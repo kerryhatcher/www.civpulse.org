@@ -76,10 +76,10 @@ Migrations are append-only files in `supabase/migrations/`.
 - `public.maps` — `slug`, `name`, `description`, `base_map`, `visibility`,
   `organization_id` (optional, unique → 1:1 with an organization), timestamps.
 - `public.layers` — first-class reusable GeoJSON layers: `name`, `description`,
-  `source_url`, `visibility`, timestamps.
+  `source_url`, `visibility`, `style` (the default style), timestamps.
 - `public.map_layers` — ordered many-to-many join between maps and layers
-  (`map_id`, `layer_id`, `position`); a layer can be on many maps and a map can
-  have many layers.
+  (`map_id`, `layer_id`, `position`, `style`); a layer can be on many maps and a
+  map can have many layers. `map_layers.style` is an optional per-map override.
 
 Events and other content tables are intentionally not defined yet. They will be
 added as separate migrations once their shape is settled.
@@ -89,7 +89,9 @@ added as separate migrations once their shape is settled.
 - Admin UI: `/admin/maps/` and `/admin/layers/`.
 - A map is an OSM base map plus zero or more reusable layers.
 - Layers are managed separately (`/admin/layers/`) and picked with checkboxes on
-  the map form; `map_layers.position` preserves the order.
+  the map form. Selected layers are listed first and can be **dragged by the
+  handle** to set their stacking order; `map_layers.position` preserves it, so
+  later layers render on top.
 - Base maps: OpenStreetMap Standard, OpenStreetMap Humanitarian, and
   OpenTopoMap (OSM data). Attribution is rendered by Leaflet.
 - The page previews the selected base map and overlays with Leaflet. Remote
@@ -115,6 +117,34 @@ silently omits it for everyone else. `public.get_map_layers(map_id)` is a
 visibility (an anonymous caller cannot read layers of a private map). The
 viewer fetches layers through this RPC, so private layer URLs never reach the
 prerendered HTML.
+
+### Layer styling
+
+Every layer has a **default style** (`layers.style`) stored as a JSON object of
+Leaflet options: `color`, `weight`, `opacity`, `fillColor`, `fillOpacity`,
+`dashArray`, and `radius` (circle markers). An empty object falls back to the
+app default in `apps/web/src/lib/layers.ts` (`DEFAULT_LAYER_STYLE`).
+
+A layer can also color **each record** differently instead of using one uniform
+style. When `categorizeBy` names a feature property, each distinct property
+value gets a color from `palette` (a sorted, stable mapping that cycles when
+there are more values than colors). This is what gives voting precincts or
+commission districts their multi-color look. The admin’s **Color by property**
+dropdown is populated by fetching the layer’s `source_url` and inspecting its
+GeoJSON feature properties, so it only offers fields that actually exist.
+
+A map can override the style of any layer it includes without affecting other
+maps. The override lives in `map_layers.style`; `null` inherits the layer
+default. `get_map_layers` returns `coalesce(map_layers.style, layers.style)` as
+the effective style, so the public viewer renders the map-specific styling
+without needing access to the raw join table.
+
+- Admin UI: the layer form (`/admin/layers/`) edits the default style; the map
+  form (`/admin/maps/`) has a per-layer “Override the layer default” editor that
+  is stored on that map only. Both use
+  `apps/web/src/lib/layer-style-editor.ts` for the controls and live preview.
+- The map admin preview and the public viewer both resolve styles through
+  `resolveLayerStyle(layer.style, override)`.
 
 ### Visibility
 

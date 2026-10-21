@@ -1,26 +1,15 @@
 import L from 'leaflet';
 import { BASE_MAPS, isBaseMapKey } from '../lib/basemaps';
-import type { LayerConfig } from '../lib/layers';
+import {
+  buildCategoryColor,
+  layerFeatureMarkerOptions,
+  layerFeaturePathOptions,
+  resolveLayerStyle,
+  type LayerConfig,
+} from '../lib/layers';
 import type { MapConfig } from '../lib/maps';
 import { getSupabase } from '../lib/supabase';
 import { isCurrentUserAdmin } from './auth';
-
-const OVERLAY_STYLE: L.PathOptions = {
-  color: '#ae583b',
-  weight: 2,
-  fillColor: '#c7d0b5',
-  fillOpacity: 0.35,
-};
-
-function pointMarker(_feature: GeoJSON.Feature | undefined, latlng: L.LatLng): L.CircleMarker {
-  return L.circleMarker(latlng, {
-    radius: 6,
-    color: '#173e34',
-    weight: 2,
-    fillColor: '#ae583b',
-    fillOpacity: 1,
-  });
-}
 
 export function renderMap(
   container: HTMLElement,
@@ -45,7 +34,15 @@ export function renderMap(
         return response.json();
       })
       .then((geojson: GeoJSON.GeoJsonObject) => {
-        const rendered = L.geoJSON(geojson, { style: OVERLAY_STYLE, pointToLayer: pointMarker });
+        const style = resolveLayerStyle(layer.style);
+        const colorFor = style.categorizeBy
+          ? buildCategoryColor(geojson, style.categorizeBy, style.palette)
+          : undefined;
+        const rendered = L.geoJSON(geojson, {
+          style: (feature) => layerFeaturePathOptions(style, feature, colorFor),
+          pointToLayer: (feature, latlng) =>
+            L.circleMarker(latlng, layerFeatureMarkerOptions(style, feature, colorFor)),
+        });
         rendered.addTo(group);
         const layerBounds = rendered.getBounds();
         if (layerBounds.isValid()) {

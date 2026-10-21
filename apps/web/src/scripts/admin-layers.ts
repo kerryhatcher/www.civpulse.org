@@ -1,4 +1,11 @@
-import type { LayerConfig, LayerVisibility } from '../lib/layers';
+import { applySwatch, createStyleEditor } from '../lib/layer-style-editor';
+import {
+  DEFAULT_LAYER_STYLE,
+  fetchPropertyKeys,
+  resolveLayerStyle,
+  type LayerConfig,
+  type LayerVisibility,
+} from '../lib/layers';
 import { getSupabase } from '../lib/supabase';
 
 type MessageKind = 'info' | 'error' | 'success';
@@ -69,11 +76,38 @@ export async function initLayerAdmin(): Promise<void> {
   const submitButton = formEl.querySelector<HTMLButtonElement>('button[type="submit"]');
   const cancelButton = formEl.querySelector<HTMLButtonElement>('[data-layer-cancel]');
   const heading = document.querySelector<HTMLElement>('[data-layer-form-title]');
+  const styleHost = formEl.querySelector<HTMLElement>('[data-layer-style-editor]');
+
+  const styleEditor = createStyleEditor({ label: 'Default style' });
+  if (styleHost) styleHost.replaceChildren(styleEditor.element);
+  else formEl.append(styleEditor.element);
+
+  const propertyKeyCache = new Map<string, string[]>();
+
+  async function suggestProperties(url: string): Promise<void> {
+    const trimmed = url.trim();
+    if (!trimmed) return;
+    const cached = propertyKeyCache.get(trimmed);
+    if (cached) {
+      styleEditor.setPropertyOptions(cached);
+      return;
+    }
+    try {
+      const keys = await fetchPropertyKeys(trimmed);
+      propertyKeyCache.set(trimmed, keys);
+      styleEditor.setPropertyOptions(keys);
+    } catch {
+      styleEditor.setPropertyOptions(null);
+    }
+  }
+
+  sourceField?.addEventListener('blur', () => void suggestProperties(sourceField.value));
 
   let allLayers: LayerConfig[] = [];
 
   function resetForm(): void {
     formEl.reset();
+    styleEditor.set(DEFAULT_LAYER_STYLE);
     if (idField) idField.value = '';
     if (cancelButton) cancelButton.hidden = true;
     if (heading) heading.textContent = 'Add a layer';
@@ -88,6 +122,8 @@ export async function initLayerAdmin(): Promise<void> {
     if (visibilityField) visibilityField.value = layer.visibility;
     const description = formEl.querySelector<HTMLTextAreaElement>('textarea[name="description"]');
     if (description) description.value = layer.description ?? '';
+    styleEditor.set(layer.style);
+    void suggestProperties(layer.source_url);
     if (cancelButton) cancelButton.hidden = false;
     if (heading) heading.textContent = `Editing ${layer.name}`;
     if (submitButton) submitButton.textContent = 'Save changes';
@@ -100,13 +136,19 @@ export async function initLayerAdmin(): Promise<void> {
 
     const info = document.createElement('div');
     info.className = 'org-row-info';
+    const heading = document.createElement('span');
+    heading.className = 'org-row-heading';
+    const swatch = document.createElement('span');
+    swatch.className = 'layer-swatch';
+    applySwatch(swatch, resolveLayerStyle(layer.style));
     const name = document.createElement('span');
     name.className = 'org-row-name';
     name.textContent = layer.name;
+    heading.append(swatch, name);
     const meta = document.createElement('span');
     meta.className = 'org-row-meta';
     meta.textContent = `${VISIBILITY_LABELS[layer.visibility]} · ${layer.source_url}`;
-    info.append(name, meta);
+    info.append(heading, meta);
     row.append(info);
 
     const actions = document.createElement('div');
@@ -132,7 +174,7 @@ export async function initLayerAdmin(): Promise<void> {
   async function loadLayers(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility')
+      .select('id, name, description, source_url, visibility, style')
       .order('name');
 
     if (error) {
@@ -193,6 +235,7 @@ export async function initLayerAdmin(): Promise<void> {
         description: textOrNull(values.get('description')),
         source_url: sourceUrl,
         visibility: isVisibility(visibilityValue) ? visibilityValue : 'public',
+        style: styleEditor.get(),
       };
 
       const { error } = id

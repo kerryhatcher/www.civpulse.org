@@ -1,6 +1,15 @@
 import L from 'leaflet';
 import { BASE_MAPS, baseMapLabel, isBaseMapKey, type BaseMapKey } from '../lib/basemaps';
-import type { LayerConfig } from '../lib/layers';
+import { applySwatch, createStyleEditor, type StyleEditor } from '../lib/layer-style-editor';
+import {
+  buildCategoryColor,
+  fetchPropertyKeys,
+  layerFeatureMarkerOptions,
+  layerFeaturePathOptions,
+  resolveLayerStyle,
+  type LayerConfig,
+  type LayerStyle,
+} from '../lib/layers';
 import type { MapConfig, MapVisibility } from '../lib/maps';
 import { getSupabase } from '../lib/supabase';
 
@@ -93,9 +102,209 @@ export async function initMapAdmin(): Promise<void> {
   let allLayers: LayerConfig[] = [];
   let organizationNames = new Map<string, string>();
   let layerCounts = new Map<string, number>();
-  let selectedLayerIds = new Set<string>();
+  let layerOrder: string[] = [];
+  let layerOverrides = new Map<string, LayerStyle>();
+  let draggingLayerId: string | null = null;
+  const propertyKeyCache = new Map<string, string[]>();
+
+  async function loadPropertyOptions(layer: LayerConfig, editor: StyleEditor): Promise<void> {
+    const cached = propertyKeyCache.get(layer.id);
+    if (cached) {
+      editor.setPropertyOptions(cached);
+      return;
+    }
+    try {
+      const keys = await fetchPropertyKeys(layer.source_url);
+      propertyKeyCache.set(layer.id, keys);
+      editor.setPropertyOptions(keys);
+    } catch {
+      editor.setPropertyOptions(null);
+    }
+  }
 
   // --- Layer picker ------------------------------------------------------
+
+  function updatePositionLabels(): void {
+    if (!layerOptions) return;
+    layerOrder.forEach((id, index) => {
+      const badge = layerOptions.querySelector<HTMLElement>(
+        `.layer-option-wrap[data-layer-id="${id}"] .layer-position`,
+      );
+      if (badge) badge.textContent = String(index + 1);
+    });
+  }
+
+  function clearDropMarkers(): void {
+    layerOptions
+      ?.querySelectorAll<HTMLElement>('[data-drop]')
+      .forEach((node) => delete node.dataset.drop);
+  }
+
+  function moveLayerNode(fromId: string, targetId: string, after: boolean): void {
+    const fromIndex = layerOrder.indexOf(fromId);
+    if (fromIndex === -1 || !layerOrder.includes(targetId)) return;
+
+    layerOrder.splice(fromIndex, 1);
+    const targetIndex = layerOrder.indexOf(targetId);
+    layerOrder.splice(after ? targetIndex + 1 : targetIndex, 0, fromId);
+
+    if (!layerOptions) return;
+
+    const nodes = new Map<string, HTMLElement>();
+    layerOptions.querySelectorAll<HTMLElement>('.layer-option-wrap').forEach((node) => {
+      if (node.dataset.layerId) nodes.set(node.dataset.layerId, node);
+    });
+
+    const anchor = layerOptions.querySelector<HTMLElement>(
+      '.layer-option-wrap[data-selected="false"]',
+    );
+    for (const id of layerOrder) {
+      const node = nodes.get(id);
+      if (!node) continue;
+      if (anchor) layerOptions.insertBefore(node, anchor);
+      else layerOptions.append(node);
+    }
+    updatePositionLabels();
+  }
+
+  function renderLayerOption(layer: LayerConfig): HTMLElement {
+    const selected = layerOrder.includes(layer.id);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'layer-option-wrap';
+    wrapper.dataset.layerId = layer.id;
+    wrapper.dataset.selected = selected ? 'true' : 'false';
+
+    const label = document.createElement('label');
+    label.className = 'layer-option';
+
+    const handle = document.createElement('span');
+    handle.className = 'layer-drag-handle';
+    handle.textContent = '⠿';
+    handle.title = 'Drag to reorder';
+    handle.setAttribute('aria-hidden', 'true');
+    handle.draggable = selected;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = layer.id;
+    checkbox.checked = selected;
+
+    const position = document.createElement('span');
+    position.className = 'layer-position';
+    position.setAttribute('aria-hidden', 'true');
+    position.hidden = !selected;
+    position.textContent = selected ? String(layerOrder.indexOf(layer.id) + 1) : '';
+
+    const swatch = document.createElement('span');
+    swatch.className = 'layer-swatch';
+
+    const name = document.createElement('span');
+    name.className = 'layer-option-name';
+    name.textContent = layer.name;
+
+    const badge = document.createElement('span');
+    badge.className = 'visibility-badge';
+    badge.textContent = VISIBILITY_LABELS[layer.visibility];
+
+    label.append(handle, checkbox, position, swatch, name, badge);
+    wrapper.append(label);
+
+    const details = document.createElement('details');
+    details.className = 'layer-style-override';
+    details.hidden = !selected;
+
+    const summary = document.createElement('summary');
+    summary.textContent = 'Style on this map';
+
+    const toggleLabel = document.createElement('label');
+    toggleLabel.className = 'layer-override-toggle';
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    const existing = layerOverrides.get(layer.id);
+    toggle.checked = Boolean(existing);
+    toggleLabel.append(toggle, document.createTextNode('Override the layer default'));
+
+    const editor = createStyleEditor();
+    editor.set(existing ?? layer.style);
+    editor.setDisabled(!toggle.checked);
+    if (selected) void loadPropertyOptions(layer, editor);
+
+    const syncSwatch = (): void => {
+      applySwatch(swatch, resolveLayerStyle(layer.style, layerOverrides.get(layer.id)));
+    };
+    syncSwatch();
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        if (!layerOrder.includes(layer.id)) layerOrder.push(layer.id);
+      } else {
+        layerOrder = layerOrder.filter((id) => id !== layer.id);
+        layerOverrides.delete(layer.id);
+      }
+      renderLayerOptions();
+    });
+
+    toggle.addEventListener('change', () => {
+      editor.setDisabled(!toggle.checked);
+      if (toggle.checked) {
+        layerOverrides.set(layer.id, editor.get());
+        details.open = true;
+      } else {
+        layerOverrides.delete(layer.id);
+        editor.set(layer.style);
+      }
+      syncSwatch();
+    });
+
+    editor.onChange((style) => {
+      if (!toggle.checked) return;
+      layerOverrides.set(layer.id, style);
+      syncSwatch();
+    });
+
+    details.append(summary, toggleLabel, editor.element);
+    wrapper.append(details);
+
+    if (selected) {
+      handle.addEventListener('dragstart', (event) => {
+        draggingLayerId = layer.id;
+        wrapper.classList.add('is-dragging');
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData('text/plain', layer.id);
+        }
+      });
+      handle.addEventListener('dragend', () => {
+        draggingLayerId = null;
+        wrapper.classList.remove('is-dragging');
+        clearDropMarkers();
+      });
+      wrapper.addEventListener('dragover', (event) => {
+        if (!draggingLayerId || draggingLayerId === layer.id) return;
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+        const rect = wrapper.getBoundingClientRect();
+        const after = event.clientY > rect.top + rect.height / 2;
+        wrapper.dataset.drop = after ? 'after' : 'before';
+      });
+      wrapper.addEventListener('dragleave', () => {
+        delete wrapper.dataset.drop;
+      });
+      wrapper.addEventListener('drop', (event) => {
+        if (!draggingLayerId || draggingLayerId === layer.id) return;
+        event.preventDefault();
+        const rect = wrapper.getBoundingClientRect();
+        const after = event.clientY > rect.top + rect.height / 2;
+        const from = draggingLayerId;
+        draggingLayerId = null;
+        clearDropMarkers();
+        moveLayerNode(from, layer.id, after);
+      });
+    }
+
+    return wrapper;
+  }
 
   function renderLayerOptions(): void {
     if (!layerOptions) return;
@@ -108,38 +317,25 @@ export async function initMapAdmin(): Promise<void> {
       return;
     }
 
-    layerOptions.replaceChildren(
-      ...allLayers.map((layer) => {
-        const label = document.createElement('label');
-        label.className = 'layer-option';
+    const byId = new Map(allLayers.map((layer) => [layer.id, layer]));
+    const ordered = [
+      ...layerOrder
+        .map((id) => byId.get(id))
+        .filter((layer): layer is LayerConfig => Boolean(layer)),
+      ...allLayers.filter((layer) => !layerOrder.includes(layer.id)),
+    ];
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = layer.id;
-        checkbox.checked = selectedLayerIds.has(layer.id);
-        checkbox.addEventListener('change', () => {
-          if (checkbox.checked) selectedLayerIds.add(layer.id);
-          else selectedLayerIds.delete(layer.id);
-        });
-
-        const name = document.createElement('span');
-        name.textContent = layer.name;
-
-        const badge = document.createElement('span');
-        badge.className = 'visibility-badge';
-        badge.textContent = VISIBILITY_LABELS[layer.visibility];
-
-        label.append(checkbox, name, badge);
-        return label;
-      }),
-    );
+    layerOptions.replaceChildren(...ordered.map(renderLayerOption));
+    updatePositionLabels();
   }
 
   function readSelectedLayers(): string[] {
     if (!layerOptions) return [];
-    return [...layerOptions.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')].map(
-      (input) => input.value,
-    );
+    return [
+      ...layerOptions.querySelectorAll<HTMLInputElement>(
+        '.layer-option input[type="checkbox"]:checked',
+      ),
+    ].map((input) => input.value);
   }
 
   // --- Leaflet preview ---------------------------------------------------
@@ -191,21 +387,14 @@ export async function initMapAdmin(): Promise<void> {
         const response = await fetch(layer.source_url);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const geojson = (await response.json()) as GeoJSON.GeoJsonObject;
+        const style = resolveLayerStyle(layer.style, layerOverrides.get(layer.id));
+        const colorFor = style.categorizeBy
+          ? buildCategoryColor(geojson, style.categorizeBy, style.palette)
+          : undefined;
         const rendered = L.geoJSON(geojson, {
-          style: {
-            color: '#ae583b',
-            weight: 2,
-            fillColor: '#c7d0b5',
-            fillOpacity: 0.35,
-          },
-          pointToLayer: (_feature, latlng) =>
-            L.circleMarker(latlng, {
-              radius: 6,
-              color: '#173e34',
-              weight: 2,
-              fillColor: '#ae583b',
-              fillOpacity: 1,
-            }),
+          style: (feature) => layerFeaturePathOptions(style, feature, colorFor),
+          pointToLayer: (feature, latlng) =>
+            L.circleMarker(latlng, layerFeatureMarkerOptions(style, feature, colorFor)),
         });
         overlayGroup?.addLayer(rendered);
         const bounds = rendered.getBounds();
@@ -244,7 +433,8 @@ export async function initMapAdmin(): Promise<void> {
     formEl.reset();
     if (idField) idField.value = '';
     slugTouched = false;
-    selectedLayerIds = new Set();
+    layerOrder = [];
+    layerOverrides = new Map();
     renderLayerOptions();
     if (cancelButton) cancelButton.hidden = true;
     if (heading) heading.textContent = 'Add a map';
@@ -264,11 +454,13 @@ export async function initMapAdmin(): Promise<void> {
 
     const { data: links } = await supabase
       .from('map_layers')
-      .select('layer_id')
+      .select('layer_id, style')
       .eq('map_id', record.id)
       .order('position');
-    selectedLayerIds = new Set(
-      ((links ?? []) as { layer_id: string }[]).map((link) => link.layer_id),
+    const rows = (links ?? []) as { layer_id: string; style: LayerStyle | null }[];
+    layerOrder = rows.map((row) => row.layer_id);
+    layerOverrides = new Map(
+      rows.filter((row) => row.style).map((row) => [row.layer_id, row.style as LayerStyle]),
     );
     renderLayerOptions();
 
@@ -366,7 +558,7 @@ export async function initMapAdmin(): Promise<void> {
   async function loadLayersLibrary(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility')
+      .select('id, name, description, source_url, visibility, style')
       .order('name');
 
     if (error) {
@@ -457,7 +649,14 @@ export async function initMapAdmin(): Promise<void> {
         if (layerIds.length > 0) {
           const { error: linkError } = await supabase
             .from('map_layers')
-            .insert(layerIds.map((layer_id, position) => ({ map_id: mapId, layer_id, position })));
+            .insert(
+              layerIds.map((layer_id, position) => ({
+                map_id: mapId,
+                layer_id,
+                position,
+                style: layerOverrides.get(layer_id) ?? null,
+              })),
+            );
           if (linkError) throw new Error(linkError.message);
         }
       }

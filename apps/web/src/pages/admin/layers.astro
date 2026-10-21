@@ -59,6 +59,14 @@ import AdminTabs from '../../components/AdminTabs.astro';
           <textarea name="description" rows="2" maxlength="2000"></textarea>
         </label>
 
+        <div class="field">
+          <span>Default style</span>
+          <p class="status">
+            Every map shows this style unless it sets its own override.
+          </p>
+          <div data-layer-style-editor></div>
+        </div>
+
         <div class="org-form-actions">
           <button class="button-link" type="submit">Create layer</button>
           <button type="button" data-layer-cancel hidden>Cancel</button>
