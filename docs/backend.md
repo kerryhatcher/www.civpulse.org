@@ -85,7 +85,18 @@ Migrations are append-only files in `supabase/migrations/`.
   `description`, `visibility`, timestamps.
 - `public.events` — `calendar_id` (required), `title`, `description`,
   `starts_at` (required), `ends_at`, `all_day`, `location`, `url`,
-  `visibility`, timestamps. Both calendars and events carry visibility.
+  `visibility`, `election_id` (optional), `election_date_kind` (set when the
+  event is an election key date), timestamps. Both calendars and events carry
+  visibility.
+- `public.elections` — `slug`, `name`, `election_date` (required), `kind`,
+  `description`, `organization_id` (optional administering body), `visibility`,
+  timestamps.
+- `public.contests` — a race within an election: `election_id` (required),
+  `office`, `district`, `seat`, `description`, `partisan`, `position`,
+  timestamps.
+- `public.contest_candidates` — links a person to a contest with `party` and
+  `status` (running, withdrawn, won, lost, runoff, pending); one entry per
+  contest/person pair, both sides cascade.
 - `public.people` — CRM-style records for officials, elected office holders,
   candidates, and other civic figures: `slug`, `full_name`, `kind`, `title`,
   `description`, contact fields (`email`, `phone`, `fax`, `website_url`,
@@ -294,6 +305,68 @@ events.
   swaps to `search_people` results as you type, and (when signed in) lists the
   full set of people the caller can access with visibility badges.
 
+## Elections
+
+- Admin UI: `/admin/elections/` (requires an admin account). One page manages
+  **elections**, their **contests**, and the **candidates** running in each.
+- Public directory: `/elections/` (searches through `search_elections`); each
+  public election gets a prerendered `/elections/<slug>/` page listing its key
+  dates and the contests on the ballot.
+- An election is organized by the date of the actual election and has a `kind`
+  (special, general/primary, and their runoffs). It may be administered by one
+  organization.
+- A contest is a race for an office (`office`, `district`, `seat`) and holds
+  candidates. Candidates reuse the `people` records: the person holds the
+  profile, `contest_candidates` holds the race-specific party and status.
+
+### Election key dates
+
+- Early-voting days and deadlines (registration, mail-ballot request/return,
+  election day itself) are **calendar events** tagged with `election_id` and an
+  `election_date_kind`. They are created and edited from
+  `/admin/calendars/` (the event form has an "Election key date" selector), so
+  every date is also on the community calendar and the event viewer links back
+  to its election.
+- An event linked to an election is only visible when the event, its calendar,
+  **and** its election are all visible — the same dependency rule as
+  event-on-calendar. `search_events` and `get_event` apply the election gate.
+
+### Elections visibility
+
+Elections use the same `public | unlisted | private` rules as maps, layers,
+calendars, events, and people. Contests and candidates inherit the election's
+visibility, so they have no separate visibility column.
+
+| Visibility | Page | Listed | Sitemap | Search | Access |
+| --- | --- | --- | --- | --- | --- |
+| `public` | `/elections/<slug>/` (prerendered) | yes | yes | anon + signed-in | anyone |
+| `unlisted` | `/elections/view/?id=<uuid>` | no | no | signed-in only | anyone with the uuid |
+| `private` | `/elections/view/?id=<uuid>` | no | no | signed-in only | signed-in users |
+
+- RLS: public elections are readable by anyone, private elections by any
+  authenticated user, unlisted elections are not readable through the Data API
+  at all (only through the RPC). Admins can read every row.
+- `contests` and `contest_candidates` have **no** public select policy: a
+  contest is only visible when its election is, so all reads go through
+  `get_election`. Hidden elections therefore never leak their contests or
+  candidates into the Data API or prerendered HTML.
+- `/elections/view/` reads the uuid from `?id=` (or `/elections/u/<uuid>/` /
+  `/elections/p/<uuid>/` paths rewritten by `public/_redirects` on Cloudflare)
+  and calls `public.get_election(uuid)`. Admins see an “Edit election” button
+  that deep-links to `/admin/elections/?edit=<id>`.
+
+### Elections search
+
+- `elections.search_document` is a stored `tsvector` generated from `name`
+  (weight A) and `description` (weight B), with a GIN index.
+- `public.search_elections(p_query text, p_limit int)` uses
+  `websearch_to_tsquery` + `ts_rank`, ordering upcoming elections first.
+  Anonymous callers only match `public` elections; signed-in callers also match
+  `unlisted` and `private` elections.
+- `public.get_election(uuid)` returns `{status: ok|private|missing, election,
+  organization, contests, dates}` for the election page and viewer, applying the
+  election gate and, for key dates, the event/calendar gates.
+
 ## Organizations admin
 
 - Admin UI: `/admin/organizations/` (requires an admin account).
@@ -346,9 +419,10 @@ the database but invisible on the static site until the next build.
   allowed only for `public` rows; `unlisted` rows are not selectable through the
   Data API at all and are reached through an RPC instead.
 - **Admin writes** use `to authenticated with check (public.is_admin())`.
-- **Hidden rows** (unlisted maps/layers, private maps for anonymous callers) are
-  exposed through `security definer` functions that apply the visibility rule
-  themselves (`get_map`, `get_map_layers`). Set `search_path = ''` and fully
+- **Hidden rows** (unlisted maps/layers/elections, and rows whose visibility
+  depends on a parent) are exposed through `security definer` functions that
+  apply the visibility rule themselves (`get_map`, `get_map_layers`,
+  `get_person`, `get_election`, `get_event`). Set `search_path = ''` and fully
   qualify names in these functions.
 - **Full-text search** uses a stored generated `tsvector` column (name weight A,
   description weight B) with a GIN index and an RPC that runs

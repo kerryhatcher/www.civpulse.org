@@ -1,0 +1,184 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { formatEventWhen } from '../../lib/calendars';
+import {
+  fetchPublicElections,
+  fetchElectionDetail,
+  formatElectionDate,
+  ELECTION_DATE_KIND_LABELS,
+  ELECTION_DATE_KIND_ORDER,
+  ELECTION_KIND_LABELS,
+  CANDIDATE_STATUS_LABELS,
+  type ElectionDateKind,
+  type ElectionDetail,
+} from '../../lib/elections';
+import { personHref, personImageUrl } from '../../lib/people';
+
+export async function getStaticPaths() {
+  const elections = await fetchPublicElections();
+  const details = await Promise.all(elections.map((election) => fetchElectionDetail(election.id)));
+
+  return details
+    .filter((detail): detail is ElectionDetail => detail !== null)
+    .map((detail) => ({
+      params: { slug: detail.election.slug },
+      props: { detail },
+    }));
+}
+
+interface Props {
+  detail: ElectionDetail;
+}
+
+const { detail } = Astro.props;
+const { election, organization, contests, dates } = detail;
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
+const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
+  kind,
+  label: ELECTION_DATE_KIND_LABELS[kind],
+  dates: dates.filter((date) => (date.election_date_kind ?? 'other') === kind),
+})).filter((group) => group.dates.length > 0);
+---
+
+<Layout
+  title={election.name}
+  description={
+    election.description ??
+    `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}.`
+  }
+>
+  <main id="main">
+    <div class="org-header">
+      <div class="org-header-text">
+        <p class="org-eyebrow">{ELECTION_KIND_LABELS[election.kind]}</p>
+        <h1>{election.name}</h1>
+        <p class="org-lede">{formatElectionDate(election.election_date)}</p>
+        {organization && (
+          <p class="election-org">
+            Administered by <a href={`/orgs/${organization.slug}/`}>{organization.name}</a>
+          </p>
+        )}
+      </div>
+      <a
+        class="button-link org-edit-link"
+        data-election-edit-link
+        href={`/admin/elections/?edit=${election.id}`}
+        hidden
+      >
+        Edit election
+      </a>
+    </div>
+
+    {election.description && <div class="prose election-description"><p>{election.description}</p></div>}
+
+    {
+      dateGroups.length > 0 && (
+        <section class="election-dates" aria-labelledby="election-dates-title">
+          <h2 id="election-dates-title">Dates &amp; deadlines</h2>
+          <div class="election-date-groups">
+            {dateGroups.map((group) => (
+              <div class="election-date-group">
+                <h3>{group.label}</h3>
+                <ul class="election-date-list">
+                  {group.dates.map((date) => (
+                    <li class="election-date-item">
+                      <a class="election-date-when" href={`/calendar/view/?id=${date.id}`}>
+                        {formatEventWhen(date)}
+                      </a>
+                      <span class="election-date-title">{date.title}</span>
+                      {date.location && <span class="election-date-location">{date.location}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p class="body-note">
+            Every date is also on the <a href="/calendar/">community calendar</a>.
+          </p>
+        </section>
+      )
+    }
+
+    <section class="election-contests" aria-labelledby="election-contests-title">
+      <h2 id="election-contests-title">What's on the ballot</h2>
+      {
+        contests.length > 0 ? (
+          <div class="contest-list">
+            {contests.map((contest) => (
+              <article class="contest-card">
+                <header class="contest-heading">
+                  <h3>
+                    {contest.office}
+                    {contest.district ? `, ${contest.district}` : ''}
+                    {contest.seat ? ` — ${contest.seat}` : ''}
+                  </h3>
+                  <span class="contest-meta">
+                    {contest.partisan ? 'Partisan race' : 'Nonpartisan race'}
+                  </span>
+                </header>
+                {contest.description && <p class="contest-description">{contest.description}</p>}
+                {contest.candidates.length > 0 ? (
+                  <div class="candidate-list">
+                    {contest.candidates.map(({ person, party, status }) => {
+                      const image = personImageUrl(person.image_path);
+                      return (
+                        <a class="candidate-card" href={personHref(person)}>
+                          {image ? (
+                            <img
+                              class="candidate-image"
+                              src={image}
+                              alt=""
+                              loading="lazy"
+                              width="44"
+                              height="44"
+                            />
+                          ) : (
+                            <span class="candidate-fallback" aria-hidden="true">
+                              {initials(person.full_name)}
+                            </span>
+                          )}
+                          <span class="candidate-text">
+                            <span class="candidate-name">{person.full_name}</span>
+                            <span class="candidate-meta">
+                              {[party, CANDIDATE_STATUS_LABELS[status]].filter(Boolean).join(' · ')}
+                            </span>
+                          </span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p class="status">No candidates listed yet.</p>
+                )}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state">
+            <p>No contests have been published for this election yet.</p>
+          </div>
+        )
+      }
+    </section>
+
+    <p class="org-back">
+      <a href="/elections/">← All elections</a>
+    </p>
+  </main>
+</Layout>
+
+<script>
+  import { initAdminEditLink } from '../../scripts/auth';
+
+  void initAdminEditLink();
+</script>

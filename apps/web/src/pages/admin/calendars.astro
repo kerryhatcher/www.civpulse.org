@@ -128,6 +128,27 @@ import AdminTabs from '../../components/AdminTabs.astro';
           </label>
         </div>
 
+        <div class="field-grid">
+          <label class="field">
+            <span>Election key date</span>
+            <select name="election_id">
+              <option value="">Not an election date</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Key date type</span>
+            <select name="election_date_kind">
+              <option value="">—</option>
+              <option value="election_day">Election day</option>
+              <option value="early_voting">Early voting</option>
+              <option value="registration_deadline">Registration deadline</option>
+              <option value="absentee_request_deadline">Mail ballot request deadline</option>
+              <option value="absentee_return_deadline">Mail ballot return deadline</option>
+              <option value="other">Other key date</option>
+            </select>
+          </label>
+        </div>
+
         <label class="field">
           <span>Description</span>
           <textarea name="description" rows="3" maxlength="4000"></textarea>

@@ -104,6 +104,10 @@ export async function initCalendarAdmin(): Promise<void> {
   const eventEnds = eventFormEl.querySelector<HTMLInputElement>('input[name="ends_at"]');
   const eventAllDay = eventFormEl.querySelector<HTMLInputElement>('input[name="all_day"]');
   const eventVisibility = eventFormEl.querySelector<HTMLSelectElement>('select[name="visibility"]');
+  const eventElection = eventFormEl.querySelector<HTMLSelectElement>('select[name="election_id"]');
+  const eventDateKind = eventFormEl.querySelector<HTMLSelectElement>(
+    'select[name="election_date_kind"]',
+  );
   const eventSubmit = eventFormEl.querySelector<HTMLButtonElement>('button[type="submit"]');
   const eventCancel = eventFormEl.querySelector<HTMLButtonElement>('[data-event-cancel]');
   const eventHeading = document.querySelector<HTMLElement>('[data-event-form-title]');
@@ -114,6 +118,7 @@ export async function initCalendarAdmin(): Promise<void> {
   let calendars: CalendarRow[] = [];
   let events: EventRow[] = [];
   const organizationNames = new Map<string, string>();
+  const electionNames = new Map<string, string>();
   let slugTouched = false;
 
   // --- Lookups -----------------------------------------------------------
@@ -134,6 +139,24 @@ export async function initCalendarAdmin(): Promise<void> {
     for (const org of organizations) calendarOrg?.append(new Option(org.name, org.id));
     if (organizations.length === 1 && calendarOrg && !calendarOrg.value) {
       calendarOrg.value = organizations[0].id;
+    }
+  }
+
+  async function loadElections(): Promise<void> {
+    const { data, error } = await supabase
+      .from('elections')
+      .select('id, name, election_date')
+      .order('election_date', { ascending: false });
+
+    if (error) return; // Non-fatal: events simply cannot be tagged to an election.
+
+    const elections = (data ?? []) as { id: string; name: string; election_date: string }[];
+    electionNames.clear();
+    for (const election of elections) electionNames.set(election.id, election.name);
+
+    eventElection?.replaceChildren(new Option('Not an election date', ''));
+    for (const election of elections) {
+      eventElection?.append(new Option(election.name, election.id));
     }
   }
 
@@ -381,9 +404,10 @@ export async function initCalendarAdmin(): Promise<void> {
         title.textContent = event.title;
         const meta = document.createElement('span');
         meta.className = 'org-row-meta';
+        const electionName = event.election_id ? electionNames.get(event.election_id) : null;
         meta.textContent = `${formatEventWhen(event)} · ${calendarNameById(
           event.calendar_id,
-        )} · ${VISIBILITY_LABELS[event.visibility]}`;
+        )} · ${VISIBILITY_LABELS[event.visibility]}${electionName ? ` · ${electionName}` : ''}`;
         info.append(title, meta);
         row.append(info);
 
@@ -429,6 +453,8 @@ export async function initCalendarAdmin(): Promise<void> {
     if (eventEnds) eventEnds.value = toDatetimeLocal(event.ends_at);
     if (eventAllDay) eventAllDay.checked = event.all_day;
     if (eventVisibility) eventVisibility.value = event.visibility;
+    if (eventElection) eventElection.value = event.election_id ?? '';
+    if (eventDateKind) eventDateKind.value = event.election_date_kind ?? '';
     const location = eventFormEl.querySelector<HTMLInputElement>('input[name="location"]');
     const url = eventFormEl.querySelector<HTMLInputElement>('input[name="url"]');
     const description = eventFormEl.querySelector<HTMLTextAreaElement>(
@@ -467,6 +493,10 @@ export async function initCalendarAdmin(): Promise<void> {
     const visibility = (['public', 'unlisted', 'private'] as string[]).includes(visibilityValue)
       ? (visibilityValue as CalendarVisibility)
       : 'public';
+    const electionId = String(values.get('election_id') ?? '').trim();
+    const electionDateKind = electionId
+      ? String(values.get('election_date_kind') ?? '').trim()
+      : '';
 
     if (!title || !calendarId || !startsLocal) {
       setMessage(
@@ -499,6 +529,8 @@ export async function initCalendarAdmin(): Promise<void> {
         location: textOrNull(values.get('location')),
         url: textOrNull(values.get('url')),
         visibility,
+        election_id: electionId || null,
+        election_date_kind: electionDateKind || null,
       };
 
       const { error } = id
@@ -551,6 +583,7 @@ export async function initCalendarAdmin(): Promise<void> {
   eventFilter?.addEventListener('change', renderEventList);
 
   await loadOrganizations();
+  await loadElections();
   await loadCalendars();
   await loadEvents();
 

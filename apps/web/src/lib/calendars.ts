@@ -1,3 +1,5 @@
+import type { ElectionDateKind, ElectionVisibility } from './elections';
+
 export type CalendarVisibility = 'public' | 'unlisted' | 'private';
 
 export interface CalendarRef {
@@ -29,6 +31,11 @@ export interface EventRecord {
   organization_id: string;
   organization_name: string;
   organization_slug: string;
+  election_id: string | null;
+  election_date_kind: ElectionDateKind | null;
+  election_name: string | null;
+  election_slug: string | null;
+  election_visibility: ElectionVisibility | null;
 }
 
 export interface CalendarRow {
@@ -51,11 +58,13 @@ export interface EventRow {
   location: string | null;
   url: string | null;
   visibility: CalendarVisibility;
+  election_id: string | null;
+  election_date_kind: ElectionDateKind | null;
 }
 
 export const CALENDAR_COLUMNS = 'id, organization_id, slug, name, description, visibility';
 export const EVENT_COLUMNS =
-  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility';
+  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind';
 
 /** The shared event viewer shell. Unlisted and private events are uuid-only. */
 export function eventViewHref(id: string): string {

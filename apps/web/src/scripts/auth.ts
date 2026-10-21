@@ -159,7 +159,7 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
 }
 
 export async function initAdminEditLink(
-  selector = '[data-org-edit-link], [data-person-edit-link]',
+  selector = '[data-org-edit-link], [data-person-edit-link], [data-election-edit-link]',
 ): Promise<void> {
   const links = document.querySelectorAll<HTMLElement>(selector);
   if (links.length === 0) return;

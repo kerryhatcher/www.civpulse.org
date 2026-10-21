@@ -6,3 +6,6 @@
 # Long uuid URLs for unlisted and private people.
 /people/u/*  /people/view/  200
 /people/p/*  /people/view/  200
+# Long uuid URLs for unlisted and private elections.
+/elections/u/*  /elections/view/  200
+/elections/p/*  /elections/view/  200

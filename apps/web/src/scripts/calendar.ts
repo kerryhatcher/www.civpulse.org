@@ -56,6 +56,19 @@ function renderEventCard(event: EventRecord): HTMLElement {
     card.append(description);
   }
 
+  if (event.election_id) {
+    const election = document.createElement('p');
+    election.className = 'event-election';
+    const link = document.createElement('a');
+    link.href =
+      event.election_visibility === 'public' && event.election_slug
+        ? `/elections/${event.election_slug}/`
+        : `/elections/view/?id=${event.election_id}`;
+    link.textContent = event.election_name ?? 'Election';
+    election.append('Part of ', link);
+    card.append(election);
+  }
+
   return card;
 }
 
@@ -220,6 +233,7 @@ interface EventViewResponse {
   };
   calendar?: { id: string; name: string };
   organization?: { id: string; name: string; slug: string };
+  election?: { id: string; slug: string; name: string; visibility: string };
 }
 
 function eventIdFromPath(pathname: string): string | null {
@@ -281,6 +295,24 @@ function fillEventView(response: EventViewResponse): void {
   if (link && url && event.url) {
     url.href = event.url;
     link.hidden = false;
+  }
+
+  const election = document.querySelector<HTMLElement>('[data-event-election]');
+  if (election) {
+    const linked = response.election;
+    if (linked) {
+      election.replaceChildren('Part of ');
+      const electionLink = document.createElement('a');
+      electionLink.href =
+        linked.visibility === 'public'
+          ? `/elections/${linked.slug}/`
+          : `/elections/view/?id=${linked.id}`;
+      electionLink.textContent = linked.name;
+      election.append(electionLink);
+      election.hidden = false;
+    } else {
+      election.hidden = true;
+    }
   }
 
   viewer.hidden = false;

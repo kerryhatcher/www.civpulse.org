@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  fetchPublicElections,
+  formatElectionDate,
+  ELECTION_KIND_LABELS,
+  type Election,
+} from '../../lib/elections';
+
+const all = await fetchPublicElections();
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const dateValue = (election: Election) => new Date(`${election.election_date}T00:00:00`).getTime();
+
+const upcoming = all
+  .filter((election) => dateValue(election) >= today.getTime())
+  .sort((a, b) => dateValue(a) - dateValue(b));
+const past = all
+  .filter((election) => dateValue(election) < today.getTime())
+  .sort((a, b) => dateValue(b) - dateValue(a));
+const elections = [...upcoming, ...past];
+---
+
+<Layout
+  title="Elections"
+  description="Upcoming and past elections, with early voting windows, registration and mail-ballot deadlines, and the contests on the ballot."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Elections</h1>
+      <p>
+        What's on the ballot, when to vote, and every deadline between now and election day.
+      </p>
+    </div>
+
+    {
+      elections.length > 0 && (
+        <form class="map-search" data-election-search-form role="search">
+          <label class="visually-hidden" for="election-search-input">
+            Search elections
+          </label>
+          <input
+            id="election-search-input"
+            type="search"
+            placeholder="Search elections…"
+            data-election-search
+            autocomplete="off"
+          />
+          <p class="status" data-election-search-note hidden>
+            Signed in — search includes public, unlisted, and private elections.
+          </p>
+        </form>
+      )
+    }
+
+    <p class="status" data-election-search-status hidden></p>
+
+    {
+      elections.length > 0 ? (
+        <div class="org-grid" data-election-initial>
+          {elections.map((election) => (
+            <a class="org-card election-card" href={`/elections/${election.slug}/`}>
+              <span class="election-card-date">
+                {formatElectionDate(election.election_date, {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </span>
+              <h2>{election.name}</h2>
+              <span class="election-card-kind">{ELECTION_KIND_LABELS[election.kind]}</span>
+              {election.description && <p>{election.description}</p>}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="prose" data-election-initial>
+          <div class="empty-state">
+            <p>
+              No elections are published yet. Admins can add them from{' '}
+              <a href="/admin/elections/">the elections admin</a>.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="org-grid" data-election-search-results hidden></div>
+    <p class="status" data-election-search-empty hidden>No elections match that search.</p>
+  </main>
+</Layout>
+
+<script>
+  import { initElectionSearch } from '../../scripts/elections';
+
+  initElectionSearch();
+</script>

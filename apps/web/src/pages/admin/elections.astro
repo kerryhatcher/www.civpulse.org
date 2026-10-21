@@ -1,0 +1,224 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout
+  title="Elections admin"
+  description="Manage elections, their contests, and the candidates running in each office."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Elections</h1>
+      <p>
+        Elections are organized by the date of the actual election. Add the contests on the ballot
+        and the people running, then tag early-voting days and deadlines to the election from the
+        <a href="/admin/calendars/">calendars admin</a> so they appear on the community calendar.
+      </p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/elections/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-election-form novalidate>
+        <h2 data-election-form-title>Add an election</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Name *</span>
+            <input type="text" name="name" maxlength="200" required />
+          </label>
+          <label class="field">
+            <span>Slug *</span>
+            <input type="text" name="slug" maxlength="80" placeholder="2026-11-03-general" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Election date *</span>
+            <input type="date" name="election_date" required />
+          </label>
+          <label class="field">
+            <span>Type</span>
+            <select name="kind">
+              <option value="general">General election</option>
+              <option value="general_runoff">General election runoff</option>
+              <option value="primary">Primary</option>
+              <option value="primary_runoff">Primary runoff</option>
+              <option value="special">Special election</option>
+              <option value="special_runoff">Special election runoff</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Administering organization</span>
+            <select name="organization_id">
+              <option value="">None</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public — listed, searchable</option>
+              <option value="unlisted">Unlisted — uuid URL only</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="4000"></textarea>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create election</button>
+          <button type="button" data-election-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-election-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="election-list-title">
+        <h2 id="election-list-title">Elections</h2>
+        <div class="org-list" data-election-list></div>
+      </section>
+
+      <form class="org-form" data-contest-form novalidate>
+        <h2 data-contest-form-title>Add a contest</h2>
+        <input type="hidden" name="id" />
+
+        <label class="field">
+          <span>Election *</span>
+          <select name="election_id" required></select>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Office *</span>
+            <input type="text" name="office" maxlength="160" placeholder="US Senator" required />
+          </label>
+          <label class="field">
+            <span>District</span>
+            <input type="text" name="district" maxlength="160" placeholder="District 18" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Seat</span>
+            <input type="text" name="seat" maxlength="160" placeholder="Class II" />
+          </label>
+          <label class="field">
+            <span>Order</span>
+            <input type="number" name="position" value="0" step="1" />
+          </label>
+        </div>
+
+        <label class="calendar-check">
+          <input type="checkbox" name="partisan" checked />
+          <span>Partisan race</span>
+        </label>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="2000"></textarea>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create contest</button>
+          <button type="button" data-contest-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-contest-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="contest-list-title">
+        <h2 id="contest-list-title">Contests</h2>
+        <label class="field event-filter">
+          <span>Filter by election</span>
+          <select data-contest-filter>
+            <option value="">All elections</option>
+          </select>
+        </label>
+        <div class="org-list" data-contest-list></div>
+      </section>
+
+      <form class="org-form" data-candidate-form novalidate>
+        <h2 data-candidate-form-title>Add a candidate</h2>
+        <input type="hidden" name="original_contest_id" />
+        <input type="hidden" name="original_person_id" />
+
+        <label class="field">
+          <span>Contest *</span>
+          <select name="contest_id" required></select>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Person *</span>
+            <select name="person_id" required></select>
+          </label>
+          <label class="field">
+            <span>Party</span>
+            <input type="text" name="party" maxlength="120" placeholder="Democratic, Republican, Nonpartisan…" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Status</span>
+            <select name="status">
+              <option value="running">Running</option>
+              <option value="runoff">In runoff</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+              <option value="withdrawn">Withdrawn</option>
+              <option value="pending">Pending</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Order</span>
+            <input type="number" name="position" value="0" step="1" />
+          </label>
+        </div>
+
+        <p class="body-note">
+          Candidates reuse <a href="/admin/people/">people records</a>. Add the person there first if
+          they are missing.
+        </p>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Add candidate</button>
+          <button type="button" data-candidate-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-candidate-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="candidate-list-title">
+        <h2 id="candidate-list-title">Candidates</h2>
+        <div class="org-list" data-candidate-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initElectionAdmin } from '../../scripts/admin-elections';
+
+  void initElectionAdmin();
+</script>

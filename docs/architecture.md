@@ -41,7 +41,7 @@ docs/         architecture, backend, and development notes
   browser, but **RLS is the real enforcement**.
 - Full-text search uses stored generated `tsvector` columns + GIN indexes and
   `security definer` RPCs (`search_maps`, `search_organizations`,
-  `search_events`, `search_people`).
+  `search_events`, `search_people`, `search_elections`).
 
 See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 
@@ -74,6 +74,14 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   use the `/people/view/?id=<uuid>` shell gated by `get_person`. Affiliations are
   readable through the Data API only for public people, so hidden people never
   leak their organization links into prerendered HTML.
+- Elections: an election on a date, with contests for the offices being elected
+  and the people running. Public pages are `/elections/<slug>/` (prerendered)
+  and `/elections/` browses/search through `search_elections`; unlisted/private
+  elections use the `/elections/view/?id=<uuid>` shell gated by `get_election`.
+  Contests, candidates, and key dates are only readable through `get_election`,
+  so hidden elections never leak into prerendered HTML. Early-voting days and
+  deadlines are calendar events tagged with the election, so they appear on the
+  community calendar and link back to the election.
 - The public listing/sitemap includes public content only; sitemap generation is
   handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
 
@@ -81,6 +89,7 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
-  `/admin/maps/`, `/admin/calendars/` with an admin tab bar. Admins also get an
-  "Edit" shortcut on public org/map/person pages.
+  `/admin/maps/`, `/admin/calendars/`, `/admin/elections/` with an admin tab
+  bar. Admins also get an "Edit" shortcut on public org/map/person/election
+  pages.
 - The header shows "Account" when signed in and "Admin" for allowlisted users.

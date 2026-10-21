@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Election" description="View a shared Civic Pulse election.">
+  <main id="main">
+    <div class="page-intro">
+      <p class="org-eyebrow">Election</p>
+    </div>
+
+    <div class="map-viewer-status empty-state" data-election-viewer-status hidden></div>
+
+    <article class="election-detail" data-election-viewer hidden>
+      <header class="org-header">
+        <div class="org-header-text">
+          <p class="org-eyebrow" data-election-kind></p>
+          <h1 data-election-name>Election</h1>
+          <p class="org-lede" data-election-date></p>
+          <p class="election-org" data-election-org hidden></p>
+        </div>
+        <a class="button-link org-edit-link" data-election-edit-link hidden>Edit election</a>
+      </header>
+
+      <div class="prose election-description" data-election-description hidden></div>
+
+      <section class="election-dates" data-election-dates-section hidden>
+        <h2>Dates &amp; deadlines</h2>
+        <div class="election-date-groups" data-election-dates></div>
+        <p class="body-note">
+          Every date is also on the <a href="/calendar/">community calendar</a>.
+        </p>
+      </section>
+
+      <section class="election-contests" data-election-contests-section hidden>
+        <h2>What's on the ballot</h2>
+        <div class="contest-list" data-election-contests></div>
+      </section>
+
+      <p class="org-back">
+        <a href="/elections/">← All elections</a>
+      </p>
+    </article>
+  </main>
+</Layout>
+
+<script>
+  import { initElectionViewFromUrl } from '../../scripts/elections';
+
+  void initElectionViewFromUrl();
+</script>

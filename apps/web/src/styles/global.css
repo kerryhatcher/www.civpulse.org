@@ -1788,6 +1788,210 @@ textarea::placeholder {
   color: var(--muted);
 }
 
+/* ---------- Elections ---------- */
+
+.election-card-date {
+  display: block;
+  font: 700 20px/1.1 var(--serif);
+  color: var(--rust-dark);
+  margin-bottom: 6px;
+}
+
+.election-card-kind {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rust-dark);
+  margin-top: 2px;
+}
+
+.election-org {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.election-description {
+  max-width: 46rem;
+  padding-bottom: 8px;
+}
+
+.election-dates,
+.election-contests {
+  max-width: 52rem;
+  padding-bottom: 32px;
+}
+
+.election-dates h2,
+.election-contests h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.election-date-groups {
+  display: grid;
+  gap: 20px;
+}
+
+.election-date-group h3 {
+  font: 600 13px/1.2 var(--sans, inherit);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.election-date-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.election-date-item {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: 4px 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.election-date-when {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.election-date-title {
+  font-size: 16px;
+}
+
+.election-date-location {
+  grid-column: 2;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.contest-list {
+  display: grid;
+  gap: 16px;
+}
+
+.contest-card {
+  padding: 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.contest-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.contest-heading h3 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.contest-meta {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.contest-description {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.candidate-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.candidate-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: border-color 160ms ease;
+}
+
+.candidate-card:hover {
+  border-color: var(--ink);
+}
+
+.candidate-image,
+.candidate-fallback {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.candidate-image {
+  object-fit: cover;
+}
+
+.candidate-fallback {
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  font: 18px/1 var(--serif);
+}
+
+.candidate-text {
+  min-width: 0;
+}
+
+.candidate-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.candidate-meta {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.event-election {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.event-detail-election {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  .election-date-item {
+    grid-template-columns: 1fr;
+  }
+
+  .election-date-location {
+    grid-column: 1;
+  }
+}
+
 /* ---------- Responsive ---------- */
 
 @media (min-width: 1537px) {
