@@ -73,7 +73,8 @@ is missing, the hook warns and skips so commits are not blocked.
 with [Trivy](https://trivy.dev). The Supabase anon-key JWT false positives are
 scoped out in `.trivyignore.yaml`; a JWT anywhere else is still reported. CI runs
 the same scan (`.github/workflows/trivy.yml`) on pushes, pull requests, and
-weekly. All GitHub Actions in this repo are pinned by commit SHA.
+weekly. All GitHub Actions in this repo are pinned by commit SHA; `bun run
+check:pins` enforces this and runs in CI (`.github/workflows/action-pins.yml`).
 
 ## Gotchas
 
