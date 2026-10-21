@@ -18,7 +18,11 @@
     "db:reset": "supabase db reset",
     "db:push": "supabase db push",
     "db:status": "supabase status",
-    "db:seed-user": "bun run scripts/seed-test-user.mjs"
+    "db:seed-user": "bun run scripts/seed-test-user.mjs",
+    "secret:scan": "bun run scripts/secret-scan.mjs",
+    "secret:scan:all": "bun run scripts/secret-scan.mjs --all",
+    "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/*",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
     "supabase": "^2.121.0"

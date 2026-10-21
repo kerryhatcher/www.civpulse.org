@@ -50,6 +50,23 @@ bunx playwright screenshot --channel=chrome --viewport-size=1280,900 \
 For scripted flows, `chromium.launch({ channel: 'chrome' })` works the same way.
 Add `playwright` as a devDependency only if you are committing tests.
 
+## Secret scanning
+
+TruffleHog guards the repo against committed credentials.
+
+- **Pre-commit hook** (`.githooks/pre-commit`) scans staged files. `bun install`
+  installs it through the `prepare` script; run `bun run hooks:install` if the
+  hooks path is ever unset. Bypass a false positive with
+  `SKIP_SECRET_SCAN=1 git commit …` (or `git commit --no-verify`).
+- **Manual scans:** `bun run secret:scan` (staged files) and
+  `bun run secret:scan:all` (full git history).
+- **CI** (`.github/workflows/secret-scan.yml`) scans pushes to `main` and pull
+  requests, and does a full-history sweep weekly and on demand.
+
+TruffleHog is a separate binary — install it from
+<https://github.com/trufflesecurity/trufflehog#floppy_disk-installation>. If it
+is missing, the hook warns and skips so commits are not blocked.
+
 ## Gotchas
 
 - **Ports 4321/4322 may be taken** by other projects on a shared machine; Astro

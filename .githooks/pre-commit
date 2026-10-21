@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Scan staged files for secrets with TruffleHog before each commit.
+# Bypass a false positive with: SKIP_SECRET_SCAN=1 git commit …  (or git commit --no-verify)
+set -euo pipefail
+
+if [ "${SKIP_SECRET_SCAN:-0}" = "1" ]; then
+  echo "▸ Secret scan skipped (SKIP_SECRET_SCAN=1)."
+  exit 0
+fi
+
+if ! command -v bun >/dev/null 2>&1; then
+  echo "⚠ bun not found — skipping secret scan."
+  exit 0
+fi
+
+exec bun "$(git rev-parse --show-toplevel)/scripts/secret-scan.mjs"
