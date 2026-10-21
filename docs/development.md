@@ -115,3 +115,31 @@ scans with `--jobs 1`; CI uses the defaults.
 The site is static, so admin changes are only visible publicly after
 `bun run build` (or a deploy). This is expected, not a bug — see
 [architecture.md](./architecture.md).
+
+
+### Automatic Cloudflare deployments
+
+Cloudflare Workers Builds connects `kerryhatcher/www.civpulse.org` on `main` to
+both existing Workers in the Kerry Personal account. Preview deployments are
+disabled. The build root is `/` so Bun installs the workspace lockfile; both
+builds use Node 24 and the existing Cloudflare-managed `Astro-starter` build token.
+No deployment credentials are stored in the repository or GitHub variables.
+
+| Worker | Domain | Build command | Deploy command | Watch paths |
+| --- | --- | --- | --- | --- |
+| `civpulse-web-new` | `new.civpulse.org` | `bun run check && bun run build` | `bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**` |
+| `civpulse-mcp` | `mcp.civpulse.org` | `bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock` |
+
+The web build has `PUBLIC_SUPABASE_URL` set to the hosted project URL and
+`PUBLIC_SUPABASE_ANON_KEY` set to its current `sb_publishable_…` key. Despite the
+historical variable name, this accepts Supabase publishable keys as well as
+legacy anon keys. MCP uses that same publishable key in its Wrangler `vars`.
+These are public values; authorization still uses the caller's user token and
+RLS. Using the publishable format avoids JWT secret-scanner false positives
+without suppressing scanner rules.
+
+Manage these settings in each Worker's **Settings → Build** in Cloudflare.
+Build status appears on the GitHub commit checks and in Cloudflare build logs.
+Supabase's GitHub integration deploys migrations separately; a migration and
+frontend build can run concurrently, so keep schema changes backward compatible.
+Redeploy the web Worker after editing prerendered public content in the admin.

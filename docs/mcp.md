@@ -88,6 +88,11 @@ bun run --cwd apps/mcp check
 CLOUDFLARE_ACCOUNT_ID=<account-id> bun run --cwd apps/mcp deploy
 ```
 
-The Supabase URL, anon key, resource URL, and authorization-server URL are set in
+The Supabase URL, publishable key, resource URL, and authorization-server URL are set in
 `apps/mcp/wrangler.jsonc` under `vars` — all public values, since agents supply
 their own user token.
+
+
+Pushes to `main` that change `apps/mcp/**` or the shared package manifest/lockfile
+are checked and deployed automatically by Cloudflare Workers Builds. See
+[development.md](./development.md#automatic-cloudflare-deployments) for settings.
