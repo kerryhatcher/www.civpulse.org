@@ -18,6 +18,7 @@ export default defineConfig({
           '/calendar/view/',
           '/people/view/',
           '/elections/view/',
+          '/oauth/',
           '/404',
         ].some((path) => page.includes(path)),
     }),

@@ -10,6 +10,8 @@
     "build": "bun run --cwd apps/web build",
     "preview": "bun run --cwd apps/web preview",
     "check": "bun run --cwd apps/web check",
+    "mcp:check": "bun run --cwd apps/mcp check",
+    "mcp:deploy": "bun run --cwd apps/mcp deploy",
     "deploy": "bun run --cwd apps/web deploy",
     "supabase": "supabase",
     "db:start": "supabase start",

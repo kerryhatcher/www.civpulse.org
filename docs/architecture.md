@@ -5,6 +5,7 @@ Supabase backend.
 
 ```
 apps/web/     Astro frontend, built to static files
+apps/mcp/     Cloudflare Worker: remote MCP server (OIDC via Supabase Auth)
 supabase/     Postgres migrations + local Supabase config
 scripts/      dev orchestration and local seed helpers
 docs/         architecture, backend, and development notes
@@ -93,3 +94,13 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   bar. Admins also get an "Edit" shortcut on public org/map/person/election
   pages.
 - The header shows "Account" when signed in and "Admin" for allowlisted users.
+
+## MCP server
+
+`apps/mcp` is a separate Cloudflare Worker that exposes a remote Model Context
+Protocol server at `https://mcp.civpulse.org/mcp`. AI agents authenticate to it
+with **OpenID Connect / OAuth 2.1** through the Supabase Auth OAuth 2.1 server
+(a consent page lives on the static site at `/oauth/consent/`). Each tool call
+forwards the user's access token to Supabase, so RLS applies exactly as it does
+in the web app — reads follow visibility and writes require an admin. The Worker
+never uses the service-role key. See [mcp.md](./mcp.md).

@@ -63,6 +63,7 @@ bun run db:stop     # stop local Supabase
 - [docs/architecture.md](docs/architecture.md) — hosting/rendering model and the
   visibility model.
 - [docs/backend.md](docs/backend.md) — schema, RLS, search, and conventions.
+- [docs/mcp.md](docs/mcp.md) — the remote MCP server and OIDC auth for AI agents.
 - [docs/development.md](docs/development.md) — local loop, verification, and
   environment gotchas.
 

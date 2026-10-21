@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Authorize an AI agent"
+  description="Grant an AI agent access to Civic Pulse on your behalf."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Authorize an AI agent</h1>
+      <p>An AI agent is asking to access Civic Pulse on your behalf.</p>
+    </div>
+
+    <p class="status" data-consent-status>Loading the authorization request…</p>
+
+    <section class="auth-card" data-consent-panel hidden>
+      <p>
+        <strong data-consent-client>An application</strong> wants to access Civic Pulse as
+        <span data-consent-user></span>.
+      </p>
+      <p class="body-note">
+        After you decide, it will be redirected to <span data-consent-redirect></span>.
+      </p>
+
+      <h2>Requested permissions</h2>
+      <ul data-consent-scopes></ul>
+
+      <div class="org-form-actions">
+        <button class="button-link" type="button" data-consent-approve>Approve</button>
+        <button type="button" data-consent-deny>Deny</button>
+      </div>
+
+      <p class="body-note">
+        Access always follows your account's permissions and Row Level Security — an agent can only do
+        what you can. You can revoke access later from <a href="/account/">your account</a>.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { initOAuthConsent } from '../../scripts/oauth-consent';
+
+  void initOAuthConsent();
+</script>
