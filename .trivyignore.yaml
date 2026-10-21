@@ -1,0 +1,13 @@
+# Trivy ignore rules.
+#
+# The Supabase anon key is a public credential: it is shipped to the browser and
+# access is enforced by Row Level Security. Trivy's generic JWT detector flags it
+# in the local env file and in generated build output, so scope the ignore to
+# those paths only. A JWT anywhere else in the repo is still reported — a leaked
+# Supabase service-role key is also a JWT and must not be ignored.
+secrets:
+  - id: jwt-token
+    paths:
+      - "apps/web/.env"
+      - "apps/web/dist/**"
+    statement: Supabase anon keys are public by design (RLS-enforced)

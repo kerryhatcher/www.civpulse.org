@@ -21,6 +21,7 @@
     "db:seed-user": "bun run scripts/seed-test-user.mjs",
     "secret:scan": "bun run scripts/secret-scan.mjs",
     "secret:scan:all": "bun run scripts/secret-scan.mjs --all",
+    "security:trivy": "trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore.yaml --skip-dirs '**/node_modules' --skip-dirs '**/dist' --skip-dirs '**/.astro' --skip-dirs '**/.git' --skip-dirs '**/supabase/.temp' --skip-dirs '**/.wrangler' --skip-files '**/.dev.vars' .",
     "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/*",
     "prepare": "git config core.hooksPath .githooks || true"
   },

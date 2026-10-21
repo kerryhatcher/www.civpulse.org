@@ -1,0 +1,46 @@
+name: Trivy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly re-scan against the latest vulnerability database (Mondays 06:00 UTC).
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Vulnerability, secret, and config scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          format: table
+          output: trivy.txt
+          exit-code: '1'
+          ignore-unfixed: true
+          trivyignores: .trivyignore.yaml
+          skip-dirs: '**/node_modules,**/dist,**/.astro,**/.git,**/supabase/.temp,**/.wrangler'
+          skip-files: '**/.dev.vars'
+
+      - name: Publish report to job summary
+        if: always()
+        run: |
+          {
+            echo "## Trivy security scan"
+            echo
+            echo '```'
+            cat trivy.txt 2>/dev/null || echo "No report produced."
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

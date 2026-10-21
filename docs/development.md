@@ -67,6 +67,14 @@ TruffleHog is a separate binary — install it from
 <https://github.com/trufflesecurity/trufflehog#floppy_disk-installation>. If it
 is missing, the hook warns and skips so commits are not blocked.
 
+## Dependency and config scanning
+
+`bun run security:trivy` scans dependencies (`bun.lock`), IaC/config, and secrets
+with [Trivy](https://trivy.dev). The Supabase anon-key JWT false positives are
+scoped out in `.trivyignore.yaml`; a JWT anywhere else is still reported. CI runs
+the same scan (`.github/workflows/trivy.yml`) on pushes, pull requests, and
+weekly. All GitHub Actions in this repo are pinned by commit SHA.
+
 ## Gotchas
 
 - **Ports 4321/4322 may be taken** by other projects on a shared machine; Astro
