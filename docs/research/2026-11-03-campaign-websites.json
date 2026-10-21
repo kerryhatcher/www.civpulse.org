@@ -1,0 +1,667 @@
+{
+  "election_slug": "2026-11-03-general-election",
+  "checked_on": "2026-10-21",
+  "method": "Searched each November candidate, including certified write-ins. Verified campaign identity using first-party content, campaign disclaimers, or official campaign-committee filings. Directory and news links were leads, not substitutes for campaign sites. not_found means no standalone site was verified during this review, not that none exists.",
+  "candidates": [
+    {
+      "slug": "andrew-pacetti",
+      "name": "Andrew Pacetti",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": "https://www.andyforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.andyforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "anissa-m-jones",
+      "name": "Anissa M. Jones",
+      "office": "Georgia House of Representatives",
+      "district": "District 143",
+      "is_write_in": false,
+      "campaign_url": "https://www.electanissajones.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.electanissajones.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "austin-scott",
+      "name": "Austin Scott",
+      "office": "United States House of Representatives",
+      "district": "Georgia District 8",
+      "is_write_in": false,
+      "campaign_url": "https://www.scottforga.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.scottforga.com/",
+        "https://en.wikipedia.org/wiki/Austin_Scott"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office."
+    },
+    {
+      "slug": "barbara-rivera-holmes",
+      "name": "Bárbara Rivera Holmes",
+      "office": "Georgia Commissioner of Labor",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.barbaraforga.com/home",
+      "status": "verified",
+      "sources": [
+        "https://www.barbaraforga.com/home"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "brian-strickland",
+      "name": "Brian Strickland",
+      "office": "Georgia Attorney General",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://stricklandforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://stricklandforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "calvin-palmer",
+      "name": "Calvin Palmer",
+      "office": "Georgia House of Representatives",
+      "district": "District 142",
+      "is_write_in": false,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://branch.vote/races/2026-georgia-primary-election-ga-state-state-representative-ga-house-142-r/candidates/calvin-dennis-palmer"
+      ],
+      "verification": "No campaign site confirmed after searches under Calvin Palmer and Calvin Dennis Palmer."
+    },
+    {
+      "slug": "cassandra-easton",
+      "name": "Cassandra Easton",
+      "office": "United States Senate",
+      "district": "Georgia (statewide)",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.sway.co/candidate/cassandra-easton-e49e8885-5b40-4abc-8f67-69718165a705"
+      ],
+      "verification": "Candidate directories and ballot records found; no candidate-owned campaign site confirmed."
+    },
+    {
+      "slug": "christina-clement",
+      "name": "Christina Clement",
+      "office": "United States Senate",
+      "district": "Georgia (statewide)",
+      "is_write_in": true,
+      "campaign_url": "https://stateoflocnation.com/",
+      "status": "verified",
+      "sources": [
+        "https://stateoflocnation.com/",
+        "https://docquery.fec.gov/pdf/528/202602089825934528/202602089825934528.pdf"
+      ],
+      "verification": "Official campaign-committee URL declared in the FEC Form 1 filed February 8, 2026; current homepage serves broader organization material."
+    },
+    {
+      "slug": "dale-washburn",
+      "name": "Dale Washburn",
+      "office": "Georgia House of Representatives",
+      "district": "District 144",
+      "is_write_in": false,
+      "campaign_url": "https://www.washburnforstatehouse.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.washburnforstatehouse.com/",
+        "https://www.41nbc.com/decision-2024-meet-dale-washburn-candidate-for-georgia-house-district-144/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "david-c-byrne",
+      "name": "David C. Byrne",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf"
+      ],
+      "verification": "Write-in ballot records found; no campaign site confirmed."
+    },
+    {
+      "slug": "david-e-lucas",
+      "name": "David E. Lucas",
+      "office": "Georgia State Senate",
+      "district": "District 26",
+      "is_write_in": false,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.senate.ga.gov/SENATORS/en-US/district.aspx?District=26&Session=25"
+      ],
+      "verification": "Official legislative and caucus profiles found; no candidate-owned campaign site confirmed."
+    },
+    {
+      "slug": "david-leon-moreland",
+      "name": "David Leon Moreland",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf"
+      ],
+      "verification": "Write-in ballot records found; no campaign site confirmed."
+    },
+    {
+      "slug": "deb-broughton-davis",
+      "name": "Deb Broughton Davis",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf"
+      ],
+      "verification": "Write-in ballot records found; no campaign site confirmed."
+    },
+    {
+      "slug": "elbert-arthur-bartell",
+      "name": "Elbert Arthur Bartell",
+      "office": "United States Senate",
+      "district": "Georgia (statewide)",
+      "is_write_in": true,
+      "campaign_url": "https://bartellforsenate.com/",
+      "status": "verified",
+      "sources": [
+        "https://bartellforsenate.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "eric-wilson",
+      "name": "Eric Wilson",
+      "office": "Georgia House of Representatives",
+      "district": "District 145",
+      "is_write_in": false,
+      "campaign_url": "https://www.voteericwilson.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.voteericwilson.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office."
+    },
+    {
+      "slug": "fitz-johnson",
+      "name": "Fitz Johnson",
+      "office": "Georgia Public Service Commissioner",
+      "district": "District 3 (statewide vote)",
+      "is_write_in": false,
+      "campaign_url": "https://www.friendsforfitz.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.friendsforfitz.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office."
+    },
+    {
+      "slug": "floyd-griffin",
+      "name": "Floyd Griffin",
+      "office": "Georgia House of Representatives",
+      "district": "District 149",
+      "is_write_in": false,
+      "campaign_url": "https://floydgriffin.com/",
+      "status": "verified",
+      "sources": [
+        "https://floydgriffin.com/",
+        "https://www.41nbc.com/decision-2024-meet-floyd-griffin-candidate-for-georgia-house-district-149/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "greg-dolezal",
+      "name": "Greg Dolezal",
+      "office": "Lieutenant Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://gregdolezal.com/",
+      "status": "verified",
+      "sources": [
+        "https://gregdolezal.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "jacqueline-angela-dacosta",
+      "name": "Jacqueline Angela DaCosta",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf"
+      ],
+      "verification": "Write-in ballot records found; no campaign site confirmed. Unrelated namesakes excluded."
+    },
+    {
+      "slug": "john-king",
+      "name": "John King",
+      "office": "Georgia Commissioner of Insurance",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.votejohnking.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.votejohnking.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "jon-ossoff",
+      "name": "Jon Ossoff",
+      "office": "United States Senate",
+      "district": "Georgia (statewide)",
+      "is_write_in": false,
+      "campaign_url": "https://electjon.com/",
+      "status": "verified",
+      "sources": [
+        "https://electjon.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "josh-mclaurin",
+      "name": "Josh McLaurin",
+      "office": "Lieutenant Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.joshmclaurin.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.joshmclaurin.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "josh-tolbert",
+      "name": "Josh Tolbert",
+      "office": "Georgia Public Service Commissioner",
+      "district": "District 5 (statewide vote)",
+      "is_write_in": false,
+      "campaign_url": "https://www.teamtolbert.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.teamtolbert.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "justin-laster",
+      "name": "Justin Laster",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": "https://justinjlaster.com/",
+      "status": "verified",
+      "sources": [
+        "https://justinjlaster.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "katherine-e-juhan-arnold",
+      "name": "Katherine E. Juhan-Arnold",
+      "office": "Georgia Commissioner of Agriculture",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://katherineforgeorgia.com/Home",
+      "status": "verified",
+      "sources": [
+        "https://katherineforgeorgia.com/Home"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "keisha-lance-bottoms",
+      "name": "Keisha Lance Bottoms",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.keishaforgovernor.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.keishaforgovernor.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "keisha-sean-waites",
+      "name": "Keisha Sean Waites",
+      "office": "Georgia Commissioner of Insurance",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.keishawaites.org/",
+      "status": "verified",
+      "sources": [
+        "https://www.keishawaites.org/",
+        "https://fultondems.org/slate/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "kelly-esti",
+      "name": "Kelly Esti",
+      "office": "United States House of Representatives",
+      "district": "Georgia District 8",
+      "is_write_in": false,
+      "campaign_url": "https://www.kellyesti4congress.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.kellyesti4congress.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "leland-j-olinger-iii",
+      "name": "Leland J. Olinger, III",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.fox5atlanta.com/news/republican-leland-olinger-says-he-wants-be-next-ga-governor.amp"
+      ],
+      "verification": "News coverage identifies a campaign announcement on Facebook; no standalone campaign website confirmed."
+    },
+    {
+      "slug": "lindsay-d-holliday",
+      "name": "Lindsay D. Holliday",
+      "office": "Bibb County Soil and Water Conservation District Supervisor",
+      "district": "Bibb County (countywide)",
+      "is_write_in": false,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://www.branch.vote/races/2026-georgia-general-election-ga-state-swc-district-supervisor-ga-bibb/candidates/lindsay-holliday"
+      ],
+      "verification": "No verified campaign site for the current soil/water race found. Older congressional campaign links and a personal civic-information site were not substituted."
+    },
+    {
+      "slug": "lydia-powell",
+      "name": "Lydia Powell",
+      "office": "Georgia State School Superintendent",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.drlydiapowell.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.drlydiapowell.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "matt-day",
+      "name": "Matt Day",
+      "office": "United States House of Representatives",
+      "district": "Georgia District 2",
+      "is_write_in": false,
+      "campaign_url": "https://www.votemattday.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.votemattday.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "mike-collins",
+      "name": "Mike Collins",
+      "office": "United States Senate",
+      "district": "Georgia (statewide)",
+      "is_write_in": false,
+      "campaign_url": "https://mikecollinsga.com/",
+      "status": "verified",
+      "sources": [
+        "https://mikecollinsga.com/",
+        "https://docquery.fec.gov/pdf/980/202509179790089980/202509179790089980.pdf"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "milton-j-lofton",
+      "name": "Milton J. Lofton",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": true,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://blackstarnews.com/milton-j-lofton-launches-write-in-campaign-for-governor-of-georgia-stand-up-speak-out-make-a-change/"
+      ],
+      "verification": "Campaign announcement directs readers to social accounts; no standalone campaign website confirmed."
+    },
+    {
+      "slug": "miriam-paris",
+      "name": "Miriam Paris",
+      "office": "Georgia House of Representatives",
+      "district": "District 142",
+      "is_write_in": false,
+      "campaign_url": "https://www.miriamparisforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.miriamparisforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "nikki-porcher",
+      "name": "Nikki Porcher",
+      "office": "Georgia Commissioner of Labor",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.voteporcher4ga.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.voteporcher4ga.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "penny-brown-reynolds",
+      "name": "Penny Brown Reynolds",
+      "office": "Georgia Secretary of State",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.pennyforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.pennyforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "peter-hubbard",
+      "name": "Peter Hubbard",
+      "office": "Georgia Public Service Commissioner",
+      "district": "District 3 (statewide vote)",
+      "is_write_in": false,
+      "campaign_url": "https://www.peterforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.peterforgeorgia.com/",
+        "https://fultondems.org/slate/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "randy-peters",
+      "name": "Randy Peters",
+      "office": "Georgia House of Representatives",
+      "district": "District 149",
+      "is_write_in": false,
+      "campaign_url": "https://randypetersforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://randypetersforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "richard-woods",
+      "name": "Richard Woods",
+      "office": "Georgia State School Superintendent",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.woodsforsuper.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.woodsforsuper.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office."
+    },
+    {
+      "slug": "rick-a-williams",
+      "name": "Rick A. Williams",
+      "office": "Georgia State Senate",
+      "district": "District 25",
+      "is_write_in": false,
+      "campaign_url": "https://www.rickwilliamsforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.rickwilliamsforgeorgia.com/",
+        "https://www.41nbc.com/decision-2024-meet-rick-williams-candidate-for-georgia-senate-district-25-republican-primary/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office."
+    },
+    {
+      "slug": "rick-jackson",
+      "name": "Rick Jackson",
+      "office": "Governor of Georgia",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://rickjackson.com/",
+      "status": "verified",
+      "sources": [
+        "https://rickjackson.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "sanford-bishop",
+      "name": "Sanford Bishop",
+      "office": "United States House of Representatives",
+      "district": "Georgia District 2",
+      "is_write_in": false,
+      "campaign_url": "https://sanfordbishop.com/",
+      "status": "verified",
+      "sources": [
+        "https://sanfordbishop.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "shelia-edwards",
+      "name": "Shelia Edwards",
+      "office": "Georgia Public Service Commissioner",
+      "district": "District 5 (statewide vote)",
+      "is_write_in": false,
+      "campaign_url": "https://www.shelia4psc.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.shelia4psc.com/",
+        "https://fultondems.org/slate/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "steven-mcneel",
+      "name": "Steven McNeel",
+      "office": "Georgia State Senate",
+      "district": "District 18",
+      "is_write_in": false,
+      "campaign_url": "https://www.votestevenmcneel.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.votestevenmcneel.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "tangie-herring",
+      "name": "Tangie Herring",
+      "office": "Georgia House of Representatives",
+      "district": "District 145",
+      "is_write_in": false,
+      "campaign_url": "https://www.tangieforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.tangieforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "tanya-miller",
+      "name": "Tanya Miller",
+      "office": "Georgia Attorney General",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.tanyaforgeorgia.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.tanyaforgeorgia.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "tim-fleming",
+      "name": "Tim Fleming",
+      "office": "Georgia Secretary of State",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://www.flemingforga.com/",
+      "status": "verified",
+      "sources": [
+        "https://www.flemingforga.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    },
+    {
+      "slug": "tracy-wheeler",
+      "name": "Tracy Wheeler",
+      "office": "Georgia State Senate",
+      "district": "District 26",
+      "is_write_in": false,
+      "campaign_url": null,
+      "status": "not_found",
+      "sources": [
+        "https://geears.org/candidate/tracy-wheeler/",
+        "https://www.ballotready.org/people/tracy-wheeler"
+      ],
+      "verification": "Campaign Facebook page listed by GEEARS and BallotReady; no standalone campaign website confirmed."
+    },
+    {
+      "slug": "tyler-harper",
+      "name": "Tyler Harper",
+      "office": "Georgia Commissioner of Agriculture",
+      "district": "Statewide",
+      "is_write_in": false,
+      "campaign_url": "https://tylerharperga.com/",
+      "status": "verified",
+      "sources": [
+        "https://tylerharperga.com/"
+      ],
+      "verification": "Candidate-owned campaign content identifies the candidate and office (homepage fetched successfully)."
+    }
+  ]
+}
