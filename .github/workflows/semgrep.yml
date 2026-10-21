@@ -1,0 +1,41 @@
+name: Semgrep
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly sweep against the latest rules (Mondays 06:00 UTC).
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: Semgrep scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Run Semgrep
+        run: |
+          docker run --rm \
+            --entrypoint semgrep \
+            -v "${{ github.workspace }}:/src" \
+            -w /src \
+            docker.io/semgrep/semgrep@sha256:81474464c1f07483ba0682a44787fd93c91397419762a04abe2bafaae396304b \
+            scan \
+            --config=p/default \
+            --config=p/secrets \
+            --config=p/owasp-top-ten \
+            --metrics=off \
+            --error \
+            --exclude=node_modules \
+            --exclude=dist \
+            --exclude=.astro \
+            --exclude=.git \
+            --exclude=supabase/.temp \
+            --exclude=.wrangler \
+            .

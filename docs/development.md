@@ -76,6 +76,12 @@ the same scan (`.github/workflows/trivy.yml`) on pushes, pull requests, and
 weekly. All GitHub Actions in this repo are pinned by commit SHA; `bun run
 check:pins` enforces this and runs in CI (`.github/workflows/action-pins.yml`).
 
+[Semgrep](https://semgrep.dev) runs in CI (`.github/workflows/semgrep.yml`) using
+the digest-pinned `semgrep/semgrep` image with the `p/default`, `p/secrets`, and
+`p/owasp-top-ten` rulesets — no token required. On this machine semgrep-core
+crashes on `io_uring_queue_init` (the sandbox blocks io_uring), so run local
+scans with `--jobs 1`; CI uses the defaults.
+
 ## Gotchas
 
 - **Ports 4321/4322 may be taken** by other projects on a shared machine; Astro
