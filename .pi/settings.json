@@ -1,4 +1,4 @@
 {
-  "packages": ["../pi-astro"],
+  "packages": ["../../pi-astro", "../../pi-supabase"],
   "instructions": "Use bun instead of node/npm. Install dependencies, run scripts, build, and test packages with bun. Use bun add / bun add --dev for installing packages, bun run for running scripts, and bun build for building. Prefer cross-agent conventions (e.g., AGENTS.md) when setting up tooling or instructions — make things work uniformly across all coding agents (Pi, Codex, Claude, etc.) rather than creating tool-specific configs. When the coding agent system reads `.pi/settings.json` for project instructions, also respect instructions in AGENTS.md for human and other AI tooling."
 }
