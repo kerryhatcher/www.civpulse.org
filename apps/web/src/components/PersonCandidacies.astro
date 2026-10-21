@@ -1,0 +1,23 @@
+---
+interface Props {
+  personId?: string;
+}
+const { personId } = Astro.props;
+---
+
+<section class="person-candidacies" data-person-candidacies data-person-id={personId} hidden={!personId} aria-labelledby="person-candidacies-title">
+  <h2 id="person-candidacies-title">Election candidacies</h2>
+  <p class="status" data-candidacies-status role="status" aria-live="polite">Loading candidacies…</p>
+  <div data-candidacy-groups hidden>
+    <section aria-labelledby="current-candidacies-title">
+      <h3 id="current-candidacies-title">Current candidacies</h3>
+      <ul class="person-candidacy-list" data-current-candidacies></ul>
+      <p class="status" data-current-candidacies-empty hidden>No current candidacies recorded.</p>
+    </section>
+    <section aria-labelledby="past-candidacies-title">
+      <h3 id="past-candidacies-title">Past candidacies</h3>
+      <ul class="person-candidacy-list" data-past-candidacies></ul>
+      <p class="status" data-past-candidacies-empty hidden>No past candidacies recorded.</p>
+    </section>
+  </div>
+</section>

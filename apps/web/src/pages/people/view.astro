@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PersonCandidacies from '../../components/PersonCandidacies.astro';
 ---
 
 <Layout title="Person" description="View a shared Civic Pulse person record.">
@@ -33,6 +34,8 @@ import Layout from '../../layouts/Layout.astro';
         <h2>Organizations</h2>
         <div class="affiliation-list" data-person-affiliations></div>
       </section>
+
+      <PersonCandidacies />
 
       <p class="org-back">
         <a href="/people/">← All people</a>

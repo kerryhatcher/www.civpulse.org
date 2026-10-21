@@ -499,3 +499,19 @@ checkbox. `get_election` returns the flag; both prerendered pages and the shared
 viewer display a **Certified write-in** badge immediately below the candidate's
 name. A missing party does not imply a write-in (nonpartisan candidates can have
 no party too).
+
+### Person candidacy history
+
+Person profiles load `get_person_candidacies(person_id)` in the browser on both
+public pages and the shared viewer. No candidacy or hidden-election data is
+embedded in public HTML. The RPC checks the person's visibility, then includes
+public elections for anonymous visitors and also unlisted/private elections for
+signed-in visitors, matching election search discovery rules.
+
+Current candidacies have an election date today or later in America/New_York
+and a status of running, runoff, or pending. Past candidacies include earlier
+elections and candidacies marked withdrawn, won, or lost. Current entries sort
+by nearest election first; past entries sort newest first. Each entry links to
+the correct public election page or UUID viewer and includes office/district,
+election date, party, status, and the certified write-in badge when applicable.
+Profiles with no visible candidacies omit the section.

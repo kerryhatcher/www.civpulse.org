@@ -1,3 +1,4 @@
+import type { CandidateStatus, ElectionVisibility } from './elections';
 import { getBuildSupabase, personImageUrl } from './supabase-build';
 
 export type PersonVisibility = 'public' | 'unlisted' | 'private';
@@ -66,6 +67,23 @@ export interface AffiliationRow {
   person_id: string;
   organization_id: string;
   role: string;
+}
+
+/** A race returned by the visibility-aware profile history RPC. */
+export interface PersonCandidacy {
+  contest_id: string;
+  office: string;
+  district: string | null;
+  seat: string | null;
+  party: string | null;
+  status: CandidateStatus;
+  is_write_in: boolean;
+  election_id: string;
+  election_name: string;
+  election_slug: string;
+  election_date: string;
+  election_visibility: ElectionVisibility;
+  is_current: boolean;
 }
 
 export const PERSON_COLUMNS =
