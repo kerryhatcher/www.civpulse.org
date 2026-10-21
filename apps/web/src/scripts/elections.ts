@@ -7,6 +7,7 @@ import {
   ELECTION_DATE_KIND_ORDER,
   ELECTION_KIND_LABELS,
   ELECTION_VISIBILITY_LABELS,
+  type BallotQuestion,
   type Election,
   type ElectionContest,
   type ElectionDate,
@@ -190,6 +191,7 @@ interface ElectionViewResponse {
   election?: Election;
   organization?: ElectionDetail['organization'];
   contests?: ElectionContest[];
+  ballot_questions?: BallotQuestion[];
   dates?: ElectionDate[];
 }
 
@@ -309,6 +311,28 @@ function buildContest(contest: ElectionContest): HTMLElement {
   return card;
 }
 
+function buildBallotQuestion(question: BallotQuestion): HTMLElement {
+  const card = document.createElement('article');
+  card.className = 'contest-card ballot-question';
+  const header = document.createElement('header'); header.className = 'contest-heading';
+  const title = document.createElement('h3'); title.textContent = question.title;
+  const meta = document.createElement('span'); meta.className = 'contest-meta';
+  meta.textContent = ['Ballot question', question.jurisdiction].filter(Boolean).join(' · ');
+  header.append(title, meta); card.append(header);
+  const wording = document.createElement('p'); wording.className = 'ballot-question-text'; wording.textContent = question.question_text; card.append(wording);
+  if (question.description) {
+    const description = document.createElement('p'); description.className = 'contest-description'; description.textContent = question.description; card.append(description);
+  }
+  const label = document.createElement('p'); label.className = 'body-note'; label.textContent = 'Response choices'; card.append(label);
+  const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
+  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; choices.append(item); }
+  card.append(choices);
+  if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
+    const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);
+  }
+  return card;
+}
+
 function buildDateGroups(dates: ElectionDate[]): HTMLElement {
   const container = document.createElement('div');
   container.className = 'election-date-groups';
@@ -407,18 +431,19 @@ function fillElectionView(response: ElectionViewResponse): void {
   }
 
   const contests = response.contests ?? [];
+  const questions = response.ballot_questions ?? [];
   const contestsSection = document.querySelector<HTMLElement>('[data-election-contests-section]');
   const contestsContainer = document.querySelector<HTMLElement>('[data-election-contests]');
   if (contestsSection && contestsContainer) {
     contestsContainer.replaceChildren();
-    if (contests.length > 0) {
-      contestsContainer.append(...contests.map(buildContest));
+    if (contests.length > 0 || questions.length > 0) {
+      contestsContainer.append(...contests.map(buildContest), ...questions.map(buildBallotQuestion));
       contestsSection.hidden = false;
     } else {
       const empty = document.createElement('div');
       empty.className = 'empty-state';
       const message = document.createElement('p');
-      message.textContent = 'No contests have been published for this election yet.';
+      message.textContent = 'No races or ballot questions have been published for this election yet.';
       empty.append(message);
       contestsContainer.append(empty);
       contestsSection.hidden = false;

@@ -1,3 +1,4 @@
+import { initBallotQuestionAdmin } from './admin-ballot-questions';
 import {
   CANDIDATE_STATUS_LABELS,
   ELECTION_COLUMNS,
@@ -259,6 +260,7 @@ export async function initElectionAdmin(): Promise<void> {
       contestElection.value = elections[0].id;
     }
 
+    document.dispatchEvent(new CustomEvent('elections-updated', { detail: elections }));
     renderElectionList();
   }
 
@@ -875,6 +877,7 @@ export async function initElectionAdmin(): Promise<void> {
   candidateCancel?.addEventListener('click', resetCandidateForm);
   contestFilter?.addEventListener('change', renderContestList);
 
+  await initBallotQuestionAdmin();
   await loadOrganizations();
   await loadPeople();
   await loadElections();

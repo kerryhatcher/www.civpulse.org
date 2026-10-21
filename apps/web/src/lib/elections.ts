@@ -125,10 +125,23 @@ export interface ElectionDate {
   calendar_slug: string;
 }
 
+export interface BallotQuestion {
+  id: string;
+  election_id: string;
+  title: string;
+  question_text: string;
+  description: string | null;
+  jurisdiction: string | null;
+  choices: string[];
+  source_url: string | null;
+  position: number;
+}
+
 export interface ElectionDetail {
   election: Election;
   organization: { id: string; slug: string; name: string } | null;
   contests: ElectionContest[];
+  ballot_questions: BallotQuestion[];
   dates: ElectionDate[];
 }
 
@@ -183,6 +196,7 @@ export async function fetchElectionDetail(id: string): Promise<ElectionDetail | 
       election?: Election;
       organization?: ElectionDetail['organization'];
       contests?: ElectionContest[];
+      ballot_questions?: BallotQuestion[];
       dates?: ElectionDate[];
     } | null;
 
@@ -192,6 +206,7 @@ export async function fetchElectionDetail(id: string): Promise<ElectionDetail | 
       election: response.election,
       organization: response.organization ?? null,
       contests: response.contests ?? [],
+      ballot_questions: response.ballot_questions ?? [],
       dates: response.dates ?? [],
     };
   } catch (error) {

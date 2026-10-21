@@ -5,14 +5,14 @@ import AdminTabs from '../../components/AdminTabs.astro';
 
 <Layout
   title="Elections admin"
-  description="Manage elections, their contests, and the candidates running in each office."
+  description="Manage elections, office races, candidates, and ballot questions."
 >
   <main id="main">
     <div class="page-intro">
       <h1>Elections</h1>
       <p>
         Elections are organized by the date of the actual election. Add the contests on the ballot
-        and the people running, then tag early-voting days and deadlines to the election from the
+        and the people running, add ballot questions, then tag early-voting days and deadlines to the election from the
         <a href="/admin/calendars/">calendars admin</a> so they appear on the community calendar.
       </p>
     </div>
@@ -97,6 +97,33 @@ import AdminTabs from '../../components/AdminTabs.astro';
       <section aria-labelledby="election-list-title">
         <h2 id="election-list-title">Elections</h2>
         <div class="org-list" data-election-list></div>
+      </section>
+
+      <form class="org-form" data-question-form>
+        <h2 data-question-form-title>Add a ballot question</h2>
+        <input type="hidden" name="id" />
+        <label class="field"><span>Election *</span><select name="election_id" required></select></label>
+        <label class="field"><span>Title / ballot number *</span><input name="title" maxlength="200" placeholder="Referendum 1 — …" required /></label>
+        <label class="field"><span>Full ballot wording *</span><textarea name="question_text" rows="6" maxlength="20000" required></textarea></label>
+        <label class="field"><span>Summary / explanation</span><textarea name="description" rows="3" maxlength="4000"></textarea></label>
+        <div class="field-grid">
+          <label class="field"><span>Jurisdiction / district</span><input name="jurisdiction" maxlength="200" placeholder="Bibb County" /></label>
+          <label class="field"><span>Order</span><input type="number" name="position" value="0" step="1" required /></label>
+        </div>
+        <label class="field"><span>Response choices * (one per line)</span><textarea name="choices" rows="3" maxlength="4000" required>Yes
+No</textarea></label>
+        <label class="field"><span>Official source URL</span><input type="url" name="source_url" maxlength="2000" placeholder="https://…" /></label>
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create ballot question</button>
+          <button type="button" data-question-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-question-message hidden role="status" aria-live="polite"></p>
+      </form>
+      <section aria-labelledby="question-list-title">
+        <h2 id="question-list-title">Ballot questions</h2>
+        <label class="field event-filter"><span>Filter by election</span><select data-question-filter><option value="">All elections</option></select></label>
+        <p class="auth-message" data-question-list-message hidden role="status" aria-live="polite"></p>
+        <div class="org-list" data-question-list></div>
       </section>
 
       <form class="org-form" data-contest-form novalidate>

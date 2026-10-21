@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
 import {
   fetchPublicElections,
@@ -31,7 +32,7 @@ interface Props {
 }
 
 const { detail } = Astro.props;
-const { election, organization, contests, dates } = detail;
+const { election, organization, contests, dates, ballot_questions } = detail;
 
 function initials(name: string): string {
   return name
@@ -112,7 +113,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
     <section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot</h2>
       {
-        contests.length > 0 ? (
+        contests.length > 0 || ballot_questions.length > 0 ? (
           <div class="contest-list">
             {contests.map((contest) => (
               <article class="contest-card">
@@ -163,10 +164,11 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                 )}
               </article>
             ))}
+            {ballot_questions.map(question => <BallotQuestion question={question} />)}
           </div>
         ) : (
           <div class="empty-state">
-            <p>No contests have been published for this election yet.</p>
+            <p>No races or ballot questions have been published for this election yet.</p>
           </div>
         )
       }

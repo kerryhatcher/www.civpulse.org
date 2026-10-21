@@ -515,3 +515,19 @@ by nearest election first; past entries sort newest first. Each entry links to
 the correct public election page or UUID viewer and includes office/district,
 election date, party, status, and the certified write-in badge when applicable.
 Profiles with no visible candidacies omit the section.
+
+### Ballot questions
+
+`ballot_questions` stores referendums, amendments, and other questions separately
+from office contests. Each belongs to an election and has a title/ballot number,
+required full wording, optional explanation and jurisdiction, 2–20 response
+choices (default Yes/No), optional HTTP(S) official source URL, and sort position.
+Admins create, edit, delete, and filter questions in `/admin/elections/`.
+Questions display after office races under “What's on the ballot,” sorted by
+position and title. Question-only elections are supported. Choices are informational,
+not a voting form. No person/candidate records are created for questions.
+
+Direct table access is admin-only, enforced with RLS. Public and shared election
+views receive questions through `get_election`, inheriting the election's
+public/unlisted/private rules. Deleting an election cascades its questions.
+Public pages update after a rebuild; UUID viewers fetch current data.

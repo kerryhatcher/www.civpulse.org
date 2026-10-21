@@ -2231,3 +2231,7 @@ textarea::placeholder {
 .person-candidacy-card .candidate-write-in {
   align-self: flex-start;
 }
+
+.ballot-question-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ballot-question-choices { margin: 0 0 1rem; padding-left: 1.5rem; }
+.ballot-question .contest-description { white-space: pre-wrap; }

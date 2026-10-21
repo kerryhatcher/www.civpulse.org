@@ -1,0 +1,16 @@
+---
+import type { BallotQuestion } from '../lib/elections';
+interface Props { question: BallotQuestion }
+const { question } = Astro.props;
+---
+<article class="contest-card ballot-question">
+  <header class="contest-heading">
+    <h3>{question.title}</h3>
+    <span class="contest-meta">Ballot question{question.jurisdiction ? ` · ${question.jurisdiction}` : ''}</span>
+  </header>
+  <p class="ballot-question-text">{question.question_text}</p>
+  {question.description && <p class="contest-description">{question.description}</p>}
+  <p class="body-note">Response choices</p>
+  <ul class="ballot-question-choices">{question.choices.map(choice => <li>{choice}</li>)}</ul>
+  {question.source_url && /^https?:\/\//i.test(question.source_url) && <p><a href={question.source_url} target="_blank" rel="noopener noreferrer">Official source ↗</a></p>}
+</article>
