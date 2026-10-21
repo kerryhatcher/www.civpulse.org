@@ -86,6 +86,14 @@ Migrations are append-only files in `supabase/migrations/`.
 - `public.events` — `calendar_id` (required), `title`, `description`,
   `starts_at` (required), `ends_at`, `all_day`, `location`, `url`,
   `visibility`, timestamps. Both calendars and events carry visibility.
+- `public.people` — CRM-style records for officials, elected office holders,
+  candidates, and other civic figures: `slug`, `full_name`, `kind`, `title`,
+  `description`, contact fields (`email`, `phone`, `fax`, `website_url`,
+  `social_url`, structured mailing address), `image_path`, `visibility`,
+  timestamps.
+- `public.person_organizations` — links a person to an organization with a
+  `role` (member, owner, officer, CEO, employee, …); one role per person/org
+  pair, both sides cascade on delete.
 
 Other content tables are intentionally not defined yet. They will be added as
 separate migrations once their shape is settled.
@@ -235,6 +243,56 @@ calendar are visible, so a public event on a private calendar stays private.
   calendar, organization}` for the viewer, applying the same gate.
 - `events.search_document` is a stored `tsvector` (title weight A, description
   weight B, location weight C) with a GIN index.
+
+## People
+
+- Admin UI: `/admin/people/` (requires an admin account). One page manages both
+  **people** and their **organization affiliations**.
+- Public directory: `/people/`; each public person gets `/people/<slug>/`. The
+  organization page lists its public affiliated people with their roles.
+- A person is an official/elected/candidate record with an optional title, bio,
+  contact details (email, phone, fax, website, social, structured mailing
+  address), and an optional profile image uploaded to the `person-images`
+  bucket.
+- Affiliations link a person to an organization with a free-text role. A person
+  has at most one role per organization; the admin form upserts on the pair.
+
+### People visibility
+
+People use the same `public | unlisted | private` rules as maps, layers, and
+events.
+
+| Visibility | Page | Listed | Sitemap | Search | Access |
+| --- | --- | --- | --- | --- | --- |
+| `public` | `/people/<slug>/` (prerendered) | yes | yes | anon + signed-in | anyone |
+| `unlisted` | `/people/view/?id=<uuid>` | no | no | signed-in only | anyone with the uuid |
+| `private` | `/people/view/?id=<uuid>` | no | no | signed-in only | signed-in users |
+
+- RLS: public people are readable by anyone, private people by any
+  authenticated user, unlisted people are not readable through the Data API at
+  all (only through the RPC). Admins can read every row.
+- `person_organizations` has no blanket public read: a select policy exposes
+  affiliations only when the linked person is public (and, for authenticated
+  callers, private), so unlisted/private organization links never reach the Data
+  API. All reads for hidden people go through `get_person`.
+- `/people/view/` reads the uuid from `?id=` (or `/people/u/<uuid>/` /
+  `/people/p/<uuid>/` paths rewritten by `public/_redirects` on Cloudflare) and
+  calls `public.get_person(uuid)`. Admins see an “Edit person” button that
+  deep-links to `/admin/people/?edit=<id>`.
+
+### People search
+
+- `people.search_document` is a stored `tsvector` generated from `full_name`
+  (weight A), `title` (weight B), and `description` (weight C), with a GIN
+  index.
+- `public.search_people(p_query text, p_limit int)` uses `websearch_to_tsquery`
+  + `ts_rank`. Anonymous callers only match `public` people; signed-in callers
+  also match `unlisted` and `private` people. Unlisted people stay unreachable
+  through the Data API because the function is `security definer` and applies
+  the filter itself.
+- The `/people/` page shows the build-time public list to anonymous visitors,
+  swaps to `search_people` results as you type, and (when signed in) lists the
+  full set of people the caller can access with visibility badges.
 
 ## Organizations admin
 

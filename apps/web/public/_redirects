@@ -3,3 +3,6 @@
 /maps/p/*  /maps/view/  200
 # Long uuid URLs for publicly shared calendar events.
 /calendar/e/*  /calendar/view/  200
+# Long uuid URLs for unlisted and private people.
+/people/u/*  /people/view/  200
+/people/p/*  /people/view/  200

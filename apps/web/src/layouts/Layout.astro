@@ -21,6 +21,7 @@ const nav = [
   { url: '/', label: 'Home' },
   { url: '/maps/', label: 'Explore maps' },
   { url: '/calendar/', label: 'Community calendar' },
+  { url: '/people/', label: 'People' },
 ];
 const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
@@ -75,6 +76,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
         </p>
         <div>
           <a href="/orgs/">Organizations</a>
+          <span aria-hidden="true">/</span>
+          <a href="/people/">People</a>
           <span aria-hidden="true">/</span>
           <a href="/about/">About this project</a>
           <span aria-hidden="true">/</span>

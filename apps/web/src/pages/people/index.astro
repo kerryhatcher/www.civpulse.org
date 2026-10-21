@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchPublicPeople, personImageUrl, PERSON_KIND_LABELS } from '../../lib/people';
+
+const people = await fetchPublicPeople();
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+---
+
+<Layout
+  title="People"
+  description="Officials, elected office holders, and candidates for office in one public directory."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>People</h1>
+      <p>Officials, elected office holders, and candidates for office.</p>
+    </div>
+
+    {
+      people.length > 0 && (
+        <form class="map-search" data-person-search-form role="search">
+          <label class="visually-hidden" for="person-search-input">
+            Search people
+          </label>
+          <input
+            id="person-search-input"
+            type="search"
+            placeholder="Search people…"
+            data-person-search
+            autocomplete="off"
+          />
+          <p class="status" data-person-search-note hidden>
+            Signed in — search includes public, unlisted, and private people.
+          </p>
+        </form>
+      )
+    }
+
+    <p class="status" data-person-search-status hidden></p>
+
+    {
+      people.length > 0 ? (
+        <div class="org-grid" data-person-initial>
+          {people.map((person) => {
+            const image = personImageUrl(person.image_path);
+            return (
+              <a class="org-card person-card" href={`/people/${person.slug}/`}>
+                {image ? (
+                  <img
+                    class="org-card-logo person-card-image"
+                    src={image}
+                    alt=""
+                    loading="lazy"
+                    width="72"
+                    height="72"
+                  />
+                ) : (
+                  <span class="org-card-fallback" aria-hidden="true">
+                    {initials(person.full_name)}
+                  </span>
+                )}
+                <h2>{person.full_name}</h2>
+                <span class="person-card-meta">
+                  {[person.title, PERSON_KIND_LABELS[person.kind]].filter(Boolean).join(' · ')}
+                </span>
+                {person.description && <p>{person.description}</p>}
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="prose" data-person-initial>
+          <div class="empty-state">
+            <p>
+              No people are published yet. Admins can add them from{' '}
+              <a href="/admin/people/">the people admin</a>.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="org-grid" data-person-search-results hidden></div>
+    <p class="status" data-person-search-empty hidden>No people match that search.</p>
+  </main>
+</Layout>
+
+<script>
+  import { initPeopleSearch } from '../../scripts/people';
+
+  initPeopleSearch();
+</script>

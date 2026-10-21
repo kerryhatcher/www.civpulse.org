@@ -1678,6 +1678,116 @@ textarea::placeholder {
   }
 }
 
+/* ---------- People ---------- */
+
+.person-card-meta {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rust-dark);
+}
+
+.person-card-image,
+.person-header-image,
+.person-row-image {
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.person-bio {
+  max-width: 46rem;
+  padding-bottom: 8px;
+}
+
+.person-affiliations {
+  max-width: 46rem;
+  padding-bottom: 32px;
+}
+
+.person-affiliations h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.affiliation-list {
+  display: grid;
+}
+
+.affiliation-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 16px;
+}
+
+.affiliation-item:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.affiliation-role {
+  color: var(--muted);
+}
+
+.address-block {
+  white-space: pre-line;
+}
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 12px;
+  padding-bottom: 32px;
+}
+
+.person-card-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: border-color 160ms ease;
+}
+
+.person-card-inline:hover {
+  border-color: var(--ink);
+}
+
+.person-card-image,
+.person-card-fallback {
+  width: 56px;
+  height: 56px;
+  flex: none;
+}
+
+.person-card-fallback {
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  font: 24px/1 var(--serif);
+  border-radius: 50%;
+}
+
+.person-card-inline-text {
+  min-width: 0;
+}
+
+.person-card-inline-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.person-card-inline-role {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ---------- Responsive ---------- */
 
 @media (min-width: 1537px) {
@@ -1841,6 +1951,12 @@ textarea::placeholder {
 
   .preview-list h3 {
     font-size: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .people-grid {
+    grid-template-columns: 1fr;
   }
 }
 

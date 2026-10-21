@@ -1,0 +1,156 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  fetchPublicAffiliations,
+  fetchPublicPeople,
+  personImageUrl,
+  PERSON_KIND_LABELS,
+  type OrganizationAffiliation,
+  type Person,
+} from '../../lib/people';
+
+export async function getStaticPaths() {
+  const people = await fetchPublicPeople();
+  const affiliations = await Promise.all(
+    people.map((person) => fetchPublicAffiliations(person.id)),
+  );
+
+  return people.map((person, index) => ({
+    params: { slug: person.slug },
+    props: { person, affiliations: affiliations[index] ?? [] },
+  }));
+}
+
+interface Props {
+  person: Person;
+  affiliations: OrganizationAffiliation[];
+}
+
+const { person, affiliations } = Astro.props;
+const image = personImageUrl(person.image_path);
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
+const address = [
+  person.address_line,
+  person.address_line2,
+  [person.city, person.state].filter(Boolean).join(', ') || null,
+  person.postal_code,
+]
+  .filter((line): line is string => Boolean(line))
+  .join('\n');
+
+const contact = [
+  { label: 'Email', value: person.email, href: person.email ? `mailto:${person.email}` : null },
+  {
+    label: 'Phone',
+    value: person.phone,
+    href: person.phone ? `tel:${person.phone.replace(/[^+\d]/g, '')}` : null,
+  },
+  {
+    label: 'Fax',
+    value: person.fax,
+    href: person.fax ? `tel:${person.fax.replace(/[^+\d]/g, '')}` : null,
+  },
+  { label: 'Mailing address', value: address, href: null },
+  { label: 'Website', value: person.website_url, href: person.website_url },
+  { label: 'Social', value: person.social_url, href: person.social_url },
+].filter((item) => item.value);
+---
+
+<Layout
+  title={person.full_name}
+  description={person.description ?? `${PERSON_KIND_LABELS[person.kind]}: ${person.full_name}.`}
+>
+  <main id="main">
+    <div class="org-header">
+      {
+        image ? (
+          <img
+            class="org-header-logo person-header-image"
+            src={image}
+            alt={`${person.full_name} portrait`}
+            width="120"
+            height="120"
+          />
+        ) : (
+          <span class="org-header-fallback" aria-hidden="true">
+            {initials(person.full_name)}
+          </span>
+        )
+      }
+      <div class="org-header-text">
+        <p class="org-eyebrow">{PERSON_KIND_LABELS[person.kind]}</p>
+        <h1>{person.full_name}</h1>
+        {person.title && <p class="org-lede">{person.title}</p>}
+      </div>
+      <a
+        class="button-link org-edit-link"
+        data-person-edit-link
+        href={`/admin/people/?edit=${person.id}`}
+        hidden
+      >
+        Edit person
+      </a>
+    </div>
+
+    {person.description && <div class="prose person-bio"><p>{person.description}</p></div>}
+
+    {
+      contact.length > 0 && (
+        <div class="org-contact">
+          <h2>Contact</h2>
+          <dl class="account-list">
+            {contact.map((item) => (
+              <div>
+                <dt>{item.label}</dt>
+                <dd>
+                  {item.href ? (
+                    <a href={item.href}>{item.value}</a>
+                  ) : item.label === 'Mailing address' ? (
+                    <span class="address-block">{item.value}</span>
+                  ) : (
+                    item.value
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
+
+    {
+      affiliations.length > 0 && (
+        <section class="person-affiliations" aria-labelledby="person-affiliations-title">
+          <h2 id="person-affiliations-title">Organizations</h2>
+          <div class="affiliation-list">
+            {affiliations.map((org) => (
+              <p class="affiliation-item">
+                <a href={`/orgs/${org.slug}/`}>{org.name}</a>
+                <span class="affiliation-role"> · {org.role}</span>
+              </p>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <p class="org-back">
+      <a href="/people/">← All people</a>
+    </p>
+  </main>
+</Layout>
+
+<script>
+  import { initAdminEditLink } from '../../scripts/auth';
+
+  void initAdminEditLink();
+</script>

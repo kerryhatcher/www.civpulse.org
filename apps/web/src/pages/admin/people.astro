@@ -1,0 +1,205 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout
+  title="People admin"
+  description="Manage officials, elected office holders, and candidates, plus their organization affiliations."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>People</h1>
+      <p>
+        Records for officials, elected office holders, and candidates. Link each person to the
+        organizations they belong to and set who can see the record.
+      </p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/people/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-person-form novalidate>
+        <h2 data-person-form-title>Add a person</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Full name *</span>
+            <input type="text" name="full_name" maxlength="160" required />
+          </label>
+          <label class="field">
+            <span>Slug *</span>
+            <input type="text" name="slug" maxlength="80" placeholder="jane-doe" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Kind</span>
+            <select name="kind">
+              <option value="elected_official">Elected official</option>
+              <option value="appointed_official">Appointed official</option>
+              <option value="candidate">Candidate</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public — listed, searchable</option>
+              <option value="unlisted">Unlisted — uuid URL only</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Title / office</span>
+          <input type="text" name="title" maxlength="160" placeholder="City Council Member, District 3" />
+        </label>
+
+        <label class="field">
+          <span>Description / bio</span>
+          <textarea name="description" rows="3" maxlength="4000"></textarea>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" name="email" maxlength="320" />
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input type="tel" name="phone" maxlength="40" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Fax</span>
+            <input type="tel" name="fax" maxlength="40" />
+          </label>
+          <label class="field">
+            <span>Website</span>
+            <input type="url" name="website_url" maxlength="500" placeholder="https://" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Social</span>
+            <input type="url" name="social_url" maxlength="500" placeholder="https://" />
+          </label>
+          <label class="field">
+            <span>Postal code</span>
+            <input type="text" name="postal_code" maxlength="20" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Address line 1</span>
+            <input type="text" name="address_line" maxlength="200" />
+          </label>
+          <label class="field">
+            <span>Address line 2</span>
+            <input type="text" name="address_line2" maxlength="200" />
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>City</span>
+            <input type="text" name="city" maxlength="120" />
+          </label>
+          <label class="field">
+            <span>State</span>
+            <input type="text" name="state" maxlength="80" />
+          </label>
+        </div>
+
+        <div class="org-logo-field">
+          <label class="field">
+            <span>Profile image</span>
+            <input
+              type="file"
+              name="image"
+              accept="image/png,image/jpeg,image/webp,image/svg+xml"
+            />
+          </label>
+          <img class="org-logo-preview" data-person-image-preview alt="Image preview" hidden />
+        </div>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create person</button>
+          <button type="button" data-person-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-person-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="people-list-title">
+        <h2 id="people-list-title">People</h2>
+        <div class="org-list" data-person-list></div>
+      </section>
+
+      <form class="org-form" data-affiliation-form novalidate>
+        <h2 data-affiliation-form-title>Add an affiliation</h2>
+        <input type="hidden" name="original_person_id" />
+        <input type="hidden" name="original_organization_id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Person *</span>
+            <select name="person_id" required></select>
+          </label>
+          <label class="field">
+            <span>Organization *</span>
+            <select name="organization_id" required></select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Role *</span>
+          <input
+            type="text"
+            name="role"
+            list="affiliation-role-options"
+            maxlength="60"
+            placeholder="Member, Officer, CEO…"
+            required
+          />
+          <datalist id="affiliation-role-options"></datalist>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Add affiliation</button>
+          <button type="button" data-affiliation-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-affiliation-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="affiliation-list-title">
+        <h2 id="affiliation-list-title">Affiliations</h2>
+        <div class="org-list" data-affiliation-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initPeopleAdmin } from '../../scripts/admin-people';
+
+  void initPeopleAdmin();
+</script>

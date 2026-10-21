@@ -158,24 +158,15 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
   return Boolean(data);
 }
 
-export async function initAdminEditLink(): Promise<void> {
-  const link = document.querySelector<HTMLElement>('[data-org-edit-link]');
-  if (!link) return;
+export async function initAdminEditLink(
+  selector = '[data-org-edit-link], [data-person-edit-link]',
+): Promise<void> {
+  const links = document.querySelectorAll<HTMLElement>(selector);
+  if (links.length === 0) return;
 
-  const supabase = getSupabase();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  if (!(await isCurrentUserAdmin())) return;
 
-  if (!session) return;
-
-  const { data: adminRow } = await supabase
-    .from('admins')
-    .select('user_id')
-    .eq('user_id', session.user.id)
-    .maybeSingle();
-
-  if (adminRow) link.hidden = false;
+  for (const link of links) link.hidden = false;
 }
 
 export async function initAuthNav(): Promise<void> {

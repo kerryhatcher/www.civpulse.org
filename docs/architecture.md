@@ -41,7 +41,7 @@ docs/         architecture, backend, and development notes
   browser, but **RLS is the real enforcement**.
 - Full-text search uses stored generated `tsvector` columns + GIN indexes and
   `security definer` RPCs (`search_maps`, `search_organizations`,
-  `search_events`).
+  `search_events`, `search_people`).
 
 See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 
@@ -68,12 +68,19 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   and filters events by organization/calendar through `search_events`; unlisted
   and private events use the `/calendar/view/?id=<uuid>` shell gated by
   `get_event`.
+- People: records for officials, elected office holders, and candidates, linked
+  to organizations with a role. Public pages are `/people/<slug>/` (prerendered)
+  and `/people/` browses/search through `search_people`; unlisted/private people
+  use the `/people/view/?id=<uuid>` shell gated by `get_person`. Affiliations are
+  readable through the Data API only for public people, so hidden people never
+  leak their organization links into prerendered HTML.
 - The public listing/sitemap includes public content only; sitemap generation is
   handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
 
 ## Auth and admin
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
-- Admin: `/admin/organizations/`, `/admin/layers/`, `/admin/maps/` with an
-  admin tab bar. Admins also get an "Edit" shortcut on public org/map pages.
+- Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
+  `/admin/maps/`, `/admin/calendars/` with an admin tab bar. Admins also get an
+  "Edit" shortcut on public org/map/person pages.
 - The header shows "Account" when signed in and "Admin" for allowlisted users.

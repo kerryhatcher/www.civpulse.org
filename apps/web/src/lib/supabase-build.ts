@@ -19,9 +19,18 @@ export function getBuildSupabase(): SupabaseClient | null {
   return client;
 }
 
-/** Public URL for an object in the org-logos bucket. */
-export function organizationLogoUrl(path: string | null | undefined): string | null {
+function publicStorageUrl(bucket: string, path: string | null | undefined): string | null {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
   if (!path || !url) return null;
-  return `${url}/storage/v1/object/public/org-logos/${path}`;
+  return `${url}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/** Public URL for an object in the org-logos bucket. */
+export function organizationLogoUrl(path: string | null | undefined): string | null {
+  return publicStorageUrl('org-logos', path);
+}
+
+/** Public URL for an object in the person-images bucket. */
+export function personImageUrl(path: string | null | undefined): string | null {
+  return publicStorageUrl('person-images', path);
 }

@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Person" description="View a shared Civic Pulse person record.">
+  <main id="main">
+    <div class="page-intro">
+      <p class="org-eyebrow">Person</p>
+    </div>
+
+    <div class="map-viewer-status empty-state" data-person-viewer-status hidden></div>
+
+    <article class="person-detail" data-person-viewer hidden>
+      <div class="org-header">
+        <img class="org-header-logo person-header-image" data-person-image alt="" hidden />
+        <span class="org-header-fallback" data-person-fallback aria-hidden="true"></span>
+        <div class="org-header-text">
+          <p class="org-eyebrow" data-person-kind></p>
+          <h1 data-person-name>Person</h1>
+          <p class="org-lede" data-person-title hidden></p>
+        </div>
+        <a class="button-link org-edit-link" data-person-edit-link hidden>Edit person</a>
+      </div>
+
+      <div class="prose person-bio" data-person-bio hidden></div>
+
+      <div class="org-contact" data-person-contact-section hidden>
+        <h2>Contact</h2>
+        <dl class="account-list" data-person-contact></dl>
+      </div>
+
+      <section class="person-affiliations" data-person-affiliations-section hidden>
+        <h2>Organizations</h2>
+        <div class="affiliation-list" data-person-affiliations></div>
+      </section>
+
+      <p class="org-back">
+        <a href="/people/">← All people</a>
+      </p>
+    </article>
+  </main>
+</Layout>
+
+<script>
+  import { initPersonViewFromUrl } from '../../scripts/people';
+
+  void initPersonViewFromUrl();
+</script>

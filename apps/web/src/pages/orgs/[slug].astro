@@ -6,6 +6,7 @@ import {
   type Organization,
 } from '../../lib/organizations';
 import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
+import { fetchPublicPeopleForOrganization, personImageUrl, type Person } from '../../lib/people';
 
 export async function getStaticPaths() {
   const [organizations, maps] = await Promise.all([fetchOrganizations(), fetchPublicMaps()]);
@@ -14,19 +15,31 @@ export async function getStaticPaths() {
       .filter((map) => map.organization_id !== null)
       .map((map) => [map.organization_id as string, map] as const),
   );
+  const peopleByOrganization = new Map<string, { person: Person; role: string }[]>();
+
+  await Promise.all(
+    organizations.map(async (org) => {
+      peopleByOrganization.set(org.id, await fetchPublicPeopleForOrganization(org.id));
+    }),
+  );
 
   return organizations.map((org) => ({
     params: { slug: org.slug },
-    props: { org, map: mapByOrganization.get(org.id) ?? null },
+    props: {
+      org,
+      map: mapByOrganization.get(org.id) ?? null,
+      people: peopleByOrganization.get(org.id) ?? [],
+    },
   }));
 }
 
 interface Props {
   org: Organization;
   map: MapConfig | null;
+  people: { person: Person; role: string }[];
 }
 
-const { org, map } = Astro.props;
+const { org, map, people } = Astro.props;
 const logo = organizationLogoUrl(org.logo_path);
 
 const contact = [
@@ -92,6 +105,44 @@ const contact = [
           <a class="button-link" href={`/maps/${map.slug}/`}>View map: {map.name}</a>
         </p>
       )}
+    </div>
+
+    {
+      people.length > 0 && (
+        <section class="person-affiliations" aria-labelledby="org-people-title">
+          <h2 id="org-people-title">People</h2>
+          <div class="people-grid">
+            {people.map(({ person, role }) => {
+              const image = personImageUrl(person.image_path);
+              return (
+                <a class="person-card-inline" href={`/people/${person.slug}/`}>
+                  {image ? (
+                    <img
+                      class="person-card-image"
+                      src={image}
+                      alt=""
+                      loading="lazy"
+                      width="56"
+                      height="56"
+                    />
+                  ) : (
+                    <span class="person-card-fallback" aria-hidden="true">
+                      {person.full_name.slice(0, 1).toUpperCase()}
+                    </span>
+                  )}
+                  <span class="person-card-inline-text">
+                    <span class="person-card-inline-name">{person.full_name}</span>
+                    <span class="person-card-inline-role">{role}</span>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+
+    <div class="org-contact">
       <p class="org-back">
         <a href="/orgs/">← All organizations</a>
       </p>

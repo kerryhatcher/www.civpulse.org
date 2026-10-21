@@ -76,19 +76,23 @@ to the browser; service-role keys must never be stored there.
 
 Supabase migrations live in `supabase/migrations/`: `profiles` (auth), plus
 `admins`, `organizations`, the `org-logos` storage bucket, `maps`, reusable
-`layers` (`map_layers` joins them many-to-many), and `calendars` + `events`
-(each calendar belongs to one organization, and an organization can have many).
-Admins manage the public directory at `/admin/organizations/`, layers at
-`/admin/layers/`, maps (OSM base map + layers) at `/admin/maps/`, and calendars
-and events at `/admin/calendars/`; published org pages live at `/orgs/` and
-`/orgs/<slug>/`. Maps, layers, calendars, and events have `public`, `unlisted`,
-and `private` visibility; public map pages live at `/maps/<slug>/` (listed +
-sitemap) while unlisted/private maps use the shared viewer at
+`layers` (`map_layers` joins them many-to-many), `calendars` + `events`
+(each calendar belongs to one organization, and an organization can have many),
+and `people` + `person_organizations` (civic figures linked to organizations
+with a role, plus the `person-images` bucket).
+Admins manage the public directory at `/admin/organizations/`, people at
+`/admin/people/`, layers at `/admin/layers/`, maps (OSM base map + layers) at
+`/admin/maps/`, and calendars and events at `/admin/calendars/`; published org
+pages live at `/orgs/` and `/orgs/<slug>/`, person profiles at `/people/` and
+`/people/<slug>/`. Maps, layers, calendars, events, and people have `public`,
+`unlisted`, and `private` visibility; public map pages live at `/maps/<slug>/`
+(listed + sitemap) while unlisted/private maps use the shared viewer at
 `/maps/view/?id=<uuid>`. Events are browsed and filtered by organization and/or
 calendar at `/calendar/`, with a shared event viewer at
-`/calendar/view/?id=<uuid>`. The `/maps/` and `/orgs/` directories include
-full-text search, and `/calendar/` searches events with the same
-anonymous/signed-in visibility rules. Because the site deploys as Cloudflare
+`/calendar/view/?id=<uuid>`; people use the shared viewer at
+`/people/view/?id=<uuid>`. The `/maps/`, `/orgs/`, `/calendar/`, and `/people/`
+directories include full-text search with the same anonymous/signed-in
+visibility rules. Because the site deploys as Cloudflare
 Workers static assets, public pages are generated at build time — rerun
 `bun run build` to publish admin changes. See
 [docs/architecture.md](docs/architecture.md) and [docs/backend.md](docs/backend.md)

@@ -16,6 +16,7 @@ export default defineConfig({
           '/signup/',
           '/maps/view/',
           '/calendar/view/',
+          '/people/view/',
           '/404',
         ].some((path) => page.includes(path)),
     }),
