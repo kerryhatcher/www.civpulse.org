@@ -28,6 +28,7 @@ interface CandidateRow {
   contest_id: string;
   person_id: string;
   party: string | null;
+  is_write_in: boolean;
   status: CandidateStatus;
   position: number;
 }
@@ -38,7 +39,7 @@ interface PersonRef {
 }
 
 const CONTEST_COLUMNS = 'id, election_id, office, district, seat, description, partisan, position';
-const CANDIDATE_COLUMNS = 'contest_id, person_id, party, status, position';
+const CANDIDATE_COLUMNS = 'contest_id, person_id, party, status, position, is_write_in';
 
 function slugify(value: string): string {
   return value
@@ -705,7 +706,7 @@ export async function initElectionAdmin(): Promise<void> {
         meta.className = 'org-row-meta';
         meta.textContent = `${candidateContestLabel(candidate.contest_id)} · ${
           CANDIDATE_STATUS_LABELS[candidate.status]
-        }${candidate.party ? ` · ${candidate.party}` : ''}`;
+        }${candidate.party ? ` · ${candidate.party}` : ''}${candidate.is_write_in ? ' · Certified write-in' : ''}`;
         info.append(name, meta);
         row.append(info);
 
@@ -749,6 +750,8 @@ export async function initElectionAdmin(): Promise<void> {
     const party = candidateFormEl.querySelector<HTMLInputElement>('input[name="party"]');
     const position = candidateFormEl.querySelector<HTMLInputElement>('input[name="position"]');
     const status = candidateFormEl.querySelector<HTMLSelectElement>('select[name="status"]');
+    const writeIn = candidateFormEl.querySelector<HTMLInputElement>('input[name="is_write_in"]');
+    if (writeIn) writeIn.checked = candidate.is_write_in;
     if (party) party.value = candidate.party ?? '';
     if (position) position.value = String(candidate.position);
     if (status) status.value = candidate.status;
@@ -815,6 +818,7 @@ export async function initElectionAdmin(): Promise<void> {
           contest_id: contestIdValue,
           person_id: personIdValue,
           party: textOrNull(values.get('party')),
+          is_write_in: values.has('is_write_in'),
           status: candidateStatusValue(String(values.get('status') ?? 'running')),
           position: intValue(values.get('position')),
         },

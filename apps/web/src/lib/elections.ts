@@ -91,6 +91,7 @@ export interface ElectionCandidate {
     visibility: ElectionVisibility;
   };
   party: string | null;
+  is_write_in: boolean;
   status: CandidateStatus;
   position: number;
 }

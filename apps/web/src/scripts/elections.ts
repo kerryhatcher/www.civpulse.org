@@ -250,6 +250,13 @@ function buildCandidateCard(
   name.textContent = candidate.person.full_name;
   text.append(name);
 
+  if (candidate.is_write_in) {
+    const badge = document.createElement('span');
+    badge.className = 'candidate-write-in';
+    badge.textContent = 'Certified write-in';
+    text.append(badge);
+  }
+
   const meta = document.createElement('span');
   meta.className = 'candidate-meta';
   meta.textContent = [candidate.party, CANDIDATE_STATUS_LABELS[candidate.status]]

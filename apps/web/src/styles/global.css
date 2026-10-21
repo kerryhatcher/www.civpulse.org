@@ -2182,3 +2182,15 @@ textarea::placeholder {
     transition: none !important;
   }
 }
+
+.candidate-write-in {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 7px;
+  border: 1px solid var(--rust);
+  border-radius: 3px;
+  color: var(--rust-dark);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}

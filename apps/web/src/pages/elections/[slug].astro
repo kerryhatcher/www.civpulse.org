@@ -129,7 +129,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                 {contest.description && <p class="contest-description">{contest.description}</p>}
                 {contest.candidates.length > 0 ? (
                   <div class="candidate-list">
-                    {contest.candidates.map(({ person, party, status }) => {
+                    {contest.candidates.map(({ person, party, status, is_write_in }) => {
                       const image = personImageUrl(person.image_path);
                       return (
                         <a class="candidate-card" href={personHref(person)}>
@@ -149,6 +149,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                           )}
                           <span class="candidate-text">
                             <span class="candidate-name">{person.full_name}</span>
+                            {is_write_in && <span class="candidate-write-in">Certified write-in</span>}
                             <span class="candidate-meta">
                               {[party, CANDIDATE_STATUS_LABELS[status]].filter(Boolean).join(' · ')}
                             </span>

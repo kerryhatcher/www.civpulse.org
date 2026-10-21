@@ -96,7 +96,8 @@ Migrations are append-only files in `supabase/migrations/`.
   `office`, `district`, `seat`, `description`, `partisan`, `position`,
   timestamps.
 - `public.contest_candidates` — links a person to a contest with `party` and
-  `status` (running, withdrawn, won, lost, runoff, pending); one entry per
+  `status` (running, withdrawn, won, lost, runoff, pending), `is_write_in`
+  (certified write-in whose name is not printed on the ballot); one entry per
   contest/person pair, both sides cascade.
 - `public.people` — CRM-style records for officials, elected office holders,
   candidates, and other civic figures: `slug`, `full_name`, `kind`, `title`,
@@ -488,3 +489,13 @@ A repeatable shape, used for organizations, maps, and layers:
    and add the production redirect URLs.
 5. Add `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` to the Cloudflare
    Worker build environment.
+
+
+### Candidate ballot labels
+
+`contest_candidates.is_write_in` is stored per candidacy, independent of party
+and status. Admins set it using the candidate form's **Certified write-in**
+checkbox. `get_election` returns the flag; both prerendered pages and the shared
+viewer display a **Certified write-in** badge immediately below the candidate's
+name. A missing party does not imply a write-in (nonpartisan candidates can have
+no party too).
