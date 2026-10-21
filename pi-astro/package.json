@@ -1,0 +1,25 @@
+{
+  "name": "pi-astro",
+  "version": "0.1.0",
+  "description": "Pi package that adds the Astro Docs MCP server and Bun-first Astro skills to a project.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "astro",
+    "mcp",
+    "skills"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/astro-docs.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}

@@ -12,6 +12,7 @@ apps/
 supabase/         Postgres migrations and local Supabase configuration
 scripts/          Dev orchestration (scripts/dev.mjs) and local seed helpers
 docs/             Architecture, backend, and development notes
+pi-astro/         Pi package: Astro Docs MCP extension + Astro skills
 package.json      Workspace root and task shortcuts
 ```
 
@@ -96,5 +97,9 @@ it with Wrangler.
 ## AI tooling
 
 Agent instructions live in [AGENTS.md](AGENTS.md) and
-[apps/web/AGENTS.md](apps/web/AGENTS.md). [Pi](https://pi.dev) loads its
-project packages/instructions from [.pi/settings.json](.pi/settings.json).
+[apps/web/AGENTS.md](apps/web/AGENTS.md). [Pi](https://pi.dev) loads its project
+packages/instructions from [.pi/settings.json](.pi/settings.json), which pulls in
+[`pi-astro/`](pi-astro) — a Pi package that registers the official
+[Astro Docs MCP server](https://docs.astro.build/en/guides/build-with-ai/)
+(`search_astro_docs`) and provides the `astro` / `astro-project-rules` skills.
+See [pi-astro/README.md](pi-astro/README.md).
