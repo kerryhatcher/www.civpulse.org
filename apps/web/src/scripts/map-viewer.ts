@@ -51,7 +51,7 @@ export function renderMap(
         }
       })
       .catch((error: unknown) => {
-        console.warn(`[layers] Could not load ${layer.name} (${layer.source_url}):`, error);
+        console.warn('[layers] Could not load %s (%s):', layer.name, layer.source_url, error);
       });
   }
 
