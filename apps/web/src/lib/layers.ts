@@ -1,3 +1,5 @@
+import { getSupabase } from './supabase';
+
 export type LayerVisibility = 'public' | 'unlisted' | 'private';
 
 /** Leaflet-friendly styling shared by polygons, lines, and point markers. */
@@ -42,13 +44,14 @@ export interface LayerConfig {
   id: string;
   name: string;
   description: string | null;
-  source_url: string;
+  source_url: string | null;
+  source_type: 'geojson' | 'postgis';
   visibility: LayerVisibility;
   /** Layer default style; may be partial or null when never customized. */
   style?: Partial<LayerStyle> | null;
 }
 
-export const LAYER_COLUMNS = 'id, name, description, source_url, visibility, style';
+export const LAYER_COLUMNS = 'id, name, description, source_url, visibility, style, source_type';
 
 const HEX_COLOR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 const MAX_PALETTE = 24;
@@ -220,4 +223,57 @@ export async function fetchPropertyKeys(url: string): Promise<string[]> {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const geojson = (await response.json()) as GeoJSON.GeoJsonObject;
   return geojsonPropertyKeys(geojson);
+}
+
+/** Load stored geometry through the same access gate as the containing map. */
+export async function fetchLayerGeoJSON(layer: LayerConfig, mapId?: string): Promise<GeoJSON.GeoJsonObject> {
+  if (layer.source_type === 'postgis') {
+    const { data, error } = await getSupabase().rpc('get_layer_geojson', {
+      p_layer_id: layer.id, p_map_id: mapId ?? null,
+    });
+    if (error) throw new Error(error.message);
+    return data as GeoJSON.GeoJsonObject;
+  }
+  if (!layer.source_url) throw new Error('Layer has no GeoJSON URL');
+  const response = await fetch(layer.source_url);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+export const MAX_IMPORT_BYTES = 10 * 1024 * 1024;
+
+/** Bound downloads too, including chunked responses without Content-Length. */
+export async function readGeoJSONImport(file: File | null, url: string): Promise<GeoJSON.GeoJsonObject> {
+  let text: string;
+  if (file) {
+    if (file.size > MAX_IMPORT_BYTES) throw new Error('Import limit: 10 MB');
+    text = await file.text();
+  } else {
+    const source = new URL(url);
+    if (!['http:', 'https:'].includes(source.protocol)) throw new Error('Use an HTTP or HTTPS URL');
+    const response = await fetch(source, { signal: AbortSignal.timeout(30000) });
+    if (!response.ok) throw new Error(`Could not import URL: HTTP ${response.status}`);
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('The URL returned no data');
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > MAX_IMPORT_BYTES) {
+        await reader.cancel();
+        throw new Error('Import limit: 10 MB');
+      }
+      chunks.push(value);
+    }
+    text = await new Blob(chunks as BlobPart[]).text();
+  }
+  try {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== 'object' || !data.type) throw new Error();
+    return data;
+  } catch {
+    throw new Error('Choose a valid GeoJSON file or URL');
+  }
 }

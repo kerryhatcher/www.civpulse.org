@@ -2,6 +2,7 @@ import L from 'leaflet';
 import { BASE_MAPS, isBaseMapKey } from '../lib/basemaps';
 import {
   buildCategoryColor,
+  fetchLayerGeoJSON,
   layerFeatureMarkerOptions,
   layerFeaturePathOptions,
   resolveLayerStyle,
@@ -28,11 +29,7 @@ export function renderMap(
   setTimeout(() => map.invalidateSize(), 0);
 
   for (const layer of layers) {
-    void fetch(layer.source_url)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-      })
+    void fetchLayerGeoJSON(layer, config.id)
       .then((geojson: GeoJSON.GeoJsonObject) => {
         const style = resolveLayerStyle(layer.style);
         const colorFor = style.categorizeBy

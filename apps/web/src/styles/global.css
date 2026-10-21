@@ -1161,6 +1161,7 @@ textarea::placeholder {
 
 .admin-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   border-bottom: 1px solid var(--line);
   margin-bottom: 28px;
@@ -1373,6 +1374,11 @@ textarea::placeholder {
   align-items: center;
   gap: 8px;
   font-size: 14px;
+}
+
+.style-categorize-toggle input[type="checkbox"] {
+  width: auto;
+  flex: none;
 }
 
 .style-categorize-fields {

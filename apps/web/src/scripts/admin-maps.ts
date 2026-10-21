@@ -3,7 +3,8 @@ import { BASE_MAPS, baseMapLabel, isBaseMapKey, type BaseMapKey } from '../lib/b
 import { applySwatch, createStyleEditor, type StyleEditor } from '../lib/layer-style-editor';
 import {
   buildCategoryColor,
-  fetchPropertyKeys,
+  fetchLayerGeoJSON,
+  geojsonPropertyKeys,
   layerFeatureMarkerOptions,
   layerFeaturePathOptions,
   resolveLayerStyle,
@@ -114,7 +115,7 @@ export async function initMapAdmin(): Promise<void> {
       return;
     }
     try {
-      const keys = await fetchPropertyKeys(layer.source_url);
+      const keys = geojsonPropertyKeys(await fetchLayerGeoJSON(layer));
       propertyKeyCache.set(layer.id, keys);
       editor.setPropertyOptions(keys);
     } catch {
@@ -384,9 +385,7 @@ export async function initMapAdmin(): Promise<void> {
 
     for (const layer of allLayers.filter((item) => selected.has(item.id))) {
       try {
-        const response = await fetch(layer.source_url);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const geojson = (await response.json()) as GeoJSON.GeoJsonObject;
+        const geojson = await fetchLayerGeoJSON(layer);
         const style = resolveLayerStyle(layer.style, layerOverrides.get(layer.id));
         const colorFor = style.categorizeBy
           ? buildCategoryColor(geojson, style.categorizeBy, style.palette)
@@ -558,7 +557,7 @@ export async function initMapAdmin(): Promise<void> {
   async function loadLayersLibrary(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility, style')
+      .select('id, name, description, source_url, visibility, style, source_type')
       .order('name');
 
     if (error) {

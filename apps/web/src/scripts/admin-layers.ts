@@ -2,6 +2,9 @@ import { applySwatch, createStyleEditor } from '../lib/layer-style-editor';
 import {
   DEFAULT_LAYER_STYLE,
   fetchPropertyKeys,
+  fetchLayerGeoJSON,
+  geojsonPropertyKeys,
+  readGeoJSONImport,
   resolveLayerStyle,
   type LayerConfig,
   type LayerVisibility,
@@ -82,6 +85,27 @@ export async function initLayerAdmin(): Promise<void> {
   if (styleHost) styleHost.replaceChildren(styleEditor.element);
   else formEl.append(styleEditor.element);
 
+  const typeField = formEl.querySelector<HTMLSelectElement>('select[name="source_type"]')!;
+  const fileField = formEl.querySelector<HTMLInputElement>('input[name="geojson_file"]')!;
+  const importPanel = formEl.querySelector<HTMLElement>('[data-layer-import]')!;
+
+  function syncSourceType(): void {
+    const stored = typeField.value === 'postgis';
+    importPanel.hidden = !stored;
+    fileField.disabled = !stored;
+    if (sourceField) sourceField.required = !stored;
+    const label = formEl.querySelector('[data-layer-url-label]');
+    if (label) label.textContent = stored ? 'Import from GeoJSON URL (instead of a file)' : 'GeoJSON URL *';
+    styleEditor.setPropertyOptions([]);
+  }
+  typeField.addEventListener('change', syncSourceType);
+  fileField.addEventListener('change', () => {
+    const file = fileField.files?.[0];
+    if (file) void readGeoJSONImport(file, '').then(data => {
+      styleEditor.setPropertyOptions(geojsonPropertyKeys(data));
+    }).catch(error => setMessage(formEl, error.message, 'error'));
+  });
+
   const propertyKeyCache = new Map<string, string[]>();
 
   async function suggestProperties(url: string): Promise<void> {
@@ -107,6 +131,8 @@ export async function initLayerAdmin(): Promise<void> {
 
   function resetForm(): void {
     formEl.reset();
+    typeField.disabled = false;
+    syncSourceType();
     styleEditor.set(DEFAULT_LAYER_STYLE);
     if (idField) idField.value = '';
     if (cancelButton) cancelButton.hidden = true;
@@ -116,14 +142,21 @@ export async function initLayerAdmin(): Promise<void> {
 
   function startEdit(layer: LayerConfig): void {
     if (!idField) return;
+    fileField.value = '';
+    typeField.value = layer.source_type;
+    typeField.disabled = true;
+    syncSourceType();
     idField.value = layer.id;
     if (nameField) nameField.value = layer.name;
-    if (sourceField) sourceField.value = layer.source_url;
+    if (sourceField) sourceField.value = layer.source_url ?? '';
     if (visibilityField) visibilityField.value = layer.visibility;
     const description = formEl.querySelector<HTMLTextAreaElement>('textarea[name="description"]');
     if (description) description.value = layer.description ?? '';
     styleEditor.set(layer.style);
-    void suggestProperties(layer.source_url);
+    if (layer.source_type === 'postgis') {
+      void fetchLayerGeoJSON(layer).then(data => styleEditor.setPropertyOptions(geojsonPropertyKeys(data)))
+        .catch(() => styleEditor.setPropertyOptions(null));
+    } else void suggestProperties(layer.source_url ?? '');
     if (cancelButton) cancelButton.hidden = false;
     if (heading) heading.textContent = `Editing ${layer.name}`;
     if (submitButton) submitButton.textContent = 'Save changes';
@@ -147,7 +180,7 @@ export async function initLayerAdmin(): Promise<void> {
     heading.append(swatch, name);
     const meta = document.createElement('span');
     meta.className = 'org-row-meta';
-    meta.textContent = `${VISIBILITY_LABELS[layer.visibility]} · ${layer.source_url}`;
+    meta.textContent = `${VISIBILITY_LABELS[layer.visibility]} · ${layer.source_type === 'postgis' ? 'Stored in PostGIS' : layer.source_url}`;
     info.append(heading, meta);
     row.append(info);
 
@@ -174,7 +207,7 @@ export async function initLayerAdmin(): Promise<void> {
   async function loadLayers(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility, style')
+      .select('id, name, description, source_url, visibility, style, source_type')
       .order('name');
 
     if (error) {
@@ -221,11 +254,18 @@ export async function initLayerAdmin(): Promise<void> {
     const visibilityValue = String(values.get('visibility') ?? 'public');
     const id = String(values.get('id') ?? '');
 
-    if (!name || !sourceUrl) {
-      setMessage(formEl, 'A name and a GeoJSON URL are required.', 'error');
+    const stored = typeField.value === 'postgis';
+    const file = fileField.files?.[0] ?? null;
+    if (!name || (!stored && !sourceUrl) || (stored && !id && !file && !sourceUrl)) {
+      setMessage(formEl, 'A name and GeoJSON data (file or URL for stored layers) are required.', 'error');
       return;
     }
 
+    if (stored && file && sourceUrl) {
+      setMessage(formEl, 'Choose either a file or a URL for this import.', 'error');
+      return;
+    }
+    if (submitButton?.disabled) return;
     if (submitButton) submitButton.disabled = true;
     setMessage(formEl, 'Saving…');
 
@@ -238,9 +278,17 @@ export async function initLayerAdmin(): Promise<void> {
         style: styleEditor.get(),
       };
 
-      const { error } = id
-        ? await supabase.from('layers').update(payload).eq('id', id)
-        : await supabase.from('layers').insert(payload);
+      let error;
+      if (stored) {
+        const geojson = file || sourceUrl ? await readGeoJSONImport(file, sourceUrl) : null;
+        ({ error } = await supabase.rpc('save_postgis_layer', {
+          p_layer: { ...payload, id: id || null }, p_geojson: geojson,
+        }));
+      } else {
+        ({ error } = id
+          ? await supabase.from('layers').update(payload).eq('id', id)
+          : await supabase.from('layers').insert(payload));
+      }
 
       if (error) throw new Error(error.message);
 

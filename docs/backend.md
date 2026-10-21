@@ -75,8 +75,9 @@ Migrations are append-only files in `supabase/migrations/`.
 - `org-logos` storage bucket — public read, 2 MB limit, images only.
 - `public.maps` — `slug`, `name`, `description`, `base_map`, `visibility`,
   `organization_id` (optional, unique → 1:1 with an organization), timestamps.
-- `public.layers` — first-class reusable GeoJSON layers: `name`, `description`,
-  `source_url`, `visibility`, `style` (the default style), timestamps.
+- `public.layers` — first-class reusable map layers: `name`, `description`,
+  `source_type` (`geojson` or `postgis`), nullable `source_url`, `visibility`,
+  `style` (the default style), timestamps.
 - `public.map_layers` — ordered many-to-many join between maps and layers
   (`map_id`, `layer_id`, `position`, `style`); a layer can be on many maps and a
   map can have many layers. `map_layers.style` is an optional per-map override.
@@ -143,6 +144,34 @@ visibility (an anonymous caller cannot read layers of a private map). The
 viewer fetches layers through this RPC, so private layer URLs never reach the
 prerendered HTML.
 
+### Stored PostGIS layers
+
+The Layers admin can create a **Stored in PostGIS** layer from a GeoJSON file
+or a URL. Imports accept a FeatureCollection, a single Feature, or a bare
+geometry: Point, LineString, Polygon, and their Multi variants. Coordinates
+must be WGS84 longitude/latitude; invalid, empty, null, and collection geometries
+are rejected. Altitudes are dropped. Feature properties and IDs are preserved.
+The import limit is 10 MB and 10,000 features. URL imports run in the browser
+and require CORS; they are snapshots, not periodic synchronization.
+
+`layer_features` holds `geometry(Geometry, 4326)` with a GiST spatial index,
+JSON properties, source feature ID, and source order. Its RLS permits only admins
+to read/write directly. `save_postgis_layer` requires an admin and saves metadata
+and a replacement dataset atomically, leaving existing data intact on failure.
+When editing, leave file and URL blank to keep the dataset; selecting data
+replaces all features on save. A layer's type is fixed in the editor after creation.
+
+`get_layer_geojson(layer_id, map_id)` returns a FeatureCollection at runtime.
+Non-admin callers must supply a map containing the layer and pass both map and
+layer visibility checks through `get_map_layers`. Admins may omit the map ID for
+previews and property discovery. Stored data never enters prerendered HTML.
+Existing URL layers, per-map styles, and per-record colors continue to work.
+
+Run `supabase/tests/postgis_layers.sql` with `psql` against a migrated local
+Supabase database. It tests all six geometry types, failed import rollback,
+replacement, metadata-only edits, and anonymous/non-admin access, and rolls back
+its fixtures.
+
 ### Layer styling
 
 Every layer has a **default style** (`layers.style`) stored as a JSON object of
@@ -155,8 +184,8 @@ style. When `categorizeBy` names a feature property, each distinct property
 value gets a color from `palette` (a sorted, stable mapping that cycles when
 there are more values than colors). This is what gives voting precincts or
 commission districts their multi-color look. The admin’s **Color by property**
-dropdown is populated by fetching the layer’s `source_url` and inspecting its
-GeoJSON feature properties, so it only offers fields that actually exist.
+dropdown is populated by loading the layer’s URL or stored data and inspecting
+its GeoJSON feature properties, so it only offers fields that actually exist.
 
 A map can override the style of any layer it includes without affecting other
 maps. The override lives in `map_layers.style`; `null` inherits the layer

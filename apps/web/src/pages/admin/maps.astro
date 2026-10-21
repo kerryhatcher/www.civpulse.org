@@ -4,11 +4,11 @@ import AdminTabs from '../../components/AdminTabs.astro';
 import 'leaflet/dist/leaflet.css';
 ---
 
-<Layout title="Maps admin" description="Manage maps built from OpenStreetMap basemaps and remote GeoJSON.">
+<Layout title="Maps admin" description="Manage maps built from OpenStreetMap basemaps and reusable map layers.">
   <main id="main">
     <div class="page-intro">
       <h1>Maps</h1>
-      <p>Combine an OpenStreetMap base map with one or more remote GeoJSON files.</p>
+      <p>Combine an OpenStreetMap base map with remote GeoJSON or stored PostGIS layers.</p>
     </div>
 
     <AdminTabs />

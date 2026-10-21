@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import {
   buildCategoryColor,
+  fetchLayerGeoJSON,
   layerFeatureMarkerOptions,
   layerFeaturePathOptions,
   resolveLayerStyle,
@@ -39,11 +40,7 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
     .then(({ data }) => {
       const layers = (data ?? []) as unknown as LayerConfig[];
       for (const layer of layers) {
-        void fetch(layer.source_url)
-          .then((response) => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();
-          })
+        void fetchLayerGeoJSON(layer, config.id)
           .then((geojson: GeoJSON.GeoJsonObject) => {
             const style = resolveLayerStyle(layer.style);
             const colorFor = style.categorizeBy

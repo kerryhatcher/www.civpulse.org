@@ -193,7 +193,7 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
 
   function renderPropertyOptions(): void {
     const placeholders: Record<typeof propertyStatus, string> = {
-      idle: 'Enter a GeoJSON URL to load properties',
+      idle: 'Choose GeoJSON data to load properties',
       ready: 'Select a property…',
       empty: 'No properties found in the source',
       error: 'Could not read the source GeoJSON',

@@ -3,11 +3,11 @@ import Layout from '../../layouts/Layout.astro';
 import AdminTabs from '../../components/AdminTabs.astro';
 ---
 
-<Layout title="Layers admin" description="Manage reusable GeoJSON layers for maps.">
+<Layout title="Layers admin" description="Manage reusable map layers and import GeoJSON data.">
   <main id="main">
     <div class="page-intro">
       <h1>Layers</h1>
-      <p>Reusable GeoJSON layers that can be added to one or more maps.</p>
+      <p>Reusable map layers that can be added to one or more maps.</p>
     </div>
 
     <AdminTabs />
@@ -44,7 +44,24 @@ import AdminTabs from '../../components/AdminTabs.astro';
         </div>
 
         <label class="field">
-          <span>GeoJSON URL *</span>
+          <span>Layer type</span>
+          <select name="source_type">
+            <option value="geojson">Remote GeoJSON URL</option>
+            <option value="postgis">Stored in PostGIS</option>
+          </select>
+        </label>
+
+        <div data-layer-import hidden>
+          <label class="field">
+            <span>Import GeoJSON file</span>
+            <input type="file" name="geojson_file" accept=".geojson,.json,application/geo+json,application/json" />
+          </label>
+          <p class="status">Upload a file or provide its URL below. Supports points, lines/paths, polygons, and multi-geometries in WGS84 (longitude, latitude). Limit: 10 MB and 10,000 features. On edit, select replacement data or leave both blank to keep existing features.</p>
+          <p class="status">Importing replaces all features when you save. Feature properties and IDs are preserved.</p>
+        </div>
+
+        <label class="field">
+          <span data-layer-url-label>GeoJSON URL *</span>
           <input
             type="url"
             name="source_url"
@@ -53,6 +70,8 @@ import AdminTabs from '../../components/AdminTabs.astro';
             required
           />
         </label>
+
+        <p class="status">URLs must allow cross-origin requests (CORS). Stored imports remain available even if the original URL changes.</p>
 
         <label class="field">
           <span>Description</span>
