@@ -80,9 +80,15 @@ Migrations are append-only files in `supabase/migrations/`.
 - `public.map_layers` — ordered many-to-many join between maps and layers
   (`map_id`, `layer_id`, `position`, `style`); a layer can be on many maps and a
   map can have many layers. `map_layers.style` is an optional per-map override.
+- `public.calendars` — `organization_id` (required, so a calendar belongs to one
+  organization and an organization can have many), `slug`, `name`,
+  `description`, `visibility`, timestamps.
+- `public.events` — `calendar_id` (required), `title`, `description`,
+  `starts_at` (required), `ends_at`, `all_day`, `location`, `url`,
+  `visibility`, timestamps. Both calendars and events carry visibility.
 
-Events and other content tables are intentionally not defined yet. They will be
-added as separate migrations once their shape is settled.
+Other content tables are intentionally not defined yet. They will be added as
+separate migrations once their shape is settled.
 
 ## Maps admin
 
@@ -183,6 +189,52 @@ Follows the Supabase full-text search guide:
   API because the function is `security definer` and applies the filter itself.
 - The `/maps/` search box debounces input, calls the RPC, and links each result
   to the right URL (slug for public, uuid for unlisted/private).
+
+## Calendars and events
+
+- Admin UI: `/admin/calendars/` (requires an admin account). One page manages
+  both **calendars** and **events**.
+- A calendar belongs to exactly one organization, and an organization can have
+  many calendars (unlike maps, which are 1:1 with an organization). Deleting an
+  organization or a calendar cascades to its calendars/events.
+- An event belongs to one calendar and has a start (required), an optional end,
+  an all-day flag, a location, an external link, and its own visibility.
+- Public browse: `/calendar/` lists upcoming events and filters by organization
+  and/or calendar, with a full-text search box and an “include past events”
+  toggle. Results are fetched with the RPCs below, so hidden rows are never
+  embedded in prerendered HTML and the list stays current.
+- The shared viewer is `/calendar/view/`, which reads a uuid from `?id=` (or a
+  `/calendar/e/<uuid>/` path rewritten by `public/_redirects` on Cloudflare) and
+  calls `public.get_event(uuid)`. Admins see an “Edit event” button that
+  deep-links to `/admin/calendars/?editEvent=<id>`.
+
+### Calendar/event visibility
+
+Calendars and events each have `public | unlisted | private`, the same rules as
+maps and layers. An event is only visible when **both** it and its owning
+calendar are visible, so a public event on a private calendar stays private.
+
+| Visibility | Listed | Search | Access |
+| --- | --- | --- | --- |
+| `public` | yes | anon + signed-in | anyone |
+| `unlisted` | no (uuid URL only) | signed-in only | anyone with the uuid |
+| `private` | no | signed-in only | signed-in users |
+
+- `public.events` has **no** anonymous/authenticated select policy: because the
+  rule depends on the owning calendar, all reads go through `security definer`
+  RPCs. `public.calendars` allows public reads (and private reads when signed
+  in), but unlisted calendars are still excluded from the Data API. Admins can
+  read both tables directly for the admin UI.
+- `public.list_calendars(p_organization_id uuid)` returns the calendars the
+  caller may see, with their organization, for the filter menus.
+- `public.search_events(p_query, p_organization_id, p_calendar_id, p_include_past, p_limit)`
+  joins events → calendars → organizations, applies both visibility rules and
+  the org/calendar filters, and ranks matches with `websearch_to_tsquery` +
+  `ts_rank`. Past events are excluded unless `p_include_past` is true.
+- `public.get_event(uuid)` returns `{status: ok|private|missing, event,
+  calendar, organization}` for the viewer, applying the same gate.
+- `events.search_document` is a stored `tsvector` (title weight A, description
+  weight B, location weight C) with a GIN index.
 
 ## Organizations admin
 

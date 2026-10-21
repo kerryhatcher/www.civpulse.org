@@ -1,0 +1,161 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout
+  title="Calendars admin"
+  description="Manage organization calendars and their events."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Calendars</h1>
+      <p>
+        Every calendar belongs to one organization, and an organization can have many. Add events
+        to a calendar and set who can see each one.
+      </p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/calendars/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-calendar-form novalidate>
+        <h2 data-calendar-form-title>Add a calendar</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Organization *</span>
+            <select name="organization_id" required></select>
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public — listed, searchable</option>
+              <option value="unlisted">Unlisted — uuid URL only</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Name *</span>
+            <input type="text" name="name" maxlength="120" required />
+          </label>
+          <label class="field">
+            <span>Slug *</span>
+            <input type="text" name="slug" maxlength="80" placeholder="my-calendar" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="2000"></textarea>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create calendar</button>
+          <button type="button" data-calendar-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-calendar-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="calendar-list-title">
+        <h2 id="calendar-list-title">Calendars</h2>
+        <div class="org-list" data-calendar-list></div>
+      </section>
+
+      <form class="org-form" data-event-form novalidate>
+        <h2 data-event-form-title>Add an event</h2>
+        <input type="hidden" name="id" />
+
+        <label class="field">
+          <span>Calendar *</span>
+          <select name="calendar_id" required></select>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Title *</span>
+            <input type="text" name="title" maxlength="200" required />
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public — listed, searchable</option>
+              <option value="unlisted">Unlisted — uuid URL only</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Starts *</span>
+            <input type="datetime-local" name="starts_at" required />
+          </label>
+          <label class="field">
+            <span>Ends</span>
+            <input type="datetime-local" name="ends_at" />
+          </label>
+        </div>
+
+        <label class="calendar-check">
+          <input type="checkbox" name="all_day" />
+          <span>All-day event</span>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Location</span>
+            <input type="text" name="location" maxlength="300" />
+          </label>
+          <label class="field">
+            <span>Link</span>
+            <input type="url" name="url" maxlength="500" placeholder="https://" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="3" maxlength="4000"></textarea>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create event</button>
+          <button type="button" data-event-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-event-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="event-list-title">
+        <h2 id="event-list-title">Events</h2>
+        <label class="field event-filter">
+          <span>Filter by calendar</span>
+          <select data-event-filter>
+            <option value="">All calendars</option>
+          </select>
+        </label>
+        <div class="org-list" data-event-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initCalendarAdmin } from '../../scripts/admin-calendars';
+
+  void initCalendarAdmin();
+</script>

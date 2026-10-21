@@ -4,21 +4,53 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="Community calendar"
-  description="Local public meetings, community gatherings, and civic deadlines are coming to the Civic Pulse calendar."
+  description="Find public meetings, community gatherings, and civic deadlines by organization or calendar."
 >
   <main id="main">
     <div class="page-intro">
       <h1>Find something to be part of.</h1>
       <p>Public meetings, community gatherings, and deadlines worth knowing.</p>
     </div>
-    <div class="prose">
-      <div class="empty-state">
-        <p>
-          The community calendar is being connected. No events are loaded in
-          this release. Check back soon, or
-          <a href="/#main">return to the homepage</a>.
-        </p>
-      </div>
-    </div>
+
+    <form class="calendar-filters" data-calendar-filters role="search">
+      <label class="field">
+        <span>Organization</span>
+        <select data-calendar-org>
+          <option value="">All organizations</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Calendar</span>
+        <select data-calendar-calendar>
+          <option value="">All calendars</option>
+        </select>
+      </label>
+      <label class="field field-wide">
+        <span>Search events</span>
+        <input
+          type="search"
+          placeholder="Search events…"
+          data-calendar-search
+          autocomplete="off"
+        />
+      </label>
+      <label class="calendar-check">
+        <input type="checkbox" data-calendar-past />
+        <span>Include past events</span>
+      </label>
+    </form>
+
+    <p class="status" data-calendar-signed-in hidden>
+      Signed in — results include unlisted and private events you can access.
+    </p>
+    <p class="status" data-calendar-status>Loading events…</p>
+    <div class="event-list" data-calendar-results hidden></div>
+    <p class="status" data-calendar-empty hidden>No events match those filters.</p>
   </main>
 </Layout>
+
+<script>
+  import { initCalendar } from '../scripts/calendar';
+
+  initCalendar();
+</script>

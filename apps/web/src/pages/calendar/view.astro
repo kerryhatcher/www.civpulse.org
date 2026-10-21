@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Event" description="View a shared Civic Pulse calendar event.">
+  <main id="main">
+    <div class="page-intro">
+      <p class="org-eyebrow">Event</p>
+    </div>
+
+    <div class="event-viewer-status empty-state" data-event-viewer-status hidden></div>
+
+    <article class="event-detail" data-event-viewer hidden>
+      <h1 data-event-title>Event</h1>
+      <p class="event-detail-when" data-event-when></p>
+      <p class="event-detail-meta" data-event-meta></p>
+      <p class="event-detail-location" data-event-location hidden></p>
+      <div class="prose event-detail-description" data-event-description hidden></div>
+      <p data-event-link hidden>
+        <a class="button-link" data-event-url target="_blank" rel="noopener">Event details</a>
+      </p>
+      <p class="event-detail-actions">
+        <a class="button-link event-edit" data-event-edit-link hidden>Edit event</a>
+        <a class="event-back" data-event-calendar-link href="/calendar/">← Back to the calendar</a>
+      </p>
+    </article>
+  </main>
+</Layout>
+
+<script>
+  import { initEventViewFromUrl } from '../../scripts/calendar';
+
+  void initEventViewFromUrl();
+</script>

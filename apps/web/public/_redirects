@@ -1,3 +1,5 @@
 # Long uuid URLs for unlisted and private maps, rendered by the shared viewer shell.
 /maps/u/*  /maps/view/  200
 /maps/p/*  /maps/view/  200
+# Long uuid URLs for publicly shared calendar events.
+/calendar/e/*  /calendar/view/  200

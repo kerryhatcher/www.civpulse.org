@@ -1,0 +1,69 @@
+import { eventViewHref, formatEventWhen, type EventRecord } from '../lib/calendars';
+import { getSupabase } from '../lib/supabase';
+
+const VISIBILITY_LABELS: Record<EventRecord['visibility'], string> = {
+  public: 'Public',
+  unlisted: 'Unlisted',
+  private: 'Private',
+};
+
+function renderHomeEvent(event: EventRecord): HTMLElement {
+  const item = document.createElement('li');
+  item.className = 'home-event';
+
+  const when = document.createElement('p');
+  when.className = 'home-event-when';
+  when.textContent = formatEventWhen(event);
+  item.append(when);
+
+  const heading = document.createElement('h3');
+  const link = document.createElement('a');
+  link.href = eventViewHref(event.id);
+  link.textContent = event.title;
+  heading.append(link);
+  item.append(heading);
+
+  if (event.visibility !== 'public') {
+    const badge = document.createElement('span');
+    badge.className = 'visibility-badge';
+    badge.textContent = VISIBILITY_LABELS[event.visibility];
+    item.append(badge);
+  }
+
+  const meta = document.createElement('p');
+  meta.className = 'home-event-meta';
+  meta.textContent = [event.organization_name, event.calendar_name, event.location]
+    .filter(Boolean)
+    .join(' · ');
+  item.append(meta);
+
+  return item;
+}
+
+/** Loads the next few upcoming events, honoring calendar/event visibility. */
+export function initHomeEvents(): void {
+  const list = document.querySelector<HTMLElement>('[data-home-events-list]');
+  const status = document.querySelector<HTMLElement>('[data-home-events-status]');
+  const empty = document.querySelector<HTMLElement>('[data-home-events-empty]');
+  if (!list) return;
+
+  void getSupabase()
+    .rpc('search_events', { p_query: '', p_limit: 4 })
+    .then(({ data, error }) => {
+      if (error) {
+        if (status) status.textContent = 'Could not load upcoming events.';
+        return;
+      }
+
+      const events = (data ?? []) as unknown as EventRecord[];
+      if (events.length === 0) {
+        if (status) status.hidden = true;
+        if (empty) empty.hidden = false;
+        return;
+      }
+
+      list.replaceChildren(...events.map(renderHomeEvent));
+      list.hidden = false;
+      if (status) status.hidden = true;
+    });
+}

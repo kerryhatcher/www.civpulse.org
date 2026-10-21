@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import 'leaflet/dist/leaflet.css';
+import { fetchPublicMaps } from '../lib/maps';
+
+const maps = await fetchPublicMaps();
 ---
 
 <Layout title="A closer look at your community">
@@ -17,32 +21,51 @@ import Icon from '../components/Icon.astro';
           <p>Places, precincts, and layers worth knowing.</p>
         </header>
         <div class="destination-body">
-          <ul class="layer-list">
-            <li>
-              <i class="layer-swatch layer-swatch--point" aria-hidden="true"></i>
-              <div>
-                <strong>Voting places</strong>
-                <span>Where to cast a ballot, and when polls are open.</span>
+          {
+            maps.length > 0 ? (
+              <div class="map-carousel" data-map-carousel role="region" aria-label="Map previews">
+                <div class="map-carousel-viewport" data-carousel-viewport>
+                  {maps.map((map, index) => (
+                    <article
+                      class="map-slide"
+                      aria-label={`Map ${index + 1} of ${maps.length}`}
+                    >
+                      <a
+                        class="map-slide-preview-link"
+                        href={`/maps/${map.slug}/`}
+                        aria-label={`View map: ${map.name}`}
+                      >
+                        <div class="map-slide-preview" data-map-preview data-map-id={map.id}></div>
+                      </a>
+                      <div class="map-slide-body">
+                        <h3>
+                          <a href={`/maps/${map.slug}/`}>{map.name}</a>
+                        </h3>
+                        {map.description && <p>{map.description}</p>}
+                        {map.organizations?.name && (
+                          <span class="map-slide-meta">{map.organizations.name}</span>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <div class="map-carousel-controls">
+                  <span class="map-carousel-count" data-carousel-count></span>
+                  <button type="button" data-carousel-prev aria-label="Previous map">
+                    <Icon name="chevron-left" />
+                  </button>
+                  <button type="button" data-carousel-next aria-label="Next map">
+                    <Icon name="chevron-right" />
+                  </button>
+                </div>
               </div>
-            </li>
-            <li>
-              <i class="layer-swatch layer-swatch--line" aria-hidden="true"></i>
-              <div>
-                <strong>District boundaries</strong>
-                <span>The lines that decide who represents you.</span>
+            ) : (
+              <div class="empty-state">
+                <p>No public maps are published yet.</p>
               </div>
-            </li>
-            <li>
-              <i class="layer-swatch layer-swatch--area" aria-hidden="true"></i>
-              <div>
-                <strong>Neighborhood layers</strong>
-                <span>Local context, stacked with the map.</span>
-              </div>
-            </li>
-          </ul>
-          <p class="body-note">
-            Interactive maps arrive in a later release. No datasets are loaded yet.
-          </p>
+            )
+          }
+          <p class="body-note">Previews show each map's published layers.</p>
         </div>
         <a class="destination-link map-cta" href="/maps/">
           Open map explorer <Icon />
@@ -55,28 +78,30 @@ import Icon from '../components/Icon.astro';
           <p>Local events, programs and gatherings.</p>
         </header>
         <div class="destination-body">
-          <ul class="preview-list">
-            <li>
-              <h3>Public meetings</h3>
-              <p>Council, boards, and commissions — with plain-language context.</p>
-            </li>
-            <li>
-              <h3>Community gatherings</h3>
-              <p>Programs, clinics, and events hosted by neighbors.</p>
-            </li>
-            <li>
-              <h3>Deadlines that matter</h3>
-              <p>Comment windows and dates worth knowing before they pass.</p>
-            </li>
-          </ul>
-          <p class="body-note">
-            Sourced events land here once the calendar is connected.
-          </p>
+          <p class="status" data-home-events-status>Loading upcoming events…</p>
+          <ul class="home-event-list" data-home-events-list hidden></ul>
+          <p class="status" data-home-events-empty hidden>No upcoming events yet.</p>
+          <p class="body-note">The next events from every organization and calendar.</p>
         </div>
         <a class="destination-link calendar-cta" href="/calendar/">
           View the calendar <Icon />
         </a>
       </section>
     </div>
+
+    <script
+      type="application/json"
+      data-home-maps
+      set:html={JSON.stringify(maps)}
+      is:inline
+    ></script>
   </main>
 </Layout>
+
+<script>
+  import { initHomeMaps } from '../scripts/home-maps';
+  import { initHomeEvents } from '../scripts/home-events';
+
+  initHomeMaps();
+  initHomeEvents();
+</script>

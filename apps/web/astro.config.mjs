@@ -9,9 +9,15 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
-        !['/admin/', '/account/', '/signin/', '/signup/', '/maps/view/', '/404'].some((path) =>
-          page.includes(path),
-        ),
+        ![
+          '/admin/',
+          '/account/',
+          '/signin/',
+          '/signup/',
+          '/maps/view/',
+          '/calendar/view/',
+          '/404',
+        ].some((path) => page.includes(path)),
     }),
   ],
 });

@@ -40,13 +40,14 @@ docs/         architecture, backend, and development notes
 - Admin pages are client-rendered shells; the header/session is checked in the
   browser, but **RLS is the real enforcement**.
 - Full-text search uses stored generated `tsvector` columns + GIN indexes and
-  `security definer` RPCs (`search_maps`, `search_organizations`).
+  `security definer` RPCs (`search_maps`, `search_organizations`,
+  `search_events`).
 
 See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 
 ## Visibility model
 
-Maps and layers both have `public | unlisted | private`:
+Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 | Value | Meaning |
 | --- | --- |
@@ -61,6 +62,12 @@ Maps and layers both have `public | unlisted | private`:
 - Layers: each layer has its own visibility. `get_map_layers(map_id)` returns
   only the layers the caller may see, so a private layer on a public map is
   silently omitted for anonymous visitors.
+- Calendars and events: each calendar belongs to one organization (an
+  organization can have many) and each event belongs to one calendar. An event
+  is only visible when both it and its calendar are visible. `/calendar/` browses
+  and filters events by organization/calendar through `search_events`; unlisted
+  and private events use the `/calendar/view/?id=<uuid>` shell gated by
+  `get_event`.
 - The public listing/sitemap includes public content only; sitemap generation is
   handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
 
