@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Layout title="A closer look at your community">
+  <main id="main">
+    <section class="home-intro" aria-labelledby="home-title">
+      <h1 id="home-title">A closer look at your community.</h1>
+      <p>Follow the decisions, places, and gatherings that shape where you live.</p>
+    </section>
+
+    <div class="home-destinations">
+      <section class="destination maps-destination" aria-labelledby="maps-title">
+        <header class="destination-heading">
+          <h2 id="maps-title">Explore maps</h2>
+          <p>Places, precincts, and layers worth knowing.</p>
+        </header>
+        <div class="destination-body">
+          <ul class="layer-list">
+            <li>
+              <i class="layer-swatch layer-swatch--point" aria-hidden="true"></i>
+              <div>
+                <strong>Voting places</strong>
+                <span>Where to cast a ballot, and when polls are open.</span>
+              </div>
+            </li>
+            <li>
+              <i class="layer-swatch layer-swatch--line" aria-hidden="true"></i>
+              <div>
+                <strong>District boundaries</strong>
+                <span>The lines that decide who represents you.</span>
+              </div>
+            </li>
+            <li>
+              <i class="layer-swatch layer-swatch--area" aria-hidden="true"></i>
+              <div>
+                <strong>Neighborhood layers</strong>
+                <span>Local context, stacked with the map.</span>
+              </div>
+            </li>
+          </ul>
+          <p class="body-note">
+            Interactive maps arrive in a later release. No datasets are loaded yet.
+          </p>
+        </div>
+        <a class="destination-link map-cta" href="/maps/">
+          Open map explorer <Icon />
+        </a>
+      </section>
+
+      <section class="destination calendar-destination" aria-labelledby="calendar-title">
+        <header class="destination-heading">
+          <h2 id="calendar-title">Community calendar</h2>
+          <p>Local events, programs and gatherings.</p>
+        </header>
+        <div class="destination-body">
+          <ul class="preview-list">
+            <li>
+              <h3>Public meetings</h3>
+              <p>Council, boards, and commissions — with plain-language context.</p>
+            </li>
+            <li>
+              <h3>Community gatherings</h3>
+              <p>Programs, clinics, and events hosted by neighbors.</p>
+            </li>
+            <li>
+              <h3>Deadlines that matter</h3>
+              <p>Comment windows and dates worth knowing before they pass.</p>
+            </li>
+          </ul>
+          <p class="body-note">
+            Sourced events land here once the calendar is connected.
+          </p>
+        </div>
+        <a class="destination-link calendar-cta" href="/calendar/">
+          View the calendar <Icon />
+        </a>
+      </section>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import 'leaflet/dist/leaflet.css';
+import { baseMapLabel } from '../../lib/basemaps';
+import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
+
+export async function getStaticPaths() {
+  const maps = await fetchPublicMaps();
+  return maps.map((map) => ({ params: { slug: map.slug }, props: { map } }));
+}
+
+interface Props {
+  map: MapConfig;
+}
+
+const { map } = Astro.props;
+const base = baseMapLabel(map.base_map);
+---
+
+<Layout
+  title={map.name}
+  description={map.description ?? `An interactive map: ${map.name}.`}
+>
+  <main id="main">
+    <div class="page-intro">
+      <p class="org-eyebrow">Map</p>
+      <h1>{map.name}</h1>
+      {map.organizations && (
+        <p class="map-org">
+          By <a href={`/orgs/${map.organizations.slug}/`}>{map.organizations.name}</a>
+        </p>
+      )}
+      {map.description && <p>{map.description}</p>}
+      <a class="button-link map-edit" data-map-edit-link hidden>Edit map</a>
+    </div>
+
+    <div class="map-viewer" data-map-viewer hidden></div>
+    <p class="map-viewer-note">
+      Base map: {base} · <span data-map-layer-note>loading layers…</span>
+    </p>
+    <p class="org-back">
+      <a href="/maps/">← All maps</a>
+    </p>
+  </main>
+</Layout>
+
+<script type="application/json" data-map-config set:html={JSON.stringify(map)} is:inline></script>
+<script>
+  import { initMapViewFromPage } from '../../scripts/map-viewer';
+
+  initMapViewFromPage();
+</script>

@@ -1,0 +1,32 @@
+---
+interface Props {
+  name?: 'arrow' | 'chevron-left' | 'chevron-right' | 'download' | 'layers' | 'search' | 'close';
+  size?: number;
+}
+
+const { name = 'arrow', size = 20 } = Astro.props;
+
+const paths = {
+  arrow: 'M4 12h16m-6-6 6 6-6 6',
+  'chevron-left': 'm15 5-7 7 7 7',
+  'chevron-right': 'm9 5 7 7-7 7',
+  download: 'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',
+  layers: 'm12 3 10 6-10 6L2 9l10-6ZM2 15l10 6 10-6M2 12l10 6 10-6',
+  search: 'm21 21-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',
+  close: 'm6 6 12 12M6 18 18 6',
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={paths[name]} />
+</svg>

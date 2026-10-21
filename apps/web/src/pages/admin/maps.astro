@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+import 'leaflet/dist/leaflet.css';
+---
+
+<Layout title="Maps admin" description="Manage maps built from OpenStreetMap basemaps and remote GeoJSON.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Maps</h1>
+      <p>Combine an OpenStreetMap base map with one or more remote GeoJSON files.</p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/maps/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-map-form novalidate>
+        <h2 data-map-form-title>Add a map</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Name *</span>
+            <input type="text" name="name" maxlength="120" required />
+          </label>
+          <label class="field">
+            <span>Slug *</span>
+            <input type="text" name="slug" maxlength="80" placeholder="my-map" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="2000"></textarea>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Base map (OpenStreetMap)</span>
+            <select name="base_map">
+              <option value="osm">OpenStreetMap Standard</option>
+              <option value="osm-humanitarian">OpenStreetMap Humanitarian</option>
+              <option value="osm-topo">OpenTopoMap (OpenStreetMap data)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public — listed, sitemap, search</option>
+              <option value="unlisted">Unlisted — uuid URL only</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Organization (optional)</span>
+          <select name="organization_id">
+            <option value="">No organization</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span>Layers</span>
+          <p class="status">
+            Pick one or more layers. Manage them in <a href="/admin/layers/">Layers</a>.
+          </p>
+          <div class="layer-options" data-layer-options></div>
+        </div>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create map</button>
+          <button type="button" data-map-preview-button>Refresh preview</button>
+          <button type="button" data-map-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-map-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="map-preview-title">
+        <h2 id="map-preview-title">Preview</h2>
+        <div class="map-preview" data-map-preview></div>
+      </section>
+
+      <section aria-labelledby="map-list-title">
+        <h2 id="map-list-title">Maps</h2>
+        <div class="org-list" data-map-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initMapAdmin } from '../../scripts/admin-maps';
+
+  void initMapAdmin();
+</script>

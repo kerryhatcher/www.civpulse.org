@@ -1,0 +1,1 @@
+-- Local-only seed data. Add development fixtures here as the schema grows.

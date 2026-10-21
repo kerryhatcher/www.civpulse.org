@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sign in" description="Sign in to Civic Pulse.">
+  <main id="main" class="auth-page">
+    <div class="auth-card">
+      <h1>Welcome back.</h1>
+      <p>Sign in to follow your community and save what matters.</p>
+
+      <form class="auth-form" data-auth-form="signin" novalidate>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            required
+            minlength="8"
+          />
+        </label>
+        <button class="button-link" type="submit">Sign in</button>
+        <p class="auth-message" data-auth-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <p class="auth-alt">
+        New to Civic Pulse? <a href="/signup/">Create an account</a>
+      </p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initSignIn } from '../scripts/auth';
+
+  initSignIn();
+</script>

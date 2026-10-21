@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { baseMapLabel } from '../../lib/basemaps';
+import { fetchPublicMaps } from '../../lib/maps';
+
+const maps = await fetchPublicMaps();
+---
+
+<Layout
+  title="Explore maps"
+  description="Browse public maps built from OpenStreetMap basemaps and open GeoJSON data."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Explore maps</h1>
+      <p>Public maps built from OpenStreetMap base maps and open GeoJSON data.</p>
+    </div>
+
+    <form class="map-search" data-map-search-form role="search">
+      <label class="visually-hidden" for="map-search-input">Search maps</label>
+      <input
+        id="map-search-input"
+        type="search"
+        placeholder="Search maps…"
+        data-map-search
+        autocomplete="off"
+      />
+      <p class="status" data-map-search-note hidden>
+        Signed in — search includes public, unlisted, and private maps.
+      </p>
+    </form>
+
+    <p class="status" data-map-search-status hidden></p>
+
+    {
+      maps.length > 0 ? (
+        <div class="org-grid" data-map-initial>
+          {maps.map((map) => (
+            <a class="org-card" href={`/maps/${map.slug}/`}>
+              <h2>{map.name}</h2>
+              {map.description && <p>{map.description}</p>}
+              <span class="map-card-meta">
+                {[map.organizations?.name, baseMapLabel(map.base_map)].filter(Boolean).join(' · ')}
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="prose" data-map-initial>
+          <div class="empty-state">
+            <p>
+              No public maps are published yet. Admins can add them from{' '}
+              <a href="/admin/maps/">the maps admin</a>.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="org-grid" data-map-search-results hidden></div>
+    <p class="status" data-map-search-empty hidden>No maps match that search.</p>
+  </main>
+</Layout>
+
+<script>
+  import { initMapSearch } from '../../scripts/map-search';
+
+  initMapSearch();
+</script>

@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Your account" description="Manage your Civic Pulse account.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Your account</h1>
+      <p>You're signed in to Civic Pulse.</p>
+    </div>
+    <div class="prose">
+      <div class="account-card" data-account hidden>
+        <dl class="account-list">
+          <div>
+            <dt>Name</dt>
+            <dd data-account-name>—</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd data-account-email>—</dd>
+          </div>
+          <div>
+            <dt>User ID</dt>
+            <dd data-account-id>—</dd>
+          </div>
+        </dl>
+        <button class="button-link" type="button" data-account-signout>Sign out</button>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initAccount } from '../scripts/auth';
+
+  void initAccount();
+</script>

@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout title="Layers admin" description="Manage reusable GeoJSON layers for maps.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Layers</h1>
+      <p>Reusable GeoJSON layers that can be added to one or more maps.</p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/layers/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-layer-form novalidate>
+        <h2 data-layer-form-title>Add a layer</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Name *</span>
+            <input type="text" name="name" maxlength="120" required />
+          </label>
+          <label class="field">
+            <span>Visibility</span>
+            <select name="visibility">
+              <option value="public">Public</option>
+              <option value="unlisted">Unlisted</option>
+              <option value="private">Private — signed-in users only</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>GeoJSON URL *</span>
+          <input
+            type="url"
+            name="source_url"
+            maxlength="1000"
+            placeholder="https://example.com/data.geojson"
+            required
+          />
+        </label>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="2000"></textarea>
+        </label>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create layer</button>
+          <button type="button" data-layer-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-layer-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="layer-list-title">
+        <h2 id="layer-list-title">All layers</h2>
+        <div class="org-list" data-layer-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initLayerAdmin } from '../../scripts/admin-layers';
+
+  void initLayerAdmin();
+</script>

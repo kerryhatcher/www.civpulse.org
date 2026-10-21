@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+import '@fontsource/unna/400.css';
+import '@fontsource/unna/700.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import '@fontsource/dm-sans/600.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Civic Pulse helps residents follow local decisions, find community events, and explore the places that shape where they live.',
+} = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const nav = [
+  { url: '/', label: 'Home' },
+  { url: '/maps/', label: 'Explore maps' },
+  { url: '/calendar/', label: 'Community calendar' },
+];
+const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f1e7" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={`${title} · Civic Pulse`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title} · Civic Pulse</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a href="/" class="brand" aria-label="Civic Pulse home">
+          <img
+            src="/brand/civic-pulse.svg"
+            alt="Civic Pulse"
+            width="257"
+            height="48"
+          />
+        </a>
+        <nav aria-label="Main navigation">
+          {
+            nav.map((item) => (
+              <a
+                href={item.url}
+                aria-current={isCurrent(item.url) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+          <a data-nav-admin href="/admin/organizations/" hidden>Admin</a>
+          <a data-nav-auth href="/signin/">Sign in</a>
+        </nav>
+      </header>
+      <slot />
+      <footer class="site-footer">
+        <p>
+          Civic Pulse <span aria-hidden="true">·</span> A clearer signal from your
+          community
+        </p>
+        <div>
+          <a href="/orgs/">Organizations</a>
+          <span aria-hidden="true">/</span>
+          <a href="/about/">About this project</a>
+          <span aria-hidden="true">/</span>
+          <a href="/signin/">Sign in</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<script>
+  import { initAuthNav } from '../scripts/auth';
+  void initAuthNav();
+</script>

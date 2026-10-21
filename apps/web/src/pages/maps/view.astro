@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import 'leaflet/dist/leaflet.css';
+---
+
+<Layout
+  title="Map"
+  description="View a shared Civic Pulse map."
+>
+  <main id="main">
+    <div class="page-intro">
+      <p class="org-eyebrow">Map</p>
+      <h1>Shared map</h1>
+      <a class="button-link map-edit" data-map-edit-link hidden>Edit map</a>
+    </div>
+
+    <div class="map-viewer-status empty-state" data-map-viewer-status hidden></div>
+    <div class="map-viewer" data-map-viewer hidden></div>
+  </main>
+</Layout>
+
+<script>
+  import { initMapViewFromUrl } from '../../scripts/map-viewer';
+
+  void initMapViewFromUrl();
+</script>

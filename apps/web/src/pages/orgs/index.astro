@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchOrganizations, organizationLogoUrl } from '../../lib/organizations';
+
+const organizations = await fetchOrganizations();
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
+}
+---
+
+<Layout
+  title="Organizations"
+  description="Community organizations, services, and groups in one public directory."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Organizations</h1>
+      <p>Community groups, services, and the people behind them.</p>
+    </div>
+
+    {
+      organizations.length > 0 && (
+        <form class="map-search" data-org-search-form role="search">
+          <label class="visually-hidden" for="org-search-input">
+            Search organizations
+          </label>
+          <input
+            id="org-search-input"
+            type="search"
+            placeholder="Search organizations…"
+            data-org-search
+            autocomplete="off"
+          />
+        </form>
+      )
+    }
+
+    <p class="status" data-org-search-status hidden></p>
+
+    {
+      organizations.length > 0 ? (
+        <div class="org-grid" data-org-initial>
+          {organizations.map((org) => {
+            const logo = organizationLogoUrl(org.logo_path);
+            return (
+              <a class="org-card" href={`/orgs/${org.slug}/`}>
+                {logo ? (
+                  <img class="org-card-logo" src={logo} alt="" loading="lazy" width="72" height="72" />
+                ) : (
+                  <span class="org-card-fallback" aria-hidden="true">
+                    {initials(org.name)}
+                  </span>
+                )}
+                <h2>{org.name}</h2>
+                {org.description && <p>{org.description}</p>}
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="prose" data-org-initial>
+          <div class="empty-state">
+            <p>
+              No organizations are published yet. Admins can add them from{' '}
+              <a href="/admin/organizations/">the admin page</a>.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="org-grid" data-org-search-results hidden></div>
+    <p class="status" data-org-search-empty hidden>No organizations match that search.</p>
+  </main>
+</Layout>
+
+<script>
+  import { initOrgSearch } from '../../scripts/org-search';
+
+  initOrgSearch();
+</script>

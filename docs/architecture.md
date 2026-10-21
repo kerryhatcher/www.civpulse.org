@@ -1,0 +1,72 @@
+# Architecture
+
+Civic Pulse is a Bun workspace monorepo with a static Astro frontend and a
+Supabase backend.
+
+```
+apps/web/     Astro frontend, built to static files
+supabase/     Postgres migrations + local Supabase config
+scripts/      dev orchestration and local seed helpers
+docs/         architecture, backend, and development notes
+```
+
+## Hosting and rendering
+
+- The frontend deploys as **Cloudflare Workers static assets**
+  (`apps/web/wrangler.jsonc`, `assets.directory = ./dist`). It is a **static
+  build**: `output` stays the Astro default (`static`) and there is **no
+  server adapter**. Do not add `@astrojs/cloudflare`/SSR without deciding that
+  the hosting model is changing first.
+- Every page is prerendered at build time. Things that change at runtime are
+  rendered in the browser with vanilla TypeScript from `apps/web/src/scripts/`
+  (`@supabase/supabase-js` + the public anon key).
+- Consequences to keep in mind:
+  - **Admin edits are live in Postgres but not on the static site until the next
+    build/deploy.** Prerendered pages are snapshots.
+  - Content that must not appear in a static file (private maps/layers) is
+    fetched client-side through a Supabase RPC, never embedded in HTML.
+  - Build-time data (public orgs/maps) is fetched with `getBuildSupabase()`;
+    browser data uses `getSupabase()`.
+  - `public/_redirects` only takes effect when served by Cloudflare. The Astro
+    dev server and `astro preview` ignore it. If a link must work in dev, do not
+    rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
+
+## Backend
+
+- Supabase Postgres with Row Level Security; Supabase Auth for email/password
+  accounts; a `public.profiles` row per user created by a signup trigger.
+- `public.admins` is an allowlist (managed with the service role, e.g. by the
+  local seed script) and `public.is_admin()` is used by RLS policies.
+- Admin pages are client-rendered shells; the header/session is checked in the
+  browser, but **RLS is the real enforcement**.
+- Full-text search uses stored generated `tsvector` columns + GIN indexes and
+  `security definer` RPCs (`search_maps`, `search_organizations`).
+
+See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
+
+## Visibility model
+
+Maps and layers both have `public | unlisted | private`:
+
+| Value | Meaning |
+| --- | --- |
+| `public` | Listed, included in sitemap, appears for everyone |
+| `unlisted` | Reachable by uuid URL only; hidden from anonymous listings/search; signed-in users can find it |
+| `private` | Requires a signed-in user |
+
+- Maps: public pages are `/maps/<slug>/` (prerendered); unlisted/private are
+  served by the `/maps/view/` shell with `?id=<uuid>` and gated by the
+  `get_map` RPC. Pretty `/maps/u/<uuid>/` and `/maps/p/<uuid>/` paths are
+  rewritten to that shell **only when served by Cloudflare**.
+- Layers: each layer has its own visibility. `get_map_layers(map_id)` returns
+  only the layers the caller may see, so a private layer on a public map is
+  silently omitted for anonymous visitors.
+- The public listing/sitemap includes public content only; sitemap generation is
+  handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
+
+## Auth and admin
+
+- Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
+- Admin: `/admin/organizations/`, `/admin/layers/`, `/admin/maps/` with an
+  admin tab bar. Admins also get an "Edit" shortcut on public org/map pages.
+- The header shows "Account" when signed in and "Admin" for allowlisted users.

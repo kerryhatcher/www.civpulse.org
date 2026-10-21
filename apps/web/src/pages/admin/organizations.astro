@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout title="Organizations admin" description="Manage the public organization directory.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Organizations</h1>
+      <p>Add and edit the public directory. Changes appear on the site at the next build.</p>
+    </div>
+
+    <AdminTabs />
+
+    <p class="status" data-admin-gate>Checking access…</p>
+
+    <div class="prose" data-admin-denied hidden>
+      <div class="empty-state">
+        <p>
+          Your account does not have admin access.{' '}
+          <a href="/signin/?next=/admin/organizations/">Sign in with an admin account</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-org-form novalidate>
+        <h2 data-org-form-title>Add an organization</h2>
+        <input type="hidden" name="id" />
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Name *</span>
+            <input type="text" name="name" maxlength="120" required />
+          </label>
+          <label class="field">
+            <span>Slug *</span>
+            <input type="text" name="slug" maxlength="80" placeholder="my-organization" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Description</span>
+          <textarea name="description" rows="3" maxlength="2000"></textarea>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" name="email" maxlength="320" />
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input type="tel" name="phone" maxlength="40" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Address</span>
+          <input type="text" name="address_line" maxlength="200" />
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Website</span>
+            <input type="url" name="website_url" maxlength="500" placeholder="https://" />
+          </label>
+          <label class="field">
+            <span>Social</span>
+            <input type="url" name="social_url" maxlength="500" placeholder="https://" />
+          </label>
+        </div>
+
+        <div class="org-logo-field">
+          <label class="field">
+            <span>Logo</span>
+            <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+          </label>
+          <img class="org-logo-preview" data-org-logo-preview alt="Logo preview" hidden />
+        </div>
+
+        <div class="org-form-actions">
+          <button class="button-link" type="submit">Create organization</button>
+          <button type="button" data-org-cancel hidden>Cancel</button>
+        </div>
+        <p class="auth-message" data-org-message hidden role="status" aria-live="polite"></p>
+      </form>
+
+      <section aria-labelledby="org-list-title">
+        <h2 id="org-list-title">Published organizations</h2>
+        <div class="org-list" data-org-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initOrganizationAdmin } from '../../scripts/admin-organizations';
+
+  void initOrganizationAdmin();
+</script>

@@ -1,0 +1,85 @@
+# Development and verification
+
+See the [README](../README.md) for setup and the root scripts. This page covers
+the local loop, how to verify changes, and the environment gotchas we hit.
+
+## Local loop
+
+```bash
+bun install
+bun run dev          # local Supabase (if needed) + Astro dev in the foreground
+```
+
+`scripts/dev.mjs` starts Supabase when it is not running, prints the local test
+user, then runs Astro with `ASTRO_DEV_BACKGROUND=1` so the server stays in the
+foreground. Supabase is left running when the dev server exits
+(`CIVICPULSE_STOP_BACKEND=1 bun run dev` stops it too).
+
+Local test user (admin), created/confirmed by `bun run db:seed-user`:
+
+| Field | Value |
+| --- | --- |
+| Email | `test@civpulse.org` |
+| Password | `civicpulse-test-123` |
+
+Local endpoints from `bun run db:status`: API `http://127.0.0.1:54321`, DB
+`127.0.0.1:54322`, Studio <http://127.0.0.1:54323>.
+
+## Verifying a change
+
+1. `bun run check` — `astro check` must report 0 errors.
+2. `bun run build` — the static build must succeed and write `apps/web/dist`.
+3. Exercise the flow in the browser and watch the console for errors.
+4. For data access rules, check both anonymous and signed-in behaviour (browser
+   and/or the REST/RPC endpoints with the anon key vs a user token).
+5. For Cloudflare-only behaviour (`_redirects`, `_headers`, asset routing),
+   build and run `bunx wrangler dev` from `apps/web` instead of `astro preview`.
+
+### Ad-hoc browser checks
+
+Playwright is not a dependency of this repo. For quick verification, run a
+throwaway Node script from the Astro app (or a checkout that has Playwright)
+against the dev server, using the system Chrome channel — the bundled Chromium
+download may be absent:
+
+```bash
+bunx playwright screenshot --channel=chrome --viewport-size=1280,900 \
+  --full-page http://localhost:4323/ /tmp/page.png
+```
+
+For scripted flows, `chromium.launch({ channel: 'chrome' })` works the same way.
+Add `playwright` as a devDependency only if you are committing tests.
+
+## Gotchas
+
+- **Ports 4321/4322 may be taken** by other projects on a shared machine; Astro
+  picks the next free port (often 4323). Read the actual URL from the dev output
+  or `apps/web/.astro/dev.json`.
+- **Astro dev caches the prerendered route set.** After creating a new public
+  map/org (a new `/maps/<slug>/` or `/orgs/<slug>/` page), restart the dev
+  server (`bunx astro dev stop` in `apps/web`, then `bun run dev`) to see it.
+  `bun run build` always generates the current set.
+- **`_redirects` is Cloudflare-only.** It is not applied by `astro dev` or
+  `astro preview`; verify it with `wrangler dev`.
+- **`db:reset` wipes data.** To apply a new migration to a running local DB
+  without losing content, use `bun run db:migrate`. Use `db:reset` when a clean
+  slate is fine.
+- **Migrations are append-only.** Never edit a migration that has been applied;
+  add a new one.
+- **Podman/Docker socket.** `docker` on this machine is a Podman shim and the
+  Supabase CLI talks to the Podman API socket. If `supabase start` fails with
+  `statfs .../podman/podman.sock: no such file or directory`, run
+  `systemctl --user enable --now podman.socket`.
+- **`supabase start` can race.** `Starting database from backup...` followed by
+  `failed to copy secret file into container` or a prune error is usually
+  transient: wait a few seconds and retry. `supabase stop` may report
+  `unknown flag: --all` from `podman volume prune`; if the containers are down
+  the stop still succeeded.
+- **Don't hand-edit integrations.** Add Astro integrations with
+  `bunx astro add <name> --yes` (see `.pi/settings.json` and the project rules).
+
+## Publishing
+
+The site is static, so admin changes are only visible publicly after
+`bun run build` (or a deploy). This is expected, not a bug — see
+[architecture.md](./architecture.md).

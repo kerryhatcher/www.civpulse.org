@@ -1,0 +1,26 @@
+{
+  "name": "civpulse",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "bun run scripts/dev.mjs",
+    "dev:web": "bun run --cwd apps/web dev",
+    "dev:backend": "supabase start",
+    "build": "bun run --cwd apps/web build",
+    "preview": "bun run --cwd apps/web preview",
+    "check": "bun run --cwd apps/web check",
+    "deploy": "bun run --cwd apps/web deploy",
+    "supabase": "supabase",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:migrate": "supabase migration up",
+    "db:reset": "supabase db reset",
+    "db:push": "supabase db push",
+    "db:status": "supabase status",
+    "db:seed-user": "bun run scripts/seed-test-user.mjs"
+  },
+  "devDependencies": {
+    "supabase": "^2.121.0"
+  }
+}

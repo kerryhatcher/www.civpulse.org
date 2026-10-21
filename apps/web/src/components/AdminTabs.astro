@@ -1,0 +1,21 @@
+---
+const path = Astro.url.pathname.replace(/\/+$/, '');
+
+const tabs = [
+  { href: '/admin/organizations/', label: 'Organizations' },
+  { href: '/admin/layers/', label: 'Layers' },
+  { href: '/admin/maps/', label: 'Maps' },
+];
+
+const isCurrent = (href: string) => href.replace(/\/+$/, '') === path;
+---
+
+<nav class="admin-tabs" aria-label="Admin sections">
+  {
+    tabs.map((tab) => (
+      <a href={tab.href} aria-current={isCurrent(tab.href) ? 'page' : undefined}>
+        {tab.label}
+      </a>
+    ))
+  }
+</nav>

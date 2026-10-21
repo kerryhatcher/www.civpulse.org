@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  fetchOrganizations,
+  organizationLogoUrl,
+  type Organization,
+} from '../../lib/organizations';
+import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
+
+export async function getStaticPaths() {
+  const [organizations, maps] = await Promise.all([fetchOrganizations(), fetchPublicMaps()]);
+  const mapByOrganization = new Map<string, MapConfig>(
+    maps
+      .filter((map) => map.organization_id !== null)
+      .map((map) => [map.organization_id as string, map] as const),
+  );
+
+  return organizations.map((org) => ({
+    params: { slug: org.slug },
+    props: { org, map: mapByOrganization.get(org.id) ?? null },
+  }));
+}
+
+interface Props {
+  org: Organization;
+  map: MapConfig | null;
+}
+
+const { org, map } = Astro.props;
+const logo = organizationLogoUrl(org.logo_path);
+
+const contact = [
+  { label: 'Email', value: org.email, href: org.email ? `mailto:${org.email}` : null },
+  {
+    label: 'Phone',
+    value: org.phone,
+    href: org.phone ? `tel:${org.phone.replace(/[^+\d]/g, '')}` : null,
+  },
+  { label: 'Address', value: org.address_line, href: null },
+  { label: 'Website', value: org.website_url, href: org.website_url },
+  { label: 'Social', value: org.social_url, href: org.social_url },
+].filter((item) => item.value);
+---
+
+<Layout title={org.name} description={org.description ?? `Contact details for ${org.name}.`}>
+  <main id="main">
+    <div class="org-header">
+      {
+        logo ? (
+          <img class="org-header-logo" src={logo} alt={`${org.name} logo`} width="120" height="120" />
+        ) : (
+          <span class="org-header-fallback" aria-hidden="true">
+            {org.name.slice(0, 1).toUpperCase()}
+          </span>
+        )
+      }
+      <div class="org-header-text">
+        <p class="org-eyebrow">Organization</p>
+        <h1>{org.name}</h1>
+        {org.description && <p class="org-lede">{org.description}</p>}
+      </div>
+      <a
+        class="button-link org-edit-link"
+        data-org-edit-link
+        href={`/admin/organizations/?edit=${org.id}`}
+        hidden
+      >
+        Edit organization
+      </a>
+    </div>
+
+    <div class="org-contact">
+      <h2>Contact</h2>
+      <dl class="account-list">
+        {
+          contact.map((item) => (
+            <div>
+              <dt>{item.label}</dt>
+              <dd>
+                {item.href ? (
+                  <a href={item.href}>{item.value}</a>
+                ) : (
+                  item.value
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      {map && (
+        <p class="org-map">
+          <a class="button-link" href={`/maps/${map.slug}/`}>View map: {map.name}</a>
+        </p>
+      )}
+      <p class="org-back">
+        <a href="/orgs/">← All organizations</a>
+      </p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initAdminEditLink } from '../../scripts/auth';
+
+  void initAdminEditLink();
+</script>
