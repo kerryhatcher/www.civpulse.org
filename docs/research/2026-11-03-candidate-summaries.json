@@ -1,0 +1,473 @@
+{
+  "researched_on": "2026-10-22",
+  "election": "2026-11-03-general-election",
+  "source_policy": "Brief neutral paraphrases of official campaign or government sources. Where a first-party biography could not be verified, use only official ballot or certified write-in facts. Campaign promises are described as priorities, not established results. Sources are recorded here to keep profile copy short.",
+  "summary": {
+    "candidates": 50,
+    "biographical_summaries": 39,
+    "election_record_only": 11
+  },
+  "candidates": [
+    {
+      "person_id": "0e4795df-8d55-4d5e-9bc1-509b9c37baca",
+      "slug": "mike-collins",
+      "name": "Mike Collins",
+      "summary": "Mike Collins is a member of Congress with a trucking-business background running for U.S. Senate on a conservative platform.",
+      "source_type": "campaign",
+      "source_url": "https://mikecollinsga.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for United States Senate, Georgia (statewide), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "d1559c93-719a-4fc0-a0d4-71b2e7234d08",
+      "slug": "jon-ossoff",
+      "name": "Jon Ossoff",
+      "summary": "Jon Ossoff is a U.S. senator from Georgia whose campaign emphasizes lower health care and housing costs and government accountability.",
+      "source_type": "campaign",
+      "source_url": "https://electjon.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for United States Senate, Georgia (statewide), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "ff6115ec-4714-4017-bac5-a15f7051c98d",
+      "slug": "elbert-arthur-bartell",
+      "name": "Elbert Arthur Bartell",
+      "summary": "Elbert Arthur Bartell is an independent U.S. Senate write-in candidate advocating human rights and greater citizen participation in government.",
+      "source_type": "campaign",
+      "source_url": "https://bartellforsenate.com/",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for United States Senate, Georgia (statewide), in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026."
+    },
+    {
+      "person_id": "469fcab4-2558-43d3-876d-867281eb9c5a",
+      "slug": "christina-clement",
+      "name": "Christina Clement",
+      "summary": "Christina Clement is a certified write-in candidate for U.S. Senate in Georgia in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for United States Senate, Georgia (statewide), in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "327ec919-5ad7-4fc1-9c45-ce96bbb1795d",
+      "slug": "cassandra-easton",
+      "name": "Cassandra Easton",
+      "summary": "Cassandra Easton is a certified write-in candidate for U.S. Senate in Georgia in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for United States Senate, Georgia (statewide), in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "c07f2cdc-72b2-486a-a97b-f300f3a28305",
+      "slug": "rick-jackson",
+      "name": "Rick Jackson",
+      "summary": "Rick Jackson is a Georgia businessman and philanthropist running for governor as a conservative.",
+      "source_type": "campaign",
+      "source_url": "https://rickjackson.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "ca744bb6-7240-462b-842d-c73304680d66",
+      "slug": "keisha-lance-bottoms",
+      "name": "Keisha Lance Bottoms",
+      "summary": "Keisha Lance Bottoms is a former Atlanta mayor and White House senior adviser running for Georgia governor.",
+      "source_type": "campaign",
+      "source_url": "https://www.keishaforgovernor.com/bio",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "4637503f-991b-4623-8bb6-d3f9adddad7e",
+      "slug": "david-c-byrne",
+      "name": "David C. Byrne",
+      "summary": "David C. Byrne is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "e8faef88-d2c1-4cf2-ae96-bb68833973f8",
+      "slug": "jacqueline-angela-dacosta",
+      "name": "Jacqueline Angela DaCosta",
+      "summary": "Jacqueline Angela DaCosta is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "2a4633f0-a6cc-4fee-9bcd-3e22c922fc5d",
+      "slug": "deb-broughton-davis",
+      "name": "Deb Broughton Davis",
+      "summary": "Deb Broughton Davis is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "3f791bd3-743c-451f-bc95-75e5ad733264",
+      "slug": "justin-laster",
+      "name": "Justin Laster",
+      "summary": "Justin Laster is a write-in candidate for Georgia governor advocating a higher minimum wage, tax relief, and voting rights.",
+      "source_type": "campaign",
+      "source_url": "https://justinjlaster.com/",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026."
+    },
+    {
+      "person_id": "98fe0c78-3773-454a-9d62-1f91cedff5cb",
+      "slug": "milton-j-lofton",
+      "name": "Milton J. Lofton",
+      "summary": "Milton J. Lofton is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "49a6c276-614d-4afe-903d-a2babb900ddd",
+      "slug": "david-leon-moreland",
+      "name": "David Leon Moreland",
+      "summary": "David Leon Moreland is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "1492f72e-957a-4269-bc41-1836912cb08d",
+      "slug": "leland-j-olinger-iii",
+      "name": "Leland J. Olinger, III",
+      "summary": "Leland J. Olinger, III is a certified write-in candidate for Georgia governor in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/2026-Certified-Write-In-Candidates-for-November-3rd-General-Election_10-15.pdf",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "aa267684-2172-4aee-99a5-11a6fd82281e",
+      "slug": "andrew-pacetti",
+      "name": "Andrew Pacetti",
+      "summary": "Andrew Pacetti is an independent write-in candidate for Georgia governor whose campaign emphasizes cooperation across party lines.",
+      "source_type": "campaign",
+      "source_url": "https://www.andyforgeorgia.com/",
+      "previous_description": "Certified write-in candidate; this name is not printed on the ballot. The official certification does not specify party affiliation. Candidate for Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Georgia Secretary of State final certified write-in list, published September 15, 2026, as posted by the Macon-Bibb Board of Elections. Verified October 21, 2026."
+    },
+    {
+      "person_id": "39a82cdb-d28e-45fe-8b25-0a5af20d1747",
+      "slug": "greg-dolezal",
+      "name": "Greg Dolezal",
+      "summary": "Greg Dolezal is a businessman running for lieutenant governor whose campaign emphasizes school choice and conservative education policies.",
+      "source_type": "campaign",
+      "source_url": "https://gregdolezal.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Lieutenant Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "8514c662-f904-439a-b740-99ce53e4c68b",
+      "slug": "josh-mclaurin",
+      "name": "Josh McLaurin",
+      "summary": "Josh McLaurin is a Georgia state senator and attorney running for lieutenant governor with a focus on working people and quality of life.",
+      "source_type": "campaign",
+      "source_url": "https://www.joshmclaurin.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Lieutenant Governor of Georgia, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "3179c219-419a-474d-8cae-15919c4b902d",
+      "slug": "tim-fleming",
+      "name": "Tim Fleming",
+      "summary": "Tim Fleming is a state representative and former deputy secretary of state campaigning on election administration and professional licensing.",
+      "source_type": "campaign",
+      "source_url": "https://www.flemingforga.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia Secretary of State, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "d67edd86-d3e6-4167-925f-902ac784bed1",
+      "slug": "penny-brown-reynolds",
+      "name": "Penny Brown Reynolds",
+      "summary": "Penny Brown Reynolds is running for secretary of state on voting rights, simpler professional licensing, and fraud prevention.",
+      "source_type": "campaign",
+      "source_url": "https://www.pennyforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Secretary of State, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "d83bc0bc-a840-4410-9e17-ae5194cd58b7",
+      "slug": "brian-strickland",
+      "name": "Brian Strickland",
+      "summary": "Brian Strickland is an attorney and state senator campaigning for attorney general on public safety and consumer protection.",
+      "source_type": "campaign",
+      "source_url": "https://stricklandforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia Attorney General, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "5cde93a4-7d2c-42fd-bf88-e21f6fe36dcf",
+      "slug": "tanya-miller",
+      "name": "Tanya Miller",
+      "summary": "Tanya Miller is a civil rights attorney, former prosecutor, and state representative running for attorney general.",
+      "source_type": "campaign",
+      "source_url": "https://www.tanyaforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Attorney General, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "184c126f-d744-4afa-90f3-d502a50cb59a",
+      "slug": "tyler-harper",
+      "name": "Tyler Harper",
+      "summary": "Tyler Harper is Georgia’s agriculture commissioner and a seventh-generation farmer focused on farms, food safety, and agricultural markets.",
+      "source_type": "campaign",
+      "source_url": "https://tylerharperga.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia Commissioner of Agriculture, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "328dc2f6-6d30-45c3-8976-37317463a08e",
+      "slug": "katherine-e-juhan-arnold",
+      "name": "Katherine E. Juhan-Arnold",
+      "summary": "Katherine E. Juhan-Arnold is campaigning for agriculture commissioner on family farms, food safety, and stronger rural communities.",
+      "source_type": "campaign",
+      "source_url": "https://katherineforgeorgia.com/Home",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Commissioner of Agriculture, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "670d5793-8315-43ff-869e-07de02fadcf9",
+      "slug": "john-king",
+      "name": "John King",
+      "summary": "John King is Georgia’s insurance commissioner, a retired Army major general, and a former police chief.",
+      "source_type": "campaign",
+      "source_url": "https://www.votejohnking.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia Commissioner of Insurance, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "65b9c67b-6ed9-487b-a0b8-4d3ee553fe69",
+      "slug": "keisha-sean-waites",
+      "name": "Keisha Sean Waites",
+      "summary": "Keisha Sean Waites is a former state legislator and Atlanta councilmember campaigning for insurance commissioner on lower premiums and consumer protection.",
+      "source_type": "campaign",
+      "source_url": "https://www.keishawaites.org/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Commissioner of Insurance, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "22d1fe3c-347c-4191-a434-035b9a7339da",
+      "slug": "richard-woods",
+      "name": "Richard Woods",
+      "summary": "Richard Woods is Georgia’s state school superintendent and a former classroom teacher, principal, and curriculum director.",
+      "source_type": "campaign",
+      "source_url": "https://www.woodsforsuper.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia State School Superintendent, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "7f194229-ef18-4fa6-a89e-6ffc2e8af6d0",
+      "slug": "lydia-powell",
+      "name": "Lydia Powell",
+      "summary": "Lydia Powell is an educator running for state school superintendent on accountability, stronger teaching resources, and student achievement.",
+      "source_type": "campaign",
+      "source_url": "https://www.drlydiapowell.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia State School Superintendent, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "736f7cc9-e1a7-485e-8df0-4b38eabc180f",
+      "slug": "barbara-rivera-holmes",
+      "name": "Bárbara Rivera Holmes",
+      "summary": "Bárbara Rivera Holmes is Georgia’s labor commissioner, focusing on workforce training, small businesses, and modernizing unemployment services.",
+      "source_type": "campaign",
+      "source_url": "https://www.barbaraforga.com/home",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia Commissioner of Labor, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "5bb16306-07ce-40e0-9420-43e0a276aab9",
+      "slug": "nikki-porcher",
+      "name": "Nikki Porcher",
+      "summary": "Nikki Porcher is an Air Force veteran, educator, and nonprofit leader running for labor commissioner to support workers and small businesses.",
+      "source_type": "campaign",
+      "source_url": "https://www.voteporcher4ga.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Commissioner of Labor, Statewide, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "85166d7b-f811-4469-83a7-4b5c26e516a5",
+      "slug": "fitz-johnson",
+      "name": "Fitz Johnson",
+      "summary": "Fitz Johnson is a businessman, Army veteran, and former public service commissioner campaigning for affordable, reliable utilities.",
+      "source_type": "campaign",
+      "source_url": "https://www.friendsforfitz.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia Public Service Commissioner, District 3 (statewide vote), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "23d6e9f5-0b5a-4b53-8c9c-7d16ffbb22af",
+      "slug": "peter-hubbard",
+      "name": "Peter Hubbard",
+      "summary": "Peter Hubbard is a public service commissioner with renewable-energy experience campaigning for lower utility bills and reliable, clean energy.",
+      "source_type": "campaign",
+      "source_url": "https://www.peterforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia Public Service Commissioner, District 3 (statewide vote), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "a701e558-a609-4ad9-bdc2-2aa73a78c076",
+      "slug": "josh-tolbert",
+      "name": "Josh Tolbert",
+      "summary": "Josh Tolbert is an engineer running for Georgia Public Service Commission District 5.",
+      "source_type": "campaign",
+      "source_url": "https://www.teamtolbert.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia Public Service Commissioner, District 5 (statewide vote), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "4eca497e-3726-43c1-a433-1c559bcc4538",
+      "slug": "shelia-edwards",
+      "name": "Shelia Edwards",
+      "summary": "Shelia Edwards is campaigning for the Public Service Commission on energy affordability, consumer protection, and clean energy.",
+      "source_type": "campaign",
+      "source_url": "https://www.shelia4psc.com/",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for Georgia Public Service Commissioner, District 5 (statewide vote), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "d0508d76-a7f8-4fa4-9035-eba77bc3110c",
+      "slug": "matt-day",
+      "name": "Matt Day",
+      "summary": "Matt Day is running for Congress with priorities including agriculture, manufacturing jobs, and rural health care.",
+      "source_type": "campaign",
+      "source_url": "https://www.votemattday.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for United States House of Representatives, Georgia District 2, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "33c58218-8db1-4366-b3b1-f27e7efc4ad3",
+      "slug": "sanford-bishop",
+      "name": "Sanford Bishop",
+      "summary": "Sanford Bishop represents Georgia’s 2nd Congressional District, with campaign priorities including agriculture, education, and civil rights.",
+      "source_type": "campaign",
+      "source_url": "https://sanfordbishop.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for United States House of Representatives, Georgia District 2, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "2b03c3fa-5e5f-44b2-aa35-16b8145406b9",
+      "slug": "austin-scott",
+      "name": "Austin Scott",
+      "summary": "Austin Scott represents Georgia’s 8th Congressional District and emphasizes small businesses, agriculture, and national defense.",
+      "source_type": "campaign",
+      "source_url": "https://www.scottforga.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for United States House of Representatives, Georgia District 8, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "6ba46c94-8e1d-49c9-84db-8dccb4390f02",
+      "slug": "kelly-esti",
+      "name": "Kelly Esti",
+      "summary": "Kelly Esti is a Navy veteran and small business co-owner running for Congress with priorities including education, health care, and veterans.",
+      "source_type": "campaign",
+      "source_url": "https://www.kellyesti4congress.com/about-9",
+      "previous_description": "Listed on the printed ballot as Democrat. Candidate for United States House of Representatives, Georgia District 8, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "1b29ad10-b8b5-40c7-a6a7-17cf3578dfa7",
+      "slug": "steven-mcneel",
+      "name": "Steven McNeel",
+      "summary": "Steven McNeel represents Georgia Senate District 18 and campaigns on lower taxes, school choice, and support for farmers.",
+      "source_type": "campaign",
+      "source_url": "https://www.votestevenmcneel.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia State Senate, District 18, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "186056da-a7b7-4ca3-b7c1-b355a6a023ac",
+      "slug": "rick-a-williams",
+      "name": "Rick A. Williams",
+      "summary": "Rick A. Williams is a Middle Georgia small businessman whose campaign emphasizes lower taxes and conservative policies.",
+      "source_type": "campaign",
+      "source_url": "https://www.rickwilliamsforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia State Senate, District 25, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "cb24e2da-dae2-41b9-8ede-46a21c7f253a",
+      "slug": "tracy-wheeler",
+      "name": "Tracy Wheeler",
+      "summary": "Tracy Wheeler is the Republican candidate for Georgia Senate District 26 in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/Sample-Ballot-for-November-3-2026-General-and-Special-Election-rev-9-17_10-15.pdf",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia State Senate, District 26, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "bf49a783-3c8e-48b8-b357-12b4b2a92c35",
+      "slug": "david-e-lucas",
+      "name": "David E. Lucas",
+      "summary": "David E. Lucas is a Macon legislator who has represented Georgia Senate District 26 since 2012, following service in the Georgia House.",
+      "source_type": "government_biography",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/bios/lucas-david-157.pdf",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia State Senate, District 26, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "4f3dcffe-e601-4942-beb1-4de54d9b6cb4",
+      "slug": "calvin-palmer",
+      "name": "Calvin Palmer",
+      "summary": "Calvin Palmer is the Republican candidate for Georgia House District 142 in the November 2026 election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/Sample-Ballot-for-November-3-2026-General-and-Special-Election-rev-9-17_10-15.pdf",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia House of Representatives, District 142, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    },
+    {
+      "person_id": "7346c09e-f504-4ff4-bf6e-f68c6c7be480",
+      "slug": "miriam-paris",
+      "name": "Miriam Paris",
+      "summary": "Miriam Paris is a state representative whose campaign emphasizes public education, housing, and equal rights.",
+      "source_type": "campaign",
+      "source_url": "https://www.miriamparisforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia House of Representatives, District 142, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "c2bc18be-0728-48da-97e6-76a958faa2ed",
+      "slug": "anissa-m-jones",
+      "name": "Anissa M. Jones",
+      "summary": "Anissa M. Jones is a Middle Georgia community leader with a business background serving Georgia House District 143.",
+      "source_type": "campaign",
+      "source_url": "https://www.electanissajones.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia House of Representatives, District 143, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "b6dfab42-707e-4937-be07-67891b4e60f8",
+      "slug": "dale-washburn",
+      "name": "Dale Washburn",
+      "summary": "Dale Washburn is a Macon real estate businessman and state representative who advocates lower taxes and private property rights.",
+      "source_type": "campaign",
+      "source_url": "https://www.washburnforstatehouse.com/",
+      "previous_description": "Listed on the printed ballot as Republican; marked incumbent by the county. Candidate for Georgia House of Representatives, District 144, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "6de2b701-1f24-496d-9204-f828d406d575",
+      "slug": "eric-wilson",
+      "name": "Eric Wilson",
+      "summary": "Eric Wilson is a paramedic, ambulance-service business owner, and former Forsyth mayor campaigning on taxes, insurance costs, and public safety.",
+      "source_type": "campaign",
+      "source_url": "https://www.voteericwilson.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia House of Representatives, District 145, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "ee21ed73-18b9-42ed-a3c2-0501a6a0561a",
+      "slug": "tangie-herring",
+      "name": "Tangie Herring",
+      "summary": "Tangie Herring is a classroom teacher, small business owner, and state representative advocating affordable housing and stronger neighborhoods.",
+      "source_type": "campaign",
+      "source_url": "https://www.tangieforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia House of Representatives, District 145, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "3ef1dc0f-b072-44fd-8ce5-76ad16dab593",
+      "slug": "randy-peters",
+      "name": "Randy Peters",
+      "summary": "Randy Peters is a Milledgeville laboratory-business founder campaigning for the Georgia House on jobs, rural health care, and education.",
+      "source_type": "campaign",
+      "source_url": "https://randypetersforgeorgia.com/",
+      "previous_description": "Listed on the printed ballot as Republican. Candidate for Georgia House of Representatives, District 149, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "7c3cbdbc-ab37-444c-8b7e-b8f71356a6ca",
+      "slug": "floyd-griffin",
+      "name": "Floyd Griffin",
+      "summary": "Floyd Griffin is a former state senator and Milledgeville mayor whose campaign emphasizes reproductive rights, health care, and veterans.",
+      "source_type": "campaign",
+      "source_url": "https://floydgriffin.com/",
+      "previous_description": "Listed on the printed ballot as Democrat; marked incumbent by the county. Candidate for Georgia House of Representatives, District 149, in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026."
+    },
+    {
+      "person_id": "bc8d34ca-8ba7-4a55-9384-c77b2f52eca8",
+      "slug": "lindsay-d-holliday",
+      "name": "Lindsay D. Holliday",
+      "summary": "Lindsay D. Holliday serves as a Bibb County soil and water conservation district supervisor and is running for re-election.",
+      "source_type": "official_election_record",
+      "source_url": "https://www.maconbibb.us/wp-content/uploads/2026/10/Sample-Ballot-for-November-3-2026-General-and-Special-Election-rev-9-17_10-15.pdf",
+      "previous_description": "Listed on the printed ballot as nonpartisan; marked incumbent by the county. Candidate for Bibb County Soil and Water Conservation District Supervisor, Bibb County (countywide), in the November 3, 2026 election. Source: Macon-Bibb Board of Elections composite sample ballot, October 15 revision. Verified October 21, 2026.",
+      "limitation": "No sufficiently verified first-party biography available; summary limited to official election facts."
+    }
+  ]
+}

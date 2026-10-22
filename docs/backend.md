@@ -371,6 +371,22 @@ events.
 
 ## Elections
 
+Candidate profile images are optional (`people.image_path` may be null). Admins
+can upload a replacement or use **Remove image**, then save the person. Removing
+an image clears the profile reference; it does not delete the public object,
+because an earlier static build may still use it. Profiles without an image show
+initials. Public profile pages need a rebuild after image changes.
+Photos also appear in the people directory and its search results, organization
+people lists, public/shared election candidate lists, site-wide person search
+results, and admin people/candidate lists. Site-wide search loads each optional
+photo through `get_person`, preserving the person's visibility gate; text results
+remain available while photos load.
+
+The November 2026 candidate photo research is recorded in
+`docs/research/2026-11-03-candidate-photos.json`, including government/campaign
+source pages, exact asset URLs, stored copies, and unresolved candidates. The
+photo data migration fills missing references only and preserves existing images.
+
 - Admin UI: `/admin/elections/` (requires an admin account). One page manages
   **elections**, their **contests**, and the **candidates** running in each.
 - Public directory: `/elections/` (searches through `search_elections`); each

@@ -1,4 +1,5 @@
 import { getSupabase } from '../lib/supabase';
+import { personImageUrl } from '../lib/people';
 
 interface SearchResult {
   entity_type: string; id: string; title: string; description: string | null;
@@ -13,6 +14,14 @@ const pageSize = 20;
 
 function renderResult(result: SearchResult): HTMLElement {
   const card = document.createElement('article'); card.className = 'org-card site-search-result';
+  if (result.entity_type === 'person') {
+    const fallback = document.createElement('span');
+    fallback.className = 'org-card-fallback';
+    fallback.setAttribute('aria-hidden', 'true');
+    fallback.textContent = result.title.split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(word => word[0]?.toUpperCase() ?? '').join('');
+    card.append(fallback);
+  }
   const type = document.createElement('p'); type.className = 'org-eyebrow';
   type.textContent = labels[result.entity_type] ?? 'Content';
   const title = document.createElement('h2');
@@ -87,7 +96,27 @@ export async function initSiteSearch(): Promise<void> {
       if (error) throw error;
       const rows = (data ?? []) as SearchResult[];
       const visible = rows.slice(0, pageSize);
-      results.replaceChildren(...visible.map(renderResult));
+      const cards = visible.map(renderResult);
+      results.replaceChildren(...cards);
+      // Load through the person visibility gate, including UUID-only records.
+      // Result text stays usable while these optional images load.
+      void Promise.allSettled(visible.map(async (row, index) => {
+        if (row.entity_type !== 'person') return;
+        const { data, error } = await supabase.rpc('get_person', { p_id: row.id });
+        if (token !== request || error || data?.status !== 'ok') return;
+        const url = personImageUrl(data.person?.image_path);
+        const fallback = cards[index]?.querySelector('.org-card-fallback');
+        if (!url || !fallback) return;
+        const image = document.createElement('img');
+        image.className = 'org-card-logo person-card-image';
+        image.alt = '';
+        image.width = 72;
+        image.height = 72;
+        image.loading = 'lazy';
+        image.addEventListener('error', () => image.replaceWith(fallback), { once: true });
+        image.src = url;
+        fallback.replaceWith(image);
+      }));
       previous.hidden = offset === 0; next.hidden = rows.length <= pageSize;
       status.textContent = visible.length ? `Showing results ${offset + 1}–${offset + visible.length}${rows.length > pageSize ? ' · more available' : ''}`
         : offset ? 'No more results. Choose Previous to return.' : 'No matching content you can access.';

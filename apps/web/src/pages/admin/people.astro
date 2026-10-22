@@ -132,15 +132,17 @@ import AdminTabs from '../../components/AdminTabs.astro';
 
         <div class="org-logo-field">
           <label class="field">
-            <span>Profile image</span>
-            <small>PNG, JPEG, or WebP · up to 2 MB. Replaces the default profile icon. Images are publicly accessible.</small>
+            <span>Profile image (optional)</span>
+            <small id="person-image-help">PNG, JPEG, or WebP · up to 2 MB. Without an image, the profile shows initials. Images are publicly accessible. Changes appear on public pages after a rebuild.</small>
             <input
               type="file"
               name="image"
               accept="image/png,image/jpeg,image/webp"
+              aria-describedby="person-image-help"
             />
           </label>
           <img class="org-logo-preview" data-person-image-preview alt="Image preview" hidden />
+          <button type="button" data-person-image-remove hidden>Remove image</button>
         </div>
 
         <div class="org-form-actions">

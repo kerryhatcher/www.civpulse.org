@@ -111,6 +111,7 @@ export async function initPeopleAdmin(): Promise<void> {
   const personName = personFormEl.querySelector<HTMLInputElement>('input[name="full_name"]');
   const personSlug = personFormEl.querySelector<HTMLInputElement>('input[name="slug"]');
   const personImage = personFormEl.querySelector<HTMLInputElement>('input[name="image"]');
+  const personImageRemove = personFormEl.querySelector<HTMLButtonElement>('[data-person-image-remove]');
   const personPreview = personFormEl.querySelector<HTMLImageElement>(
     '[data-person-image-preview]',
   );
@@ -297,6 +298,7 @@ export async function initPeopleAdmin(): Promise<void> {
 
   function setPreview(path: string | null): void {
     clearImagePreview();
+    if (personImageRemove) personImageRemove.hidden = !path;
     if (!personPreview) return;
     const url = personImageUrl(path);
     if (url) {
@@ -621,6 +623,18 @@ export async function initPeopleAdmin(): Promise<void> {
   });
 
   personCancel?.addEventListener('click', resetPersonForm);
+  personImage?.addEventListener('change', () => {
+    if (personImageRemove) personImageRemove.hidden = !(personImage.files?.length || editingImagePath);
+    if (personImage.files?.length) {
+      setMessage(personFormEl, '[data-person-message]', 'Image selected. Save the person to update the profile.');
+    }
+  });
+  personImageRemove?.addEventListener('click', () => {
+    editingImagePath = null;
+    if (personImage) personImage.value = '';
+    setPreview(null);
+    setMessage(personFormEl, '[data-person-message]', 'Image removed from this draft. Save the person to update the profile.');
+  });
   affiliationCancel?.addEventListener('click', resetAffiliationForm);
 
   if (roleOptions) {

@@ -11,6 +11,7 @@ import {
   type ElectionVisibility,
 } from '../lib/elections';
 import { getSupabase } from '../lib/supabase';
+import { personImageUrl } from '../lib/people';
 
 type MessageKind = 'info' | 'error' | 'success';
 
@@ -37,6 +38,7 @@ interface CandidateRow {
 interface PersonRef {
   id: string;
   full_name: string;
+  image_path: string | null;
 }
 
 const CONTEST_COLUMNS = 'id, election_id, office, district, seat, description, partisan, position';
@@ -215,7 +217,7 @@ export async function initElectionAdmin(): Promise<void> {
   }
 
   async function loadPeople(): Promise<void> {
-    const { data, error } = await supabase.from('people').select('id, full_name').order('full_name');
+    const { data, error } = await supabase.from('people').select('id, full_name, image_path').order('full_name');
 
     if (error) {
       setMessage(candidateFormEl, '[data-candidate-message]', error.message, 'error');
@@ -698,6 +700,25 @@ export async function initElectionAdmin(): Promise<void> {
       ...sorted.map((candidate) => {
         const row = document.createElement('article');
         row.className = 'org-row';
+
+        const person = people.find(item => item.id === candidate.person_id);
+        const fallback = document.createElement('span');
+        fallback.className = 'org-row-fallback';
+        fallback.setAttribute('aria-hidden', 'true');
+        fallback.textContent = personNameById(candidate.person_id).split(/\s+/)
+          .filter(Boolean).slice(0, 2).map(word => word[0]?.toUpperCase() ?? '').join('');
+        const imageUrl = personImageUrl(person?.image_path);
+        if (imageUrl) {
+          const image = document.createElement('img');
+          image.className = 'org-row-logo person-row-image';
+          image.src = imageUrl;
+          image.alt = '';
+          image.width = 48;
+          image.height = 48;
+          image.loading = 'lazy';
+          image.addEventListener('error', () => image.replaceWith(fallback), { once: true });
+          row.append(image);
+        } else row.append(fallback);
 
         const info = document.createElement('div');
         info.className = 'org-row-info';
