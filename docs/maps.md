@@ -1,7 +1,8 @@
 # Hosted geometry loading
 
 Viewers and homepage previews fetch stored features through `get_layer_geojson_page`
-in ordered batches of 50, with at most two follow-up requests per layer at once.
+in ordered batches of 50, with at most two geometry requests across the page at
+once. Timed-out pages are retried once through that same request budget.
 The RPC applies the same map/layer visibility gate as the full-document RPC and
 returns `numberMatched` so clients can assemble every feature without an extra
 empty request. This keeps large district boundaries within hosted query timeouts.

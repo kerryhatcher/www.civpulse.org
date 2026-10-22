@@ -268,21 +268,37 @@ export async function fetchPropertyKeys(url: string): Promise<string[]> {
   return geojsonPropertyKeys(geojson);
 }
 
+let activeGeometryRequests = 0;
+const waitingGeometryRequests: (() => void)[] = [];
+
+/** Share the request budget across layers and lazy homepage previews. */
+async function geometryRequest<T>(request: () => Promise<T>): Promise<T> {
+  await new Promise<void>((resolve) => {
+    const enter = (): void => { activeGeometryRequests++; resolve(); };
+    if (activeGeometryRequests < 2) enter();
+    else waitingGeometryRequests.push(enter);
+  });
+  try { return await request(); }
+  finally { activeGeometryRequests--; waitingGeometryRequests.shift()?.(); }
+}
+
 /** Load stored geometry through the same access gate as the containing map. */
 export async function fetchLayerGeoJSON(layer: LayerConfig, mapId?: string): Promise<GeoJSON.GeoJsonObject> {
   if (layer.source_type === 'postgis') {
     const pageSize = 50;
     const readPage = async (offset: number): Promise<GeoJSON.FeatureCollection & { numberMatched: number }> => {
-      const { data, error } = await getSupabase().rpc('get_layer_geojson_page', {
-        p_layer_id: layer.id, p_map_id: mapId ?? null, p_offset: offset, p_limit: pageSize,
-      });
-      if (error) throw new Error(error.message);
-      return data as GeoJSON.FeatureCollection & { numberMatched: number };
+      for (let attempt = 0; ; attempt++) {
+        const { data, error } = await geometryRequest(async () => getSupabase().rpc('get_layer_geojson_page', {
+          p_layer_id: layer.id, p_map_id: mapId ?? null, p_offset: offset, p_limit: pageSize,
+        }));
+        if (!error) return data as GeoJSON.FeatureCollection & { numberMatched: number };
+        if (attempt > 0 || error.code !== '57014') throw new Error(error.message);
+      }
     };
     const first = await readPage(0);
     const pages = new Map<number, GeoJSON.Feature[]>([[0, first.features]]);
     let nextOffset = pageSize;
-    // Bound parallel work so several previews cannot flood the database.
+    // Fetch ahead within the shared, page-wide request budget.
     await Promise.all(Array.from({ length: 2 }, async () => {
       while (nextOffset < first.numberMatched) {
         const offset = nextOffset;
