@@ -1,4 +1,4 @@
-import { articleFetchedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
+import { articleFetchedLabel, articlePublishedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
 import { getSupabase } from '../lib/supabase';
 
 function renderArticle(article: ProfileArticle): HTMLLIElement {
@@ -16,7 +16,9 @@ function renderArticle(article: ProfileArticle): HTMLLIElement {
   const role = document.createElement('span'); role.className = 'affiliation-role'; role.textContent = article.role;
   const fetched = document.createElement('span'); fetched.className = 'candidate-meta';
   fetched.textContent = articleFetchedLabel(article.fetched_on);
-  link.append(title, source, fetched, role); item.append(link);
+  const published = document.createElement('span'); published.className = 'candidate-meta';
+  published.textContent = articlePublishedLabel(article.published_on);
+  link.append(title, source, published, fetched, role); item.append(link);
   return item;
 }
 

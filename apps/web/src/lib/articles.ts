@@ -6,6 +6,7 @@ export interface Article {
   url: string;
   visibility: ArticleVisibility;
   fetched_on: string | null;
+  published_on: string | null;
 }
 
 export interface ArticlePerson {
@@ -37,4 +38,10 @@ export function articleFetchedLabel(value: string | null | undefined): string {
   if (!value) return 'Fetched on: unknown';
   const date = new Date(`${value}T00:00:00Z`);
   return `Fetched on: ${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}`;
+}
+
+export function articlePublishedLabel(value: string | null | undefined): string {
+  if (!value) return 'Publication date: unknown';
+  const date = new Date(`${value}T00:00:00Z`);
+  return `Published: ${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}`;
 }

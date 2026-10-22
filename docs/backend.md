@@ -535,9 +535,11 @@ Public pages update after a rebuild; UUID viewers fetch current data.
 ### Articles and profile reading lists
 
 `articles` stores an external article's required title and HTTP(S) URL, visibility,
-optional `fetched_on` date, and timestamps. `fetched_on` records when the article
-or link was last verified to exist, independently of its publication or creation
-date. Unknown dates remain null; future and infinite dates are rejected. URLs are
+optional `published_on` and `fetched_on` dates, and timestamps. `published_on`
+records the publisher's publication date, or null when unknown. `fetched_on`
+records when the article or link was last verified to exist, independently of its
+publication or creation date. Unknown dates remain null; infinite dates and
+future fetched dates are rejected. URLs are
 unique so one article can be linked to many profiles.
 `article_people` and `article_organizations` are independent many-to-many joins;
 a link has a free-text relationship label (default “Mentioned”), such as Subject,
@@ -550,8 +552,9 @@ and edit/delete entries. `save_article` is an admin-only security-invoker RPC
 that saves metadata and replaces both association sets in one transaction.
 Invalid foreign keys, duplicate links, or duplicate URLs roll back the entire
 save. The seven-argument overload accepts `p_fetched_on` (null clears it); the
-original six-argument API preserves existing dates. Deleting an article cascades
-its links; deleting a person/organization
+original six-argument API preserves existing dates. The eight-argument overload
+also accepts `p_published_on` (null clears it); older callers preserve publication
+dates. Deleting an article cascades its links; deleting a person/organization
 removes that association while preserving the article and its other links.
 
 RLS protects all three tables. Only admins can modify articles or read/write
@@ -564,9 +567,10 @@ unlisted articles when signed in, matching the existing profile discovery rules.
 They return only that profile's own relationship, never other linked identities.
 
 “News & articles” lists load at runtime on public person pages, the person UUID
-viewer, and organization pages, newest added first. Each title opens the external
-article, with its source hostname, fetched-on date (or “unknown”), and relationship
-label. Empty lists are hidden;
-errors offer a reload message. No article associations or hidden metadata are
+viewer, and organization pages, newest publication date first, undated articles
+last, with ties ordered by title then ID. Each title opens the external
+article, with its source hostname, publication and fetched-on dates (or “unknown”),
+and relationship label. Empty lists are hidden; errors offer a reload message.
+No article associations or hidden metadata are
 embedded in static HTML. Article edits and associations update these runtime
 lists immediately; new public person/organization pages still require a rebuild.

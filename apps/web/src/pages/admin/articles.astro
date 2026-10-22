@@ -17,6 +17,8 @@ import AdminTabs from '../../components/AdminTabs.astro';
         <input type="hidden" name="id" />
         <label class="field"><span>Title *</span><input name="title" maxlength="500" required /></label>
         <label class="field"><span>Article URL *</span><input type="url" name="url" maxlength="2000" placeholder="https://…" required /></label>
+        <label class="field"><span>Publication date (optional)</span><input type="date" name="published_on" aria-describedby="article-published-help" /></label>
+        <p id="article-published-help" class="body-note">Use the date reported by the publisher. Profiles show the newest articles first; unknown publication dates appear last.</p>
         <label class="field"><span>Fetched on (optional)</span><input type="date" name="fetched_on" aria-describedby="article-fetched-help" /></label>
         <p id="article-fetched-help" class="body-note">Date you last verified that the article or link existed. Leave blank if unknown. This is separate from its publication date.</p>
         <label class="field"><span>Visibility</span><select name="visibility">
