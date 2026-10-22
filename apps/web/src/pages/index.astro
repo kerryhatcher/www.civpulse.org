@@ -3,8 +3,21 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import 'leaflet/dist/leaflet.css';
 import { fetchPublicMaps } from '../lib/maps';
+import { fetchPublicElections, fetchElectionDetail, formatElectionDate, electionHref } from '../lib/elections';
+import { civicDate, electionCalloutStart } from '../lib/election-callout';
 
 const maps = await fetchPublicMaps();
+const elections = await fetchPublicElections();
+const electionCallouts = (await Promise.all(elections.map(async (election) => {
+  const detail = await fetchElectionDetail(election.id);
+  const earlyVoting = detail?.dates
+    .filter((date) => date.visibility === 'public' && date.election_date_kind === 'early_voting')
+    .map((date) => civicDate(new Date(date.starts_at)))
+    .sort()[0];
+  if (!earlyVoting || earlyVoting > election.election_date) return null;
+  return { election, earlyVoting, startsOn: electionCalloutStart(earlyVoting) };
+}))).filter((entry) => entry !== null)
+  .sort((a, b) => a.election.election_date.localeCompare(b.election.election_date) || a.election.name.localeCompare(b.election.name));
 ---
 
 <Layout title="A closer look at your community">
@@ -13,6 +26,24 @@ const maps = await fetchPublicMaps();
       <h1 id="home-title">A closer look at your community.</h1>
       <p>Follow the decisions, places, and gatherings that shape where you live.</p>
     </section>
+
+    {electionCallouts.map(({ election, earlyVoting, startsOn }) => (
+      <section class="home-election-callout" data-election-callout data-starts-on={startsOn}
+        data-election-day={election.election_date} data-early-voting={earlyVoting}
+        aria-labelledby={`election-${election.id}`} hidden>
+        <div>
+          <h2 id={`election-${election.id}`}>{election.name}</h2>
+          <p class="home-election-status" data-voting-status>Make your plan to vote.</p>
+          <p class="home-election-dates">
+            Early voting begins <time datetime={earlyVoting}>{formatElectionDate(earlyVoting)}</time>.
+            {' '}Election Day is <time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time>.
+          </p>
+        </div>
+        <a class="button-link" href={electionHref(election)} aria-label={`View election details: ${election.name}`}>
+          View election details <Icon />
+        </a>
+      </section>
+    ))}
 
     <div class="home-destinations">
       <section class="destination maps-destination" aria-labelledby="maps-title">
@@ -101,7 +132,9 @@ const maps = await fetchPublicMaps();
 <script>
   import { initHomeMaps } from '../scripts/home-maps';
   import { initHomeEvents } from '../scripts/home-events';
+  import { initHomeElections } from '../scripts/home-elections';
 
   initHomeMaps();
   initHomeEvents();
+  initHomeElections();
 </script>
