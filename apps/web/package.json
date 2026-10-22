@@ -11,7 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "deploy": "astro build && wrangler deploy",
+    "deploy": "bun run ../../scripts/check-migrations.mjs && astro build && wrangler deploy",
     "cf:dev": "astro build && wrangler dev",
     "astro": "astro"
   },
