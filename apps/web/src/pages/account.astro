@@ -25,6 +25,13 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </dl>
         <button class="button-link" type="button" data-account-signout>Sign out</button>
+        <section aria-labelledby="connected-apps-title">
+          <h2 id="connected-apps-title">Connected apps</h2>
+          <p>Apps you have authorized can act with your account's permissions. Revoke access to disconnect an app.</p>
+          <p data-grants-status role="status" aria-live="polite">Loading connected apps…</p>
+          <ul data-grants-list></ul>
+          <button type="button" data-grants-retry hidden>Try again</button>
+        </section>
       </div>
     </div>
   </main>

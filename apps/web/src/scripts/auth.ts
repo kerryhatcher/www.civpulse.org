@@ -133,12 +133,69 @@ export async function initAccount(): Promise<void> {
 
   setText(root, '[data-account-name]', profile?.display_name ?? '—');
   root.hidden = false;
+  void initConnectedApps(root);
 
   root
     .querySelector<HTMLButtonElement>('[data-account-signout]')
     ?.addEventListener('click', () => {
       void supabase.auth.signOut().then(() => window.location.assign('/'));
     });
+}
+
+async function initConnectedApps(root: HTMLElement): Promise<void> {
+  const status = root.querySelector<HTMLElement>('[data-grants-status]');
+  const list = root.querySelector<HTMLElement>('[data-grants-list]');
+  const retry = root.querySelector<HTMLButtonElement>('[data-grants-retry]');
+  if (!status || !list || !retry) return;
+  const statusElement = status;
+  const listElement = list;
+  const retryButton = retry;
+  const oauth = getSupabase().auth.oauth;
+
+  async function load(): Promise<void> {
+    retryButton.hidden = true;
+    listElement.replaceChildren();
+    statusElement.textContent = 'Loading connected apps…';
+    try {
+      const { data, error } = await oauth.listGrants();
+      if (error) throw error;
+      statusElement.textContent = data?.length ? '' : 'No connected apps.';
+      for (const grant of data ?? []) {
+        const item = document.createElement('li');
+        const name = document.createElement('strong');
+        name.textContent = grant.client.name || grant.client.id;
+        const scopes = document.createElement('p');
+        scopes.textContent = `Requested permissions: ${grant.scopes.join(', ') || 'Account access'}`;
+        const revoke = document.createElement('button');
+        revoke.type = 'button';
+        revoke.textContent = 'Revoke access';
+        revoke.setAttribute('aria-label', `Revoke access for ${name.textContent}`);
+        revoke.addEventListener('click', () => {
+          revoke.disabled = true;
+          statusElement.textContent = 'Revoking access…';
+          void (async () => {
+            try {
+              const { error: revokeError } = await oauth.revokeGrant({ clientId: grant.client.id });
+              if (revokeError) throw revokeError;
+              item.remove();
+              statusElement.textContent = listElement.children.length ? 'Access revoked.' : 'Access revoked. No connected apps.';
+            } catch {
+              statusElement.textContent = 'Could not revoke access. Please try again.';
+              revoke.disabled = false;
+            }
+          })();
+        });
+        item.append(name, scopes, revoke);
+        listElement.append(item);
+      }
+    } catch {
+      statusElement.textContent = 'Could not load connected apps. Please try again.';
+      retryButton.hidden = false;
+    }
+  }
+
+  retryButton.addEventListener('click', () => { void load(); });
+  await load();
 }
 
 export async function isCurrentUserAdmin(): Promise<boolean> {

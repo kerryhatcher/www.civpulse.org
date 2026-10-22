@@ -12,6 +12,18 @@ interface AuthorizationClient {
  * are redirected here with ?authorization_id=… after the user signs in.
  */
 export async function initOAuthConsent(): Promise<void> {
+  try {
+    await loadOAuthConsent();
+  } catch {
+    const status = document.querySelector<HTMLElement>('[data-consent-status]');
+    if (status) {
+      status.textContent = 'Could not load the authorization request. Please reload and try again.';
+      status.hidden = false;
+    }
+  }
+}
+
+async function loadOAuthConsent(): Promise<void> {
   const status = document.querySelector<HTMLElement>('[data-consent-status]');
   const panel = document.querySelector<HTMLElement>('[data-consent-panel]');
   if (!status || !panel) return;
@@ -89,9 +101,11 @@ export async function initOAuthConsent(): Promise<void> {
     setBusy(true);
     setStatus('Completing authorization…');
     // The SDK redirects the browser to the client on success.
-    const { error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
-    if (approveError) {
-      setStatus(approveError.message);
+    try {
+      const { error: approveError } = await supabase.auth.oauth.approveAuthorization(authorizationId);
+      if (approveError) throw approveError;
+    } catch {
+      setStatus('Could not approve access. Please try again.');
       setBusy(false);
     }
   });
@@ -99,9 +113,11 @@ export async function initOAuthConsent(): Promise<void> {
   deny?.addEventListener('click', async () => {
     setBusy(true);
     setStatus('Denying access…');
-    const { error: denyError } = await supabase.auth.oauth.denyAuthorization(authorizationId);
-    if (denyError) {
-      setStatus(denyError.message);
+    try {
+      const { error: denyError } = await supabase.auth.oauth.denyAuthorization(authorizationId);
+      if (denyError) throw denyError;
+    } catch {
+      setStatus('Could not deny access. Please try again.');
       setBusy(false);
     }
   });

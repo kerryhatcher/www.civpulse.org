@@ -1,6 +1,6 @@
 import { createMcpHandler } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/server";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import { z } from "zod";
 
 interface Env {
@@ -46,17 +46,7 @@ function defined<T extends Record<string, unknown>>(values: T): Partial<T> {
   return Object.fromEntries(Object.entries(values).filter(([, v]) => v !== undefined)) as Partial<T>;
 }
 
-function decodeJwt(token: string): Record<string, unknown> {
-  try {
-    const payload = token.split(".")[1];
-    const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-    return JSON.parse(json) as Record<string, unknown>;
-  } catch {
-    return {};
-  }
-}
-
-function buildServer(supabase: SupabaseClient, token: string): McpServer {
+function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">): McpServer {
   const server = new McpServer({ name: "Civic Pulse", version: "1.0.0" });
 
   const readRpc = (
@@ -157,9 +147,9 @@ function buildServer(supabase: SupabaseClient, token: string): McpServer {
     { description: "Return the authenticated user's id, email, and admin status.", inputSchema: z.object({}) },
     async () => {
       try {
-        const claims = decodeJwt(token);
-        const { data: isAdmin } = await supabase.rpc("is_admin");
-        return ok({ user_id: claims.sub ?? null, email: claims.email ?? null, is_admin: Boolean(isAdmin) });
+        const { data: isAdmin, error } = await supabase.rpc("is_admin");
+        if (error) throw new Error(error.message);
+        return ok({ user_id: user.id, email: user.email ?? null, is_admin: Boolean(isAdmin) });
       } catch (error) {
         return fail(error);
       }
@@ -377,25 +367,46 @@ export default {
 
     if (url.pathname === "/mcp" || url.pathname.startsWith("/mcp/")) {
       const authorization = request.headers.get("Authorization") ?? "";
-      if (!authorization.toLowerCase().startsWith("bearer ")) {
-        return Response.json(
-          { error: "unauthorized", error_description: "A Supabase access token is required." },
-          {
-            status: 401,
-            headers: {
-              "WWW-Authenticate": `Bearer resource_metadata="${url.origin}/.well-known/oauth-protected-resource"`,
-            },
-          },
-        );
+      const token = /^Bearer\s+(\S+)$/i.exec(authorization)?.[1];
+      const unauthorized = (invalid = false) => Response.json(
+        { error: invalid ? "invalid_token" : "unauthorized", error_description: "A valid Supabase user access token is required." },
+        { status: 401, headers: {
+          "Cache-Control": "no-store",
+          "WWW-Authenticate": `Bearer resource_metadata="${env.MCP_RESOURCE_URL.replace(/\/mcp$/, "")}/.well-known/oauth-protected-resource"${invalid ? ', error="invalid_token"' : ""}`,
+        } },
+      );
+      if (!token) {
+        return unauthorized(Boolean(authorization));
       }
 
-      const token = authorization.slice(7).trim();
       const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
         auth: { persistSession: false, autoRefreshToken: false },
         global: { headers: { Authorization: `Bearer ${token}` } },
       });
 
-      const handler = createMcpHandler(() => buildServer(supabase, token), {
+      // getClaims verifies signature/expiry; getUser also checks the live session,
+      // so revoking an OAuth grant stops existing access tokens at this endpoint.
+      let user: User;
+      try {
+        const result = await supabase.auth.getUser(token);
+        if (result.error && (!result.error.status || result.error.status >= 500)) throw result.error;
+        if (result.error || !result.data.user) return unauthorized(true);
+        const { data, error } = await supabase.auth.getClaims(token);
+        if (error && (!error.status || error.status >= 500)) throw error;
+        const claims = data?.claims;
+        const audience = claims?.aud;
+        if (error || !claims || claims.iss !== env.AUTHORIZATION_SERVER ||
+          !(audience === "authenticated" || (Array.isArray(audience) && audience.includes("authenticated"))) ||
+          claims.role !== "authenticated" || !claims.sub || !claims.exp || claims.exp <= Date.now() / 1000) {
+          return unauthorized(true);
+        }
+        if (result.data.user.id !== claims.sub) return unauthorized(true);
+        user = result.data.user;
+      } catch {
+        return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
+      }
+
+      const handler = createMcpHandler(() => buildServer(supabase, user), {
         route: "/mcp",
         allowedHostnames: ["mcp.civpulse.org", "localhost"],
         allowedOriginHostnames: ["new.civpulse.org", "www.civpulse.org", "civpulse.org"],

@@ -12,11 +12,11 @@ import Layout from '../../layouts/Layout.astro';
       <p>An AI agent is asking to access Civic Pulse on your behalf.</p>
     </div>
 
-    <p class="status" data-consent-status>Loading the authorization request…</p>
+    <p class="status" data-consent-status role="status" aria-live="polite">Loading the authorization request…</p>
 
     <section class="auth-card" data-consent-panel hidden>
       <p>
-        <strong data-consent-client>An application</strong> wants to access Civic Pulse as
+        <strong data-consent-client>An application</strong> wants to access Civic Pulse as{' '}
         <span data-consent-user></span>.
       </p>
       <p class="body-note">
@@ -32,8 +32,10 @@ import Layout from '../../layouts/Layout.astro';
       </div>
 
       <p class="body-note">
-        Access always follows your account's permissions and Row Level Security — an agent can only do
-        what you can. You can revoke access later from <a href="/account/">your account</a>.
+        This app can search public, unlisted, and private content available to your account.
+        If you are an admin, it can also create, edit, and delete supported records.
+        Requested permissions above describe access to your profile information.
+        You can revoke access later from <a href="/account/">your account</a>.
       </p>
     </section>
   </main>
