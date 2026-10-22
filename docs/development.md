@@ -75,6 +75,30 @@ bunx playwright screenshot --channel=chrome --viewport-size=1280,900 \
 For scripted flows, `chromium.launch({ channel: 'chrome' })` works the same way.
 Add `playwright` as a devDependency only if you are committing tests.
 
+### Homepage election callout
+
+The homepage embeds only public elections with a public `early_voting` key-date
+event visible through `get_election` (its calendar must also be public). The
+earliest early-voting start is interpreted in `America/New_York`; a missing
+date, or one after Election Day, omits that election's callout. Publish the
+election, calendar, and early-voting event, then rebuild and deploy the frontend
+to include or update the callout's metadata.
+
+Once published, browser code shows the callout from seven calendar days before
+early voting through Election Day, inclusive, using `America/New_York` for all
+visitors. UTC calendar arithmetic keeps the seven-day offset stable across DST.
+The page starts with callouts hidden, then checks the date on load, every minute,
+and on tab visibility changes. Crossing a timing boundary needs no rebuild;
+changing the election or early-voting data does. Multiple qualifying elections
+appear in Election Day/name order.
+
+Verify the day before the window (hidden), its first day (visible), early-voting
+start, Election Day (visible with today's status), and the following day
+(hidden), including a visitor outside the Eastern time zone. Check missing and
+non-public dates, multiple elections, narrow screens, keyboard focus, and the
+election-details link. Confirm anonymous and signed-in visitors receive the same
+public callouts and no hidden metadata appears in the built HTML.
+
 ## Secret scanning
 
 TruffleHog guards the repo against committed credentials.

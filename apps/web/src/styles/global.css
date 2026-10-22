@@ -391,6 +391,43 @@ details[open] summary {
   gap: 24px;
 }
 
+.home-election-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: clamp(24px, 3vw, 40px);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.home-election-callout[hidden] { display: none; }
+
+.home-election-callout h2 {
+  font-size: clamp(32px, 3.6vw, 52px);
+  line-height: 1.1;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.home-election-status { margin: 12px 0 6px; font-weight: 600; }
+.home-election-dates { margin: 0; max-width: 65ch; color: var(--sage); }
+
+.home-election-callout .button-link {
+  flex-shrink: 0;
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.home-election-callout .button-link:hover { background: var(--sage); }
+.home-election-callout .button-link:focus-visible { outline-color: var(--paper); }
+
+@media (max-width: 700px) {
+  .home-election-callout { align-items: flex-start; flex-direction: column; }
+}
+
 .destination {
   display: flex;
   flex-direction: column;
