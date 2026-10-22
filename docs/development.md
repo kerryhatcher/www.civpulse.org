@@ -191,6 +191,12 @@ Manage these settings in each Worker's **Settings → Build** in Cloudflare.
 Build status appears on the GitHub commit checks and in Cloudflare build logs.
 Supabase's GitHub integration deploys migrations separately; a migration and
 frontend build can run concurrently, so keep schema changes backward compatible.
+Keep production's applied migration files on `main`. Applying a feature-branch
+migration to production before its file reaches `main` blocks subsequent Supabase
+checks with “Remote migration versions not found in local migrations directory.”
+If this happens, restore the exact applied file from its source branch after
+comparing it with `supabase_migrations.schema_migrations`; do not delete history
+entries or rerun applied SQL to make the check pass.
 Redeploy the web Worker after editing prerendered public content in the admin.
 
 ### Profile media development and deployment
