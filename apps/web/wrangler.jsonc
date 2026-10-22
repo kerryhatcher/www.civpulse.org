@@ -2,7 +2,16 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "civpulse-web-new",
   "compatibility_date": "2026-10-01",
-  "routes": [{ "pattern": "new.civpulse.org", "custom_domain": true }],
+  "routes": [
+    {
+      "pattern": "new.civpulse.org",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.civpulse.org/*",
+      "zone_name": "civpulse.org"
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
