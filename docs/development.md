@@ -176,8 +176,8 @@ No deployment credentials are stored in the repository or GitHub variables.
 
 | Worker | Domain | Build command | Deploy command | Watch paths |
 | --- | --- | --- | --- | --- |
-| `civpulse-web-new` | `www.civpulse.org`, `new.civpulse.org` | `bun run check && bun run build` | `bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**` |
-| `civpulse-mcp` | `mcp.civpulse.org` | `bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock` |
+| `civpulse-web-new` | `www.civpulse.org`, `new.civpulse.org` | `bun run check:migrations && bun run check && bun run build` | `bun run check:migrations && bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
+| `civpulse-mcp` | `mcp.civpulse.org` | `bun run check:migrations && bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
 
 The web build has `PUBLIC_SUPABASE_URL` set to the hosted project URL and
 `PUBLIC_SUPABASE_ANON_KEY` set to its current `sb_publishable_…` key. Despite the
@@ -189,8 +189,29 @@ without suppressing scanner rules.
 
 Manage these settings in each Worker's **Settings → Build** in Cloudflare.
 Build status appears on the GitHub commit checks and in Cloudflare build logs.
-Supabase's GitHub integration deploys migrations separately; a migration and
-frontend build can run concurrently, so keep schema changes backward compatible.
+Supabase's GitHub integration deploys migrations separately. Both Workers Builds
+pipelines run `bun run check:migrations` before building and deploying. The guard
+waits up to ten minutes for the official Supabase GitHub app's `Supabase Preview`
+check to succeed for the checkout's full commit SHA. A migration-history mismatch,
+failed/skipped/cancelled check, API error, or timeout blocks deployment. A missing
+check never counts as success. Keep the Supabase production integration enabled
+for every push to `main`; after resolving a failure, rerun the Cloudflare build.
+Keep schema changes backward compatible with the currently deployed frontend.
+
+The guard uses GitHub's public checks API, without database credentials. An optional
+`GITHUB_TOKEN` with Checks read permission raises API rate limits (set it as a
+build secret, never a `PUBLIC_*` value). API rate limiting blocks deployment and
+requires a retry or token configuration. Local `bun run deploy` and
+`bun run mcp:deploy` use the same guard; unpushed commits cannot pass it.
+`bun test scripts/tests/check-migrations.test.ts` covers mismatch rejection,
+trusted-app/commit matching, reruns, waiting, API failures, and timeout behavior;
+the Migration deployment gate workflow runs these tests on pushes and PRs.
+Keep production's applied migration files on `main`. Applying a feature-branch
+migration to production before its file reaches `main` blocks subsequent Supabase
+checks with “Remote migration versions not found in local migrations directory.”
+If this happens, restore the exact applied file from its source branch after
+comparing it with `supabase_migrations.schema_migrations`; do not delete history
+entries or rerun applied SQL to make the check pass.
 Redeploy the web Worker after editing prerendered public content in the admin.
 
 ### Profile media development and deployment
