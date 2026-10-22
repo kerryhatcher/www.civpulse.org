@@ -1,0 +1,921 @@
+{
+  "verified_on": "2026-10-22",
+  "scope": "Existing contest candidates excluding previously recorded Jon Ossoff. This is a verified first pass, not a claim of exhaustive lifetime office histories. Exact dates include explicitly documented oaths and identified term-boundary inferences; YYYY values preserve year precision. Unresolved offices are listed in pending and are not imported.",
+  "records": [
+    {
+      "person_slug": "anissa-m-jones",
+      "office_name": "State Representative",
+      "district": "District 143",
+      "seat": "",
+      "organization_name": "Georgia House District 143",
+      "organization_slug": "georgia-house-district-143",
+      "starts_on": "2025-01-13",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [],
+      "evidence": "2025 House Journal, January 13 certification roster and oath, pp. 16–21. This records the current 2025–2026 term, not an assertion of first-ever service."
+    },
+    {
+      "person_slug": "dale-washburn",
+      "office_name": "State Representative",
+      "district": "District 144",
+      "seat": "",
+      "organization_name": "Georgia House District 144",
+      "organization_slug": "georgia-house-district-144",
+      "starts_on": "2023-01-09",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_06095483-2023"
+      ],
+      "evidence": "2023 House Journal first-day certification roster and oath establish service in this district for 2023–2024; 2025 journal confirms continuation."
+    },
+    {
+      "person_slug": "floyd-griffin",
+      "office_name": "State Representative",
+      "district": "District 149",
+      "seat": "",
+      "organization_name": "Georgia House District 149",
+      "organization_slug": "georgia-house-district-149",
+      "starts_on": "2025-01-13",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [],
+      "evidence": "2025 House Journal, January 13 certification roster and oath, pp. 16–21. This records the current 2025–2026 term, not an assertion of first-ever service."
+    },
+    {
+      "person_slug": "miriam-paris",
+      "office_name": "State Representative",
+      "district": "District 142",
+      "seat": "",
+      "organization_name": "Georgia House District 142",
+      "organization_slug": "georgia-house-district-142",
+      "starts_on": "2017-01-09",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b2017-belec-p-btext"
+      ],
+      "evidence": "2017 House Journal records Paris, District 142, at the first-day oath. 2025 House journal confirms continued service in the same district."
+    },
+    {
+      "person_slug": "tangie-herring",
+      "office_name": "State Representative",
+      "district": "District 145",
+      "seat": "",
+      "organization_name": "Georgia House District 145",
+      "organization_slug": "georgia-house-district-145",
+      "starts_on": "2025-01-13",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [],
+      "evidence": "2025 House Journal, January 13 certification roster and oath, pp. 16–21. This records the current 2025–2026 term, not an assertion of first-ever service."
+    },
+    {
+      "person_slug": "tanya-miller",
+      "office_name": "State Representative",
+      "district": "District 62",
+      "seat": "",
+      "organization_name": "Georgia House District 62",
+      "organization_slug": "georgia-house-district-62",
+      "starts_on": "2023-01-09",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_06095483-2023"
+      ],
+      "evidence": "2023 House Journal first-day certification roster and oath establish service in this district for 2023–2024; 2025 journal confirms continuation."
+    },
+    {
+      "person_slug": "tim-fleming",
+      "office_name": "State Representative",
+      "district": "District 114",
+      "seat": "",
+      "organization_name": "Georgia House District 114",
+      "organization_slug": "georgia-house-district-114",
+      "starts_on": "2023-01-09",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/house-journal-document-library/2025-house-journal.pdf",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_06095483-2023"
+      ],
+      "evidence": "2023 House Journal first-day certification roster and oath establish service in this district for 2023–2024; 2025 journal confirms continuation."
+    },
+    {
+      "person_slug": "austin-scott",
+      "office_name": "U.S. Representative",
+      "district": "Georgia District 8",
+      "seat": "",
+      "organization_name": "Georgia's 8th Congressional District",
+      "organization_slug": "georgia-s-8th-congressional-district",
+      "starts_on": "2011-01-03",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://austinscott.house.gov/press-kit",
+      "supporting_sources": [
+        "https://www.congress.gov/member/austin-scott/S001189"
+      ],
+      "evidence": "Official source establishes the office, selection method and service date shown."
+    },
+    {
+      "person_slug": "mike-collins",
+      "office_name": "U.S. Representative",
+      "district": "Georgia District 10",
+      "seat": "",
+      "organization_name": "Georgia's 10th Congressional District",
+      "organization_slug": "georgia-s-10th-congressional-district",
+      "starts_on": "2023-01-03",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.congress.gov/member/mike-collins/C001129",
+      "supporting_sources": [
+        "https://collinsforms.house.gov/news/documentsingle.aspx?DocumentID=23"
+      ],
+      "evidence": "Congress.gov records service in the 118th–119th Congresses; constitutional term begins January 3, 2023. This is the term date, not the delayed January 7 House oath date."
+    },
+    {
+      "person_slug": "sanford-bishop",
+      "office_name": "U.S. Representative",
+      "district": "Georgia District 2",
+      "seat": "",
+      "organization_name": "Georgia's 2nd Congressional District",
+      "organization_slug": "georgia-s-2nd-congressional-district",
+      "starts_on": "1993",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://bishop.house.gov/about",
+      "supporting_sources": [
+        "https://www.congress.gov/member/sanford-bishop/B000490"
+      ],
+      "evidence": "Official biography identifies first congressional election in 1992 and Congress.gov confirms service since 1993. Preserve year precision."
+    },
+    {
+      "person_slug": "barbara-rivera-holmes",
+      "office_name": "Commissioner of Labor",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia Commissioner of Labor",
+      "organization_slug": "georgia-commissioner-of-labor",
+      "starts_on": "2025-04-04",
+      "ends_on": null,
+      "selection_method": "appointed",
+      "source_url": "https://dol.georgia.gov/biography-labor-commissioner",
+      "supporting_sources": [
+        "https://gov.georgia.gov/press-releases/2025-03-18/gov-kemp-appoints-state-dol-commissioner"
+      ],
+      "evidence": "Official source establishes the office, selection method and service date shown."
+    },
+    {
+      "person_slug": "barbara-rivera-holmes",
+      "office_name": "Regent",
+      "district": "Statewide",
+      "seat": "",
+      "organization_name": "University System of Georgia Board of Regents",
+      "organization_slug": "university-system-of-georgia-board-of-regents",
+      "starts_on": "2018",
+      "ends_on": "2024",
+      "selection_method": "appointed",
+      "source_url": "https://usg.edu/regents/past-regents/",
+      "supporting_sources": [],
+      "evidence": "Official past-regents chronology gives 2018–2024 only. No exact days claimed."
+    },
+    {
+      "person_slug": "john-king",
+      "office_name": "Insurance and Safety Fire Commissioner",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia Insurance and Safety Fire Commissioner",
+      "organization_slug": "georgia-insurance-and-safety-fire-commissioner",
+      "starts_on": "2019-07-01",
+      "ends_on": "2023",
+      "selection_method": "appointed",
+      "source_url": "https://oci.georgia.gov/about-us/john-f-king",
+      "supporting_sources": [],
+      "evidence": "Appointed July 1, 2019; elected to a full term in November 2022. Appointment ended when elected term began in 2023; exact transition day not established by this biography."
+    },
+    {
+      "person_slug": "john-king",
+      "office_name": "Insurance and Safety Fire Commissioner",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia Insurance and Safety Fire Commissioner",
+      "organization_slug": "georgia-insurance-and-safety-fire-commissioner",
+      "starts_on": "2023",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://oci.georgia.gov/about-us/john-f-king",
+      "supporting_sources": [],
+      "evidence": "Official biography confirms election in 2022 to full four-year term. Year precision for elected term beginning 2023; not election-day service."
+    },
+    {
+      "person_slug": "richard-woods",
+      "office_name": "State School Superintendent",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia State School Superintendent",
+      "organization_slug": "georgia-state-school-superintendent",
+      "starts_on": "2015-01-12",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_i-ga-be300-b-pp1-bp7-b2015-s1-h12-belec-p-btext",
+      "supporting_sources": [
+        "https://georgia.gov/richard-woods"
+      ],
+      "evidence": "GaDOE archived swearing-in release gives January 12, 2015. Current Georgia.gov biography confirms reelections in 2018 and 2022."
+    },
+    {
+      "person_slug": "tyler-harper",
+      "office_name": "Commissioner of Agriculture",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia Commissioner of Agriculture",
+      "organization_slug": "georgia-commissioner-of-agriculture",
+      "starts_on": "2023-01-12",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://agr.georgia.gov/news/tyler-harper-17th-commissioner-agriculture",
+      "supporting_sources": [],
+      "evidence": "Official source establishes the office, selection method and service date shown."
+    },
+    {
+      "person_slug": "peter-hubbard",
+      "office_name": "Public Service Commissioner",
+      "district": "District 3",
+      "seat": "",
+      "organization_name": "Georgia Public Service Commission District 3",
+      "organization_slug": "georgia-public-service-commission-district-3",
+      "starts_on": "2026-01-01",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://psc.ga.gov/about-the-psc/commissioners/peter-hubbard/",
+      "supporting_sources": [],
+      "evidence": "Official page gives commissioner since January 1, 2026 and election in 2025. Scheduled December 31, 2026 term expiration is not recorded as an actual departure."
+    },
+    {
+      "person_slug": "fitz-johnson",
+      "office_name": "Public Service Commissioner",
+      "district": "District 3",
+      "seat": "",
+      "organization_name": "Georgia Public Service Commission District 3",
+      "organization_slug": "georgia-public-service-commission-district-3",
+      "starts_on": "2021-08-26",
+      "ends_on": "2025",
+      "selection_method": "appointed",
+      "source_url": "https://psc.ga.gov/site/downloads/annual_reports/2025_GAPSC_Annual_Report.pdf",
+      "supporting_sources": [
+        "https://psc.ga.gov/about-the-psc/",
+        "https://psc.ga.gov/about-the-psc/commissioners/peter-hubbard/"
+      ],
+      "evidence": "2025 official annual report gives commissioner since August 26, 2021; commission history lists 2021–2025. End year only; do not treat him as the current officeholder."
+    },
+    {
+      "person_slug": "greg-dolezal",
+      "office_name": "State Senator",
+      "district": "District 27",
+      "seat": "",
+      "organization_name": "Georgia Senate District 27",
+      "organization_slug": "georgia-senate-district-27",
+      "starts_on": "2019-01-14",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://senatepress.net/sen-greg-dolezal-sworn-into-office.html",
+      "supporting_sources": [],
+      "evidence": "Official source establishes the office, selection method and service date shown."
+    },
+    {
+      "person_slug": "david-e-lucas",
+      "office_name": "State Senator",
+      "district": "District 26",
+      "seat": "",
+      "organization_name": "Georgia Senate District 26",
+      "organization_slug": "georgia-senate-district-26",
+      "starts_on": "2013-01-14",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://senatepress.net/4534.html",
+      "supporting_sources": [],
+      "evidence": "Official source establishes the office, selection method and service date shown."
+    },
+    {
+      "person_slug": "miriam-paris",
+      "office_name": "State Senator",
+      "district": "District 26",
+      "seat": "",
+      "organization_name": "Georgia Senate District 26",
+      "organization_slug": "georgia-senate-district-26",
+      "starts_on": "2011-08-22",
+      "ends_on": "2013-01-13",
+      "selection_method": "elected",
+      "source_url": "https://www.senate.ga.gov/sos/Documents/Journal/2011SpecialSessionJournal.pdf",
+      "supporting_sources": [
+        "https://senatepress.net/4534.html"
+      ],
+      "evidence": "Journal records oath August 22, 2011. Inclusive last day derived as day before Lucas took oath January 14, 2013."
+    },
+    {
+      "person_slug": "dale-washburn",
+      "office_name": "County Commissioner / Vice Chair",
+      "district": "Jones County",
+      "seat": "",
+      "organization_name": "Jones County Board of Commissioners",
+      "organization_slug": "jones-county-board-of-commissioners",
+      "starts_on": "1985",
+      "ends_on": "1988",
+      "selection_method": "elected",
+      "source_url": "https://www.house.ga.gov/Documents/Biographies/washburnDale.pdf",
+      "supporting_sources": [],
+      "evidence": "Official House biography gives vice-chair service from 1985 through 1988. County seat number is not given; no numbered district asserted."
+    },
+    {
+      "person_slug": "penny-brown-reynolds",
+      "office_name": "State Court Judge",
+      "district": "Fulton County",
+      "seat": "",
+      "organization_name": "State Court of Fulton County",
+      "organization_slug": "state-court-of-fulton-county",
+      "starts_on": "2000-09-07",
+      "ends_on": "2008",
+      "selection_method": "appointed",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_i-ga-bj800-b-pp1-bg4-b2000-sdecember",
+      "supporting_sources": [
+        "https://aysps.gsu.edu/files/2019/02/GSU-CV-2022-Dr.-Penny-Brown-Reynolds.pdf"
+      ],
+      "evidence": "Official Georgia Courts Journal records appointment oath September 7, 2000; university-hosted CV gives end year 2008. Initially appointed; later election cycles not separately asserted."
+    },
+    {
+      "person_slug": "penny-brown-reynolds",
+      "office_name": "Chief of Staff and General Counsel",
+      "district": "Office of the Lieutenant Governor",
+      "seat": "",
+      "organization_name": "Georgia Lieutenant Governor’s Office",
+      "organization_slug": "georgia-lieutenant-governor-s-office",
+      "starts_on": "1997",
+      "ends_on": "1998",
+      "selection_method": "appointed",
+      "source_url": "https://aysps.gsu.edu/files/2019/02/GSU-CV-2022-Dr.-Penny-Brown-Reynolds.pdf",
+      "supporting_sources": [],
+      "evidence": "Institution-hosted official CV lists 1997–1998."
+    },
+    {
+      "person_slug": "penny-brown-reynolds",
+      "office_name": "Executive Counsel",
+      "district": "Office of the Governor",
+      "seat": "",
+      "organization_name": "Georgia Governor’s Office",
+      "organization_slug": "georgia-governor-s-office",
+      "starts_on": "1998",
+      "ends_on": "2000",
+      "selection_method": "appointed",
+      "source_url": "https://aysps.gsu.edu/files/2019/02/GSU-CV-2022-Dr.-Penny-Brown-Reynolds.pdf",
+      "supporting_sources": [],
+      "evidence": "Institution-hosted CV gives 1998–2000; do not infer governor identity from the date range."
+    },
+    {
+      "person_slug": "anissa-m-jones",
+      "office_name": "Board Member",
+      "district": "District 1",
+      "seat": "",
+      "organization_name": "Macon Water Authority District 1",
+      "organization_slug": "macon-water-authority-district-1",
+      "starts_on": "2019",
+      "ends_on": "2024",
+      "selection_method": "elected",
+      "source_url": "https://maconwater.org/four-mwa-board-members-sworn-into-office/",
+      "supporting_sources": [
+        "https://maconwater.org/mwas-new-board-member/"
+      ],
+      "evidence": "Official authority confirms election in 2018, reelection in 2022 and replacement in April 2024. Election year is not used as service start; preserve year precision pending original oath minutes."
+    },
+    {
+      "person_slug": "brian-strickland",
+      "office_name": "State Senator",
+      "district": "District 42",
+      "seat": "",
+      "organization_name": "Georgia Senate District 42",
+      "organization_slug": "georgia-senate-district-42",
+      "starts_on": "2025-01-13",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2025-senate-journal.pdf",
+      "supporting_sources": [],
+      "evidence": "2025 Senate Journal pp. 41–43 certification by district and oath; new district after redistricting."
+    },
+    {
+      "person_slug": "brian-strickland",
+      "office_name": "State Senator",
+      "district": "District 17",
+      "seat": "",
+      "organization_name": "Georgia Senate District 17",
+      "organization_slug": "georgia-senate-district-17",
+      "starts_on": "2018-01-16",
+      "ends_on": "2025-01-12",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b2018-belec-p-btext",
+      "supporting_sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2025-senate-journal.pdf"
+      ],
+      "evidence": "2018 journal p. 89 records oath and district 17. Inclusive end is day before the 2025 oath in redistricted District 42."
+    },
+    {
+      "person_slug": "josh-mclaurin",
+      "office_name": "State Senator",
+      "district": "District 14",
+      "seat": "",
+      "organization_name": "Georgia Senate District 14",
+      "organization_slug": "georgia-senate-district-14",
+      "starts_on": "2023-01-09",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/members/senate/4942/contact",
+      "supporting_sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2023-senate-journal.pdf",
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2025-senate-journal.pdf"
+      ],
+      "evidence": "Official member profile explicitly gives first Senate oath; 2025 journal confirms continued service."
+    },
+    {
+      "person_slug": "josh-mclaurin",
+      "office_name": "State Representative",
+      "district": "District 51",
+      "seat": "",
+      "organization_name": "Georgia House District 51",
+      "organization_slug": "georgia-house-district-51",
+      "starts_on": "2019-01-14",
+      "ends_on": "2023-01-08",
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/members/senate/4942/contact",
+      "supporting_sources": [
+        "https://www.house.ga.gov/Documents/Biographies/mclaurinJosh.pdf",
+        "https://www.legis.ga.gov/api/document/docs/default-source/bios/mclaurin-josh-4942.pdf"
+      ],
+      "evidence": "Member profile gives first House oath. Biography states four House years; inclusive end is day before Senate oath."
+    },
+    {
+      "person_slug": "rick-a-williams",
+      "office_name": "State Senator",
+      "district": "District 25",
+      "seat": "",
+      "organization_name": "Georgia Senate District 25",
+      "organization_slug": "georgia-senate-district-25",
+      "starts_on": "2023-01-23",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/members/senate/4905/contact",
+      "supporting_sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2025-senate-journal.pdf"
+      ],
+      "evidence": "Official member profile explicitly gives January 23, 2023 Senate oath. Do not use the January 9 general oath: Williams was absent; do not use biography election-year 2022."
+    },
+    {
+      "person_slug": "rick-a-williams",
+      "office_name": "State Representative",
+      "district": "District 145",
+      "seat": "",
+      "organization_name": "Georgia House District 145",
+      "organization_slug": "georgia-house-district-145",
+      "starts_on": "2017-01-09",
+      "ends_on": "2023-01-08",
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/members/senate/4905/contact",
+      "supporting_sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/bios/williams-rick-4905.pdf",
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2023-senate-journal.pdf"
+      ],
+      "evidence": "Official member page gives first House oath; Senate biography identifies House District 145. Inclusive end is day before the next House biennium began."
+    },
+    {
+      "person_slug": "steven-mcneel",
+      "office_name": "State Senator",
+      "district": "District 18",
+      "seat": "",
+      "organization_name": "Georgia Senate District 18",
+      "organization_slug": "georgia-senate-district-18",
+      "starts_on": "2026",
+      "ends_on": null,
+      "selection_method": "elected",
+      "source_url": "https://senatepress.net/sen-steven-mcneel-officially-sworn-in-as-georgia-state-senator.html",
+      "supporting_sources": [],
+      "evidence": "Official February 25 release says sworn in this week. Preserve year precision; do not substitute publication date or election date for oath date."
+    },
+    {
+      "person_slug": "tim-fleming",
+      "office_name": "Chief of Staff",
+      "district": "Office of the Governor",
+      "seat": "",
+      "organization_name": "Georgia Governor’s Office",
+      "organization_slug": "georgia-governor-s-office",
+      "starts_on": "2019",
+      "ends_on": "2020-09-30",
+      "selection_method": "appointed",
+      "source_url": "https://gov.georgia.gov/press-releases/2020-09-17/kemp-announces-chief-staffs-departure",
+      "supporting_sources": [],
+      "evidence": "Named to governor-elect staff in November 2018; governmental service began with Kemp administration in 2019. Official release explicitly gives last day September 30, 2020."
+    },
+    {
+      "person_slug": "keisha-lance-bottoms",
+      "office_name": "Mayor",
+      "district": "Atlanta",
+      "seat": "",
+      "organization_name": "Mayor of Atlanta",
+      "organization_slug": "mayor-of-atlanta",
+      "starts_on": "2018-01-02",
+      "ends_on": "2022-01-02",
+      "selection_method": "elected",
+      "source_url": "https://www.atlantaga.gov/Home/Components/News/News/11379/672?arch=1&npage=56",
+      "supporting_sources": [
+        "https://www.atlantaga.gov/home/showpublisheddocument/53699/637769803773230000"
+      ],
+      "evidence": "Official inauguration release gives first day. Inclusive last day is day before successor Dickens’s January 3, 2022 inauguration."
+    },
+    {
+      "person_slug": "keisha-lance-bottoms",
+      "office_name": "Council Member",
+      "district": "District 11",
+      "seat": "",
+      "organization_name": "Atlanta City Council District 11",
+      "organization_slug": "atlanta-city-council-district-11",
+      "starts_on": "2010-01-04",
+      "ends_on": "2018-01-01",
+      "selection_method": "elected",
+      "source_url": "https://www.atlantaga.gov/Home/Components/News/News/356/672?arch=1&npage=65&seldept=1",
+      "supporting_sources": [
+        "https://www.atlantaga.gov/Home/Components/News/News/11379/672?arch=1&npage=56"
+      ],
+      "evidence": "Official 2010 inauguration release names Bottoms among council members sworn in. Inclusive end is day before transition to mayor."
+    },
+    {
+      "person_slug": "keisha-lance-bottoms",
+      "office_name": "Senior Advisor and Director of Public Engagement",
+      "district": "White House",
+      "seat": "",
+      "organization_name": "White House Office of Public Engagement",
+      "organization_slug": "white-house-office-of-public-engagement",
+      "starts_on": "2022",
+      "ends_on": "2023",
+      "selection_method": "appointed",
+      "source_url": "https://bidenwhitehouse.archives.gov/briefing-room/statements-releases/2022/06/15/president-biden-announces-former-atlanta-mayor-keisha-lance-bottoms-as-senior-advisor-for-public-engagement/",
+      "supporting_sources": [
+        "https://www.govinfo.gov/content/pkg/DCPD-202300143/pdf/DCPD-202300143.pdf"
+      ],
+      "evidence": "Appointment and resignation announcements establish service years; neither publication date is asserted to be the actual transition day."
+    },
+    {
+      "person_slug": "keisha-sean-waites",
+      "office_name": "Council Member",
+      "district": "Citywide",
+      "seat": "",
+      "organization_name": "Atlanta City Council At-Large Post 3",
+      "organization_slug": "atlanta-city-council-at-large-post-3",
+      "starts_on": "2022-01-03",
+      "ends_on": "2024",
+      "selection_method": "elected",
+      "source_url": "https://citycouncil.atlantaga.gov/Home/Components/News/News/2796/175",
+      "supporting_sources": [
+        "https://dekalbcountyga.gov/sites/default/files/2026-04/BRE%20Materials%2003-18%20%285%29.pdf"
+      ],
+      "evidence": "First organizational meeting identifies Waites as Post 3 member January 3, 2022. Official special-election resolution records vacancy March 8, 2024; end year avoids implying service continued throughout the vacancy day."
+    },
+    {
+      "person_slug": "keisha-sean-waites",
+      "office_name": "State Representative",
+      "district": "District 60",
+      "seat": "",
+      "organization_name": "Georgia House District 60",
+      "organization_slug": "georgia-house-district-60",
+      "starts_on": "2012-02-13",
+      "ends_on": "2017",
+      "selection_method": "elected",
+      "source_url": "https://www.house.ga.gov/Documents/House%20Journals/2012/Day%2019.pdf",
+      "supporting_sources": [
+        "https://www.house.ga.gov/Documents/Biographies/waitesKeisha.pdf",
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b2018-belec-p-btext"
+      ],
+      "evidence": "First oath in 2012 House Journal. Resignation effective September 18, 2017 reproduced in 2018 journal; end year avoids asserting service on the vacancy day."
+    },
+    {
+      "person_slug": "tyler-harper",
+      "office_name": "State Senator",
+      "district": "District 7",
+      "seat": "",
+      "organization_name": "Georgia Senate District 7",
+      "organization_slug": "georgia-senate-district-7",
+      "starts_on": "2013-01-14",
+      "ends_on": "2023-01-08",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b2013-belec-p-btext",
+      "supporting_sources": [
+        "https://georgia.gov/tyler-harper",
+        "https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2023-senate-journal.pdf"
+      ],
+      "evidence": "2013 Senate journal certification and oath. Inclusive end is day before the 2023 biennium, whose journal certifies Nabilah Islam in District 7."
+    },
+    {
+      "person_slug": "floyd-griffin",
+      "office_name": "State Senator",
+      "district": "District 25",
+      "seat": "",
+      "organization_name": "Georgia Senate District 25",
+      "organization_slug": "georgia-senate-district-25",
+      "starts_on": "1995-01-09",
+      "ends_on": "1999-01-10",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b1995-bv-p1",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b1998-bv-p1",
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b1999-bv-p1"
+      ],
+      "evidence": "1995 Senate journal first-day roster and oath; inclusive end is day before successor Faye Smith took office at the next biennium."
+    },
+    {
+      "person_slug": "sanford-bishop",
+      "office_name": "State Senator",
+      "district": "District 15",
+      "seat": "",
+      "organization_name": "Georgia Senate District 15",
+      "organization_slug": "georgia-senate-district-15",
+      "starts_on": "1991-01-14",
+      "ends_on": "1993-01-02",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b1991-bv-p1",
+      "supporting_sources": [
+        "https://bishop.house.gov/about",
+        "https://www.congress.gov/member/sanford-bishop/B000490"
+      ],
+      "evidence": "1991 journal identifies Bishop in District 15 and first-day oath. Inclusive end is day before constitutional congressional term began January 3, 1993."
+    },
+    {
+      "person_slug": "sanford-bishop",
+      "office_name": "State Representative",
+      "district": "District 94",
+      "seat": "",
+      "organization_name": "Georgia House District 94",
+      "organization_slug": "georgia-house-district-94",
+      "starts_on": "1977-01-10",
+      "ends_on": "1991-01-13",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b1977-bv-p1",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b1983-bv-p1",
+        "https://bishop.house.gov/about",
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b1991-bv-p1"
+      ],
+      "evidence": "1977 journal roster pairs Sanford Bishop with District 94 and records first-day oath; 1983 journal confirms District 94. Official congressional biography gives House service 1977–1990 (legislative sessions). Inclusive end is day before the 1991 Senate oath."
+    },
+    {
+      "person_slug": "rick-jackson",
+      "office_name": "Board Member",
+      "district": "Georgia",
+      "seat": "",
+      "organization_name": "Georgia Board of Community Health",
+      "organization_slug": "georgia-board-of-community-health",
+      "starts_on": "2012-07-01",
+      "ends_on": "2015",
+      "selection_method": "appointed",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl402-b2013-belec-p-btext",
+      "supporting_sources": [
+        "https://orders.gaodp.org/orders/2015/07.24.15.07.html",
+        "https://dch.georgia.gov/document/document/fy-2015-annual-report/download"
+      ],
+      "evidence": "2013 Senate Journal p. 2862 confirms Richard (Rick) Jackson’s term beginning July 1, 2012. July 2015 executive order replaces him after expiry. End year avoids asserting the precise end of any holdover period."
+    },
+    {
+      "person_slug": "eric-wilson",
+      "office_name": "Mayor",
+      "district": "Forsyth",
+      "seat": "",
+      "organization_name": "Mayor of Forsyth",
+      "organization_slug": "mayor-of-forsyth",
+      "starts_on": "2016",
+      "ends_on": "2025",
+      "selection_method": "elected",
+      "source_url": "https://www.cityofforsyth.net/sites/default/files/uploads/annual-comprehensive-reeports/forsythcity_finalreport2016.pdf",
+      "supporting_sources": [
+        "https://www.monroecoga.org/2023/11/08/city-of-forsyth-general-election-results/",
+        "https://www.monroecoga.org/wp-content/uploads/2026/01/12-17-2025-Joint-City-County-Called-Meeting-Approved-minutes.pdf",
+        "https://www.macon.com/news/politics-government/article310209670.html"
+      ],
+      "evidence": "2016 municipal annual report identifies Wilson as mayor; county 2025 minutes acknowledge his resignation. First service year corroborated by his 2025 candidacy announcement reported by the Macon Telegraph. Year precision only."
+    },
+    {
+      "person_slug": "brian-strickland",
+      "office_name": "State Representative",
+      "district": "District 111",
+      "seat": "",
+      "organization_name": "Georgia House District 111",
+      "organization_slug": "georgia-house-district-111",
+      "starts_on": "2013-01-14",
+      "ends_on": "2017",
+      "selection_method": "elected",
+      "source_url": "https://www.legis.ga.gov/members/senate/835/contact",
+      "supporting_sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b2018-belec-p-btext"
+      ],
+      "evidence": "Member page gives first House oath. Governor’s acceptance reproduced in 2018 House Journal confirms resignation effective December 1, 2017; year precision for inclusive last service date."
+    },
+    {
+      "person_slug": "dale-washburn",
+      "office_name": "State Representative",
+      "district": "District 141",
+      "seat": "",
+      "organization_name": "Georgia House District 141",
+      "organization_slug": "georgia-house-district-141",
+      "starts_on": "2019-01-14",
+      "ends_on": "2023-01-08",
+      "selection_method": "elected",
+      "source_url": "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b2019-belec-p-btext",
+      "supporting_sources": [
+        "https://www.house.ga.gov/Documents/Biographies/washburnDale.pdf",
+        "https://dlg.usg.edu/record/dlg_ggpd_06095483-2023"
+      ],
+      "evidence": "2019 journal first-day oath and official House biography identify District 141. Inclusive end is day before the new House biennium and move to District 144."
+    }
+  ],
+  "pending": [
+    {
+      "person_slug": "lindsay-d-holliday",
+      "office": "Elected Bibb supervisor, Ocmulgee River Soil and Water Conservation District",
+      "reason": "Current commission roster confirms office; first service/current-term start still needs an official dated oath or certified term record. Qualified-candidate lists alone do not establish service dates.",
+      "sources": [
+        "https://gaswcc.georgia.gov/soil-water-conservation-districts/who-are-my-swcd-supervisors",
+        "https://gaswcc.georgia.gov/document/document/ocmulgee-plan-work-fy24/download"
+      ]
+    },
+    {
+      "person_slug": "austin-scott",
+      "office": "Former Georgia House districts 165, 138 and 153",
+      "reason": "Official 1997 roster and 2011 resignation confirm service; exact district-change boundaries still need checking before assigning complete periods to seats.",
+      "sources": [
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b1997-bv-p1",
+        "https://dlg.usg.edu/record/dlg_ggpd_y-ga-bl404-b2011-belec-p-btext"
+      ]
+    },
+    {
+      "person_slug": "david-e-lucas",
+      "office": "Former Georgia House service",
+      "reason": "Official biography confirms former House service; historical district changes and resignation date need reconciliation before assigning periods to individual seat organizations.",
+      "sources": [
+        "https://senatepress.net/4534.html"
+      ]
+    },
+    {
+      "person_slug": "floyd-griffin",
+      "office": "Former Mayor of Milledgeville",
+      "reason": "Official House biography election year conflicts with contemporary court record and inauguration accounts. Do not substitute election year for first day.",
+      "sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/bios/griffin-floyd-5083.pdf"
+      ]
+    },
+    {
+      "person_slug": "miriam-paris",
+      "office": "Former Macon Council Member / Council President",
+      "reason": "Separate election to council and election as council president; original municipal term boundaries not yet verified.",
+      "sources": [
+        "https://www.house.ga.gov/Documents/Biographies/parisMiriam.pdf"
+      ]
+    },
+    {
+      "person_slug": "eric-wilson",
+      "office": "Former Forsyth Council Member",
+      "reason": "Official 2014 annual report confirms membership; original term start and resignation boundaries need verification.",
+      "sources": [
+        "https://www.cityofforsyth.net/sites/default/files/uploads/annual-comprehensive-reeports/2014-cityofforsyth.pdf"
+      ]
+    },
+    {
+      "person_slug": "rick-a-williams",
+      "office": "Former Baldwin Commissioner and Chief Registrar",
+      "reason": "Official Senate biography confirms roles; years and numbered commission seat not established.",
+      "sources": [
+        "https://www.legis.ga.gov/api/document/docs/default-source/bios/williams-rick-4905.pdf"
+      ]
+    },
+    {
+      "person_slug": "john-king",
+      "office": "Former Doraville Police Chief",
+      "reason": "Municipal newsletter confirms chief since 2002 and 2019 departure; reported intervening 2007 termination/reinstatement needs official reconciliation before recording a continuous interval.",
+      "sources": [
+        "https://cms1files.revize.com/doravillega/Newsletter%20FINAL%20-%20062819.pdf"
+      ]
+    },
+    {
+      "person_slug": "tim-fleming",
+      "office": "Former Newton Commissioner / Deputy Secretary of State",
+      "reason": "Offices confirmed, but term boundaries and numbered county seat need official records.",
+      "sources": [
+        "https://gov.georgia.gov/press-releases/2020-09-17/kemp-announces-chief-staffs-departure",
+        "https://www.newtoncountyga.gov/DocumentCenter/View/2489/June-15-2010"
+      ]
+    },
+    {
+      "person_slug": "penny-brown-reynolds",
+      "office": "Former USDA Deputy / Acting Assistant Secretary for Civil Rights",
+      "reason": "Official appointment and later acting service established; acting-role transition and actual end of service need official documentation.",
+      "sources": [
+        "https://www.usda.gov/about-usda/news/press-releases/2022/09/27/us-department-agriculture-announces-key-staff-appointments",
+        "https://www.usda.gov/sites/default/files/documents/summary-minutes-acmf-tarrytown-july-23-25-2024-signed.pdf"
+      ]
+    },
+    {
+      "person_slug": "keisha-lance-bottoms",
+      "office": "President’s Export Council / former magistrate judge",
+      "reason": "Official appointment or biography establishes roles; full service boundaries not established.",
+      "sources": [
+        "https://www.trade.gov/sites/default/files/2024-06/PEC%20Meeting%20Transcript%20-%20November%2029%2C%202023.pdf",
+        "https://bidenwhitehouse.archives.gov/briefing-room/statements-releases/2022/06/15/president-biden-announces-former-atlanta-mayor-keisha-lance-bottoms-as-senior-advisor-for-public-engagement/"
+      ]
+    }
+  ],
+  "no_verified_office": [
+    {
+      "person_slug": "andrew-pacetti",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "calvin-palmer",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "cassandra-easton",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "christina-clement",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "david-c-byrne",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "david-leon-moreland",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "deb-broughton-davis",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "elbert-arthur-bartell",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "jacqueline-angela-dacosta",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "josh-tolbert",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "justin-laster",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "katherine-e-juhan-arnold",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "kelly-esti",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "leland-j-olinger-iii",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "lydia-powell",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "matt-day",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "milton-j-lofton",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "nikki-porcher",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "randy-peters",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "shelia-edwards",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    },
+    {
+      "person_slug": "tracy-wheeler",
+      "reason": "No prior elected or appointed public office with verified service dates established in this review. Existing election candidacy is retained; absence of an imported service record does not assert that the person has never held office."
+    }
+  ]
+}

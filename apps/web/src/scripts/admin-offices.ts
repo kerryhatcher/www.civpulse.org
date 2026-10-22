@@ -1,4 +1,4 @@
-import { officeLabel, serviceDates, type Office, type OfficeTerm } from '../lib/offices';
+import { officeLabel, parseServiceDate, serviceDates, type Office, type OfficeTerm } from '../lib/offices';
 import { getSupabase } from '../lib/supabase';
 
 type Named = { id: string; name: string };
@@ -44,6 +44,10 @@ export async function initOfficesAdmin(): Promise<void> {
     for (const [key, value] of Object.entries(record)) {
       const input = form.elements.namedItem(key) as HTMLInputElement | null;
       if (input) input.value = value ?? '';
+      if (input && (key === 'starts_on' || key === 'ends_on') && 'starts_on_precision' in record) {
+        const precision = key === 'starts_on' ? record.starts_on_precision : (record as OfficeTerm).ends_on_precision;
+        if (precision === 'year' && value) input.value = String(value).slice(0, 4);
+      }
     }
     form.querySelector<HTMLElement>('[data-cancel]')!.hidden = false;
     form.querySelector<HTMLElement>('[data-form-heading]')!.textContent = table === 'offices' ? 'Edit office' : 'Edit service';
@@ -104,7 +108,7 @@ export async function initOfficesAdmin(): Promise<void> {
   async function load() {
     const results = await Promise.all([
       supabase.from('offices').select('id,organization_id,name,district,seat,description').order('name'),
-      supabase.from('office_terms').select('id,office_id,person_id,selection_method,starts_on,ends_on,source_url').order('starts_on', { ascending: false }),
+      supabase.from('office_terms').select('id,office_id,person_id,selection_method,starts_on,ends_on,source_url,starts_on_precision,ends_on_precision').order('starts_on', { ascending: false }),
       supabase.from('organizations').select('id,name').order('name'),
       supabase.from('people').select('id,full_name').order('full_name'),
     ]);
@@ -127,12 +131,24 @@ export async function initOfficesAdmin(): Promise<void> {
       const values = new FormData(form);
       const value = (name: string) => String(values.get(name) ?? '').trim();
       const id = value('id');
+      let start: ReturnType<typeof parseServiceDate> = null;
+      let end: ReturnType<typeof parseServiceDate> = null;
+      if (table === 'office_terms') {
+        try {
+          start = parseServiceDate(value('starts_on'), 'start');
+          end = parseServiceDate(value('ends_on'), 'end');
+          if (!start) throw new Error('Enter the first date or year of service.');
+        } catch (error) { message(form, (error as Error).message, true); return; }
+      }
       const payload: Record<string, string | null> = table === 'offices' ? {
         organization_id: value('organization_id'), name: value('name'), district: value('district'), seat: value('seat'), description: value('description') || null,
       } : {
-        office_id: value('office_id'), person_id: value('person_id'), selection_method: value('selection_method'), starts_on: value('starts_on'), ends_on: value('ends_on') || null, source_url: value('source_url') || null,
+        office_id: value('office_id'), person_id: value('person_id'), selection_method: value('selection_method'), starts_on: start!.date,
+        ends_on: end?.date ?? null,
+        starts_on_precision: start!.precision,
+        ends_on_precision: end?.precision ?? 'day', source_url: value('source_url') || null,
       };
-      if (table === 'office_terms' && value('ends_on') && value('ends_on') < value('starts_on')) {
+      if (table === 'office_terms' && value('ends_on') && String(payload.ends_on) < String(payload.starts_on)) {
         message(form, 'The last day must be on or after the first day.', true); return;
       }
       if (table === 'office_terms' && value('source_url') && !/^https?:\/\/\S+$/i.test(value('source_url'))) {

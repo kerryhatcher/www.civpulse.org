@@ -723,3 +723,21 @@ Verification: `OFFICES_TEST_DATABASE_URL=<local postgres URL> bun test
 scripts/tests/offices-db.test.ts`. Fixtures roll back; the test checks date
 boundaries, anonymous/signed-in visibility, direct-table protection, non-admin
 write denial, admin service CRUD, invalid dates/URLs and deletion restrictions.
+
+Historical sources may establish only a year. `starts_on_precision` and
+`ends_on_precision` preserve `day | year`; year-only starts are stored at January
+1 and year-only ends at December 31 solely as sorting bounds. Public/admin
+formatters show the year, never those placeholder days. An end year denotes
+already-concluded service, not a projected expiration; it is former even during
+that calendar year. Admin date inputs accept `YYYY-MM-DD` or `YYYY` and reject
+invalid calendar dates. Existing exact dates retain day precision by default.
+
+The reviewed candidate import is recorded in
+`docs/research/2026-candidate-office-history.json`, including supporting official
+sources, explicitly identified term-boundary inferences and unresolved research.
+`bun scripts/generate-office-history-migration.ts` reproduces its data migration.
+It resolves existing people by slug, reuses seat organizations by slug or exact
+normalized name, and inserts offices/service records without overwriting existing
+content. Missing people in empty development databases are skipped. Pending
+research and candidates without verified service are never converted into office
+records. An omitted history is not evidence that a candidate has never served.
