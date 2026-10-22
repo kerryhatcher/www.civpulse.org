@@ -285,25 +285,27 @@ async function geometryRequest<T>(request: () => Promise<T>): Promise<T> {
 /** Load stored geometry through the same access gate as the containing map. */
 export async function fetchLayerGeoJSON(layer: LayerConfig, mapId?: string): Promise<GeoJSON.GeoJsonObject> {
   if (layer.source_type === 'postgis') {
-    const pageSize = 50;
-    const readPage = async (offset: number): Promise<GeoJSON.FeatureCollection & { numberMatched: number }> => {
+    const initialPageSize = 10;
+    const readPage = async (offset: number, limit: number): Promise<GeoJSON.FeatureCollection & { numberMatched: number }> => {
       for (let attempt = 0; ; attempt++) {
         const { data, error } = await geometryRequest(async () => getSupabase().rpc('get_layer_geojson_page', {
-          p_layer_id: layer.id, p_map_id: mapId ?? null, p_offset: offset, p_limit: pageSize,
+          p_layer_id: layer.id, p_map_id: mapId ?? null, p_offset: offset, p_limit: limit,
         }));
         if (!error) return data as GeoJSON.FeatureCollection & { numberMatched: number };
         if (attempt > 0 || error.code !== '57014') throw new Error(error.message);
       }
     };
-    const first = await readPage(0);
+    const first = await readPage(0, initialPageSize);
+    // Compact points can use larger batches; dense boundaries stay small.
+    const pageSize = JSON.stringify(first.features).length <= 100_000 ? 100 : initialPageSize;
     const pages = new Map<number, GeoJSON.Feature[]>([[0, first.features]]);
-    let nextOffset = pageSize;
+    let nextOffset = initialPageSize;
     // Fetch ahead within the shared, page-wide request budget.
     await Promise.all(Array.from({ length: 2 }, async () => {
       while (nextOffset < first.numberMatched) {
         const offset = nextOffset;
         nextOffset += pageSize;
-        pages.set(offset, (await readPage(offset)).features);
+        pages.set(offset, (await readPage(offset, pageSize)).features);
       }
     }));
     return { type: 'FeatureCollection', features: [...pages.entries()]
