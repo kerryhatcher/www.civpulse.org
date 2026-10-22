@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ProfileArticles from '../../components/ProfileArticles.astro';
 import {
   fetchOrganizations,
   organizationLogoUrl,
@@ -142,6 +143,8 @@ const contact = [
       )
     }
 
+    <ProfileArticles organizationId={org.id} />
+
     <div class="org-contact">
       <p class="org-back">
         <a href="/orgs/">← All organizations</a>
@@ -151,7 +154,10 @@ const contact = [
 </Layout>
 
 <script>
+  import { initProfileArticles } from '../../scripts/profile-articles';
   import { initAdminEditLink } from '../../scripts/auth';
+
+  initProfileArticles();
 
   void initAdminEditLink();
 </script>

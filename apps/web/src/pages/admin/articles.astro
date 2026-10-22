@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="Articles admin" description="Manage news articles and their links to people and organizations.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Articles</h1>
+      <p>Save a news article once, then link it to any people and organizations it covers, credits, or mentions.</p>
+    </div>
+    <AdminTabs />
+    <p class="status" data-admin-gate>Checking access…</p>
+    <div class="prose" data-admin-denied hidden><div class="empty-state"><p>Your account does not have admin access. <a href="/signin/?next=/admin/articles/">Sign in with an admin account</a>.</p></div></div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-article-form>
+        <h2 data-article-form-title>Add an article</h2>
+        <input type="hidden" name="id" />
+        <label class="field"><span>Title *</span><input name="title" maxlength="500" required /></label>
+        <label class="field"><span>Article URL *</span><input type="url" name="url" maxlength="2000" placeholder="https://…" required /></label>
+        <label class="field"><span>Visibility</span><select name="visibility">
+          <option value="public">Public — shown on linked profiles</option>
+          <option value="unlisted">Unlisted — shown to signed-in visitors only</option>
+          <option value="private">Private — signed-in visitors only</option>
+        </select></label>
+        <fieldset>
+          <legend>People (optional)</legend>
+          <p class="body-note">Select everyone to link. Describe each relationship, for example Subject, Author, or Mentioned.</p>
+          <label class="field"><span>Find people</span><input type="search" data-article-people-search /></label>
+          <div class="article-associations" data-article-people></div>
+        </fieldset>
+        <fieldset>
+          <legend>Organizations (optional)</legend>
+          <p class="body-note">Select any organizations, with a relationship such as Subject, Publisher, Author, or Mentioned.</p>
+          <label class="field"><span>Find organizations</span><input type="search" data-article-organizations-search /></label>
+          <div class="article-associations" data-article-organizations></div>
+        </fieldset>
+        <datalist id="article-person-roles"><option value="Subject" /><option value="Author" /><option value="Mentioned" /></datalist>
+        <datalist id="article-organization-roles"><option value="Subject" /><option value="Publisher" /><option value="Author" /><option value="Mentioned" /></datalist>
+        <p class="body-note">Missing a record? Add it in <a href="/admin/people/">People</a> or <a href="/admin/organizations/">Organizations</a> first. Articles can also be saved without any links.</p>
+        <div class="org-form-actions"><button class="button-link" type="submit">Create article</button><button type="button" data-article-cancel hidden>Cancel</button></div>
+        <p class="auth-message" data-article-message hidden role="status" aria-live="polite"></p>
+      </form>
+      <section aria-labelledby="article-list-title">
+        <h2 id="article-list-title">Articles</h2>
+        <label class="field"><span>Find an article</span><input type="search" data-article-search placeholder="Title, URL, person, or organization" /></label>
+        <p class="auth-message" data-article-list-message hidden role="status" aria-live="polite"></p>
+        <div class="org-list" data-article-list></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initArticleAdmin } from '../../scripts/admin-articles';
+  void initArticleAdmin();
+</script>

@@ -1,0 +1,9 @@
+---
+interface Props { personId?: string; organizationId?: string }
+const { personId, organizationId } = Astro.props;
+---
+<section class="profile-articles" data-profile-articles data-person-id={personId} data-organization-id={organizationId} hidden aria-labelledby="profile-articles-title">
+  <h2 id="profile-articles-title">News &amp; articles</h2>
+  <p class="status" data-articles-status role="status" aria-live="polite">Loading articles…</p>
+  <ul class="profile-article-list" data-profile-article-list></ul>
+</section>

@@ -1,3 +1,4 @@
+import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
 import {
   personHref,
@@ -382,7 +383,10 @@ export async function initPersonViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillPersonView(response);
-  if (response.person) void loadPersonCandidacies(response.person.id);
+  if (response.person) {
+    void loadPersonCandidacies(response.person.id);
+    void loadProfileArticles('person', response.person.id);
+  }
 
   if (response.person && (await isCurrentUserAdmin())) {
     const edit = document.querySelector<HTMLAnchorElement>('[data-person-edit-link]');

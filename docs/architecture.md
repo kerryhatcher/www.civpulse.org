@@ -83,6 +83,10 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   so hidden elections never leak into prerendered HTML. Early-voting days and
   deadlines are calendar events tagged with the election, so they appear on the
   community calendar and link back to the election.
+- Articles: external URLs with titles and many-to-many links to people and
+  organizations. Runtime “News & articles” lists on profiles distinguish subjects,
+  authors, publishers, and mentions. Hidden associations never enter static HTML;
+  writes use the admin-only `save_article` transaction.
 - The public listing/sitemap includes public content only; sitemap generation is
   handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
 
@@ -90,7 +94,7 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
-  `/admin/maps/`, `/admin/calendars/`, `/admin/elections/` with an admin tab
+  `/admin/maps/`, `/admin/calendars/`, `/admin/elections/`, `/admin/articles/` with an admin tab
   bar. Admins also get an "Edit" shortcut on public org/map/person/election
   pages.
 - The header shows "Account" when signed in and "Admin" for allowlisted users.

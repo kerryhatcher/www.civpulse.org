@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
 import {
   fetchPublicAffiliations,
@@ -145,6 +146,7 @@ const contact = [
     }
 
     <PersonCandidacies personId={person.id} />
+    <ProfileArticles personId={person.id} />
 
     <p class="org-back">
       <a href="/people/">← All people</a>
@@ -154,8 +156,10 @@ const contact = [
 
 <script>
   import { initAdminEditLink } from '../../scripts/auth';
+  import { initProfileArticles } from '../../scripts/profile-articles';
   import { initPersonCandidacies } from '../../scripts/person-candidacies';
 
+  initProfileArticles();
   initPersonCandidacies();
 
   void initAdminEditLink();

@@ -2235,3 +2235,15 @@ textarea::placeholder {
 .ballot-question-text { white-space: pre-wrap; overflow-wrap: anywhere; }
 .ballot-question-choices { margin: 0 0 1rem; padding-left: 1.5rem; }
 .ballot-question .contest-description { white-space: pre-wrap; }
+
+.profile-articles { max-width: 52rem; padding-bottom: 32px; }
+.profile-articles h2 { font-size: 32px; margin-bottom: 16px; }
+.profile-article-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.profile-article-card { gap: 6px; overflow-wrap: anywhere; }
+.profile-article-card h3 { font-size: 24px; line-height: 1.3; margin: 0; }
+.article-associations { display: grid; gap: 8px; max-height: 20rem; overflow-y: auto; padding: 8px; border: 1px solid var(--line); }
+.article-association { display: grid; grid-template-columns: minmax(0, 1fr) minmax(8rem, 1fr); gap: 12px; align-items: center; }
+.article-association label { display: flex; align-items: center; gap: 8px; overflow-wrap: anywhere; }
+.article-association input[type="checkbox"] { width: auto; }
+.article-association input[type="text"] { min-width: 0; width: 100%; }
+.article-admin-links { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
