@@ -2,6 +2,26 @@ import { getSupabase } from './supabase';
 
 export type LayerVisibility = 'public' | 'unlisted' | 'private';
 
+export interface MarkerIcon {
+  url: string;
+  size: [number, number];
+  anchor: [number, number];
+  popupAnchor: [number, number];
+}
+
+export interface LayerPresentation {
+  key?: string;
+  group?: string;
+  titleProperty?: string;
+  titleSuffix?: string;
+  searchFields?: string[];
+  popupFields?: { property: string; label: string; format?: 'text' | 'url' | 'email' | 'phone' }[];
+  renderer?: 'fields' | 'events' | 'polling' | 'precincts';
+  attribution?: string;
+  sourceUrl?: string;
+  note?: string;
+}
+
 /** Leaflet-friendly styling shared by polygons, lines, and point markers. */
 export interface LayerStyle {
   /** Line / border color. Used when a layer is not colored per record. */
@@ -26,6 +46,12 @@ export interface LayerStyle {
   categorizeBy: string;
   /** Colors used for per-record coloring, cycled once values run out. */
   palette: string[];
+  categoryStyles: Record<string, Partial<LayerStyle>>;
+  categoryTarget: "both" | "fill" | "stroke";
+  colorProperty: string;
+  iconBy: string;
+  icon?: MarkerIcon;
+  icons: Record<string, MarkerIcon>;
 }
 
 export const DEFAULT_LAYER_STYLE: LayerStyle = {
@@ -37,11 +63,19 @@ export const DEFAULT_LAYER_STYLE: LayerStyle = {
   dashArray: '',
   radius: 6,
   categorizeBy: '',
+  categoryStyles: {},
+  categoryTarget: 'both',
+  colorProperty: '',
+  iconBy: '',
+  icons: {},
   palette: ['#2166ac', '#e66101', '#1b9e77', '#c51b7d', '#6a51a3', '#e6ab02', '#5a5a5a', '#8c510a', '#00a6ca', '#287556'],
 };
 
 export interface LayerConfig {
   id: string;
+  presentation?: LayerPresentation;
+  visible_by_default?: boolean;
+  position?: number;
   name: string;
   description: string | null;
   source_url: string | null;
@@ -51,7 +85,7 @@ export interface LayerConfig {
   style?: Partial<LayerStyle> | null;
 }
 
-export const LAYER_COLUMNS = 'id, name, description, source_url, visibility, style, source_type';
+export const LAYER_COLUMNS = 'id, name, description, source_url, visibility, style, source_type, presentation';
 
 const HEX_COLOR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 const MAX_PALETTE = 24;
@@ -96,6 +130,15 @@ export function normalizeLayerStyle(value?: Partial<LayerStyle> | null): LayerSt
     categorizeBy:
       typeof merged.categorizeBy === 'string' ? merged.categorizeBy.trim().slice(0, 80) : '',
     palette: normalizePalette(merged.palette),
+    categoryTarget: ['fill', 'stroke'].includes(merged.categoryTarget) ? merged.categoryTarget : 'both',
+    categoryStyles: merged.categoryStyles && typeof merged.categoryStyles === 'object' && !Array.isArray(merged.categoryStyles) ? merged.categoryStyles : {},
+    colorProperty: typeof merged.colorProperty === 'string' ? merged.colorProperty.slice(0, 80) : '',
+    iconBy: typeof merged.iconBy === 'string' ? merged.iconBy.slice(0, 80) : '',
+    icon: normalizeMarkerIcon(merged.icon),
+    icons: Object.fromEntries(Object.entries(merged.icons && typeof merged.icons === 'object' ? merged.icons : {}).flatMap(([key, icon]) => {
+      const normalized = normalizeMarkerIcon(icon);
+      return normalized ? [[key, normalized]] : [];
+    })),
   };
 }
 
@@ -147,8 +190,8 @@ export function layerFeaturePathOptions(
   const options = layerPathOptions(style);
   if (colorFor) {
     const color = colorFor(feature);
-    options.color = color;
-    options.fillColor = color;
+    if (style.categoryTarget !== 'fill') options.color = color;
+    if (style.categoryTarget !== 'stroke') options.fillColor = color;
   }
   return options;
 }
@@ -162,8 +205,8 @@ export function layerFeatureMarkerOptions(
   const options = layerMarkerOptions(style);
   if (colorFor) {
     const color = colorFor(feature);
-    options.color = color;
-    options.fillColor = color;
+    if (style.categoryTarget !== 'fill') options.color = color;
+    if (style.categoryTarget !== 'stroke') options.fillColor = color;
   }
   return options;
 }
@@ -276,4 +319,64 @@ export async function readGeoJSONImport(file: File | null, url: string): Promise
   } catch {
     throw new Error('Choose a valid GeoJSON file or URL');
   }
+}
+
+/** Allow local assets and HTTP(S), never executable URL schemes. */
+export function safeMapUrl(value: unknown): string | undefined {
+  if (typeof value !== 'string') return;
+  if (/^\/(?!\/)/.test(value)) return value;
+  try {
+    const url = new URL(value);
+    if (url.protocol === 'https:' || url.protocol === 'http:') return url.href;
+  } catch { /* Untrusted source properties may not be URLs. */ }
+}
+
+function pair(value: unknown, fallback: [number, number]): [number, number] {
+  return Array.isArray(value) && value.length === 2 && value.every(v => typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= 256)
+    ? [value[0], value[1]] : fallback;
+}
+
+export function normalizeMarkerIcon(value: unknown): MarkerIcon | undefined {
+  if (!value || typeof value !== 'object') return;
+  const icon = value as Partial<MarkerIcon>;
+  const url = safeMapUrl(icon.url);
+  if (!url) return;
+  const size = pair(icon.size, [30, 38]);
+  if (size.some(v => v <= 0)) return;
+  return { url, size, anchor: pair(icon.anchor, [size[0] / 2, size[1]]), popupAnchor: pair(icon.popupAnchor, [0, -size[1] + 4]) };
+}
+
+/** Explicit assignments preserve source colors even when a dataset is filtered. */
+export function featureStyle(style: LayerStyle, feature: GeoJSON.Feature): LayerStyle {
+  const value = String(feature.properties?.[style.categorizeBy] ?? '');
+  const override = Object.hasOwn(style.categoryStyles, value) ? style.categoryStyles[value] : {};
+  const result = normalizeLayerStyle({ ...style, ...override, categoryStyles: {} });
+  if (style.colorProperty) {
+    const raw = feature.properties?.[style.colorProperty];
+    const color = typeof raw === 'string' ? (raw.startsWith('#') ? raw : `#${raw}`) : '';
+    if (HEX_COLOR.test(color)) {
+      if (style.categoryTarget !== 'fill') result.color = color;
+      if (style.categoryTarget !== 'stroke') result.fillColor = color;
+    }
+  }
+  return result;
+}
+
+export function featureIcon(style: LayerStyle, feature: GeoJSON.Feature): MarkerIcon | undefined {
+  const key = String(feature.properties?.[style.iconBy] ?? '');
+  return (Object.hasOwn(style.icons, key) ? normalizeMarkerIcon(style.icons[key]) : undefined) ?? style.icon;
+}
+
+export function normalizePresentation(value: unknown): LayerPresentation {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const raw = value as LayerPresentation;
+  const result: LayerPresentation = {};
+  for (const key of ['key', 'group', 'titleProperty', 'titleSuffix', 'attribution', 'note'] as const) {
+    if (typeof raw[key] === 'string') result[key] = raw[key].slice(0, 2000);
+  }
+  result.sourceUrl = safeMapUrl(raw.sourceUrl);
+  result.renderer = ['events', 'polling', 'precincts'].includes(raw.renderer ?? '') ? raw.renderer : 'fields';
+  result.searchFields = Array.isArray(raw.searchFields) ? raw.searchFields.filter(v => typeof v === 'string').slice(0, 40) : [];
+  result.popupFields = Array.isArray(raw.popupFields) ? raw.popupFields.filter(v => v && typeof v.property === 'string' && typeof v.label === 'string').slice(0, 40).map(v => ({ property: v.property, label: v.label, format: ['url', 'email', 'phone'].includes(v.format ?? '') ? v.format : 'text' })) : [];
+  return result;
 }

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import 'leaflet/dist/leaflet.css';
 import { baseMapLabel } from '../../lib/basemaps';
 import { fetchPublicMaps } from '../../lib/maps';
 
@@ -12,9 +13,19 @@ const maps = await fetchPublicMaps();
 >
   <main id="main">
     <div class="page-intro">
-      <h1>Explore maps</h1>
-      <p>Public maps built from OpenStreetMap base maps and open GeoJSON data.</p>
+      <h1>Find your way around.</h1>
+      <p>A different view of Macon–Bibb. Choose a map, then make it your own with layers.</p>
     </div>
+
+    <section class="map-explorer-intro" aria-label="Map selection">
+      <label class="field"><span>Choose a map</span>
+        <select data-map-choice aria-label="Choose a map">{maps.map(map => <option value={map.id}>{map.name}</option>)}</select>
+      </label>
+      <p data-map-description class="map-description"></p>
+    </section>
+    <div data-map-explorer><p class="status">Loading maps…</p></div>
+    <noscript><p>Enable JavaScript to explore interactive maps. Public map links are listed below.</p></noscript>
+    <h2 class="map-browse-heading">Browse all maps</h2>
 
     <form class="map-search" data-map-search-form role="search">
       <label class="visually-hidden" for="map-search-input">Search maps</label>
@@ -62,8 +73,11 @@ const maps = await fetchPublicMaps();
   </main>
 </Layout>
 
+<script type="application/json" data-map-catalog set:html={JSON.stringify(maps).replaceAll('<', '\\u003c')} is:inline></script>
 <script>
+  import { initMapExplorer } from '../../scripts/map-viewer';
   import { initMapSearch } from '../../scripts/map-search';
 
   initMapSearch();
+  initMapExplorer();
 </script>

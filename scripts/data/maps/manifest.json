@@ -1,0 +1,5116 @@
+{
+  "captured": "2026-10-22",
+  "source": "https://www.civpulse.org/maps/",
+  "maps": [
+    {
+      "id": "318c9a3b-daf9-53af-98b4-8abbfef6bfb8",
+      "slug": "voting",
+      "name": "Polling places & precincts",
+      "description": "Uploaded polling locations and voting precincts, including historical records.",
+      "layers": [
+        "polling-places",
+        "voting-precincts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "downloads": [
+          {
+            "label": "Download poster PDF",
+            "url": "https://files.civpulse.org/maps/Macon-Bibb_23x48_300dpi_Posters.pdf",
+            "detail": "23 × 48 inches · 32 pages · 262 MB"
+          },
+          {
+            "label": "Download letter PDF",
+            "url": "https://files.civpulse.org/maps/Macon-Bibb_Letter_300dpi_All_Maps.pdf",
+            "detail": "8.5 × 11 inches · 33 pages · 48 MB"
+          }
+        ],
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "d54e1467-bb44-51e1-9190-31281686f160",
+      "slug": "commissioners",
+      "name": "Find your commissioner",
+      "description": "Explore the nine commission districts and commissioner details from Macon-Bibb County Government IT GIS.",
+      "layers": [
+        "commission-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "bf4d7bb7-ced3-5a93-9976-a3ed736297d9",
+      "slug": "events",
+      "name": "Community events",
+      "description": "Explore calendar events by venue. Online events and listings without coordinates remain in the calendar.",
+      "layers": [
+        "event-locations"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "3302a685-71b8-5731-ac5c-494ea2edca28",
+      "slug": "recreation",
+      "name": "Macon-Bibb recreation centers",
+      "description": "Explore 11 county recreation, community, senior and boxing centers, with published hours and amenities. Locations are approximate street-address matches.",
+      "layers": [
+        "recreation-centers"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "dd982317-dd93-5fad-bf61-c4e06d56c6e9",
+      "slug": "libraries",
+      "name": "MGRLS libraries",
+      "description": "Find Middle Georgia Regional Library locations, published opening hours and contact details. Book markers are colored by county.",
+      "layers": [
+        "libraries"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "de7a2f72-dee4-51fe-abfe-828b00717d42",
+      "slug": "us-house",
+      "name": "U.S. House districts — Georgia",
+      "description": "All 14 Georgia districts for the 120th Congress and 2026 election cycle, from Census TIGERweb. Full district boundaries extend beyond Bibb County. Search Bibb in the directory to find districts that intersect the county.",
+      "layers": [
+        "us-house-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "f0bf6154-62cc-5ecf-ae71-83f534261498",
+      "slug": "state-house",
+      "name": "Georgia House districts",
+      "description": "All 180 Georgia House districts, using the Census Bureau’s 2026 state legislative boundaries. Search Bibb in the directory for districts intersecting Macon-Bibb.",
+      "layers": [
+        "state-house-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "fd1fe4c7-3fee-5ed8-84c6-4f9e72395c20",
+      "slug": "state-senate",
+      "name": "Georgia Senate districts",
+      "description": "All 56 Georgia Senate districts, using the Census Bureau’s 2026 state legislative boundaries. Search Bibb in the directory for districts intersecting Macon-Bibb.",
+      "layers": [
+        "state-senate-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "c1f44b94-fc84-5b45-b956-fdfbb0df07c2",
+      "slug": "psc",
+      "name": "Georgia PSC residency districts",
+      "description": "Five commissioner residency districts derived from the enacted PSC-2022 county assignments and official Census county GIS. Commissioners must live in their district; voters statewide elect each commissioner. Bibb County is in District 1.",
+      "layers": [
+        "psc-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "dec81f47-6573-5988-8e16-4e6a5084ab64",
+      "slug": "statewide",
+      "name": "U.S. Senate & statewide offices",
+      "description": "Both U.S. senators represent all of Georgia. This state boundary also provides geographic context for statewide offices; there are no separate U.S. Senate districts within the state.",
+      "layers": [
+        "georgia-statewide"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "d3ae53d6-d6ca-55de-b87d-54d3baaab625",
+      "slug": "rapid",
+      "name": "MBCTA Rapid service area",
+      "description": "Published on-demand service zones from MBCTA Rapid’s own map: Downtown, South, East and Northwest Bibb. Both pickup and destination must be inside active service areas.",
+      "layers": [
+        "rapid-service-area"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "674e3350-e6e8-5cb8-bb84-056b6552dc09",
+      "slug": "schools",
+      "name": "Schools by type",
+      "description": "43 district-listed locations, grouped by their official source type. Toggle elementary, middle, high, pre-K, administration and specialty locations independently.",
+      "layers": [
+        "schools-elementary",
+        "schools-middle",
+        "schools-high",
+        "schools-pre-k",
+        "schools-administration",
+        "schools-specialty"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "327fca5f-b212-5a0e-8529-531f6afc877a",
+      "slug": "school-elementary",
+      "name": "Elementary attendance zones",
+      "description": "Published elementary boundaries with elementary school locations. The source labels these zones 2025–26; confirm enrollment assignments with BCSD.",
+      "layers": [
+        "schools-elementary",
+        "school-zones-elementary"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "9975391a-0441-514b-93f1-ff2d6fabeeae",
+      "slug": "school-middle",
+      "name": "Middle attendance zones",
+      "description": "Published middle-school boundaries with middle school locations. The source labels these zones 2025–26; confirm enrollment assignments with BCSD.",
+      "layers": [
+        "schools-middle",
+        "school-zones-middle"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "a31fcc17-d2c6-553d-b36b-39c2957ed54e",
+      "slug": "school-high",
+      "name": "High attendance zones",
+      "description": "Published high-school boundaries with high school locations. The source labels these zones 2025–26; confirm enrollment assignments with BCSD.",
+      "layers": [
+        "schools-high",
+        "school-zones-high"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "a268b231-4ac3-50f6-9e3e-0874e6d1e5e9",
+      "slug": "school-board",
+      "name": "School-board districts",
+      "description": "Six geographic school-board districts from the district-linked GIS map. Member names are those in the saved source.",
+      "layers": [
+        "school-board-districts"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    },
+    {
+      "id": "c698830a-3822-598e-a27f-8ae720442bca",
+      "slug": "transit",
+      "name": "Macon-Bibb transit",
+      "description": "Official scheduled bus routes and stops from the transit authority’s GTFS feed. Route colors follow the authority’s data; this is not a live-arrival map.",
+      "layers": [
+        "transit-routes",
+        "transit-stops"
+      ],
+      "view_options": {
+        "center": [
+          32.844,
+          -83.649
+        ],
+        "zoom": 12,
+        "basemapVisible": true,
+        "fitBounds": true
+      }
+    }
+  ],
+  "layers": [
+    {
+      "id": "3d578769-0e35-5eb5-b830-dc0c6c8d9a2b",
+      "key": "us-house-districts",
+      "name": "U.S. House districts",
+      "description": "14 Georgia districts · 120th Congress / 2026 elections",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#2166ac",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          },
+          "5": {
+            "fillColor": "#e6ab02"
+          },
+          "6": {
+            "fillColor": "#6a51a3"
+          },
+          "7": {
+            "fillColor": "#5a5a5a"
+          },
+          "8": {
+            "fillColor": "#8c510a"
+          },
+          "9": {
+            "fillColor": "#00a6ca"
+          },
+          "10": {
+            "fillColor": "#2166ac"
+          },
+          "11": {
+            "fillColor": "#e66101"
+          },
+          "12": {
+            "fillColor": "#1b9e77"
+          },
+          "13": {
+            "fillColor": "#c51b7d"
+          },
+          "14": {
+            "fillColor": "#e6ab02"
+          }
+        }
+      },
+      "presentation": {
+        "key": "us-house-districts",
+        "group": "State & federal election districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/us-house-districts.geojson",
+        "attribution": "U.S. Census Bureau, TIGERweb"
+      },
+      "file": "us-house-districts.geojson.gz",
+      "features": 14,
+      "sha256": "b0b3df58e1ab7b776fdf507c9375f58e6488cf000d0edc9e03681a46321af62f",
+      "sourceUrl": "https://www.civpulse.org/data/us-house-districts.geojson"
+    },
+    {
+      "id": "bf4ba084-86bb-5e0a-9670-a9dc9883a500",
+      "key": "state-house-districts",
+      "name": "Georgia House districts",
+      "description": "180 districts · 2026 legislative boundaries",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#a15b29",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          },
+          "5": {
+            "fillColor": "#e6ab02"
+          },
+          "6": {
+            "fillColor": "#6a51a3"
+          },
+          "7": {
+            "fillColor": "#5a5a5a"
+          },
+          "8": {
+            "fillColor": "#8c510a"
+          },
+          "9": {
+            "fillColor": "#00a6ca"
+          },
+          "10": {
+            "fillColor": "#2166ac"
+          },
+          "11": {
+            "fillColor": "#e66101"
+          },
+          "12": {
+            "fillColor": "#1b9e77"
+          },
+          "13": {
+            "fillColor": "#c51b7d"
+          },
+          "14": {
+            "fillColor": "#e6ab02"
+          },
+          "15": {
+            "fillColor": "#6a51a3"
+          },
+          "16": {
+            "fillColor": "#5a5a5a"
+          },
+          "17": {
+            "fillColor": "#8c510a"
+          },
+          "18": {
+            "fillColor": "#00a6ca"
+          },
+          "19": {
+            "fillColor": "#2166ac"
+          },
+          "20": {
+            "fillColor": "#e66101"
+          },
+          "21": {
+            "fillColor": "#1b9e77"
+          },
+          "22": {
+            "fillColor": "#c51b7d"
+          },
+          "23": {
+            "fillColor": "#e6ab02"
+          },
+          "24": {
+            "fillColor": "#6a51a3"
+          },
+          "25": {
+            "fillColor": "#5a5a5a"
+          },
+          "26": {
+            "fillColor": "#8c510a"
+          },
+          "27": {
+            "fillColor": "#00a6ca"
+          },
+          "28": {
+            "fillColor": "#2166ac"
+          },
+          "29": {
+            "fillColor": "#e66101"
+          },
+          "30": {
+            "fillColor": "#1b9e77"
+          },
+          "31": {
+            "fillColor": "#c51b7d"
+          },
+          "32": {
+            "fillColor": "#e6ab02"
+          },
+          "33": {
+            "fillColor": "#6a51a3"
+          },
+          "34": {
+            "fillColor": "#5a5a5a"
+          },
+          "35": {
+            "fillColor": "#8c510a"
+          },
+          "36": {
+            "fillColor": "#00a6ca"
+          },
+          "37": {
+            "fillColor": "#2166ac"
+          },
+          "38": {
+            "fillColor": "#e66101"
+          },
+          "39": {
+            "fillColor": "#1b9e77"
+          },
+          "40": {
+            "fillColor": "#c51b7d"
+          },
+          "41": {
+            "fillColor": "#e6ab02"
+          },
+          "42": {
+            "fillColor": "#6a51a3"
+          },
+          "43": {
+            "fillColor": "#5a5a5a"
+          },
+          "44": {
+            "fillColor": "#8c510a"
+          },
+          "45": {
+            "fillColor": "#00a6ca"
+          },
+          "46": {
+            "fillColor": "#2166ac"
+          },
+          "47": {
+            "fillColor": "#e66101"
+          },
+          "48": {
+            "fillColor": "#1b9e77"
+          },
+          "49": {
+            "fillColor": "#c51b7d"
+          },
+          "50": {
+            "fillColor": "#e6ab02"
+          },
+          "51": {
+            "fillColor": "#6a51a3"
+          },
+          "52": {
+            "fillColor": "#5a5a5a"
+          },
+          "53": {
+            "fillColor": "#8c510a"
+          },
+          "54": {
+            "fillColor": "#00a6ca"
+          },
+          "55": {
+            "fillColor": "#2166ac"
+          },
+          "56": {
+            "fillColor": "#e66101"
+          },
+          "57": {
+            "fillColor": "#1b9e77"
+          },
+          "58": {
+            "fillColor": "#c51b7d"
+          },
+          "59": {
+            "fillColor": "#e6ab02"
+          },
+          "60": {
+            "fillColor": "#6a51a3"
+          },
+          "61": {
+            "fillColor": "#5a5a5a"
+          },
+          "62": {
+            "fillColor": "#8c510a"
+          },
+          "63": {
+            "fillColor": "#00a6ca"
+          },
+          "64": {
+            "fillColor": "#2166ac"
+          },
+          "65": {
+            "fillColor": "#e66101"
+          },
+          "66": {
+            "fillColor": "#1b9e77"
+          },
+          "67": {
+            "fillColor": "#c51b7d"
+          },
+          "68": {
+            "fillColor": "#e6ab02"
+          },
+          "69": {
+            "fillColor": "#6a51a3"
+          },
+          "70": {
+            "fillColor": "#5a5a5a"
+          },
+          "71": {
+            "fillColor": "#8c510a"
+          },
+          "72": {
+            "fillColor": "#00a6ca"
+          },
+          "73": {
+            "fillColor": "#2166ac"
+          },
+          "74": {
+            "fillColor": "#e66101"
+          },
+          "75": {
+            "fillColor": "#1b9e77"
+          },
+          "76": {
+            "fillColor": "#c51b7d"
+          },
+          "77": {
+            "fillColor": "#e6ab02"
+          },
+          "78": {
+            "fillColor": "#6a51a3"
+          },
+          "79": {
+            "fillColor": "#5a5a5a"
+          },
+          "80": {
+            "fillColor": "#8c510a"
+          },
+          "81": {
+            "fillColor": "#00a6ca"
+          },
+          "82": {
+            "fillColor": "#2166ac"
+          },
+          "83": {
+            "fillColor": "#e66101"
+          },
+          "84": {
+            "fillColor": "#1b9e77"
+          },
+          "85": {
+            "fillColor": "#c51b7d"
+          },
+          "86": {
+            "fillColor": "#e6ab02"
+          },
+          "87": {
+            "fillColor": "#6a51a3"
+          },
+          "88": {
+            "fillColor": "#5a5a5a"
+          },
+          "89": {
+            "fillColor": "#8c510a"
+          },
+          "90": {
+            "fillColor": "#00a6ca"
+          },
+          "91": {
+            "fillColor": "#2166ac"
+          },
+          "92": {
+            "fillColor": "#e66101"
+          },
+          "93": {
+            "fillColor": "#1b9e77"
+          },
+          "94": {
+            "fillColor": "#c51b7d"
+          },
+          "95": {
+            "fillColor": "#e6ab02"
+          },
+          "96": {
+            "fillColor": "#6a51a3"
+          },
+          "97": {
+            "fillColor": "#5a5a5a"
+          },
+          "98": {
+            "fillColor": "#8c510a"
+          },
+          "99": {
+            "fillColor": "#00a6ca"
+          },
+          "100": {
+            "fillColor": "#2166ac"
+          },
+          "101": {
+            "fillColor": "#e66101"
+          },
+          "102": {
+            "fillColor": "#1b9e77"
+          },
+          "103": {
+            "fillColor": "#c51b7d"
+          },
+          "104": {
+            "fillColor": "#e6ab02"
+          },
+          "105": {
+            "fillColor": "#6a51a3"
+          },
+          "106": {
+            "fillColor": "#5a5a5a"
+          },
+          "107": {
+            "fillColor": "#8c510a"
+          },
+          "108": {
+            "fillColor": "#00a6ca"
+          },
+          "109": {
+            "fillColor": "#2166ac"
+          },
+          "110": {
+            "fillColor": "#e66101"
+          },
+          "111": {
+            "fillColor": "#1b9e77"
+          },
+          "112": {
+            "fillColor": "#c51b7d"
+          },
+          "113": {
+            "fillColor": "#e6ab02"
+          },
+          "114": {
+            "fillColor": "#6a51a3"
+          },
+          "115": {
+            "fillColor": "#5a5a5a"
+          },
+          "116": {
+            "fillColor": "#8c510a"
+          },
+          "117": {
+            "fillColor": "#00a6ca"
+          },
+          "118": {
+            "fillColor": "#2166ac"
+          },
+          "119": {
+            "fillColor": "#e66101"
+          },
+          "120": {
+            "fillColor": "#1b9e77"
+          },
+          "121": {
+            "fillColor": "#c51b7d"
+          },
+          "122": {
+            "fillColor": "#e6ab02"
+          },
+          "123": {
+            "fillColor": "#6a51a3"
+          },
+          "124": {
+            "fillColor": "#5a5a5a"
+          },
+          "125": {
+            "fillColor": "#8c510a"
+          },
+          "126": {
+            "fillColor": "#00a6ca"
+          },
+          "127": {
+            "fillColor": "#2166ac"
+          },
+          "128": {
+            "fillColor": "#e66101"
+          },
+          "129": {
+            "fillColor": "#1b9e77"
+          },
+          "130": {
+            "fillColor": "#c51b7d"
+          },
+          "131": {
+            "fillColor": "#e6ab02"
+          },
+          "132": {
+            "fillColor": "#6a51a3"
+          },
+          "133": {
+            "fillColor": "#5a5a5a"
+          },
+          "134": {
+            "fillColor": "#8c510a"
+          },
+          "135": {
+            "fillColor": "#00a6ca"
+          },
+          "136": {
+            "fillColor": "#2166ac"
+          },
+          "137": {
+            "fillColor": "#e66101"
+          },
+          "138": {
+            "fillColor": "#1b9e77"
+          },
+          "139": {
+            "fillColor": "#c51b7d"
+          },
+          "140": {
+            "fillColor": "#e6ab02"
+          },
+          "141": {
+            "fillColor": "#6a51a3"
+          },
+          "142": {
+            "fillColor": "#5a5a5a"
+          },
+          "143": {
+            "fillColor": "#8c510a"
+          },
+          "144": {
+            "fillColor": "#00a6ca"
+          },
+          "145": {
+            "fillColor": "#2166ac"
+          },
+          "146": {
+            "fillColor": "#e66101"
+          },
+          "147": {
+            "fillColor": "#1b9e77"
+          },
+          "148": {
+            "fillColor": "#c51b7d"
+          },
+          "149": {
+            "fillColor": "#e6ab02"
+          },
+          "150": {
+            "fillColor": "#6a51a3"
+          },
+          "151": {
+            "fillColor": "#5a5a5a"
+          },
+          "152": {
+            "fillColor": "#8c510a"
+          },
+          "153": {
+            "fillColor": "#00a6ca"
+          },
+          "154": {
+            "fillColor": "#2166ac"
+          },
+          "155": {
+            "fillColor": "#e66101"
+          },
+          "156": {
+            "fillColor": "#1b9e77"
+          },
+          "157": {
+            "fillColor": "#c51b7d"
+          },
+          "158": {
+            "fillColor": "#e6ab02"
+          },
+          "159": {
+            "fillColor": "#6a51a3"
+          },
+          "160": {
+            "fillColor": "#5a5a5a"
+          },
+          "161": {
+            "fillColor": "#8c510a"
+          },
+          "162": {
+            "fillColor": "#00a6ca"
+          },
+          "163": {
+            "fillColor": "#2166ac"
+          },
+          "164": {
+            "fillColor": "#e66101"
+          },
+          "165": {
+            "fillColor": "#1b9e77"
+          },
+          "166": {
+            "fillColor": "#c51b7d"
+          },
+          "167": {
+            "fillColor": "#e6ab02"
+          },
+          "168": {
+            "fillColor": "#6a51a3"
+          },
+          "169": {
+            "fillColor": "#5a5a5a"
+          },
+          "170": {
+            "fillColor": "#8c510a"
+          },
+          "171": {
+            "fillColor": "#00a6ca"
+          },
+          "172": {
+            "fillColor": "#2166ac"
+          },
+          "173": {
+            "fillColor": "#e66101"
+          },
+          "174": {
+            "fillColor": "#1b9e77"
+          },
+          "175": {
+            "fillColor": "#c51b7d"
+          },
+          "176": {
+            "fillColor": "#e6ab02"
+          },
+          "177": {
+            "fillColor": "#6a51a3"
+          },
+          "178": {
+            "fillColor": "#5a5a5a"
+          },
+          "179": {
+            "fillColor": "#8c510a"
+          },
+          "180": {
+            "fillColor": "#00a6ca"
+          }
+        }
+      },
+      "presentation": {
+        "key": "state-house-districts",
+        "group": "State & federal election districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/state-house-districts.geojson",
+        "attribution": "U.S. Census Bureau, TIGERweb"
+      },
+      "file": "state-house-districts.geojson.gz",
+      "features": 180,
+      "sha256": "75c8ec9b422a4afca35af1dcae266227feb5cb0995a02bf77773e7abd3441e2b",
+      "sourceUrl": "https://www.civpulse.org/data/state-house-districts.geojson"
+    },
+    {
+      "id": "ae07c325-380b-5ba0-b06b-5060fce09ad0",
+      "key": "state-senate-districts",
+      "name": "Georgia Senate districts",
+      "description": "56 districts · 2026 legislative boundaries",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#287556",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          },
+          "5": {
+            "fillColor": "#e6ab02"
+          },
+          "6": {
+            "fillColor": "#6a51a3"
+          },
+          "7": {
+            "fillColor": "#5a5a5a"
+          },
+          "8": {
+            "fillColor": "#8c510a"
+          },
+          "9": {
+            "fillColor": "#00a6ca"
+          },
+          "10": {
+            "fillColor": "#2166ac"
+          },
+          "11": {
+            "fillColor": "#e66101"
+          },
+          "12": {
+            "fillColor": "#1b9e77"
+          },
+          "13": {
+            "fillColor": "#c51b7d"
+          },
+          "14": {
+            "fillColor": "#e6ab02"
+          },
+          "15": {
+            "fillColor": "#6a51a3"
+          },
+          "16": {
+            "fillColor": "#5a5a5a"
+          },
+          "17": {
+            "fillColor": "#8c510a"
+          },
+          "18": {
+            "fillColor": "#00a6ca"
+          },
+          "19": {
+            "fillColor": "#2166ac"
+          },
+          "20": {
+            "fillColor": "#e66101"
+          },
+          "21": {
+            "fillColor": "#1b9e77"
+          },
+          "22": {
+            "fillColor": "#c51b7d"
+          },
+          "23": {
+            "fillColor": "#e6ab02"
+          },
+          "24": {
+            "fillColor": "#6a51a3"
+          },
+          "25": {
+            "fillColor": "#5a5a5a"
+          },
+          "26": {
+            "fillColor": "#8c510a"
+          },
+          "27": {
+            "fillColor": "#00a6ca"
+          },
+          "28": {
+            "fillColor": "#2166ac"
+          },
+          "29": {
+            "fillColor": "#e66101"
+          },
+          "30": {
+            "fillColor": "#1b9e77"
+          },
+          "31": {
+            "fillColor": "#c51b7d"
+          },
+          "32": {
+            "fillColor": "#e6ab02"
+          },
+          "33": {
+            "fillColor": "#6a51a3"
+          },
+          "34": {
+            "fillColor": "#5a5a5a"
+          },
+          "35": {
+            "fillColor": "#8c510a"
+          },
+          "36": {
+            "fillColor": "#00a6ca"
+          },
+          "37": {
+            "fillColor": "#2166ac"
+          },
+          "38": {
+            "fillColor": "#e66101"
+          },
+          "39": {
+            "fillColor": "#1b9e77"
+          },
+          "40": {
+            "fillColor": "#c51b7d"
+          },
+          "41": {
+            "fillColor": "#e6ab02"
+          },
+          "42": {
+            "fillColor": "#6a51a3"
+          },
+          "43": {
+            "fillColor": "#5a5a5a"
+          },
+          "44": {
+            "fillColor": "#8c510a"
+          },
+          "45": {
+            "fillColor": "#00a6ca"
+          },
+          "46": {
+            "fillColor": "#2166ac"
+          },
+          "47": {
+            "fillColor": "#e66101"
+          },
+          "48": {
+            "fillColor": "#1b9e77"
+          },
+          "49": {
+            "fillColor": "#c51b7d"
+          },
+          "50": {
+            "fillColor": "#e6ab02"
+          },
+          "51": {
+            "fillColor": "#6a51a3"
+          },
+          "52": {
+            "fillColor": "#5a5a5a"
+          },
+          "53": {
+            "fillColor": "#8c510a"
+          },
+          "54": {
+            "fillColor": "#00a6ca"
+          },
+          "55": {
+            "fillColor": "#2166ac"
+          },
+          "56": {
+            "fillColor": "#e66101"
+          }
+        }
+      },
+      "presentation": {
+        "key": "state-senate-districts",
+        "group": "State & federal election districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/state-senate-districts.geojson",
+        "attribution": "U.S. Census Bureau, TIGERweb"
+      },
+      "file": "state-senate-districts.geojson.gz",
+      "features": 56,
+      "sha256": "1e6d0c5853f6e49262049a51c4ca4f11c8325aed3043ae7438ff3b6f2396b594",
+      "sourceUrl": "https://www.civpulse.org/data/state-senate-districts.geojson"
+    },
+    {
+      "id": "a3ba3def-81ef-5a2d-950c-b0573a78d30f",
+      "key": "psc-districts",
+      "name": "PSC residency districts",
+      "description": "5 county-based districts · commissioners elected statewide",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#6a51a3",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          },
+          "5": {
+            "fillColor": "#e6ab02"
+          }
+        }
+      },
+      "presentation": {
+        "key": "psc-districts",
+        "group": "State & federal election districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/psc-districts.geojson",
+        "attribution": "Georgia General Assembly (SB 472 / PSC-2022); U.S. Census Bureau (county GIS)"
+      },
+      "file": "psc-districts.geojson.gz",
+      "features": 5,
+      "sha256": "f62ef11bbb9cdb62b3e2475393e0a4e4d9ddbda0e6e8df7675aed2fcf5428c83",
+      "sourceUrl": "https://www.civpulse.org/data/psc-districts.geojson"
+    },
+    {
+      "id": "e04603f0-2718-54a1-98af-38cc2aec4b39",
+      "key": "georgia-statewide",
+      "name": "Georgia statewide electorate",
+      "description": "U.S. Senate and statewide offices · one statewide boundary",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#82651d",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "Georgia — U.S. Senate / statewide electorate": {
+            "fillColor": "#8c510a"
+          }
+        }
+      },
+      "presentation": {
+        "key": "georgia-statewide",
+        "group": "State & federal election districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/georgia-statewide.geojson",
+        "attribution": "U.S. Census Bureau, TIGERweb"
+      },
+      "file": "georgia-statewide.geojson.gz",
+      "features": 1,
+      "sha256": "1d598f1bc68a8a7d27c2b122206f9d640cf0cf76e69dac2a906582149dcf0b8c",
+      "sourceUrl": "https://www.civpulse.org/data/georgia-statewide.geojson"
+    },
+    {
+      "id": "a7a0ffb5-8eab-5ec8-bd3c-002f26e8cbef",
+      "key": "rapid-service-area",
+      "name": "Rapid Transit service area",
+      "description": "4 published on-demand service zones",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#e6ab02",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          }
+        }
+      },
+      "presentation": {
+        "key": "rapid-service-area",
+        "group": "Transit routes & stops",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/rapid-service-area.geojson",
+        "attribution": "Macon-Bibb County Transit Authority — Rapid Transit"
+      },
+      "file": "rapid-service-area.geojson.gz",
+      "features": 4,
+      "sha256": "a64b4fdc0c803b5ce69d59f148973a81069941265189ea1c8926577dc7c6a8f3",
+      "sourceUrl": "https://www.civpulse.org/data/rapid-service-area.geojson"
+    },
+    {
+      "id": "d5357fef-30b4-5c5e-9431-0280d25ca302",
+      "key": "schools-elementary",
+      "name": "Elementary schools",
+      "description": "22 locations · Elementary School in source",
+      "style": {
+        "color": "#b45a16",
+        "fillColor": "#b45a16",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/elementary.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-elementary",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-elementary.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-elementary.geojson.gz",
+      "features": 22,
+      "sha256": "852b18ef85b7be5f89fe3207ae4c4e7ddf2a69e1fa18482034fdca814ba7d78d",
+      "sourceUrl": "https://www.civpulse.org/data/schools-elementary.geojson"
+    },
+    {
+      "id": "7a2e5fea-95f2-5ded-845c-a6a2b8f9907f",
+      "key": "schools-middle",
+      "name": "Middle schools",
+      "description": "6 locations · Middle School in source",
+      "style": {
+        "color": "#2166ac",
+        "fillColor": "#2166ac",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/middle.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-middle",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-middle.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-middle.geojson.gz",
+      "features": 6,
+      "sha256": "b91de86f730c08cb0025be43a288cf938cc15c472ef3a9c62ab040a9f06a7c53",
+      "sourceUrl": "https://www.civpulse.org/data/schools-middle.geojson"
+    },
+    {
+      "id": "1ea0813f-2d53-5e9e-8298-d4af44ef762f",
+      "key": "schools-high",
+      "name": "High schools",
+      "description": "6 locations · High School in source",
+      "style": {
+        "color": "#6a51a3",
+        "fillColor": "#6a51a3",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/high.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-high",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-high.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-high.geojson.gz",
+      "features": 6,
+      "sha256": "d44c1b50aa2c2bf9a1cebeb82e68e65c929cb58ce3a5ff32f353d923ac31ea5d",
+      "sourceUrl": "https://www.civpulse.org/data/schools-high.geojson"
+    },
+    {
+      "id": "27ec68f9-529f-534c-8ea3-9f1f3c0f62e5",
+      "key": "schools-pre-k",
+      "name": "Pre-K schools",
+      "description": "1 location · Pre-K in source",
+      "style": {
+        "color": "#c51b7d",
+        "fillColor": "#c51b7d",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/pre-k.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-pre-k",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-pre-k.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-pre-k.geojson.gz",
+      "features": 1,
+      "sha256": "febaa75752936425b34f807df07b53c1b19a08390875f81f4509facddf3ba380",
+      "sourceUrl": "https://www.civpulse.org/data/schools-pre-k.geojson"
+    },
+    {
+      "id": "918a6166-d9bf-59bb-b403-d48e55bd40e0",
+      "key": "schools-administration",
+      "name": "Administration & other facilities",
+      "description": "7 locations · Administration in source",
+      "style": {
+        "color": "#5a5a5a",
+        "fillColor": "#5a5a5a",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/administration.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-administration",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-administration.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-administration.geojson.gz",
+      "features": 7,
+      "sha256": "ee0af53e5a8c110ce7e6654a9b1e65f5c99e1fb3c51d8ed511bc28873ceaf82a",
+      "sourceUrl": "https://www.civpulse.org/data/schools-administration.geojson"
+    },
+    {
+      "id": "1d701a1d-4e3a-51b1-837a-b47a4e78b8cf",
+      "key": "schools-specialty",
+      "name": "Specialty schools",
+      "description": "1 location · Specialty School in source",
+      "style": {
+        "color": "#1b9e77",
+        "fillColor": "#1b9e77",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/schools/specialty.svg",
+          "size": [
+            30,
+            38
+          ],
+          "anchor": [
+            15,
+            36
+          ],
+          "popupAnchor": [
+            0,
+            -32
+          ]
+        }
+      },
+      "presentation": {
+        "key": "schools-specialty",
+        "group": "School locations by type",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "schoolType",
+            "label": "Type in source",
+            "format": "text"
+          },
+          {
+            "property": "recordStatus",
+            "label": "Record status",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/schools-specialty.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "schools-specialty.geojson.gz",
+      "features": 1,
+      "sha256": "07d62c0b350d99b918b9f07bed4b1bb882476de60b61ef6bbe9fe9fa506b0617",
+      "sourceUrl": "https://www.civpulse.org/data/schools-specialty.geojson"
+    },
+    {
+      "id": "b9315dc9-de58-5151-b5b4-06e4b60f6ca9",
+      "key": "school-zones-elementary",
+      "name": "Elementary attendance zones",
+      "description": "23 polygons · source school year 2025–26",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#2166ac",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "Bernd Elementary Zone": {
+            "fillColor": "#e66101"
+          },
+          "Bruce Elementary Zone": {
+            "fillColor": "#6a51a3"
+          },
+          "Burdell Elementary Zone": {
+            "fillColor": "#00a6ca"
+          },
+          "Carter Elementary Zone": {
+            "fillColor": "#e6ab02"
+          },
+          "Hartley Elementary Zone": {
+            "fillColor": "#6a51a3"
+          },
+          "Heard Elementary Zone": {
+            "fillColor": "#6a51a3"
+          },
+          "Heritage Elementary Zone": {
+            "fillColor": "#5a5a5a"
+          },
+          "Ingram Elementary Zone West": {
+            "fillColor": "#e6ab02"
+          },
+          "Lane Elementary Zone": {
+            "fillColor": "#00a6ca"
+          },
+          "Porter Elementary Zone": {
+            "fillColor": "#e6ab02"
+          },
+          "Skyview Elementary Zone": {
+            "fillColor": "#e6ab02"
+          },
+          "Springdale Elementary Zone": {
+            "fillColor": "#5a5a5a"
+          },
+          "MLK Jr Elementary Zone": {
+            "fillColor": "#c51b7d"
+          },
+          "Southfield Elementary Zone": {
+            "fillColor": "#e66101"
+          },
+          "Williams Elementary Zone": {
+            "fillColor": "#2166ac"
+          },
+          "Ingram Elementary Zone East": {
+            "fillColor": "#c51b7d"
+          },
+          "Veterans Elementary Zone": {
+            "fillColor": "#6a51a3"
+          },
+          "Union Elementary Zone": {
+            "fillColor": "#8c510a"
+          },
+          "JR Lewis South Temp": {
+            "fillColor": "#c51b7d"
+          },
+          "JR Lewis North Temp": {
+            "fillColor": "#00a6ca"
+          },
+          "JR Lewis West Temp": {
+            "fillColor": "#5a5a5a"
+          },
+          "Taylor South Temp": {
+            "fillColor": "#5a5a5a"
+          },
+          "Taylor North Temp": {
+            "fillColor": "#1b9e77"
+          }
+        }
+      },
+      "presentation": {
+        "key": "school-zones-elementary",
+        "group": "Attendance & school-board districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/school-zones-elementary.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission",
+        "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
+      },
+      "file": "school-zones-elementary.import.geojson.gz",
+      "features": 23,
+      "sha256": "a9feaab4a3765ee50ba826988acd6a953297bd4684a1eb15986c68d14ca08997",
+      "sourceUrl": "https://www.civpulse.org/data/school-zones-elementary.geojson",
+      "originalFile": "school-zones-elementary.geojson.gz",
+      "originalSha256": "235080b70b452d65e2796b29cc30ec004d266b25b8f5e68e552e2fec38fd80bb",
+      "repairs": [
+        {
+          "id": "school-zones-elementary:5",
+          "reason": "Ring Self-intersection[-83.6851205356295 32.8153025000676]"
+        },
+        {
+          "id": "school-zones-elementary:10",
+          "reason": "Ring Self-intersection[-83.7114326322725 32.7532164608388]"
+        }
+      ]
+    },
+    {
+      "id": "6dbddb67-55c3-55ee-a9cf-1cfc428ded63",
+      "key": "school-zones-middle",
+      "name": "Middle attendance zones",
+      "description": "6 polygons · source school year 2025–26",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#1b9e77",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "Appling Middle School Zone": {
+            "fillColor": "#e66101"
+          },
+          "Miller Magnet Middle School Zone": {
+            "fillColor": "#e66101"
+          },
+          "Ballard-Hudson Middle School Zone": {
+            "fillColor": "#1b9e77"
+          },
+          "Rutland Middle School Zone": {
+            "fillColor": "#1b9e77"
+          },
+          "Weaver Middle School Zone": {
+            "fillColor": "#6a51a3"
+          },
+          "Howard Middle School Zone": {
+            "fillColor": "#2166ac"
+          }
+        }
+      },
+      "presentation": {
+        "key": "school-zones-middle",
+        "group": "Attendance & school-board districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/school-zones-middle.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission",
+        "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
+      },
+      "file": "school-zones-middle.geojson.gz",
+      "features": 6,
+      "sha256": "da77f9f398c30e90dd85146609441089ae49042dac4270f46c46b41d7b434506",
+      "sourceUrl": "https://www.civpulse.org/data/school-zones-middle.geojson"
+    },
+    {
+      "id": "1d93b577-259f-5d2c-b099-fbe1eaf36352",
+      "key": "school-zones-high",
+      "name": "High attendance zones",
+      "description": "6 polygons · source school year 2025–26",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#c51b7d",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "Northeast High School Zone": {
+            "fillColor": "#e6ab02"
+          },
+          "Rutland High School Zone": {
+            "fillColor": "#00a6ca"
+          },
+          "Southwest High School Zone": {
+            "fillColor": "#5a5a5a"
+          },
+          "Howard High School Zone": {
+            "fillColor": "#2166ac"
+          },
+          "Westside High School Zone": {
+            "fillColor": "#1b9e77"
+          },
+          "Central High School Zone": {
+            "fillColor": "#00a6ca"
+          }
+        }
+      },
+      "presentation": {
+        "key": "school-zones-high",
+        "group": "Attendance & school-board districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/school-zones-high.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission",
+        "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
+      },
+      "file": "school-zones-high.geojson.gz",
+      "features": 6,
+      "sha256": "e6c363d0e3e788116033cc222654a90029d02151685cfabbe82a5042100b2fde",
+      "sourceUrl": "https://www.civpulse.org/data/school-zones-high.geojson"
+    },
+    {
+      "id": "4a7f6fd5-e497-52c0-a6ce-5c76826bb376",
+      "key": "school-board-districts",
+      "name": "School-board districts",
+      "description": "6 geographic districts and source member names",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#6a51a3",
+        "weight": 1.5,
+        "fillOpacity": 0.35,
+        "opacity": 0.85,
+        "categorizeBy": "_sourceCategory",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#e6ab02"
+          },
+          "2": {
+            "fillColor": "#6a51a3"
+          },
+          "3": {
+            "fillColor": "#5a5a5a"
+          },
+          "4": {
+            "fillColor": "#8c510a"
+          },
+          "5": {
+            "fillColor": "#00a6ca"
+          },
+          "6": {
+            "fillColor": "#2166ac"
+          }
+        }
+      },
+      "presentation": {
+        "key": "school-board-districts",
+        "group": "Attendance & school-board districts",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "counties",
+            "label": "Counties",
+            "format": "text"
+          },
+          {
+            "property": "BoardMember",
+            "label": "Board member in source",
+            "format": "text"
+          },
+          {
+            "property": "originalDescription",
+            "label": "Original map annotation",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/school-board-districts.geojson",
+        "attribution": "Bibb County School District; Middle Georgia Regional Commission"
+      },
+      "file": "school-board-districts.geojson.gz",
+      "features": 6,
+      "sha256": "fee8e9591bb657873e33df62b6a614d83097345c8b64b70ebc6c474877e9bbc8",
+      "sourceUrl": "https://www.civpulse.org/data/school-board-districts.geojson"
+    },
+    {
+      "id": "d0f9eb2a-e029-5611-ac8c-dac8e5382567",
+      "key": "transit-routes",
+      "name": "Transit routes",
+      "description": "10 routes with 29 path variants · scheduled service",
+      "style": {
+        "color": "#26726b",
+        "fillColor": "#26726b",
+        "weight": 4,
+        "fillOpacity": 0.13,
+        "opacity": 0.9,
+        "colorProperty": "route_color",
+        "categoryTarget": "stroke"
+      },
+      "presentation": {
+        "key": "transit-routes",
+        "group": "Transit routes & stops",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "variantCount",
+            "label": "Route-path variants",
+            "format": "text"
+          },
+          {
+            "property": "directions",
+            "label": "Directions",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/transit-routes.geojson",
+        "attribution": "Macon-Bibb County Transit Authority",
+        "note": "Schedule snapshot: June 7, 2026 – October 31, 2026. No live arrivals. Confirm current service with MBCTA."
+      },
+      "file": "transit-routes.geojson.gz",
+      "features": 10,
+      "sha256": "1ccaef8975dd4f09c575b68b765936fe9015351c0877a0c1a27fb3a423895d8b",
+      "sourceUrl": "https://www.civpulse.org/data/transit-routes.geojson"
+    },
+    {
+      "id": "7c8b61d2-5e8b-5bd3-91ba-2f92eed8dbc6",
+      "key": "transit-stops",
+      "name": "Transit stops",
+      "description": "854 stops with scheduled route connections",
+      "style": {
+        "color": "#173e34",
+        "fillColor": "#fffcf6",
+        "weight": 1,
+        "fillOpacity": 1,
+        "radius": 4
+      },
+      "presentation": {
+        "key": "transit-stops",
+        "group": "Transit routes & stops",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "stop_code",
+            "label": "Stop code",
+            "format": "text"
+          },
+          {
+            "property": "routeNumbers",
+            "label": "Scheduled routes",
+            "format": "text"
+          },
+          {
+            "property": "routeNames",
+            "label": "Routes",
+            "format": "text"
+          },
+          {
+            "property": "wheelchair_boarding",
+            "label": "Wheelchair boarding in source",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/transit-stops.geojson",
+        "attribution": "Macon-Bibb County Transit Authority",
+        "note": "Schedule snapshot: June 7, 2026 – October 31, 2026. No live arrivals. Confirm current service with MBCTA."
+      },
+      "file": "transit-stops.geojson.gz",
+      "features": 854,
+      "sha256": "fe07e52cd330b5c3720581f7649be88187c5e1ed5cdd7394b6169fa6b616426d",
+      "sourceUrl": "https://www.civpulse.org/data/transit-stops.geojson"
+    },
+    {
+      "id": "a5d90eb6-f31f-5c20-933e-5adc04a04ea0",
+      "key": "recreation-centers",
+      "name": "Recreation centers",
+      "description": "11 county centers with published hours and amenities",
+      "style": {
+        "color": "#26726b",
+        "fillColor": "#26726b",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "icon": {
+          "url": "/maps/icons/recreation/center.svg",
+          "size": [
+            36,
+            45
+          ],
+          "anchor": [
+            18,
+            43
+          ],
+          "popupAnchor": [
+            0,
+            -39
+          ]
+        }
+      },
+      "presentation": {
+        "key": "recreation-centers",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "hours",
+            "label": "Published hours",
+            "format": "text"
+          },
+          {
+            "property": "amenities",
+            "label": "Amenities",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/recreation-centers.geojson",
+        "attribution": "Macon-Bibb County Government Recreation Department",
+        "note": "Published hours are a saved snapshot. Confirm hours before visiting. Map points are approximate street-address locations."
+      },
+      "file": "recreation-centers.geojson.gz",
+      "features": 11,
+      "sha256": "af68f4c2022c8700797b16cd31133bd255b7d023c83c52d4f4922aadb22c77ac",
+      "sourceUrl": "https://www.civpulse.org/data/recreation-centers.geojson"
+    },
+    {
+      "id": "86019056-a535-5229-8c03-f15bc854b856",
+      "key": "libraries",
+      "name": "MGRLS libraries",
+      "description": "18 library and book-locker locations in seven counties",
+      "style": {
+        "color": "#2166ac",
+        "fillColor": "#2166ac",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "iconBy": "county",
+        "icons": {
+          "Baldwin County": {
+            "url": "/maps/icons/libraries/library-baldwin.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Bibb County": {
+            "url": "/maps/icons/libraries/library-bibb.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Crawford County": {
+            "url": "/maps/icons/libraries/library-crawford.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Jones County": {
+            "url": "/maps/icons/libraries/library-jones.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Macon County": {
+            "url": "/maps/icons/libraries/library-macon.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Twiggs County": {
+            "url": "/maps/icons/libraries/library-twiggs.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          },
+          "Wilkinson County": {
+            "url": "/maps/icons/libraries/library-wilkinson.svg",
+            "size": [
+              36,
+              44
+            ],
+            "anchor": [
+              18,
+              42
+            ],
+            "popupAnchor": [
+              0,
+              -38
+            ]
+          }
+        }
+      },
+      "presentation": {
+        "key": "libraries",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "county",
+            "label": "County",
+            "format": "text"
+          },
+          {
+            "property": "kind",
+            "label": "Location type",
+            "format": "text"
+          },
+          {
+            "property": "phone",
+            "label": "Phone",
+            "format": "phone"
+          },
+          {
+            "property": "hours",
+            "label": "Published hours",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/libraries.geojson",
+        "attribution": "Macon-Bibb County Government IT GIS",
+        "note": "MGRLS hours checked October 15, 2026. Confirm holiday hours before visiting. Library WOW is a mobile service without a fixed marker."
+      },
+      "file": "libraries.geojson.gz",
+      "features": 18,
+      "sha256": "beb5b6c73c01e3c75832f02b9239d28fa25faaaefa5a41151c99b74be660f475",
+      "sourceUrl": "https://www.civpulse.org/data/libraries.geojson"
+    },
+    {
+      "id": "9b2fe500-3f07-5f7b-ae44-65c0954ddcee",
+      "key": "commission-districts",
+      "name": "Commission districts",
+      "description": "Nine county districts and commissioner contact details",
+      "style": {
+        "color": "#374151",
+        "fillColor": "#4d6a8c",
+        "weight": 1.8,
+        "fillOpacity": 0.38,
+        "opacity": 0.9,
+        "categorizeBy": "commdist",
+        "categoryTarget": "fill",
+        "categoryStyles": {
+          "1": {
+            "fillColor": "#2166ac"
+          },
+          "2": {
+            "fillColor": "#e66101"
+          },
+          "3": {
+            "fillColor": "#1b9e77"
+          },
+          "4": {
+            "fillColor": "#c51b7d"
+          },
+          "5": {
+            "fillColor": "#e6ab02"
+          },
+          "6": {
+            "fillColor": "#6a51a3"
+          },
+          "7": {
+            "fillColor": "#5a5a5a"
+          },
+          "8": {
+            "fillColor": "#8c510a"
+          },
+          "9": {
+            "fillColor": "#00a6ca"
+          }
+        }
+      },
+      "presentation": {
+        "key": "commission-districts",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "repname1",
+            "label": "Commissioner",
+            "format": "text"
+          },
+          {
+            "property": "phone",
+            "label": "Phone",
+            "format": "phone"
+          },
+          {
+            "property": "email",
+            "label": "Email",
+            "format": "email"
+          },
+          {
+            "property": "party1",
+            "label": "Designation in source",
+            "format": "text"
+          }
+        ],
+        "renderer": "fields",
+        "sourceUrl": "https://www.civpulse.org/data/commission_districts.geojson",
+        "attribution": "Macon-Bibb County Government IT GIS",
+        "titleSuffix": "repname1",
+        "note": "Macon-Bibb County Government IT GIS · October 15, 2026 snapshot. Confirm current contact details with the county."
+      },
+      "file": "commission-districts.geojson.gz",
+      "features": 9,
+      "sha256": "76ee330bc6fba9ac934e238a94e7d841ea2a36b0150d7fe631a7bab232cfd168",
+      "sourceUrl": "https://www.civpulse.org/data/commission_districts.geojson"
+    },
+    {
+      "id": "09cb594e-bc60-56e6-a66d-bb3fa8884eb3",
+      "key": "event-locations",
+      "name": "Calendar events",
+      "description": "Events grouped at their mapped venues",
+      "style": {
+        "color": "#fffcf6",
+        "fillColor": "#8a4565",
+        "weight": 2,
+        "fillOpacity": 1,
+        "radius": 8,
+        "iconBy": "_markerKey",
+        "icons": {
+          "0": {
+            "url": "/maps/icons/events/venue-0.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "1": {
+            "url": "/maps/icons/events/venue-1.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "2": {
+            "url": "/maps/icons/events/venue-2.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "3": {
+            "url": "/maps/icons/events/venue-3.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "4": {
+            "url": "/maps/icons/events/venue-4.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "5": {
+            "url": "/maps/icons/events/venue-5.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "6": {
+            "url": "/maps/icons/events/venue-6.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "7": {
+            "url": "/maps/icons/events/venue-7.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "8": {
+            "url": "/maps/icons/events/venue-8.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "9": {
+            "url": "/maps/icons/events/venue-9.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "10": {
+            "url": "/maps/icons/events/venue-10.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "11": {
+            "url": "/maps/icons/events/venue-11.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "12": {
+            "url": "/maps/icons/events/venue-12.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "13": {
+            "url": "/maps/icons/events/venue-13.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "14": {
+            "url": "/maps/icons/events/venue-14.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "15": {
+            "url": "/maps/icons/events/venue-15.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "16": {
+            "url": "/maps/icons/events/venue-16.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "17": {
+            "url": "/maps/icons/events/venue-17.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "18": {
+            "url": "/maps/icons/events/venue-18.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "19": {
+            "url": "/maps/icons/events/venue-19.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "20": {
+            "url": "/maps/icons/events/venue-20.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "21": {
+            "url": "/maps/icons/events/venue-21.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "22": {
+            "url": "/maps/icons/events/venue-22.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "23": {
+            "url": "/maps/icons/events/venue-23.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "24": {
+            "url": "/maps/icons/events/venue-24.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "25": {
+            "url": "/maps/icons/events/venue-25.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "26": {
+            "url": "/maps/icons/events/venue-26.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "27": {
+            "url": "/maps/icons/events/venue-27.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "28": {
+            "url": "/maps/icons/events/venue-28.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "29": {
+            "url": "/maps/icons/events/venue-29.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "30": {
+            "url": "/maps/icons/events/venue-30.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "31": {
+            "url": "/maps/icons/events/venue-31.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "32": {
+            "url": "/maps/icons/events/venue-32.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          },
+          "33": {
+            "url": "/maps/icons/events/venue-33.svg",
+            "size": [
+              40,
+              49
+            ],
+            "anchor": [
+              20,
+              47
+            ],
+            "popupAnchor": [
+              0,
+              -43
+            ]
+          }
+        }
+      },
+      "presentation": {
+        "key": "event-locations",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          }
+        ],
+        "renderer": "events",
+        "sourceUrl": "https://www.civpulse.org/data/calendar-events.geojson",
+        "attribution": "Saved public community calendars",
+        "note": "Events grouped at approximate venue locations. Confirm the meeting point with the organizer."
+      },
+      "file": "event-locations.geojson.gz",
+      "features": 34,
+      "sha256": "da0805255d2ce671a723d4762cf42d8dfc4ae4e0eeb274eaa98b67bf725d09c7",
+      "sourceUrl": "https://www.civpulse.org/data/calendar-events.geojson"
+    },
+    {
+      "id": "83ca0253-930a-5e9e-87bf-c846f0287c0d",
+      "key": "polling-places",
+      "name": "Polling places",
+      "description": "Uploaded locations and record status",
+      "style": {
+        "color": "#ae583b",
+        "fillColor": "#ae583b",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "categorizeBy": "pollingid",
+        "categoryStyles": {
+          "EM1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 1
+          },
+          "EM2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "EM3": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "EM4": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "EM5": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "GF1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "GF2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "GF3": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "GF4": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "GF5": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "HA1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 1
+          },
+          "HA2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#4d4d4d",
+            "fillOpacity": 1
+          },
+          "HA3": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "HA4": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "HO1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 1
+          },
+          "HO2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "HO3": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "HO4": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "HO5": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "HO6": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "HO7": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "RU1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "RU2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "VV1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "VV2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 1
+          },
+          "VV3": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 1
+          },
+          "VV4": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "VV5": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "VV6": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#e66101",
+            "fillOpacity": 1
+          },
+          "WA1": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#2166ac",
+            "fillOpacity": 1
+          },
+          "WA2": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 1
+          },
+          "EarlyVote": {
+            "color": "#ffffff",
+            "weight": 1.8897637795275593,
+            "opacity": 1,
+            "fillColor": "#f5a400",
+            "fillOpacity": 1
+          }
+        },
+        "iconBy": "pollingid",
+        "icons": {
+          "EM1": {
+            "url": "/maps/icons/polling/ballot-c51b7d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "EM2": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "EM3": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "EM4": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "EM5": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "GF1": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "GF2": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "GF3": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "GF4": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "GF5": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HA1": {
+            "url": "/maps/icons/polling/ballot-c51b7d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HA2": {
+            "url": "/maps/icons/polling/ballot-4d4d4d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HA3": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HA4": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO1": {
+            "url": "/maps/icons/polling/ballot-c51b7d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO2": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO3": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO4": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO5": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO6": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "HO7": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "RU1": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "RU2": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV1": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV2": {
+            "url": "/maps/icons/polling/ballot-c51b7d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV3": {
+            "url": "/maps/icons/polling/ballot-c51b7d.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV4": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV5": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "VV6": {
+            "url": "/maps/icons/polling/ballot-e66101.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "WA1": {
+            "url": "/maps/icons/polling/ballot-2166ac.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "WA2": {
+            "url": "/maps/icons/polling/ballot-1b9e77.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          },
+          "EarlyVote": {
+            "url": "/maps/icons/polling/ballot-f5a400.svg",
+            "size": [
+              26.45669291338583,
+              29.76377952755906
+            ],
+            "anchor": [
+              13.228346456692915,
+              29.76377952755906
+            ],
+            "popupAnchor": [
+              0,
+              -25.76377952755906
+            ]
+          }
+        }
+      },
+      "presentation": {
+        "key": "polling-places",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          },
+          {
+            "property": "active",
+            "label": "Record activity",
+            "format": "text"
+          },
+          {
+            "property": "operhours",
+            "label": "Hours in dataset",
+            "format": "text"
+          },
+          {
+            "property": "handicap",
+            "label": "Accessibility in dataset",
+            "format": "text"
+          },
+          {
+            "property": "comments",
+            "label": "Comments",
+            "format": "text"
+          }
+        ],
+        "renderer": "polling",
+        "sourceUrl": "https://www.civpulse.org/data/polling_places.geojson",
+        "attribution": "Macon-Bibb County Government IT GIS",
+        "titleSuffix": "pollingid"
+      },
+      "file": "polling-places.geojson.gz",
+      "features": 34,
+      "sha256": "2a6a873efc5fd0442a590939eca86027b1783011ca72513aa1b6fecbc4e2e25e",
+      "sourceUrl": "https://www.civpulse.org/data/polling_places.geojson"
+    },
+    {
+      "id": "507659a2-299d-544c-a62f-d52922717732",
+      "key": "voting-precincts",
+      "name": "Voting precincts",
+      "description": "Uploaded precinct boundaries",
+      "style": {
+        "color": "#3d704c",
+        "fillColor": "#3d704c",
+        "weight": 2,
+        "fillOpacity": 0.13,
+        "categorizeBy": "precinctid",
+        "categoryStyles": {
+          "EM1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "EM2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "EM3": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "EM4": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "EM5": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "GF1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "GF2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "GF3": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "GF4": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "GF5": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HA1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HA2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#4d4d4d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HA3": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HA4": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO3": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO4": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO5": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO6": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "HO7": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "RU1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "RU2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV3": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#c51b7d",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV4": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV5": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "VV6": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#e66101",
+            "fillOpacity": 0.34901960784313724
+          },
+          "WA1": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#2166ac",
+            "fillOpacity": 0.34901960784313724
+          },
+          "WA2": {
+            "color": "#374151",
+            "weight": 0.8314960629921261,
+            "opacity": 0.7254901960784313,
+            "fillColor": "#1b9e77",
+            "fillOpacity": 0.34901960784313724
+          }
+        }
+      },
+      "presentation": {
+        "key": "voting-precincts",
+        "group": "Community & elections",
+        "titleProperty": "name",
+        "searchFields": [
+          "name",
+          "fulladd",
+          "county",
+          "BoardMember",
+          "stop_code",
+          "routeNumbers",
+          "routeNames",
+          "amenities",
+          "active",
+          "events",
+          "pollingid",
+          "precinctid"
+        ],
+        "popupFields": [
+          {
+            "property": "fulladd",
+            "label": "Address",
+            "format": "text"
+          },
+          {
+            "property": "sourceChecked",
+            "label": "Source checked",
+            "format": "text"
+          },
+          {
+            "property": "sourceSchoolYear",
+            "label": "Source school year",
+            "format": "text"
+          },
+          {
+            "property": "boundaryVintage",
+            "label": "Boundary version",
+            "format": "text"
+          },
+          {
+            "property": "planLabel",
+            "label": "Plan",
+            "format": "text"
+          },
+          {
+            "property": "electionNote",
+            "label": "Election note",
+            "format": "text"
+          },
+          {
+            "property": "geometryNote",
+            "label": "Geometry note",
+            "format": "text"
+          }
+        ],
+        "renderer": "precincts",
+        "sourceUrl": "https://www.civpulse.org/data/voting_precincts.geojson",
+        "attribution": "Macon-Bibb County Government IT GIS",
+        "titleSuffix": "precinctid"
+      },
+      "file": "voting-precincts.geojson.gz",
+      "features": 31,
+      "sha256": "a904c8b56d0615518e796abbeabd14fb832d69c54e393e263e701e85afa082c9",
+      "sourceUrl": "https://www.civpulse.org/data/voting_precincts.geojson"
+    }
+  ]
+}

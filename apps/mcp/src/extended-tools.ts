@@ -69,27 +69,27 @@ export function registerExtendedTools(server: McpServer, supabase: SupabaseClien
 
   const map = {
     slug, name: z.string().min(1).max(120), description: z.string().max(2000).nullish(),
-    base_map: z.enum(['osm', 'osm-humanitarian', 'osm-topo']).optional(), visibility: visibility.optional(), organization_id: uuid.nullish(),
+    base_map: z.enum(['osm', 'osm-humanitarian', 'osm-topo']).optional(), visibility: visibility.optional(), organization_id: uuid.nullish(), view_options: object.optional(),
   };
-  create('map', 'maps', 'Create a map (admin only). Add reusable layers using create_map_layer.', map, 'id,slug,name,visibility,base_map,organization_id');
-  update('map', 'maps', 'Partially update a map (admin only). Layer links are managed separately.', map, 'id,slug,name,visibility,base_map,organization_id');
+  create('map', 'maps', 'Create a map (admin only). Add reusable layers using create_map_layer.', map, 'id,slug,name,visibility,base_map,organization_id,view_options');
+  update('map', 'maps', 'Partially update a map (admin only). Layer links are managed separately.', map, 'id,slug,name,visibility,base_map,organization_id,view_options');
   remove('map', 'maps', 'Delete a map and its layer links, preserving reusable layers (admin only).');
   const layer = {
     name: z.string().min(1).max(120), description: z.string().max(2000).nullish(), source_url: url.max(1000),
-    visibility: visibility.optional(), style: object.optional(),
+    visibility: visibility.optional(), style: object.optional(), presentation: object.optional(),
   };
-  create('layer', 'layers', 'Create a remote GeoJSON URL layer (admin only). Use save_postgis_layer for stored geometry.', layer, 'id,name,source_type,source_url,visibility,style');
+  create('layer', 'layers', 'Create a remote GeoJSON URL layer (admin only). Use save_postgis_layer for stored geometry.', layer, 'id,name,source_type,source_url,visibility,style,presentation');
   update('layer', 'layers', 'Partially update layer metadata (admin only). This does not replace stored geometry or change its source type.',
-    { ...layer, source_url: layer.source_url.nullish() }, 'id,name,source_type,source_url,visibility,style');
+    { ...layer, source_url: layer.source_url.nullish() }, 'id,name,source_type,source_url,visibility,style,presentation');
   remove('layer', 'layers', 'Delete a reusable layer, its stored features and all map links (admin only).');
   register('save_postgis_layer', 'Create or update a stored PostGIS layer atomically (admin only). Creation requires name and a GeoJSON FeatureCollection. Use id to update; omitted metadata is preserved. Omit geojson on update to keep features; otherwise the entire dataset is replaced. Limit: 10 MB / 10,000 features.',
-    { id: uuid.optional(), name: layer.name.optional(), description: layer.description, visibility: visibility.optional(), style: object.optional(), geojson: object.optional() },
+    { id: uuid.optional(), name: layer.name.optional(), description: layer.description, visibility: visibility.optional(), style: object.optional(), presentation: object.optional(), geojson: object.optional() },
     async ({ geojson, ...metadata }) => ({ id: await rpc('mcp_save_postgis_layer', { p_layer: defined(metadata), p_geojson: geojson ?? null }) }),
     { write: true });
-  relationship('map_layer', 'map_layers', ['map_id', 'layer_id'], { position: z.number().int().optional(), style: object.nullish() });
+  relationship('map_layer', 'map_layers', ['map_id', 'layer_id'], { position: z.number().int().optional(), style: object.nullish(), visible_by_default: z.boolean().optional() });
   register('list_map_layer_links', 'Get editable positions and style overrides for map-layer links (admin only).', { map_id: uuid }, async ({ map_id }) => {
     await ensureAdmin();
-    const { data, error } = await supabase.from('map_layers').select('map_id,layer_id,position,style').eq('map_id', map_id).order('position').order('layer_id');
+    const { data, error } = await supabase.from('map_layers').select('map_id,layer_id,position,style,visible_by_default').eq('map_id', map_id).order('position').order('layer_id');
     if (error) throw new Error(error.message);
     return data;
   });

@@ -1913,6 +1913,13 @@
               "type": "null"
             }
           ]
+        },
+        "view_options": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
         }
       },
       "required": [
@@ -1987,6 +1994,13 @@
               "type": "null"
             }
           ]
+        },
+        "view_options": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
         }
       },
       "required": [
@@ -2066,6 +2080,13 @@
             "type": "string"
           },
           "additionalProperties": {}
+        },
+        "presentation": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
         }
       },
       "required": [
@@ -2129,6 +2150,13 @@
           ]
         },
         "style": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        },
+        "presentation": {
           "type": "object",
           "propertyNames": {
             "type": "string"
@@ -2214,6 +2242,13 @@
           },
           "additionalProperties": {}
         },
+        "presentation": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        },
         "geojson": {
           "type": "object",
           "propertyNames": {
@@ -2265,6 +2300,9 @@
               "type": "null"
             }
           ]
+        },
+        "visible_by_default": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -2314,6 +2352,9 @@
               "type": "null"
             }
           ]
+        },
+        "visible_by_default": {
+          "type": "boolean"
         }
       },
       "required": [

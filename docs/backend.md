@@ -626,3 +626,17 @@ the existing geometry constraints. Partial feature edits enforce the same
 10 MB / 10,000-feature layer limits as imports. Invalid associations or geometry
 roll back the entire operation. Direct resource/link writes still use RLS.
 See [mcp.md](./mcp.md) for tool coverage and OAuth verification.
+
+### Recreated map explorer and presentation
+
+The map directory also hosts the interactive preset explorer. Maps carry
+`view_options`, layers carry `presentation`, and each map-layer link carries
+`visible_by_default`. `get_map_layers` returns these settings through the same
+visibility gate and now merges partial map styles over layer defaults using
+JSON object concatenation. The new admin-only `save_map` saves metadata and
+ordered links atomically. Existing map/layer RLS policies remain in force.
+
+The shared public/admin renderer supports exact category styles, independent
+fill/outline colors, GTFS property colors, original marker assets, safe popups,
+and a paginated place directory. See [maps.md](./maps.md) for the schemas,
+reproducible import commands, snapshot provenance and geometry repair notes.

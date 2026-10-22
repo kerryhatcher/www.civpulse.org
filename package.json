@@ -34,6 +34,7 @@
     "media:deploy": "bun run --cwd apps/media deploy"
   },
   "devDependencies": {
-    "supabase": "^2.121.0"
+    "supabase": "^2.121.0",
+    "wrangler": "^4.152.0"
   }
 }

@@ -1,12 +1,6 @@
 import L from 'leaflet';
-import {
-  buildCategoryColor,
-  fetchLayerGeoJSON,
-  layerFeatureMarkerOptions,
-  layerFeaturePathOptions,
-  resolveLayerStyle,
-  type LayerConfig,
-} from '../lib/layers';
+import { fetchLayerGeoJSON, type LayerConfig } from '../lib/layers';
+import { createGeoJSONLayer } from '../lib/map-rendering';
 import type { MapConfig } from '../lib/maps';
 import { getSupabase } from '../lib/supabase';
 
@@ -33,41 +27,35 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
 
   const group = L.layerGroup().addTo(map);
   const bounds = L.latLngBounds([]);
+  const fitPreview = (): void => {
+    if (bounds.isValid()) map.fitBounds(bounds, { padding: [16, 16], maxZoom: 14 });
+  };
+  map.on('resize', fitPreview);
   setTimeout(() => map.invalidateSize(), 0);
 
   void getSupabase()
     .rpc('get_map_layers', { p_map_id: config.id })
-    .then(({ data }) => {
-      const layers = (data ?? []) as unknown as LayerConfig[];
-      for (const layer of layers) {
-        void fetchLayerGeoJSON(layer, config.id)
+    .then(async ({ data }) => {
+      const layers = ((data ?? []) as unknown as LayerConfig[])
+        .filter((layer) => layer.visible_by_default !== false);
+      // Assign panes before downloading so stacking follows the map's order.
+      await Promise.all(layers.map(async (layer, index) => {
+        const pane = `preview-${index}`;
+        map.createPane(pane).style.zIndex = String(400 + index * 2);
+        await fetchLayerGeoJSON(layer, config.id)
           .then((geojson: GeoJSON.GeoJsonObject) => {
-            const style = resolveLayerStyle(layer.style);
-            const colorFor = style.categorizeBy
-              ? buildCategoryColor(geojson, style.categorizeBy, style.palette)
-              : undefined;
-            const rendered = L.geoJSON(geojson, {
-              style: (feature) => ({
-                ...layerFeaturePathOptions(style, feature, colorFor),
-                interactive: false,
-              }),
-              pointToLayer: (feature, latlng) =>
-                L.circleMarker(latlng, {
-                  ...layerFeatureMarkerOptions(style, feature, colorFor),
-                  interactive: false,
-                }),
-            });
+            const rendered = createGeoJSONLayer(layer, geojson, { pane, interactive: false });
             rendered.addTo(group);
             const layerBounds = rendered.getBounds();
             if (layerBounds.isValid()) {
               bounds.extend(layerBounds);
-              map.fitBounds(bounds, { padding: [16, 16], maxZoom: 14 });
             }
           })
           .catch(() => {
             /* ignore layers that fail to load in the preview */
           });
-      }
+      }));
+      fitPreview();
     });
 }
 

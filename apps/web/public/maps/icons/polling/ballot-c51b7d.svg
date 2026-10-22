@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="72" viewBox="0 0 64 72">
+  <title>Polling place</title>
+  <desc>A map pin with a checked ballot and ballot box. QGIS supports configurable fill, outline, and outline width.</desc>
+  <path d="M32 3C17.1 3 5 15.1 5 30c0 18.2 27 39 27 39s27-20.8 27-39C59 15.1 46.9 3 32 3Z"
+        fill="#c51b7d" stroke="#ffffff"
+        stroke-width="0.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 29h-5l-3 7v12h38V36l-3-7h-5M13 36h38"/>
+    <path d="M22 32h20"/>
+    <path d="m25 13 17 4-4 17-17-4Z"/>
+    <path d="m26 23 3 4 7-6"/>
+  </g>
+</svg>

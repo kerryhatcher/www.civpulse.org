@@ -1,3 +1,4 @@
+import { createMapSettingsEditor } from '../lib/map-settings-editor';
 import { applySwatch, createStyleEditor } from '../lib/layer-style-editor';
 import {
   DEFAULT_LAYER_STYLE,
@@ -81,6 +82,9 @@ export async function initLayerAdmin(): Promise<void> {
   const heading = document.querySelector<HTMLElement>('[data-layer-form-title]');
   const styleHost = formEl.querySelector<HTMLElement>('[data-layer-style-editor]');
 
+  const presentationEditor = createMapSettingsEditor('Layer presentation', 'Configure legend group, titleProperty, searchFields, popupFields, renderer, attribution, sourceUrl, and note. See docs/maps.md.');
+  presentationEditor.set({});
+  formEl.insertBefore(presentationEditor.element, formEl.querySelector('.org-form-actions'));
   const styleEditor = createStyleEditor({ label: 'Default style' });
   if (styleHost) styleHost.replaceChildren(styleEditor.element);
   else formEl.append(styleEditor.element);
@@ -134,6 +138,7 @@ export async function initLayerAdmin(): Promise<void> {
     typeField.disabled = false;
     syncSourceType();
     styleEditor.set(DEFAULT_LAYER_STYLE);
+    presentationEditor.set({});
     if (idField) idField.value = '';
     if (cancelButton) cancelButton.hidden = true;
     if (heading) heading.textContent = 'Add a layer';
@@ -147,6 +152,7 @@ export async function initLayerAdmin(): Promise<void> {
     typeField.disabled = true;
     syncSourceType();
     idField.value = layer.id;
+    presentationEditor.set(layer.presentation);
     if (nameField) nameField.value = layer.name;
     if (sourceField) sourceField.value = layer.source_url ?? '';
     if (visibilityField) visibilityField.value = layer.visibility;
@@ -207,7 +213,7 @@ export async function initLayerAdmin(): Promise<void> {
   async function loadLayers(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility, style, source_type')
+      .select('id, name, description, source_url, visibility, style, source_type, presentation')
       .order('name');
 
     if (error) {
@@ -276,6 +282,7 @@ export async function initLayerAdmin(): Promise<void> {
         source_url: sourceUrl,
         visibility: isVisibility(visibilityValue) ? visibilityValue : 'public',
         style: styleEditor.get(),
+        presentation: presentationEditor.get(),
       };
 
       let error;

@@ -1,3 +1,4 @@
+import { createMapSettingsEditor } from './map-settings-editor';
 import {
   DEFAULT_LAYER_STYLE,
   normalizeLayerStyle,
@@ -183,7 +184,8 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
 
   preview.append(area, point, palettePreview, previewLabel);
 
-  element.append(grid, categorize, preview);
+  const advanced = createMapSettingsEditor('Icons & exact colors', 'Configure categoryStyles, categoryTarget, colorProperty, icon, iconBy, and icons. Icon URLs must be local assets or HTTP(S). See docs/maps.md for the schema.');
+  element.append(grid, categorize, preview, advanced.element);
 
   const listeners: ((style: LayerStyle) => void)[] = [];
 
@@ -216,7 +218,7 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
     for (const [key, input] of inputs) raw[key] = input.value;
     raw.categorizeBy = categorizeToggle.checked ? bySelect.value : '';
     raw.palette = normalizePalette(paletteInput.value);
-    return normalizeLayerStyle(raw as Partial<LayerStyle>);
+    return normalizeLayerStyle({ ...raw, ...advanced.get() } as Partial<LayerStyle>);
   }
 
   function updatePreview(style: LayerStyle): void {
@@ -257,6 +259,7 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
 
   function set(style?: Partial<LayerStyle> | null): void {
     const resolved = normalizeLayerStyle(style);
+    advanced.set({ categoryStyles: resolved.categoryStyles, categoryTarget: resolved.categoryTarget, colorProperty: resolved.colorProperty, icon: resolved.icon, iconBy: resolved.iconBy, icons: resolved.icons });
     for (const [key, input] of inputs) {
       input.value = String(resolved[key]);
     }
@@ -273,6 +276,7 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
   function setDisabled(value: boolean): void {
     disabled = value;
     for (const input of inputs.values()) input.disabled = value;
+    advanced.element.querySelectorAll<HTMLTextAreaElement>('textarea').forEach(input => { input.disabled = value; });
     categorizeToggle.disabled = value;
     paletteInput.disabled = value;
     renderPropertyOptions();
@@ -297,6 +301,7 @@ export function createStyleEditor(options: { label?: string } = {}): StyleEditor
   }
 
   for (const input of inputs.values()) input.addEventListener('input', notify);
+  advanced.element.querySelector('textarea')?.addEventListener('input', notify);
   categorizeToggle.addEventListener('change', notify);
   bySelect.addEventListener('change', notify);
   paletteInput.addEventListener('input', notify);

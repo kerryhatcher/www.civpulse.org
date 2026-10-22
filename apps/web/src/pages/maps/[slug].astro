@@ -23,7 +23,6 @@ const base = baseMapLabel(map.base_map);
 >
   <main id="main">
     <div class="page-intro">
-      <p class="org-eyebrow">Map</p>
       <h1>{map.name}</h1>
       {map.organizations && (
         <p class="map-org">
@@ -44,7 +43,7 @@ const base = baseMapLabel(map.base_map);
   </main>
 </Layout>
 
-<script type="application/json" data-map-config set:html={JSON.stringify(map)} is:inline></script>
+<script type="application/json" data-map-config set:html={JSON.stringify(map).replaceAll('<', '\\u003c')} is:inline></script>
 <script>
   import { initMapViewFromPage } from '../../scripts/map-viewer';
 

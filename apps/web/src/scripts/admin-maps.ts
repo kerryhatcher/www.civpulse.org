@@ -1,12 +1,11 @@
+import { createMapSettingsEditor } from '../lib/map-settings-editor';
+import { createGeoJSONLayer } from '../lib/map-rendering';
 import L from 'leaflet';
 import { BASE_MAPS, baseMapLabel, isBaseMapKey, type BaseMapKey } from '../lib/basemaps';
 import { applySwatch, createStyleEditor, type StyleEditor } from '../lib/layer-style-editor';
 import {
-  buildCategoryColor,
   fetchLayerGeoJSON,
   geojsonPropertyKeys,
-  layerFeatureMarkerOptions,
-  layerFeaturePathOptions,
   resolveLayerStyle,
   type LayerConfig,
   type LayerStyle,
@@ -59,6 +58,10 @@ export async function initMapAdmin(): Promise<void> {
   if (!panel || !form || !list) return;
 
   const formEl = form;
+  const viewEditor = createMapSettingsEditor('Map view & downloads', 'Configure center [latitude, longitude], zoom, basemapVisible, note, and downloads. See docs/maps.md.');
+  viewEditor.set({});
+  formEl.insertBefore(viewEditor.element, formEl.querySelector('.org-form-actions'));
+  const initialVisibility = new Map<string, boolean>();
   const listEl = list;
 
   const supabase = getSupabase();
@@ -265,6 +268,13 @@ export async function initMapAdmin(): Promise<void> {
     });
 
     details.append(summary, toggleLabel, editor.element);
+    const initialLabel = document.createElement('label');
+    initialLabel.className = 'layer-override-toggle';
+    const initial = document.createElement('input'); initial.type = 'checkbox';
+    initial.checked = initialVisibility.get(layer.id) !== false;
+    initialLabel.append(initial, document.createTextNode('Visible when this map opens'));
+    initial.addEventListener('change', () => initialVisibility.set(layer.id, initial.checked));
+    details.append(initialLabel);
     wrapper.append(details);
 
     if (selected) {
@@ -383,18 +393,14 @@ export async function initMapAdmin(): Promise<void> {
     const selected = new Set(readSelectedLayers());
     const errors: string[] = [];
 
-    for (const layer of allLayers.filter((item) => selected.has(item.id))) {
+    for (const layer of layerOrder.map(id => allLayers.find(l => l.id === id)).filter((l): l is LayerConfig => Boolean(l) && selected.has(l!.id) && initialVisibility.get(l!.id) !== false)) {
       try {
         const geojson = await fetchLayerGeoJSON(layer);
         const style = resolveLayerStyle(layer.style, layerOverrides.get(layer.id));
-        const colorFor = style.categorizeBy
-          ? buildCategoryColor(geojson, style.categorizeBy, style.palette)
-          : undefined;
-        const rendered = L.geoJSON(geojson, {
-          style: (feature) => layerFeaturePathOptions(style, feature, colorFor),
-          pointToLayer: (feature, latlng) =>
-            L.circleMarker(latlng, layerFeatureMarkerOptions(style, feature, colorFor)),
-        });
+        const paneName = 'preview-' + layer.id;
+        const pane = instance.getPane(paneName) ?? instance.createPane(paneName);
+        pane.style.zIndex = String(400 + layerOrder.indexOf(layer.id) * 2);
+        const rendered = createGeoJSONLayer({ ...layer, style }, geojson, { pane: paneName });
         overlayGroup?.addLayer(rendered);
         const bounds = rendered.getBounds();
         if (bounds.isValid()) instance.fitBounds(bounds, { padding: [24, 24], maxZoom: 15 });
@@ -433,6 +439,8 @@ export async function initMapAdmin(): Promise<void> {
     if (idField) idField.value = '';
     slugTouched = false;
     layerOrder = [];
+    initialVisibility.clear();
+    viewEditor.set({});
     layerOverrides = new Map();
     renderLayerOptions();
     if (cancelButton) cancelButton.hidden = true;
@@ -443,6 +451,7 @@ export async function initMapAdmin(): Promise<void> {
   async function startEdit(record: MapRecord): Promise<void> {
     if (!idField) return;
     idField.value = record.id;
+    viewEditor.set(record.view_options);
     if (nameField) nameField.value = record.name;
     if (slugField) slugField.value = record.slug;
     if (baseField) baseField.value = isBaseMapKey(record.base_map) ? record.base_map : 'osm';
@@ -453,10 +462,12 @@ export async function initMapAdmin(): Promise<void> {
 
     const { data: links } = await supabase
       .from('map_layers')
-      .select('layer_id, style')
+      .select('layer_id, style, visible_by_default')
       .eq('map_id', record.id)
       .order('position');
-    const rows = (links ?? []) as { layer_id: string; style: LayerStyle | null }[];
+    const rows = (links ?? []) as { layer_id: string; style: LayerStyle | null; visible_by_default: boolean }[];
+    initialVisibility.clear();
+    rows.forEach(row => initialVisibility.set(row.layer_id, row.visible_by_default));
     layerOrder = rows.map((row) => row.layer_id);
     layerOverrides = new Map(
       rows.filter((row) => row.style).map((row) => [row.layer_id, row.style as LayerStyle]),
@@ -525,7 +536,7 @@ export async function initMapAdmin(): Promise<void> {
     const { data, error } = await supabase
       .from('maps')
       .select(
-        'id, slug, name, description, base_map, visibility, organization_id, organizations(id, name, slug)',
+        'id, slug, name, description, base_map, visibility, organization_id, view_options, organizations(id, name, slug)',
       )
       .order('name');
 
@@ -557,7 +568,7 @@ export async function initMapAdmin(): Promise<void> {
   async function loadLayersLibrary(): Promise<void> {
     const { data, error } = await supabase
       .from('layers')
-      .select('id, name, description, source_url, visibility, style, source_type')
+      .select('id, name, description, source_url, visibility, style, source_type, presentation')
       .order('name');
 
     if (error) {
@@ -632,33 +643,14 @@ export async function initMapAdmin(): Promise<void> {
         base_map: isBaseMapKey(baseMap) ? baseMap : 'osm',
         visibility: isVisibility(visibilityValue) ? visibilityValue : 'public',
         organization_id: organizationId,
+        view_options: viewEditor.get(),
       };
 
-      const { data: saved, error } = id
-        ? await supabase.from('maps').update(payload).eq('id', id).select('id').single()
-        : await supabase.from('maps').insert(payload).select('id').single();
-
+      const { error } = await supabase.rpc('save_map', {
+        p_map: { ...payload, id: id || null },
+        p_layers: layerIds.map(layer_id => ({ layer_id, style: layerOverrides.get(layer_id) ?? null, visible_by_default: initialVisibility.get(layer_id) !== false })),
+      });
       if (error) throw new Error(error.message);
-
-      const mapId = (saved as { id: string } | null)?.id ?? id;
-      if (mapId) {
-        const { error: clearError } = await supabase.from('map_layers').delete().eq('map_id', mapId);
-        if (clearError) throw new Error(clearError.message);
-
-        if (layerIds.length > 0) {
-          const { error: linkError } = await supabase
-            .from('map_layers')
-            .insert(
-              layerIds.map((layer_id, position) => ({
-                map_id: mapId,
-                layer_id,
-                position,
-                style: layerOverrides.get(layer_id) ?? null,
-              })),
-            );
-          if (linkError) throw new Error(linkError.message);
-        }
-      }
 
       setMessage(formEl, id ? 'Map updated.' : 'Map created.', 'success');
       resetForm();
