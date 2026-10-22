@@ -271,11 +271,27 @@ export async function fetchPropertyKeys(url: string): Promise<string[]> {
 /** Load stored geometry through the same access gate as the containing map. */
 export async function fetchLayerGeoJSON(layer: LayerConfig, mapId?: string): Promise<GeoJSON.GeoJsonObject> {
   if (layer.source_type === 'postgis') {
-    const { data, error } = await getSupabase().rpc('get_layer_geojson', {
-      p_layer_id: layer.id, p_map_id: mapId ?? null,
-    });
-    if (error) throw new Error(error.message);
-    return data as GeoJSON.GeoJsonObject;
+    const pageSize = 50;
+    const readPage = async (offset: number): Promise<GeoJSON.FeatureCollection & { numberMatched: number }> => {
+      const { data, error } = await getSupabase().rpc('get_layer_geojson_page', {
+        p_layer_id: layer.id, p_map_id: mapId ?? null, p_offset: offset, p_limit: pageSize,
+      });
+      if (error) throw new Error(error.message);
+      return data as GeoJSON.FeatureCollection & { numberMatched: number };
+    };
+    const first = await readPage(0);
+    const pages = new Map<number, GeoJSON.Feature[]>([[0, first.features]]);
+    let nextOffset = pageSize;
+    // Bound parallel work so several previews cannot flood the database.
+    await Promise.all(Array.from({ length: 2 }, async () => {
+      while (nextOffset < first.numberMatched) {
+        const offset = nextOffset;
+        nextOffset += pageSize;
+        pages.set(offset, (await readPage(offset)).features);
+      }
+    }));
+    return { type: 'FeatureCollection', features: [...pages.entries()]
+      .sort(([a], [b]) => a - b).flatMap(([, features]) => features) } as GeoJSON.FeatureCollection;
   }
   if (!layer.source_url) throw new Error('Layer has no GeoJSON URL');
   const response = await fetch(layer.source_url);

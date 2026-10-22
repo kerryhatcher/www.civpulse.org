@@ -1,3 +1,13 @@
+# Hosted geometry loading
+
+Viewers and homepage previews fetch stored features through `get_layer_geojson_page`
+in ordered batches of 50, with at most two follow-up requests per layer at once.
+The RPC applies the same map/layer visibility gate as the full-document RPC and
+returns `numberMatched` so clients can assemble every feature without an extra
+empty request. This keeps large district boundaries within hosted query timeouts.
+The original full-document RPC remains available for existing consumers.
+
+
 # Recreated maps
 
 The map explorer at `/maps/` recreates the 17 public presets and 24 reusable

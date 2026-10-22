@@ -30,6 +30,14 @@ begin
   exception when foreign_key_violation then null; end;
   assert (select name = 'Map test' and view_options->>'zoom' = '10' from public.maps where id = m), 'invalid link rolls back map metadata';
   assert (select count(*) = 2 from public.map_layers where map_id = m), 'invalid link preserves existing links';
+  insert into public.layer_features(layer_id, position, feature_id, properties, geometry)
+    select l, i, to_jsonb(i), jsonb_build_object('name', 'Page ' || i),
+      extensions.st_setsrid(extensions.st_makepoint(-83, 32),4326) from generate_series(1,120) i;
+  assert public.get_layer_geojson_page(l,null,0,50)->>'numberMatched' = '121', 'page reports full feature count';
+  assert (public.get_layer_geojson_page(l,null,0,50)->'features') ||
+    (public.get_layer_geojson_page(l,null,50,50)->'features') ||
+    (public.get_layer_geojson_page(l,null,100,50)->'features') = public.get_layer_geojson(l)->'features',
+    'pages preserve every feature, ID, property, and ordering';
 end $$;
 reset role;
 select set_config('request.jwt.claim.sub', '', true);
@@ -37,7 +45,16 @@ set local role anon;
 do $$
 begin
   assert (select count(*) = 1 from public.get_map_layers(current_setting('test.map_id')::uuid)), 'anonymous sees optional public layer, never private layer';
-  assert jsonb_array_length(public.get_layer_geojson(current_setting('test.layer_id')::uuid,current_setting('test.map_id')::uuid)->'features') = 1, 'optional layer can be toggled on through map gate';
+  assert jsonb_array_length(public.get_layer_geojson_page(current_setting('test.layer_id')::uuid,current_setting('test.map_id')::uuid,100,50)->'features') = 21, 'optional layer pages use map gate';
+  assert jsonb_array_length(public.get_layer_geojson_page(current_setting('test.layer_id')::uuid,current_setting('test.map_id')::uuid,121,50)->'features') = 0, 'past-end page is empty';
+  begin
+    perform public.get_layer_geojson_page(current_setting('test.layer_id')::uuid,current_setting('test.map_id')::uuid,0,101);
+    raise exception 'Unbounded page accepted';
+  exception when invalid_parameter_value then null; end;
+  begin
+    perform public.get_layer_geojson_page(current_setting('test.private_layer_id')::uuid,current_setting('test.map_id')::uuid);
+    raise exception 'Private paged geometry leaked';
+  exception when insufficient_privilege then null; end;
   begin
     perform public.get_layer_geojson(current_setting('test.private_layer_id')::uuid,current_setting('test.map_id')::uuid);
     raise exception 'Private geometry leaked';
@@ -64,5 +81,9 @@ select set_config('request.jwt.claim.sub', '', true);
 set local role anon;
 do $$ begin
   assert not exists(select 1 from public.get_map_layers(current_setting('test.map_id')::uuid)), 'private map hides every layer including public ones';
+  begin
+    perform public.get_layer_geojson_page(current_setting('test.layer_id')::uuid,current_setting('test.map_id')::uuid);
+    raise exception 'Private map paged geometry leaked';
+  exception when insufficient_privilege then null; end;
 end $$;
 rollback;
