@@ -5,6 +5,7 @@ export interface Article {
   title: string;
   url: string;
   visibility: ArticleVisibility;
+  fetched_on: string | null;
 }
 
 export interface ArticlePerson {
@@ -30,4 +31,10 @@ export function articleUrl(value: string): string | null {
   } catch {
     return null;
   }
+}
+
+export function articleFetchedLabel(value: string | null | undefined): string {
+  if (!value) return 'Fetched on: unknown';
+  const date = new Date(`${value}T00:00:00Z`);
+  return `Fetched on: ${date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}`;
 }

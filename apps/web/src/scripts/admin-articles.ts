@@ -1,4 +1,4 @@
-import { articleUrl, type Article, type ArticlePerson, type ArticleOrganization } from '../lib/articles';
+import { articleFetchedLabel, articleUrl, type Article, type ArticlePerson, type ArticleOrganization } from '../lib/articles';
 import { getSupabase } from '../lib/supabase';
 
 interface Reference { id: string; name: string }
@@ -70,6 +70,7 @@ export async function initArticleAdmin(): Promise<void> {
   function edit(article: Article): void {
     reset();
     for (const key of ['id', 'title', 'url', 'visibility'] as const) (formEl.elements.namedItem(key) as HTMLInputElement | HTMLSelectElement).value = article[key];
+    (formEl.elements.namedItem('fetched_on') as HTMLInputElement).value = article.fetched_on ?? '';
     fillPicker(peoplePicker, articlePeople.filter(link => link.article_id === article.id).map(link => ({ id: link.person_id, role: link.role })));
     fillPicker(orgPicker, articleOrganizations.filter(link => link.article_id === article.id).map(link => ({ id: link.organization_id, role: link.role })));
     heading.textContent = 'Edit article'; submit.textContent = 'Save article'; cancel.hidden = false;
@@ -91,7 +92,7 @@ export async function initArticleAdmin(): Promise<void> {
       const row = document.createElement('article'); row.className = 'org-row';
       const content = document.createElement('div');
       const title = document.createElement('a'); title.textContent = article.title; title.href = articleUrl(article.url) ?? '#'; title.target = '_blank'; title.rel = 'noopener noreferrer';
-      const meta = document.createElement('p'); meta.className = 'article-admin-links'; meta.textContent = `${article.visibility} · ${article.url}`;
+      const meta = document.createElement('p'); meta.className = 'article-admin-links'; meta.textContent = `${article.visibility} · ${article.url} · ${articleFetchedLabel(article.fetched_on)}`;
       const links = document.createElement('p'); links.className = 'article-admin-links'; links.textContent = associationLabels(article).join('; ') || 'Not linked to any profiles';
       content.append(title, meta, links);
       const actions = document.createElement('div'); actions.className = 'org-row-actions';
@@ -114,7 +115,7 @@ export async function initArticleAdmin(): Promise<void> {
   }
   async function load(): Promise<void> {
     const results = await Promise.all([
-      supabase.from('articles').select('id, title, url, visibility').order('created_at', { ascending: false }).order('title'),
+      supabase.from('articles').select('id, title, url, visibility, fetched_on').order('created_at', { ascending: false }).order('title'),
       supabase.from('article_people').select('article_id, person_id, role'),
       supabase.from('article_organizations').select('article_id, organization_id, role'),
     ]);
@@ -158,6 +159,7 @@ export async function initArticleAdmin(): Promise<void> {
         p_id: String(values.get('id') ?? '') || null, p_title: title, p_url: url, p_visibility: String(values.get('visibility') ?? 'public'),
         p_people: selection(peoplePicker).map(link => ({ person_id: link.id, role: link.role })),
         p_organizations: selection(orgPicker).map(link => ({ organization_id: link.id, role: link.role })),
+        p_fetched_on: String(values.get('fetched_on') ?? '') || null,
       });
       if (error) throw new Error(error.code === '23505' ? 'An article with that URL already exists. Edit it to add more profile links.' : error.message);
       reset(); message('Article saved.'); await load();

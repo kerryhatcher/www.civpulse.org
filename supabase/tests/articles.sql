@@ -24,8 +24,11 @@ select a.id,o.id,case when o.slug='article-test-org-a' then 'Subject' else 'Publ
 from public.articles a cross join public.organizations o
 where a.id in ('76000000-0000-0000-0000-000000000021','76000000-0000-0000-0000-000000000022','76000000-0000-0000-0000-000000000023')
  and o.id in ('76000000-0000-0000-0000-000000000001','76000000-0000-0000-0000-000000000002');
+update public.articles set fetched_on='2026-10-01' where id='76000000-0000-0000-0000-000000000021';
 set local role anon;
 do $$ begin
+ assert (select fetched_on=date '2026-10-01' from public.get_person_articles('76000000-0000-0000-0000-000000000011')), 'anonymous person fetched date';
+ assert (select fetched_on=date '2026-10-01' from public.get_organization_articles('76000000-0000-0000-0000-000000000002')), 'anonymous organization fetched date';
  assert (select count(*)=1 from public.get_person_articles('76000000-0000-0000-0000-000000000011')), 'anon public articles only';
  assert (select role='Author' from public.get_person_articles('76000000-0000-0000-0000-000000000014')), 'author role preserved';
  assert (select count(*)=1 from public.get_person_articles('76000000-0000-0000-0000-000000000012')), 'unlisted person UUID readable';
@@ -52,6 +55,7 @@ do $$ declare ids uuid[]; affected int; begin
  assert not exists(select 1 from public.article_people), 'nonadmin association read denied';
  assert not exists(select 1 from public.article_organizations), 'nonadmin org association read denied';
  begin perform public.save_article('Bad','https://example.gov/bad'); raise exception 'nonadmin RPC'; exception when insufficient_privilege then null; end;
+ begin perform public.save_article('Bad','https://example.gov/bad','public','[]','[]',null,date '2026-10-01'); raise exception 'nonadmin dated RPC'; exception when insufficient_privilege then null; end;
  begin insert into public.articles(title,url) values ('Bad','https://example.gov/bad'); raise exception 'nonadmin insert'; exception when insufficient_privilege then null; end;
  update public.articles set title='Bad'; get diagnostics affected=row_count; assert affected=0, 'nonadmin update denied';
  delete from public.articles; get diagnostics affected=row_count; assert affected=0, 'nonadmin delete denied';
@@ -67,6 +71,18 @@ select set_config('request.jwt.claim.sub',(select user_id::text from public.admi
 set local role authenticated;
 do $$ declare a uuid; begin
  assert public.is_admin(), 'local admin seeded';
+ a:=public.save_article('Dated article','https://example.gov/articles/dated','public','[]','[]',null,date '2026-10-01');
+ assert (select fetched_on=date '2026-10-01' from public.articles where id=a), 'date saved';
+ perform public.save_article('Legacy edit','https://example.gov/articles/dated','public','[]','[]',a);
+ assert (select fetched_on=date '2026-10-01' from public.articles where id=a), 'legacy edit preserves date';
+ begin
+   perform public.save_article('Invalid future edit','https://example.gov/articles/dated','public','[]','[]',a,current_date+1);
+   raise exception 'future fetched date accepted';
+ exception when check_violation then null; end;
+ assert (select title='Legacy edit' and fetched_on=date '2026-10-01' from public.articles where id=a), 'invalid date rolls back metadata';
+ perform public.save_article('Unknown date','https://example.gov/articles/dated','public','[]','[]',a,null);
+ assert (select fetched_on is null from public.articles where id=a), 'date may be cleared';
+ delete from public.articles where id=a;
  a:=public.save_article('Created article','https://example.gov/articles/created','public',
  '[{"person_id":"76000000-0000-0000-0000-000000000011","role":"Subject"},{"person_id":"76000000-0000-0000-0000-000000000014","role":"Author"}]',
  '[{"organization_id":"76000000-0000-0000-0000-000000000001","role":"Subject"},{"organization_id":"76000000-0000-0000-0000-000000000002","role":"Publisher"}]');
