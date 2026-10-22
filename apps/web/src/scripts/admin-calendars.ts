@@ -460,6 +460,8 @@ export async function initCalendarAdmin(): Promise<void> {
     const description = eventFormEl.querySelector<HTMLTextAreaElement>(
       'textarea[name="description"]',
     );
+    const category = eventFormEl.querySelector<HTMLInputElement>('input[name="category"]');
+    if (category) category.value = event.category ?? '';
     if (location) location.value = event.location ?? '';
     if (url) url.value = event.url ?? '';
     if (description) description.value = event.description ?? '';
@@ -527,6 +529,7 @@ export async function initCalendarAdmin(): Promise<void> {
         ends_at: endsAt ? endsAt.toISOString() : null,
         all_day: values.get('all_day') !== null,
         location: textOrNull(values.get('location')),
+        category: textOrNull(values.get('category')),
         url: textOrNull(values.get('url')),
         visibility,
         election_id: electionId || null,

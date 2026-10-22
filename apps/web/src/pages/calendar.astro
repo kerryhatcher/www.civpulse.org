@@ -34,23 +34,52 @@ import Layout from '../layouts/Layout.astro';
           autocomplete="off"
         />
       </label>
-      <label class="calendar-check">
-        <input type="checkbox" data-calendar-past />
-        <span>Include past events</span>
-      </label>
+      <label class="field"><span>Category</span><select data-calendar-category><option value="">All categories</option></select></label>
     </form>
 
-    <p class="status" data-calendar-signed-in hidden>
-      Signed in — results include unlisted and private events you can access.
-    </p>
-    <p class="status" data-calendar-status>Loading events…</p>
+    <div class="calendar-subscription">
+      <a class="button-link" data-calendar-subscribe href="webcal://www.civpulse.org/events.ics">Subscribe to calendar</a>
+      <a href="/events.ics">Download calendar</a>
+      <details><summary>Use a subscription URL</summary>
+        <p>In your calendar app, choose “Add calendar by URL” or “Subscribe” and paste this address:</p>
+        <label class="field"><span>Public calendar feed URL</span><input readonly data-calendar-feed value="https://www.civpulse.org/events.ics" /></label>
+        <p>Includes all public calendars. Updates appear after publication and your app's next refresh. Private events are excluded. Downloading imports a one-time copy.</p>
+      </details>
+    </div>
+    <details class="calendar-picker" open>
+      <summary>Calendars</summary>
+      <div class="calendar-toolbar">
+        <button type="button" data-calendars-show>Show all</button>
+        <button type="button" data-calendars-hide>Hide all</button>
+        <label class="field"><span>Color by</span><select data-calendar-color><option value="calendar">Calendar</option><option value="organization">Organization</option></select></label>
+      </div>
+      <div data-calendar-picker class="calendar-picker-groups"></div>
+      <p class="status">Select several calendars together. Shared events appear once with all matching calendar labels.</p>
+    </details>
+    <section aria-label="Community calendar">
+      <div class="calendar-toolbar">
+        <h2 data-calendar-month></h2>
+        <button type="button" aria-label="Previous month" data-calendar-prev>←</button>
+        <button type="button" data-calendar-today>Today</button>
+        <button type="button" aria-label="Next month" data-calendar-next>→</button>
+        <div role="group" aria-label="Calendar view">
+          <button type="button" data-calendar-view="month" aria-pressed="true">Month</button>
+          <button type="button" data-calendar-view="agenda" aria-pressed="false">Agenda</button>
+        </div>
+      </div>
+      <p class="status">Times are shown in America/New_York. Select a day to see its events.</p>
+      <div class="calendar-month-grid" data-calendar-grid></div>
+    </section>
+    <p class="status" data-calendar-signed-in hidden>Signed in — results include unlisted and private events you can access.</p>
+    <p class="status" data-calendar-status role="status" aria-live="polite">Loading events…</p>
+    <button type="button" data-calendar-clear-day hidden>Show all events this month</button>
     <div class="event-list" data-calendar-results hidden></div>
     <p class="status" data-calendar-empty hidden>No events match those filters.</p>
+    <noscript><p>Enable JavaScript to browse events, or subscribe using the public calendar feed above.</p></noscript>
   </main>
 </Layout>
 
 <script>
   import { initCalendar } from '../scripts/calendar';
-
   initCalendar();
 </script>

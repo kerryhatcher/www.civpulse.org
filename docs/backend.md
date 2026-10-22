@@ -640,3 +640,43 @@ The shared public/admin renderer supports exact category styles, independent
 fill/outline colors, GTFS property colors, original marker assets, safe popups,
 and a paginated place directory. See [maps.md](./maps.md) for the schemas,
 reproducible import commands, snapshot provenance and geometry repair notes.
+
+### Calendar month explorer and subscription feed
+
+`/calendar/` offers month/day selection and an agenda of that month's events,
+previous/next month and Today controls, organization and category filters, text
+search, multiple calendar checkboxes with Show all/Hide all, and colors by calendar
+or organization. Times and day boundaries use America/New_York, including DST.
+The URL preserves the month, view, query, organization, category, colors, and
+selected calendars. Existing `?calendar=<uuid>` links still select that calendar.
+Event details expand in place and link to the organizer when a URL is available.
+
+`browse_calendar_events(p_start, p_end, p_offset, p_public_only)` returns up to
+500 events per page, ordered by start and UUID. It includes events overlapping
+the requested range, with the same event/calendar/election visibility gates as
+search. The browser loads every page before filtering and displaying results;
+errors never leave a partial month looking complete. The category is optional,
+editable in the event admin form, and initially backfilled from calendar names.
+Copies of the same occurrence in multiple visible calendars are displayed once,
+with all matching calendar labels. Distinct times and locations remain separate.
+
+`/events.ics` is a **stable subscription URL**, prerendered on every build using
+the anonymous build client and `p_public_only: true`. It includes all public
+calendars, independent of browser filters or session, never private/unlisted
+content. Event UUIDs form stable UIDs, and updated_at supplies revision timestamps.
+The file uses RFC 5545 UTC timestamps, all-day dates with exclusive ends, escaped
+text, CRLF, and UTF-8-safe line folding. Backend errors fail the build instead of
+publishing a partial feed. Cloudflare headers set text/calendar and five-minute
+cache revalidation. There is no server adapter or runtime feed service.
+
+Users choose Subscribe (webcal) or paste the HTTPS URL into their calendar app's
+“Add by URL” option. Download imports a one-time copy. Feed changes publish on the
+next successful frontend deployment; phones refresh at their own cadence, so
+updates are not instant. Keep this path stable when switching new.civpulse.org to
+www.civpulse.org. Existing subscribers on either hostname need that hostname to
+continue serving the feed (or redirecting it) after cutover.
+
+Verification: `bun test scripts/tests/calendar.test.ts`. The opt-in database test
+uses a transaction that rolls back its fixtures and checks >500 events,
+anonymous/signed-in visibility, hidden calendars/elections, and public-only mode:
+`CALENDAR_TEST_DATABASE_URL=<local postgres URL> bun test scripts/tests/calendar-db.test.ts`.

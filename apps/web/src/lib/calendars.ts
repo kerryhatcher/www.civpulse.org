@@ -17,6 +17,8 @@ export interface CalendarRef {
 export interface EventRecord {
   id: string;
   title: string;
+  category?: string | null;
+  updated_at?: string;
   description: string | null;
   starts_at: string;
   ends_at: string | null;
@@ -51,6 +53,8 @@ export interface EventRow {
   id: string;
   calendar_id: string;
   title: string;
+  category?: string | null;
+  updated_at?: string;
   description: string | null;
   starts_at: string;
   ends_at: string | null;
@@ -64,7 +68,7 @@ export interface EventRow {
 
 export const CALENDAR_COLUMNS = 'id, organization_id, slug, name, description, visibility';
 export const EVENT_COLUMNS =
-  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind';
+  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind, category';
 
 /** The shared event viewer shell. Unlisted and private events are uuid-only. */
 export function eventViewHref(id: string): string {
@@ -79,12 +83,8 @@ const DATE_FORMAT: Intl.DateTimeFormatOptions = {
 };
 const TIME_FORMAT: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
 
-function sameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+function sameDay(a: Date, b: Date, timeZone?: string): boolean {
+  return a.toLocaleDateString('en-CA', { timeZone }) === b.toLocaleDateString('en-CA', { timeZone });
 }
 
 /** Human-friendly date/time range for an event, in the visitor's timezone. */
@@ -92,17 +92,19 @@ export function formatEventWhen(event: {
   starts_at: string;
   ends_at: string | null;
   all_day: boolean;
-}): string {
+}, timeZone?: string): string {
   const start = new Date(event.starts_at);
-  const end = event.ends_at ? new Date(event.ends_at) : null;
-  const date = (value: Date) => value.toLocaleDateString(undefined, DATE_FORMAT);
-  const time = (value: Date) => value.toLocaleTimeString(undefined, TIME_FORMAT);
+  const end = event.ends_at ? new Date(
+    new Date(event.ends_at).getTime() - (event.all_day && event.ends_at > event.starts_at ? 1 : 0),
+  ) : null;
+  const date = (value: Date) => value.toLocaleDateString(undefined, { ...DATE_FORMAT, timeZone });
+  const time = (value: Date) => value.toLocaleTimeString(undefined, { ...TIME_FORMAT, timeZone });
 
   if (event.all_day) {
-    return end && !sameDay(start, end) ? `${date(start)} – ${date(end)}` : date(start);
+    return end && !sameDay(start, end, timeZone) ? `${date(start)} – ${date(end)}` : date(start);
   }
 
-  if (end && sameDay(start, end)) {
+  if (end && sameDay(start, end, timeZone)) {
     return `${date(start)} · ${time(start)} – ${time(end)}`;
   }
 
