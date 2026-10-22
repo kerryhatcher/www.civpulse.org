@@ -1,0 +1,564 @@
+{
+  "researched_on": "2026-10-21",
+  "election_slug": "2026-11-03-general-election",
+  "office": "United States Senate",
+  "district": "Georgia (statewide)",
+  "method": "Searched both publisher domains for every current candidate, including certified write-ins and name variants. Verified titles, bylines, mentions, and original publication dates using publisher pages, search-indexed publisher text, print PDFs, or explicitly identified publisher syndications. This is a verified search result set, not a claim to exhaust either archive.",
+  "notes": [
+    "Only metadata and associations are stored, not article text.",
+    "Publication dates use original publisher dates rather than update or syndication dates.",
+    "Fetched-on dates record verification of the article or link/metadata, including indexed or syndicated evidence where original access was restricted.",
+    "The Melody homepage currently redirects to macon.com, but individual archive URLs and PDFs remain indexed.",
+    "Collective credits are not turned into person records; named contributors receive Contributor roles."
+  ],
+  "candidates": [
+    {
+      "slug": "jon-ossoff",
+      "full_name": "Jon Ossoff",
+      "is_write_in": false,
+      "verified_article_count": 24,
+      "status": "verified_coverage",
+      "queries": [
+        "\"Jon Ossoff\" site:macon.com",
+        "\"Jon Ossoff\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "mike-collins",
+      "full_name": "Mike Collins",
+      "is_write_in": false,
+      "verified_article_count": 4,
+      "status": "verified_coverage",
+      "queries": [
+        "\"Mike Collins\" site:macon.com",
+        "\"Mike Collins\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "cassandra-easton",
+      "full_name": "Cassandra Easton",
+      "is_write_in": true,
+      "verified_article_count": 0,
+      "status": "no_verified_coverage_found",
+      "queries": [
+        "\"Cassandra Easton\" site:macon.com",
+        "\"Cassandra Easton\" site:maconmelody.com"
+      ],
+      "additional_variants": [
+        "Cazz Easton"
+      ]
+    },
+    {
+      "slug": "christina-clement",
+      "full_name": "Christina Clement",
+      "is_write_in": true,
+      "verified_article_count": 0,
+      "status": "no_verified_coverage_found",
+      "queries": [
+        "\"Christina Clement\" site:macon.com",
+        "\"Christina Clement\" site:maconmelody.com"
+      ],
+      "additional_variants": [
+        "Christina Loren Clement"
+      ]
+    },
+    {
+      "slug": "elbert-arthur-bartell",
+      "full_name": "Elbert Arthur Bartell",
+      "is_write_in": true,
+      "verified_article_count": 0,
+      "status": "no_verified_coverage_found",
+      "queries": [
+        "\"Elbert Arthur Bartell\" site:macon.com",
+        "\"Elbert Arthur Bartell\" site:maconmelody.com"
+      ],
+      "additional_variants": [
+        "Al Bartell",
+        "Elbert Bartell"
+      ]
+    }
+  ],
+  "excluded_leads": [
+    {
+      "url": "https://www.macon.com/news/article295105779.html",
+      "reason": "Video shell did not expose enough date/byline metadata to verify an article record."
+    },
+    {
+      "url": "https://www.macon.com/news/politics-government/election/article316106036.html",
+      "reason": "Accessible syndicated text discusses the Senate runoff but does not name either current candidate."
+    },
+    {
+      "url": "https://www.macon.com/news/politics-government/election/article315927044.html",
+      "reason": "Could not verify a named candidate mention from accessible text."
+    }
+  ],
+  "articles": [
+    {
+      "title": "Op-Ed: Affordable, accessible health care for Middle Georgia",
+      "url": "https://www.macon.com/opinion/article245844260.html",
+      "published_on": "2020-09-20",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Author",
+          "name": "Jon Ossoff"
+        }
+      ],
+      "verification": "Signed opinion piece by Jon Ossoff; retained as historical authored material."
+    },
+    {
+      "title": "Georgia legislators make 2nd effort to turn Ocmulgee Mounds into a national park, preserve",
+      "url": "https://www.macon.com/news/politics-government/article302841764.html",
+      "published_on": "2025-03-26",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "mike-collins",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "margaret-walker",
+          "name": "Margaret Walker",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Ossoff on the park legislation and names Collins among House cosponsors."
+    },
+    {
+      "title": "Issues persist at Dublin Vets hospital that exposed patients to infection, officials say",
+      "url": "https://www.macon.com/news/politics-government/article306831526.html",
+      "published_on": "2025-05-20",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Subject"
+        },
+        {
+          "slug": "lucinda-warnke",
+          "name": "Lucinda Warnke",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports Ossoff’s letter about patient safety and instrument sanitation."
+    },
+    {
+      "title": "Macon-Bibb County to advocate for a railroad stop between Atlanta and Savannah",
+      "url": "https://www.macon.com/news/local/article310650140.html",
+      "published_on": "2025-07-15",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "alba-rosa",
+          "name": "Alba Rosa",
+          "role": "Author"
+        }
+      ],
+      "verification": "Credits Ossoff with obtaining federal passenger-rail funding."
+    },
+    {
+      "title": "Georgia senators push for a ‘full’ federal investigation into Bibb County Jail",
+      "url": "https://www.macon.com/news/local/article311265190.html",
+      "published_on": "2025-07-24",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Subject"
+        },
+        {
+          "slug": "alba-rosa",
+          "name": "Alba Rosa",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports the senators’ request for a federal jail investigation; uses original publication date, not September update."
+    },
+    {
+      "title": "Ossoff ‘cautiously optimistic’ that Ocmulgee Mounds will become a national park",
+      "url": "https://www.macon.com/news/environment/article312215663.html",
+      "published_on": "2025-09-23",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Subject"
+        },
+        {
+          "slug": "margaret-walker",
+          "name": "Margaret Walker",
+          "role": "Author"
+        },
+        {
+          "slug": "alba-rosa",
+          "name": "Alba Rosa",
+          "role": "Contributor"
+        }
+      ],
+      "verification": "Reports Ossoff’s Rotary Club remarks; explicitly credits Alba Rosa as contributing."
+    },
+    {
+      "title": "US senators raise alarm about deaths at a Georgia ICE facility. What to know",
+      "url": "https://www.macon.com/news/politics-government/article312226577.html",
+      "published_on": "2025-09-23",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Subject"
+        },
+        {
+          "slug": "jeremy-chisenhall",
+          "name": "Jeremy Chisenhall",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports Ossoff and Warnock asking federal officials about deaths in ICE custody."
+    },
+    {
+      "title": "5 things to know about deaths of 2 ICE detainees in Georgia this year",
+      "url": "https://www.macon.com/news/politics-government/article312234351.html",
+      "published_on": "2025-09-23",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "jeremy-chisenhall",
+          "name": "Jeremy Chisenhall",
+          "role": "Author"
+        }
+      ],
+      "verification": "Includes the senators’ requests for accountability in a separate explanatory article."
+    },
+    {
+      "title": "Here’s the company that will build an expansion at the Bibb County Jail",
+      "url": "https://www.macon.com/news/politics-government/article312241809.html",
+      "published_on": "2025-09-24",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "lucinda-warnke",
+          "name": "Lucinda Warnke",
+          "role": "Author"
+        }
+      ],
+      "verification": "Mentions Ossoff and Warnock calling for a DOJ investigation."
+    },
+    {
+      "title": "SNAP cuts threaten free school meals for Macon students. Why advocates are worried",
+      "url": "https://www.macon.com/news/local/education/article312326677.html",
+      "published_on": "2025-09-30",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Ossoff as opposing HR 1; original publication date precedes the October update."
+    },
+    {
+      "title": "Republican candidate defends all-GOP Public Service Commission at Middle GA campaign stop",
+      "url": "https://www.macon.com/news/environment/article312614683.html",
+      "published_on": "2025-10-23",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "margaret-walker",
+          "name": "Margaret Walker",
+          "role": "Author"
+        }
+      ],
+      "verification": "Identifies Ossoff as the incumbent in the 2026 Senate race; uses original publication date."
+    },
+    {
+      "title": "Democratic governor candidate criticizes Kemp’s response to SNAP pause during Macon visit",
+      "url": "https://www.macon.com/news/politics-government/article312709840.html",
+      "published_on": "2025-10-30",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "lucinda-warnke",
+          "name": "Lucinda Warnke",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Ossoff in the dispute over shutdown responsibility and SNAP funding."
+    },
+    {
+      "title": "Democrats demand reform after another person dies in Bibb County Jail",
+      "url": "https://www.macon.com/news/local/crime/article314558967.html",
+      "published_on": "2026-02-03",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "jesse-fraga",
+          "name": "Jesse Fraga",
+          "role": "Author"
+        }
+      ],
+      "verification": "Mentions Ossoff and Warnock seeking a DOJ jail investigation."
+    },
+    {
+      "title": "With national attention on Georgia’s U.S. Senate race, Ossoff and Collins meet",
+      "url": "https://www.macon.com/news/local/article317253067.html",
+      "published_on": "2026-09-19",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Subject"
+        },
+        {
+          "slug": "mike-collins",
+          "role": "Subject"
+        },
+        {
+          "slug": "micah-johnston",
+          "name": "Micah Johnston",
+          "role": "Author"
+        }
+      ],
+      "verification": "Telegraph election index supplies original URL and publication date; syndicated publisher copy verifies byline and both candidate sections.",
+      "alternate_sources": [
+        "https://albanyherald.com/voter-guide-2026/with-national-attention-on-georgias-u-s-senate-race-ossoff-and-collins-meet/"
+      ],
+      "date_note": "Albany Herald’s October 16 syndication date is not the September 19 Telegraph publication date."
+    },
+    {
+      "title": "I’m just a bill: The legislative process behind creating Georgia’s first national park",
+      "url": "https://maconmelody.com/im-just-a-bill-the-legislative-process-behind-creating-georgias-first-national-park/",
+      "published_on": "2024-06-25",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "caleb-slinkard",
+          "name": "Caleb Slinkard",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Ossoff’s support and Senate committee presentation."
+    },
+    {
+      "title": "Ocmulgee Mounds National Park initiative gains momentum after Senate, House hearings",
+      "url": "https://maconmelody.com/ocmulgee-mounds-national-park-initiative-gains-momentum-after-senate-house-hearings/",
+      "published_on": "2024-11-20",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "evelyn-davidson",
+          "name": "Evelyn Davidson",
+          "role": "Author"
+        },
+        {
+          "slug": "caleb-slinkard",
+          "name": "Caleb Slinkard",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Ossoff about advancing the legislation; both named byline authors are credited."
+    },
+    {
+      "title": "See Macon’s Ocmulgee Mounds in a unique way: by lantern light",
+      "url": "https://maconmelody.com/see-macons-ocmulgee-mounds-in-a-unique-way-by-lantern-light/",
+      "published_on": "2025-03-13",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "micah-johnston",
+          "name": "Micah Johnston",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Ossoff among supporters describing tourism benefits of national-park status."
+    },
+    {
+      "title": "Short-term vacation rentals will soon be taxed in Bibb County",
+      "url": "https://maconmelody.com/short-term-vacation-rentals-will-soon-be-taxed-in-bibb-county/",
+      "published_on": "2025-09-03",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Mentions Ossoff and Warnock requesting investigation of jail conditions."
+    },
+    {
+      "title": "Macon-Bibb County Commission hires companies for jail expansion, new arena",
+      "url": "https://maconmelody.com/macon-bibb-county-commission-hires-companies-for-jail-expansion-new-arena/",
+      "published_on": "2025-09-24",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Ossoff among senators calling for an investigation of inmate civil rights."
+    },
+    {
+      "title": "Macon officials optimistic about Ocmulgee Mounds bill despite snag in Senate",
+      "url": "https://maconmelody.com/macon-officials-optimistic-about-ocmulgee-mounds-bill-despite-snag-in-senate/",
+      "published_on": "2025-12-10",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "casey-choung",
+          "name": "Casey Choung",
+          "role": "Author"
+        }
+      ],
+      "verification": "Identifies Ossoff as sponsor of the Senate national-park bill."
+    },
+    {
+      "title": "Hurricane Helene relief effort launches for farmers",
+      "url": "https://maconmelody.com/hurricane-helene-relief-effort-launches-for-farmers/",
+      "published_on": "2026-03-14",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "emily-jones",
+          "name": "Emily Jones",
+          "role": "Author"
+        },
+        {
+          "slug": "rahul-bali",
+          "name": "Rahul Bali",
+          "role": "Contributor"
+        }
+      ],
+      "verification": "Reports Ossoff’s support for farmer relief funding; explicitly credits Rahul Bali as contributing."
+    },
+    {
+      "title": "LETTER TO THE EDITOR: Congress must restore protections for dialysis patients",
+      "url": "https://maconmelody.com/letter-to-the-editor-congress-must-restore-protections-for-dialysis-patients/",
+      "published_on": "2026-06-12",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "kelda-cubit",
+          "name": "Kelda Cubit",
+          "role": "Author"
+        }
+      ],
+      "verification": "Signed letter asks Ossoff and other lawmakers to support dialysis protections; title identifies opinion format."
+    },
+    {
+      "title": "Democratic voters eclipsed Republicans in Georgia’s election. What happens in Nov.?",
+      "url": "https://maconmelody.com/wp-content/uploads/2026/05/052926-mm-eEdition.pdf#page=6",
+      "published_on": "2026-05-29",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "ross-williams",
+          "name": "Ross Williams",
+          "role": "Author"
+        }
+      ],
+      "verification": "Visually verified print page 6 identifies Ross Williams and discusses Ossoff’s unopposed primary."
+    },
+    {
+      "title": "Affordability more than a political buzzword for many Georgia voters",
+      "url": "https://maconmelody.com/wp-content/uploads/2026/05/052926-mm-eEdition.pdf#page=2",
+      "published_on": "2026-05-29",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "mike-collins",
+          "role": "Mentioned"
+        }
+      ],
+      "verification": "Print page 2, continued on page 7, names Collins as a voter’s Senate choice. Collective credit: From Georgia Recorder; no named individual author."
+    },
+    {
+      "title": "May 19, 2026 Election Results",
+      "url": "https://maconmelody.com/051926-election/",
+      "published_on": "2026-05-19",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "mike-collins",
+          "role": "Mentioned"
+        }
+      ],
+      "verification": "Lists both candidates in Macon-Bibb primary results. Existing article is reused, preserving Josh McLaurin’s association. Collective byline: Melody Staff."
+    }
+  ]
+}
