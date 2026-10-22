@@ -1,0 +1,11 @@
+{
+  "plugin_id": "plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
+  "plugin_url": "https://chatgpt.com/plugins/plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
+  "release_id": "pluginrel_6ad98bfcc15481918ebc4a0894ab1d42",
+  "version": "1.0.0",
+  "scope": "USER",
+  "discoverability": "PRIVATE",
+  "source_commit": "dbe4b18",
+  "source_directory": "plugins/civpulse",
+  "build_command": "bun run plugin:build"
+}
