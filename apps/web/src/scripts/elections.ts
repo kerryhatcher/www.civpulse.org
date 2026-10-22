@@ -273,6 +273,7 @@ function buildCandidateCard(
 function buildContest(contest: ElectionContest): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card';
+  card.id = `contest-${contest.id}`;
 
   const header = document.createElement('header');
   header.className = 'contest-heading';
@@ -314,6 +315,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
 function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card ballot-question';
+  card.id = `question-${question.id}`;
   const header = document.createElement('header'); header.className = 'contest-heading';
   const title = document.createElement('h3'); title.textContent = question.title;
   const meta = document.createElement('span'); meta.className = 'contest-meta';
@@ -451,6 +453,9 @@ function fillElectionView(response: ElectionViewResponse): void {
   }
 
   viewer.hidden = false;
+  if (/^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)) {
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+  }
 }
 
 /** Viewer for any election uuid (public, unlisted, or private). */

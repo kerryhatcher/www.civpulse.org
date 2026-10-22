@@ -99,6 +99,9 @@ export function initCalendar(): void {
   let signedIn = false;
   let timer: number | undefined;
   let requestId = 0;
+  const params = new URLSearchParams(window.location.search);
+  let initialCalendar = params.get('calendar');
+  if (pastCheckbox && params.get('past') === '1') pastCheckbox.checked = true;
 
   function setStatus(text: string, hidden = false): void {
     if (!status) return;
@@ -189,6 +192,10 @@ export function initCalendar(): void {
     calendars = (data ?? []) as unknown as CalendarRef[];
     renderOrganizationOptions();
     renderCalendarOptions();
+    if (initialCalendar) {
+      if (calendars.some(calendar => calendar.id === initialCalendar)) calendarSelectEl.value = initialCalendar;
+      initialCalendar = null;
+    }
     await loadEvents();
   }
 

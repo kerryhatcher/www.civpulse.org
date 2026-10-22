@@ -238,6 +238,7 @@ details[open] summary {
 
 .site-footer div {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 20px;
 }
@@ -2247,3 +2248,8 @@ textarea::placeholder {
 .article-association input[type="checkbox"] { width: auto; }
 .article-association input[type="text"] { min-width: 0; width: 100%; }
 .article-admin-links { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.site-search-form button { align-self: end; }
+.site-search-results { margin-block: 1.5rem; }
+.site-search-result h2 a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+.site-search-result p { overflow-wrap: anywhere; }
+.site-search-pagination { display: flex; gap: 1rem; margin-block: 1.5rem; }

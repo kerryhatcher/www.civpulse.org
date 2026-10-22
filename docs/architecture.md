@@ -42,7 +42,9 @@ docs/         architecture, backend, and development notes
   browser, but **RLS is the real enforcement**.
 - Full-text search uses stored generated `tsvector` columns + GIN indexes and
   `security definer` RPCs (`search_maps`, `search_organizations`,
-  `search_events`, `search_people`, `search_elections`).
+  `search_events`, `search_people`, `search_elections`). The `/search/` page uses
+  `search_site` for all civic content types and their permitted relationships,
+  applying visibility before matching or ranking.
 
 See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 

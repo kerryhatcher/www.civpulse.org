@@ -224,7 +224,41 @@ without needing access to the raw join table.
 - `@astrojs/sitemap` writes `sitemap-index.xml`; `public/robots.txt` references
   it. Admin, account, auth, viewer, and 404 routes are excluded.
 
-### Search
+### Site-wide search
+
+The main navigation links to `/search/`, a static shell that fetches results live
+through `public.search_site(p_query, p_type, p_limit, p_offset)`. It covers people,
+organizations, elections, races, ballot questions, articles, maps, layers,
+calendars, and events (including past events). Type filters, pagination, and
+queries are shareable URL parameters. Results link to profiles, election
+sections, calendars, maps, or the original article URL.
+
+Stored generated `site_search_document` columns have GIN indexes. Search combines
+English full-text ranking with literal substring matching for partial names,
+contact details, and URLs. Related names and metadata are searchable: candidates
+and parties on races, ballot wording on elections, affiliations on people and
+organizations, and authors/subjects/publishers on articles. These joins filter
+access before matching or ranking. Existing people, organization, map, and
+election directory searches reuse the same search implementation. Empty election
+browsing preserves upcoming-nearest-first, then past-newest-first order.
+
+Anonymous discovery includes public records only; signed-in discovery includes
+unlisted and private records under the existing visibility rules. Events also
+inherit calendar and election gates. Election details omit hidden candidate
+profiles for anonymous callers. RPCs apply these checks with an empty search path;
+no private result data is embedded in prerendered HTML. Authentication changes
+clear and refetch results. Accounts, auth profiles, and admin allowlists are
+excluded from civic content search.
+
+PostGIS feature properties are searchable through their layer when it belongs to
+an accessible map; admins can also search orphan layer properties. Remote GeoJSON
+contents are not crawled: only stored layer metadata and source URLs are searched.
+Queries are limited to 500 characters; each RPC page is capped at 100 results.
+
+Run `supabase/tests/site_search.sql` against local Supabase for rollback-only
+anonymous, ordinary-member, and admin access regression checks.
+
+### Map search
 
 Follows the Supabase full-text search guide:
 
@@ -390,7 +424,7 @@ visibility, so they have no separate visibility column.
 - `elections.search_document` is a stored `tsvector` generated from `name`
   (weight A) and `description` (weight B), with a GIN index.
 - `public.search_elections(p_query text, p_limit int)` uses
-  `websearch_to_tsquery` + `ts_rank`, ordering upcoming elections first.
+  `websearch_to_tsquery` + `ts_rank` for nonempty queries; empty browsing orders upcoming elections first.
   Anonymous callers only match `public` elections; signed-in callers also match
   `unlisted` and `private` elections.
 - `public.get_election(uuid)` returns `{status: ok|private|missing, election,

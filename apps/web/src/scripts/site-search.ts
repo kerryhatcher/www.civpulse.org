@@ -1,0 +1,119 @@
+import { getSupabase } from '../lib/supabase';
+
+interface SearchResult {
+  entity_type: string; id: string; title: string; description: string | null;
+  url: string | null; visibility: string;
+}
+const labels: Record<string, string> = {
+  person: 'Person', organization: 'Organization', election: 'Election', contest: 'Race',
+  ballot_question: 'Ballot question', article: 'Article', map: 'Map', layer: 'Layer',
+  calendar: 'Calendar', event: 'Event',
+};
+const pageSize = 20;
+
+function renderResult(result: SearchResult): HTMLElement {
+  const card = document.createElement('article'); card.className = 'org-card site-search-result';
+  const type = document.createElement('p'); type.className = 'org-eyebrow';
+  type.textContent = labels[result.entity_type] ?? 'Content';
+  const title = document.createElement('h2');
+  let target: URL | null = null;
+  try {
+    if (result.url) {
+      const parsed = new URL(result.url, window.location.origin);
+      if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password
+        && (result.entity_type === 'article' || parsed.origin === window.location.origin)) target = parsed;
+    }
+  } catch { /* Metadata without a usable destination still has a readable result. */ }
+  if (target) {
+    const link = document.createElement('a'); link.href = target.href; link.textContent = result.title;
+    if (result.entity_type === 'article') { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+    title.append(link);
+  } else title.textContent = result.title;
+  card.append(type, title);
+  if (result.visibility !== 'public') {
+    const access = document.createElement('span'); access.className = 'visibility-badge';
+    access.textContent = result.visibility === 'private' ? 'Private' : 'Unlisted'; card.append(access);
+  }
+  if (result.description) { const description = document.createElement('p'); description.textContent = result.description; card.append(description); }
+  if (result.entity_type === 'article' && target) {
+    const source = document.createElement('span'); source.className = 'candidate-meta'; source.textContent = target.hostname; card.append(source);
+  }
+  return card;
+}
+
+export async function initSiteSearch(): Promise<void> {
+  const form = document.querySelector<HTMLFormElement>('[data-site-search-form]');
+  if (!form) return;
+  const input = form.querySelector<HTMLInputElement>('[data-site-search-input]')!;
+  const type = form.querySelector<HTMLSelectElement>('[data-site-search-type]')!;
+  const results = document.querySelector<HTMLElement>('[data-site-search-results]')!;
+  const status = document.querySelector<HTMLElement>('[data-site-search-status]')!;
+  const access = document.querySelector<HTMLElement>('[data-site-search-access]')!;
+  const previous = document.querySelector<HTMLButtonElement>('[data-site-search-previous]')!;
+  const next = document.querySelector<HTMLButtonElement>('[data-site-search-next]')!;
+  const supabase = getSupabase();
+  let request = 0, offset = 0, timer: number | undefined;
+  let ready = false;
+
+  function restoreUrl(): void {
+    const params = new URLSearchParams(window.location.search);
+    input.value = (params.get('q') ?? '').slice(0, 500);
+    const chosen = params.get('type') ?? '';
+    type.value = Object.hasOwn(labels, chosen) ? chosen : '';
+    const page = Number(params.get('page') ?? '1');
+    offset = Number.isSafeInteger(page) && page > 0 && page <= 10000 ? (page - 1) * pageSize : 0;
+  }
+  function saveUrl(): void {
+    const params = new URLSearchParams();
+    if (input.value.trim()) params.set('q', input.value.trim());
+    if (type.value) params.set('type', type.value);
+    if (offset) params.set('page', String(offset / pageSize + 1));
+    const query = params.toString(); history.replaceState(null, '', `/search/${query ? '?' + query : ''}`);
+  }
+  async function search(): Promise<void> {
+    const token = ++request;
+    results.replaceChildren(); previous.hidden = true; next.hidden = true;
+    results.removeAttribute('aria-busy');
+    if (!ready) return;
+    saveUrl();
+    if (!input.value.trim() && !type.value) { status.textContent = 'Enter a search or choose a content type to browse.'; return; }
+    status.textContent = 'Searching…';
+    results.setAttribute('aria-busy', 'true');
+    try {
+      const { data, error } = await supabase.rpc('search_site', {
+        p_query: input.value.trim(), p_type: type.value || null, p_limit: pageSize + 1, p_offset: offset,
+      });
+      if (token !== request) return;
+      if (error) throw error;
+      const rows = (data ?? []) as SearchResult[];
+      const visible = rows.slice(0, pageSize);
+      results.replaceChildren(...visible.map(renderResult));
+      previous.hidden = offset === 0; next.hidden = rows.length <= pageSize;
+      status.textContent = visible.length ? `Showing results ${offset + 1}–${offset + visible.length}${rows.length > pageSize ? ' · more available' : ''}`
+        : offset ? 'No more results. Choose Previous to return.' : 'No matching content you can access.';
+    } catch {
+      if (token === request) { results.replaceChildren(); status.textContent = 'Could not search. Please try again.'; }
+    } finally { if (token === request) results.removeAttribute('aria-busy'); }
+  }
+  function update(): void {
+    ++request; results.replaceChildren(); previous.hidden = true; next.hidden = true;
+    offset = 0; window.clearTimeout(timer); timer = window.setTimeout(() => void search(), 200);
+  }
+  restoreUrl();
+  form.addEventListener('submit', event => { event.preventDefault(); window.clearTimeout(timer); offset = 0; void search(); });
+  input.addEventListener('input', update); type.addEventListener('change', update);
+  previous.addEventListener('click', () => { offset = Math.max(0, offset - pageSize); void search(); });
+  next.addEventListener('click', () => { offset += pageSize; void search(); });
+  window.addEventListener('popstate', () => { restoreUrl(); void search(); });
+  const { data: { session } } = await supabase.auth.getSession();
+  let identity = session?.user.id ?? null;
+  function showAccess(): void { access.textContent = identity ? 'Signed in — search includes public, unlisted, and private content you can access.' : 'Search shows public content. Sign in to search additional content you can access.'; }
+  showAccess(); ready = true; await search();
+  supabase.auth.onAuthStateChange((_event, current) => {
+    const nextIdentity = current?.user.id ?? null;
+    if (nextIdentity === identity) return;
+    identity = nextIdentity; showAccess(); ++request; results.replaceChildren(); offset = 0;
+    // Start outside the auth callback to avoid Supabase auth-lock reentrancy.
+    window.setTimeout(() => void search(), 0);
+  });
+}

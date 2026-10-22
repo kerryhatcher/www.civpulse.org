@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Search" description="Search Civic Pulse people, elections, articles, organizations, maps, and community events.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Search Civic Pulse</h1>
+      <p>Find people, organizations, elections, races, ballot questions, articles, maps, layers, calendars, and events.</p>
+    </div>
+    <form class="calendar-filters site-search-form" action="/search/" role="search" data-site-search-form>
+      <label class="field field-wide"><span>Search</span><input type="search" name="q" maxlength="500" placeholder="Name, office, topic, or article URL…" data-site-search-input /></label>
+      <label class="field"><span>Content type</span><select name="type" data-site-search-type>
+        <option value="">All content</option>
+        <option value="person">People</option><option value="organization">Organizations</option>
+        <option value="election">Elections</option><option value="contest">Races</option>
+        <option value="ballot_question">Ballot questions</option><option value="article">Articles</option>
+        <option value="map">Maps</option><option value="layer">Layers</option>
+        <option value="calendar">Calendars</option><option value="event">Events</option>
+      </select></label>
+      <button class="button-link" type="submit">Search</button>
+    </form>
+    <p class="body-note" data-site-search-access>Search shows public content. Sign in to search additional content you can access.</p>
+    <p class="status" role="status" aria-live="polite" data-site-search-status>Enter a search or choose a content type to browse.</p>
+    <div class="org-grid site-search-results" data-site-search-results></div>
+    <div class="site-search-pagination" aria-label="Search result pages">
+      <button type="button" data-site-search-previous hidden>Previous</button>
+      <button type="button" data-site-search-next hidden>Next</button>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initSiteSearch } from '../scripts/site-search';
+  void initSiteSearch();
+</script>

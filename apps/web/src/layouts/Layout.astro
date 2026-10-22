@@ -23,6 +23,7 @@ const nav = [
   { url: '/calendar/', label: 'Community calendar' },
   { url: '/elections/', label: 'Elections' },
   { url: '/people/', label: 'People' },
+  { url: '/search/', label: 'Search' },
 ];
 const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
