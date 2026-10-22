@@ -1,0 +1,296 @@
+{
+  "researched_on": "2026-10-21",
+  "election_slug": "2026-11-03-general-election",
+  "scope": "The ten November candidates with no verified matches in the previous seven-outlet article research pass.",
+  "method": "Searched exact candidate names and useful variants across established Georgia television, radio and newspaper outlets, followed primary publisher pages, and checked candidate identity, visible byline, publication date and publisher credentials. Article metadata and associations only; no copied article bodies.",
+  "notes": [
+    "The Wiregrass Farmer guide supplies brief named mentions for nine target candidates; it is not an individual profile for each. WTOC separately reports on Christina Clement speaking to Savannah voters.",
+    "Justin Laster remains without verified coverage from a qualifying Georgia news outlet. This is a search result, not proof that no coverage exists.",
+    "Unsuffixed Leland Olinger reports and reports naming Olinger II were not attached to the existing Olinger III profile because that identity discrepancy remains unresolved. The Wiregrass Farmer uses the exact Olinger III name.",
+    "Excluded campaign websites, election aggregators, advocacy material, court records and unverified same-name arrest records. A campaign announcement in New York-based Black Star News was outside the requested Georgia-outlet scope.",
+    "Some search-tool access was blocked for Savannah Morning News, The Augusta Chronicle and WSAV. No absence-of-coverage conclusion is drawn from those access restrictions.",
+    "A generic Editor or collective Staff credit is not converted into a fictitious person or attributed to someone based only on their job title."
+  ],
+  "publisher_quality": [
+    {
+      "slug": "the-wiregrass-farmer",
+      "evidence": "Georgia Press Association public-notice directory lists the paper. University of Georgia archived masthead identifies its founding year and Turner County legal-organ role.",
+      "sources": [
+        "https://www.georgiapublicnotice.com/Public-Notice-Law.aspx/1000",
+        "https://gahistoricnewspapers.galileo.usg.edu/lccn/sn88054146/2020-02-05/ed-1/seq-4/ocr/"
+      ]
+    },
+    {
+      "slug": "wtoc",
+      "evidence": "Original reporting published on the established Savannah television station’s own website with a named reporter and visible date.",
+      "sources": [
+        "https://www.wtoc.com/2026/04/01/georgias-senate-race-heats-up-four-candidates-pitch-savannah-voters/",
+        "https://www.wtoc.com/"
+      ]
+    }
+  ],
+  "organizations": [
+    {
+      "slug": "the-wiregrass-farmer",
+      "name": "The Wiregrass Farmer",
+      "website_url": "https://www.thewiregrassfarmer.com/",
+      "description": "Local newspaper serving Ashburn and Turner County, Georgia. Established in 1902; listed by the Georgia Press Association."
+    },
+    {
+      "slug": "wtoc",
+      "name": "WTOC",
+      "website_url": "https://www.wtoc.com/",
+      "description": "Savannah, Georgia television newsroom serving the Coastal Empire and Lowcountry."
+    }
+  ],
+  "candidates": [
+    {
+      "slug": "andrew-pacetti",
+      "name": "Andrew Pacetti",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Andrew Pacetti\" Georgia candidate news",
+        "\"Andrew Pacetti\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Andy Pacetti\" Georgia news -site:andyforgeorgia.com",
+        "\"Andrew Pacetti\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)",
+        "\"Andy Pacetti\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "cassandra-easton",
+      "name": "Cassandra Easton",
+      "office": "United States Senate",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Cassandra Easton\" Georgia candidate news",
+        "\"Cassandra Easton\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Cassandra Easton\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "christina-clement",
+      "name": "Christina Clement",
+      "office": "United States Senate",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 2,
+      "queries": [
+        "\"Christina Clement\" Georgia candidate news",
+        "\"Christina Clement\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Christina Clement\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "david-c-byrne",
+      "name": "David C. Byrne",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"David C. Byrne\" Georgia candidate news",
+        "\"David C. Byrne\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"David Byrne\" Georgia governor write-in",
+        "\"David C. Byrne\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "david-leon-moreland",
+      "name": "David Leon Moreland",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"David Leon Moreland\" Georgia candidate news",
+        "\"David Leon Moreland\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"David Leon Moreland\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "deb-broughton-davis",
+      "name": "Deb Broughton Davis",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Deb Broughton Davis\" Georgia candidate news",
+        "\"Deb Broughton Davis\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Deb Davis\" Georgia governor",
+        "\"Deb Broughton Davis\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "jacqueline-angela-dacosta",
+      "name": "Jacqueline Angela DaCosta",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Jacqueline Angela DaCosta\" Georgia candidate news",
+        "\"Jacqueline Angela DaCosta\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Jacqueline DaCosta\" Georgia candidate news",
+        "\"Jacqueline Angela DaCosta\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "justin-laster",
+      "name": "Justin Laster",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "no_verified_match",
+      "article_count": 0,
+      "queries": [
+        "\"Justin Laster\" Georgia candidate news",
+        "\"Justin Laster\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Justin Laster\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "leland-j-olinger-iii",
+      "name": "Leland J. Olinger, III",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Leland Olinger\" Georgia candidate news",
+        "\"Leland Olinger\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Leland Olinger\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    },
+    {
+      "slug": "milton-j-lofton",
+      "name": "Milton J. Lofton",
+      "office": "Governor of Georgia",
+      "is_write_in": true,
+      "status": "verified",
+      "article_count": 1,
+      "queries": [
+        "\"Milton Lofton\" Georgia candidate news",
+        "\"Milton Lofton\" (site:wsbtv.com OR site:fox5atlanta.com OR site:atlantanewsfirst.com OR site:11alive.com OR site:wtoc.com OR site:wjcl.com OR site:wsav.com OR site:wabe.org OR site:georgiarecorder.com OR site:savannahnow.com OR site:augustachronicle.com OR site:walb.com OR site:thecurrentga.org)",
+        "\"Milton Lofton\" Georgia (site:wsbtv.com OR site:11alive.com OR site:wabe.org OR site:georgiarecorder.com)"
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "title": "Write-in candidates on the ballot this year",
+      "url": "https://www.thewiregrassfarmer.com/2026/09/22/write-in-candidates-on-the-ballot-this-year/",
+      "published_on": "2026-09-22",
+      "fetched_on": "2026-10-21",
+      "publisher": "the-wiregrass-farmer",
+      "people": [
+        {
+          "slug": "andrew-pacetti",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "cassandra-easton",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "christina-clement",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "david-c-byrne",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "david-leon-moreland",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "deb-broughton-davis",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "jacqueline-angela-dacosta",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "leland-j-olinger-iii",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "milton-j-lofton",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "elbert-arthur-bartell",
+          "role": "Mentioned"
+        }
+      ],
+      "organizations": [
+        {
+          "slug": "the-wiregrass-farmer",
+          "role": "Publisher"
+        }
+      ],
+      "byline": "Editor",
+      "verification": "The publicly visible publisher article lists the exact names of nine members of the target roster, plus Elbert Arthur Bartell. It does not name Justin Laster. Only visible metadata and named associations are imported; subscriber-only content was not accessed. The generic Editor byline is not attributed to a named person.",
+      "sources": [
+        "https://www.thewiregrassfarmer.com/2026/09/22/write-in-candidates-on-the-ballot-this-year/"
+      ]
+    },
+    {
+      "title": "Georgia’s Senate race heats up as four candidates pitch to Savannah voters",
+      "url": "https://www.wtoc.com/2026/04/01/georgias-senate-race-heats-up-four-candidates-pitch-savannah-voters/",
+      "published_on": "2026-04-01",
+      "fetched_on": "2026-10-21",
+      "publisher": "wtoc",
+      "people": [
+        {
+          "slug": "christina-clement",
+          "role": "Subject"
+        },
+        {
+          "slug": "mike-collins",
+          "role": "Subject"
+        },
+        {
+          "slug": "jon-ossoff",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "madalyn-bierster",
+          "name": "Madalyn Bierster",
+          "role": "Author"
+        }
+      ],
+      "organizations": [
+        {
+          "slug": "wtoc",
+          "role": "Publisher"
+        }
+      ],
+      "byline": "Madalyn Bierster and WTOC Staff",
+      "verification": "Publisher reports Clement speaking as a write-in U.S. Senate candidate at a Savannah candidate luncheon; has a separate section for Collins and names incumbent Ossoff. Visible byline and April 1 publication date verified. No fictitious person is created for WTOC Staff.",
+      "sources": [
+        "https://www.wtoc.com/2026/04/01/georgias-senate-race-heats-up-four-candidates-pitch-savannah-voters/"
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "url": "https://www.fox5atlanta.com/news/republican-leland-olinger-says-he-wants-be-next-ga-governor.amp",
+      "reason": "Unsuffixed candidate name; cannot resolve II/III identity discrepancy with sufficient confidence."
+    },
+    {
+      "url": "https://www.wjcl.com/article/another-republican-throws-his-hat-in-the-ring-for-georgia-governor/70246041",
+      "reason": "Story is about Rick Jackson, not a target candidate; no verified target-candidate mention."
+    },
+    {
+      "url": "https://blackstarnews.com/milton-j-lofton-launches-write-in-campaign-for-governor-of-georgia-stand-up-speak-out-make-a-change/",
+      "reason": "Outside Georgia publisher scope; campaign-announcement format."
+    }
+  ]
+}
