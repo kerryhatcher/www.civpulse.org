@@ -171,8 +171,10 @@ details[open] summary {
 }
 
 .site-header {
-  height: 80px;
+  min-height: 80px;
+  padding-block: 12px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
@@ -194,14 +196,20 @@ details[open] summary {
 
 .site-header nav {
   display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   align-items: center;
-  gap: 44px;
+  gap: 4px 44px;
 }
 
 .site-header nav a {
   min-height: 44px;
+  min-width: 44px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  white-space: nowrap;
   text-decoration: none;
   position: relative;
   font-size: 18px;
@@ -2025,12 +2033,19 @@ textarea::placeholder {
 }
 
 @media (max-width: 1000px) {
+  .site-header {
+    justify-content: center;
+    gap: 4px 24px;
+  }
+
   .brand img {
     width: 234px;
   }
 
   .site-header nav {
-    gap: 24px;
+    width: 100%;
+    justify-content: center;
+    gap: 4px 24px;
   }
 
   .site-header nav a {
