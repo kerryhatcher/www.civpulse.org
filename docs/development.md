@@ -25,6 +25,31 @@ Local test user (admin), created/confirmed by `bun run db:seed-user`:
 Local endpoints from `bun run db:status`: API `http://127.0.0.1:54321`, DB
 `127.0.0.1:54322`, Studio <http://127.0.0.1:54323>.
 
+## Codex worktrees (including chats started from iOS)
+
+Select **Civpulse shared local backend** in the chat's Environment picker.
+The versioned configuration is `.codex/environments/environment.toml`.
+Its setup runs `bun run worktree:setup`: installs the locked dependencies and
+reads the original checkout's running Supabase with `supabase status -o env`.
+Only the local API URL and anon key are written to the worktree's gitignored
+`apps/web/.env.local`. Existing `.env` files are preserved; `.env.local` takes
+precedence for these two settings. Rerunning setup refreshes those settings.
+
+Start the backend once with `bun run db:start` in the original checkout, then
+use the environment's **Start web** action (`bun run dev:worktree`) in each
+worktree. This starts only Astro and leaves the shared backend running.
+If the backend is stopped, setup explains where to start it and can be rerun.
+Astro selects an available port; use the URL printed by that worktree.
+
+All worktrees share database rows, Auth users, and schema. Run backend lifecycle,
+seeding, and migration commands deliberately from the original checkout;
+`db:reset` affects every worktree. Setup never starts, resets, migrates, or seeds
+the shared database. The setup script requires Bun, Git, and a running local
+Docker/Podman backend on the connected computer, not on the phone.
+
+Commit the environment and setup script to the branch used to create new
+worktrees so Codex can discover them there.
+
 ## Verifying a change
 
 1. `bun run check` — `astro check` must report 0 errors.
