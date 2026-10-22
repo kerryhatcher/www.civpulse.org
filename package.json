@@ -28,7 +28,10 @@
     "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/*",
     "check:pins": "bun run scripts/check-action-pins.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
-    "plugin:build": "bun run scripts/build-plugin.mjs"
+    "plugin:build": "bun run scripts/build-plugin.mjs",
+    "media:check": "bun run --cwd apps/media check",
+    "media:test": "bun run --cwd apps/media test",
+    "media:deploy": "bun run --cwd apps/media deploy"
   },
   "devDependencies": {
     "supabase": "^2.121.0"

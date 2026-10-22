@@ -24,6 +24,14 @@
         "wrangler": "^4.151.3",
       },
     },
+    "apps/media": {
+      "name": "@civpulse/media",
+      "devDependencies": {
+        "@cloudflare/workers-types": "^5.20261021.1",
+        "typescript": "^7.0.2",
+        "wrangler": "^4.151.3",
+      },
+    },
     "apps/web": {
       "name": "@civpulse/web",
       "version": "0.0.1",
@@ -159,6 +167,8 @@
     "@cfworker/json-schema": ["@cfworker/json-schema@4.1.1", "", {}, "sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og=="],
 
     "@civpulse/mcp": ["@civpulse/mcp@workspace:apps/mcp"],
+
+    "@civpulse/media": ["@civpulse/media@workspace:apps/media"],
 
     "@civpulse/web": ["@civpulse/web@workspace:apps/web"],
 

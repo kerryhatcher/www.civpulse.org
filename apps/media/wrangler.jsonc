@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "civpulse-media",
+  "account_id": "6d837580a4d0641139ecada9e74076b8",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [{ "pattern": "media.civpulse.org", "custom_domain": true }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "civpulse-media" }],
+  "vars": {
+    "SUPABASE_URL": "https://drzcrodqflzkzzbqsags.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_RaV0tnG5xJ2sBxFAarnxJg_TpPCL5fA",
+    "ALLOWED_ORIGINS": "https://new.civpulse.org,https://www.civpulse.org"
+  },
+  "observability": { "enabled": true }
+}

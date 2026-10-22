@@ -1,3 +1,4 @@
+import { uploadProfileImage, initImagePreview } from '../lib/media';
 import { getSupabase } from '../lib/supabase';
 import { organizationLogoUrl } from '../lib/supabase-build';
 import type { Organization } from '../lib/organizations';
@@ -85,7 +86,13 @@ export async function initOrganizationAdmin(): Promise<void> {
     slugField.value = slugify(nameField.value);
   });
 
+  const clearImagePreview = initImagePreview(fileField, preview, (message) => {
+    setPreview(editingLogoPath);
+    setMessage(formEl, message, 'error');
+  });
+
   function setPreview(path: string | null): void {
+    clearImagePreview();
     if (!preview) return;
     const url = organizationLogoUrl(path);
     if (url) {
@@ -222,10 +229,6 @@ export async function initOrganizationAdmin(): Promise<void> {
       return;
     }
 
-    if (org.logo_path) {
-      await supabase.storage.from('org-logos').remove([org.logo_path]);
-    }
-
     setMessage(listEl, 'Organization deleted.', 'success');
     await loadOrganizations();
   }
@@ -254,13 +257,7 @@ export async function initOrganizationAdmin(): Promise<void> {
       const file = fileField?.files?.[0];
 
       if (file) {
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-60);
-        const path = `${crypto.randomUUID()}-${safeName}`;
-        const { error: uploadError } = await supabase.storage
-          .from('org-logos')
-          .upload(path, file, { contentType: file.type || undefined, upsert: false });
-        if (uploadError) throw new Error(uploadError.message);
-        logoPath = path;
+        logoPath = await uploadProfileImage('org-logos', file);
       }
 
       const payload = {
@@ -280,10 +277,6 @@ export async function initOrganizationAdmin(): Promise<void> {
         : await supabase.from('organizations').insert(payload);
 
       if (error) throw new Error(error.message);
-
-      if (file && editingLogoPath && editingLogoPath !== logoPath) {
-        await supabase.storage.from('org-logos').remove([editingLogoPath]);
-      }
 
       setMessage(formEl, id ? 'Organization updated.' : 'Organization created.', 'success');
       resetForm();

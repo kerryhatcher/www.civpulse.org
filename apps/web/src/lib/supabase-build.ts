@@ -21,7 +21,11 @@ export function getBuildSupabase(): SupabaseClient | null {
 
 function publicStorageUrl(bucket: string, path: string | null | undefined): string | null {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
-  if (!path || !url) return null;
+  if (!path) return null;
+  // R2 uploads store an absolute URL; legacy Supabase paths stay supported.
+  const mediaUrl = (import.meta.env.PUBLIC_MEDIA_URL || 'https://media.civpulse.org').replace(/\/$/, '');
+  if (path.startsWith(`${mediaUrl}/${bucket}/`)) return path;
+  if (!url || /^[a-z]+:/i.test(path)) return null;
   return `${url}/storage/v1/object/public/${bucket}/${path}`;
 }
 

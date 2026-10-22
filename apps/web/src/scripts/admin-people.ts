@@ -1,3 +1,4 @@
+import { uploadProfileImage, initImagePreview } from '../lib/media';
 import {
   COMMON_ROLES,
   personHref,
@@ -289,7 +290,13 @@ export async function initPeopleAdmin(): Promise<void> {
     if (personSubmit) personSubmit.textContent = 'Create person';
   }
 
+  const clearImagePreview = initImagePreview(personImage, personPreview, (message) => {
+    setPreview(editingImagePath);
+    setMessage(personFormEl, '[data-person-message]', message, 'error');
+  });
+
   function setPreview(path: string | null): void {
+    clearImagePreview();
     if (!personPreview) return;
     const url = personImageUrl(path);
     if (url) {
@@ -347,10 +354,6 @@ export async function initPeopleAdmin(): Promise<void> {
       return;
     }
 
-    if (person.image_path) {
-      await supabase.storage.from('person-images').remove([person.image_path]);
-    }
-
     setMessage(personListEl, '[data-person-message]', 'Person deleted.', 'success');
     await loadPeople();
     await loadAffiliations();
@@ -380,13 +383,7 @@ export async function initPeopleAdmin(): Promise<void> {
       const file = personImage?.files?.[0];
 
       if (file) {
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-60);
-        const path = `${crypto.randomUUID()}-${safeName}`;
-        const { error: uploadError } = await supabase.storage
-          .from('person-images')
-          .upload(path, file, { contentType: file.type || undefined, upsert: false });
-        if (uploadError) throw new Error(uploadError.message);
-        imagePath = path;
+        imagePath = await uploadProfileImage('person-images', file);
       }
 
       const payload = {
@@ -414,10 +411,6 @@ export async function initPeopleAdmin(): Promise<void> {
         : await supabase.from('people').insert(payload);
 
       if (error) throw new Error(error.message);
-
-      if (file && editingImagePath && editingImagePath !== imagePath) {
-        await supabase.storage.from('person-images').remove([editingImagePath]);
-      }
 
       setMessage(
         personFormEl,

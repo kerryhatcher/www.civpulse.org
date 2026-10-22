@@ -143,3 +143,19 @@ Build status appears on the GitHub commit checks and in Cloudflare build logs.
 Supabase's GitHub integration deploys migrations separately; a migration and
 frontend build can run concurrently, so keep schema changes backward compatible.
 Redeploy the web Worker after editing prerendered public content in the admin.
+
+### Profile media development and deployment
+
+- `bun run media:check` and `bun run media:test` check the upload Worker.
+- `bun run media:deploy` deploys `apps/media/wrangler.jsonc`, including its R2
+  binding and `media.civpulse.org` custom domain. Deploy it separately from the
+  static frontend; `bun run deploy` continues to deploy only the frontend.
+- No database migration or private R2 credentials are needed. Worker vars contain
+  the hosted Supabase URL, public publishable key, and allowed site origins.
+- For local testing, run `bunx wrangler dev` from `apps/media` with local overrides
+  for `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `ALLOWED_ORIGINS` (the exact Astro
+  origin, e.g. `http://localhost:4323`). Use a gitignored `.dev.vars` for overrides.
+  Start Astro with `PUBLIC_MEDIA_URL=http://localhost:8787 bun run dev`.
+  Wrangler uses a local R2 simulation by default; do not enable remote bindings.
+- Admin saves update the directory immediately in admin. Public prerendered
+  profiles show the new image after the next frontend rebuild/deployment.

@@ -133,10 +133,11 @@ import AdminTabs from '../../components/AdminTabs.astro';
         <div class="org-logo-field">
           <label class="field">
             <span>Profile image</span>
+            <small>PNG, JPEG, or WebP · up to 2 MB. Replaces the default profile icon. Images are publicly accessible.</small>
             <input
               type="file"
               name="image"
-              accept="image/png,image/jpeg,image/webp,image/svg+xml"
+              accept="image/png,image/jpeg,image/webp"
             />
           </label>
           <img class="org-logo-preview" data-person-image-preview alt="Image preview" hidden />

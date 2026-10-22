@@ -110,3 +110,22 @@ with **OpenID Connect / OAuth 2.1** through the Supabase Auth OAuth 2.1 server
 forwards the user's access token to Supabase, so RLS applies exactly as it does
 in the web app — reads follow visibility and writes require an admin. The Worker
 never uses the service-role key. See [mcp.md](./mcp.md).
+
+## Profile media
+
+`apps/media` is a separate Cloudflare Worker at `media.civpulse.org`, bound to
+R2 bucket `civpulse-media` in the Kerry Personal account. The Astro site remains
+entirely static. Admin organization/person forms upload to this Worker, then save
+the returned absolute URL in `logo_path` / `image_path` under existing RLS.
+Legacy relative paths still resolve to Supabase Storage.
+
+Uploads require a Supabase-verified user token and `is_admin()` on every request.
+Only PNG, JPEG, and WebP up to 2 MB are accepted; the Worker checks file signatures
+and actual body size. SVG uploads are excluded. Browser uploads allow only
+`new.civpulse.org` and `www.civpulse.org`. Objects are public, including images
+attached to hidden people; do not upload confidential images.
+
+Object names are immutable UUIDs. Replacing/deleting a record does not delete its
+old image, because a previous static build may still reference it. Failed saves
+can also leave unreferenced uploads. Cleanup is a future maintenance task, after
+checking references in both the database and deployed builds.
