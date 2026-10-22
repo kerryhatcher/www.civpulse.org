@@ -1,3 +1,4 @@
+import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, shiftDay, type CalendarEvent } from '../lib/calendar-display';
 import {
   eventViewHref,
   formatEventWhen,
@@ -20,7 +21,7 @@ function renderEventCard(event: EventRecord): HTMLElement {
 
   const when = document.createElement('p');
   when.className = 'event-when';
-  when.textContent = formatEventWhen(event);
+  when.textContent = formatEventWhen(event, 'America/New_York');
   card.append(when);
 
   const heading = document.createElement('h2');
@@ -49,11 +50,20 @@ function renderEventCard(event: EventRecord): HTMLElement {
     card.append(location);
   }
 
-  if (event.description) {
-    const description = document.createElement('p');
-    description.className = 'event-description';
-    description.textContent = event.description;
-    card.append(description);
+  if (event.description || event.url) {
+    const details = document.createElement('details');
+    details.className = 'event-details';
+    const summary = document.createElement('summary'); summary.textContent = 'Event details';
+    details.append(summary);
+    if (event.description) {
+      const description = document.createElement('p'); description.className = 'event-description';
+      description.textContent = event.description; details.append(description);
+    }
+    if (event.url && /^https?:\/\//i.test(event.url)) {
+      const source = document.createElement('a'); source.href = event.url; source.textContent = 'Organizer website';
+      details.append(source);
+    }
+    card.append(details);
   }
 
   if (event.election_id) {
@@ -72,156 +82,203 @@ function renderEventCard(event: EventRecord): HTMLElement {
   return card;
 }
 
-/**
- * Public calendar browse/search. Organization and calendar filters both come
- * from the `list_calendars` RPC, so the list only ever contains content the
- * caller may see (public for anonymous, plus unlisted/private when signed in).
- */
+/** Month browsing uses the same event/calendar/election visibility rules as search. */
 export function initCalendar(): void {
-  const form = document.querySelector<HTMLFormElement>('[data-calendar-filters]');
-  const orgSelect = document.querySelector<HTMLSelectElement>('[data-calendar-org]');
-  const calendarSelect = document.querySelector<HTMLSelectElement>('[data-calendar-calendar]');
-  const searchInput = document.querySelector<HTMLInputElement>('[data-calendar-search]');
-  const pastCheckbox = document.querySelector<HTMLInputElement>('[data-calendar-past]');
-  const results = document.querySelector<HTMLElement>('[data-calendar-results]');
-  const status = document.querySelector<HTMLElement>('[data-calendar-status]');
-  const empty = document.querySelector<HTMLElement>('[data-calendar-empty]');
-  const signedInNote = document.querySelector<HTMLElement>('[data-calendar-signed-in]');
-  if (!orgSelect || !calendarSelect || !results) return;
-
-  // Aliases keep the non-null types inside the nested helpers below.
-  const orgSelectEl = orgSelect;
-  const calendarSelectEl = calendarSelect;
-  const resultsEl = results;
-
+  const find = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
+  const org = find<HTMLSelectElement>('[data-calendar-org]');
+  const calendar = find<HTMLSelectElement>('[data-calendar-calendar]');
+  const category = find<HTMLSelectElement>('[data-calendar-category]');
+  const query = find<HTMLInputElement>('[data-calendar-search]');
+  const colorBy = find<HTMLSelectElement>('[data-calendar-color]');
+  const results = find<HTMLElement>('[data-calendar-results]');
+  const status = find<HTMLElement>('[data-calendar-status]');
+  const empty = find<HTMLElement>('[data-calendar-empty]');
+  const grid = find<HTMLElement>('[data-calendar-grid]');
+  const picker = find<HTMLElement>('[data-calendar-picker]');
+  const monthLabel = find<HTMLElement>('[data-calendar-month]');
+  const clearDay = find<HTMLButtonElement>('[data-calendar-clear-day]');
+  if (!org || !results) return;
   const supabase = getSupabase();
+  const params = new URLSearchParams(location.search);
+  const today = dayKey(new Date());
+  let month = /^\d{4}-(0[1-9]|1[0-2])$/.test(params.get('month') ?? '') ? params.get('month')! : today.slice(0, 7);
+  let view = params.get('view') === 'agenda' ? 'agenda' : 'month';
+  let selectedDay: string | null = null;
   let calendars: CalendarRef[] = [];
-  let signedIn = false;
-  let timer: number | undefined;
+  let events: CalendarEvent[] = [];
+  let selected = new Set<string>();
   let requestId = 0;
-  const params = new URLSearchParams(window.location.search);
-  let initialCalendar = params.get('calendar');
-  if (pastCheckbox && params.get('past') === '1') pastCheckbox.checked = true;
+  let timer: number | undefined;
+  let loading = true;
+  let failed = false;
+  query.value = params.get('q') ?? '';
+  colorBy.value = params.get('color') === 'organization' ? 'organization' : 'calendar';
 
-  function setStatus(text: string, hidden = false): void {
-    if (!status) return;
-    status.textContent = text;
-    status.hidden = hidden;
+  function color(id: string, organization: string): string { return calendarColor(colorBy.value === 'organization' ? organization : id); }
+  function syncUrl(): void {
+    const url = new URL(location.href);
+    for (const key of ['calendar', 'calendars', 'month', 'view', 'q', 'organization', 'category', 'color', 'past']) url.searchParams.delete(key);
+    url.searchParams.set('month', month);
+    url.searchParams.set('view', view);
+    if (selected.size !== calendars.length) url.searchParams.set('calendars', [...selected].join(','));
+    if (query.value) url.searchParams.set('q', query.value);
+    if (org.value) url.searchParams.set('organization', org.value);
+    if (category.value) url.searchParams.set('category', category.value);
+    if (colorBy.value !== 'calendar') url.searchParams.set('color', colorBy.value);
+    history.replaceState(null, '', url);
   }
-
-  function selectedOrganization(): string {
-    return orgSelectEl.value;
-  }
-
-  function renderOrganizationOptions(): void {
-    const previous = orgSelectEl.value;
-    const organizations = new Map<string, string>();
-    for (const calendar of calendars) {
-      if (!organizations.has(calendar.organization_id)) {
-        organizations.set(calendar.organization_id, calendar.organization_name);
+  function drawPicker(): void {
+    const active = document.activeElement instanceof HTMLInputElement ? document.activeElement.dataset.calendarId : undefined;
+    picker.replaceChildren();
+    const groups = new Map<string, CalendarRef[]>();
+    for (const item of calendars) {
+      if (org.value && item.organization_id !== org.value) continue;
+      const group = groups.get(item.organization_name) ?? [];
+      group.push(item); groups.set(item.organization_name, group);
+    }
+    for (const [name, items] of groups) {
+      const fieldset = document.createElement('fieldset');
+      const legend = document.createElement('legend'); legend.textContent = name; fieldset.append(legend);
+      for (const item of items) {
+        const label = document.createElement('label'); label.className = 'calendar-check';
+        const input = document.createElement('input'); input.type = 'checkbox'; input.checked = selected.has(item.id);
+        input.dataset.calendarId = item.id;
+        input.style.accentColor = color(item.id, item.organization_id);
+        input.addEventListener('change', () => { input.checked ? selected.add(item.id) : selected.delete(item.id); calendar.value = ''; render(); });
+        const text = document.createElement('span'); text.textContent = item.name + (item.visibility === 'public' ? '' : ` (${VISIBILITY_LABELS[item.visibility]})`);
+        text.style.borderLeft = `4px solid ${color(item.id, item.organization_id)}`; text.style.paddingLeft = '8px';
+        label.append(input, text); fieldset.append(label);
       }
+      picker.append(fieldset);
     }
-
-    const options = [...organizations.entries()].sort((a, b) =>
-      a[1].localeCompare(b[1], undefined, { sensitivity: 'base' }),
-    );
-
-    orgSelectEl.replaceChildren(new Option('All organizations', ''));
-    for (const [id, name] of options) orgSelectEl.append(new Option(name, id));
-    orgSelectEl.value = organizations.has(previous) ? previous : '';
+    if (active) picker.querySelector<HTMLInputElement>(`[data-calendar-id="${active}"]`)?.focus();
   }
-
-  function renderCalendarOptions(): void {
-    const organizationId = selectedOrganization();
-    const previous = calendarSelectEl.value;
-    const visible = calendars.filter(
-      (calendar) => !organizationId || calendar.organization_id === organizationId,
-    );
-
-    calendarSelectEl.replaceChildren(new Option('All calendars', ''));
-    for (const calendar of visible) {
-      const label =
-        signedIn && calendar.visibility !== 'public'
-          ? `${calendar.name} (${VISIBILITY_LABELS[calendar.visibility]})`
-          : calendar.name;
-      calendarSelectEl.append(new Option(label, calendar.id));
+  function calendarOptions(): void {
+    const previous = calendar.value;
+    calendar.replaceChildren(new Option('All calendars', ''));
+    for (const item of calendars.filter(item => !org.value || item.organization_id === org.value)) calendar.append(new Option(item.name, item.id));
+    calendar.value = [...calendar.options].some(option => option.value === previous) ? previous : '';
+  }
+  function filteredEvents(): CalendarEvent[] {
+    const needle = query.value.trim().toLocaleLowerCase();
+    return events.filter(event => event.memberships.some(item => selected.has(item.id) && (!org.value || item.organization_id === org.value))
+      && (!category.value || event.categories.includes(category.value))
+      && (!needle || [event.title, event.description, event.location, event.organization_name, ...event.memberships.map(item => item.name), ...event.categories].join(' ').toLocaleLowerCase().includes(needle)));
+  }
+  function render(): void {
+    const activeDay = document.activeElement instanceof HTMLButtonElement ? document.activeElement.dataset.day : undefined;
+    const window = monthWindow(month);
+    monthLabel.textContent = new Date(`${window.start}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    grid.hidden = view !== 'month';
+    document.querySelectorAll<HTMLButtonElement>('[data-calendar-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.calendarView === view)));
+    const filtered = filteredEvents();
+    grid.replaceChildren();
+    for (const name of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']) {
+      const label = document.createElement('div'); label.className = 'calendar-weekday'; label.textContent = name; grid.append(label);
     }
-    calendarSelectEl.value = visible.some((calendar) => calendar.id === previous) ? previous : '';
+    for (let index = 0; index < window.weekday; index++) { const blank = document.createElement('div'); blank.setAttribute('aria-hidden', 'true'); grid.append(blank); }
+    for (let date = 1; date <= window.days; date++) {
+      const day = `${month}-${String(date).padStart(2, '0')}`;
+      const matches = filtered.filter(event => occursOn(event, day));
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'calendar-day';
+      button.dataset.day = day;
+      button.setAttribute('aria-label', `${new Date(`${day}T12:00:00Z`).toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'UTC' })}, ${matches.length} event${matches.length === 1 ? '' : 's'}`);
+      button.setAttribute('aria-pressed', String(selectedDay === day));
+      if (day === today) button.setAttribute('aria-current', 'date');
+      const number = document.createElement('span'); number.textContent = String(date); button.append(number);
+      const dots = document.createElement('span'); dots.className = 'calendar-dots'; dots.setAttribute('aria-hidden', 'true');
+      const keys = new Map<string, string>();
+      for (const event of matches) for (const item of event.memberships.filter(item => selected.has(item.id))) keys.set(colorBy.value === 'organization' ? item.organization_id : item.id, color(item.id, item.organization_id));
+      for (const value of keys.values()) { const dot = document.createElement('i'); dot.style.backgroundColor = value; dots.append(dot); }
+      button.append(dots);
+      button.addEventListener('click', () => { selectedDay = selectedDay === day ? null : day; render(); });
+      grid.append(button);
+    }
+    const visible = selectedDay ? filtered.filter(event => occursOn(event, selectedDay!)) : filtered;
+    results.replaceChildren(...visible.map(event => {
+      const card = renderEventCard(event);
+      const memberships = event.memberships.filter(item => selected.has(item.id) && (!org.value || item.organization_id === org.value));
+      card.style.borderLeft = `4px solid ${color(memberships[0].id, memberships[0].organization_id)}`;
+      const meta = card.querySelector<HTMLElement>('.event-meta')!;
+      meta.textContent = `${event.organization_name} · ${memberships.map(item => item.name).join(' · ')}`;
+      const categories = event.categories.filter(name => !memberships.some(item => item.name === name));
+      if (categories.length) meta.append(` · ${categories.join(', ')}`);
+      return card;
+    }));
+    results.hidden = loading || failed || visible.length === 0;
+    empty.hidden = loading || failed || visible.length > 0;
+    status.textContent = loading ? 'Loading events…' : failed ? 'Could not load events. Please reload to try again.' : `${visible.length} event${visible.length === 1 ? '' : 's'}${selectedDay ? ` on ${selectedDay}` : ' this month'}`;
+    clearDay.hidden = selectedDay === null;
+    drawPicker();
+    if (activeDay) grid.querySelector<HTMLButtonElement>(`[data-day="${activeDay}"]`)?.focus();
+    syncUrl();
   }
-
   async function loadEvents(): Promise<void> {
     const id = ++requestId;
-    setStatus('Loading events…');
-
-    const { data, error } = await supabase.rpc('search_events', {
-      p_query: searchInput?.value.trim() ?? '',
-      p_organization_id: orgSelectEl.value || null,
-      p_calendar_id: calendarSelectEl.value || null,
-      p_include_past: Boolean(pastCheckbox?.checked),
-      p_limit: 100,
-    });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (empty) empty.hidden = true;
-      setStatus(`Could not load events: ${error.message}`);
-      return;
-    }
-
-    const events = (data ?? []) as unknown as EventRecord[];
-    resultsEl.replaceChildren(...events.map(renderEventCard));
-    resultsEl.hidden = events.length === 0;
-    if (empty) empty.hidden = events.length > 0;
-    setStatus(
-      events.length > 0 ? `${events.length} event${events.length === 1 ? '' : 's'}` : '',
-      events.length === 0,
-    );
+    loading = true; failed = false; events = []; render();
+    const range = monthWindow(month);
+    const rows: EventRecord[] = [];
+    try {
+      for (let offset = 0; ; offset += 500) {
+        const { data, error } = await supabase.rpc('browse_calendar_events', { p_start: dayBoundary(range.start), p_end: dayBoundary(range.end), p_offset: offset });
+        if (id !== requestId) return;
+        if (error) throw error;
+        const page = data as EventRecord[]; rows.push(...page);
+        if (page.length < 500) break;
+      }
+      events = groupEvents(rows).filter(event => Array.from({length: range.days}, (_, index) => shiftDay(range.start, index)).some(day => occursOn(event, day)));
+      const previous = category.value;
+      category.replaceChildren(new Option('All categories', ''));
+      for (const name of [...new Set(events.flatMap(event => event.categories))].sort()) category.append(new Option(name, name));
+      if (previous && ![...category.options].some(option => option.value === previous)) category.append(new Option(previous, previous));
+      category.value = previous;
+    } catch { failed = true; }
+    if (id === requestId) { loading = false; render(); }
   }
-
-  async function loadCalendars(): Promise<void> {
-    const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
-
-    if (error) {
-      setStatus(`Could not load calendars: ${error.message}`);
-      return;
-    }
-
-    calendars = (data ?? []) as unknown as CalendarRef[];
-    renderOrganizationOptions();
-    renderCalendarOptions();
-    if (initialCalendar) {
-      if (calendars.some(calendar => calendar.id === initialCalendar)) calendarSelectEl.value = initialCalendar;
-      initialCalendar = null;
-    }
-    await loadEvents();
+  function changeMonth(amount: number): void {
+    const date = new Date(`${month}-01T12:00:00Z`); date.setUTCMonth(date.getUTCMonth() + amount);
+    month = date.toISOString().slice(0, 7); selectedDay = null; void loadEvents();
   }
-
-  orgSelectEl.addEventListener('change', () => {
-    renderCalendarOptions();
-    void loadEvents();
+  find('[data-calendar-prev]').addEventListener('click', () => changeMonth(-1));
+  find('[data-calendar-next]').addEventListener('click', () => changeMonth(1));
+  find('[data-calendar-today]').addEventListener('click', () => { month = dayKey(new Date()).slice(0, 7); selectedDay = null; void loadEvents(); });
+  clearDay.addEventListener('click', () => { selectedDay = null; render(); });
+  document.querySelectorAll<HTMLButtonElement>('[data-calendar-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.calendarView!; selectedDay = null; render(); }));
+  org.addEventListener('change', () => { calendarOptions(); selectedDay = null; render(); });
+  calendar.addEventListener('change', () => {
+    selected = new Set(calendars.filter(item => !calendar.value || item.id === calendar.value).map(item => item.id)); render();
   });
-  calendarSelectEl.addEventListener('change', () => void loadEvents());
-  pastCheckbox?.addEventListener('change', () => void loadEvents());
-
-  searchInput?.addEventListener('input', () => {
-    window.clearTimeout(timer);
-    timer = window.setTimeout(() => void loadEvents(), 200);
+  category.addEventListener('change', () => { selectedDay = null; render(); });
+  colorBy.addEventListener('change', render);
+  query.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => { selectedDay = null; render(); }, 150); });
+  find<HTMLFormElement>('[data-calendar-filters]').addEventListener('submit', event => { event.preventDefault(); render(); });
+  for (const [selector, show] of [['[data-calendars-show]', true], ['[data-calendars-hide]', false]] as const) find(selector).addEventListener('click', () => {
+    for (const item of calendars.filter(item => !org.value || item.organization_id === org.value)) show ? selected.add(item.id) : selected.delete(item.id);
+    calendar.value = ''; render();
   });
-
-  form?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    window.clearTimeout(timer);
-    void loadEvents();
-  });
-
-  void supabase.auth.getSession().then(({ data: { session } }) => {
-    signedIn = Boolean(session);
-    if (signedIn && signedInNote) signedInNote.hidden = false;
-    void loadCalendars();
-  });
+  // Same-origin stable URL works on staging and follows the production domain at cutover.
+  const feed = new URL('/events.ics', location.origin);
+  find<HTMLAnchorElement>('[data-calendar-subscribe]').href = feed.href.replace(/^https?:/, 'webcal:');
+  find<HTMLInputElement>('[data-calendar-feed]').value = feed.href;
+  void (async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      find('[data-calendar-signed-in]').hidden = !session;
+      const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
+      if (error) throw error;
+      calendars = data as CalendarRef[];
+      selected = new Set(calendars.map(item => item.id));
+      const ids = params.has('calendars') ? params.get('calendars')!.split(',') : params.get('calendar') ? [params.get('calendar')!] : null;
+      if (ids) selected = new Set(ids.filter(id => calendars.some(item => item.id === id)));
+      org.replaceChildren(new Option('All organizations', ''));
+      for (const [id, name] of new Map(calendars.map(item => [item.organization_id, item.organization_name]))) org.append(new Option(name, id));
+      org.value = params.get('organization') ?? '';
+      calendarOptions();
+      if (params.get('calendar')) calendar.value = params.get('calendar')!;
+      if (params.get('category')) { const name = params.get('category')!; category.append(new Option(name, name)); category.value = name; }
+      await loadEvents();
+    } catch { loading = false; failed = true; render(); }
+  })();
 }
 
 // --- Shared event viewer ------------------------------------------------
