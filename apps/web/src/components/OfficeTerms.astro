@@ -1,0 +1,16 @@
+---
+interface Props { personId?: string; organizationId?: string; viewer?: boolean }
+const { personId, organizationId, viewer = false } = Astro.props;
+---
+<section class="person-candidacies" data-office-terms data-person-id={personId} data-organization-id={organizationId} hidden={viewer} aria-labelledby="office-terms-title">
+  <h2 id="office-terms-title">{organizationId ? 'Officeholders' : 'Offices held'}</h2>
+  <p class="status" data-office-status role="status" aria-live="polite">Loading offices…</p>
+  <div data-office-groups hidden>
+    {(['current', 'former', 'upcoming'] as const).map((group) => (
+      <section data-office-group={group} hidden>
+        <h3>{group === 'current' ? 'Current' : group === 'former' ? 'Former' : 'Upcoming'}</h3>
+        <ul class="person-candidacy-list" data-office-list={group}></ul>
+      </section>
+    ))}
+  </div>
+</section>

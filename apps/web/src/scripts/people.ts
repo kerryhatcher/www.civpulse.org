@@ -1,3 +1,4 @@
+import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
 import {
@@ -384,6 +385,7 @@ export async function initPersonViewFromUrl(): Promise<void> {
   status.hidden = true;
   fillPersonView(response);
   if (response.person) {
+    void loadOfficeTerms(response.person.id);
     void loadPersonCandidacies(response.person.id);
     void loadProfileArticles('person', response.person.id);
   }
