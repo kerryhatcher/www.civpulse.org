@@ -1,6 +1,6 @@
 {
   "name": "civpulse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Search and manage Civic Pulse through authenticated MCP tools and guided civic research, content editing and mapping workflows.",
   "author": {
     "name": "Kerry Hatcher"
@@ -32,5 +32,5 @@
     ]
   },
   "skills": "./skills",
-  "mcpServers": "./.mcp.json"
+  "apps": "./.app.json"
 }

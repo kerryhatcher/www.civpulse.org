@@ -74,7 +74,10 @@ research, editing and mapping skills. Build and inspect the archive with:
 bun run plugin:build
 ```
 
-The output is `dist/plugins/civpulse-1.0.0.zip`. No tokens or secrets are packaged.
+The output is `dist/plugins/civpulse-1.0.1.zip`. No tokens or secrets are packaged.
+The account package links a registered ChatGPT cloud app through `.app.json`;
+direct-client MCP configuration is preserved separately in
+`plugins/civpulse-mcp.json`. The registered connection handles OAuth in ChatGPT.
 
 ## Enabling it on a Supabase project
 
