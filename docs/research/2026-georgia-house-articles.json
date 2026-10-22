@@ -1,0 +1,754 @@
+{
+  "researched_on": "2026-10-21",
+  "election_slug": "2026-11-03-general-election",
+  "office": "Georgia House of Representatives",
+  "scope": "All eight candidates in the five Georgia House contests currently stored for the Bibb County November ballot: districts 142, 143, 144, 145 and 149.",
+  "method": "Searched both Macon publisher domains separately for every listed candidate, including Calvin Dennis Palmer and Anissa Jones name variants. Verified publisher metadata, named mentions, bylines and original publication dates. Shared articles are linked to each verified candidate; historical stories retain their original dates and context. This is a verified search result set, not an exhaustive archive inventory.",
+  "notes": [
+    "Only metadata and associations are saved, not article text.",
+    "Fetched-on dates record when article/link existence and metadata were verified; some Telegraph evidence is search-indexed publisher text or identified syndication.",
+    "Repeated PDF versions of verified web articles are not imported as duplicate articles.",
+    "All named authors already have people records, including candidate/author Tangie Herring; existing records are reused.",
+    "No House candidate in these five current contests is listed as a write-in."
+  ],
+  "candidates": [
+    {
+      "slug": "anissa-m-jones",
+      "full_name": "Anissa M. Jones",
+      "district": "District 143",
+      "is_write_in": false,
+      "verified_article_count": 8,
+      "queries": [
+        "\"Anissa M. Jones\" site:macon.com",
+        "\"Anissa M. Jones\" site:maconmelody.com"
+      ],
+      "additional_variants": [
+        "Anissa Jones"
+      ]
+    },
+    {
+      "slug": "calvin-palmer",
+      "full_name": "Calvin Palmer",
+      "district": "District 142",
+      "is_write_in": false,
+      "verified_article_count": 6,
+      "queries": [
+        "\"Calvin Palmer\" site:macon.com",
+        "\"Calvin Palmer\" site:maconmelody.com"
+      ],
+      "additional_variants": [
+        "Calvin Dennis Palmer"
+      ]
+    },
+    {
+      "slug": "dale-washburn",
+      "full_name": "Dale Washburn",
+      "district": "District 144",
+      "is_write_in": false,
+      "verified_article_count": 15,
+      "queries": [
+        "\"Dale Washburn\" site:macon.com",
+        "\"Dale Washburn\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "eric-wilson",
+      "full_name": "Eric Wilson",
+      "district": "District 145",
+      "is_write_in": false,
+      "verified_article_count": 4,
+      "queries": [
+        "\"Eric Wilson\" site:macon.com",
+        "\"Eric Wilson\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "floyd-griffin",
+      "full_name": "Floyd Griffin",
+      "district": "District 149",
+      "is_write_in": false,
+      "verified_article_count": 12,
+      "queries": [
+        "\"Floyd Griffin\" site:macon.com",
+        "\"Floyd Griffin\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "miriam-paris",
+      "full_name": "Miriam Paris",
+      "district": "District 142",
+      "is_write_in": false,
+      "verified_article_count": 13,
+      "queries": [
+        "\"Miriam Paris\" site:macon.com",
+        "\"Miriam Paris\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "randy-peters",
+      "full_name": "Randy Peters",
+      "district": "District 149",
+      "is_write_in": false,
+      "verified_article_count": 2,
+      "queries": [
+        "\"Randy Peters\" site:macon.com",
+        "\"Randy Peters\" site:maconmelody.com"
+      ]
+    },
+    {
+      "slug": "tangie-herring",
+      "full_name": "Tangie Herring",
+      "district": "District 145",
+      "is_write_in": false,
+      "verified_article_count": 14,
+      "queries": [
+        "\"Tangie Herring\" site:macon.com",
+        "\"Tangie Herring\" site:maconmelody.com"
+      ]
+    }
+  ],
+  "excluded_leads": [
+    {
+      "url": "https://www.macon.com/news/local/crime/article315724915.html",
+      "reason": "Paris appeared only in a reused file-photo caption; no substantive reporting about her was verified."
+    },
+    {
+      "url": "https://www.macon.com/news/local/article315739428.html",
+      "reason": "Paris appeared only in a reused file-photo caption; no substantive reporting about her was verified."
+    }
+  ],
+  "articles": [
+    {
+      "title": "Macon has several state House races on the ballot this year. Meet the candidates.",
+      "url": "https://www.macon.com/news/politics-government/election/article293751684.html",
+      "published_on": "2024-10-11",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "calvin-palmer",
+          "role": "Subject"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Subject"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "jesse-fraga",
+          "name": "Jesse Fraga",
+          "role": "Author"
+        }
+      ],
+      "verification": "Historical 2024 candidate guide profiles Palmer and all five current incumbents; original publication date is October 11."
+    },
+    {
+      "title": "Five state House races on the ballot in Macon on Election Day. Here’s who won each.",
+      "url": "https://www.macon.com/news/politics-government/election/article294650634.html",
+      "published_on": "2024-11-06",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Subject"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "jesse-fraga",
+          "name": "Jesse Fraga",
+          "role": "Author"
+        }
+      ],
+      "verification": "Historical election reporting names the five winning House representatives."
+    },
+    {
+      "title": "Time for real leadership: Tangie Herring’s vision for a stronger, safer Middle Georgia | Opinion.",
+      "url": "https://www.macon.com/opinion/article294473634.html",
+      "published_on": "2024-10-24",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Author"
+        }
+      ],
+      "verification": "Signed 2024 opinion piece by Tangie Herring; candidate and author are the same existing person."
+    },
+    {
+      "title": "Monroe County school officials wanted big pay hike. Why legislators disapproved.",
+      "url": "https://www.macon.com/news/local/education/article304360976.html",
+      "published_on": "2025-04-16",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Identifies Herring and Washburn as members of the legislative delegation considering the board-pay proposal."
+    },
+    {
+      "title": "GA cellphone ban is now law. What it means for Middle Georgia schools",
+      "url": "https://www.macon.com/news/local/education/article306465381.html",
+      "published_on": "2025-05-15",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Herring on classroom cellphone rules and parent concerns."
+    },
+    {
+      "title": "New law bans cellphones, boosts literacy in GA schools. Local lawmakers weigh in",
+      "url": "https://www.macon.com/news/local/education/article315643329.html",
+      "published_on": "2026-05-12",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Griffin and Washburn about education legislation and school-zone camera rules."
+    },
+    {
+      "title": "Georgia’s school voucher list is out. But a Middle GA lawmaker wants to repeal the program",
+      "url": "https://www.macon.com/news/politics-government/article300598289.html",
+      "published_on": "2025-02-20",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports Griffin’s bill to repeal the voucher program and his arguments about public accountability."
+    },
+    {
+      "title": "Macon ranks high in number of school voucher program applicants, recipients",
+      "url": "https://www.macon.com/news/local/education/article311309180.html",
+      "published_on": "2025-07-24",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "floyd-griffin",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Identifies Griffin as a critic who sought to repeal the voucher program."
+    },
+    {
+      "title": "Macon swim instructor shares water safety tips amid spike in drownings",
+      "url": "https://www.macon.com/news/local/article316416242.html",
+      "published_on": "2026-07-10",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "alba-rosa",
+          "name": "Alba Rosa",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Herring as hosting free water-safety and swimming lessons."
+    },
+    {
+      "title": "$22M campus replaces decades-old school facility in Monroe County. See inside.",
+      "url": "https://www.macon.com/news/local/education/article311675658.html",
+      "published_on": "2025-08-15",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "myracle-lewis",
+          "name": "Myracle Lewis",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Herring about the new college and career academy and local workforce opportunities."
+    },
+    {
+      "title": "Bibb legislators draw challengers in May 19 primary election",
+      "url": "https://maconmelody.com/bibb-legislators-draw-challengers-in-may-19-primary-election/",
+      "published_on": "2026-04-23",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "calvin-palmer",
+          "role": "Subject"
+        },
+        {
+          "slug": "randy-peters",
+          "role": "Subject"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "eric-wilson",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Profiles Paris, Griffin, Palmer and Peters; identifies Herring’s challenger as former Forsyth mayor Eric Wilson, confirming his identity across races."
+    },
+    {
+      "title": "Charter changes, taxes and more: Bibb lawmakers prep for Gold Dome business",
+      "url": "https://maconmelody.com/charter-changes-taxes-and-more-bibb-lawmakers-prep-for-gold-dome-business/",
+      "published_on": "2026-01-09",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Subject"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Includes individual sections for all five House incumbents and their session priorities."
+    },
+    {
+      "title": "Speed camera ban bill zooms through state house",
+      "url": "https://maconmelody.com/speed-camera-ban-bill-zooms-through-state-house/",
+      "published_on": "2025-03-10",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports Washburn’s bill and Griffin’s support for banning automated school-zone speed cameras."
+    },
+    {
+      "title": "Macon lawmakers cap session with last-minute deals",
+      "url": "https://maconmelody.com/macon-lawmakers-cap-session-with-last-minute-deals/",
+      "published_on": "2026-04-09",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "casey-choung",
+          "name": "Casey Choung",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Paris on taxes and financial literacy and Washburn on school-zone cameras and property-tax reforms."
+    },
+    {
+      "title": "Here’s what Macon legislators are pushing under the Gold Dome this session",
+      "url": "https://maconmelody.com/bibb-county-legislative-delegation-introduces-slew-of-bills-under-gold-dome-in-2025/",
+      "published_on": "2025-02-18",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Subject"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Subject"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Subject"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reviews bills introduced by Griffin, Herring, Washburn and Jones; Paris is identified in the delegation photo caption, so her role is Mentioned."
+    },
+    {
+      "title": "Macon Democrat Herring joins Republicans supporting bill that targets trans students",
+      "url": "https://maconmelody.com/macon-democrat-herring-joins-republicans-supporting-bill-that-targets-trans-students/",
+      "published_on": "2025-03-05",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "tangie-herring",
+          "role": "Subject"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reports Herring and Washburn voting for the bill, Jones and Griffin opposing it, and Paris not voting; includes lawmakers’ comments."
+    },
+    {
+      "title": "Race for vacant Middle Georgia senate seat ramps up",
+      "url": "https://maconmelody.com/race-for-vacant-middle-georgia-senate-seat-ramps-up/",
+      "published_on": "2026-01-15",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "eric-wilson",
+          "role": "Subject"
+        },
+        {
+          "slug": "casey-choung",
+          "name": "Casey Choung",
+          "role": "Author"
+        }
+      ],
+      "verification": "Historical coverage of Wilson’s earlier Senate District 18 campaign; his identity is confirmed by the April House primary article."
+    },
+    {
+      "title": "Democrats outvote Republicans as Macon-Bibb voters pick school board, water authority seats",
+      "url": "https://maconmelody.com/democrats-outvote-republicans-as-macon-bibb-voters-pick-school-board-water-authority-seats/",
+      "published_on": "2026-05-20",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "calvin-palmer",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "casey-choung",
+          "name": "Casey Choung",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Paris as the primary winner and Palmer as her November opponent."
+    },
+    {
+      "title": "Will the Macon Mayor get a third term? Legislators to make the final call",
+      "url": "https://maconmelody.com/macon-bibb-commissioners-ask-legislators-for-third-term-for-mayor/",
+      "published_on": "2025-01-28",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Washburn questioning the urgency of changing mayoral term limits."
+    },
+    {
+      "title": "Bibb County reports 64% voter turnout as incumbent candidates dominate local, state house elections",
+      "url": "https://maconmelody.com/bibb-county-reports-64-voter-turnout-as-incumbent-candidates-dominate-local-state-house-elections/",
+      "published_on": "2024-11-06",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "caleb-slinkard",
+          "name": "Caleb Slinkard",
+          "role": "Author"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Names Paris, Jones, Washburn and Herring in historical election results; Griffin is not named in this report."
+    },
+    {
+      "title": "Macon-Bibb County releases voting results",
+      "url": "https://maconmelody.com/macon-bibb-county-releases-some-early-voting-results/",
+      "published_on": "2024-11-05",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "calvin-palmer",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "anissa-m-jones",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "caleb-slinkard",
+          "name": "Caleb Slinkard",
+          "role": "Author"
+        }
+      ],
+      "verification": "Preliminary historical tallies name these five candidates; article explicitly cautions the totals were not yet certified."
+    },
+    {
+      "title": "Map redraw could cost Black voters in Bibb, legislators warn",
+      "url": "https://maconmelody.com/map-redraw-could-cost-black-voters-in-bibb-legislators-warn/",
+      "published_on": "2026-06-16",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "dale-washburn",
+          "role": "Subject"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Subject"
+        },
+        {
+          "slug": "laura-corley",
+          "name": "Laura Corley",
+          "role": "Author"
+        }
+      ],
+      "verification": "Quotes Washburn and Paris on potential district changes; the source says changes would take effect in 2028."
+    },
+    {
+      "title": "May 19, 2026 Election Results",
+      "url": "https://maconmelody.com/051926-election/",
+      "published_on": "2026-05-19",
+      "publisher": "the-macon-melody",
+      "people": [
+        {
+          "slug": "anissa-m-jones",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "calvin-palmer",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "eric-wilson",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "floyd-griffin",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "randy-peters",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "tangie-herring",
+          "role": "Mentioned"
+        }
+      ],
+      "verification": "Reuses existing primary-results article and links all eight named House candidates. Collective byline: Melody Staff.",
+      "existing_article": true
+    },
+    {
+      "title": "Local Macon event seeks to connect people with candidates",
+      "url": "https://www.macon.com/news/local/article317242264.html",
+      "published_on": "2026-09-15",
+      "publisher": "the-macon-telegraph",
+      "people": [
+        {
+          "slug": "floyd-griffin",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "miriam-paris",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "dale-washburn",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "eric-wilson",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "calvin-palmer",
+          "role": "Mentioned"
+        },
+        {
+          "slug": "casey-choung",
+          "name": "Casey Choung",
+          "role": "Author"
+        }
+      ],
+      "verification": "Reuses existing Votes and Vibez article; names Griffin, Paris, Washburn, Wilson and Palmer as attendees.",
+      "existing_article": true,
+      "alternate_sources": [
+        "https://www.aol.com/articles/local-macon-event-seeks-connect-100000000.html"
+      ]
+    }
+  ]
+}
