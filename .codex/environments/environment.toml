@@ -1,0 +1,10 @@
+version = 1
+name = "Civpulse shared local backend"
+
+[setup]
+script = "bun run worktree:setup"
+
+[[actions]]
+name = "Start web"
+icon = "run"
+command = "bun run dev:worktree"

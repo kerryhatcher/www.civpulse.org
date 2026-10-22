@@ -4,6 +4,8 @@
   "type": "module",
   "workspaces": ["apps/*"],
   "scripts": {
+    "worktree:setup": "bun run scripts/setup-worktree.mjs",
+    "dev:worktree": "ASTRO_DEV_BACKGROUND=1 bun run dev:web",
     "dev": "bun run scripts/dev.mjs",
     "dev:web": "bun run --cwd apps/web dev",
     "dev:backend": "supabase start",
