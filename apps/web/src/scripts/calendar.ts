@@ -194,7 +194,11 @@ export function initCalendar(): void {
       button.addEventListener('click', () => { selectedDay = selectedDay === day ? null : day; render(); });
       grid.append(button);
     }
-    const visible = selectedDay ? filtered.filter(event => occursOn(event, selectedDay!)) : filtered;
+    // Keep historical dates in the grid, but default the list to today onward.
+    const listToday = dayKey(new Date());
+    const visible = selectedDay
+      ? filtered.filter(event => occursOn(event, selectedDay!))
+      : filtered.filter(event => dayKey(event.starts_at) >= listToday || occursOn(event, listToday));
     results.replaceChildren(...visible.map(event => {
       const card = renderEventCard(event);
       const memberships = event.memberships.filter(item => selected.has(item.id) && (!org.value || item.organization_id === org.value));
@@ -207,7 +211,7 @@ export function initCalendar(): void {
     }));
     results.hidden = loading || failed || visible.length === 0;
     empty.hidden = loading || failed || visible.length > 0;
-    status.textContent = loading ? 'Loading events…' : failed ? 'Could not load events. Please reload to try again.' : `${visible.length} event${visible.length === 1 ? '' : 's'}${selectedDay ? ` on ${selectedDay}` : ' this month'}`;
+    status.textContent = loading ? 'Loading events…' : failed ? 'Could not load events. Please reload to try again.' : `${visible.length} event${visible.length === 1 ? '' : 's'}${selectedDay ? ` on ${selectedDay}` : ' this month from today onward'}`;
     clearDay.hidden = selectedDay === null;
     drawPicker();
     if (activeDay) grid.querySelector<HTMLButtonElement>(`[data-day="${activeDay}"]`)?.focus();
