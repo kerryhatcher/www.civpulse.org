@@ -176,7 +176,7 @@ No deployment credentials are stored in the repository or GitHub variables.
 
 | Worker | Domain | Build command | Deploy command | Watch paths |
 | --- | --- | --- | --- | --- |
-| `civpulse-web-new` | `new.civpulse.org` | `bun run check && bun run build` | `bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**` |
+| `civpulse-web-new` | `www.civpulse.org`, `new.civpulse.org` | `bun run check && bun run build` | `bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**` |
 | `civpulse-mcp` | `mcp.civpulse.org` | `bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock` |
 
 The web build has `PUBLIC_SUPABASE_URL` set to the hosted project URL and
@@ -208,3 +208,13 @@ Redeploy the web Worker after editing prerendered public content in the admin.
   Wrangler uses a local R2 simulation by default; do not enable remote bindings.
 - Admin saves update the directory immediately in admin. Public prerendered
   profiles show the new image after the next frontend rebuild/deployment.
+
+### Production domain cutover
+
+`www.civpulse.org/*` routes to `civpulse-web-new`, the same static Worker serving
+`new.civpulse.org`. Both routes are declared in `apps/web/wrangler.jsonc`.
+The existing proxied www CNAME and legacy `civicpulse-web` Pages deployment are
+retained as a rollback origin; the Worker route takes precedence. To roll back,
+remove the www Worker route and revert its Wrangler declaration before the next
+build. The apex and HTTP redirects continue sending visitors to HTTPS www.
+The public ICS feed remains `/events.ics` on both hostnames.
