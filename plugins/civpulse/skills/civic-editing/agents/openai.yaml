@@ -1,0 +1,5 @@
+interface:
+  display_name: "Civic content editing"
+  short_description: "Create and maintain civic records and their relationships"
+policy:
+  allow_implicit_invocation: true

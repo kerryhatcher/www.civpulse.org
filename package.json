@@ -27,7 +27,8 @@
     "security:trivy": "trivy fs --scanners vuln,secret,misconfig --ignorefile .trivyignore.yaml --skip-dirs '**/node_modules' --skip-dirs '**/dist' --skip-dirs '**/.astro' --skip-dirs '**/.git' --skip-dirs '**/supabase/.temp' --skip-dirs '**/.wrangler' --skip-files '**/.dev.vars' .",
     "hooks:install": "git config core.hooksPath .githooks && chmod +x .githooks/*",
     "check:pins": "bun run scripts/check-action-pins.mjs",
-    "prepare": "git config core.hooksPath .githooks || true"
+    "prepare": "git config core.hooksPath .githooks || true",
+    "plugin:build": "bun run scripts/build-plugin.mjs"
   },
   "devDependencies": {
     "supabase": "^2.121.0"

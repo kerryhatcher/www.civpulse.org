@@ -1,0 +1,36 @@
+{
+  "name": "civpulse",
+  "version": "1.0.0",
+  "description": "Search and manage Civic Pulse through authenticated MCP tools and guided civic research, content editing and mapping workflows.",
+  "author": {
+    "name": "Kerry Hatcher"
+  },
+  "repository": "https://github.com/kerryhatcher/www.civpulse.org",
+  "homepage": "https://new.civpulse.org",
+  "license": "MIT",
+  "keywords": [
+    "civic",
+    "elections",
+    "maps",
+    "community",
+    "mcp"
+  ],
+  "interface": {
+    "displayName": "Civic Pulse",
+    "shortDescription": "Search and manage civic data",
+    "longDescription": "Search civic organizations, people, elections, ballot questions, articles, calendars, events and maps. Connect with your Civic Pulse account. Administrators can create, edit and delete content, relationships, stored map features and images; other users can research permitted content and edit their own display name. Includes research, editing and mapping skills.",
+    "developerName": "Kerry Hatcher",
+    "category": "Productivity",
+    "capabilities": [],
+    "logo": "./assets/icon.svg",
+    "composerIcon": "./assets/icon.svg",
+    "brandColor": "#173e34",
+    "defaultPrompt": [
+      "Find civic organizations, people and upcoming elections.",
+      "Help me update a Civic Pulse record.",
+      "Help me build a map with reusable layers."
+    ]
+  },
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json"
+}

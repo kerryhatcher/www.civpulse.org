@@ -1,0 +1,5 @@
+interface:
+  display_name: "Civic research"
+  short_description: "Find people, organizations, elections and civic information"
+policy:
+  allow_implicit_invocation: true

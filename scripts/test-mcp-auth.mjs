@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 // Integration test against the running LOCAL Supabase stack. Never uses hosted credentials.
 import assert from 'node:assert/strict';
+import { runCrudSuite } from './test-mcp-crud.mjs';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -164,6 +165,7 @@ try {
   assert.equal(denied.searchParams.get('error'), 'access_denied');
   console.log('PASS discovery, dynamic registration and denied authorization');
 
+  const sessions = [];
   for (const [user, isAdmin] of [[reader, false], [admin, true]]) {
     const pending = await authorization(discovery, clientId);
     const redirect = await consent(user, pending, 'approve');
@@ -201,12 +203,23 @@ try {
     assert.ok(refreshed.response.ok, JSON.stringify(refreshed.data));
     const grants = await request(`${auth}/user/oauth/grants`, { token: user.access_token });
     assert.ok(grants.data.some(grant => grant.client.id === clientId));
+    sessions.push({ user, isAdmin, refreshed });
+    console.log(`PASS ${isAdmin ? 'admin' : 'reader'} PKCE, identity, reads, write permissions and refresh`);
+  }
+  const catalog = await rpc(admin.access_token, 'tools/list');
+  assert.equal(catalog.response.status, 200);
+  assert.ok(catalog.data.result.tools.length < 128, 'Keep the MCP tool catalog within client limits');
+  if (process.env.MCP_TOOL_CATALOG) {
+    await Bun.write(process.env.MCP_TOOL_CATALOG, JSON.stringify({ server: 'Civic Pulse', tools: catalog.data.result.tools }, null, 2));
+  }
+  await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool, apiUrl: env.API_URL });
+  for (const { user, isAdmin, refreshed } of sessions) {
     const revoke = await request(`${auth}/user/oauth/grants?client_id=${clientId}`, { token: user.access_token, method: 'DELETE' });
     assert.ok(revoke.response.ok);
     assert.equal((await rpc(refreshed.data.access_token, 'tools/list')).response.status, 401, 'Revocation must stop existing access tokens');
     const revokedRefresh = await tokenRequest(discovery, { grant_type: 'refresh_token', client_id: clientId, refresh_token: refreshed.data.refresh_token });
     assert.ok(!revokedRefresh.response.ok, 'Revoked refresh token must fail');
-    console.log(`PASS ${isAdmin ? 'admin' : 'reader'} PKCE, identity, reads, write permissions, refresh, grants and revocation`);
+    console.log(`PASS ${isAdmin ? 'admin' : 'reader'} grant and token revocation`);
   }
 } finally {
   worker?.kill();

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Civic maps and layers"
+  short_description: "Research maps and edit reusable layers and stored features"
+policy:
+  allow_implicit_invocation: true

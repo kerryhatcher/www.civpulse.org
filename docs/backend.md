@@ -608,3 +608,21 @@ and relationship label. Empty lists are hidden; errors offer a reload message.
 No article associations or hidden metadata are
 embedded in static HTML. Article edits and associations update these runtime
 lists immediately; new public person/organization pages still require a rebuild.
+
+### Authenticated MCP content operations
+
+The MCP Worker forwards the verified user token; it never uses service-role
+credentials. The append-only mcp_content_tools migration adds authenticated-only
+RPCs without changing RLS. `mcp_get_record` follows existing signed-in discovery
+rules and returns article association sets only to admins. `mcp_layer_features`
+uses the existing containing-map geometry gate for non-admins, searches stored
+properties with pagination and returns bigint IDs as strings. Both read RPCs
+are security definers with an empty search_path and an explicit auth.uid gate.
+
+The admin-only, security-invoker RPCs `mcp_save_article`,
+`mcp_save_postgis_layer` and `mcp_save_layer_feature` lock existing rows and
+preserve omitted fields. They reuse canonical article/import transactions or
+the existing geometry constraints. Partial feature edits enforce the same
+10 MB / 10,000-feature layer limits as imports. Invalid associations or geometry
+roll back the entire operation. Direct resource/link writes still use RLS.
+See [mcp.md](./mcp.md) for tool coverage and OAuth verification.

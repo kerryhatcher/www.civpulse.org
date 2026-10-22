@@ -8,10 +8,12 @@ This is a Bun workspace monorepo:
 
 ```
 apps/
+  mcp/            Authenticated MCP Worker
   web/            Astro frontend (served as Cloudflare Workers static assets)
 supabase/         Postgres migrations and local Supabase configuration
 scripts/          Dev orchestration (scripts/dev.mjs) and local seed helpers
 docs/             Architecture, backend, and development notes
+plugins/civpulse/ Portable Codex/ChatGPT plugin, skills and MCP configuration
 pi-astro/         Pi package: Astro Docs MCP extension + Astro skills
 package.json      Workspace root and task shortcuts
 ```
@@ -124,3 +126,10 @@ packages/instructions from [.pi/settings.json](.pi/settings.json), which pulls i
 [Astro Docs MCP server](https://docs.astro.build/en/guides/build-with-ai/)
 (`search_astro_docs`) and provides the `astro` / `astro-project-rules` skills.
 See [pi-astro/README.md](pi-astro/README.md).
+
+## Civic Pulse plugin
+
+[Plugin source and connection instructions](plugins/civpulse/README.md) include
+research, editing and mapping skills. Run `bun run plugin:build` to generate and
+validate the portable archive. See [MCP documentation](docs/mcp.md) for OAuth,
+permissions, deployment and the full integration test.

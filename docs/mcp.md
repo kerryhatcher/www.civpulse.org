@@ -41,15 +41,40 @@ client gets the same supported read/write permissions as the user's account.
 
 ## Tools
 
-**Read** (any authenticated caller): `whoami`, `search_organizations`,
-`search_maps`, `search_events`, `search_people`, `search_elections`,
-`list_calendars`, `get_map`, `get_event`, `get_person`, `get_election`.
+The server exposes **93 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
+and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every operation.
 
-**Write** (admin): `create_organization`, `update_organization`,
-`delete_organization`, `create_calendar`, `update_calendar`, `delete_calendar`,
-`create_event`, `update_event`, `delete_event`, `create_person`,
-`update_person`, `delete_person`, `create_election`, `update_election`,
-`delete_election`.
+- **Search/read:** all ten civic types, unified search with type/limit/offset,
+  election children, article reading lists, affiliations, map layers and stored
+  feature properties/geometry.
+- **Admin CRUD:** organizations, people, elections, calendars, events, maps,
+  reusable layers, contests, ballot questions, articles, all their editable
+  relationships, individual stored features and image storage.
+- **Own account:** any signed-in user can read their profile and update their
+  display name. Administrator membership and auth user provisioning are excluded.
+
+Updates preserve omitted fields. Article updates preserve omitted association
+sets; [] explicitly clears a set and null clears supported nullable fields.
+Stored-layer updates preserve geometry when geojson is omitted; supplying it
+replaces the dataset atomically. Non-admin geometry reads require a visible
+containing map. Deletion descriptions identify cascading link/feature removal.
+
+Tool annotations identify reads, writes and destructive actions, while the
+database remains the enforcement boundary. Images are limited to the existing
+public org-logos/person-images buckets and supported image formats, up to 2 MB.
+Content edits do not trigger a public website rebuild.
+
+## Codex / ChatGPT plugin
+
+The complete portable plugin source is [plugins/civpulse](../plugins/civpulse/README.md),
+including OAuth MCP configuration, compatible Codex manifests, brand icon and
+research, editing and mapping skills. Build and inspect the archive with:
+
+```sh
+bun run plugin:build
+```
+
+The output is `dist/plugins/civpulse-1.0.0.zip`. No tokens or secrets are packaged.
 
 ## Enabling it on a Supabase project
 
@@ -88,8 +113,8 @@ Clients that only support local (stdio) servers can use `mcp-remote`:
 {
   "mcpServers": {
     "civicpulse": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.civpulse.org/mcp"]
+      "command": "bunx",
+      "args": ["mcp-remote", "https://mcp.civpulse.org/mcp"]
     }
   }
 }
@@ -124,7 +149,9 @@ This starts a temporary MCP Worker on port 8789, creates disposable local users,
 an OAuth client and visibility fixtures, and checks discovery, registration,
 PKCE, approve/deny, identity, visibility, admin/non-admin writes, refresh, and grant
 revocation. It also checks missing, malformed, forged, expired, wrong-issuer,
-wrong-audience, anon, and service-role token rejection. Test data is removed
+wrong-audience, anon, and service-role token rejection. The suite also exercises full content/link CRUD, all-type search and pagination,
+partial field/date/link preservation, stored-feature access and geometry rollback,
+article transaction rollback, own profiles and image operations. Test data is removed
 afterward. The script rejects hosted Supabase URLs and never prints tokens.
 
 For browser verification, use the consent and Account pages with the local
