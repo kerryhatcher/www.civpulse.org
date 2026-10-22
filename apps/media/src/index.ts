@@ -12,17 +12,17 @@ function imageExtension(bytes: Uint8Array, type: string): string | null {
 async function handle(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
-  const allowed = origin !== null && env.ALLOWED_ORIGINS.split(',').includes(origin);
+  const allowedOrigin = env.ALLOWED_ORIGINS.split(',').find((trusted) => trusted === origin);
   const cors = new Headers({ Vary: 'Origin', 'Cache-Control': 'no-store' });
-  if (allowed) {
-    cors.set('Access-Control-Allow-Origin', origin!);
+  if (allowedOrigin) {
+    cors.set('Access-Control-Allow-Origin', allowedOrigin);
     cors.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
     cors.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
   }
   const reply = (error: string, status: number) => Response.json({ error }, { status, headers: cors });
 
   if (url.pathname === '/upload') {
-    if (origin && !allowed) return reply('Origin is not allowed.', 403);
+    if (origin && !allowedOrigin) return reply('Origin is not allowed.', 403);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     if (request.method !== 'POST') return reply('Method not allowed.', 405);
     const bucket = url.searchParams.get('bucket');
@@ -87,7 +87,8 @@ export default {
       console.error('Media request failed', error instanceof Error ? error.message : 'Unknown error');
       const headers = new Headers({ 'Cache-Control': 'no-store', Vary: 'Origin' });
       const origin = request.headers.get('Origin');
-      if (origin && env.ALLOWED_ORIGINS.split(',').includes(origin)) headers.set('Access-Control-Allow-Origin', origin);
+      const allowedOrigin = env.ALLOWED_ORIGINS.split(',').find((trusted) => trusted === origin);
+      if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
       return Response.json({ error: 'Media storage is temporarily unavailable. Please try again.' }, { status: 503, headers });
     }
   },
