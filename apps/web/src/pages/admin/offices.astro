@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="Offices admin" description="Manage offices and elected or appointed service.">
+  <main id="main">
+    <div class="page-intro"><h1>Offices &amp; service</h1><p>Create an office within an organization, then record the people who hold it. Add a separate service record for each term, including appointments.</p></div>
+    <AdminTabs />
+    <p class="status" data-admin-gate>Checking access…</p>
+    <div class="prose" data-admin-denied hidden><p>Your account does not have admin access. <a href="/signin/?next=/admin/offices/">Sign in with an admin account</a>.</p></div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-office-form>
+        <h2 data-form-heading>Add an office</h2>
+        <input type="hidden" name="id" />
+        <label class="field"><span>Organization *</span><select name="organization_id" required></select></label>
+        <label class="field"><span>Office name *</span><input name="name" required maxlength="160" placeholder="U.S. Senator" /></label>
+        <div class="field-grid">
+          <label class="field"><span>District / jurisdiction</span><input name="district" maxlength="160" placeholder="Georgia" /></label>
+          <label class="field"><span>Seat</span><input name="seat" maxlength="160" placeholder="Class 2" /></label>
+        </div>
+        <label class="field"><span>Description</span><textarea name="description" maxlength="4000" rows="3"></textarea></label>
+        <p class="status">Offices are public. Service links follow the person's visibility. Remove service records before deleting an office.</p>
+        <div class="org-form-actions"><button class="button-link" type="submit">Save office</button><button type="button" data-cancel hidden>Cancel</button></div>
+        <p class="auth-message" data-message role="status" aria-live="polite" hidden></p>
+      </form>
+      <section aria-labelledby="office-list-heading"><h2 id="office-list-heading">Offices</h2><div class="org-list" data-office-list></div></section>
+      <form class="org-form" data-term-form>
+        <h2 data-form-heading>Add service</h2>
+        <input type="hidden" name="id" />
+        <label class="field"><span>Office *</span><select name="office_id" required></select></label>
+        <div class="field-grid">
+          <label class="field"><span>Person *</span><select name="person_id" required></select></label>
+          <label class="field"><span>Selection method *</span><select name="selection_method"><option value="elected">Elected</option><option value="appointed">Appointed</option></select></label>
+        </div>
+        <div class="field-grid">
+          <label class="field"><span>First day of service *</span><input type="date" name="starts_on" required /></label>
+          <label class="field"><span>Last day of service</span><input type="date" name="ends_on" /><small>Leave blank for ongoing service. Dates are inclusive.</small></label>
+        </div>
+        <label class="field"><span>Source URL</span><input type="url" name="source_url" maxlength="2000" placeholder="https://" /></label>
+        <p class="status">Current and former status follows the dates automatically. Future start dates appear as upcoming. Winning a race does not create a service record.</p>
+        <div class="org-form-actions"><button class="button-link" type="submit">Save service</button><button type="button" data-cancel hidden>Cancel</button></div>
+        <p class="auth-message" data-message role="status" aria-live="polite" hidden></p>
+      </form>
+      <section aria-labelledby="service-list-heading"><h2 id="service-list-heading">Service records</h2><div class="org-list" data-term-list></div></section>
+      <p class="auth-message" data-list-message role="status" aria-live="polite" hidden></p>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initOfficesAdmin } from '../../scripts/admin-offices';
+  void initOfficesAdmin();
+</script>

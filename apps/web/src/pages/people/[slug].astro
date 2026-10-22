@@ -1,4 +1,5 @@
 ---
+import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
@@ -145,6 +146,7 @@ const contact = [
       )
     }
 
+    <OfficeTerms personId={person.id} />
     <PersonCandidacies personId={person.id} />
     <ProfileArticles personId={person.id} />
 
@@ -155,6 +157,8 @@ const contact = [
 </Layout>
 
 <script>
+  import { initOfficeTerms } from '../../scripts/office-terms';
+  initOfficeTerms();
   import { initAdminEditLink } from '../../scripts/auth';
   import { initProfileArticles } from '../../scripts/profile-articles';
   import { initPersonCandidacies } from '../../scripts/person-candidacies';

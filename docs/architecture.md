@@ -96,7 +96,7 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
-  `/admin/maps/`, `/admin/calendars/`, `/admin/elections/`, `/admin/articles/` with an admin tab
+  `/admin/maps/`, `/admin/offices/`, `/admin/calendars/`, `/admin/elections/`, `/admin/articles/` with an admin tab
   bar. Admins also get an "Edit" shortcut on public org/map/person/election
   pages.
 - The header shows "Account" when signed in and "Admin" for allowlisted users.

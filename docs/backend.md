@@ -680,3 +680,46 @@ Verification: `bun test scripts/tests/calendar.test.ts`. The opt-in database tes
 uses a transaction that rolls back its fixtures and checks >500 events,
 anonymous/signed-in visibility, hidden calendars/elections, and public-only mode:
 `CALENDAR_TEST_DATABASE_URL=<local postgres URL> bun test scripts/tests/calendar-db.test.ts`.
+
+
+### Offices and service history
+
+`offices` identifies a durable office or seat within an organization, with a
+required name and optional district/jurisdiction, seat label and description.
+The organization/name/district/seat combination is unique. Offices are public;
+organization deletion is restricted while offices reference it.
+
+`office_terms` links a person to an office for one period of actual service.
+Each record has a required `elected | appointed` selection method and first day,
+optional inclusive last day, and optional HTTP(S) source URL. Null last day means
+ongoing. Dates must be finite and the last day cannot precede the first day.
+Repeated/nonconsecutive terms are separate records; the same person/office/start
+cannot be duplicated. An office with service records cannot be deleted; deleting
+a person removes their service links. Election results never automatically
+create service records, and existing candidacies and affiliations are unchanged.
+
+Admins manage both resources in `/admin/offices/`. `offices` is publicly readable;
+`office_terms` has admin-only direct access. All writes require `is_admin()`.
+`get_office_terms(p_person_id, p_organization_id)` returns service records through
+an empty-search-path security-definer function. At least one filter is required.
+Person UUID access permits public/unlisted people anonymously, private people
+only when signed in. Organization discovery permits only public people
+anonymously and includes hidden people when signed in, like person search.
+
+Public person pages, the person UUID viewer and organization pages load service
+at runtime; no service associations are embedded in prerendered HTML. The RPC
+classifies current, former and upcoming using today's America/New_York date.
+The start and last day are inclusive. Empty groups/sections are hidden and load
+errors offer a reload message. Offices link back to their organization; an
+organization's officeholders link to each person's visibility-appropriate URL.
+
+The migration includes Jon Ossoff's elected Georgia Class 2 U.S. Senate service
+starting January 20, 2021, with the Senate's Georgia senator history as its source,
+only if his existing `jon-ossoff` profile is present. It reuses an existing Senate
+organization when found, otherwise creates one. It records ongoing service
+without inferring a future departure date or changing his candidate profile.
+
+Verification: `OFFICES_TEST_DATABASE_URL=<local postgres URL> bun test
+scripts/tests/offices-db.test.ts`. Fixtures roll back; the test checks date
+boundaries, anonymous/signed-in visibility, direct-table protection, non-admin
+write denial, admin service CRUD, invalid dates/URLs and deletion restrictions.
