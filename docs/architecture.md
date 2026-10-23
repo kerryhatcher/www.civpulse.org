@@ -142,3 +142,13 @@ Anyone can register at `/signup/` with an email, password (at least 8 characters
 `public.admins` remains the only source of admin authority; user-editable metadata never grants roles. Admins use `/admin/users/` to search registered accounts and promote another user. The `admin_list_users` and `promote_user_to_admin` RPCs check `is_admin()` on every call, use an empty search path, and expose no service key. Promotion is immediate without a token refresh. Account profiles are readable only by their owner or admins.
 
 Verify with `ACCOUNTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/accounts-db.test.ts`. Fixtures roll back.
+
+## Records request tracking
+
+`/requests/`, `/requests/view/?id=<uuid>` and `/admin/requests/` are static Astro
+shells with browser RPC data. This follows the runtime calendar pattern: saved
+request content is live without a rebuild, while new frontend code requires a
+deploy. Organization profiles link to a filtered request directory; the Account
+page links to managed requests. Viewer routes are excluded from the sitemap.
+No request identity, private file metadata or ownership history enters HTML at
+build time. Creation is admin-only; owners and admins manage existing requests.

@@ -2495,3 +2495,25 @@ textarea::placeholder {
 .meeting-inline-form .field { flex: 1 1 12rem; }
 .meeting-vote { display: block; }
 .meeting-vote form { margin-block: .75rem; }
+
+/* Records requests extend the existing civic resource forms and reading pages. */
+.request-filters, .request-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.request-filters { align-items: end; margin-block: 2rem; }
+.request-filters button { justify-self: start; }
+.request-section { margin-block: 2rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+.request-section summary { cursor: pointer; font-size: 1.15rem; font-weight: 600; }
+.request-columns { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 3rem; }
+.request-prose { white-space: pre-wrap; max-width: 72ch; line-height: 1.7; }
+.request-timeline, .request-items { padding-left: 1.25rem; }
+.request-timeline li, .request-items li { margin-block: 1.5rem; overflow-wrap: anywhere; }
+.request-timeline p { white-space: pre-wrap; line-height: 1.6; }
+.request-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
+.request-result { display: block; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
+.request-result h2 { margin: 0 0 .5rem; }
+[data-request-content] dd, [data-request-owner], [data-transfer-list] { overflow-wrap: anywhere; }
+[data-request-editor] .org-form { max-width: 58rem; }
+[data-request-message][data-kind="error"] { color: var(--rust-dark); }
+@media (max-width: 700px) {
+ .request-columns, .request-fields, .request-filters { grid-template-columns: minmax(0, 1fr); }
+ .request-columns { gap: 0; }
+}

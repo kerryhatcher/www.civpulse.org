@@ -42,3 +42,31 @@ other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflo
 Each assistant connects through your own Civic Pulse account. Admin tools require
 an admin account; review proposed changes before saving. Revoke access under
 [Account → Connected apps](/account/).
+
+## Follow a records request
+
+Open [Records requests](/requests/) to search Open Records Requests (ORR), federal
+Freedom of Information Act (FOIA) requests, and other records requests. Filter by
+stage or organization; organization profiles link to requests they receive or
+originate. Open a request to read its timeline, fees, supporting files and news links.
+
+The stage describes progress: draft, submitted, initial response, in progress,
+appeal / mediation, or closed. Outcome is separate: not assessed, satisfactory,
+partial, or unsatisfactory. A partial release can remain in progress. Follow-up
+dates are manually recorded, not legal deadlines or automatic reminders.
+
+Fees are recorded in USD as separate estimated, billed and paid entries. Totals
+sum each category independently; estimates are not added to bills or payments.
+No fees recorded does not establish that a request is free.
+
+Public requests appear in the directory. Unlisted requests require their direct
+link. Private requests are visible only to their assigned owner and admins.
+Account ownership and transfer history are always private. Files can be private
+even when a request is public; downloads use short-lived links.
+
+Only admins create requests. If one is assigned to you, use **Account → Manage
+your records requests**, then **Manage this request** to update it. You can add
+updates, fees, links and files, change visibility, and transfer it to another
+registered user using their Account-page user ID. A transfer gives the recipient
+access to private files; the previous owner loses access unless they are an admin.
+Saving records here does not submit a request or payment to an agency.

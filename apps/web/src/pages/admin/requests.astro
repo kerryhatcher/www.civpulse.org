@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+import RequestEditor from '../../components/RequestEditor.astro';
+---
+<Layout title="Create a records request"><main id="main" data-request-new>
+ <div class="page-intro"><h1>Create a records request</h1><p>Start a private draft, then document responses, fees and released records.</p><p><a href="/requests/?scope=managed">Manage existing requests</a></p></div>
+ <AdminTabs /><p data-request-message role="status" aria-live="polite">Checking access…</p><RequestEditor />
+</main></Layout>
+<script>import { initRequestView } from '../../scripts/records-requests'; void initRequestView();</script>

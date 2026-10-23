@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RequestEditor from '../../components/RequestEditor.astro';
+---
+<Layout title="Records request" description="Read a records request, its timeline, fees and supporting documents.">
+ <main id="main" data-request-view>
+  <p><a href="/requests/">All records requests</a></p>
+  <p data-request-message role="status" aria-live="polite">Loading request…</p>
+  <button type="button" data-request-retry hidden>Try again</button>
+  <article data-request-content hidden>
+   <div class="page-intro"><h1 data-request-title></h1><p data-request-state></p><div data-request-organizations></div></div>
+   <dl data-request-facts class="account-list"></dl>
+   <p data-request-description class="request-prose"></p>
+   <details data-request-manage hidden class="request-section"><summary>Manage this request</summary><RequestEditor /></details>
+   <div class="request-columns">
+    <section class="request-section"><h2>Request timeline</h2><ol data-request-timeline class="request-timeline"></ol></section>
+    <aside><section class="request-section"><h2>Fees and payments</h2><p>USD · estimates, bills and payments are tracked separately.</p><dl data-fee-totals class="account-list"></dl><ul data-request-fees class="request-items"></ul></section>
+    <section class="request-section"><h2>Files and related coverage</h2><ul data-request-files class="request-items"></ul><ul data-request-links class="request-items"></ul></section></aside>
+   </div>
+  </article>
+ </main>
+</Layout>
+<script>import { initRequestView } from '../../scripts/records-requests'; void initRequestView();</script>

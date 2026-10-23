@@ -961,3 +961,40 @@ already use future timestamps, apply these locally with
 
 Verify with `SOS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/organization-sos-db.test.ts` (fixtures roll back).
+
+## Records requests (ORR / FOIA)
+
+`records_requests` holds publishable details, two optional organization links
+(target and source; at least one required), three-way visibility, stage, outcome,
+manual dates and a full-text search vector. `records_request_owners` and
+`records_request_transfers` hold private account ownership and append-only
+transfer history. Auth-user foreign keys restrict deletion while referenced.
+
+The update, link, fee and file tables are children of the request. Fee amounts
+use `numeric(12,2)` USD and separate estimated/billed/paid categories; they are
+not combined into one total. Timeline entries are dated independently of the
+current stage. Stage and outcome changes automatically append a status entry.
+
+All tables enable RLS and revoke Data API access. Explicit security-definer RPCs
+with empty search paths expose projections and enforce access. Creation checks
+`is_admin()`; subsequent mutations allow the assigned owner or an admin. Every
+mutation locks the parent before checking access, serializing it with transfers.
+Clients cannot update owners or rewrite history directly. `get_records_request`
+omits ownership/history unless authorized and returns the same unavailable state
+for nonexistent and unauthorized private IDs. `search_records_requests` lists
+public rows or, explicitly, rows managed by the caller, with stage/organization
+filters, FTS and bounded pagination. Unlisted access is via UUID viewer only.
+
+The private `records-request-files` bucket accepts common document/image MIME
+types up to 25 MB. Immutable UUID object paths are scoped to a managed request.
+Metadata defaults to private; shared files inherit request visibility. Storage
+SELECT allows managers to manage objects, while visitors can only sign a known,
+permitted path (`storage.allow_only_operation('object.sign')`), not enumerate
+unlisted files. Signed downloads last 60 seconds and can remain usable for that
+period after visibility/ownership changes. Removing metadata revokes new access
+before object cleanup; failed cleanup leaves an inaccessible orphan for admin
+maintenance. Never put confidential files in the public profile-media bucket.
+
+Verify with `RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/records-requests-db.test.ts`.
+The transaction rolls back its fixtures, covering anonymous, non-owner, owner,
+admin, transfers, fee validation, private metadata and file enumeration.

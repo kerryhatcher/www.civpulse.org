@@ -270,3 +270,12 @@ seven standalone public-source skills, installed with `bunx skills add`.
 Distinguish those seven skills from the four live-service workflows bundled
 with the OpenAI and Pi plugins; MCP authorization is a separate setup step.
 Do not present private registered app bindings as public directory availability.
+
+### Records request verification
+
+Apply the records-request migration locally without resetting the shared DB.
+Run the rollback database test documented in backend.md, then verify creation as
+an admin, owner editing/transfer, public and unlisted anonymous viewing, private
+rejection, fee totals and private/shared file downloads. Check narrow and desktop
+layouts and browser console output. Synthetic fixtures must be labeled as such
+and removed after testing. Bucket enumeration must not reveal unlisted files.

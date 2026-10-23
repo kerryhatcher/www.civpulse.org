@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { REQUEST_STAGES } from '../../lib/records-requests';
+---
+<Layout title="Records requests" description="Follow open records and Freedom of Information Act requests, responses and records.">
+ <main id="main">
+  <div class="page-intro"><h1>Records requests</h1><p>Follow the questions, the responses, and the records behind local decisions.</p>
+   <p><a href="/admin/requests/" data-request-create hidden>Create a request</a> <a href="/docs/users/#follow-a-records-request">How records requests work</a></p>
+  </div>
+  <form class="request-filters" data-request-search>
+   <label class="field"><span>Search requests</span><input type="search" name="query" placeholder="Topic or words in a request" /></label>
+   <label class="field"><span>Stage</span><select name="stage"><option value="">All stages</option>{Object.entries(REQUEST_STAGES).map(([v,l])=><option value={v}>{l}</option>)}</select></label>
+   <label class="field"><span>Organization</span><select name="organization"><option value="">All organizations</option></select></label>
+   <label class="field" data-request-scope hidden><span>Show</span><select name="scope"><option value="public">Public requests</option><option value="managed">Requests I manage</option></select></label>
+   <button type="submit" class="button-link">Search</button>
+  </form>
+  <p data-request-message role="status" aria-live="polite">Loading requests…</p>
+  <div data-request-results class="org-list"></div>
+  <div class="request-actions"><button type="button" data-request-prev hidden>Previous</button><button type="button" data-request-next hidden>Next</button></div>
+ </main>
+</Layout>
+<script>import { initRequestDirectory } from '../../scripts/records-requests'; void initRequestDirectory();</script>
