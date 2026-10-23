@@ -13,7 +13,7 @@ Level Security decides what an agent can see or change.
 | MCP endpoint | `https://mcp.civpulse.org/mcp` (streamable HTTP) |
 | Protected-resource metadata | `https://mcp.civpulse.org/.well-known/oauth-protected-resource` |
 | Authorization server | `https://drzcrodqflzkzzbqsags.supabase.co/auth/v1` (Supabase Auth OAuth 2.1 server) |
-| Consent page | `https://new.civpulse.org/oauth/consent/` |
+| Consent page | `https://www.civpulse.org/oauth/consent/` |
 
 ## Auth model
 
@@ -41,7 +41,7 @@ client gets the same supported read/write permissions as the user's account.
 
 ## Tools
 
-The server exposes **93 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
+The server exposes **95 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
 and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every operation.
 
 - **Search/read:** all ten civic types, unified search with type/limit/offset,
@@ -51,7 +51,13 @@ and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every o
   reusable layers, contests, ballot questions, articles, all their editable
   relationships, individual stored features and image storage.
 - **Own account:** any signed-in user can read their profile and update their
-  display name. Administrator membership and auth user provisioning are excluded.
+  display name.
+- **Admin accounts:** `search_users` finds registered accounts by email/display
+  name and paginates 50 at a time with `offset`. `promote_user_to_admin` promotes
+  another existing account; it grants private-content access, content writes and
+  further promotions immediately. Both tools call the guarded database RPCs with
+  the caller’s OAuth token. Regular users cannot list accounts or promote anyone.
+  No service role, account creation/deletion, demotion or password reset is exposed.
 
 Updates preserve omitted fields. Article updates preserve omitted association
 sets; [] explicitly clears a set and null clears supported nullable fields.
@@ -68,13 +74,13 @@ Content edits do not trigger a public website rebuild.
 
 The complete portable plugin source is [plugins/civpulse](../plugins/civpulse/README.md),
 including OAuth MCP configuration, compatible Codex manifests, brand icon and
-research, editing and mapping skills. Build and inspect the archive with:
+research, editing, mapping and user-administration skills. Build and inspect the archive with:
 
 ```sh
 bun run plugin:build
 ```
 
-The output is `dist/plugins/civpulse-1.0.1.zip`. No tokens or secrets are packaged.
+The output is `dist/plugins/civpulse-1.1.0.zip`. No tokens or secrets are packaged.
 The account package links a registered ChatGPT cloud app through `.app.json`;
 direct-client MCP configuration is preserved separately in
 `plugins/civpulse-mcp.json`. The registered connection handles OAuth in ChatGPT.
@@ -82,7 +88,7 @@ direct-client MCP configuration is preserved separately in
 ## Enabling it on a Supabase project
 
 The hosted Civic Pulse project has OAuth and dynamic registration enabled, with
-`https://new.civpulse.org` as its Site URL and `/oauth/consent` as its Authorization
+`https://www.civpulse.org` as its Site URL and `/oauth/consent` as its Authorization
 Path. Use the following steps when configuring another project.
 
 The deployable Worker lives in `apps/mcp`. Before agents can complete the OAuth
@@ -93,7 +99,7 @@ flow, the Supabase project's OAuth 2.1 server must be enabled:
 3. Optionally enable **Dynamic Client Registration** so MCP clients can register
    themselves; otherwise pre-register a client per agent.
 4. Authentication → **URL Configuration** → set the **Site URL** to the site that
-   serves the consent page (for example `https://new.civpulse.org`).
+   serves the consent page (for example `https://www.civpulse.org`).
 
 Until step 1 is done, `POST /auth/v1/oauth/authorize` returns
 `feature_disabled`, and agents cannot run the OAuth flow.
@@ -154,7 +160,10 @@ PKCE, approve/deny, identity, visibility, admin/non-admin writes, refresh, and g
 revocation. It also checks missing, malformed, forged, expired, wrong-issuer,
 wrong-audience, anon, and service-role token rejection. The suite also exercises full content/link CRUD, all-type search and pagination,
 partial field/date/link preservation, stored-feature access and geometry rollback,
-article transaction rollback, own profiles and image operations. Test data is removed
+article transaction rollback, own profiles and image operations. Account tests
+cover admin-only email/name search, pagination, safe output fields, non-admin
+denial, self/missing-target rejection, idempotent promotion and immediate
+permissions through an existing OAuth token. Test data is removed
 afterward. The script rejects hosted Supabase URLs and never prints tokens.
 
 For browser verification, use the consent and Account pages with the local

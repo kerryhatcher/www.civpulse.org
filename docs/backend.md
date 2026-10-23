@@ -812,8 +812,8 @@ Setup completed on October 22, 2026:
   permissions `0600`. These non-public bootstrap variables are not used by the
   frontend or local Auth. Do not copy the secret into Cloudflare build variables.
 - Verified Cloudflare rejects missing, invalid, and public testing tokens using
-  the production secret. Successful real-token and replay checks are still pending
-  until the protected forms and hosted Auth configuration are live.
+  the production secret. Real-token signup/signin checks passed after deployment. See the replay
+  verification limitation below.
 - Signed in to the hosted CivicPulse dashboard through the approved GitHub flow.
   Confirmed email verification is enabled; anonymous sign-ins and manual identity
   linking are disabled. Password changes require recent authentication and the
@@ -852,8 +852,11 @@ Setup completed on October 22, 2026:
   was denied; anonymous access redirected to signin. No application console
   errors appeared. The QA session was signed out; the approved test account
   remains a regular user in production. No live admin promotion was performed.
-- Real-token signup/signin and backend rejection checks passed. A direct replay
-  test against hosted Auth has not been performed. Local transactional access
+- Real-token signup/signin and backend rejection checks passed. A live replay probe was also run: a repeated token returned successful
+  Siteverify responses and the duplicate signup request returned HTTP 200 rather
+  than `captcha_failed`. Replay rejection is therefore **not verified**. No new
+  account was requested: the approved replay targeted the existing confirmed QA
+  account. Do not describe hosted replay protection as tested successfully. Local transactional access
   tests cover admin-only account listing/promotion and anonymous/user visibility
   parity; the full local MCP regression suite also passed.
 
@@ -888,7 +891,8 @@ CAPTCHA or email protections. Coordinate these settings with the frontend releas
 
 Do not silently disable CAPTCHA to resolve a deployment problem. Restore the
 matching frontend/key configuration instead. Hosted settings and the production widget are configured as recorded above.
-Direct real-token replay validation remains an outstanding verification check. The repository includes no production Turnstile secret.
+The live replay probe above did not demonstrate rejection; that provider/backend
+behavior remains an unresolved verification limitation. The repository includes no production Turnstile secret.
 
 References: [Supabase CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha),
 [Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits), and

@@ -184,6 +184,7 @@ try {
     const identity = JSON.parse((await tool(tokens.data.access_token, 'whoami')).content[0].text);
     assert.equal(identity.user_id, user.user.id);
     assert.equal(identity.is_admin, isAdmin);
+    assert.equal(identity.role, isAdmin ? 'admin' : 'user');
     assert.ok(!(await tool(tokens.data.access_token, 'search_organizations')).isError);
     const visible = JSON.parse((await tool(tokens.data.access_token, 'search_people', { query: needle })).content[0].text);
     assert.equal(visible.length, isAdmin ? 3 : 1, 'Only admin OAuth search includes unlisted and private fixtures');
@@ -213,6 +214,51 @@ try {
     await Bun.write(process.env.MCP_TOOL_CATALOG, JSON.stringify({ server: 'Civic Pulse', tools: catalog.data.result.tools }, null, 2));
   }
   await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool, apiUrl: env.API_URL });
+
+  // Use the existing disposable reader only after all non-admin CRUD checks.
+  const adminToken = sessions[1].refreshed.data.access_token;
+  const readerToken = sessions[0].refreshed.data.access_token;
+  assert.ok((await tool(readerToken, 'search_users')).isError, 'Regular users cannot list accounts');
+  assert.ok((await tool(readerToken, 'search_users', { query: reader.user.email })).isError, 'Even an own-email search requires admin access');
+  assert.ok((await tool(readerToken, 'promote_user_to_admin', { user_id: reader.user.id })).isError, 'Regular users cannot promote themselves');
+  assert.ok((await tool(readerToken, 'promote_user_to_admin', { user_id: admin.user.id })).isError, 'Regular users cannot change another account');
+  const search = await tool(adminToken, 'search_users', { query: reader.user.email });
+  assert.ok(!search.isError);
+  const accounts = JSON.parse(search.content[0].text);
+  assert.equal(accounts.length, 1);
+  assert.equal(accounts[0].id, reader.user.id);
+  assert.equal(accounts[0].role, 'user');
+  assert.deepEqual(Object.keys(accounts[0]).sort(), ['created_at', 'display_name', 'email', 'id', 'role']);
+  const profile = JSON.parse((await tool(readerToken, 'get_my_profile')).content[0].text);
+  const searchName = `Account Search QA ${crypto.randomUUID()}`;
+  assert.ok(!(await tool(readerToken, 'update_my_profile', { display_name: searchName })).isError);
+  const byName = JSON.parse((await tool(adminToken, 'search_users', { query: searchName })).content[0].text);
+  assert.ok(byName.some(account => account.id === reader.user.id), 'Display-name search resolves registered accounts');
+  assert.ok(!(await tool(readerToken, 'update_my_profile', { display_name: profile.display_name })).isError);
+  const page = JSON.parse((await tool(adminToken, 'search_users', { query: 'mcp-auth-' })).content[0].text);
+  const nextPage = JSON.parse((await tool(adminToken, 'search_users', { query: 'mcp-auth-', offset: 1 })).content[0].text);
+  assert.equal(nextPage[0].id, page[1].id, 'Account pagination forwards the requested offset');
+  assert.deepEqual(JSON.parse((await tool(adminToken, 'search_users', { query: "%'_no_such_account" })).content[0].text), [], 'Account search treats punctuation literally');
+  assert.ok((await tool(adminToken, 'promote_user_to_admin', { user_id: admin.user.id })).isError, 'Admin cannot target themselves');
+  assert.ok((await tool(adminToken, 'promote_user_to_admin', { user_id: crypto.randomUUID() })).isError, 'Missing account is rejected');
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const promoted = await tool(adminToken, 'promote_user_to_admin', { user_id: reader.user.id });
+    assert.ok(!promoted.isError, 'Promotion is idempotent for another existing account');
+    assert.deepEqual(JSON.parse(promoted.content[0].text), { user_id: reader.user.id, role: 'admin' });
+  }
+  const promotedIdentity = JSON.parse((await tool(readerToken, 'whoami')).content[0].text);
+  assert.equal(promotedIdentity.role, 'admin');
+  assert.equal(promotedIdentity.is_admin, true, 'Promotion is visible through the existing OAuth token');
+  const verified = JSON.parse((await tool(adminToken, 'search_users', { query: reader.user.email })).content[0].text);
+  assert.equal(verified[0].role, 'admin');
+  assert.ok(!(await tool(readerToken, 'search_users', { query: reader.user.email })).isError, 'Promoted user immediately gains admin tools');
+  const promotedSlug = `mcp-promoted-${crypto.randomUUID()}`;
+  const promotedCreate = await tool(readerToken, 'create_organization', { slug: promotedSlug, name: 'Disposable promoted-user test' });
+  assert.ok(!promotedCreate.isError, 'Promoted user immediately gains content writes');
+  const promotedOrganization = JSON.parse(promotedCreate.content[0].text);
+  organizations.push(promotedOrganization.id);
+  assert.ok(!(await tool(readerToken, 'delete_organization', { id: promotedOrganization.id })).isError);
+  console.log('PASS admin-only account search, pagination, guarded promotion and immediate OAuth role changes');
   for (const { user, isAdmin, refreshed } of sessions) {
     const revoke = await request(`${auth}/user/oauth/grants?client_id=${clientId}`, { token: user.access_token, method: 'DELETE' });
     assert.ok(revoke.response.ok);

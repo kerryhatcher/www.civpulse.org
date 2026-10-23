@@ -1,7 +1,7 @@
 [
   {
     "name": "whoami",
-    "description": "Return the authenticated user's id, email, and admin status.",
+    "description": "Return the authenticated user's id, email, role (user or admin), and admin status.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -10,6 +10,57 @@
     "annotations": {
       "readOnlyHint": true,
       "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "search_users",
+    "description": "Search registered accounts by email or display name (admin only). Returns up to 50 accounts with id, email, display_name, role and created_at. Empty query lists accounts; use offset increments of 50 to paginate. Civic people records are separate from login accounts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "default": "",
+          "type": "string",
+          "maxLength": 200
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "promote_user_to_admin",
+    "description": "Promote an existing registered user to admin (admin only). Grants content editing, private-content access and permission to promote other users immediately. Resolve the exact account with search_users and act only on an explicit request to promote that person. Cannot promote yourself, create an account or demote an admin. Repeating a promotion of another existing admin is harmless.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        }
+      },
+      "required": [
+        "user_id"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
     }
@@ -68,7 +119,7 @@
   },
   {
     "name": "search_events",
-    "description": "Search calendar events. Anonymous sees public; signed-in sees unlisted/private too.",
+    "description": "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.",
     "inputSchema": {
       "type": "object",
       "properties": {

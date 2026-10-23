@@ -25,25 +25,44 @@ const ELECTION_DATE_KIND = z.enum([
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
 export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">): McpServer {
-  const server = new McpServer({ name: "Civic Pulse", version: "1.1.0" });
+  const server = new McpServer({ name: "Civic Pulse", version: "1.2.0" });
 
-  const { register, readRpc, getRpc, create, update, remove } = createToolkit(server, supabase);
+  const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
 
   // --- Identity ----------------------------------------------------------
 
   server.registerTool(
     "whoami",
-    { description: "Return the authenticated user's id, email, and admin status.", inputSchema: z.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } },
+    { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } },
     async () => {
       try {
         const { data: isAdmin, error } = await supabase.rpc("is_admin");
         if (error) throw new Error(error.message);
-        return ok({ user_id: user.id, email: user.email ?? null, is_admin: Boolean(isAdmin) });
+        return ok({ user_id: user.id, email: user.email ?? null, is_admin: Boolean(isAdmin), role: isAdmin ? "admin" : "user" });
       } catch (error) {
         return fail(error);
       }
     },
   );
+
+  // Account-directory reads contain personal information and require an admin.
+  register("search_users", "Search registered accounts by email or display name (admin only). Returns up to 50 accounts with id, email, display_name, role and created_at. Empty query lists accounts; use offset increments of 50 to paginate. Civic people records are separate from login accounts.", {
+    query: z.string().trim().max(200).default(""),
+    offset: z.number().int().min(0).default(0),
+  }, async ({ query, offset }) => {
+    await ensureAdmin();
+    const { data, error } = await supabase.rpc("admin_list_users", { p_query: query, p_offset: offset });
+    if (error) throw new Error(error.message);
+    return data;
+  });
+
+  register("promote_user_to_admin", "Promote an existing registered user to admin (admin only). Grants content editing, private-content access and permission to promote other users immediately. Resolve the exact account with search_users and act only on an explicit request to promote that person. Cannot promote yourself, create an account or demote an admin. Repeating a promotion of another existing admin is harmless.", {
+    user_id: z.string().uuid(),
+  }, async ({ user_id }) => {
+    const { error } = await supabase.rpc("promote_user_to_admin", { p_user_id: user_id });
+    if (error) throw new Error(error.message);
+    return { user_id, role: "admin" };
+  }, { write: true, destructive: true, idempotent: true });
 
   // --- Read: search + get ------------------------------------------------
 
@@ -63,7 +82,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   );
   readRpc(
     "search_events",
-    "Search calendar events. Anonymous sees public; signed-in sees unlisted/private too.",
+    "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.",
     {
       query: z.string().default(""),
       organization_id: z.string().uuid().nullish(),

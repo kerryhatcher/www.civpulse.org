@@ -11,14 +11,15 @@ For other MCP clients, the direct remote configuration is preserved in
 ## Connect
 
 Install the private plugin using its account listing, then connect Civic Pulse
-when prompted. Sign in on `https://new.civpulse.org` and approve the client’s
+when prompted. Sign in on `https://www.civpulse.org` and approve the client’s
 access. Each user connects their own account through Supabase OAuth with dynamic
 client registration and PKCE. The plugin gets that account’s supported access:
-research for signed-in users, content writes for administrators. OpenID profile
+public-content research for regular users; content writes, account search and
+explicitly requested user promotion for administrators. OpenID profile
 scopes do not restrict the database permissions of an approved administrator.
 
 To disconnect, revoke the app under
-[Account → Connected apps](https://new.civpulse.org/account/). Revocation rejects
+[Account → Connected apps](https://www.civpulse.org/account/). Revocation rejects
 existing MCP access tokens and prevents refresh. Never paste tokens or passwords
 into chat or into this package.
 
@@ -27,6 +28,7 @@ into chat or into this package.
 - `civic-research`: search civic records, election detail and article reading lists.
 - `civic-editing`: maintain content, associations, profile display names and images.
 - `civic-mapping`: manage maps, reusable layers, stored GeoJSON and individual features.
+- `civic-user-admin`: find registered accounts and promote an existing user (admin only).
 
 [Tool guide](references/tools.md) and [full schemas](references/tool-schemas.json)
 are generated from the server implementation. Live MCP schemas remain authoritative.
@@ -43,7 +45,7 @@ bun run mcp:check
 bun run mcp:test  # requires the running local Supabase stack
 ```
 
-The archive is written outside this folder to `dist/plugins/civpulse-1.0.1.zip`.
+The archive is written outside this folder to `dist/plugins/civpulse-1.1.0.zip`.
 The builder validates manifests, compatibility metadata, skill YAML and contained
 references, regenerates the catalog, excludes symlinks/credentials, and inspects
 the ZIP. Keep both manifests and the registered app mapping synchronized on edits.
@@ -58,7 +60,8 @@ The app binding is account-specific and is not a public-directory submission.
 
 MCP implementation: `apps/mcp/`. Deploy and auth details: `docs/mcp.md` at the
 repository root. Public website metadata is static: a database edit can require
-a separate web rebuild/deploy. The plugin does not deploy the site or manage
-administrator accounts.
+a separate web rebuild/deploy. The plugin does not deploy the site. Admins can search registered accounts with
+`search_users` and explicitly promote another account with `promote_user_to_admin`.
+Account provisioning/deletion, demotion and password resets remain outside the plugin.
 
 Format reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).

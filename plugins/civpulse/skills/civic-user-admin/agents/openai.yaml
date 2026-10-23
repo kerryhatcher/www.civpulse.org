@@ -1,0 +1,5 @@
+interface:
+  display_name: "Civic user administration"
+  short_description: "Find registered accounts and promote users as an admin"
+policy:
+  allow_implicit_invocation: true
