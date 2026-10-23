@@ -254,3 +254,5 @@ Run `bun run mcp:check`, `bun run scripts/build-mcp.mjs --check`,
 `bun test scripts/tests/mcp-handler.test.ts`, and `bun run mcp:test` (local DB)
 before release. The routing checks cover gateway path stripping, OAuth discovery
 and allowed origins. The full suite covers user/admin RLS, refresh and revocation.
+Browser CORS responses use literal values from the approved origin allowlist;
+they never echo an unchecked request header. Unknown origins receive 403.

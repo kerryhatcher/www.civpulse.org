@@ -20,6 +20,18 @@ function protectedResourceMetadata(env: Env) {
   };
 }
 
+function allowedOrigin(origin: string | null): string | null {
+  switch (origin) {
+    case "https://www.civpulse.org": return "https://www.civpulse.org";
+    case "https://new.civpulse.org": return "https://new.civpulse.org";
+    case "https://civpulse.org": return "https://civpulse.org";
+    case "https://api.civpulse.org": return "https://api.civpulse.org";
+    case "http://localhost:8789": return "http://localhost:8789";
+    case "http://127.0.0.1:8789": return "http://127.0.0.1:8789";
+    default: return null;
+  }
+}
+
 async function respond(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const endpoint = new URL(env.MCP_RESOURCE_URL);
@@ -30,11 +42,11 @@ async function respond(request: Request, env: Env): Promise<Response> {
     return new Response("Forbidden host", { status: 403 });
   }
   const origin = request.headers.get("Origin");
-  if (origin && !["https://www.civpulse.org", "https://new.civpulse.org", "https://civpulse.org"].includes(origin) && origin !== endpoint.origin) {
+  if (origin && !allowedOrigin(origin)) {
     return new Response("Forbidden origin", { status: 403 });
   }
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: {
-    "Access-Control-Allow-Origin": origin ?? "https://www.civpulse.org",
+    "Access-Control-Allow-Origin": allowedOrigin(origin) ?? "https://www.civpulse.org",
     "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Authorization, Content-Type, Accept, MCP-Protocol-Version, MCP-Session-Id",
     "Access-Control-Expose-Headers": "WWW-Authenticate", "Vary": "Origin",
@@ -107,10 +119,18 @@ async function respond(request: Request, env: Env): Promise<Response> {
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
   const response = await respond(request, env);
-  const origin = request.headers.get('Origin');
+  const origin = allowedOrigin(request.headers.get('Origin'));
   if (origin && response.status !== 403) {
     const headers = new Headers(response.headers);
-    headers.set('Access-Control-Allow-Origin', origin);
+    // Keep response values literal as well as checking the request allowlist.
+    switch (origin) {
+      case "https://www.civpulse.org": headers.set('Access-Control-Allow-Origin', "https://www.civpulse.org"); break;
+      case "https://new.civpulse.org": headers.set('Access-Control-Allow-Origin', "https://new.civpulse.org"); break;
+      case "https://civpulse.org": headers.set('Access-Control-Allow-Origin', "https://civpulse.org"); break;
+      case "https://api.civpulse.org": headers.set('Access-Control-Allow-Origin', "https://api.civpulse.org"); break;
+      case "http://localhost:8789": headers.set('Access-Control-Allow-Origin', "http://localhost:8789"); break;
+      case "http://127.0.0.1:8789": headers.set('Access-Control-Allow-Origin', "http://127.0.0.1:8789"); break;
+    }
     headers.set('Access-Control-Expose-Headers', 'WWW-Authenticate');
     headers.set('Vary', 'Origin');
     return new Response(response.body, { status: response.status, headers });
