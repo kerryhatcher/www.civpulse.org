@@ -14,6 +14,7 @@ export default defineConfig({
           '/account/',
           '/signin/',
           '/signup/',
+          '/requests/view/',
           '/maps/view/',
           '/calendar/view/',
           '/people/view/',

@@ -2,6 +2,8 @@
 const path = Astro.url.pathname.replace(/\/+$/, '');
 
 const tabs = [
+  { href: '/admin/requests/', label: 'Records requests' },
+
   { href: '/history/', label: 'Audit log' },
   { href: '/admin/users/', label: 'Users' },
   { href: '/admin/organizations/', label: 'Organizations' },

@@ -46,6 +46,41 @@ Each assistant connects through your own Civic Pulse account. Admin tools requir
 an admin account; review proposed changes before saving. Revoke access under
 [Account → Connected apps](/account/).
 
+## Document an open records request
+
+Use [Records requests admin](/admin/requests/) to create a private draft. Set a
+target organization, a requesting/source organization, or both. Your account is
+the initial owner; the organization association does not grant account access.
+The title is required. Record the scope, ORR/FOIA type, agency reference number,
+submission date and next follow-up date as appropriate.
+
+After saving, open **Manage this request**. Maintain the stage independently of
+the outcome. Add dated timeline entries for responses, clarifications, delays,
+record productions, denials and appeals. Stage/outcome changes automatically add
+a status entry. They cannot be removed through the editor.
+
+**Record a fee or payment** adds a USD estimate, bill or payment with its date
+and note/invoice reference. Enter each separate charge once. When an estimate is
+superseded, remove the previous estimate and add the revised amount. Each total
+sums only its own category; this is a documentation ledger, not payment processing.
+
+**Attach files and links** accepts images, PDF, Office/OpenDocument, text and CSV
+files up to 25 MB each, plus HTTP(S) links to news coverage or other sources.
+Files default to private. Choose “Share with everyone who can view the request”
+only for a shareable/redacted copy. Existing uploads are immutable; remove and
+upload a replacement to change file content or its access setting.
+
+Public visibility lists the request; unlisted visibility allows direct-link
+access; private visibility restricts it to the owner and admins. Details,
+timeline, fees and links inherit request visibility. The owner ID and transfer
+history never appear to public readers. Transfer to an existing account using
+its user ID and a reason; history retains the previous/new owner and acting user.
+
+These request pages load live records in the browser, so changes appear after
+save without rebuilding request content. Deploy the frontend and database
+migration before using the feature. No outgoing agency messages, automated
+legal deadlines, payments, or notification delivery are performed.
+
 ## Audit log and record history
 
 Choose **Audit log** in the admin tabs to browse the live change feed. Filter by
