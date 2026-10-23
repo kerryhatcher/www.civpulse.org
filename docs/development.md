@@ -239,7 +239,7 @@ variables, source files, or browser configuration:
 | --- | --- |
 | `CLOUDFLARE_ACCOUNT_ID` | Kerry Personal account ID (`6d837580a4d0641139ecada9e74076b8`) |
 | `CLOUDFLARE_WORKER_TAG` | Immutable tag for `civpulse-web-new` (`2bf0468f854440eebeb10454be815eaa`), not the Worker name |
-| `CLOUDFLARE_BUILDS_READ_TOKEN` | Cloudflare API token with **Workers CI Read** permission scoped to this account; used only for status |
+| `CLOUDFLARE_BUILDS_READ_TOKEN` | **User-owned** Cloudflare API token with **Workers Builds Configuration → Read** (API permission: Workers CI Read), restricted to this account; used only for status |
 | `CLOUDFLARE_DEPLOY_HOOK_URL` | A Workers Builds Deploy Hook URL for **`civpulse-web-new`, branch `main`** |
 | `PUBLISH_ALLOWED_ORIGINS` | Optional comma-separated exact origins; defaults to `https://www.civpulse.org,https://new.civpulse.org` |
 
@@ -249,6 +249,13 @@ gitignored env file, then upload with
 `SUPABASE_TELEMETRY_DISABLED=1 bunx supabase secrets set --project-ref drzcrodqflzkzzbqsags --env-file /absolute/path/to/publish.env`.
 Do not print or log that file. Supabase injects its own `SUPABASE_URL` and public
 `SUPABASE_ANON_KEY`; the function does not need a service-role key.
+
+Create the status token under **My Profile → API Tokens → Create Token → Custom
+token**. Choose **Account → Workers Builds Configuration → Read**, include only
+**Kerry Personal**, and give it a descriptive name such as **Civic Pulse publish
+build status**. Account-owned tokens are not supported by the Builds API and
+return `Invalid token` even when Cloudflare's token-verification endpoint accepts
+them. Verify status access before saving the token; no edit permission is needed.
 
 The `functions.publish` entry in `supabase/config.toml` declares the function for
 the existing Supabase GitHub deployment integration. For a deliberate standalone
