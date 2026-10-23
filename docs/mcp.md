@@ -33,6 +33,11 @@ Level Security decides what an agent can see or change.
 5. The MCP server forwards that token to Supabase, so `auth.uid()` and the RLS
    policies apply exactly as they do in the web app.
 
+Both endpoint spellings (with or without a trailing slash) require a signed-in,
+non-anonymous user. OAuth discovery and CORS preflight remain public so clients
+can start sign-in. All mutations require admin access; account-directory reads
+also remain admin-only.
+
 **No service-role key is used for agent traffic.** Reads follow visibility
 (`public` / `unlisted` / `private`); `create_*` / `update_*` / `delete_*` succeed
 only for admins (`public.is_admin()`).
@@ -58,8 +63,8 @@ and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every o
 - **Admin CRUD:** organizations, people, elections, calendars, events, maps,
   reusable layers, contests, ballot questions, articles, all their editable
   relationships, individual stored features and image storage.
-- **Own account:** any signed-in user can read their profile and update their
-  display name.
+- **Own account:** any signed-in user can read their profile. All MCP mutations,
+  including display-name updates, require an admin.
 - **Admin accounts:** `search_users` finds registered accounts by email/display
   name and paginates 50 at a time with `offset`. `promote_user_to_admin` promotes
   another existing account; it grants private-content access, content writes and

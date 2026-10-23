@@ -185,11 +185,11 @@ export function registerExtendedTools(server: McpServer, supabase: SupabaseClien
     if (error) throw new Error(error.message);
     return data;
   });
-  register('update_my_profile', 'Update your own display name. This does not grant admin access or edit another user.', { display_name: z.string().min(1).max(80).nullable() }, async ({ display_name }) => {
+  register('update_my_profile', 'Update your own display name (admin only). This does not grant admin access or edit another user.', { display_name: z.string().min(1).max(80).nullable() }, async ({ display_name }) => {
     const { data, error } = await supabase.from('profiles').update({ display_name }).eq('id', user.id).select('id,display_name').single();
     if (error) throw new Error(error.message);
     return data;
-  }, { write: true, ownProfile: true, idempotent: true });
+  }, { write: true, idempotent: true });
 
   const bucket = z.enum(['org-logos', 'person-images']);
   const path = z.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine(value => !value.split('/').some(part => !part || part === '.' || part === '..'), 'Use a relative object path without dot segments');

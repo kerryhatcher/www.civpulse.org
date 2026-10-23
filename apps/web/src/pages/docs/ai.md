@@ -24,7 +24,7 @@ Choose [ChatGPT](#connect-in-chatgpt), [Codex](#connect-in-codex), [Pi](#pi), [a
 https://api.civpulse.org/functions/v1/mcp
 ```
 
-Each person connects their own account. Regular accounts can research permitted public content and update their own display name. Administrators can also discover hidden content, edit supported records, search registered accounts, and promote another existing user. A connection does not turn a regular account into an administrator.
+Each person connects their own account. Regular accounts have read-only access to permitted content. Administrators can also discover hidden content, edit supported records, search registered accounts, and promote another existing user. A connection does not turn a regular account into an administrator.
 
 ## Connect in ChatGPT
 
@@ -176,6 +176,8 @@ For changes, identify the exact record and fields. Review names, dates, sources,
 ## Access, publishing, and disconnecting
 
 An approved assistant receives your account's supported access, including private content and administrative writes when you are an admin. The consent scopes `openid`, `email`, `profile`, and `offline_access` describe profile access and continued authorization; they do not make an admin connection read-only.
+
+Every MCP tool requires sign-in. Regular users have read-only access; all mutations, including display-name updates, require an admin. Account-directory reads remain admin-only.
 
 Content writes save to the database immediately. Some website views load live data; prerendered public profiles need a separate website rebuild and deployment. Installing a plugin or saving through MCP does not deploy the website. See the [admin guide](/docs/admins/#visibility-and-publication).
 

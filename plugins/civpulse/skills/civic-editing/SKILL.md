@@ -5,7 +5,7 @@ description: Use when creating, updating or deleting Civic Pulse content, articl
 
 # Civic content editing
 
-Call whoami first. Content and image writes require is_admin=true. Non-admin users can read permitted content and use get_my_profile / update_my_profile for their own display name. Explain a denied operation without attempting to bypass permissions. Use civic-user-admin for explicitly requested registered-account search or promotion; content editing does not imply permission to promote users.
+Call whoami first. All mutations, including update_my_profile, require is_admin=true. Non-admin users can read permitted content and use get_my_profile. Explain a denied operation without attempting to bypass permissions. Use civic-user-admin for explicitly requested registered-account search or promotion; content editing does not imply permission to promote users.
 
 Search for existing records and fetch their details before creating duplicates or editing. Resolve relationships to existing UUIDs. Act on the user’s authorized scope; ask only when a missing value materially affects the result or the target is ambiguous. Before destructive changes, inspect the record and relationship effects. Deletion tools describe their cascades; relationship deletion removes only the link. Avoid bulk deletion unless clearly requested.
 
