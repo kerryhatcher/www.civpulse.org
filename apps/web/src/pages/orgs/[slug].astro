@@ -1,4 +1,5 @@
 ---
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
@@ -211,6 +212,7 @@ const contact = [
         <a href="/orgs/">← All organizations</a>
       </p>
     </div>
+  <ObjectHistoryLink table="organizations" id={org.id} />
   </main>
 </Layout>
 

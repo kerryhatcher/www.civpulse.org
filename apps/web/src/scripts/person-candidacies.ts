@@ -1,8 +1,9 @@
+import { historyLink } from '../lib/history';
 import { CANDIDATE_STATUS_LABELS, electionHref, formatElectionDate } from '../lib/elections';
 import type { PersonCandidacy } from '../lib/people';
 import { getSupabase } from '../lib/supabase';
 
-function renderCandidacy(race: PersonCandidacy): HTMLLIElement {
+function renderCandidacy(race: PersonCandidacy, personId: string): HTMLLIElement {
   const item = document.createElement('li');
   const link = document.createElement('a');
   link.className = 'org-card person-candidacy-card';
@@ -26,7 +27,7 @@ function renderCandidacy(race: PersonCandidacy): HTMLLIElement {
     badge.textContent = 'Certified write-in';
     link.append(badge);
   }
-  item.append(link);
+  item.append(link, historyLink('contest_candidates', JSON.stringify({contest_id: race.contest_id, person_id: personId})));
   return item;
 }
 
@@ -48,7 +49,7 @@ export async function loadPersonCandidacies(personId: string): Promise<void> {
     const races = (data ?? []) as PersonCandidacy[];
     for (const [key, current] of [['current', true], ['past', false]] as const) {
       const selected = races.filter((race) => race.is_current === current);
-      root.querySelector(`[data-${key}-candidacies]`)!.replaceChildren(...selected.map(renderCandidacy));
+      root.querySelector(`[data-${key}-candidacies]`)!.replaceChildren(...selected.map(race => renderCandidacy(race, personId)));
       root.querySelector<HTMLElement>(`[data-${key}-candidacies-empty]`)!.hidden = selected.length > 0;
     }
     status.hidden = true;

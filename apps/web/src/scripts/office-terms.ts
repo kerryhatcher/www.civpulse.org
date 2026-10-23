@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { officeLabel, serviceDates, type ProfileOfficeTerm } from '../lib/offices';
 import { personHref } from '../lib/people';
 import { getSupabase } from '../lib/supabase';
@@ -35,7 +36,7 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
         dates.textContent = serviceDates(term).replace('– present', group === 'upcoming' ? '– end not recorded' : '– present');
         const method = document.createElement('span');
         method.textContent = term.selection_method === 'elected' ? 'Elected' : 'Appointed';
-        card.append(name, link, dates, method);
+        card.append(name, link, dates, method, historyLink('offices', term.office_id), historyLink('office_terms', term.id));
         if (term.source_url) {
           const source = document.createElement('a');
           source.href = term.source_url;

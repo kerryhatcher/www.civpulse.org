@@ -2495,3 +2495,20 @@ textarea::placeholder {
 .meeting-inline-form .field { flex: 1 1 12rem; }
 .meeting-vote { display: block; }
 .meeting-vote form { margin-block: .75rem; }
+
+/* Readable, keyboard-accessible revision comparisons. */
+.history-page { max-width: 72rem; margin-inline: auto; }
+.history-list { list-style: none; padding: 0; }
+.history-list > li { border-top: 1px solid var(--color-border, #c9cbbd); padding-block: 1rem; }
+.history-list summary { cursor: pointer; padding: .5rem 0; }
+.history-meta { display: block; overflow-wrap: anywhere; font-size: .875rem; margin-top: .5rem; }
+.history-values { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+.history-values > div { min-width: 0; }
+.history-values pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; padding: .75rem; background: rgba(60, 80, 60, .06); }
+.history-changes h3 { text-transform: capitalize; }
+@media (max-width: 600px) { .history-values { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+@media (min-width: 900px) {
+  .history-filter { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(16rem, 2fr) auto; align-items: start; gap: 1rem; max-width: none; }
+  .history-filter > button { margin-top: 1.85rem; }
+}

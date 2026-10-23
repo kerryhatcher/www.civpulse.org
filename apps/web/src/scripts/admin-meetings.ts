@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { getSupabase } from '../lib/supabase';
 import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 
@@ -51,7 +52,12 @@ export async function initMeetingAdmin(): Promise<void> {
     notes.value = record.event?.meeting_notes ?? '';
     transcript.value = record.event?.meeting_transcript ?? '';
     const view = document.querySelector<HTMLAnchorElement>('[data-meeting-view]');
-    if (view) view.href = `/calendar/view/?id=${id}`;
+    if (view) {
+      view.href = `/calendar/view/?id=${id}`;
+      editor.querySelector('[data-meeting-history]')?.remove();
+      const link = historyLink('events', id); link.dataset.meetingHistory = '';
+      view.after(link);
+    }
     renderAttendance(); renderVotes(); renderAttachments();
   };
 

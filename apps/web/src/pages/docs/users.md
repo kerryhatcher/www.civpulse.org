@@ -42,3 +42,26 @@ other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflo
 Each assistant connects through your own Civic Pulse account. Admin tools require
 an admin account; review proposed changes before saving. Revoke access under
 [Account → Connected apps](/account/).
+
+## Change history
+
+Choose **View history** on an organization, person, election, map, event, office,
+service record, candidacy, ballot question, or article to open its live history.
+Open a revision to compare **Before** and **After**, with the edit time and the
+editor’s display name. Relationship edits also appear in the owning record’s
+history: for example, candidacy changes appear for the person and election.
+Use **Load older changes** to continue through earlier revisions.
+
+Anonymous visitors and regular signed-in users see the same history: revisions
+must have been public when recorded, and the record and its referenced records
+must still be public. Edits made while private or unlisted, including publication
+transitions containing hidden earlier values, stay hidden. Public deletions can
+remain visible; deleting a hidden record does not make its past history public.
+Editor account IDs and email addresses are not shown in public history. Meeting
+file storage paths are also hidden; use the meeting viewer to access files.
+
+Tracking begins when this feature is enabled; edits before that point cannot be
+reconstructed. Imports and maintenance without a signed-in editor are labeled
+**System / import**. History updates immediately, even when the profile page still
+shows the previous static build. History is for inspection; it does not restore
+or roll back records.

@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { initBallotQuestionAdmin } from './admin-ballot-questions';
 import {
   CANDIDATE_STATUS_LABELS,
@@ -369,6 +370,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('elections', election.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -541,6 +543,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('contests', contest.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -735,6 +738,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('contest_candidates', JSON.stringify({contest_id: candidate.contest_id, person_id: candidate.person_id})));
 
         const edit = document.createElement('button');
         edit.type = 'button';

@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { uploadProfileImage, initImagePreview } from '../lib/media';
 import { getSupabase } from '../lib/supabase';
 import { organizationLogoUrl } from '../lib/supabase-build';
@@ -190,6 +191,7 @@ export async function initOrganizationAdmin(): Promise<void> {
 
     const actions = document.createElement('div');
     actions.className = 'org-row-actions';
+        actions.append(historyLink('organizations', org.id));
 
     const edit = document.createElement('button');
     edit.type = 'button';
