@@ -216,6 +216,8 @@ web3 = 30
 [auth.captcha]
 enabled = true
 provider = "turnstile"
+# Public local-only Cloudflare test key: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+# nosemgrep: generic.secrets.security.detected-generic-secret.detected-generic-secret
 secret = "1x0000000000000000000000000000000AA"
 
 [auth.email]
