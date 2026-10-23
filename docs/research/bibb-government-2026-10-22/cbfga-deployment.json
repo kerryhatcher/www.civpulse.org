@@ -1,0 +1,16 @@
+{
+  "deployed_at": "2026-10-23",
+  "build_id": "302eaa6e-4e29-433f-9e84-5f6d7a7c1753",
+  "worker_version": "c64ab5e1-668d-48ad-90c9-abbed17d26aa",
+  "outcome": "success",
+  "organizations_added": 2,
+  "people_added": 29,
+  "affiliations_added": 53,
+  "relationships_added": 1,
+  "checks": {
+    "astro": "88 files, 0 errors, 0 warnings",
+    "build_pages": 887,
+    "live_people_passed": 29,
+    "browser": "Organization and reciprocal council page verified; no console errors or warnings."
+  }
+}

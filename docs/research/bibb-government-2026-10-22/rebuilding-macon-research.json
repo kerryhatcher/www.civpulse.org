@@ -1,0 +1,105 @@
+{
+  "verified_at": "2026-10-23",
+  "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+  "board": {
+    "id": "d26ca9e6-c3c8-4e8d-b724-62576c2ac756",
+    "slug": "rebuilding-macon-board-of-directors",
+    "name": "Rebuilding Macon Board of Directors"
+  },
+  "new_people": [
+    {
+      "id": "0b1d7ca7-34f8-4707-bd9c-80f2e234ec65",
+      "slug": "bob-king",
+      "full_name": "Bob King",
+      "role": "2025 Board Chair"
+    },
+    {
+      "id": "45052500-267c-45a5-879e-016e6b3e3472",
+      "slug": "dan-riley",
+      "full_name": "Dan Riley",
+      "role": "2025 Board Secretary"
+    },
+    {
+      "id": "3028969f-1d2c-4da1-9a90-141be9d104df",
+      "slug": "larry-crumbley",
+      "full_name": "Larry Crumbley",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "d82a41c9-2c86-43bb-9a04-8f4e9d33c889",
+      "slug": "christi-dykes",
+      "full_name": "Christi Dykes",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "190e2531-17a1-456d-b22f-ef319660fa66",
+      "slug": "nathan-moore",
+      "full_name": "Nathan Moore",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "9251b22b-fd6c-448e-8c7e-f42f0df6f87c",
+      "slug": "dylan-baldwin",
+      "full_name": "Dylan Baldwin",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "3aaba1c1-2907-4e09-bb7e-6bd1a5df0b7b",
+      "slug": "brandon-elam",
+      "full_name": "Brandon Elam",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "5e21e47d-214f-41a7-a6f1-783c40a12908",
+      "slug": "lisa-knight",
+      "full_name": "Lisa Knight",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "d453d2b7-e5a7-48f3-b04f-cb4a8bdbe664",
+      "slug": "reece-freel",
+      "full_name": "Reece Freel",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "bac94547-d339-4f01-84ba-1618f40152cb",
+      "slug": "mandy-howell",
+      "full_name": "Mandy Howell",
+      "role": "2025 Board Member"
+    },
+    {
+      "id": "e5c37bfa-c824-43ab-b22f-90ad3f6e2d47",
+      "slug": "grace-howell",
+      "full_name": "Grace Howell",
+      "role": "2025 Board Member"
+    }
+  ],
+  "existing_staff_ids": [
+    "8b877a7f-07bc-49cd-86b8-b53d54214546",
+    "8566281f-013e-439d-9f98-36b85e450270"
+  ],
+  "relationships": [
+    [
+      "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "d26ca9e6-c3c8-4e8d-b724-62576c2ac756",
+      "Governed by",
+      "Governing board of",
+      "https://www.rebuildingmacon.org/team"
+    ],
+    [
+      "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "2026 minor-home-repair grant supporter",
+      "2026 minor-home-repair grant recipient",
+      "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-345000-in-grants-to-nonprofits-serving-central-georgia/"
+    ],
+    [
+      "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "37020420-eb21-4c44-a267-b0aec47db269",
+      "Community-development partner (2026 recognition)",
+      "Community-development partner (2026 recognition)",
+      "https://www.maconbibb.us/communitydevelopmentweek2026/"
+    ]
+  ],
+  "notes": "Board explicitly labeled 2025 throughout. Current 2026 board not established by website. Staff records and affiliations already existed; preserved. No new photos."
+}

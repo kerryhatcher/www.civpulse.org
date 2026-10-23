@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-23",
+  "organizations": [
+    {
+      "id": "c83589b4-6f17-4261-8466-1fc8467b4a12",
+      "slug": "macon-outreach-at-mulberry"
+    },
+    {
+      "id": "61a32251-2a13-4e7a-b2c6-ef7b8592e90f",
+      "slug": "mulberry-street-united-methodist-church"
+    },
+    {
+      "id": "3856a15e-2a2f-43b0-b3a2-5f4c037dbf6b",
+      "slug": "mulberry-outreach-community-garden"
+    }
+  ],
+  "people": [
+    {
+      "id": "566c47f1-a13b-4e2c-84f9-650d5016a8ec",
+      "slug": "robin-frischkorn",
+      "full_name": "Robin Frischkorn",
+      "role": "Director / Operations Officer",
+      "organization_id": "c83589b4-6f17-4261-8466-1fc8467b4a12"
+    },
+    {
+      "id": "4c0285f3-07f5-4a66-a28e-038f99769348",
+      "slug": "robin-harris",
+      "full_name": "Robin Harris",
+      "role": "Volunteer Coordinator",
+      "organization_id": "c83589b4-6f17-4261-8466-1fc8467b4a12"
+    },
+    {
+      "id": "599fefa4-25ee-425b-b139-8d8e54c9e73f",
+      "slug": "jack-varnell",
+      "full_name": "Jack Varnell",
+      "role": "Senior Pastor",
+      "organization_id": "61a32251-2a13-4e7a-b2c6-ef7b8592e90f"
+    },
+    {
+      "id": "cf3a5132-1e01-40f7-ac6b-1d114ba8e2dc",
+      "slug": "hunter-godsey",
+      "full_name": "Hunter Godsey",
+      "role": "Church Administrator",
+      "organization_id": "61a32251-2a13-4e7a-b2c6-ef7b8592e90f"
+    },
+    {
+      "id": "dfb3d5f3-d8fb-4e5d-9bcf-6f812031ddc7",
+      "slug": "jane-moore",
+      "full_name": "Jane Moore",
+      "role": "Community Garden Contact",
+      "organization_id": "3856a15e-2a2f-43b0-b3a2-5f4c037dbf6b"
+    }
+  ],
+  "relationships": [
+    [
+      "c83589b4-6f17-4261-8466-1fc8467b4a12",
+      "61a32251-2a13-4e7a-b2c6-ef7b8592e90f",
+      "Ministry of",
+      "Home church of"
+    ],
+    [
+      "61a32251-2a13-4e7a-b2c6-ef7b8592e90f",
+      "3856a15e-2a2f-43b0-b3a2-5f4c037dbf6b",
+      "Operates",
+      "Ministry program of"
+    ],
+    [
+      "3856a15e-2a2f-43b0-b3a2-5f4c037dbf6b",
+      "c83589b4-6f17-4261-8466-1fc8467b4a12",
+      "Supplies produce to food pantry",
+      "Food pantry supplied by"
+    ]
+  ],
+  "notes": "Direct ministry domain certificate mismatch; no bypass. Indexed staff roster corroborated by April 30, 2026 sponsoring church newsletter. Government DCS page confirms address and phone. Current board not verified; 2021 chair not treated as current. No profile photos added.",
+  "sources": [
+    "https://dcs.georgia.gov/locations/macon-outreach",
+    "https://www.mulberrymethodist.org/missions",
+    "https://www.mulberrymethodist.org/our-staff",
+    "https://www.mulberrymethodist.org/serve",
+    "https://maconoutreach.com/staff",
+    "https://myemail.constantcontact.com/Mulberry-Weekly---Worship---Prayer--Senior-Sunday--Macon-Outreach-and-more.html?aid=wf-ypY60MJQ&soid=1110910745812"
+  ]
+}

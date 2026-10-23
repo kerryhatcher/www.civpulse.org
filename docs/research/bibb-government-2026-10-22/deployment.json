@@ -1,0 +1,2062 @@
+{
+  "status": "success",
+  "deployed_on": "2026-10-23",
+  "worker": "civpulse-web-new",
+  "worker_version": "b74179de-0310-4c17-9f25-58de003218e9",
+  "build_uuid": "7bb456a8-22b6-48fb-9ec4-3d38b964a8a9",
+  "source_commit": "456ada9d81e1ebfac1f453ac4d04f70ee572758c",
+  "production_domains": [
+    "www.civpulse.org",
+    "new.civpulse.org"
+  ],
+  "build_pages": 661,
+  "migration_guard": "Passed for source commit, both before build and before deploy.",
+  "check": "0 errors, 0 warnings",
+  "canonical_page_checks": [
+    {
+      "name": "Macon Water Authority",
+      "url": "https://www.civpulse.org/orgs/macon-water-authority/",
+      "status": 200,
+      "heading": "Macon Water Authority",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Urban Development Authority",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-urban-development-authority/",
+      "status": 200,
+      "heading": "Macon-Bibb County Urban Development Authority",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Attorney’s Office",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-attorney-s-office/",
+      "status": 200,
+      "heading": "Macon-Bibb County Attorney’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Board of Commissioners",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-board-of-commissioners/",
+      "status": 200,
+      "heading": "Macon-Bibb County Board of Commissioners",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Manager’s Office",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-manager-s-office/",
+      "status": 200,
+      "heading": "Macon-Bibb County Manager’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Land Bank Authority",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-land-bank-authority/",
+      "status": 200,
+      "heading": "Macon-Bibb County Land Bank Authority",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Office of Communications",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-office-of-communications/",
+      "status": 200,
+      "heading": "Macon-Bibb County Office of Communications",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Government",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-government/",
+      "status": 200,
+      "heading": "Macon-Bibb County Government",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Transit Authority",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-transit-authority/",
+      "status": 200,
+      "heading": "Macon-Bibb County Transit Authority",
+      "ok": true
+    },
+    {
+      "name": "Downtown Macon Parking Advisory Board",
+      "url": "https://www.civpulse.org/orgs/downtown-macon-parking-advisory-board/",
+      "status": 200,
+      "heading": "Downtown Macon Parking Advisory Board",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Planning and Zoning Commission",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-planning-and-zoning-commission/",
+      "status": 200,
+      "heading": "Macon-Bibb County Planning and Zoning Commission",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Civil and Magistrate Court",
+      "url": "https://www.civpulse.org/orgs/bibb-county-civil-and-magistrate-court/",
+      "status": 200,
+      "heading": "Bibb County Civil and Magistrate Court",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Board of Tax Assessors",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-board-of-tax-assessors/",
+      "status": 200,
+      "heading": "Macon-Bibb County Board of Tax Assessors",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Sheriff's Office",
+      "url": "https://www.civpulse.org/orgs/bibb-county-sheriffs-office/",
+      "status": 200,
+      "heading": "Bibb County Sheriff&#39;s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Tax Commissioner’s Office",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-tax-commissioner-s-office/",
+      "status": 200,
+      "heading": "Macon-Bibb County Tax Commissioner’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Pedestrian Safety Review Board",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-pedestrian-safety-review-board/",
+      "status": 200,
+      "heading": "Macon-Bibb County Pedestrian Safety Review Board",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Design Review Board",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-design-review-board/",
+      "status": 200,
+      "heading": "Macon-Bibb County Design Review Board",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Coroner’s Office",
+      "url": "https://www.civpulse.org/orgs/bibb-county-coroner-s-office/",
+      "status": 200,
+      "heading": "Bibb County Coroner’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Industrial Authority",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-industrial-authority/",
+      "status": 200,
+      "heading": "Macon-Bibb County Industrial Authority",
+      "ok": true
+    },
+    {
+      "name": "Macon Housing Authority",
+      "url": "https://www.civpulse.org/orgs/macon-housing-authority/",
+      "status": 200,
+      "heading": "Macon Housing Authority",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Probate Court",
+      "url": "https://www.civpulse.org/orgs/bibb-county-probate-court/",
+      "status": 200,
+      "heading": "Bibb County Probate Court",
+      "ok": true
+    },
+    {
+      "name": "Macon Judicial Circuit District Attorney’s Office",
+      "url": "https://www.civpulse.org/orgs/macon-judicial-circuit-district-attorney-s-office/",
+      "status": 200,
+      "heading": "Macon Judicial Circuit District Attorney’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Juvenile Court",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-juvenile-court/",
+      "status": 200,
+      "heading": "Macon-Bibb County Juvenile Court",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Solicitor-General’s Office",
+      "url": "https://www.civpulse.org/orgs/bibb-county-solicitor-general-s-office/",
+      "status": 200,
+      "heading": "Bibb County Solicitor-General’s Office",
+      "ok": true
+    },
+    {
+      "name": "State Court of Bibb County",
+      "url": "https://www.civpulse.org/orgs/state-court-of-bibb-county/",
+      "status": 200,
+      "heading": "State Court of Bibb County",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Clerk of Superior Court",
+      "url": "https://www.civpulse.org/orgs/bibb-county-clerk-of-superior-court/",
+      "status": 200,
+      "heading": "Bibb County Clerk of Superior Court",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Fire Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-fire-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Fire Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Finance Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-finance-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Finance Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Municipal Court",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-municipal-court/",
+      "status": 200,
+      "heading": "Macon-Bibb County Municipal Court",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Superior Court",
+      "url": "https://www.civpulse.org/orgs/bibb-county-superior-court/",
+      "status": 200,
+      "heading": "Bibb County Superior Court",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Information Technology Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-information-technology-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Information Technology Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Procurement Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-procurement-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Procurement Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Office of Small Business Affairs",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-office-of-small-business-affairs/",
+      "status": 200,
+      "heading": "Macon-Bibb County Office of Small Business Affairs",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Public Works Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-public-works-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Public Works Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Human Resources Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-human-resources-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Human Resources Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Clerk of Commission",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-clerk-of-commission/",
+      "status": 200,
+      "heading": "Macon-Bibb County Clerk of Commission",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Recreation Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-recreation-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Recreation Department",
+      "ok": true
+    },
+    {
+      "name": "Macon Judicial Circuit Public Defender’s Office",
+      "url": "https://www.civpulse.org/orgs/macon-judicial-circuit-public-defender-s-office/",
+      "status": 200,
+      "heading": "Macon Judicial Circuit Public Defender’s Office",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Engineering Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-engineering-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Engineering Department",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Economic and Community Development Department",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-economic-and-community-development-department/",
+      "status": 200,
+      "heading": "Macon-Bibb County Economic and Community Development Department",
+      "ok": true
+    },
+    {
+      "name": "Lester Miller",
+      "url": "https://www.civpulse.org/people/lester-miller/",
+      "status": 200,
+      "heading": "Lester Miller",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Emergency Management Agency",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-emergency-management-agency/",
+      "status": 200,
+      "heading": "Macon-Bibb County Emergency Management Agency",
+      "ok": true
+    },
+    {
+      "name": "Stanley Stewart",
+      "url": "https://www.civpulse.org/people/stanley-stewart/",
+      "status": 200,
+      "heading": "Stanley Stewart",
+      "ok": true
+    },
+    {
+      "name": "Middle Georgia Regional Commission",
+      "url": "https://www.civpulse.org/orgs/middle-georgia-regional-commission/",
+      "status": 200,
+      "heading": "Middle Georgia Regional Commission",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County E-911 Communications Center",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-e-911-communications-center/",
+      "status": 200,
+      "heading": "Macon-Bibb County E-911 Communications Center",
+      "ok": true
+    },
+    {
+      "name": "Joey Hulett",
+      "url": "https://www.civpulse.org/people/joey-hulett/",
+      "status": 200,
+      "heading": "Joey Hulett",
+      "ok": true
+    },
+    {
+      "name": "Valerie Wynn",
+      "url": "https://www.civpulse.org/people/valerie-wynn/",
+      "status": 200,
+      "heading": "Valerie Wynn",
+      "ok": true
+    },
+    {
+      "name": "Bibb County Board of Elections",
+      "url": "https://www.civpulse.org/orgs/bibb-county-board-of-elections/",
+      "status": 200,
+      "heading": "Bibb County Board of Elections",
+      "ok": true
+    },
+    {
+      "name": "Macon-Bibb County Martin Luther King Jr. Commission",
+      "url": "https://www.civpulse.org/orgs/macon-bibb-county-martin-luther-king-jr-commission/",
+      "status": 200,
+      "heading": "Macon-Bibb County Martin Luther King Jr. Commission",
+      "ok": true
+    },
+    {
+      "name": "Paul Bronson",
+      "url": "https://www.civpulse.org/people/paul-bronson/",
+      "status": 200,
+      "heading": "Paul Bronson",
+      "ok": true
+    },
+    {
+      "name": "Keith Moffett",
+      "url": "https://www.civpulse.org/people/keith-moffett/",
+      "status": 200,
+      "heading": "Keith Moffett",
+      "ok": true
+    },
+    {
+      "name": "Chris Floore",
+      "url": "https://www.civpulse.org/people/chris-floore/",
+      "status": 200,
+      "heading": "Chris Floore",
+      "ok": true
+    },
+    {
+      "name": "Brendalyn Bailey",
+      "url": "https://www.civpulse.org/people/brendalyn-bailey/",
+      "status": 200,
+      "heading": "Brendalyn Bailey",
+      "ok": true
+    },
+    {
+      "name": "Bill Howell",
+      "url": "https://www.civpulse.org/people/bill-howell/",
+      "status": 200,
+      "heading": "Bill Howell",
+      "ok": true
+    },
+    {
+      "name": "Raymond Wilder",
+      "url": "https://www.civpulse.org/people/raymond-wilder/",
+      "status": 200,
+      "heading": "Raymond Wilder",
+      "ok": true
+    },
+    {
+      "name": "Olivia Walter",
+      "url": "https://www.civpulse.org/people/olivia-walter/",
+      "status": 200,
+      "heading": "Olivia Walter",
+      "ok": true
+    },
+    {
+      "name": "Andrea Cooke",
+      "url": "https://www.civpulse.org/people/andrea-cooke/",
+      "status": 200,
+      "heading": "Andrea Cooke",
+      "ok": true
+    },
+    {
+      "name": "Edna Ruiz",
+      "url": "https://www.civpulse.org/people/edna-ruiz/",
+      "status": 200,
+      "heading": "Edna Ruiz",
+      "ok": true
+    },
+    {
+      "name": "Julie Moore",
+      "url": "https://www.civpulse.org/people/julie-moore/",
+      "status": 200,
+      "heading": "Julie Moore",
+      "ok": true
+    },
+    {
+      "name": "Donice Bryant",
+      "url": "https://www.civpulse.org/people/donice-bryant/",
+      "status": 200,
+      "heading": "Donice Bryant",
+      "ok": true
+    },
+    {
+      "name": "Duke Groover",
+      "url": "https://www.civpulse.org/people/duke-groover/",
+      "status": 200,
+      "heading": "Duke Groover",
+      "ok": true
+    },
+    {
+      "name": "Khaia Gibson",
+      "url": "https://www.civpulse.org/people/khaia-gibson/",
+      "status": 200,
+      "heading": "Khaia Gibson",
+      "ok": true
+    },
+    {
+      "name": "Sylvia McGee",
+      "url": "https://www.civpulse.org/people/sylvia-mcgee/",
+      "status": 200,
+      "heading": "Sylvia McGee",
+      "ok": true
+    },
+    {
+      "name": "Bert Bivins",
+      "url": "https://www.civpulse.org/people/bert-bivins/",
+      "status": 200,
+      "heading": "Bert Bivins",
+      "ok": true
+    },
+    {
+      "name": "Gary Bechtel",
+      "url": "https://www.civpulse.org/people/gary-bechtel/",
+      "status": 200,
+      "heading": "Gary Bechtel",
+      "ok": true
+    },
+    {
+      "name": "Tom Ellington",
+      "url": "https://www.civpulse.org/people/tom-ellington/",
+      "status": 200,
+      "heading": "Tom Ellington",
+      "ok": true
+    },
+    {
+      "name": "Michael Bill",
+      "url": "https://www.civpulse.org/people/michael-bill/",
+      "status": 200,
+      "heading": "Michael Bill",
+      "ok": true
+    },
+    {
+      "name": "Veronica McClendon",
+      "url": "https://www.civpulse.org/people/veronica-mcclendon/",
+      "status": 200,
+      "heading": "Veronica McClendon",
+      "ok": true
+    },
+    {
+      "name": "Everett Verner",
+      "url": "https://www.civpulse.org/people/everett-verner/",
+      "status": 200,
+      "heading": "Everett Verner",
+      "ok": true
+    },
+    {
+      "name": "Sundra M. Woodford",
+      "url": "https://www.civpulse.org/people/sundra-m-woodford/",
+      "status": 200,
+      "heading": "Sundra M. Woodford",
+      "ok": true
+    },
+    {
+      "name": "Harold Blevins",
+      "url": "https://www.civpulse.org/people/harold-blevins/",
+      "status": 200,
+      "heading": "Harold Blevins",
+      "ok": true
+    },
+    {
+      "name": "Marvin Land",
+      "url": "https://www.civpulse.org/people/marvin-land/",
+      "status": 200,
+      "heading": "Marvin Land",
+      "ok": true
+    },
+    {
+      "name": "Elaine Lucas",
+      "url": "https://www.civpulse.org/people/elaine-lucas/",
+      "status": 200,
+      "heading": "Elaine Lucas",
+      "ok": true
+    },
+    {
+      "name": "Frank Patterson",
+      "url": "https://www.civpulse.org/people/frank-patterson/",
+      "status": 200,
+      "heading": "Frank Patterson",
+      "ok": true
+    },
+    {
+      "name": "Dwight Jones",
+      "url": "https://www.civpulse.org/people/dwight-jones/",
+      "status": 200,
+      "heading": "Dwight Jones",
+      "ok": true
+    },
+    {
+      "name": "Michel Wanna",
+      "url": "https://www.civpulse.org/people/michel-wanna/",
+      "status": 200,
+      "heading": "Michel Wanna",
+      "ok": true
+    },
+    {
+      "name": "Felicia Parks",
+      "url": "https://www.civpulse.org/people/felicia-parks/",
+      "status": 200,
+      "heading": "Felicia Parks",
+      "ok": true
+    },
+    {
+      "name": "A.J. Hopkins",
+      "url": "https://www.civpulse.org/people/a-j-hopkins/",
+      "status": 200,
+      "heading": "A.J. Hopkins",
+      "ok": true
+    },
+    {
+      "name": "Marshall Talley",
+      "url": "https://www.civpulse.org/people/marshall-talley/",
+      "status": 200,
+      "heading": "Marshall Talley",
+      "ok": true
+    },
+    {
+      "name": "Kate Kubesheski",
+      "url": "https://www.civpulse.org/people/kate-kubesheski/",
+      "status": 200,
+      "heading": "Kate Kubesheski",
+      "ok": true
+    },
+    {
+      "name": "Rachad Hollis",
+      "url": "https://www.civpulse.org/people/rachad-hollis/",
+      "status": 200,
+      "heading": "Rachad Hollis",
+      "ok": true
+    },
+    {
+      "name": "Cedrick Jenkins",
+      "url": "https://www.civpulse.org/people/cedrick-jenkins/",
+      "status": 200,
+      "heading": "Cedrick Jenkins",
+      "ok": true
+    },
+    {
+      "name": "Willie Sidney",
+      "url": "https://www.civpulse.org/people/willie-sidney/",
+      "status": 200,
+      "heading": "Willie Sidney",
+      "ok": true
+    },
+    {
+      "name": "Algernon Wallace",
+      "url": "https://www.civpulse.org/people/algernon-wallace/",
+      "status": 200,
+      "heading": "Algernon Wallace",
+      "ok": true
+    },
+    {
+      "name": "Dave Dickey",
+      "url": "https://www.civpulse.org/people/dave-dickey/",
+      "status": 200,
+      "heading": "Dave Dickey",
+      "ok": true
+    },
+    {
+      "name": "Jarad Zellner",
+      "url": "https://www.civpulse.org/people/jarad-zellner/",
+      "status": 200,
+      "heading": "Jarad Zellner",
+      "ok": true
+    },
+    {
+      "name": "Louis Frank Tompkins",
+      "url": "https://www.civpulse.org/people/louis-frank-tompkins/",
+      "status": 200,
+      "heading": "Louis Frank Tompkins",
+      "ok": true
+    },
+    {
+      "name": "Legena Bolton",
+      "url": "https://www.civpulse.org/people/legena-bolton/",
+      "status": 200,
+      "heading": "Legena Bolton",
+      "ok": true
+    },
+    {
+      "name": "Weston Stroud",
+      "url": "https://www.civpulse.org/people/weston-stroud/",
+      "status": 200,
+      "heading": "Weston Stroud",
+      "ok": true
+    },
+    {
+      "name": "Frank Evans",
+      "url": "https://www.civpulse.org/people/frank-evans/",
+      "status": 200,
+      "heading": "Frank Evans",
+      "ok": true
+    },
+    {
+      "name": "Jonathan Barton",
+      "url": "https://www.civpulse.org/people/jonathan-barton/",
+      "status": 200,
+      "heading": "Jonathan Barton",
+      "ok": true
+    },
+    {
+      "name": "Jim Crisp",
+      "url": "https://www.civpulse.org/people/jim-crisp/",
+      "status": 200,
+      "heading": "Jim Crisp",
+      "ok": true
+    },
+    {
+      "name": "Deborah Garcia",
+      "url": "https://www.civpulse.org/people/deborah-garcia/",
+      "status": 200,
+      "heading": "Deborah Garcia",
+      "ok": true
+    },
+    {
+      "name": "Lynn Farmer",
+      "url": "https://www.civpulse.org/people/lynn-farmer/",
+      "status": 200,
+      "heading": "Lynn Farmer",
+      "ok": true
+    },
+    {
+      "name": "Charles Murphy",
+      "url": "https://www.civpulse.org/people/charles-murphy/",
+      "status": 200,
+      "heading": "Charles Murphy",
+      "ok": true
+    },
+    {
+      "name": "Charles Richardson",
+      "url": "https://www.civpulse.org/people/charles-richardson/",
+      "status": 200,
+      "heading": "Charles Richardson",
+      "ok": true
+    },
+    {
+      "name": "Craig Ross",
+      "url": "https://www.civpulse.org/people/craig-ross/",
+      "status": 200,
+      "heading": "Craig Ross",
+      "ok": true
+    },
+    {
+      "name": "Jan Beeland",
+      "url": "https://www.civpulse.org/people/jan-beeland/",
+      "status": 200,
+      "heading": "Jan Beeland",
+      "ok": true
+    },
+    {
+      "name": "Lisa Berrian",
+      "url": "https://www.civpulse.org/people/lisa-berrian/",
+      "status": 200,
+      "heading": "Lisa Berrian",
+      "ok": true
+    },
+    {
+      "name": "Ryan Griffin",
+      "url": "https://www.civpulse.org/people/ryan-griffin/",
+      "status": 200,
+      "heading": "Ryan Griffin",
+      "ok": true
+    },
+    {
+      "name": "Baleigh Fleming",
+      "url": "https://www.civpulse.org/people/baleigh-fleming/",
+      "status": 200,
+      "heading": "Baleigh Fleming",
+      "ok": true
+    },
+    {
+      "name": "Kaitlynn Kressin",
+      "url": "https://www.civpulse.org/people/kaitlynn-kressin/",
+      "status": 200,
+      "heading": "Kaitlynn Kressin",
+      "ok": true
+    },
+    {
+      "name": "Robert E. Fountain Jr.",
+      "url": "https://www.civpulse.org/people/robert-e-fountain-jr/",
+      "status": 200,
+      "heading": "Robert E. Fountain Jr.",
+      "ok": true
+    },
+    {
+      "name": "Charise Stephens-Merriweather",
+      "url": "https://www.civpulse.org/people/charise-stephens-merriweather/",
+      "status": 200,
+      "heading": "Charise Stephens-Merriweather",
+      "ok": true
+    },
+    {
+      "name": "Gary Wilson",
+      "url": "https://www.civpulse.org/people/gary-wilson/",
+      "status": 200,
+      "heading": "Gary Wilson",
+      "ok": true
+    },
+    {
+      "name": "Heather Carmichael",
+      "url": "https://www.civpulse.org/people/heather-carmichael/",
+      "status": 200,
+      "heading": "Heather Carmichael",
+      "ok": true
+    },
+    {
+      "name": "Alex Morrison",
+      "url": "https://www.civpulse.org/people/alex-morrison/",
+      "status": 200,
+      "heading": "Alex Morrison",
+      "ok": true
+    },
+    {
+      "name": "Ember Bishop Bentley",
+      "url": "https://www.civpulse.org/people/ember-bishop-bentley/",
+      "status": 200,
+      "heading": "Ember Bishop Bentley",
+      "ok": true
+    },
+    {
+      "name": "Cassandra Washington",
+      "url": "https://www.civpulse.org/people/cassandra-washington/",
+      "status": 200,
+      "heading": "Cassandra Washington",
+      "ok": true
+    },
+    {
+      "name": "Stephen Adams",
+      "url": "https://www.civpulse.org/people/stephen-adams/",
+      "status": 200,
+      "heading": "Stephen Adams",
+      "ok": true
+    },
+    {
+      "name": "JoAnn Fowler",
+      "url": "https://www.civpulse.org/people/joann-fowler/",
+      "status": 200,
+      "heading": "JoAnn Fowler",
+      "ok": true
+    },
+    {
+      "name": "Mike Austin",
+      "url": "https://www.civpulse.org/people/mike-austin/",
+      "status": 200,
+      "heading": "Mike Austin",
+      "ok": true
+    },
+    {
+      "name": "Eric Manson",
+      "url": "https://www.civpulse.org/people/eric-manson/",
+      "status": 200,
+      "heading": "Eric Manson",
+      "ok": true
+    },
+    {
+      "name": "Melinda Robinson-Moffett",
+      "url": "https://www.civpulse.org/people/melinda-robinson-moffett/",
+      "status": 200,
+      "heading": "Melinda Robinson-Moffett",
+      "ok": true
+    },
+    {
+      "name": "Ethiel Garlington",
+      "url": "https://www.civpulse.org/people/ethiel-garlington/",
+      "status": 200,
+      "heading": "Ethiel Garlington",
+      "ok": true
+    },
+    {
+      "name": "David Danzie",
+      "url": "https://www.civpulse.org/people/david-danzie/",
+      "status": 200,
+      "heading": "David Danzie",
+      "ok": true
+    },
+    {
+      "name": "Kevin T. Brown",
+      "url": "https://www.civpulse.org/people/kevin-t-brown/",
+      "status": 200,
+      "heading": "Kevin T. Brown",
+      "ok": true
+    },
+    {
+      "name": "Jeff Battcher",
+      "url": "https://www.civpulse.org/people/jeff-battcher/",
+      "status": 200,
+      "heading": "Jeff Battcher",
+      "ok": true
+    },
+    {
+      "name": "Christy Scott",
+      "url": "https://www.civpulse.org/people/christy-scott/",
+      "status": 200,
+      "heading": "Christy Scott",
+      "ok": true
+    },
+    {
+      "name": "Charlotte Arline",
+      "url": "https://www.civpulse.org/people/charlotte-arline/",
+      "status": 200,
+      "heading": "Charlotte Arline",
+      "ok": true
+    },
+    {
+      "name": "Wykesia Stafford",
+      "url": "https://www.civpulse.org/people/wykesia-stafford/",
+      "status": 200,
+      "heading": "Wykesia Stafford",
+      "ok": true
+    },
+    {
+      "name": "Jessica Plante",
+      "url": "https://www.civpulse.org/people/jessica-plante/",
+      "status": 200,
+      "heading": "Jessica Plante",
+      "ok": true
+    },
+    {
+      "name": "Kathleen Mathews",
+      "url": "https://www.civpulse.org/people/kathleen-mathews/",
+      "status": 200,
+      "heading": "Kathleen Mathews",
+      "ok": true
+    },
+    {
+      "name": "Robert Robby Redmond",
+      "url": "https://www.civpulse.org/people/robert-robby-redmond/",
+      "status": 200,
+      "heading": "Robert Robby Redmond",
+      "ok": true
+    },
+    {
+      "name": "Jeane Easom",
+      "url": "https://www.civpulse.org/people/jeane-easom/",
+      "status": 200,
+      "heading": "Jeane Easom",
+      "ok": true
+    },
+    {
+      "name": "Janita Hickenbotham",
+      "url": "https://www.civpulse.org/people/janita-hickenbotham/",
+      "status": 200,
+      "heading": "Janita Hickenbotham",
+      "ok": true
+    },
+    {
+      "name": "Tim Jones",
+      "url": "https://www.civpulse.org/people/tim-jones/",
+      "status": 200,
+      "heading": "Tim Jones",
+      "ok": true
+    },
+    {
+      "name": "Mindy Attaway",
+      "url": "https://www.civpulse.org/people/mindy-attaway/",
+      "status": 200,
+      "heading": "Mindy Attaway",
+      "ok": true
+    },
+    {
+      "name": "Jeffrey C. Ruggieri",
+      "url": "https://www.civpulse.org/people/jeffrey-c-ruggieri/",
+      "status": 200,
+      "heading": "Jeffrey C. Ruggieri",
+      "ok": true
+    },
+    {
+      "name": "Brittany Hadley",
+      "url": "https://www.civpulse.org/people/brittany-hadley/",
+      "status": 200,
+      "heading": "Brittany Hadley",
+      "ok": true
+    },
+    {
+      "name": "Michael J. Greenwald",
+      "url": "https://www.civpulse.org/people/michael-j-greenwald/",
+      "status": 200,
+      "heading": "Michael J. Greenwald",
+      "ok": true
+    },
+    {
+      "name": "D. Elaine Fitzgerald",
+      "url": "https://www.civpulse.org/people/d-elaine-fitzgerald/",
+      "status": 200,
+      "heading": "D. Elaine Fitzgerald",
+      "ok": true
+    },
+    {
+      "name": "Will Stanford",
+      "url": "https://www.civpulse.org/people/will-stanford/",
+      "status": 200,
+      "heading": "Will Stanford",
+      "ok": true
+    },
+    {
+      "name": "Carrie Robinson",
+      "url": "https://www.civpulse.org/people/carrie-robinson/",
+      "status": 200,
+      "heading": "Carrie Robinson",
+      "ok": true
+    },
+    {
+      "name": "Francis Butch Sementilli III",
+      "url": "https://www.civpulse.org/people/francis-butch-sementilli-iii/",
+      "status": 200,
+      "heading": "Francis Butch Sementilli III",
+      "ok": true
+    },
+    {
+      "name": "Maryam Yarahmadi",
+      "url": "https://www.civpulse.org/people/maryam-yarahmadi/",
+      "status": 200,
+      "heading": "Maryam Yarahmadi",
+      "ok": true
+    },
+    {
+      "name": "Ophelia Pete Hill",
+      "url": "https://www.civpulse.org/people/ophelia-pete-hill/",
+      "status": 200,
+      "heading": "Ophelia Pete Hill",
+      "ok": true
+    },
+    {
+      "name": "Gregory L. Brown",
+      "url": "https://www.civpulse.org/people/gregory-l-brown/",
+      "status": 200,
+      "heading": "Gregory L. Brown",
+      "ok": true
+    },
+    {
+      "name": "Kristie Brown",
+      "url": "https://www.civpulse.org/people/kristie-brown/",
+      "status": 200,
+      "heading": "Kristie Brown",
+      "ok": true
+    },
+    {
+      "name": "Randi Doveton",
+      "url": "https://www.civpulse.org/people/randi-doveton/",
+      "status": 200,
+      "heading": "Randi Doveton",
+      "ok": true
+    },
+    {
+      "name": "Trey Wood",
+      "url": "https://www.civpulse.org/people/trey-wood/",
+      "status": 200,
+      "heading": "Trey Wood",
+      "ok": true
+    },
+    {
+      "name": "George Thomas Jr.",
+      "url": "https://www.civpulse.org/people/george-thomas-jr/",
+      "status": 200,
+      "heading": "George Thomas Jr.",
+      "ok": true
+    },
+    {
+      "name": "Leigh Ann Junod",
+      "url": "https://www.civpulse.org/people/leigh-ann-junod/",
+      "status": 200,
+      "heading": "Leigh Ann Junod",
+      "ok": true
+    },
+    {
+      "name": "Jim Davis",
+      "url": "https://www.civpulse.org/people/jim-davis/",
+      "status": 200,
+      "heading": "Jim Davis",
+      "ok": true
+    },
+    {
+      "name": "Jody Claborn",
+      "url": "https://www.civpulse.org/people/jody-claborn/",
+      "status": 200,
+      "heading": "Jody Claborn",
+      "ok": true
+    },
+    {
+      "name": "Lauren Mauldin Marshall",
+      "url": "https://www.civpulse.org/people/lauren-mauldin-marshall/",
+      "status": 200,
+      "heading": "Lauren Mauldin Marshall",
+      "ok": true
+    },
+    {
+      "name": "Yvonne Holmes",
+      "url": "https://www.civpulse.org/people/yvonne-holmes/",
+      "status": 200,
+      "heading": "Yvonne Holmes",
+      "ok": true
+    },
+    {
+      "name": "George Thomas",
+      "url": "https://www.civpulse.org/people/george-thomas/",
+      "status": 200,
+      "heading": "George Thomas",
+      "ok": true
+    },
+    {
+      "name": "Andrea Crutchfield",
+      "url": "https://www.civpulse.org/people/andrea-crutchfield/",
+      "status": 200,
+      "heading": "Andrea Crutchfield",
+      "ok": true
+    },
+    {
+      "name": "Jonathan Alderman",
+      "url": "https://www.civpulse.org/people/jonathan-alderman/",
+      "status": 200,
+      "heading": "Jonathan Alderman",
+      "ok": true
+    },
+    {
+      "name": "Wade McCord",
+      "url": "https://www.civpulse.org/people/wade-mccord/",
+      "status": 200,
+      "heading": "Wade McCord",
+      "ok": true
+    },
+    {
+      "name": "Henderson Carswell",
+      "url": "https://www.civpulse.org/people/henderson-carswell/",
+      "status": 200,
+      "heading": "Henderson Carswell",
+      "ok": true
+    },
+    {
+      "name": "David Davis",
+      "url": "https://www.civpulse.org/people/david-davis/",
+      "status": 200,
+      "heading": "David Davis",
+      "ok": true
+    },
+    {
+      "name": "Luann Stone",
+      "url": "https://www.civpulse.org/people/luann-stone/",
+      "status": 200,
+      "heading": "Luann Stone",
+      "ok": true
+    },
+    {
+      "name": "Kema Bishop",
+      "url": "https://www.civpulse.org/people/kema-bishop/",
+      "status": 200,
+      "heading": "Kema Bishop",
+      "ok": true
+    },
+    {
+      "name": "Lonnie Miley",
+      "url": "https://www.civpulse.org/people/lonnie-miley/",
+      "status": 200,
+      "heading": "Lonnie Miley",
+      "ok": true
+    },
+    {
+      "name": "Chris C. Patterson",
+      "url": "https://www.civpulse.org/people/chris-c-patterson/",
+      "status": 200,
+      "heading": "Chris C. Patterson",
+      "ok": true
+    },
+    {
+      "name": "Leon Jones",
+      "url": "https://www.civpulse.org/people/leon-jones/",
+      "status": 200,
+      "heading": "Leon Jones",
+      "ok": true
+    },
+    {
+      "name": "Ronnie Miley",
+      "url": "https://www.civpulse.org/people/ronnie-miley/",
+      "status": 200,
+      "heading": "Ronnie Miley",
+      "ok": true
+    },
+    {
+      "name": "Bo Parrott",
+      "url": "https://www.civpulse.org/people/bo-parrott/",
+      "status": 200,
+      "heading": "Bo Parrott",
+      "ok": true
+    },
+    {
+      "name": "Richard Robinson",
+      "url": "https://www.civpulse.org/people/richard-robinson/",
+      "status": 200,
+      "heading": "Richard Robinson",
+      "ok": true
+    },
+    {
+      "name": "David Hank Ashley",
+      "url": "https://www.civpulse.org/people/david-hank-ashley/",
+      "status": 200,
+      "heading": "David Hank Ashley",
+      "ok": true
+    },
+    {
+      "name": "Ruth Taylor",
+      "url": "https://www.civpulse.org/people/ruth-taylor/",
+      "status": 200,
+      "heading": "Ruth Taylor",
+      "ok": true
+    },
+    {
+      "name": "Valencia Jones",
+      "url": "https://www.civpulse.org/people/valencia-jones/",
+      "status": 200,
+      "heading": "Valencia Jones",
+      "ok": true
+    },
+    {
+      "name": "Kenisha Jackson",
+      "url": "https://www.civpulse.org/people/kenisha-jackson/",
+      "status": 200,
+      "heading": "Kenisha Jackson",
+      "ok": true
+    },
+    {
+      "name": "Jerome Sinclair",
+      "url": "https://www.civpulse.org/people/jerome-sinclair/",
+      "status": 200,
+      "heading": "Jerome Sinclair",
+      "ok": true
+    },
+    {
+      "name": "Jimmy Daniels",
+      "url": "https://www.civpulse.org/people/jimmy-daniels/",
+      "status": 200,
+      "heading": "Jimmy Daniels",
+      "ok": true
+    },
+    {
+      "name": "Pamela White-Colbert",
+      "url": "https://www.civpulse.org/people/pamela-white-colbert/",
+      "status": 200,
+      "heading": "Pamela White-Colbert",
+      "ok": true
+    },
+    {
+      "name": "Sarah S. Harris",
+      "url": "https://www.civpulse.org/people/sarah-s-harris/",
+      "status": 200,
+      "heading": "Sarah S. Harris",
+      "ok": true
+    },
+    {
+      "name": "Brenda Youmas",
+      "url": "https://www.civpulse.org/people/brenda-youmas/",
+      "status": 200,
+      "heading": "Brenda Youmas",
+      "ok": true
+    },
+    {
+      "name": "Kathryn W. Gerhardt",
+      "url": "https://www.civpulse.org/people/kathryn-w-gerhardt/",
+      "status": 200,
+      "heading": "Kathryn W. Gerhardt",
+      "ok": true
+    },
+    {
+      "name": "Crystal Jones",
+      "url": "https://www.civpulse.org/people/crystal-jones/",
+      "status": 200,
+      "heading": "Crystal Jones",
+      "ok": true
+    },
+    {
+      "name": "DeAlvah Simms",
+      "url": "https://www.civpulse.org/people/dealvah-simms/",
+      "status": 200,
+      "heading": "DeAlvah Simms",
+      "ok": true
+    },
+    {
+      "name": "Amy Hartley",
+      "url": "https://www.civpulse.org/people/amy-hartley/",
+      "status": 200,
+      "heading": "Amy Hartley",
+      "ok": true
+    },
+    {
+      "name": "William M. Shurling III",
+      "url": "https://www.civpulse.org/people/william-m-shurling-iii/",
+      "status": 200,
+      "heading": "William M. Shurling III",
+      "ok": true
+    },
+    {
+      "name": "Holly Hoyle",
+      "url": "https://www.civpulse.org/people/holly-hoyle/",
+      "status": 200,
+      "heading": "Holly Hoyle",
+      "ok": true
+    },
+    {
+      "name": "Robert E. Herndon",
+      "url": "https://www.civpulse.org/people/robert-e-herndon/",
+      "status": 200,
+      "heading": "Robert E. Herndon",
+      "ok": true
+    },
+    {
+      "name": "Jeff Hanson",
+      "url": "https://www.civpulse.org/people/jeff-hanson/",
+      "status": 200,
+      "heading": "Jeff Hanson",
+      "ok": true
+    },
+    {
+      "name": "Chéferre Young",
+      "url": "https://www.civpulse.org/people/cheferre-young/",
+      "status": 200,
+      "heading": "Chéferre Young",
+      "ok": true
+    },
+    {
+      "name": "Sharell F. Lewis",
+      "url": "https://www.civpulse.org/people/sharell-f-lewis/",
+      "status": 200,
+      "heading": "Sharell F. Lewis",
+      "ok": true
+    },
+    {
+      "name": "Erica Woodford",
+      "url": "https://www.civpulse.org/people/erica-woodford/",
+      "status": 200,
+      "heading": "Erica Woodford",
+      "ok": true
+    },
+    {
+      "name": "Shemeka Williams",
+      "url": "https://www.civpulse.org/people/shemeka-williams/",
+      "status": 200,
+      "heading": "Shemeka Williams",
+      "ok": true
+    },
+    {
+      "name": "Rebecca L. Grist",
+      "url": "https://www.civpulse.org/people/rebecca-l-grist/",
+      "status": 200,
+      "heading": "Rebecca L. Grist",
+      "ok": true
+    },
+    {
+      "name": "Natalie Callaway",
+      "url": "https://www.civpulse.org/people/natalie-callaway/",
+      "status": 200,
+      "heading": "Natalie Callaway",
+      "ok": true
+    },
+    {
+      "name": "LaTonya Slaughter",
+      "url": "https://www.civpulse.org/people/latonya-slaughter/",
+      "status": 200,
+      "heading": "LaTonya Slaughter",
+      "ok": true
+    },
+    {
+      "name": "Chante’ Drumgold",
+      "url": "https://www.civpulse.org/people/chante-drumgold/",
+      "status": 200,
+      "heading": "Chante’ Drumgold",
+      "ok": true
+    },
+    {
+      "name": "Stephanie Miller",
+      "url": "https://www.civpulse.org/people/stephanie-miller/",
+      "status": 200,
+      "heading": "Stephanie Miller",
+      "ok": true
+    },
+    {
+      "name": "Anita R. Howard",
+      "url": "https://www.civpulse.org/people/anita-r-howard/",
+      "status": 200,
+      "heading": "Anita R. Howard",
+      "ok": true
+    },
+    {
+      "name": "Juanita Grey",
+      "url": "https://www.civpulse.org/people/juanita-grey/",
+      "status": 200,
+      "heading": "Juanita Grey",
+      "ok": true
+    },
+    {
+      "name": "Rhonda Roell-Taylor",
+      "url": "https://www.civpulse.org/people/rhonda-roell-taylor/",
+      "status": 200,
+      "heading": "Rhonda Roell-Taylor",
+      "ok": true
+    },
+    {
+      "name": "Alveta Watkins",
+      "url": "https://www.civpulse.org/people/alveta-watkins/",
+      "status": 200,
+      "heading": "Alveta Watkins",
+      "ok": true
+    },
+    {
+      "name": "Tony May",
+      "url": "https://www.civpulse.org/people/tony-may/",
+      "status": 200,
+      "heading": "Tony May",
+      "ok": true
+    },
+    {
+      "name": "Jeremy Johnson",
+      "url": "https://www.civpulse.org/people/jeremy-johnson/",
+      "status": 200,
+      "heading": "Jeremy Johnson",
+      "ok": true
+    },
+    {
+      "name": "Taylor Wilson",
+      "url": "https://www.civpulse.org/people/taylor-wilson/",
+      "status": 200,
+      "heading": "Taylor Wilson",
+      "ok": true
+    },
+    {
+      "name": "Kyle Owenby",
+      "url": "https://www.civpulse.org/people/kyle-owenby/",
+      "status": 200,
+      "heading": "Kyle Owenby",
+      "ok": true
+    },
+    {
+      "name": "Cynthia T. Adams",
+      "url": "https://www.civpulse.org/people/cynthia-t-adams/",
+      "status": 200,
+      "heading": "Cynthia T. Adams",
+      "ok": true
+    },
+    {
+      "name": "Pam Faison",
+      "url": "https://www.civpulse.org/people/pam-faison/",
+      "status": 200,
+      "heading": "Pam Faison",
+      "ok": true
+    },
+    {
+      "name": "Melissa Pittman",
+      "url": "https://www.civpulse.org/people/melissa-pittman/",
+      "status": 200,
+      "heading": "Melissa Pittman",
+      "ok": true
+    },
+    {
+      "name": "Jeremy Raines",
+      "url": "https://www.civpulse.org/people/jeremy-raines/",
+      "status": 200,
+      "heading": "Jeremy Raines",
+      "ok": true
+    },
+    {
+      "name": "Christy Iuliucci",
+      "url": "https://www.civpulse.org/people/christy-iuliucci/",
+      "status": 200,
+      "heading": "Christy Iuliucci",
+      "ok": true
+    },
+    {
+      "name": "Janice Ross",
+      "url": "https://www.civpulse.org/people/janice-ross/",
+      "status": 200,
+      "heading": "Janice Ross",
+      "ok": true
+    },
+    {
+      "name": "Wanzina Jackson",
+      "url": "https://www.civpulse.org/people/wanzina-jackson/",
+      "status": 200,
+      "heading": "Wanzina Jackson",
+      "ok": true
+    },
+    {
+      "name": "Shane Edwards",
+      "url": "https://www.civpulse.org/people/shane-edwards/",
+      "status": 200,
+      "heading": "Shane Edwards",
+      "ok": true
+    },
+    {
+      "name": "Tim Wilder",
+      "url": "https://www.civpulse.org/people/tim-wilder/",
+      "status": 200,
+      "heading": "Tim Wilder",
+      "ok": true
+    },
+    {
+      "name": "Joveta Turner",
+      "url": "https://www.civpulse.org/people/joveta-turner/",
+      "status": 200,
+      "heading": "Joveta Turner",
+      "ok": true
+    },
+    {
+      "name": "John Hayes",
+      "url": "https://www.civpulse.org/people/john-hayes/",
+      "status": 200,
+      "heading": "John Hayes",
+      "ok": true
+    },
+    {
+      "name": "Tekquell Watson",
+      "url": "https://www.civpulse.org/people/tekquell-watson/",
+      "status": 200,
+      "heading": "Tekquell Watson",
+      "ok": true
+    },
+    {
+      "name": "Laura Hardwick",
+      "url": "https://www.civpulse.org/people/laura-hardwick/",
+      "status": 200,
+      "heading": "Laura Hardwick",
+      "ok": true
+    },
+    {
+      "name": "Robert Walker",
+      "url": "https://www.civpulse.org/people/robert-walker/",
+      "status": 200,
+      "heading": "Robert Walker",
+      "ok": true
+    },
+    {
+      "name": "Spencer Hawkins",
+      "url": "https://www.civpulse.org/people/spencer-hawkins/",
+      "status": 200,
+      "heading": "Spencer Hawkins",
+      "ok": true
+    },
+    {
+      "name": "Mike Kaplan",
+      "url": "https://www.civpulse.org/people/mike-kaplan/",
+      "status": 200,
+      "heading": "Mike Kaplan",
+      "ok": true
+    },
+    {
+      "name": "Michael McNeil",
+      "url": "https://www.civpulse.org/people/michael-mcneil/",
+      "status": 200,
+      "heading": "Michael McNeil",
+      "ok": true
+    },
+    {
+      "name": "Barbara Boyer",
+      "url": "https://www.civpulse.org/people/barbara-boyer/",
+      "status": 200,
+      "heading": "Barbara Boyer",
+      "ok": true
+    },
+    {
+      "name": "Casey Walker Jr.",
+      "url": "https://www.civpulse.org/people/casey-walker-jr/",
+      "status": 200,
+      "heading": "Casey Walker Jr.",
+      "ok": true
+    },
+    {
+      "name": "Robert Abbott",
+      "url": "https://www.civpulse.org/people/robert-abbott/",
+      "status": 200,
+      "heading": "Robert Abbott",
+      "ok": true
+    },
+    {
+      "name": "Karen Evans",
+      "url": "https://www.civpulse.org/people/karen-evans/",
+      "status": 200,
+      "heading": "Karen Evans",
+      "ok": true
+    },
+    {
+      "name": "Moranda Guy",
+      "url": "https://www.civpulse.org/people/moranda-guy/",
+      "status": 200,
+      "heading": "Moranda Guy",
+      "ok": true
+    },
+    {
+      "name": "Robert McCord",
+      "url": "https://www.civpulse.org/people/robert-mccord/",
+      "status": 200,
+      "heading": "Robert McCord",
+      "ok": true
+    },
+    {
+      "name": "Sophie Rosen",
+      "url": "https://www.civpulse.org/people/sophie-rosen/",
+      "status": 200,
+      "heading": "Sophie Rosen",
+      "ok": true
+    },
+    {
+      "name": "Eduardo Guerra",
+      "url": "https://www.civpulse.org/people/eduardo-guerra/",
+      "status": 200,
+      "heading": "Eduardo Guerra",
+      "ok": true
+    },
+    {
+      "name": "Kay McGiboney",
+      "url": "https://www.civpulse.org/people/kay-mcgiboney/",
+      "status": 200,
+      "heading": "Kay McGiboney",
+      "ok": true
+    },
+    {
+      "name": "Connie L. Williford",
+      "url": "https://www.civpulse.org/people/connie-l-williford/",
+      "status": 200,
+      "heading": "Connie L. Williford",
+      "ok": true
+    },
+    {
+      "name": "Thomas Jackson Gillon Jr",
+      "url": "https://www.civpulse.org/people/thomas-jackson-gillon-jr/",
+      "status": 200,
+      "heading": "Thomas Jackson Gillon Jr",
+      "ok": true
+    },
+    {
+      "name": "David L. Mincey III",
+      "url": "https://www.civpulse.org/people/david-l-mincey-iii/",
+      "status": 200,
+      "heading": "David L. Mincey III",
+      "ok": true
+    },
+    {
+      "name": "Philip T. Raymond III",
+      "url": "https://www.civpulse.org/people/philip-t-raymond-iii/",
+      "status": 200,
+      "heading": "Philip T. Raymond III",
+      "ok": true
+    },
+    {
+      "name": "Emily Davis",
+      "url": "https://www.civpulse.org/people/emily-davis/",
+      "status": 200,
+      "heading": "Emily Davis",
+      "ok": true
+    },
+    {
+      "name": "Veronica Womack",
+      "url": "https://www.civpulse.org/people/veronica-womack/",
+      "status": 200,
+      "heading": "Veronica Womack",
+      "ok": true
+    },
+    {
+      "name": "Denese Shinholster",
+      "url": "https://www.civpulse.org/people/denese-shinholster/",
+      "status": 200,
+      "heading": "Denese Shinholster",
+      "ok": true
+    },
+    {
+      "name": "Jeffery O. Monroe",
+      "url": "https://www.civpulse.org/people/jeffery-o-monroe/",
+      "status": 200,
+      "heading": "Jeffery O. Monroe",
+      "ok": true
+    },
+    {
+      "name": "Ken Smith",
+      "url": "https://www.civpulse.org/people/ken-smith/",
+      "status": 200,
+      "heading": "Ken Smith",
+      "ok": true
+    },
+    {
+      "name": "Kerry Dunaway",
+      "url": "https://www.civpulse.org/people/kerry-dunaway/",
+      "status": 200,
+      "heading": "Kerry Dunaway",
+      "ok": true
+    },
+    {
+      "name": "Randall Walker",
+      "url": "https://www.civpulse.org/people/randall-walker/",
+      "status": 200,
+      "heading": "Randall Walker",
+      "ok": true
+    },
+    {
+      "name": "Shonya Mapp",
+      "url": "https://www.civpulse.org/people/shonya-mapp/",
+      "status": 200,
+      "heading": "Shonya Mapp",
+      "ok": true
+    },
+    {
+      "name": "Brant Bailey",
+      "url": "https://www.civpulse.org/people/brant-bailey/",
+      "status": 200,
+      "heading": "Brant Bailey",
+      "ok": true
+    },
+    {
+      "name": "George E. Slappey",
+      "url": "https://www.civpulse.org/people/george-e-slappey/",
+      "status": 200,
+      "heading": "George E. Slappey",
+      "ok": true
+    },
+    {
+      "name": "LaRhonda Patrick",
+      "url": "https://www.civpulse.org/people/larhonda-patrick/",
+      "status": 200,
+      "heading": "LaRhonda Patrick",
+      "ok": true
+    },
+    {
+      "name": "Will Carroll",
+      "url": "https://www.civpulse.org/people/will-carroll/",
+      "status": 200,
+      "heading": "Will Carroll",
+      "ok": true
+    },
+    {
+      "name": "Dale Jump",
+      "url": "https://www.civpulse.org/people/dale-jump/",
+      "status": 200,
+      "heading": "Dale Jump",
+      "ok": true
+    },
+    {
+      "name": "Troy Cook",
+      "url": "https://www.civpulse.org/people/troy-cook/",
+      "status": 200,
+      "heading": "Troy Cook",
+      "ok": true
+    },
+    {
+      "name": "Dan Perdue",
+      "url": "https://www.civpulse.org/people/dan-perdue/",
+      "status": 200,
+      "heading": "Dan Perdue",
+      "ok": true
+    },
+    {
+      "name": "Ed Barbee",
+      "url": "https://www.civpulse.org/people/ed-barbee/",
+      "status": 200,
+      "heading": "Ed Barbee",
+      "ok": true
+    },
+    {
+      "name": "Michelle Parks",
+      "url": "https://www.civpulse.org/people/michelle-parks/",
+      "status": 200,
+      "heading": "Michelle Parks",
+      "ok": true
+    },
+    {
+      "name": "Joy Carr",
+      "url": "https://www.civpulse.org/people/joy-carr/",
+      "status": 200,
+      "heading": "Joy Carr",
+      "ok": true
+    },
+    {
+      "name": "Steve Johnson",
+      "url": "https://www.civpulse.org/people/steve-johnson/",
+      "status": 200,
+      "heading": "Steve Johnson",
+      "ok": true
+    },
+    {
+      "name": "Clifford Holmes",
+      "url": "https://www.civpulse.org/people/clifford-holmes/",
+      "status": 200,
+      "heading": "Clifford Holmes",
+      "ok": true
+    },
+    {
+      "name": "Natalie Lurie",
+      "url": "https://www.civpulse.org/people/natalie-lurie/",
+      "status": 200,
+      "heading": "Natalie Lurie",
+      "ok": true
+    },
+    {
+      "name": "Chris Weidner",
+      "url": "https://www.civpulse.org/people/chris-weidner/",
+      "status": 200,
+      "heading": "Chris Weidner",
+      "ok": true
+    },
+    {
+      "name": "Wallace Herring",
+      "url": "https://www.civpulse.org/people/wallace-herring/",
+      "status": 200,
+      "heading": "Wallace Herring",
+      "ok": true
+    },
+    {
+      "name": "Lamarcus Davis",
+      "url": "https://www.civpulse.org/people/lamarcus-davis/",
+      "status": 200,
+      "heading": "Lamarcus Davis",
+      "ok": true
+    },
+    {
+      "name": "Carlos McCloud",
+      "url": "https://www.civpulse.org/people/carlos-mccloud/",
+      "status": 200,
+      "heading": "Carlos McCloud",
+      "ok": true
+    },
+    {
+      "name": "Jenna S. Mashburn",
+      "url": "https://www.civpulse.org/people/jenna-s-mashburn/",
+      "status": 200,
+      "heading": "Jenna S. Mashburn",
+      "ok": true
+    },
+    {
+      "name": "Mike Dodd",
+      "url": "https://www.civpulse.org/people/mike-dodd/",
+      "status": 200,
+      "heading": "Mike Dodd",
+      "ok": true
+    },
+    {
+      "name": "Marcus Agostino",
+      "url": "https://www.civpulse.org/people/marcus-agostino/",
+      "status": 200,
+      "heading": "Marcus Agostino",
+      "ok": true
+    },
+    {
+      "name": "Don Carter",
+      "url": "https://www.civpulse.org/people/don-carter/",
+      "status": 200,
+      "heading": "Don Carter",
+      "ok": true
+    },
+    {
+      "name": "James Richardson",
+      "url": "https://www.civpulse.org/people/james-richardson/",
+      "status": 200,
+      "heading": "James Richardson",
+      "ok": true
+    },
+    {
+      "name": "Martin Moseley",
+      "url": "https://www.civpulse.org/people/martin-moseley/",
+      "status": 200,
+      "heading": "Martin Moseley",
+      "ok": true
+    },
+    {
+      "name": "Chad Tyler",
+      "url": "https://www.civpulse.org/people/chad-tyler/",
+      "status": 200,
+      "heading": "Chad Tyler",
+      "ok": true
+    },
+    {
+      "name": "Nolan Howard",
+      "url": "https://www.civpulse.org/people/nolan-howard/",
+      "status": 200,
+      "heading": "Nolan Howard",
+      "ok": true
+    },
+    {
+      "name": "Michael Chidester",
+      "url": "https://www.civpulse.org/people/michael-chidester/",
+      "status": 200,
+      "heading": "Michael Chidester",
+      "ok": true
+    },
+    {
+      "name": "Alton Howard",
+      "url": "https://www.civpulse.org/people/alton-howard/",
+      "status": 200,
+      "heading": "Alton Howard",
+      "ok": true
+    },
+    {
+      "name": "Kyle Goss",
+      "url": "https://www.civpulse.org/people/kyle-goss/",
+      "status": 200,
+      "heading": "Kyle Goss",
+      "ok": true
+    },
+    {
+      "name": "Ramsey Howard",
+      "url": "https://www.civpulse.org/people/ramsey-howard/",
+      "status": 200,
+      "heading": "Ramsey Howard",
+      "ok": true
+    },
+    {
+      "name": "Richard Garrett",
+      "url": "https://www.civpulse.org/people/richard-garrett/",
+      "status": 200,
+      "heading": "Richard Garrett",
+      "ok": true
+    },
+    {
+      "name": "Bill Sharp",
+      "url": "https://www.civpulse.org/people/bill-sharp/",
+      "status": 200,
+      "heading": "Bill Sharp",
+      "ok": true
+    },
+    {
+      "name": "John Reid",
+      "url": "https://www.civpulse.org/people/john-reid/",
+      "status": 200,
+      "heading": "John Reid",
+      "ok": true
+    },
+    {
+      "name": "Gary Sanders",
+      "url": "https://www.civpulse.org/people/gary-sanders/",
+      "status": 200,
+      "heading": "Gary Sanders",
+      "ok": true
+    },
+    {
+      "name": "Bernice Banks",
+      "url": "https://www.civpulse.org/people/bernice-banks/",
+      "status": 200,
+      "heading": "Bernice Banks",
+      "ok": true
+    },
+    {
+      "name": "Ken Fowler",
+      "url": "https://www.civpulse.org/people/ken-fowler/",
+      "status": 200,
+      "heading": "Ken Fowler",
+      "ok": true
+    },
+    {
+      "name": "Sara Myers",
+      "url": "https://www.civpulse.org/people/sara-myers/",
+      "status": 200,
+      "heading": "Sara Myers",
+      "ok": true
+    },
+    {
+      "name": "Charles Gray",
+      "url": "https://www.civpulse.org/people/charles-gray/",
+      "status": 200,
+      "heading": "Charles Gray",
+      "ok": true
+    },
+    {
+      "name": "Flint Shepherd",
+      "url": "https://www.civpulse.org/people/flint-shepherd/",
+      "status": 200,
+      "heading": "Flint Shepherd",
+      "ok": true
+    },
+    {
+      "name": "Kyle Swicord",
+      "url": "https://www.civpulse.org/people/kyle-swicord/",
+      "status": 200,
+      "heading": "Kyle Swicord",
+      "ok": true
+    },
+    {
+      "name": "Lloyd Hatfield",
+      "url": "https://www.civpulse.org/people/lloyd-hatfield/",
+      "status": 200,
+      "heading": "Lloyd Hatfield",
+      "ok": true
+    },
+    {
+      "name": "Judy Sherling",
+      "url": "https://www.civpulse.org/people/judy-sherling/",
+      "status": 200,
+      "heading": "Judy Sherling",
+      "ok": true
+    },
+    {
+      "name": "Virginia Lee",
+      "url": "https://www.civpulse.org/people/virginia-lee/",
+      "status": 200,
+      "heading": "Virginia Lee",
+      "ok": true
+    },
+    {
+      "name": "Aprill-Adside Smith",
+      "url": "https://www.civpulse.org/people/aprill-adside-smith/",
+      "status": 200,
+      "heading": "Aprill-Adside Smith",
+      "ok": true
+    },
+    {
+      "name": "James Vaughn",
+      "url": "https://www.civpulse.org/people/james-vaughn/",
+      "status": 200,
+      "heading": "James Vaughn",
+      "ok": true
+    },
+    {
+      "name": "Charles Williams",
+      "url": "https://www.civpulse.org/people/charles-williams/",
+      "status": 200,
+      "heading": "Charles Williams",
+      "ok": true
+    },
+    {
+      "name": "Kathryn Epps",
+      "url": "https://www.civpulse.org/people/kathryn-epps/",
+      "status": 200,
+      "heading": "Kathryn Epps",
+      "ok": true
+    },
+    {
+      "name": "Marty Dominy",
+      "url": "https://www.civpulse.org/people/marty-dominy/",
+      "status": 200,
+      "heading": "Marty Dominy",
+      "ok": true
+    },
+    {
+      "name": "Tommy Stalnaker",
+      "url": "https://www.civpulse.org/people/tommy-stalnaker/",
+      "status": 200,
+      "heading": "Tommy Stalnaker",
+      "ok": true
+    },
+    {
+      "name": "Brent Lanford",
+      "url": "https://www.civpulse.org/people/brent-lanford/",
+      "status": 200,
+      "heading": "Brent Lanford",
+      "ok": true
+    },
+    {
+      "name": "Michelle Grembowski",
+      "url": "https://www.civpulse.org/people/michelle-grembowski/",
+      "status": 200,
+      "heading": "Michelle Grembowski",
+      "ok": true
+    },
+    {
+      "name": "Tiffany Andrews",
+      "url": "https://www.civpulse.org/people/tiffany-andrews/",
+      "status": 200,
+      "heading": "Tiffany Andrews",
+      "ok": true
+    },
+    {
+      "name": "Matt Garvin",
+      "url": "https://www.civpulse.org/people/matt-garvin/",
+      "status": 200,
+      "heading": "Matt Garvin",
+      "ok": true
+    },
+    {
+      "name": "Laura M. Mathis",
+      "url": "https://www.civpulse.org/people/laura-m-mathis/",
+      "status": 200,
+      "heading": "Laura M. Mathis",
+      "ok": true
+    },
+    {
+      "name": "Nancy Nash",
+      "url": "https://www.civpulse.org/people/nancy-nash/",
+      "status": 200,
+      "heading": "Nancy Nash",
+      "ok": true
+    },
+    {
+      "name": "Michael Huckaby",
+      "url": "https://www.civpulse.org/people/michael-huckaby/",
+      "status": 200,
+      "heading": "Michael Huckaby",
+      "ok": true
+    },
+    {
+      "name": "James A. Epps Jr.",
+      "url": "https://www.civpulse.org/people/james-a-epps-jr/",
+      "status": 200,
+      "heading": "James A. Epps Jr.",
+      "ok": true
+    },
+    {
+      "name": "Greg Boike",
+      "url": "https://www.civpulse.org/people/greg-boike/",
+      "status": 200,
+      "heading": "Greg Boike",
+      "ok": true
+    },
+    {
+      "name": "Kim Stanton",
+      "url": "https://www.civpulse.org/people/kim-stanton/",
+      "status": 200,
+      "heading": "Kim Stanton",
+      "ok": true
+    }
+  ],
+  "anonymous_browser": "MGRC organization lists 67 council/staff profiles; Laura M. Mathis canonical profile renders the official portrait at 240×300 and its affiliation. No console warnings/errors.",
+  "initial_build": {
+    "build_uuid": "864a7869-a6f5-49d4-b930-c4e7fbbc2cd0",
+    "outcome": "failed",
+    "reason": "GitHub checks API HTTP 403; successful retry retained the migration guard."
+  },
+  "new_mgrc_photos_verified": 2,
+  "existing_photos_verified": 95
+}

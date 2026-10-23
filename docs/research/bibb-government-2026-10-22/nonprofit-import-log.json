@@ -1,0 +1,3997 @@
+{
+  "operations": [
+    {
+      "name": "Macon-Bibb Citizen Advocacy",
+      "operation": "create",
+      "result": {
+        "id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "slug": "macon-bibb-citizen-advocacy",
+        "name": "Macon-Bibb Citizen Advocacy"
+      }
+    },
+    {
+      "name": "Middle Georgia Community Food Bank",
+      "operation": "create",
+      "result": {
+        "id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "slug": "middle-georgia-community-food-bank",
+        "name": "Middle Georgia Community Food Bank"
+      }
+    },
+    {
+      "name": "Macon-Bibb County Economic Opportunity Council",
+      "operation": "create",
+      "result": {
+        "id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "slug": "macon-bibb-county-economic-opportunity-council",
+        "name": "Macon-Bibb County Economic Opportunity Council"
+      }
+    },
+    {
+      "name": "Keep Macon-Bibb Beautiful",
+      "operation": "create",
+      "result": {
+        "id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "slug": "keep-macon-bibb-beautiful",
+        "name": "Keep Macon-Bibb Beautiful"
+      }
+    },
+    {
+      "name": "Macon Arts Alliance",
+      "operation": "create",
+      "result": {
+        "id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "slug": "macon-arts-alliance",
+        "name": "Macon Arts Alliance"
+      }
+    },
+    {
+      "name": "Macon Regional Crimestoppers",
+      "operation": "create",
+      "result": {
+        "id": "cadfb929-7335-4474-97b8-0fb6337ea429",
+        "slug": "macon-regional-crimestoppers",
+        "name": "Macon Regional Crimestoppers"
+      }
+    },
+    {
+      "name": "Museum of Arts and Sciences",
+      "operation": "create",
+      "result": {
+        "id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "slug": "museum-of-arts-and-sciences",
+        "name": "Museum of Arts and Sciences"
+      }
+    },
+    {
+      "name": "Museum of Aviation Foundation",
+      "operation": "create",
+      "result": {
+        "id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "slug": "museum-of-aviation-foundation",
+        "name": "Museum of Aviation Foundation"
+      }
+    },
+    {
+      "name": "Crisis Line & Safe House of Central Georgia",
+      "operation": "create",
+      "result": {
+        "id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "slug": "crisis-line-safe-house-of-central-georgia",
+        "name": "Crisis Line & Safe House of Central Georgia"
+      }
+    },
+    {
+      "name": "Tubman African American Museum",
+      "operation": "create",
+      "result": {
+        "id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "slug": "tubman-african-american-museum",
+        "name": "Tubman African American Museum"
+      }
+    },
+    {
+      "name": "International Cherry Blossom Festival",
+      "operation": "create",
+      "result": {
+        "id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "slug": "international-cherry-blossom-festival",
+        "name": "International Cherry Blossom Festival"
+      }
+    },
+    {
+      "name": "Douglass Theatre",
+      "operation": "create",
+      "result": {
+        "id": "cd3361bc-3559-4baa-996c-e1c5544036cf",
+        "slug": "douglass-theatre",
+        "name": "Douglass Theatre"
+      }
+    },
+    {
+      "name": "Visit Macon",
+      "operation": "create",
+      "result": {
+        "id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+        "slug": "visit-macon",
+        "name": "Visit Macon"
+      }
+    },
+    {
+      "name": "Greater Macon Chamber of Commerce",
+      "operation": "create",
+      "result": {
+        "id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "slug": "greater-macon-chamber-of-commerce",
+        "name": "Greater Macon Chamber of Commerce"
+      }
+    },
+    {
+      "name": "Rebuilding Macon",
+      "operation": "create",
+      "result": {
+        "id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+        "slug": "rebuilding-macon",
+        "name": "Rebuilding Macon"
+      }
+    },
+    {
+      "name": "Mercer University",
+      "operation": "create",
+      "result": {
+        "id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "slug": "mercer-university",
+        "name": "Mercer University"
+      }
+    },
+    {
+      "name": "Wesleyan College",
+      "operation": "create",
+      "result": {
+        "id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "slug": "wesleyan-college",
+        "name": "Wesleyan College"
+      }
+    },
+    {
+      "name": "Best Buddies in Georgia",
+      "operation": "create",
+      "result": {
+        "id": "070e700d-24ce-41ef-b187-f0a930ccb96a",
+        "slug": "best-buddies-in-georgia",
+        "name": "Best Buddies in Georgia"
+      }
+    },
+    {
+      "name": "Bibb Mt. Zion Baptist Church",
+      "operation": "create",
+      "result": {
+        "id": "804f3b28-5af9-48f3-898d-6df5be0568a8",
+        "slug": "bibb-mt-zion-baptist-church",
+        "name": "Bibb Mt. Zion Baptist Church"
+      }
+    },
+    {
+      "name": "Big Brothers Big Sisters of the Heart of Georgia",
+      "operation": "create",
+      "result": {
+        "id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "slug": "big-brothers-big-sisters-of-the-heart-of-georgia",
+        "name": "Big Brothers Big Sisters of the Heart of Georgia"
+      }
+    },
+    {
+      "name": "Central Georgia CASA",
+      "operation": "create",
+      "result": {
+        "id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "slug": "central-georgia-casa",
+        "name": "Central Georgia CASA"
+      }
+    },
+    {
+      "name": "Central Georgia Council, Scouting America",
+      "operation": "create",
+      "result": {
+        "id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+        "slug": "central-georgia-council-scouting-america",
+        "name": "Central Georgia Council, Scouting America"
+      }
+    },
+    {
+      "name": "Coach John M. Peacock Foundation",
+      "operation": "create",
+      "result": {
+        "id": "24ffb3a4-206f-45b3-b0ff-88a8f7d675a4",
+        "slug": "coach-john-m-peacock-foundation",
+        "name": "Coach John M. Peacock Foundation"
+      }
+    },
+    {
+      "name": "Family Advancement Ministries",
+      "operation": "create",
+      "result": {
+        "id": "fb015ca5-240e-4ff9-b421-276ee93d386a",
+        "slug": "family-advancement-ministries",
+        "name": "Family Advancement Ministries"
+      }
+    },
+    {
+      "name": "Girl Scouts of Historic Georgia",
+      "operation": "create",
+      "result": {
+        "id": "df7291fd-50e7-4d22-b167-7d870718bfa6",
+        "slug": "girl-scouts-of-historic-georgia",
+        "name": "Girl Scouts of Historic Georgia"
+      }
+    },
+    {
+      "name": "I Am Kali",
+      "operation": "create",
+      "result": {
+        "id": "00a9eeeb-d20f-42cf-bdc0-f54b78391e13",
+        "slug": "i-am-kali",
+        "name": "I Am Kali"
+      }
+    },
+    {
+      "name": "Joining Our Youth",
+      "operation": "create",
+      "result": {
+        "id": "12ca0e75-3088-436b-93e4-af6b9e07977f",
+        "slug": "joining-our-youth",
+        "name": "Joining Our Youth"
+      }
+    },
+    {
+      "name": "Little Disciples Educational Services",
+      "operation": "create",
+      "result": {
+        "id": "71e04e45-2ae8-45bd-a2ee-cdbaff8c8031",
+        "slug": "little-disciples-educational-services",
+        "name": "Little Disciples Educational Services"
+      }
+    },
+    {
+      "name": "Macon Hope — First Tee Middle Georgia",
+      "operation": "create",
+      "result": {
+        "id": "8a60ba0c-d5bf-4e6b-a2a0-8d8839b0a73d",
+        "slug": "macon-hope-first-tee-middle-georgia",
+        "name": "Macon Hope — First Tee Middle Georgia"
+      }
+    },
+    {
+      "name": "Meals on Wheels of Middle Georgia",
+      "operation": "create",
+      "result": {
+        "id": "955f8698-dc88-4946-aa79-7496ddb2c332",
+        "slug": "meals-on-wheels-of-middle-georgia",
+        "name": "Meals on Wheels of Middle Georgia"
+      }
+    },
+    {
+      "name": "Mother’s Nest",
+      "operation": "create",
+      "result": {
+        "id": "2a97254f-55eb-4fca-a0d5-978f986a4678",
+        "slug": "mother-s-nest",
+        "name": "Mother’s Nest"
+      }
+    },
+    {
+      "name": "Mt. Zion Baptist Church — Upson County",
+      "operation": "create",
+      "result": {
+        "id": "7e7afc77-75be-43b5-905c-f992b98e4dc3",
+        "slug": "mt-zion-baptist-church-upson-county",
+        "name": "Mt. Zion Baptist Church — Upson County"
+      }
+    },
+    {
+      "name": "Rescue Mission of Middle Georgia",
+      "operation": "create",
+      "result": {
+        "id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "slug": "rescue-mission-of-middle-georgia",
+        "name": "Rescue Mission of Middle Georgia"
+      }
+    },
+    {
+      "name": "Sleep in Heavenly Peace — Macon Chapter",
+      "operation": "create",
+      "result": {
+        "id": "983e3e0b-88fe-4272-876c-b3d23f7f9ae5",
+        "slug": "sleep-in-heavenly-peace-macon-chapter",
+        "name": "Sleep in Heavenly Peace — Macon Chapter"
+      }
+    },
+    {
+      "name": "The Arc Macon",
+      "operation": "create",
+      "result": {
+        "id": "f9e08bf8-aaa8-4f37-9c10-f5181c1a7502",
+        "slug": "the-arc-macon",
+        "name": "The Arc Macon"
+      }
+    },
+    {
+      "name": "100 Black Men of Macon-Middle Georgia",
+      "operation": "create",
+      "result": {
+        "id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+        "slug": "100-black-men-of-macon-middle-georgia",
+        "name": "100 Black Men of Macon-Middle Georgia"
+      }
+    },
+    {
+      "name": "Lead With Literacy",
+      "operation": "create",
+      "result": {
+        "id": "79cc029e-abe0-40c0-8460-c020098fd7e0",
+        "slug": "lead-with-literacy",
+        "name": "Lead With Literacy"
+      }
+    },
+    {
+      "name": "Men About Change",
+      "operation": "create",
+      "result": {
+        "id": "ae4f2331-7872-43fa-99e6-e9883c941b43",
+        "slug": "men-about-change",
+        "name": "Men About Change"
+      }
+    },
+    {
+      "name": "Next Level Community Development Center",
+      "operation": "create",
+      "result": {
+        "id": "d11b2901-2486-4fd0-925f-d60d10ec3145",
+        "slug": "next-level-community-development-center",
+        "name": "Next Level Community Development Center"
+      }
+    },
+    {
+      "name": "Appleton Episcopal Ministries",
+      "operation": "create",
+      "result": {
+        "id": "db4090d6-4d30-46ee-9c55-fcb44b1e6d35",
+        "slug": "appleton-episcopal-ministries",
+        "name": "Appleton Episcopal Ministries"
+      }
+    },
+    {
+      "name": "Campus Clubs",
+      "operation": "create",
+      "result": {
+        "id": "b6c9d380-4743-47e3-bc1f-45cff42c7fbc",
+        "slug": "campus-clubs",
+        "name": "Campus Clubs"
+      }
+    },
+    {
+      "name": "Diamonds On Our Mind Foundation",
+      "operation": "create",
+      "result": {
+        "id": "755d131e-f94c-433f-bc0e-2d3a745897ea",
+        "slug": "diamonds-on-our-mind-foundation",
+        "name": "Diamonds On Our Mind Foundation"
+      }
+    },
+    {
+      "name": "Epsilon Beta Lambda Foundation",
+      "operation": "create",
+      "result": {
+        "id": "a9efd622-f398-418c-a0b3-30727d89ef9c",
+        "slug": "epsilon-beta-lambda-foundation",
+        "name": "Epsilon Beta Lambda Foundation"
+      }
+    },
+    {
+      "name": "Family Counseling Center of Central Georgia",
+      "operation": "create",
+      "result": {
+        "id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+        "slug": "family-counseling-center-of-central-georgia",
+        "name": "Family Counseling Center of Central Georgia"
+      }
+    },
+    {
+      "name": "Girls Dig Deeper Initiative",
+      "operation": "create",
+      "result": {
+        "id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+        "slug": "girls-dig-deeper-initiative",
+        "name": "Girls Dig Deeper Initiative"
+      }
+    },
+    {
+      "name": "Living Bread Restoration Outreach",
+      "operation": "create",
+      "result": {
+        "id": "72b01618-5bbb-4a62-a99e-082efd520edb",
+        "slug": "living-bread-restoration-outreach",
+        "name": "Living Bread Restoration Outreach"
+      }
+    },
+    {
+      "name": "Pace Center for Girls — Macon",
+      "operation": "create",
+      "result": {
+        "id": "b632c214-b6b6-41ed-a2c1-b4f14cda949c",
+        "slug": "pace-center-for-girls-macon",
+        "name": "Pace Center for Girls — Macon"
+      }
+    },
+    {
+      "name": "HomeFirst Housing Resource Services",
+      "operation": "create",
+      "result": {
+        "id": "2838b5a6-b504-4296-aecd-9ff2be18b930",
+        "slug": "homefirst-housing-resource-services",
+        "name": "HomeFirst Housing Resource Services"
+      }
+    },
+    {
+      "name": "The Mentors Project of Bibb County",
+      "operation": "create",
+      "result": {
+        "id": "e131019f-badc-473f-bde8-a85715431fa6",
+        "slug": "the-mentors-project-of-bibb-county",
+        "name": "The Mentors Project of Bibb County"
+      }
+    },
+    {
+      "name": "River Edge Foundation",
+      "operation": "create",
+      "result": {
+        "id": "5fa13bbd-d3ef-4627-bdaa-a862991c075c",
+        "slug": "river-edge-foundation",
+        "name": "River Edge Foundation"
+      }
+    },
+    {
+      "name": "Community Partnership — Bibb County Family Connection",
+      "operation": "create",
+      "result": {
+        "id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "slug": "community-partnership-bibb-county-family-connection",
+        "name": "Community Partnership — Bibb County Family Connection"
+      }
+    },
+    {
+      "name": "Macon Periods Easier",
+      "operation": "create",
+      "result": {
+        "id": "07d79079-9a9e-4110-8e32-e0093168c480",
+        "slug": "macon-periods-easier",
+        "name": "Macon Periods Easier"
+      }
+    },
+    {
+      "name": "Choosing a Quality Life",
+      "operation": "create",
+      "result": {
+        "id": "afcd84f0-cc82-4df6-9493-78fb8008fe95",
+        "slug": "choosing-a-quality-life",
+        "name": "Choosing a Quality Life"
+      }
+    },
+    {
+      "name": "American Red Cross — Central Midwest Georgia",
+      "operation": "create",
+      "result": {
+        "id": "a3254474-5a15-4757-9c3a-7478429b2efc",
+        "slug": "american-red-cross-central-midwest-georgia",
+        "name": "American Red Cross — Central Midwest Georgia"
+      }
+    },
+    {
+      "name": "Goodwill Industries of Middle Georgia and the CSRA",
+      "operation": "create",
+      "result": {
+        "id": "281e110c-1d89-41d2-8bf0-addbc88edc45",
+        "slug": "goodwill-industries-of-middle-georgia-and-the-csra",
+        "name": "Goodwill Industries of Middle Georgia and the CSRA"
+      }
+    },
+    {
+      "name": "Loaves and Fishes Ministry of Macon",
+      "operation": "create",
+      "result": {
+        "id": "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+        "slug": "loaves-and-fishes-ministry-of-macon",
+        "name": "Loaves and Fishes Ministry of Macon"
+      }
+    },
+    {
+      "name": "Society of St. Andrew — Georgia",
+      "operation": "create",
+      "result": {
+        "id": "a1224a88-0e9e-418f-974c-242ab2d28316",
+        "slug": "society-of-st-andrew-georgia",
+        "name": "Society of St. Andrew — Georgia"
+      }
+    },
+    {
+      "name": "First Choice Primary Care",
+      "operation": "create",
+      "result": {
+        "id": "3f07a696-d49b-47da-88b7-fb186b0d0dbe",
+        "slug": "first-choice-primary-care",
+        "name": "First Choice Primary Care"
+      }
+    },
+    {
+      "name": "Keryx Ministries",
+      "operation": "create",
+      "result": {
+        "id": "5690d28c-5e1c-4e3c-bca0-70d97d6700e6",
+        "slug": "keryx-ministries",
+        "name": "Keryx Ministries"
+      }
+    },
+    {
+      "name": "The Peyton Anderson Foundation",
+      "operation": "create",
+      "result": {
+        "id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "slug": "the-peyton-anderson-foundation",
+        "name": "The Peyton Anderson Foundation"
+      }
+    },
+    {
+      "name": "Macon-Bibb Mayor’s Literacy Alliance",
+      "operation": "create",
+      "result": {
+        "id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+        "slug": "macon-bibb-mayor-s-literacy-alliance",
+        "name": "Macon-Bibb Mayor’s Literacy Alliance"
+      }
+    },
+    {
+      "name": "Otis Redding Foundation",
+      "operation": "create",
+      "result": {
+        "id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+        "slug": "otis-redding-foundation",
+        "name": "Otis Redding Foundation"
+      }
+    },
+    {
+      "name": "Community Foundation of Central Georgia",
+      "operation": "update",
+      "result": {
+        "id": "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+        "slug": "community-foundation-of-central-georgia",
+        "name": "Community Foundation of Central Georgia"
+      }
+    },
+    {
+      "name": "NewTown Macon",
+      "operation": "update",
+      "result": {
+        "id": "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "slug": "newtown-macon",
+        "name": "NewTown Macon"
+      }
+    },
+    {
+      "name": "Historic Macon Foundation",
+      "operation": "update",
+      "result": {
+        "id": "4a3641a0-bfa6-412e-9d0e-4ee7df280179",
+        "slug": "historic-macon-foundation",
+        "name": "Historic Macon Foundation"
+      }
+    },
+    {
+      "name": "John S. and James L. Knight Foundation",
+      "operation": "update",
+      "result": {
+        "id": "709fa82d-5606-4d59-bb34-f8277fd774c4",
+        "slug": "knight-foundation",
+        "name": "John S. and James L. Knight Foundation"
+      }
+    },
+    {
+      "name": "United Way of Central Georgia",
+      "operation": "update",
+      "result": {
+        "id": "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+        "slug": "united-way-of-central-georgia",
+        "name": "United Way of Central Georgia"
+      }
+    },
+    {
+      "name": "Daybreak Resource Center — Depaul USA",
+      "operation": "update",
+      "result": {
+        "id": "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+        "slug": "daybreak-resource-center",
+        "name": "Daybreak Resource Center — Depaul USA"
+      }
+    },
+    {
+      "name": "The Salvation Army of Central Georgia",
+      "operation": "update",
+      "result": {
+        "id": "c8390ac6-2c41-4489-b73d-691e65cd8870",
+        "slug": "salvation-army-central-georgia",
+        "name": "The Salvation Army of Central Georgia"
+      }
+    },
+    {
+      "name": "Georgia Women (And Those Who Stand With Us)",
+      "operation": "update",
+      "result": {
+        "id": "41c643c0-5995-4050-8e34-ab110d91c0fb",
+        "slug": "georgia-women-and-those-who-stand-with-us",
+        "name": "Georgia Women (And Those Who Stand With Us)"
+      }
+    },
+    {
+      "name": "Verda Colvin",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+        "slug": "verda-colvin",
+        "full_name": "Verda Colvin"
+      }
+    },
+    {
+      "name": "Kendra Russell",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+        "slug": "kendra-russell",
+        "full_name": "Kendra Russell"
+      }
+    },
+    {
+      "name": "Natacha Ansley",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "000cd7bb-3a34-4ec7-ae37-cb978abe8655",
+        "slug": "natacha-ansley",
+        "full_name": "Natacha Ansley"
+      }
+    },
+    {
+      "name": "Cindy Tengelsen",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ebcb62e8-eafd-45ce-b0ba-65861c79529b",
+        "slug": "cindy-tengelsen",
+        "full_name": "Cindy Tengelsen"
+      }
+    },
+    {
+      "name": "Pamela White-Colbert",
+      "entity": "person",
+      "operation": "update",
+      "result": {
+        "id": "1d525469-97fa-4023-9665-89dba6341074",
+        "slug": "pamela-white-colbert",
+        "full_name": "Pamela White-Colbert"
+      }
+    },
+    {
+      "name": "David Danzie",
+      "entity": "person",
+      "operation": "update",
+      "result": {
+        "id": "31effe83-a589-459d-ac90-3af549fdce8b",
+        "slug": "david-danzie",
+        "full_name": "David Danzie"
+      }
+    },
+    {
+      "name": "Nancy Nash",
+      "entity": "person",
+      "operation": "update",
+      "result": {
+        "id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+        "slug": "nancy-nash",
+        "full_name": "Nancy Nash"
+      }
+    },
+    {
+      "name": "Alvin Lindsey",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "5dbfe4bc-0880-44a5-a12d-30c7eb7a1750",
+        "slug": "alvin-lindsey",
+        "full_name": "Alvin Lindsey"
+      }
+    },
+    {
+      "name": "Bob Hatcher",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "5b68645a-51f7-4c31-bc99-c9f294ff0e78",
+        "slug": "bob-hatcher",
+        "full_name": "Bob Hatcher"
+      }
+    },
+    {
+      "name": "Sarita R. Hill",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "edd73fe7-c987-4098-8b9b-33ad0d10e3c6",
+        "slug": "sarita-r-hill",
+        "full_name": "Sarita R. Hill"
+      }
+    },
+    {
+      "name": "Ike E. Mack",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "29740a71-7f9f-451b-aede-fc823e872aac",
+        "slug": "ike-e-mack",
+        "full_name": "Ike E. Mack"
+      }
+    },
+    {
+      "name": "Isaac Grant",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "6fd90ab5-60a2-4e09-9a4b-e41d96ac84fe",
+        "slug": "isaac-grant",
+        "full_name": "Isaac Grant"
+      }
+    },
+    {
+      "name": "Sam Henderson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "c8d58602-6289-47d1-82ca-4eb64599b7ef",
+        "slug": "sam-henderson",
+        "full_name": "Sam Henderson"
+      }
+    },
+    {
+      "name": "Susan Joanis",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "c118f7b2-6783-47d9-8840-fc009e829581",
+        "slug": "susan-joanis",
+        "full_name": "Susan Joanis"
+      }
+    },
+    {
+      "name": "LaConstance Smith",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "074fddde-320f-4d1d-a144-081bbbd5b20c",
+        "slug": "laconstance-smith",
+        "full_name": "LaConstance Smith"
+      }
+    },
+    {
+      "name": "James L. Bumpus",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "25a915ef-6895-47a4-b358-523e1c187332",
+        "slug": "james-l-bumpus",
+        "full_name": "James L. Bumpus"
+      }
+    },
+    {
+      "name": "Asha Ellen",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "bf4450d9-b836-4582-9242-c46ff1bafcbe",
+        "slug": "asha-ellen",
+        "full_name": "Asha Ellen"
+      }
+    },
+    {
+      "name": "Willie Pitts",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "31aeb847-01b7-4afc-97a9-628a76a0bf5d",
+        "slug": "willie-pitts",
+        "full_name": "Willie Pitts"
+      }
+    },
+    {
+      "name": "Natasha Christian",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "31c3739e-805c-4ce9-892c-9df5e0667243",
+        "slug": "natasha-christian",
+        "full_name": "Natasha Christian"
+      }
+    },
+    {
+      "name": "Laurie Fickling",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f2b766cd-54c2-46af-8ee8-0cbf8bb32185",
+        "slug": "laurie-fickling",
+        "full_name": "Laurie Fickling"
+      }
+    },
+    {
+      "name": "Jaquana Barnes Mosley",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "06fc303b-13e8-4b28-87cf-36cb7121726c",
+        "slug": "jaquana-barnes-mosley",
+        "full_name": "Jaquana Barnes Mosley"
+      }
+    },
+    {
+      "name": "Chris Howard",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "2a9496ee-8dc3-4304-a5f7-a868262532a6",
+        "slug": "chris-howard",
+        "full_name": "Chris Howard"
+      }
+    },
+    {
+      "name": "Brandi Simpson Miller",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ec8b4187-9282-4594-93dc-c14ad98486e1",
+        "slug": "brandi-simpson-miller",
+        "full_name": "Brandi Simpson Miller"
+      }
+    },
+    {
+      "name": "Justin Hollingsworth",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "2bea306d-3225-4258-b491-a3acd260a2fc",
+        "slug": "justin-hollingsworth",
+        "full_name": "Justin Hollingsworth"
+      }
+    },
+    {
+      "name": "George Crawley",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ca5cb31c-aafb-4001-b9f6-e292fe2fb90f",
+        "slug": "george-crawley",
+        "full_name": "George Crawley"
+      }
+    },
+    {
+      "name": "Ty Fiveash",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "6f567b22-60bf-4de4-9106-86be1fd96e56",
+        "slug": "ty-fiveash",
+        "full_name": "Ty Fiveash"
+      }
+    },
+    {
+      "name": "Julie Wilkerson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "0e87ccd1-a4b7-4cbb-af3b-2b9fcdf0e0e8",
+        "slug": "julie-wilkerson",
+        "full_name": "Julie Wilkerson"
+      }
+    },
+    {
+      "name": "Maria Andrade",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8fb073da-00f8-4acd-abc2-914c712f73b8",
+        "slug": "maria-andrade",
+        "full_name": "Maria Andrade"
+      }
+    },
+    {
+      "name": "Ginny Lane Sheridan",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "4721c28d-736a-4fe8-b82a-616689b5f182",
+        "slug": "ginny-lane-sheridan",
+        "full_name": "Ginny Lane Sheridan"
+      }
+    },
+    {
+      "name": "Brooks Corwin",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "43f7e38e-5d87-46b2-b405-9bfef633e7ee",
+        "slug": "brooks-corwin",
+        "full_name": "Brooks Corwin"
+      }
+    },
+    {
+      "name": "Erin Hawkins",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "fc063f54-da7b-4666-9765-b78ace75e99f",
+        "slug": "erin-hawkins",
+        "full_name": "Erin Hawkins"
+      }
+    },
+    {
+      "name": "Tabatha Duncan",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "aea7ee33-24e6-48d2-bd04-5c2056b14219",
+        "slug": "tabatha-duncan",
+        "full_name": "Tabatha Duncan"
+      }
+    },
+    {
+      "name": "Autumn VanGunten",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "d16d6611-0285-4b58-aeab-263dac7d1bcc",
+        "slug": "autumn-vangunten",
+        "full_name": "Autumn VanGunten"
+      }
+    },
+    {
+      "name": "Lauren Roan-Parks",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b9df0f15-19ca-4736-ab4d-548110ce9e25",
+        "slug": "lauren-roan-parks",
+        "full_name": "Lauren Roan-Parks"
+      }
+    },
+    {
+      "name": "Jim Greenhouse",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "bf2d0fbf-6c69-4922-9ad0-29ce962d02aa",
+        "slug": "jim-greenhouse",
+        "full_name": "Jim Greenhouse"
+      }
+    },
+    {
+      "name": "Kristie Jones",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "a14247b8-a90a-461e-bd78-1f8a609e542e",
+        "slug": "kristie-jones",
+        "full_name": "Kristie Jones"
+      }
+    },
+    {
+      "name": "Mallory Stone",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "57fb24af-f3c2-4ac1-8d62-502bccfad780",
+        "slug": "mallory-stone",
+        "full_name": "Mallory Stone"
+      }
+    },
+    {
+      "name": "Lauryn Dawson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "9193ca2e-a4db-4f34-b256-973dcac55ca9",
+        "slug": "lauryn-dawson",
+        "full_name": "Lauryn Dawson"
+      }
+    },
+    {
+      "name": "Charles Ladson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "3e4786df-fb2f-4d7c-a219-192cd541b5f3",
+        "slug": "charles-ladson",
+        "full_name": "Charles Ladson"
+      }
+    },
+    {
+      "name": "Lorra Lynch Jones",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ffd07c9c-cb28-4e92-95a3-267c7078e054",
+        "slug": "lorra-lynch-jones",
+        "full_name": "Lorra Lynch Jones"
+      }
+    },
+    {
+      "name": "Howard “Chris” Davis",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "58af7d5f-7973-4fd7-8f44-66b0dbec539e",
+        "slug": "howard-chris-davis",
+        "full_name": "Howard “Chris” Davis"
+      }
+    },
+    {
+      "name": "Susan Dryden",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "1ad076dc-7805-4f53-9888-b9b6d094ad83",
+        "slug": "susan-dryden",
+        "full_name": "Susan Dryden"
+      }
+    },
+    {
+      "name": "Chris McGuire",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f7e23ea7-7216-453a-adaa-1cf9ffef2829",
+        "slug": "chris-mcguire",
+        "full_name": "Chris McGuire"
+      }
+    },
+    {
+      "name": "David Hollingsworth",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "15cc4778-e82d-4a97-a31e-c6b3c4ee1932",
+        "slug": "david-hollingsworth",
+        "full_name": "David Hollingsworth"
+      }
+    },
+    {
+      "name": "Ashleigh Coats",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "872311b0-97f1-4a6c-84b8-f7c83efd312c",
+        "slug": "ashleigh-coats",
+        "full_name": "Ashleigh Coats"
+      }
+    },
+    {
+      "name": "Bonnie Carlson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "3d1ce37a-43e6-4552-bac5-b8887a462fc9",
+        "slug": "bonnie-carlson",
+        "full_name": "Bonnie Carlson"
+      }
+    },
+    {
+      "name": "Holly Reeves",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "7e5ffd43-8b97-4756-baae-f33bc6e3043e",
+        "slug": "holly-reeves",
+        "full_name": "Holly Reeves"
+      }
+    },
+    {
+      "name": "Jamie Walden",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f380c532-f1e2-4f81-b1b4-3b7f7b4a118a",
+        "slug": "jamie-walden",
+        "full_name": "Jamie Walden"
+      }
+    },
+    {
+      "name": "Jonathan Adams",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "7712a6fe-7506-4a5a-8426-3817d35825b3",
+        "slug": "jonathan-adams",
+        "full_name": "Jonathan Adams"
+      }
+    },
+    {
+      "name": "Harold Young",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+        "slug": "harold-young",
+        "full_name": "Harold Young"
+      }
+    },
+    {
+      "name": "Barrie Miller-Howard",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "68540d8e-de0f-4ec3-991f-ab328cfecd0e",
+        "slug": "barrie-miller-howard",
+        "full_name": "Barrie Miller-Howard"
+      }
+    },
+    {
+      "name": "Jeff Bruce",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "141b3f21-ac1c-48f4-8477-dad1bfd47b44",
+        "slug": "jeff-bruce",
+        "full_name": "Jeff Bruce"
+      }
+    },
+    {
+      "name": "Denise Y. Vanzant",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "58b2edbf-2e6e-4e12-a58b-25f4a5727e9f",
+        "slug": "denise-y-vanzant",
+        "full_name": "Denise Y. Vanzant"
+      }
+    },
+    {
+      "name": "Stacy Moore",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f2fe0891-5805-4858-8f71-5bfe20eed42b",
+        "slug": "stacy-moore",
+        "full_name": "Stacy Moore"
+      }
+    },
+    {
+      "name": "Patty Gibbs",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+        "slug": "patty-gibbs",
+        "full_name": "Patty Gibbs"
+      }
+    },
+    {
+      "name": "Katie Hart",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "1e06bdd6-aa8f-40ee-abd2-95ac3f99db00",
+        "slug": "katie-hart",
+        "full_name": "Katie Hart"
+      }
+    },
+    {
+      "name": "Jenny O’Neal",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "e2f0e82d-ef7e-4c4c-bc8b-9fe41da652e3",
+        "slug": "jenny-o-neal",
+        "full_name": "Jenny O’Neal"
+      }
+    },
+    {
+      "name": "Hannah Jett Theus",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "81d0ebee-718d-484b-9612-3be8be29a0a9",
+        "slug": "hannah-jett-theus",
+        "full_name": "Hannah Jett Theus"
+      }
+    },
+    {
+      "name": "Robin Cochran",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "fa447994-8979-4f13-b42a-51727c7a9b8f",
+        "slug": "robin-cochran",
+        "full_name": "Robin Cochran"
+      }
+    },
+    {
+      "name": "Gary Wheat",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "4b182fb5-c924-4fc5-809d-dfe6417652f0",
+        "slug": "gary-wheat",
+        "full_name": "Gary Wheat"
+      }
+    },
+    {
+      "name": "Jessica Walden",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "4dbda243-e095-4b00-84d2-4f0af4347e53",
+        "slug": "jessica-walden",
+        "full_name": "Jessica Walden"
+      }
+    },
+    {
+      "name": "Jennifer Bronner",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "a5a48cf2-7aa9-40ad-9237-15992eb714d5",
+        "slug": "jennifer-bronner",
+        "full_name": "Jennifer Bronner"
+      }
+    },
+    {
+      "name": "J.R. Olive",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "a6e6f202-a9aa-4fb4-9416-6d0d074cdff7",
+        "slug": "j-r-olive",
+        "full_name": "J.R. Olive"
+      }
+    },
+    {
+      "name": "Renita Patterson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "e548c94f-e50b-42b3-a29e-d28c3a9a0a73",
+        "slug": "renita-patterson",
+        "full_name": "Renita Patterson"
+      }
+    },
+    {
+      "name": "Sherry Singleton",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "2928a887-30a4-4fe6-bdc6-9d83b8d8717d",
+        "slug": "sherry-singleton",
+        "full_name": "Sherry Singleton"
+      }
+    },
+    {
+      "name": "Jen Marshall",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8bd7fa7e-0367-4b89-9e74-03754bb58628",
+        "slug": "jen-marshall",
+        "full_name": "Jen Marshall"
+      }
+    },
+    {
+      "name": "Alex Mason",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "e6991351-6846-40f3-8cfd-1b1d5a4436eb",
+        "slug": "alex-mason",
+        "full_name": "Alex Mason"
+      }
+    },
+    {
+      "name": "Reid McLain",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "aab3a447-ce02-4773-94ed-5102e5e1bcf3",
+        "slug": "reid-mclain",
+        "full_name": "Reid McLain"
+      }
+    },
+    {
+      "name": "Derek Thomas",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8b877a7f-07bc-49cd-86b8-b53d54214546",
+        "slug": "derek-thomas",
+        "full_name": "Derek Thomas"
+      }
+    },
+    {
+      "name": "Tom Birmingham",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8566281f-013e-439d-9f98-36b85e450270",
+        "slug": "tom-birmingham",
+        "full_name": "Tom Birmingham"
+      }
+    },
+    {
+      "name": "Betsy Fitzgerald",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "1568d78d-a5a6-46de-b20c-d2acca1bbe1e",
+        "slug": "betsy-fitzgerald",
+        "full_name": "Betsy Fitzgerald"
+      }
+    },
+    {
+      "name": "Jackie Curtis",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "6c3c39b6-9b91-4770-b123-2825555f064e",
+        "slug": "jackie-curtis",
+        "full_name": "Jackie Curtis"
+      }
+    },
+    {
+      "name": "Fran Lugo-Camera",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "4bdd819a-cb98-4aae-a6fc-0e5e19c0c3c3",
+        "slug": "fran-lugo-camera",
+        "full_name": "Fran Lugo-Camera"
+      }
+    },
+    {
+      "name": "Bre’yanna Johnson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8efada63-b71c-47fc-a380-36428b77fc04",
+        "slug": "bre-yanna-johnson",
+        "full_name": "Bre’yanna Johnson"
+      }
+    },
+    {
+      "name": "Elizabeth Hammock",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b309940b-a86a-4d4c-a1c3-dc8b0f969fd5",
+        "slug": "elizabeth-hammock",
+        "full_name": "Elizabeth Hammock"
+      }
+    },
+    {
+      "name": "David McCain",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "7bf74394-2fb8-4c7e-8452-b2d9c4164f0e",
+        "slug": "david-mccain",
+        "full_name": "David McCain"
+      }
+    },
+    {
+      "name": "Cathy Barnes",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "a4d9d245-159a-4faf-b21d-00342037d4c3",
+        "slug": "cathy-barnes",
+        "full_name": "Cathy Barnes"
+      }
+    },
+    {
+      "name": "Olivia Slaton",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ef6b189b-cca4-4866-8ed2-318fa6b54a6b",
+        "slug": "olivia-slaton",
+        "full_name": "Olivia Slaton"
+      }
+    },
+    {
+      "name": "Garrett L. Williams",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+        "slug": "garrett-l-williams",
+        "full_name": "Garrett L. Williams"
+      }
+    },
+    {
+      "name": "Pat Chastain",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+        "slug": "pat-chastain",
+        "full_name": "Pat Chastain"
+      }
+    },
+    {
+      "name": "Tina Hicks",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+        "slug": "tina-hicks",
+        "full_name": "Tina Hicks"
+      }
+    },
+    {
+      "name": "Dawn Burns",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+        "slug": "dawn-burns",
+        "full_name": "Dawn Burns"
+      }
+    },
+    {
+      "name": "Jason Beck",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+        "slug": "jason-beck",
+        "full_name": "Jason Beck"
+      }
+    },
+    {
+      "name": "Barbara Durham",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "34deeec3-b175-4307-b2fd-524d281f5551",
+        "slug": "barbara-durham",
+        "full_name": "Barbara Durham"
+      }
+    },
+    {
+      "name": "Chako Scott",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+        "slug": "chako-scott",
+        "full_name": "Chako Scott"
+      }
+    },
+    {
+      "name": "Charlie L. Cantrell",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+        "slug": "charlie-l-cantrell",
+        "full_name": "Charlie L. Cantrell"
+      }
+    },
+    {
+      "name": "Blake Sullivan",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f0830777-1425-4899-9005-05e67c41ec3f",
+        "slug": "blake-sullivan",
+        "full_name": "Blake Sullivan"
+      }
+    },
+    {
+      "name": "Beverly Olson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+        "slug": "beverly-olson",
+        "full_name": "Beverly Olson"
+      }
+    },
+    {
+      "name": "Susan Collins",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+        "slug": "susan-collins",
+        "full_name": "Susan Collins"
+      }
+    },
+    {
+      "name": "Christy Henry",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "df59f879-5c65-486a-a0da-17065875dc49",
+        "slug": "christy-henry",
+        "full_name": "Christy Henry"
+      }
+    },
+    {
+      "name": "Najiva Timothee",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f2854ac8-3ab5-4627-87f1-46266981d6af",
+        "slug": "najiva-timothee",
+        "full_name": "Najiva Timothee"
+      }
+    },
+    {
+      "name": "Jill Vanderhoek",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "904918e5-481f-4449-a9b8-b146ca4f9b26",
+        "slug": "jill-vanderhoek",
+        "full_name": "Jill Vanderhoek"
+      }
+    },
+    {
+      "name": "Dominique Johnson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b8411b00-e6fe-43d7-ba77-d87d331cf687",
+        "slug": "dominique-johnson",
+        "full_name": "Dominique Johnson"
+      }
+    },
+    {
+      "name": "Gregory Glover",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "6fb6662c-1ed3-40b2-b42e-960181231d21",
+        "slug": "gregory-glover",
+        "full_name": "Gregory Glover"
+      }
+    },
+    {
+      "name": "Jim Montgomery",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "ddaad83a-7231-4ef8-8d64-8ed2949692e5",
+        "slug": "jim-montgomery",
+        "full_name": "Jim Montgomery"
+      }
+    },
+    {
+      "name": "Karla Redding-Andrews",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "3c300192-db2d-4cbe-a3f8-b28bcfba610f",
+        "slug": "karla-redding-andrews",
+        "full_name": "Karla Redding-Andrews"
+      }
+    },
+    {
+      "name": "Penny L. Elkins",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "91f646a0-08c8-4403-a2c2-22223b3b2a33",
+        "slug": "penny-l-elkins",
+        "full_name": "Penny L. Elkins"
+      }
+    },
+    {
+      "name": "Meaghan Blight",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "c62a4dfd-337c-41bd-9363-6366b4009f33",
+        "slug": "meaghan-blight",
+        "full_name": "Meaghan Blight"
+      }
+    },
+    {
+      "name": "Ivey Hall",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "40addf0d-a363-4870-9dd2-f24c0081f923",
+        "slug": "ivey-hall",
+        "full_name": "Ivey Hall"
+      }
+    },
+    {
+      "name": "Kathleen Matthews",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "dcb17d8b-dd1b-49c4-9eca-7abb07c74c36",
+        "slug": "kathleen-matthews",
+        "full_name": "Kathleen Matthews"
+      }
+    },
+    {
+      "name": "Courtney Erikson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "fe8507a4-eba0-479e-921e-1722f738f48e",
+        "slug": "courtney-erikson",
+        "full_name": "Courtney Erikson"
+      }
+    },
+    {
+      "name": "Weston Stroud",
+      "entity": "person",
+      "operation": "update",
+      "result": {
+        "id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+        "slug": "weston-stroud",
+        "full_name": "Weston Stroud"
+      }
+    },
+    {
+      "name": "Jim Manley",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "836ec619-3344-41ea-b929-0dea6acee4a7",
+        "slug": "jim-manley",
+        "full_name": "Jim Manley"
+      }
+    },
+    {
+      "name": "Jennifer Sellers",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "9fe3b9a3-ed41-4cfb-8bac-7d44ed0a2c19",
+        "slug": "jennifer-sellers",
+        "full_name": "Jennifer Sellers"
+      }
+    },
+    {
+      "name": "Ellie Johnson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f9de5ca8-cc50-4fb2-a09f-48e7cbf7e470",
+        "slug": "ellie-johnson",
+        "full_name": "Ellie Johnson"
+      }
+    },
+    {
+      "name": "Karen J. Lambert",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b2c7672a-5314-403f-97d7-b1dd182f9cf2",
+        "slug": "karen-j-lambert",
+        "full_name": "Karen J. Lambert"
+      }
+    },
+    {
+      "name": "Gail Mansfield",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "129e0bb3-8503-41e8-bc8e-a1ca51fb313d",
+        "slug": "gail-mansfield",
+        "full_name": "Gail Mansfield"
+      }
+    },
+    {
+      "name": "Charla Ivey",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "9838a34f-70cf-40fc-929c-9c71741f664a",
+        "slug": "charla-ivey",
+        "full_name": "Charla Ivey"
+      }
+    },
+    {
+      "name": "Chenza Stokes",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b015a617-9755-4e2c-8a28-c244efa961ef",
+        "slug": "chenza-stokes",
+        "full_name": "Chenza Stokes"
+      }
+    },
+    {
+      "name": "Melody Blake",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "2ec810eb-cfb1-45c8-8377-8f74a1fc3339",
+        "slug": "melody-blake",
+        "full_name": "Melody Blake"
+      }
+    },
+    {
+      "name": "Dwight Frederick",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "969db5fb-2edb-4886-b65a-8a507744a9dc",
+        "slug": "dwight-frederick",
+        "full_name": "Dwight Frederick"
+      }
+    },
+    {
+      "name": "Carrie Ingoldsby",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "d66eca81-64e9-48e3-9c81-b35d8662de42",
+        "slug": "carrie-ingoldsby",
+        "full_name": "Carrie Ingoldsby"
+      }
+    },
+    {
+      "name": "Jolynn Allgood",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "25580be0-cae9-4bee-9b2e-fe26a1211bd3",
+        "slug": "jolynn-allgood",
+        "full_name": "Jolynn Allgood"
+      }
+    },
+    {
+      "name": "Seth Berkebile",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8b37b1d7-87f2-4a9b-91e4-a64b4330372e",
+        "slug": "seth-berkebile",
+        "full_name": "Seth Berkebile"
+      }
+    },
+    {
+      "name": "Jessica Tucker",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "eaed1454-bf20-4d02-b148-fbd98299c33e",
+        "slug": "jessica-tucker",
+        "full_name": "Jessica Tucker"
+      }
+    },
+    {
+      "name": "Kellie R. Appel",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "60545a37-9406-49fb-95bc-bc1c0c0bdbf5",
+        "slug": "kellie-r-appel",
+        "full_name": "Kellie R. Appel"
+      }
+    },
+    {
+      "name": "Julia Davis",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "2a8f55dd-9821-4a73-837e-c67ea05479cb",
+        "slug": "julia-davis",
+        "full_name": "Julia Davis"
+      }
+    },
+    {
+      "name": "Matthew R. Hall",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "68e3e588-6f9e-49ef-bbba-8447ed995412",
+        "slug": "matthew-r-hall",
+        "full_name": "Matthew R. Hall"
+      }
+    },
+    {
+      "name": "Maria Hammett",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "4c0987f9-2f0a-4290-9aba-1db7548b684f",
+        "slug": "maria-hammett",
+        "full_name": "Maria Hammett"
+      }
+    },
+    {
+      "name": "Mary Bowman Hampton",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "e137adca-ac21-4313-b46a-01bd152b8748",
+        "slug": "mary-bowman-hampton",
+        "full_name": "Mary Bowman Hampton"
+      }
+    },
+    {
+      "name": "Keith E. Howard",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b8d1388f-1dbc-4b8b-9125-36aaaea9b0d4",
+        "slug": "keith-e-howard",
+        "full_name": "Keith E. Howard"
+      }
+    },
+    {
+      "name": "Kathryn D. Kloepper",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "b1f6751c-eb16-488f-9d3b-9fd30c904ea8",
+        "slug": "kathryn-d-kloepper",
+        "full_name": "Kathryn D. Kloepper"
+      }
+    },
+    {
+      "name": "Lisa M. Lundquist",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "f2456ea9-10a2-4941-b659-717699c50049",
+        "slug": "lisa-m-lundquist",
+        "full_name": "Lisa M. Lundquist"
+      }
+    },
+    {
+      "name": "John A. Patterson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8a7fcbbe-0188-4f64-9360-c7e44cf5ab77",
+        "slug": "john-a-patterson",
+        "full_name": "John A. Patterson"
+      }
+    },
+    {
+      "name": "Douglas R. Pearson",
+      "entity": "person",
+      "operation": "create",
+      "result": {
+        "id": "8d3754d0-3a07-4946-8341-c8013af11d45",
+        "slug": "douglas-r-pearson",
+        "full_name": "Douglas R. Pearson"
+      }
+    }
+  ],
+  "affiliations": [
+    {
+      "full_name": "Verda Colvin",
+      "role": "Board Chair and Secretary",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "slug": "verda-colvin",
+      "result": {
+        "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+        "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "role": "Board Chair and Secretary",
+        "created_at": "2026-10-23T04:44:17.553205+00:00"
+      }
+    },
+    {
+      "full_name": "Kendra Russell",
+      "role": "Treasurer",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+      "slug": "kendra-russell",
+      "result": {
+        "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+        "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "role": "Treasurer",
+        "created_at": "2026-10-23T04:44:18.721902+00:00"
+      }
+    },
+    {
+      "full_name": "Natacha Ansley",
+      "role": "Coordinator — Macon/Oconee Area/Milledgeville",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "000cd7bb-3a34-4ec7-ae37-cb978abe8655",
+      "slug": "natacha-ansley",
+      "result": {
+        "person_id": "000cd7bb-3a34-4ec7-ae37-cb978abe8655",
+        "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "role": "Coordinator — Macon/Oconee Area/Milledgeville",
+        "created_at": "2026-10-23T04:44:19.619343+00:00"
+      }
+    },
+    {
+      "full_name": "Cindy Tengelsen",
+      "role": "Office Manager",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "ebcb62e8-eafd-45ce-b0ba-65861c79529b",
+      "slug": "cindy-tengelsen",
+      "result": {
+        "person_id": "ebcb62e8-eafd-45ce-b0ba-65861c79529b",
+        "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "role": "Office Manager",
+        "created_at": "2026-10-23T04:44:20.381688+00:00"
+      }
+    },
+    {
+      "full_name": "Pamela White-Colbert",
+      "role": "Board Member",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+      "slug": "pamela-white-colbert",
+      "result": {
+        "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+        "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "role": "Board Member",
+        "created_at": "2026-10-23T04:44:21.423989+00:00"
+      }
+    },
+    {
+      "full_name": "David Danzie",
+      "role": "Board Chairman",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+      "slug": "david-danzie",
+      "result": {
+        "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+        "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "role": "Board Chairman",
+        "created_at": "2026-10-23T04:44:22.272894+00:00"
+      }
+    },
+    {
+      "full_name": "Nancy Nash",
+      "role": "Vice Chair",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "slug": "nancy-nash",
+      "result": {
+        "person_id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+        "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "role": "Vice Chair",
+        "created_at": "2026-10-23T04:44:23.022788+00:00"
+      }
+    },
+    {
+      "full_name": "Alvin Lindsey",
+      "role": "Secretary",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "5dbfe4bc-0880-44a5-a12d-30c7eb7a1750",
+      "slug": "alvin-lindsey",
+      "result": {
+        "person_id": "5dbfe4bc-0880-44a5-a12d-30c7eb7a1750",
+        "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "role": "Secretary",
+        "created_at": "2026-10-23T04:44:23.704792+00:00"
+      }
+    },
+    {
+      "full_name": "Bob Hatcher",
+      "role": "Treasurer",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "5b68645a-51f7-4c31-bc99-c9f294ff0e78",
+      "slug": "bob-hatcher",
+      "result": {
+        "person_id": "5b68645a-51f7-4c31-bc99-c9f294ff0e78",
+        "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "role": "Treasurer",
+        "created_at": "2026-10-23T04:44:24.703637+00:00"
+      }
+    },
+    {
+      "full_name": "Sarita R. Hill",
+      "role": "Chief Executive Officer",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/",
+      "person_id": "edd73fe7-c987-4098-8b9b-33ad0d10e3c6",
+      "slug": "sarita-r-hill",
+      "result": {
+        "person_id": "edd73fe7-c987-4098-8b9b-33ad0d10e3c6",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Chief Executive Officer",
+        "created_at": "2026-10-23T04:44:25.688432+00:00"
+      }
+    },
+    {
+      "full_name": "Ike E. Mack",
+      "role": "Board President",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "29740a71-7f9f-451b-aede-fc823e872aac",
+      "slug": "ike-e-mack",
+      "result": {
+        "person_id": "29740a71-7f9f-451b-aede-fc823e872aac",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board President",
+        "created_at": "2026-10-23T04:44:26.451094+00:00"
+      }
+    },
+    {
+      "full_name": "Isaac Grant",
+      "role": "Board Vice President",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "6fd90ab5-60a2-4e09-9a4b-e41d96ac84fe",
+      "slug": "isaac-grant",
+      "result": {
+        "person_id": "6fd90ab5-60a2-4e09-9a4b-e41d96ac84fe",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board Vice President",
+        "created_at": "2026-10-23T04:44:27.41726+00:00"
+      }
+    },
+    {
+      "full_name": "Sam Henderson",
+      "role": "Board Secretary",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "c8d58602-6289-47d1-82ca-4eb64599b7ef",
+      "slug": "sam-henderson",
+      "result": {
+        "person_id": "c8d58602-6289-47d1-82ca-4eb64599b7ef",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board Secretary",
+        "created_at": "2026-10-23T04:44:28.599327+00:00"
+      }
+    },
+    {
+      "full_name": "Susan Joanis",
+      "role": "Assistant Secretary",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "c118f7b2-6783-47d9-8840-fc009e829581",
+      "slug": "susan-joanis",
+      "result": {
+        "person_id": "c118f7b2-6783-47d9-8840-fc009e829581",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Assistant Secretary",
+        "created_at": "2026-10-23T04:44:30.254151+00:00"
+      }
+    },
+    {
+      "full_name": "LaConstance Smith",
+      "role": "Board Treasurer",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "074fddde-320f-4d1d-a144-081bbbd5b20c",
+      "slug": "laconstance-smith",
+      "result": {
+        "person_id": "074fddde-320f-4d1d-a144-081bbbd5b20c",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board Treasurer",
+        "created_at": "2026-10-23T04:44:31.038509+00:00"
+      }
+    },
+    {
+      "full_name": "James L. Bumpus",
+      "role": "Board Member",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "25a915ef-6895-47a4-b358-523e1c187332",
+      "slug": "james-l-bumpus",
+      "result": {
+        "person_id": "25a915ef-6895-47a4-b358-523e1c187332",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board Member",
+        "created_at": "2026-10-23T04:44:31.618054+00:00"
+      }
+    },
+    {
+      "full_name": "Pamela White-Colbert",
+      "role": "Board Member",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+      "slug": "pamela-white-colbert",
+      "result": {
+        "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+        "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "role": "Board Member",
+        "created_at": "2026-10-23T04:44:32.30682+00:00"
+      }
+    },
+    {
+      "full_name": "Asha Ellen",
+      "role": "Executive Director",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "bf4450d9-b836-4582-9242-c46ff1bafcbe",
+      "slug": "asha-ellen",
+      "result": {
+        "person_id": "bf4450d9-b836-4582-9242-c46ff1bafcbe",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:44:32.926569+00:00"
+      }
+    },
+    {
+      "full_name": "Willie Pitts",
+      "role": "Board Chair",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "31aeb847-01b7-4afc-97a9-628a76a0bf5d",
+      "slug": "willie-pitts",
+      "result": {
+        "person_id": "31aeb847-01b7-4afc-97a9-628a76a0bf5d",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Board Chair",
+        "created_at": "2026-10-23T04:44:33.645328+00:00"
+      }
+    },
+    {
+      "full_name": "Natasha Christian",
+      "role": "Immediate Past Chair",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "31c3739e-805c-4ce9-892c-9df5e0667243",
+      "slug": "natasha-christian",
+      "result": {
+        "person_id": "31c3739e-805c-4ce9-892c-9df5e0667243",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Immediate Past Chair",
+        "created_at": "2026-10-23T04:44:34.237557+00:00"
+      }
+    },
+    {
+      "full_name": "Laurie Fickling",
+      "role": "Treasurer",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "f2b766cd-54c2-46af-8ee8-0cbf8bb32185",
+      "slug": "laurie-fickling",
+      "result": {
+        "person_id": "f2b766cd-54c2-46af-8ee8-0cbf8bb32185",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Treasurer",
+        "created_at": "2026-10-23T04:44:34.801251+00:00"
+      }
+    },
+    {
+      "full_name": "Jaquana Barnes Mosley",
+      "role": "Treasurer Elect",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "06fc303b-13e8-4b28-87cf-36cb7121726c",
+      "slug": "jaquana-barnes-mosley",
+      "result": {
+        "person_id": "06fc303b-13e8-4b28-87cf-36cb7121726c",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Treasurer Elect",
+        "created_at": "2026-10-23T04:44:35.438796+00:00"
+      }
+    },
+    {
+      "full_name": "Chris Howard",
+      "role": "Secretary",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "2a9496ee-8dc3-4304-a5f7-a868262532a6",
+      "slug": "chris-howard",
+      "result": {
+        "person_id": "2a9496ee-8dc3-4304-a5f7-a868262532a6",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Secretary",
+        "created_at": "2026-10-23T04:44:36.003315+00:00"
+      }
+    },
+    {
+      "full_name": "Brandi Simpson Miller",
+      "role": "Historian",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "ec8b4187-9282-4594-93dc-c14ad98486e1",
+      "slug": "brandi-simpson-miller",
+      "result": {
+        "person_id": "ec8b4187-9282-4594-93dc-c14ad98486e1",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Historian",
+        "created_at": "2026-10-23T04:44:36.527866+00:00"
+      }
+    },
+    {
+      "full_name": "Justin Hollingsworth",
+      "role": "Legal Counsel",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "2bea306d-3225-4258-b491-a3acd260a2fc",
+      "slug": "justin-hollingsworth",
+      "result": {
+        "person_id": "2bea306d-3225-4258-b491-a3acd260a2fc",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Legal Counsel",
+        "created_at": "2026-10-23T04:44:37.300735+00:00"
+      }
+    },
+    {
+      "full_name": "George Crawley",
+      "role": "Program Coordinator",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "ca5cb31c-aafb-4001-b9f6-e292fe2fb90f",
+      "slug": "george-crawley",
+      "result": {
+        "person_id": "ca5cb31c-aafb-4001-b9f6-e292fe2fb90f",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Program Coordinator",
+        "created_at": "2026-10-23T04:44:37.795217+00:00"
+      }
+    },
+    {
+      "full_name": "Ty Fiveash",
+      "role": "Volunteer and Event Coordinator",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "6f567b22-60bf-4de4-9106-86be1fd96e56",
+      "slug": "ty-fiveash",
+      "result": {
+        "person_id": "6f567b22-60bf-4de4-9106-86be1fd96e56",
+        "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "role": "Volunteer and Event Coordinator",
+        "created_at": "2026-10-23T04:44:38.321281+00:00"
+      }
+    },
+    {
+      "full_name": "Julie Wilkerson",
+      "role": "Executive Director",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "0e87ccd1-a4b7-4cbb-af3b-2b9fcdf0e0e8",
+      "slug": "julie-wilkerson",
+      "result": {
+        "person_id": "0e87ccd1-a4b7-4cbb-af3b-2b9fcdf0e0e8",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:44:38.879422+00:00"
+      }
+    },
+    {
+      "full_name": "Maria Andrade",
+      "role": "Project Director",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "8fb073da-00f8-4acd-abc2-914c712f73b8",
+      "slug": "maria-andrade",
+      "result": {
+        "person_id": "8fb073da-00f8-4acd-abc2-914c712f73b8",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Project Director",
+        "created_at": "2026-10-23T04:44:39.408927+00:00"
+      }
+    },
+    {
+      "full_name": "Ginny Lane Sheridan",
+      "role": "Curator",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "4721c28d-736a-4fe8-b82a-616689b5f182",
+      "slug": "ginny-lane-sheridan",
+      "result": {
+        "person_id": "4721c28d-736a-4fe8-b82a-616689b5f182",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Curator",
+        "created_at": "2026-10-23T04:44:40.044172+00:00"
+      }
+    },
+    {
+      "full_name": "Brooks Corwin",
+      "role": "Development Associate",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "43f7e38e-5d87-46b2-b405-9bfef633e7ee",
+      "slug": "brooks-corwin",
+      "result": {
+        "person_id": "43f7e38e-5d87-46b2-b405-9bfef633e7ee",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Development Associate",
+        "created_at": "2026-10-23T04:44:40.576779+00:00"
+      }
+    },
+    {
+      "full_name": "Erin Hawkins",
+      "role": "Board President",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "fc063f54-da7b-4666-9765-b78ace75e99f",
+      "slug": "erin-hawkins",
+      "result": {
+        "person_id": "fc063f54-da7b-4666-9765-b78ace75e99f",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Board President",
+        "created_at": "2026-10-23T04:44:41.06817+00:00"
+      }
+    },
+    {
+      "full_name": "Tabatha Duncan",
+      "role": "Board Vice-President",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "aea7ee33-24e6-48d2-bd04-5c2056b14219",
+      "slug": "tabatha-duncan",
+      "result": {
+        "person_id": "aea7ee33-24e6-48d2-bd04-5c2056b14219",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Board Vice-President",
+        "created_at": "2026-10-23T04:44:41.603881+00:00"
+      }
+    },
+    {
+      "full_name": "Autumn VanGunten",
+      "role": "Board Secretary",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "d16d6611-0285-4b58-aeab-263dac7d1bcc",
+      "slug": "autumn-vangunten",
+      "result": {
+        "person_id": "d16d6611-0285-4b58-aeab-263dac7d1bcc",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Board Secretary",
+        "created_at": "2026-10-23T04:44:42.173345+00:00"
+      }
+    },
+    {
+      "full_name": "Lauren Roan-Parks",
+      "role": "Board Treasurer",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "b9df0f15-19ca-4736-ab4d-548110ce9e25",
+      "slug": "lauren-roan-parks",
+      "result": {
+        "person_id": "b9df0f15-19ca-4736-ab4d-548110ce9e25",
+        "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "role": "Board Treasurer",
+        "created_at": "2026-10-23T04:44:42.685724+00:00"
+      }
+    },
+    {
+      "full_name": "Jim Greenhouse",
+      "role": "Executive Director",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "bf2d0fbf-6c69-4922-9ad0-29ce962d02aa",
+      "slug": "jim-greenhouse",
+      "result": {
+        "person_id": "bf2d0fbf-6c69-4922-9ad0-29ce962d02aa",
+        "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:44:43.208303+00:00"
+      }
+    },
+    {
+      "full_name": "Kristie Jones",
+      "role": "Museum Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "a14247b8-a90a-461e-bd78-1f8a609e542e",
+      "slug": "kristie-jones",
+      "result": {
+        "person_id": "a14247b8-a90a-461e-bd78-1f8a609e542e",
+        "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "role": "Museum Manager",
+        "created_at": "2026-10-23T04:44:43.899025+00:00"
+      }
+    },
+    {
+      "full_name": "Mallory Stone",
+      "role": "Education Director",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "57fb24af-f3c2-4ac1-8d62-502bccfad780",
+      "slug": "mallory-stone",
+      "result": {
+        "person_id": "57fb24af-f3c2-4ac1-8d62-502bccfad780",
+        "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "role": "Education Director",
+        "created_at": "2026-10-23T04:44:44.454593+00:00"
+      }
+    },
+    {
+      "full_name": "Lauryn Dawson",
+      "role": "Group Tour Coordinator and Collections Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "9193ca2e-a4db-4f34-b256-973dcac55ca9",
+      "slug": "lauryn-dawson",
+      "result": {
+        "person_id": "9193ca2e-a4db-4f34-b256-973dcac55ca9",
+        "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "role": "Group Tour Coordinator and Collections Manager",
+        "created_at": "2026-10-23T04:44:45.298724+00:00"
+      }
+    },
+    {
+      "full_name": "Charles Ladson",
+      "role": "Exhibits Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "3e4786df-fb2f-4d7c-a219-192cd541b5f3",
+      "slug": "charles-ladson",
+      "result": {
+        "person_id": "3e4786df-fb2f-4d7c-a219-192cd541b5f3",
+        "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "role": "Exhibits Manager",
+        "created_at": "2026-10-23T04:44:46.062384+00:00"
+      }
+    },
+    {
+      "full_name": "Lorra Lynch Jones",
+      "role": "President and CEO",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "ffd07c9c-cb28-4e92-95a3-267c7078e054",
+      "slug": "lorra-lynch-jones",
+      "result": {
+        "person_id": "ffd07c9c-cb28-4e92-95a3-267c7078e054",
+        "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:44:46.686829+00:00"
+      }
+    },
+    {
+      "full_name": "Howard “Chris” Davis",
+      "role": "Board Chairman",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "58af7d5f-7973-4fd7-8f44-66b0dbec539e",
+      "slug": "howard-chris-davis",
+      "result": {
+        "person_id": "58af7d5f-7973-4fd7-8f44-66b0dbec539e",
+        "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "role": "Board Chairman",
+        "created_at": "2026-10-23T04:44:47.265104+00:00"
+      }
+    },
+    {
+      "full_name": "Susan Dryden",
+      "role": "Board Vice Chairman",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "1ad076dc-7805-4f53-9888-b9b6d094ad83",
+      "slug": "susan-dryden",
+      "result": {
+        "person_id": "1ad076dc-7805-4f53-9888-b9b6d094ad83",
+        "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "role": "Board Vice Chairman",
+        "created_at": "2026-10-23T04:44:47.76891+00:00"
+      }
+    },
+    {
+      "full_name": "Chris McGuire",
+      "role": "Secretary-Treasurer",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "f7e23ea7-7216-453a-adaa-1cf9ffef2829",
+      "slug": "chris-mcguire",
+      "result": {
+        "person_id": "f7e23ea7-7216-453a-adaa-1cf9ffef2829",
+        "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "role": "Secretary-Treasurer",
+        "created_at": "2026-10-23T04:44:48.360677+00:00"
+      }
+    },
+    {
+      "full_name": "David Hollingsworth",
+      "role": "Legal Counsel",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "15cc4778-e82d-4a97-a31e-c6b3c4ee1932",
+      "slug": "david-hollingsworth",
+      "result": {
+        "person_id": "15cc4778-e82d-4a97-a31e-c6b3c4ee1932",
+        "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "role": "Legal Counsel",
+        "created_at": "2026-10-23T04:44:49.059309+00:00"
+      }
+    },
+    {
+      "full_name": "Ashleigh Coats",
+      "role": "Board Chair",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "872311b0-97f1-4a6c-84b8-f7c83efd312c",
+      "slug": "ashleigh-coats",
+      "result": {
+        "person_id": "872311b0-97f1-4a6c-84b8-f7c83efd312c",
+        "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "role": "Board Chair",
+        "created_at": "2026-10-23T04:44:49.572868+00:00"
+      }
+    },
+    {
+      "full_name": "Bonnie Carlson",
+      "role": "Board Vice Chair",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "3d1ce37a-43e6-4552-bac5-b8887a462fc9",
+      "slug": "bonnie-carlson",
+      "result": {
+        "person_id": "3d1ce37a-43e6-4552-bac5-b8887a462fc9",
+        "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "role": "Board Vice Chair",
+        "created_at": "2026-10-23T04:44:50.066335+00:00"
+      }
+    },
+    {
+      "full_name": "Holly Reeves",
+      "role": "Board Treasurer",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "7e5ffd43-8b97-4756-baae-f33bc6e3043e",
+      "slug": "holly-reeves",
+      "result": {
+        "person_id": "7e5ffd43-8b97-4756-baae-f33bc6e3043e",
+        "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "role": "Board Treasurer",
+        "created_at": "2026-10-23T04:44:50.828607+00:00"
+      }
+    },
+    {
+      "full_name": "Jamie Walden",
+      "role": "Board Secretary",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "f380c532-f1e2-4f81-b1b4-3b7f7b4a118a",
+      "slug": "jamie-walden",
+      "result": {
+        "person_id": "f380c532-f1e2-4f81-b1b4-3b7f7b4a118a",
+        "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "role": "Board Secretary",
+        "created_at": "2026-10-23T04:44:51.329261+00:00"
+      }
+    },
+    {
+      "full_name": "Jonathan Adams",
+      "role": "Board Member",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "7712a6fe-7506-4a5a-8426-3817d35825b3",
+      "slug": "jonathan-adams",
+      "result": {
+        "person_id": "7712a6fe-7506-4a5a-8426-3817d35825b3",
+        "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "role": "Board Member",
+        "created_at": "2026-10-23T04:44:51.875722+00:00"
+      }
+    },
+    {
+      "full_name": "Harold Young",
+      "role": "Executive Director and Special Events Manager",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+      "slug": "harold-young",
+      "result": {
+        "person_id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+        "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "role": "Executive Director and Special Events Manager",
+        "created_at": "2026-10-23T04:44:52.52082+00:00"
+      }
+    },
+    {
+      "full_name": "Barrie Miller-Howard",
+      "role": "Chief Financial Officer",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "68540d8e-de0f-4ec3-991f-ab328cfecd0e",
+      "slug": "barrie-miller-howard",
+      "result": {
+        "person_id": "68540d8e-de0f-4ec3-991f-ab328cfecd0e",
+        "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "role": "Chief Financial Officer",
+        "created_at": "2026-10-23T04:44:53.25991+00:00"
+      }
+    },
+    {
+      "full_name": "Jeff Bruce",
+      "role": "Director of Exhibitions",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "141b3f21-ac1c-48f4-8477-dad1bfd47b44",
+      "slug": "jeff-bruce",
+      "result": {
+        "person_id": "141b3f21-ac1c-48f4-8477-dad1bfd47b44",
+        "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "role": "Director of Exhibitions",
+        "created_at": "2026-10-23T04:44:56.763439+00:00"
+      }
+    },
+    {
+      "full_name": "Denise Y. Vanzant",
+      "role": "IT and Office Manager",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "58b2edbf-2e6e-4e12-a58b-25f4a5727e9f",
+      "slug": "denise-y-vanzant",
+      "result": {
+        "person_id": "58b2edbf-2e6e-4e12-a58b-25f4a5727e9f",
+        "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "role": "IT and Office Manager",
+        "created_at": "2026-10-23T04:44:57.478354+00:00"
+      }
+    },
+    {
+      "full_name": "Stacy Moore",
+      "role": "President and CEO",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "f2fe0891-5805-4858-8f71-5bfe20eed42b",
+      "slug": "stacy-moore",
+      "result": {
+        "person_id": "f2fe0891-5805-4858-8f71-5bfe20eed42b",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:44:57.962436+00:00"
+      }
+    },
+    {
+      "full_name": "Patty Gibbs",
+      "role": "2026–2027 Board Chair",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+      "slug": "patty-gibbs",
+      "result": {
+        "person_id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "2026–2027 Board Chair",
+        "created_at": "2026-10-23T04:44:58.547825+00:00"
+      }
+    },
+    {
+      "full_name": "David Danzie",
+      "role": "2027 Festival Chair",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+      "slug": "david-danzie",
+      "result": {
+        "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "2027 Festival Chair",
+        "created_at": "2026-10-23T04:44:59.001905+00:00"
+      }
+    },
+    {
+      "full_name": "Katie Hart",
+      "role": "Director of Operations",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "1e06bdd6-aa8f-40ee-abd2-95ac3f99db00",
+      "slug": "katie-hart",
+      "result": {
+        "person_id": "1e06bdd6-aa8f-40ee-abd2-95ac3f99db00",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "Director of Operations",
+        "created_at": "2026-10-23T04:44:59.785034+00:00"
+      }
+    },
+    {
+      "full_name": "Jenny O’Neal",
+      "role": "Director of Finance and Administration",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "e2f0e82d-ef7e-4c4c-bc8b-9fe41da652e3",
+      "slug": "jenny-o-neal",
+      "result": {
+        "person_id": "e2f0e82d-ef7e-4c4c-bc8b-9fe41da652e3",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "Director of Finance and Administration",
+        "created_at": "2026-10-23T04:45:00.335367+00:00"
+      }
+    },
+    {
+      "full_name": "Hannah Jett Theus",
+      "role": "Director, Marketing and Fulfillment",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "81d0ebee-718d-484b-9612-3be8be29a0a9",
+      "slug": "hannah-jett-theus",
+      "result": {
+        "person_id": "81d0ebee-718d-484b-9612-3be8be29a0a9",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "Director, Marketing and Fulfillment",
+        "created_at": "2026-10-23T04:45:00.885128+00:00"
+      }
+    },
+    {
+      "full_name": "Robin Cochran",
+      "role": "Merchandise and Administrative Manager",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "fa447994-8979-4f13-b42a-51727c7a9b8f",
+      "slug": "robin-cochran",
+      "result": {
+        "person_id": "fa447994-8979-4f13-b42a-51727c7a9b8f",
+        "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "role": "Merchandise and Administrative Manager",
+        "created_at": "2026-10-23T04:45:01.588436+00:00"
+      }
+    },
+    {
+      "full_name": "Gary Wheat",
+      "role": "President and CEO",
+      "organization": "Visit Macon",
+      "organization_id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+      "source": "https://masmacon.org/about/",
+      "person_id": "4b182fb5-c924-4fc5-809d-dfe6417652f0",
+      "slug": "gary-wheat",
+      "result": {
+        "person_id": "4b182fb5-c924-4fc5-809d-dfe6417652f0",
+        "organization_id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:45:02.183065+00:00"
+      }
+    },
+    {
+      "full_name": "Jessica Walden",
+      "role": "President and CEO",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "4dbda243-e095-4b00-84d2-4f0af4347e53",
+      "slug": "jessica-walden",
+      "result": {
+        "person_id": "4dbda243-e095-4b00-84d2-4f0af4347e53",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:45:02.834686+00:00"
+      }
+    },
+    {
+      "full_name": "Jennifer Bronner",
+      "role": "Chief Financial Officer",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "a5a48cf2-7aa9-40ad-9237-15992eb714d5",
+      "slug": "jennifer-bronner",
+      "result": {
+        "person_id": "a5a48cf2-7aa9-40ad-9237-15992eb714d5",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Chief Financial Officer",
+        "created_at": "2026-10-23T04:45:03.50108+00:00"
+      }
+    },
+    {
+      "full_name": "J.R. Olive",
+      "role": "VP of Operations and Strategic Initiatives",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "a6e6f202-a9aa-4fb4-9416-6d0d074cdff7",
+      "slug": "j-r-olive",
+      "result": {
+        "person_id": "a6e6f202-a9aa-4fb4-9416-6d0d074cdff7",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "VP of Operations and Strategic Initiatives",
+        "created_at": "2026-10-23T04:45:04.081354+00:00"
+      }
+    },
+    {
+      "full_name": "Renita Patterson",
+      "role": "Vice President of Engagement",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "e548c94f-e50b-42b3-a29e-d28c3a9a0a73",
+      "slug": "renita-patterson",
+      "result": {
+        "person_id": "e548c94f-e50b-42b3-a29e-d28c3a9a0a73",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Vice President of Engagement",
+        "created_at": "2026-10-23T04:45:04.755314+00:00"
+      }
+    },
+    {
+      "full_name": "Sherry Singleton",
+      "role": "Vice President of Communications",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "2928a887-30a4-4fe6-bdc6-9d83b8d8717d",
+      "slug": "sherry-singleton",
+      "result": {
+        "person_id": "2928a887-30a4-4fe6-bdc6-9d83b8d8717d",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Vice President of Communications",
+        "created_at": "2026-10-23T04:45:05.319637+00:00"
+      }
+    },
+    {
+      "full_name": "Jen Marshall",
+      "role": "Director of Investor Relations",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "8bd7fa7e-0367-4b89-9e74-03754bb58628",
+      "slug": "jen-marshall",
+      "result": {
+        "person_id": "8bd7fa7e-0367-4b89-9e74-03754bb58628",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Director of Investor Relations",
+        "created_at": "2026-10-23T04:45:05.906153+00:00"
+      }
+    },
+    {
+      "full_name": "Alex Mason",
+      "role": "Director of Development",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "e6991351-6846-40f3-8cfd-1b1d5a4436eb",
+      "slug": "alex-mason",
+      "result": {
+        "person_id": "e6991351-6846-40f3-8cfd-1b1d5a4436eb",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Director of Development",
+        "created_at": "2026-10-23T04:45:06.530847+00:00"
+      }
+    },
+    {
+      "full_name": "Reid McLain",
+      "role": "Director of Workforce Programs and Strategies",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "aab3a447-ce02-4773-94ed-5102e5e1bcf3",
+      "slug": "reid-mclain",
+      "result": {
+        "person_id": "aab3a447-ce02-4773-94ed-5102e5e1bcf3",
+        "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "role": "Director of Workforce Programs and Strategies",
+        "created_at": "2026-10-23T04:45:07.126576+00:00"
+      }
+    },
+    {
+      "full_name": "Derek Thomas",
+      "role": "Executive Director",
+      "organization": "Rebuilding Macon",
+      "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "source": "https://www.rebuildingmacon.org/team",
+      "person_id": "8b877a7f-07bc-49cd-86b8-b53d54214546",
+      "slug": "derek-thomas",
+      "result": {
+        "person_id": "8b877a7f-07bc-49cd-86b8-b53d54214546",
+        "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:08.86126+00:00"
+      }
+    },
+    {
+      "full_name": "Tom Birmingham",
+      "role": "Construction Manager",
+      "organization": "Rebuilding Macon",
+      "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "source": "https://www.rebuildingmacon.org/team",
+      "person_id": "8566281f-013e-439d-9f98-36b85e450270",
+      "slug": "tom-birmingham",
+      "result": {
+        "person_id": "8566281f-013e-439d-9f98-36b85e450270",
+        "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+        "role": "Construction Manager",
+        "created_at": "2026-10-23T04:45:10.376724+00:00"
+      }
+    },
+    {
+      "full_name": "Betsy Fitzgerald",
+      "role": "President and CEO",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "1568d78d-a5a6-46de-b20c-d2acca1bbe1e",
+      "slug": "betsy-fitzgerald",
+      "result": {
+        "person_id": "1568d78d-a5a6-46de-b20c-d2acca1bbe1e",
+        "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:45:14.820437+00:00"
+      }
+    },
+    {
+      "full_name": "Jackie Curtis",
+      "role": "Director of Programs",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "6c3c39b6-9b91-4770-b123-2825555f064e",
+      "slug": "jackie-curtis",
+      "result": {
+        "person_id": "6c3c39b6-9b91-4770-b123-2825555f064e",
+        "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "role": "Director of Programs",
+        "created_at": "2026-10-23T04:45:15.521422+00:00"
+      }
+    },
+    {
+      "full_name": "Fran Lugo-Camera",
+      "role": "Finance Director",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "4bdd819a-cb98-4aae-a6fc-0e5e19c0c3c3",
+      "slug": "fran-lugo-camera",
+      "result": {
+        "person_id": "4bdd819a-cb98-4aae-a6fc-0e5e19c0c3c3",
+        "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "role": "Finance Director",
+        "created_at": "2026-10-23T04:45:16.129862+00:00"
+      }
+    },
+    {
+      "full_name": "Bre’yanna Johnson",
+      "role": "Director of Marketing and Strategic Partnerships",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "8efada63-b71c-47fc-a380-36428b77fc04",
+      "slug": "bre-yanna-johnson",
+      "result": {
+        "person_id": "8efada63-b71c-47fc-a380-36428b77fc04",
+        "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "role": "Director of Marketing and Strategic Partnerships",
+        "created_at": "2026-10-23T04:45:16.686385+00:00"
+      }
+    },
+    {
+      "full_name": "Elizabeth Hammock",
+      "role": "Executive Director",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "b309940b-a86a-4d4c-a1c3-dc8b0f969fd5",
+      "slug": "elizabeth-hammock",
+      "result": {
+        "person_id": "b309940b-a86a-4d4c-a1c3-dc8b0f969fd5",
+        "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:17.293549+00:00"
+      }
+    },
+    {
+      "full_name": "David McCain",
+      "role": "Board Chair",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "7bf74394-2fb8-4c7e-8452-b2d9c4164f0e",
+      "slug": "david-mccain",
+      "result": {
+        "person_id": "7bf74394-2fb8-4c7e-8452-b2d9c4164f0e",
+        "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "role": "Board Chair",
+        "created_at": "2026-10-23T04:45:17.831714+00:00"
+      }
+    },
+    {
+      "full_name": "Cathy Barnes",
+      "role": "Advocacy Coordinator",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "a4d9d245-159a-4faf-b21d-00342037d4c3",
+      "slug": "cathy-barnes",
+      "result": {
+        "person_id": "a4d9d245-159a-4faf-b21d-00342037d4c3",
+        "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "role": "Advocacy Coordinator",
+        "created_at": "2026-10-23T04:45:18.500853+00:00"
+      }
+    },
+    {
+      "full_name": "Olivia Slaton",
+      "role": "Advocacy Coordinator",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "ef6b189b-cca4-4866-8ed2-318fa6b54a6b",
+      "slug": "olivia-slaton",
+      "result": {
+        "person_id": "ef6b189b-cca4-4866-8ed2-318fa6b54a6b",
+        "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "role": "Advocacy Coordinator",
+        "created_at": "2026-10-23T04:45:18.994797+00:00"
+      }
+    },
+    {
+      "full_name": "Garrett L. Williams",
+      "role": "Scout Executive and CEO",
+      "organization": "Central Georgia Council, Scouting America",
+      "organization_id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+      "source": "https://www.centralgeorgiacouncil.org/staff/",
+      "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+      "slug": "garrett-l-williams",
+      "result": {
+        "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+        "organization_id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+        "role": "Scout Executive and CEO",
+        "created_at": "2026-10-23T04:45:19.506451+00:00"
+      }
+    },
+    {
+      "full_name": "Garrett L. Williams",
+      "role": "President",
+      "organization": "100 Black Men of Macon-Middle Georgia",
+      "organization_id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+      "source": "https://www.maconbibb.us/100-black-men-call-for-people-to-join-them-in-working-with-children/",
+      "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+      "slug": "garrett-l-williams",
+      "result": {
+        "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+        "organization_id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+        "role": "President",
+        "created_at": "2026-10-23T04:45:20.073291+00:00"
+      }
+    },
+    {
+      "full_name": "Pat Chastain",
+      "role": "President and CEO",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+      "slug": "pat-chastain",
+      "result": {
+        "person_id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:45:21.45515+00:00"
+      }
+    },
+    {
+      "full_name": "Tina Hicks",
+      "role": "Vice President of Finance",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+      "slug": "tina-hicks",
+      "result": {
+        "person_id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Vice President of Finance",
+        "created_at": "2026-10-23T04:45:22.461506+00:00"
+      }
+    },
+    {
+      "full_name": "Dawn Burns",
+      "role": "Vice President of Operations",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+      "slug": "dawn-burns",
+      "result": {
+        "person_id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Vice President of Operations",
+        "created_at": "2026-10-23T04:45:23.015336+00:00"
+      }
+    },
+    {
+      "full_name": "Jason Beck",
+      "role": "Vice President of Programs",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+      "slug": "jason-beck",
+      "result": {
+        "person_id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Vice President of Programs",
+        "created_at": "2026-10-23T04:45:23.542273+00:00"
+      }
+    },
+    {
+      "full_name": "Barbara Durham",
+      "role": "Development Director",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "34deeec3-b175-4307-b2fd-524d281f5551",
+      "slug": "barbara-durham",
+      "result": {
+        "person_id": "34deeec3-b175-4307-b2fd-524d281f5551",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Development Director",
+        "created_at": "2026-10-23T04:45:24.035827+00:00"
+      }
+    },
+    {
+      "full_name": "Chako Scott",
+      "role": "Women’s Program Director",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+      "slug": "chako-scott",
+      "result": {
+        "person_id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Women’s Program Director",
+        "created_at": "2026-10-23T04:45:25.214402+00:00"
+      }
+    },
+    {
+      "full_name": "Charlie L. Cantrell",
+      "role": "Board Chairman",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+      "slug": "charlie-l-cantrell",
+      "result": {
+        "person_id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Board Chairman",
+        "created_at": "2026-10-23T04:45:25.774612+00:00"
+      }
+    },
+    {
+      "full_name": "Blake Sullivan",
+      "role": "Board Vice Chair",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f0830777-1425-4899-9005-05e67c41ec3f",
+      "slug": "blake-sullivan",
+      "result": {
+        "person_id": "f0830777-1425-4899-9005-05e67c41ec3f",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Board Vice Chair",
+        "created_at": "2026-10-23T04:45:26.35156+00:00"
+      }
+    },
+    {
+      "full_name": "Beverly Olson",
+      "role": "Board Secretary",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+      "slug": "beverly-olson",
+      "result": {
+        "person_id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Board Secretary",
+        "created_at": "2026-10-23T04:45:26.837502+00:00"
+      }
+    },
+    {
+      "full_name": "Susan Collins",
+      "role": "Board Treasurer",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+      "slug": "susan-collins",
+      "result": {
+        "person_id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+        "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "role": "Board Treasurer",
+        "created_at": "2026-10-23T04:45:27.402182+00:00"
+      }
+    },
+    {
+      "full_name": "Christy Henry",
+      "role": "Executive Director",
+      "organization": "Family Counseling Center of Central Georgia",
+      "organization_id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+      "source": "https://www.maconbibb.us/griefsupportsession41626/",
+      "person_id": "df59f879-5c65-486a-a0da-17065875dc49",
+      "slug": "christy-henry",
+      "result": {
+        "person_id": "df59f879-5c65-486a-a0da-17065875dc49",
+        "organization_id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:27.902858+00:00"
+      }
+    },
+    {
+      "full_name": "Najiva Timothee",
+      "role": "Founder and Executive Director",
+      "organization": "Girls Dig Deeper Initiative",
+      "organization_id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+      "source": "https://www.maconbibb.us/gddifoodbank2026/",
+      "person_id": "f2854ac8-3ab5-4627-87f1-46266981d6af",
+      "slug": "najiva-timothee",
+      "result": {
+        "person_id": "f2854ac8-3ab5-4627-87f1-46266981d6af",
+        "organization_id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+        "role": "Founder and Executive Director",
+        "created_at": "2026-10-23T04:45:28.499586+00:00"
+      }
+    },
+    {
+      "full_name": "Jill Vanderhoek",
+      "role": "Executive Director",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "904918e5-481f-4449-a9b8-b146ca4f9b26",
+      "slug": "jill-vanderhoek",
+      "result": {
+        "person_id": "904918e5-481f-4449-a9b8-b146ca4f9b26",
+        "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:29.0287+00:00"
+      }
+    },
+    {
+      "full_name": "Kendra Russell",
+      "role": "Board Chair",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+      "slug": "kendra-russell",
+      "result": {
+        "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+        "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "role": "Board Chair",
+        "created_at": "2026-10-23T04:45:29.637264+00:00"
+      }
+    },
+    {
+      "full_name": "Dominique Johnson",
+      "role": "Board Vice Chair",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "b8411b00-e6fe-43d7-ba77-d87d331cf687",
+      "slug": "dominique-johnson",
+      "result": {
+        "person_id": "b8411b00-e6fe-43d7-ba77-d87d331cf687",
+        "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "role": "Board Vice Chair",
+        "created_at": "2026-10-23T04:45:30.243482+00:00"
+      }
+    },
+    {
+      "full_name": "Gregory Glover",
+      "role": "Treasurer",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "6fb6662c-1ed3-40b2-b42e-960181231d21",
+      "slug": "gregory-glover",
+      "result": {
+        "person_id": "6fb6662c-1ed3-40b2-b42e-960181231d21",
+        "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "role": "Treasurer",
+        "created_at": "2026-10-23T04:45:30.788103+00:00"
+      }
+    },
+    {
+      "full_name": "Verda Colvin",
+      "role": "Secretary",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "slug": "verda-colvin",
+      "result": {
+        "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+        "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "role": "Secretary",
+        "created_at": "2026-10-23T04:45:32.329075+00:00"
+      }
+    },
+    {
+      "full_name": "Jim Montgomery",
+      "role": "Executive Director",
+      "organization": "Macon-Bibb Mayor’s Literacy Alliance",
+      "organization_id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+      "source": "https://www.maconbibb.us/literacy-week-macon-bibb-2026/",
+      "person_id": "ddaad83a-7231-4ef8-8d64-8ed2949692e5",
+      "slug": "jim-montgomery",
+      "result": {
+        "person_id": "ddaad83a-7231-4ef8-8d64-8ed2949692e5",
+        "organization_id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:32.850765+00:00"
+      }
+    },
+    {
+      "full_name": "Karla Redding-Andrews",
+      "role": "Vice President and Executive Director",
+      "organization": "Otis Redding Foundation",
+      "organization_id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+      "source": "https://www.maconbibb.us/macon-bibb-to-dedicate-otis-redding-way-in-honor-of-music-legend/",
+      "person_id": "3c300192-db2d-4cbe-a3f8-b28bcfba610f",
+      "slug": "karla-redding-andrews",
+      "result": {
+        "person_id": "3c300192-db2d-4cbe-a3f8-b28bcfba610f",
+        "organization_id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+        "role": "Vice President and Executive Director",
+        "created_at": "2026-10-23T04:45:33.345505+00:00"
+      }
+    },
+    {
+      "full_name": "Penny L. Elkins",
+      "role": "President",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/",
+      "person_id": "91f646a0-08c8-4403-a2c2-22223b3b2a33",
+      "slug": "penny-l-elkins",
+      "result": {
+        "person_id": "91f646a0-08c8-4403-a2c2-22223b3b2a33",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "President",
+        "created_at": "2026-10-23T04:45:33.854391+00:00"
+      }
+    },
+    {
+      "full_name": "Meaghan Blight",
+      "role": "President",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "c62a4dfd-337c-41bd-9363-6366b4009f33",
+      "slug": "meaghan-blight",
+      "result": {
+        "person_id": "c62a4dfd-337c-41bd-9363-6366b4009f33",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "President",
+        "created_at": "2026-10-23T04:45:34.379265+00:00"
+      }
+    },
+    {
+      "full_name": "Ivey Hall",
+      "role": "Executive Director",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "40addf0d-a363-4870-9dd2-f24c0081f923",
+      "slug": "ivey-hall",
+      "result": {
+        "person_id": "40addf0d-a363-4870-9dd2-f24c0081f923",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Executive Director",
+        "created_at": "2026-10-23T04:45:34.967718+00:00"
+      }
+    },
+    {
+      "full_name": "Kathleen Matthews",
+      "role": "2026–2027 Board President",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "dcb17d8b-dd1b-49c4-9eca-7abb07c74c36",
+      "slug": "kathleen-matthews",
+      "result": {
+        "person_id": "dcb17d8b-dd1b-49c4-9eca-7abb07c74c36",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "2026–2027 Board President",
+        "created_at": "2026-10-23T04:45:35.47629+00:00"
+      }
+    },
+    {
+      "full_name": "Courtney Erikson",
+      "role": "Board Vice President",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "fe8507a4-eba0-479e-921e-1722f738f48e",
+      "slug": "courtney-erikson",
+      "result": {
+        "person_id": "fe8507a4-eba0-479e-921e-1722f738f48e",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Board Vice President",
+        "created_at": "2026-10-23T04:45:35.947582+00:00"
+      }
+    },
+    {
+      "full_name": "Weston Stroud",
+      "role": "Board Secretary",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+      "slug": "weston-stroud",
+      "result": {
+        "person_id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Board Secretary",
+        "created_at": "2026-10-23T04:45:36.588241+00:00"
+      }
+    },
+    {
+      "full_name": "Jim Manley",
+      "role": "Board Treasurer",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "836ec619-3344-41ea-b929-0dea6acee4a7",
+      "slug": "jim-manley",
+      "result": {
+        "person_id": "836ec619-3344-41ea-b929-0dea6acee4a7",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Board Treasurer",
+        "created_at": "2026-10-23T04:45:37.031786+00:00"
+      }
+    },
+    {
+      "full_name": "Jennifer Sellers",
+      "role": "Financial and Family Services Manager",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "9fe3b9a3-ed41-4cfb-8bac-7d44ed0a2c19",
+      "slug": "jennifer-sellers",
+      "result": {
+        "person_id": "9fe3b9a3-ed41-4cfb-8bac-7d44ed0a2c19",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Financial and Family Services Manager",
+        "created_at": "2026-10-23T04:45:37.54906+00:00"
+      }
+    },
+    {
+      "full_name": "Ellie Johnson",
+      "role": "Senior Outreach Manager",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "f9de5ca8-cc50-4fb2-a09f-48e7cbf7e470",
+      "slug": "ellie-johnson",
+      "result": {
+        "person_id": "f9de5ca8-cc50-4fb2-a09f-48e7cbf7e470",
+        "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "role": "Senior Outreach Manager",
+        "created_at": "2026-10-23T04:45:38.130485+00:00"
+      }
+    },
+    {
+      "full_name": "Karen J. Lambert",
+      "role": "President and CEO",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "b2c7672a-5314-403f-97d7-b1dd182f9cf2",
+      "slug": "karen-j-lambert",
+      "result": {
+        "person_id": "b2c7672a-5314-403f-97d7-b1dd182f9cf2",
+        "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "role": "President and CEO",
+        "created_at": "2026-10-23T04:45:38.64551+00:00"
+      }
+    },
+    {
+      "full_name": "Gail Mansfield",
+      "role": "Director of Finance",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "129e0bb3-8503-41e8-bc8e-a1ca51fb313d",
+      "slug": "gail-mansfield",
+      "result": {
+        "person_id": "129e0bb3-8503-41e8-bc8e-a1ca51fb313d",
+        "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "role": "Director of Finance",
+        "created_at": "2026-10-23T04:45:39.148727+00:00"
+      }
+    },
+    {
+      "full_name": "Charla Ivey",
+      "role": "Program Director",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "9838a34f-70cf-40fc-929c-9c71741f664a",
+      "slug": "charla-ivey",
+      "result": {
+        "person_id": "9838a34f-70cf-40fc-929c-9c71741f664a",
+        "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "role": "Program Director",
+        "created_at": "2026-10-23T04:45:39.740863+00:00"
+      }
+    },
+    {
+      "full_name": "Chenza Stokes",
+      "role": "Project Manager",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "b015a617-9755-4e2c-8a28-c244efa961ef",
+      "slug": "chenza-stokes",
+      "result": {
+        "person_id": "b015a617-9755-4e2c-8a28-c244efa961ef",
+        "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "role": "Project Manager",
+        "created_at": "2026-10-23T04:45:40.470043+00:00"
+      }
+    },
+    {
+      "full_name": "Melody Blake",
+      "role": "Provost and VP for Academic Affairs",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "2ec810eb-cfb1-45c8-8377-8f74a1fc3339",
+      "slug": "melody-blake",
+      "result": {
+        "person_id": "2ec810eb-cfb1-45c8-8377-8f74a1fc3339",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "Provost and VP for Academic Affairs",
+        "created_at": "2026-10-23T04:45:41.089595+00:00"
+      }
+    },
+    {
+      "full_name": "Dwight Frederick",
+      "role": "VP of Business Operations and Finance / CFO",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "969db5fb-2edb-4886-b65a-8a507744a9dc",
+      "slug": "dwight-frederick",
+      "result": {
+        "person_id": "969db5fb-2edb-4886-b65a-8a507744a9dc",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "VP of Business Operations and Finance / CFO",
+        "created_at": "2026-10-23T04:45:41.627788+00:00"
+      }
+    },
+    {
+      "full_name": "Carrie Ingoldsby",
+      "role": "VP for Student Affairs and Dean of Students",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "d66eca81-64e9-48e3-9c81-b35d8662de42",
+      "slug": "carrie-ingoldsby",
+      "result": {
+        "person_id": "d66eca81-64e9-48e3-9c81-b35d8662de42",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "VP for Student Affairs and Dean of Students",
+        "created_at": "2026-10-23T04:45:42.14531+00:00"
+      }
+    },
+    {
+      "full_name": "Jolynn Allgood",
+      "role": "Director of Human Resources",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "25580be0-cae9-4bee-9b2e-fe26a1211bd3",
+      "slug": "jolynn-allgood",
+      "result": {
+        "person_id": "25580be0-cae9-4bee-9b2e-fe26a1211bd3",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "Director of Human Resources",
+        "created_at": "2026-10-23T04:45:42.681212+00:00"
+      }
+    },
+    {
+      "full_name": "Seth Berkebile",
+      "role": "Athletic Director",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "8b37b1d7-87f2-4a9b-91e4-a64b4330372e",
+      "slug": "seth-berkebile",
+      "result": {
+        "person_id": "8b37b1d7-87f2-4a9b-91e4-a64b4330372e",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "Athletic Director",
+        "created_at": "2026-10-23T04:45:43.236122+00:00"
+      }
+    },
+    {
+      "full_name": "Jessica Tucker",
+      "role": "Director of President’s Office and Trustee Relations",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "eaed1454-bf20-4d02-b148-fbd98299c33e",
+      "slug": "jessica-tucker",
+      "result": {
+        "person_id": "eaed1454-bf20-4d02-b148-fbd98299c33e",
+        "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "role": "Director of President’s Office and Trustee Relations",
+        "created_at": "2026-10-23T04:45:43.774105+00:00"
+      }
+    },
+    {
+      "full_name": "Kellie R. Appel",
+      "role": "Senior VP for Strategic Initiatives",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "60545a37-9406-49fb-95bc-bc1c0c0bdbf5",
+      "slug": "kellie-r-appel",
+      "result": {
+        "person_id": "60545a37-9406-49fb-95bc-bc1c0c0bdbf5",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Senior VP for Strategic Initiatives",
+        "created_at": "2026-10-23T04:45:44.293518+00:00"
+      }
+    },
+    {
+      "full_name": "Julia Davis",
+      "role": "Senior VP for Administration and Finance",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "2a8f55dd-9821-4a73-837e-c67ea05479cb",
+      "slug": "julia-davis",
+      "result": {
+        "person_id": "2a8f55dd-9821-4a73-837e-c67ea05479cb",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Senior VP for Administration and Finance",
+        "created_at": "2026-10-23T04:45:44.874973+00:00"
+      }
+    },
+    {
+      "full_name": "Matthew R. Hall",
+      "role": "Senior VP, General Counsel and Corporate Secretary",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "68e3e588-6f9e-49ef-bbba-8447ed995412",
+      "slug": "matthew-r-hall",
+      "result": {
+        "person_id": "68e3e588-6f9e-49ef-bbba-8447ed995412",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Senior VP, General Counsel and Corporate Secretary",
+        "created_at": "2026-10-23T04:45:45.453727+00:00"
+      }
+    },
+    {
+      "full_name": "Maria Hammett",
+      "role": "Interim Senior VP for Enrollment Management",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "4c0987f9-2f0a-4290-9aba-1db7548b684f",
+      "slug": "maria-hammett",
+      "result": {
+        "person_id": "4c0987f9-2f0a-4290-9aba-1db7548b684f",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Interim Senior VP for Enrollment Management",
+        "created_at": "2026-10-23T04:45:45.994901+00:00"
+      }
+    },
+    {
+      "full_name": "Mary Bowman Hampton",
+      "role": "Senior VP for University Marketing",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "e137adca-ac21-4313-b46a-01bd152b8748",
+      "slug": "mary-bowman-hampton",
+      "result": {
+        "person_id": "e137adca-ac21-4313-b46a-01bd152b8748",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Senior VP for University Marketing",
+        "created_at": "2026-10-23T04:45:46.517046+00:00"
+      }
+    },
+    {
+      "full_name": "Keith E. Howard",
+      "role": "Vice Provost",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "b8d1388f-1dbc-4b8b-9125-36aaaea9b0d4",
+      "slug": "keith-e-howard",
+      "result": {
+        "person_id": "b8d1388f-1dbc-4b8b-9125-36aaaea9b0d4",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Vice Provost",
+        "created_at": "2026-10-23T04:45:47.067261+00:00"
+      }
+    },
+    {
+      "full_name": "Kathryn D. Kloepper",
+      "role": "Chief of Staff",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "b1f6751c-eb16-488f-9d3b-9fd30c904ea8",
+      "slug": "kathryn-d-kloepper",
+      "result": {
+        "person_id": "b1f6751c-eb16-488f-9d3b-9fd30c904ea8",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Chief of Staff",
+        "created_at": "2026-10-23T04:45:47.633123+00:00"
+      }
+    },
+    {
+      "full_name": "Lisa M. Lundquist",
+      "role": "Executive VP for Academic Affairs and Provost",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "f2456ea9-10a2-4941-b659-717699c50049",
+      "slug": "lisa-m-lundquist",
+      "result": {
+        "person_id": "f2456ea9-10a2-4941-b659-717699c50049",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Executive VP for Academic Affairs and Provost",
+        "created_at": "2026-10-23T04:45:48.263549+00:00"
+      }
+    },
+    {
+      "full_name": "John A. Patterson",
+      "role": "Senior VP for University Advancement",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "8a7fcbbe-0188-4f64-9360-c7e44cf5ab77",
+      "slug": "john-a-patterson",
+      "result": {
+        "person_id": "8a7fcbbe-0188-4f64-9360-c7e44cf5ab77",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "Senior VP for University Advancement",
+        "created_at": "2026-10-23T04:45:48.86445+00:00"
+      }
+    },
+    {
+      "full_name": "Douglas R. Pearson",
+      "role": "VP and Dean of Students for Macon",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "8d3754d0-3a07-4946-8341-c8013af11d45",
+      "slug": "douglas-r-pearson",
+      "result": {
+        "person_id": "8d3754d0-3a07-4946-8341-c8013af11d45",
+        "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "role": "VP and Dean of Students for Macon",
+        "created_at": "2026-10-23T04:45:49.33592+00:00"
+      }
+    },
+    {
+      "full_name": "Stephen Daugherty",
+      "role": "Chief Executive Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "df170e69-b6df-47ba-bb5b-c8fd29b9f685",
+      "slug": "stephen-daugherty",
+      "recovered": true
+    },
+    {
+      "full_name": "Stephen Daugherty",
+      "role": "Chief Executive Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "df170e69-b6df-47ba-bb5b-c8fd29b9f685",
+      "slug": "stephen-daugherty",
+      "recovered": true
+    },
+    {
+      "full_name": "Alisha Neal",
+      "role": "Chief Financial Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "7124cac6-6864-4ede-8c08-9db9db6a9bd5",
+      "slug": "alisha-neal",
+      "recovered": true
+    },
+    {
+      "full_name": "Alisha Neal",
+      "role": "Chief Financial Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "7124cac6-6864-4ede-8c08-9db9db6a9bd5",
+      "slug": "alisha-neal",
+      "recovered": true
+    },
+    {
+      "full_name": "Claire Paris",
+      "role": "Chief Medical Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "b76dbeab-ceb8-4fe9-b066-e89d6bb2a82f",
+      "slug": "claire-paris",
+      "recovered": true
+    },
+    {
+      "full_name": "Claire Paris",
+      "role": "Chief Medical Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "b76dbeab-ceb8-4fe9-b066-e89d6bb2a82f",
+      "slug": "claire-paris",
+      "recovered": true
+    },
+    {
+      "full_name": "Scott Strong",
+      "role": "Chief Operations Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "e6af0dbd-f3b5-4c6f-9804-f1b92b3039d6",
+      "slug": "scott-strong",
+      "recovered": true
+    },
+    {
+      "full_name": "Scott Strong",
+      "role": "Chief Operations Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "e6af0dbd-f3b5-4c6f-9804-f1b92b3039d6",
+      "slug": "scott-strong",
+      "recovered": true
+    },
+    {
+      "full_name": "Elizabeth Larkins",
+      "role": "Chief Nursing Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "4409ed0a-f3e0-4bdc-8dd5-2ed5c45defb0",
+      "slug": "elizabeth-larkins",
+      "recovered": true
+    },
+    {
+      "full_name": "Elizabeth Larkins",
+      "role": "Chief Nursing Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "4409ed0a-f3e0-4bdc-8dd5-2ed5c45defb0",
+      "slug": "elizabeth-larkins",
+      "recovered": true
+    },
+    {
+      "full_name": "Angie Walker",
+      "role": "Executive Director, Human Resources",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "bf009b0a-5f70-44a1-88fb-bc72fb6601ad",
+      "slug": "angie-walker",
+      "recovered": true
+    },
+    {
+      "full_name": "Angie Walker",
+      "role": "Executive Director, Human Resources",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "bf009b0a-5f70-44a1-88fb-bc72fb6601ad",
+      "slug": "angie-walker",
+      "recovered": true
+    },
+    {
+      "full_name": "Robin Parker",
+      "role": "Executive Director, Community Development & Patient Support",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "4f164ec3-0ab7-4880-8083-df3d4f273ccc",
+      "slug": "robin-parker",
+      "recovered": true
+    },
+    {
+      "full_name": "Robin Parker",
+      "role": "Executive Director, Community Development & Patient Support",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "4f164ec3-0ab7-4880-8083-df3d4f273ccc",
+      "slug": "robin-parker",
+      "recovered": true
+    },
+    {
+      "full_name": "Kathy McCollum",
+      "role": "President and CEO",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/wp-content/uploads/2026/10/MGCFB-Fall26-Newsletter-Final2_new.pdf",
+      "person_id": "d76fa528-02c4-4584-80e2-b513363ea5fc",
+      "slug": "kathy-mccollum",
+      "recovered": true
+    }
+  ],
+  "statistics": {
+    "organizations": 75,
+    "new_organizations": 66,
+    "updated_organizations": 9,
+    "people": 133,
+    "new_people": 129,
+    "updated_people": 4,
+    "affiliations": 145,
+    "new_portraits": 0
+  },
+  "note": "Supplementary hospital, National Cybersecurity Alliance and Habitat records were recovered by search/get and all final records and affiliations independently read back; the operation list is not a complete count of writes."
+}

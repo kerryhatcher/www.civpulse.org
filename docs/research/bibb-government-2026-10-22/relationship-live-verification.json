@@ -1,0 +1,500 @@
+[
+  {
+    "slug": "bibb-county-board-of-education",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "bibb-county-board-of-education",
+        "to": "bcsd",
+        "label": "School district governed by this board",
+        "source": "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "bcsd",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "bcsd",
+        "to": "bibb-county-board-of-education",
+        "label": "Governing board",
+        "source": "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-planning-and-zoning-commission",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-planning-and-zoning-commission",
+        "to": "macon-bibb-county-design-review-board",
+        "label": "Associated design review board",
+        "source": "https://mbpz.org/team/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-design-review-board",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-design-review-board",
+        "to": "macon-bibb-county-planning-and-zoning-commission",
+        "label": "Associated planning and zoning commission",
+        "source": "https://mbpz.org/team/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-urban-development-authority",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-urban-development-authority",
+        "to": "downtown-macon-parking-advisory-board",
+        "label": "Parking advisory board appointed by this authority",
+        "source": "https://www.parkmacon.com/public-engagement",
+        "ok": true
+      },
+      {
+        "from": "macon-bibb-county-urban-development-authority",
+        "to": "macon-arts-alliance",
+        "label": "Partner in the Mill Hill arts district",
+        "source": "https://www.maconartsalliance.org/about/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "downtown-macon-parking-advisory-board",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "downtown-macon-parking-advisory-board",
+        "to": "macon-bibb-county-urban-development-authority",
+        "label": "Appointing authority; advised on parking policy",
+        "source": "https://www.parkmacon.com/public-engagement",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-board-of-health",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-board-of-health",
+        "to": "macon-bibb-county-health-department",
+        "label": "County health department overseen by this board",
+        "source": "https://northcentralhealthdistrict.org/board-of-health/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-health-department",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-health-department",
+        "to": "macon-bibb-county-board-of-health",
+        "label": "Local public-health governing board",
+        "source": "https://northcentralhealthdistrict.org/board-of-health/",
+        "ok": true
+      },
+      {
+        "from": "macon-bibb-county-health-department",
+        "to": "north-central-health-district",
+        "label": "Regional public-health district",
+        "source": "https://northcentralhealthdistrict.org/macon-bibb-county-health-department/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "north-central-health-district",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "north-central-health-district",
+        "to": "macon-bibb-county-health-department",
+        "label": "County health department within the district",
+        "source": "https://northcentralhealthdistrict.org/macon-bibb-county-health-department/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-board-of-commissioners",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-board-of-commissioners",
+        "to": "macon-bibb-county-clerk-of-commission",
+        "label": "Clerk maintaining commission records and supporting meetings",
+        "source": "https://www.maconbibb.us/clerk-of-commission/meet-the-clerk/",
+        "ok": true
+      },
+      {
+        "from": "macon-bibb-county-board-of-commissioners",
+        "to": "macon-bibb-county-government",
+        "label": "Consolidated county government",
+        "source": "https://www.maconbibb.us/commissioners/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-clerk-of-commission",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-clerk-of-commission",
+        "to": "macon-bibb-county-board-of-commissioners",
+        "label": "Commission served by this clerk’s office",
+        "source": "https://www.maconbibb.us/clerk-of-commission/meet-the-clerk/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-government",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-government",
+        "to": "macon-bibb-county-board-of-commissioners",
+        "label": "County legislative governing body",
+        "source": "https://www.maconbibb.us/commissioners/",
+        "ok": true
+      },
+      {
+        "from": "macon-bibb-county-government",
+        "to": "macon-bibb-county-manager-s-office",
+        "label": "County administrative leadership",
+        "source": "https://www.maconbibb.us/county-manager/",
+        "ok": true
+      },
+      {
+        "from": "macon-bibb-county-government",
+        "to": "middle-georgia-regional-commission",
+        "label": "Regional commission serving Macon-Bibb",
+        "source": "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-manager-s-office",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-manager-s-office",
+        "to": "macon-bibb-county-government",
+        "label": "County government served by this office",
+        "source": "https://www.maconbibb.us/county-manager/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "middle-georgia-regional-commission",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "middle-georgia-regional-commission",
+        "to": "macon-bibb-county-government",
+        "label": "Member county government represented on the council",
+        "source": "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-water-authority",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-water-authority",
+        "to": "macon-water-authority-district-1",
+        "label": "District 1 elected board seat",
+        "source": "https://maconwater.org/your-mwa/board-members/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-water-authority-district-1",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-water-authority-district-1",
+        "to": "macon-water-authority",
+        "label": "Authority on whose board this elected seat serves",
+        "source": "https://maconwater.org/your-mwa/board-members/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "river-edge-behavioral-health",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "river-edge-behavioral-health",
+        "to": "river-edge-foundation",
+        "label": "Charitable foundation established by River Edge",
+        "source": "https://www.maconbibb.us/economic-community-development/program-highlights/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "river-edge-foundation",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "river-edge-foundation",
+        "to": "river-edge-behavioral-health",
+        "label": "Public community services board that established the foundation",
+        "source": "https://www.maconbibb.us/economic-community-development/program-highlights/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "united-way-of-central-georgia",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "united-way-of-central-georgia",
+        "to": "brookdale-resource-center",
+        "label": "Resource center operated by United Way",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      },
+      {
+        "from": "united-way-of-central-georgia",
+        "to": "hello-house-at-brookdale",
+        "label": "Shelter program operated at Brookdale",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "brookdale-resource-center",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "brookdale-resource-center",
+        "to": "united-way-of-central-georgia",
+        "label": "Operating organization",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      },
+      {
+        "from": "brookdale-resource-center",
+        "to": "hello-house-at-brookdale",
+        "label": "Short-term shelter program within the resource center",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "hello-house-at-brookdale",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "hello-house-at-brookdale",
+        "to": "brookdale-resource-center",
+        "label": "Resource center hosting this shelter program",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      },
+      {
+        "from": "hello-house-at-brookdale",
+        "to": "united-way-of-central-georgia",
+        "label": "Operating organization",
+        "source": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-arts-alliance",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-arts-alliance",
+        "to": "macon-bibb-county-urban-development-authority",
+        "label": "Partner in the Mill Hill arts district",
+        "source": "https://www.maconartsalliance.org/about/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "piedmont-macon-medical-center",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "piedmont-macon-medical-center",
+        "to": "piedmont-macon-north-hospital",
+        "label": "Fellow Macon hospital within Piedmont Healthcare",
+        "source": "https://www.maconbibb.us/griefsupportsession41626/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "piedmont-macon-north-hospital",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "piedmont-macon-north-hospital",
+        "to": "piedmont-macon-medical-center",
+        "label": "Fellow Macon hospital within Piedmont Healthcare",
+        "source": "https://www.maconbibb.us/griefsupportsession41626/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "bibb-county-superior-court",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "bibb-county-superior-court",
+        "to": "bibb-county-clerk-of-superior-court",
+        "label": "Clerk maintaining Superior Court records",
+        "source": "https://www.maconbibb.us/superior-court/clerk-of-superior-court/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "bibb-county-clerk-of-superior-court",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "bibb-county-clerk-of-superior-court",
+        "to": "bibb-county-superior-court",
+        "label": "Court whose records this office maintains",
+        "source": "https://www.maconbibb.us/superior-court/clerk-of-superior-court/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "bibb-county-solicitor-general-s-office",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "bibb-county-solicitor-general-s-office",
+        "to": "state-court-of-bibb-county",
+        "label": "Court in which the solicitor prosecutes misdemeanor cases",
+        "source": "https://www.maconbibb.us/solicitor/",
+        "ok": true
+      },
+      {
+        "from": "bibb-county-solicitor-general-s-office",
+        "to": "macon-bibb-county-municipal-court",
+        "label": "Court in which the solicitor prosecutes misdemeanor cases",
+        "source": "https://www.maconbibb.us/solicitor/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "state-court-of-bibb-county",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "state-court-of-bibb-county",
+        "to": "bibb-county-solicitor-general-s-office",
+        "label": "Office prosecuting misdemeanor cases in this court",
+        "source": "https://www.maconbibb.us/solicitor/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  {
+    "slug": "macon-bibb-county-municipal-court",
+    "status": 200,
+    "rpcOk": true,
+    "links": [
+      {
+        "from": "macon-bibb-county-municipal-court",
+        "to": "bibb-county-solicitor-general-s-office",
+        "label": "Office prosecuting misdemeanor cases in this court",
+        "source": "https://www.maconbibb.us/solicitor/",
+        "ok": true
+      }
+    ],
+    "ok": true
+  }
+]

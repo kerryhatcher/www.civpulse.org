@@ -1,0 +1,10 @@
+{
+  "build": "9fef2e5b-21d1-4da6-8c00-24b9b1f5b011",
+  "version": "6aadc1b0-26b8-473f-b36a-dd5cfad39908",
+  "new_organizations": 5,
+  "new_people": 10,
+  "reused_people": 1,
+  "relationships": 7,
+  "pages": 1090,
+  "checks": "Astro 0 errors and warnings; production migration validation and build passed. 11 people and 14 directional organization links verified live. Church and language ministry checked in browser without console errors."
+}

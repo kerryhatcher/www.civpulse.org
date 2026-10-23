@@ -1,0 +1,916 @@
+{
+  "researched_on": "2026-10-23",
+  "organization": {
+    "name": "Middle Georgia Regional Commission",
+    "slug": "middle-georgia-regional-commission",
+    "website_url": "https://www.middlegeorgiarc.org/",
+    "address_line": "3661 Eisenhower Parkway, Suite MB102, Macon, GA 31206",
+    "phone": "(478) 751-6160",
+    "description": "Regional governmental planning and service agency serving eleven Middle Georgia counties, including Macon-Bibb. Its services include planning and public administration, economic development and lending, technology, transportation and transit, and the Area Agency on Aging. The governing council establishes policy and, through its Budget, Audit and Personnel Committee, hires the executive director; the executive director hires staff.\n\nThe 2026–27 officer list identifies Jenna S. Mashburn as chair, Denese Shinholster as vice chair, Kerry Dunaway as secretary and Executive Director Laura M. Mathis as ex-officio treasurer. Macon-Bibb representatives listed on the council roster are Lester Miller, Valerie Wynn, Carlos McCloud, Wallace Herring and Michelle Parks.\n\nSources: https://www.middlegeorgiarc.org/about-us/mission-values/ ; https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/ ; https://www.middlegeorgiarc.org/about-us/staff/",
+    "id": "e4c31702-846c-4aee-84aa-195894638df6"
+  },
+  "people": [
+    {
+      "full_name": "Emily Davis",
+      "role": "County Member; County Commissioner — Baldwin County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "emily-davis",
+      "title": "County Member; County Commissioner — Baldwin County",
+      "description": "County Member; County Commissioner — Baldwin County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "b90954c5-3439-45b5-b952-33e7d37d8379",
+      "full_role": "County Member; County Commissioner — Baldwin County"
+    },
+    {
+      "full_name": "Denese Shinholster",
+      "role": "Council Vice Chair; Milledgeville Municipal Member",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "elected_official",
+      "slug": "denese-shinholster",
+      "title": "Municipal Member; Milledgeville Councilwoman — Baldwin County; Council Vice Chair (2026–27); Executive Committee; Budget, Audit and Personnel Committee Chair",
+      "description": "Municipal Member; Milledgeville Councilwoman — Baldwin County; Council Vice Chair (2026–27); Executive Committee; Budget, Audit and Personnel Committee Chair at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+      "id": "98e39565-5e69-438c-aa3e-f96dbebe0736",
+      "full_role": "Municipal Member; Milledgeville Councilwoman — Baldwin County; Council Vice Chair (2026–27); Executive Committee; Budget, Audit and Personnel Committee Chair"
+    },
+    {
+      "full_name": "Veronica Womack",
+      "role": "Non-public Member — Baldwin County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "veronica-womack",
+      "title": "Non-public Member — Baldwin County",
+      "description": "Non-public Member — Baldwin County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "5076d3e7-a67d-4a36-9bb9-56e065a1fd9a",
+      "full_role": "Non-public Member — Baldwin County"
+    },
+    {
+      "full_name": "Kay McGiboney",
+      "role": "Associate Member — Baldwin County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "kay-mcgiboney",
+      "title": "Associate Member — Baldwin County",
+      "description": "Associate Member — Baldwin County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "ece65182-4133-4a68-9e38-e6fd3e142dc1",
+      "full_role": "Associate Member — Baldwin County"
+    },
+    {
+      "full_name": "Shonya Mapp",
+      "role": "Associate Member — Baldwin County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "shonya-mapp",
+      "title": "Associate Member; Milledgeville Councilwoman — Baldwin County",
+      "description": "Associate Member; Milledgeville Councilwoman — Baldwin County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "cf5419b6-8ee1-4a99-8037-7cddab7837e9",
+      "full_role": "Associate Member; Milledgeville Councilwoman — Baldwin County"
+    },
+    {
+      "full_name": "Dale Jump",
+      "role": "County Member; County Commissioner — Crawford County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "dale-jump",
+      "title": "County Member; County Commissioner — Crawford County",
+      "description": "County Member; County Commissioner — Crawford County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "7a758d34-d937-4a09-a6e7-a4d33dc71bec",
+      "full_role": "County Member; County Commissioner — Crawford County"
+    },
+    {
+      "full_name": "Will Carroll",
+      "role": "Municipal Member — Crawford County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "will-carroll",
+      "title": "Municipal Member — Crawford County",
+      "description": "Municipal Member — Crawford County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "6c9ab278-c950-42fa-b3f5-98859feba0dd",
+      "full_role": "Municipal Member — Crawford County"
+    },
+    {
+      "full_name": "Kerry Dunaway",
+      "role": "Council Secretary; Crawford Non-public Member",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "other",
+      "slug": "kerry-dunaway",
+      "title": "Non-public Member — Crawford County; Council Secretary (2026–27); Executive Committee; Budget, Audit and Personnel Committee",
+      "description": "Non-public Member — Crawford County; Council Secretary (2026–27); Executive Committee; Budget, Audit and Personnel Committee at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+      "id": "d6f8cfa5-041a-4558-9439-547cbf8d638e",
+      "full_role": "Non-public Member — Crawford County; Council Secretary (2026–27); Executive Committee; Budget, Audit and Personnel Committee"
+    },
+    {
+      "full_name": "Troy Cook",
+      "role": "Associate Member — Crawford County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "troy-cook",
+      "title": "Associate Member — Crawford County",
+      "description": "Associate Member — Crawford County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "24bc7fec-5b48-4a8d-99a1-9e81d77cfa7e",
+      "full_role": "Associate Member — Crawford County"
+    },
+    {
+      "full_name": "Brant Bailey",
+      "role": "Associate Member — Crawford County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "brant-bailey",
+      "title": "Associate Member — Crawford County",
+      "description": "Associate Member — Crawford County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "e6a534a0-6ef3-4a22-8acc-35dff3ce06bb",
+      "full_role": "Associate Member — Crawford County"
+    },
+    {
+      "full_name": "Dan Perdue",
+      "role": "County Member; County Commission Chairman — Houston County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "dan-perdue",
+      "title": "County Member; County Commission Chairman — Houston County",
+      "description": "County Member; County Commission Chairman — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "b8632cf4-8987-436d-a30f-ae7b2527b4ff",
+      "full_role": "County Member; County Commission Chairman — Houston County"
+    },
+    {
+      "full_name": "Randall Walker",
+      "role": "Municipal Member; Perry Mayor — Houston County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "randall-walker",
+      "title": "Municipal Member; Perry Mayor — Houston County",
+      "description": "Municipal Member; Perry Mayor — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "ed6f6546-5775-4152-bca8-d265528620cc",
+      "full_role": "Municipal Member; Perry Mayor — Houston County"
+    },
+    {
+      "full_name": "George E. Slappey",
+      "role": "Non-public Member — Houston County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "george-e-slappey",
+      "title": "Non-public Member — Houston County",
+      "description": "Non-public Member — Houston County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "8cde54b0-b205-4014-8d21-592e9acd5d58",
+      "full_role": "Non-public Member — Houston County"
+    },
+    {
+      "full_name": "LaRhonda Patrick",
+      "role": "Associate Member; Warner Robins Mayor — Houston County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "larhonda-patrick",
+      "title": "Associate Member; Warner Robins Mayor — Houston County",
+      "description": "Associate Member; Warner Robins Mayor — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "d36c3c01-9372-4d1e-9ffa-44a15316d084",
+      "full_role": "Associate Member; Warner Robins Mayor — Houston County"
+    },
+    {
+      "full_name": "Clifford Holmes",
+      "role": "Associate Member; Warner Robins Councilman — Houston County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "clifford-holmes",
+      "title": "Associate Member; Warner Robins Councilman — Houston County",
+      "description": "Associate Member; Warner Robins Councilman — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "495519c4-f410-49f7-bfb6-7838cbba62c1",
+      "full_role": "Associate Member; Warner Robins Councilman — Houston County"
+    },
+    {
+      "full_name": "Chris Weidner",
+      "role": "County Member; County Commission Chairman — Jones County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "chris-weidner",
+      "title": "County Member; County Commission Chairman — Jones County",
+      "description": "County Member; County Commission Chairman — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "819f04a3-2367-4874-9f7d-001e227e4ddb",
+      "full_role": "County Member; County Commission Chairman — Jones County"
+    },
+    {
+      "full_name": "Ed Barbee",
+      "role": "Municipal Member; Gray Mayor — Jones County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "ed-barbee",
+      "title": "Municipal Member; Gray Mayor — Jones County",
+      "description": "Municipal Member; Gray Mayor — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "7da3f33c-b3ad-4d93-bb2b-10109d414394",
+      "full_role": "Municipal Member; Gray Mayor — Jones County"
+    },
+    {
+      "full_name": "Natalie Lurie",
+      "role": "Non-public Member — Jones County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "natalie-lurie",
+      "title": "Non-public Member — Jones County",
+      "description": "Non-public Member — Jones County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "39e8a421-5fe6-4bb6-903e-8ca3c31042f2",
+      "full_role": "Non-public Member — Jones County"
+    },
+    {
+      "full_name": "Steve Johnson",
+      "role": "Associate Member — Jones County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "steve-johnson",
+      "title": "Associate Member — Jones County",
+      "description": "Associate Member — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "69259844-9752-4b39-80aa-cd1282e07cc6",
+      "full_role": "Associate Member — Jones County"
+    },
+    {
+      "full_name": "Joy Carr",
+      "role": "Associate Member — Jones County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "joy-carr",
+      "title": "Associate Member — Jones County",
+      "description": "Associate Member — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "58e549ff-e574-4551-b731-3b258d26fd07",
+      "full_role": "Associate Member — Jones County"
+    },
+    {
+      "full_name": "Lester Miller",
+      "role": "Macon-Bibb County Member; Pension Committee",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "elected_official",
+      "slug": "lester-miller",
+      "title": "County Member; Macon-Bibb County Mayor — Macon-Bibb County; Pension and Retirement Plan Committee, Post 1",
+      "description": "County Member; Macon-Bibb County Mayor — Macon-Bibb County; Pension and Retirement Plan Committee, Post 1 at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+      "id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "existing": true,
+      "full_role": "County Member; Macon-Bibb County Mayor — Macon-Bibb County; Pension and Retirement Plan Committee, Post 1"
+    },
+    {
+      "full_name": "Valerie Wynn",
+      "role": "Macon-Bibb Municipal Member; Budget Committee",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "other",
+      "slug": "valerie-wynn",
+      "title": "Municipal Member — Macon-Bibb County; Budget, Audit and Personnel Committee",
+      "description": "Municipal Member — Macon-Bibb County; Budget, Audit and Personnel Committee at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+      "id": "744fd23b-2f67-4c38-8539-1b614c30624b",
+      "existing": true,
+      "full_role": "Municipal Member — Macon-Bibb County; Budget, Audit and Personnel Committee"
+    },
+    {
+      "full_name": "Carlos McCloud",
+      "role": "Macon-Bibb Non-public Member; Executive Committee",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "other",
+      "slug": "carlos-mccloud",
+      "title": "Non-public Member — Macon-Bibb County; Executive Committee, Macon-Bibb County",
+      "description": "Non-public Member — Macon-Bibb County; Executive Committee, Macon-Bibb County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+      "id": "e4a600c1-5bb7-4726-9e7c-57177502872a",
+      "full_role": "Non-public Member — Macon-Bibb County; Executive Committee, Macon-Bibb County"
+    },
+    {
+      "full_name": "Wallace Herring",
+      "role": "Associate Member — Macon-Bibb County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "wallace-herring",
+      "title": "Associate Member — Macon-Bibb County",
+      "description": "Associate Member — Macon-Bibb County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "1fd11136-a9d6-4c77-b7c1-9b5c96637be1",
+      "full_role": "Associate Member — Macon-Bibb County"
+    },
+    {
+      "full_name": "Michelle Parks",
+      "role": "Associate Member — Macon-Bibb County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "michelle-parks",
+      "title": "Associate Member — Macon-Bibb County",
+      "description": "Associate Member — Macon-Bibb County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "0df66970-2166-455c-8ded-4e9c02a542fd",
+      "full_role": "Associate Member — Macon-Bibb County"
+    },
+    {
+      "full_name": "Lamarcus Davis",
+      "role": "Associate Member; County Commissioner — Monroe County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "lamarcus-davis",
+      "title": "Associate Member; County Commissioner — Monroe County",
+      "description": "Associate Member; County Commissioner — Monroe County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "0a309f97-b51c-4493-b2c1-5a06e3dd0930",
+      "full_role": "Associate Member; County Commissioner — Monroe County"
+    },
+    {
+      "full_name": "Mike Dodd",
+      "role": "Associate Member; Forsyth Councilman — Monroe County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "mike-dodd",
+      "title": "Associate Member; Forsyth Councilman — Monroe County",
+      "description": "Associate Member; Forsyth Councilman — Monroe County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "273c1291-435e-41dd-8d05-e86b8a240966",
+      "full_role": "Associate Member; Forsyth Councilman — Monroe County"
+    },
+    {
+      "full_name": "Chad Tyler",
+      "role": "Non-public Member — Monroe County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "chad-tyler",
+      "title": "Non-public Member — Monroe County",
+      "description": "Non-public Member — Monroe County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "08e1b583-faed-4991-bf2f-9e9b4ec80e2e",
+      "full_role": "Non-public Member — Monroe County"
+    },
+    {
+      "full_name": "Don Carter",
+      "role": "Non-public Member — Monroe County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "don-carter",
+      "title": "Non-public Member — Monroe County",
+      "description": "Non-public Member — Monroe County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "3ca2afdf-5219-49f8-97f0-bd01eebf610e",
+      "full_role": "Non-public Member — Monroe County"
+    },
+    {
+      "full_name": "Nolan Howard",
+      "role": "Associate Member — Monroe County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "nolan-howard",
+      "title": "Associate Member — Monroe County",
+      "description": "Associate Member — Monroe County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "a9b0a4b2-7439-444a-9713-a024e9aa68c5",
+      "full_role": "Associate Member — Monroe County"
+    },
+    {
+      "full_name": "Martin Moseley",
+      "role": "County Member; County Commission Chairman — Peach County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "martin-moseley",
+      "title": "County Member; County Commission Chairman — Peach County",
+      "description": "County Member; County Commission Chairman — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "3369e3aa-30ac-4428-995d-3b6700fc0f99",
+      "full_role": "County Member; County Commission Chairman — Peach County"
+    },
+    {
+      "full_name": "Michael Chidester",
+      "role": "Municipal Member; Byron Mayor — Peach County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "michael-chidester",
+      "title": "Municipal Member; Byron Mayor — Peach County",
+      "description": "Municipal Member; Byron Mayor — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "f4c01e01-b855-46c5-897f-dae67bddd843",
+      "full_role": "Municipal Member; Byron Mayor — Peach County"
+    },
+    {
+      "full_name": "Marcus Agostino",
+      "role": "Non-public Member — Peach County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "marcus-agostino",
+      "title": "Non-public Member — Peach County",
+      "description": "Non-public Member — Peach County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "c63dd6d2-49fb-42d4-adde-1fc65283a9bc",
+      "full_role": "Non-public Member — Peach County"
+    },
+    {
+      "full_name": "Alton Howard",
+      "role": "Associate Member; Fort Valley Council Member — Peach County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "alton-howard",
+      "title": "Associate Member; Fort Valley Council Member — Peach County",
+      "description": "Associate Member; Fort Valley Council Member — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "f13ca925-0e90-496b-a606-d68cf01043f7",
+      "full_role": "Associate Member; Fort Valley Council Member — Peach County"
+    },
+    {
+      "full_name": "James Richardson",
+      "role": "Associate Member; Byron Councilman — Peach County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "james-richardson",
+      "title": "Associate Member; Byron Councilman — Peach County",
+      "description": "Associate Member; Byron Councilman — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "165e5f30-b751-48f5-8a11-9a1e09552159",
+      "full_role": "Associate Member; Byron Councilman — Peach County"
+    },
+    {
+      "full_name": "Jenna S. Mashburn",
+      "role": "Council Chair; Pulaski County Member",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "kind": "elected_official",
+      "slug": "jenna-s-mashburn",
+      "title": "County Member; Sole Commissioner — Pulaski County; Council Chair (2026–27); Executive Committee; GARC Policy Member",
+      "description": "County Member; Sole Commissioner — Pulaski County; Council Chair (2026–27); Executive Committee; GARC Policy Member at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/\n\nProfile photo source: https://www.middlegeorgiarc.org/about-us/mission-values/",
+      "photo_url": "https://www.middlegeorgiarc.org/wp-content/uploads/2026/04/jm2-1-1-240x300.png",
+      "image_path": "mgrc-2026-10-23/jenna-s-mashburn.png",
+      "image_url": "https://drzcrodqflzkzzbqsags.supabase.co/storage/v1/object/public/person-images/mgrc-2026-10-23/jenna-s-mashburn.png",
+      "photo_page_url": "https://www.middlegeorgiarc.org/about-us/mission-values/",
+      "id": "c396e211-dfa7-4b38-87f6-ce66364ab0f0",
+      "full_role": "County Member; Sole Commissioner — Pulaski County; Council Chair (2026–27); Executive Committee; GARC Policy Member"
+    },
+    {
+      "full_name": "Bernice Banks",
+      "role": "Municipal Member; Hawkinsville Commissioner — Pulaski County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "bernice-banks",
+      "title": "Municipal Member; Hawkinsville Commissioner — Pulaski County",
+      "description": "Municipal Member; Hawkinsville Commissioner — Pulaski County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "8a552636-e98e-4e41-b0e9-d95c738f144a",
+      "full_role": "Municipal Member; Hawkinsville Commissioner — Pulaski County"
+    },
+    {
+      "full_name": "Sara Myers",
+      "role": "Non-public Member — Pulaski County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "sara-myers",
+      "title": "Non-public Member — Pulaski County",
+      "description": "Non-public Member — Pulaski County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "93c8a01f-3281-4f27-884f-74a728e10694",
+      "full_role": "Non-public Member — Pulaski County"
+    },
+    {
+      "full_name": "Ramsey Howard",
+      "role": "Associate Member — Pulaski County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "ramsey-howard",
+      "title": "Associate Member — Pulaski County",
+      "description": "Associate Member — Pulaski County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "c5cb6138-c2c0-41c4-a3e2-bc7227ccb2b0",
+      "full_role": "Associate Member — Pulaski County"
+    },
+    {
+      "full_name": "Kyle Goss",
+      "role": "Associate Member — Pulaski County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "kyle-goss",
+      "title": "Associate Member — Pulaski County",
+      "description": "Associate Member — Pulaski County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "7ec8c6c4-a6a7-4d71-a0af-20f203ce8968",
+      "full_role": "Associate Member — Pulaski County"
+    },
+    {
+      "full_name": "Bill Sharp",
+      "role": "County Member; County Commissioner — Putnam County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "bill-sharp",
+      "title": "County Member; County Commissioner — Putnam County",
+      "description": "County Member; County Commissioner — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "07da3c8e-f7c9-472c-8c6e-e106847f08ef",
+      "full_role": "County Member; County Commissioner — Putnam County"
+    },
+    {
+      "full_name": "John Reid",
+      "role": "Municipal Member; Eatonton Mayor — Putnam County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "john-reid",
+      "title": "Municipal Member; Eatonton Mayor — Putnam County",
+      "description": "Municipal Member; Eatonton Mayor — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "6b9ac97d-d2b4-4bc5-91cb-9cf18bc6a12a",
+      "full_role": "Municipal Member; Eatonton Mayor — Putnam County"
+    },
+    {
+      "full_name": "Charles Gray",
+      "role": "Non-public Member — Putnam County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "charles-gray",
+      "title": "Non-public Member — Putnam County",
+      "description": "Non-public Member — Putnam County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "3a4c000b-77e0-4ca8-a24f-81e8c1555c2c",
+      "full_role": "Non-public Member — Putnam County"
+    },
+    {
+      "full_name": "Gary Sanders",
+      "role": "Associate Member — Putnam County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "gary-sanders",
+      "title": "Associate Member — Putnam County",
+      "description": "Associate Member — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "3236f04d-2140-4989-963f-9cac796ff1f6",
+      "full_role": "Associate Member — Putnam County"
+    },
+    {
+      "full_name": "Richard Garrett",
+      "role": "Associate Member — Putnam County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "richard-garrett",
+      "title": "Associate Member — Putnam County",
+      "description": "Associate Member — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "07a74612-78c3-4687-9730-73866c692631",
+      "full_role": "Associate Member — Putnam County"
+    },
+    {
+      "full_name": "Ken Fowler",
+      "role": "County Member; County Commission Chairman — Twiggs County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "ken-fowler",
+      "title": "County Member; County Commission Chairman — Twiggs County",
+      "description": "County Member; County Commission Chairman — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "ea91c848-f782-45cd-95bc-33f15be53245",
+      "full_role": "County Member; County Commission Chairman — Twiggs County"
+    },
+    {
+      "full_name": "Charles Williams",
+      "role": "Municipal Member; Jeffersonville Mayor — Twiggs County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "charles-williams",
+      "title": "Municipal Member; Jeffersonville Mayor — Twiggs County",
+      "description": "Municipal Member; Jeffersonville Mayor — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "87381ac5-fb1b-4e59-8c03-4e8e0241d17c",
+      "full_role": "Municipal Member; Jeffersonville Mayor — Twiggs County"
+    },
+    {
+      "full_name": "Virginia Lee",
+      "role": "Non-public Member — Twiggs County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "virginia-lee",
+      "title": "Non-public Member — Twiggs County",
+      "description": "Non-public Member — Twiggs County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "02f8a712-c6b7-41c9-9191-0629c6666238",
+      "full_role": "Non-public Member — Twiggs County"
+    },
+    {
+      "full_name": "Kathryn Epps",
+      "role": "Associate Member — Twiggs County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "kathryn-epps",
+      "title": "Associate Member — Twiggs County",
+      "description": "Associate Member — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "6283aa11-364e-4c7f-9ebb-c486c4fb6004",
+      "full_role": "Associate Member — Twiggs County"
+    },
+    {
+      "full_name": "Judy Sherling",
+      "role": "Associate Member — Twiggs County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "judy-sherling",
+      "title": "Associate Member — Twiggs County",
+      "description": "Associate Member — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "912dd36c-794a-4e32-ad15-6907b94ef73f",
+      "full_role": "Associate Member — Twiggs County"
+    },
+    {
+      "full_name": "Flint Shepherd",
+      "role": "County Member — Wilkinson County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "flint-shepherd",
+      "title": "County Member; County Commission Vice-Chairman — Wilkinson County",
+      "description": "County Member; County Commission Vice-Chairman — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "084a5e1f-05b6-472e-aad7-a1cbecd9ba15",
+      "full_role": "County Member; County Commission Vice-Chairman — Wilkinson County"
+    },
+    {
+      "full_name": "Marty Dominy",
+      "role": "Non-public Member — Wilkinson County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "marty-dominy",
+      "title": "Non-public Member — Wilkinson County",
+      "description": "Non-public Member — Wilkinson County at the Middle Georgia Regional Commission. “Non-public member” is MGRC’s label for a private-sector council representative; this is a publicly listed civic role. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "6ce99642-bbce-4c64-bff9-a839180b6218",
+      "full_role": "Non-public Member — Wilkinson County"
+    },
+    {
+      "full_name": "Lloyd Hatfield",
+      "role": "Associate Member; Ivey Councilman — Wilkinson County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "lloyd-hatfield",
+      "title": "Associate Member; Ivey Councilman — Wilkinson County",
+      "description": "Associate Member; Ivey Councilman — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "cc05200e-4b63-4b07-a900-9f8d4054e3f4",
+      "full_role": "Associate Member; Ivey Councilman — Wilkinson County"
+    },
+    {
+      "full_name": "Aprill-Adside Smith",
+      "role": "Associate Member; Gordon Mayor — Wilkinson County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "elected_official",
+      "slug": "aprill-adside-smith",
+      "title": "Associate Member; Gordon Mayor — Wilkinson County",
+      "description": "Associate Member; Gordon Mayor — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "967441f2-1af1-4848-9bfe-7632203f20c8",
+      "full_role": "Associate Member; Gordon Mayor — Wilkinson County"
+    },
+    {
+      "full_name": "Kyle Swicord",
+      "role": "Associate Member — Wilkinson County",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "other",
+      "slug": "kyle-swicord",
+      "title": "Associate Member — Wilkinson County",
+      "description": "Associate Member — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "8855e7c9-1ce7-4e85-9864-658f86793760",
+      "full_role": "Associate Member — Wilkinson County"
+    },
+    {
+      "full_name": "James Vaughn",
+      "role": "Governor’s Appointee — State",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "appointed_official",
+      "slug": "james-vaughn",
+      "title": "Governor’s Appointee — State",
+      "description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "d5a326bb-7b45-47f0-8241-ea6ea9da46ca",
+      "full_role": "Governor’s Appointee — State"
+    },
+    {
+      "full_name": "Nancy Nash",
+      "role": "Governor’s Appointee — State",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "appointed_official",
+      "slug": "nancy-nash",
+      "title": "Governor’s Appointee — State",
+      "description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "full_role": "Governor’s Appointee — State"
+    },
+    {
+      "full_name": "Tommy Stalnaker",
+      "role": "Governor’s Appointee — State",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "appointed_official",
+      "slug": "tommy-stalnaker",
+      "title": "Governor’s Appointee — State",
+      "description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "7e102341-6136-4914-b6a2-ad7c0bab27d1",
+      "full_role": "Governor’s Appointee — State"
+    },
+    {
+      "full_name": "James A. Epps Jr.",
+      "role": "Lieutenant Governor’s Appointee — State",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "kind": "appointed_official",
+      "slug": "james-a-epps-jr",
+      "title": "Lieutenant Governor’s Appointee — State",
+      "description": "Lieutenant Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/",
+      "id": "4720cd11-f382-44f8-87a0-8d6d38c0038b",
+      "full_role": "Lieutenant Governor’s Appointee — State"
+    },
+    {
+      "full_name": "Laura M. Mathis",
+      "role": "Executive Director; ex-officio Council Treasurer (2026–27)",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/",
+        "https://www.middlegeorgiarc.org/about-us/mission-values/",
+        "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+      ],
+      "slug": "laura-m-mathis",
+      "title": "Executive Director; ex-officio Council Treasurer (2026–27)",
+      "description": "Executive Director; ex-officio Council Treasurer (2026–27) at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/ ; https://www.middlegeorgiarc.org/about-us/mission-values/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/\n\nProfile photo source: https://www.middlegeorgiarc.org/about-us/mission-values/",
+      "photo_url": "https://www.middlegeorgiarc.org/wp-content/uploads/2023/06/mathis_laura_clp_190211-F-F3494-1404-002-240x300.jpg",
+      "image_path": "mgrc-2026-10-23/laura-m-mathis.jpg",
+      "image_url": "https://drzcrodqflzkzzbqsags.supabase.co/storage/v1/object/public/person-images/mgrc-2026-10-23/laura-m-mathis.jpg",
+      "photo_page_url": "https://www.middlegeorgiarc.org/about-us/mission-values/",
+      "id": "e30ff47a-6f46-4c86-a19f-32a4908eac14",
+      "full_role": "Executive Director; ex-officio Council Treasurer (2026–27)"
+    },
+    {
+      "full_name": "Tiffany Andrews",
+      "role": "Deputy Director",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "tiffany-andrews",
+      "title": "Deputy Director",
+      "description": "Deputy Director at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "72174ccb-ef32-4080-84f1-93d22e20e256",
+      "full_role": "Deputy Director"
+    },
+    {
+      "full_name": "Brent Lanford",
+      "role": "Chief Information Officer",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "brent-lanford",
+      "title": "Chief Information Officer",
+      "description": "Chief Information Officer at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "275ad756-197f-423d-a97a-89b5d5d1f192",
+      "full_role": "Chief Information Officer"
+    },
+    {
+      "full_name": "Michael Huckaby",
+      "role": "Director of Aging",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "michael-huckaby",
+      "title": "Director of Aging",
+      "description": "Director of Aging at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "7073a206-621e-4e14-941e-2f982f326921",
+      "full_role": "Director of Aging"
+    },
+    {
+      "full_name": "Matt Garvin",
+      "role": "Director of Finance",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "matt-garvin",
+      "title": "Director of Finance",
+      "description": "Director of Finance at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "99d03748-afe6-4179-ae06-5fdc2b3295ad",
+      "full_role": "Director of Finance"
+    },
+    {
+      "full_name": "Greg Boike",
+      "role": "Director of Planning and Public Administration",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "greg-boike",
+      "title": "Director of Planning and Public Administration",
+      "description": "Director of Planning and Public Administration at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "318bba02-672d-4347-952f-b97ed62bd812",
+      "full_role": "Director of Planning and Public Administration"
+    },
+    {
+      "full_name": "Michelle Grembowski",
+      "role": "Director of Technology Services",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "michelle-grembowski",
+      "title": "Director of Technology Services",
+      "description": "Director of Technology Services at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "5b6779d1-303d-4e93-8176-fc9cc6608245",
+      "full_role": "Director of Technology Services"
+    },
+    {
+      "full_name": "Kim Stanton",
+      "role": "Executive Assistant",
+      "kind": "other",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/about-us/staff/"
+      ],
+      "slug": "kim-stanton",
+      "title": "Executive Assistant",
+      "description": "Executive Assistant at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/about-us/staff/",
+      "id": "43f56fbc-59d2-480c-981c-42c6061524f9",
+      "full_role": "Executive Assistant"
+    }
+  ],
+  "notes": [
+    "The leadership page states a 60-member council; the council directory lists 59 named members. Only named members are imported.",
+    "The general council page labels Denese Shinholster as treasurer; the dated 2026–27 officers page identifies her as vice chair and Laura Mathis as ex-officio treasurer. The dated officer list is used.",
+    "Roster spellings and council seat categories are preserved. Individual appointment dates and service terms are not inferred.",
+    "The Aging Advisory Council page says appointments are not yet made; the Ethics Committee has no named appointees. No members were invented.",
+    "Only senior management, department directors and the executive assistant are included from the staff directory."
+  ],
+  "sources": [
+    "https://www.middlegeorgiarc.org/about-us/mission-values/",
+    "https://www.middlegeorgiarc.org/mgrc-council-2/",
+    "https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/",
+    "https://www.middlegeorgiarc.org/about-us/staff/"
+  ]
+}

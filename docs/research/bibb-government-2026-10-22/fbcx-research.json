@@ -1,0 +1,162 @@
+{
+  "verified_at": "2026-10-23",
+  "church": {
+    "id": "4e7b9125-709a-445b-bee9-d77b9505263a",
+    "slug": "first-baptist-church-of-christ-macon",
+    "name": "First Baptist Church of Christ at Macon"
+  },
+  "organizations": {
+    "language": {
+      "id": "b951669c-4b7f-4be2-9c1c-c7d82a133d47",
+      "slug": "fbcx-language-ministry",
+      "name": "FBCX Language Ministry — ESLFREE.NET"
+    },
+    "circle": {
+      "id": "18d0fc83-863c-40ee-b2bc-25839a11816b",
+      "slug": "fbcx-circle-of-hope",
+      "name": "FBCX Circle of Hope"
+    },
+    "closet": {
+      "id": "78fd4abb-703a-4da1-92bd-993b3b613079",
+      "slug": "fbcx-crisis-closet",
+      "name": "FBCX Crisis Closet"
+    },
+    "awab": {
+      "id": "314d30af-28d4-4d19-93f3-1c2ebaf5fa6e",
+      "slug": "association-welcoming-affirming-baptists",
+      "name": "Association of Welcoming and Affirming Baptists"
+    }
+  },
+  "people": [
+    {
+      "id": "e9334bc0-4e35-4aad-9316-553f6557bf23",
+      "slug": "julie-long",
+      "full_name": "Julie Long",
+      "role": "Pastor",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "53e04388-b7a6-43dc-a610-1cfedbadf103",
+      "slug": "zack-jackson",
+      "full_name": "Zack Jackson",
+      "role": "Associate Pastor",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "e560058c-18f1-4aca-8b89-5342931e9ce1",
+      "slug": "craig-mcmahan",
+      "full_name": "Craig McMahan",
+      "role": "Preacher-in-Residence",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "bd0ec9c7-956c-42c4-b39f-3c885ab191f0",
+      "slug": "stanley-l-roberts",
+      "full_name": "Stanley L. Roberts",
+      "role": "Minister of Music",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "3931f603-12f9-4cb9-92e9-c5b741bd1c45",
+      "slug": "connie-pursiful",
+      "full_name": "Connie Pursiful",
+      "role": "Administrative Assistant",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "f938c92d-3ac5-4516-9f8c-04cbcecda0b5",
+      "slug": "camille-kittrell",
+      "full_name": "Camille Kittrell",
+      "role": "Bookkeeper",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "3d659ed6-8ed5-4630-be96-d9bceff1dc39",
+      "slug": "dusty-fuller",
+      "full_name": "Dusty Fuller",
+      "role": "Facilities Manager",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "0f9efc35-80d8-48f8-a7bb-f19c8225fb32",
+      "slug": "rachel-s-greco",
+      "full_name": "Rachel S. Greco",
+      "existing": true,
+      "role": "Communications Manager",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "68e42cd7-0bc7-420a-a5c6-ac8720968ebc",
+      "slug": "cam-bishop",
+      "full_name": "Cam Bishop",
+      "role": "Organist",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "22d8ad17-ee93-4308-a00d-26e2fcd3950c",
+      "slug": "tierra-johnson",
+      "full_name": "Tierra Johnson",
+      "role": "Custodian",
+      "organization_id": "4e7b9125-709a-445b-bee9-d77b9505263a"
+    },
+    {
+      "id": "1fc9506f-25ca-46bf-a2e9-ef38f55d143e",
+      "slug": "paula-strozier",
+      "full_name": "Paula Strozier",
+      "role": "Language Ministry Contact",
+      "organization_id": "b951669c-4b7f-4be2-9c1c-c7d82a133d47"
+    }
+  ],
+  "relationships": [
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "b951669c-4b7f-4be2-9c1c-c7d82a133d47",
+      "Operates ministry",
+      "Ministry of",
+      "https://fbcxmacon.org/missions/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "18d0fc83-863c-40ee-b2bc-25839a11816b",
+      "Operates ministry",
+      "Ministry of",
+      "https://fbcxmacon.org/missions/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "78fd4abb-703a-4da1-92bd-993b3b613079",
+      "Operates ministry",
+      "Ministry of",
+      "https://fbcxmacon.org/missions/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "314d30af-28d4-4d19-93f3-1c2ebaf5fa6e",
+      "Affiliated congregation (September 2026)",
+      "Affiliated congregation (September 2026)",
+      "https://fbcxmacon.org/brian-henderson-from-awab-is-guest-speaker-on-wednesday-september-30/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "7049dd3a-1642-4706-9829-ad2b7d7cd4d1",
+      "Affiliated congregation in",
+      "Affiliated congregation",
+      "https://fbcxmacon.org/who-we-are/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+      "Community ministry partner",
+      "Community ministry partner",
+      "https://fbcxmacon.org/missions/"
+    ],
+    [
+      "4e7b9125-709a-445b-bee9-d77b9505263a",
+      "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "Homebuilding ministry partner",
+      "Homebuilding ministry partner",
+      "https://fbcxmacon.org/missions/"
+    ]
+  ],
+  "notes": "10 church staff plus 1 language ministry contact; Rachel S. Greco reused, 10 new people. Church ministries distinguished from separately incorporated charities. Current deacon/council roster not established. Nongovernment profile photos not imported."
+}

@@ -1,0 +1,10 @@
+{
+  "build": "99a8de65-3a21-4918-9401-87893cd8d7a7",
+  "version": "02b85276-ec8b-47de-bab7-a316c868dd1a",
+  "organizations": 3,
+  "new_people": 33,
+  "reused_people": 1,
+  "relationships": 3,
+  "pages": 1032,
+  "checks": "Production migration guard, Astro check (0 errors/warnings) and build passed. Live chapter and board verified in browser with no errors. Local production wrapper stopped safely for unrelated uncommitted schema changes; left untouched."
+}

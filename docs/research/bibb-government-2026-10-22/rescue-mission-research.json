@@ -1,0 +1,501 @@
+{
+  "verified_at": "2026-10-23",
+  "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+  "boards": {
+    "executive": {
+      "id": "27de30b7-e867-44cd-8c2e-66bd25b7c1a4",
+      "slug": "rescue-mission-of-middle-georgia-executive-board",
+      "name": "Rescue Mission of Middle Georgia Executive Board"
+    },
+    "board": {
+      "id": "b8d9a11b-f71f-4b84-9da1-6494e0fb0796",
+      "slug": "rescue-mission-of-middle-georgia-board-of-directors",
+      "name": "Rescue Mission of Middle Georgia Board of Directors"
+    },
+    "advisory": {
+      "id": "c875bb12-e08c-4c6a-8454-065d1ddf8f9f",
+      "slug": "rescue-mission-of-middle-georgia-advisory-board",
+      "name": "Rescue Mission of Middle Georgia Advisory Board"
+    }
+  },
+  "people": [
+    {
+      "id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+      "slug": "pat-chastain",
+      "full_name": "Pat Chastain",
+      "existing": true,
+      "role": "President / CEO",
+      "group": "staff"
+    },
+    {
+      "id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+      "slug": "tina-hicks",
+      "full_name": "Tina Hicks",
+      "existing": true,
+      "role": "Vice President of Finance",
+      "group": "staff"
+    },
+    {
+      "id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+      "slug": "dawn-burns",
+      "full_name": "Dawn Burns",
+      "existing": true,
+      "role": "Vice President of Operations",
+      "group": "staff"
+    },
+    {
+      "id": "34deeec3-b175-4307-b2fd-524d281f5551",
+      "slug": "barbara-durham",
+      "full_name": "Barbara Durham",
+      "existing": true,
+      "role": "Development Director",
+      "group": "staff"
+    },
+    {
+      "id": "cf20430f-cbc5-46dc-9d9d-efd9452c77c8",
+      "slug": "christina-porter",
+      "full_name": "Christina Porter",
+      "role": "Development Assistant",
+      "group": "staff"
+    },
+    {
+      "id": "d5862ab0-55ca-4f33-9982-66a11223a62f",
+      "slug": "jaime-kaplan",
+      "full_name": "Jaime Kaplan",
+      "role": "Special Events Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "4a7db785-82d7-47ba-a125-950b24aadcc8",
+      "slug": "greg-brooks",
+      "full_name": "Greg Brooks",
+      "role": "Kitchen Supervisor",
+      "group": "staff"
+    },
+    {
+      "id": "8a147cb5-1346-4b02-9670-5f30ff517b8a",
+      "slug": "keith-moss",
+      "full_name": "Keith Moss",
+      "role": "Maintenance Supervisor",
+      "group": "staff"
+    },
+    {
+      "id": "0558b48d-7203-4c7e-a6fb-b8c91402e510",
+      "slug": "adam-dudynsky",
+      "full_name": "Adam Dudynsky",
+      "role": "Maintenance / Auto Mechanic",
+      "group": "staff"
+    },
+    {
+      "id": "5a20803b-3a32-4aab-9e01-f288d6590891",
+      "slug": "curtis-owens",
+      "full_name": "Curtis Owens",
+      "role": "Maintenance Assistant",
+      "group": "staff"
+    },
+    {
+      "id": "7d5af2ec-2df1-4da4-9cd6-fe44df424590",
+      "slug": "greg-maddox",
+      "full_name": "Greg Maddox",
+      "role": "Lawn Maintenance",
+      "group": "staff"
+    },
+    {
+      "id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+      "slug": "jason-beck",
+      "full_name": "Jason Beck",
+      "existing": true,
+      "role": "Vice President of Programs",
+      "group": "staff"
+    },
+    {
+      "id": "d0ff4e3a-ddde-46fa-b841-c5bd254a5122",
+      "slug": "john-colquitt",
+      "full_name": "John Colquitt",
+      "role": "Men's Program Intake Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "cd4a78e2-bff4-4fde-bf85-a77af4255d10",
+      "slug": "willie-moore",
+      "full_name": "Willie Moore",
+      "role": "Men's Program Intake Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "f559a358-da5a-499e-b113-0245c4fceafb",
+      "slug": "matthew-rogers",
+      "full_name": "Matthew Rogers",
+      "role": "Men's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "79b9707e-5098-4f9e-9e51-22440622f245",
+      "slug": "chris-lones",
+      "full_name": "Chris Lones",
+      "role": "Men's Program Lead Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "f218652e-f3ad-4ab6-9a29-4a3a35b9be93",
+      "slug": "charles-pope",
+      "full_name": "Charles Pope",
+      "role": "Men's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+      "slug": "chako-scott",
+      "full_name": "Chako Scott",
+      "existing": true,
+      "role": "Women's Program Director",
+      "group": "staff"
+    },
+    {
+      "id": "a575fbc9-a347-49c2-ad31-3e977cadde90",
+      "slug": "taylor-hildebrand",
+      "full_name": "Taylor Hildebrand",
+      "role": "Women's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "4ba0907c-3c82-4c52-b6cb-17f1ce79a69d",
+      "slug": "princess-jackson",
+      "full_name": "Princess Jackson",
+      "role": "Women's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "a400233d-706d-45c1-baa4-dccb9c71af98",
+      "slug": "misty-tyson",
+      "full_name": "Misty Tyson",
+      "role": "Women's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "e875e101-1b20-4229-b565-c6c2f05ae17a",
+      "slug": "lacey-davis",
+      "full_name": "Lacey Davis",
+      "role": "Women's Program Intake Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "f176b83c-49f3-436c-9928-9d15c0ddbb1b",
+      "slug": "jessie-boler",
+      "full_name": "Jessie Boler",
+      "role": "Women's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "3a9206b5-0098-4420-be87-341b69dfc139",
+      "slug": "ashley-haynes",
+      "full_name": "Ashley Haynes",
+      "role": "Women's Program Facilitator",
+      "group": "staff"
+    },
+    {
+      "id": "70c8345a-d197-47cf-8968-a71740ea0920",
+      "slug": "susan-daniels",
+      "full_name": "Susan Daniels",
+      "role": "Social Services Director",
+      "group": "staff"
+    },
+    {
+      "id": "18602ff7-386f-4114-be8d-c54fb1df8133",
+      "slug": "kiia-jackson-appling",
+      "full_name": "Kiia Jackson-Appling",
+      "role": "Men's Division Case Manager",
+      "group": "staff"
+    },
+    {
+      "id": "009de0f6-34b0-4d33-b3f6-bcd37548a97a",
+      "slug": "myah-anderson",
+      "full_name": "Myah Anderson",
+      "role": "Children's Program Manager",
+      "group": "staff"
+    },
+    {
+      "id": "a40da5f6-4f1c-4c07-b6dd-6ff7501fd2d5",
+      "slug": "niger-brown",
+      "full_name": "Niger Brown",
+      "role": "Bargain Center Operations Manager",
+      "group": "staff"
+    },
+    {
+      "id": "e26cb6a0-ce53-41b9-84cf-5b255312ca8d",
+      "slug": "david-clance",
+      "full_name": "David Clance",
+      "role": "Bargain Center Manager",
+      "group": "staff"
+    },
+    {
+      "id": "b6093b02-e535-47fd-b033-39be16953647",
+      "slug": "kyle-patat",
+      "full_name": "Kyle Patat",
+      "role": "Barn Center Operations Manager",
+      "group": "staff"
+    },
+    {
+      "id": "c9803ea1-03e3-4578-b004-49c5939e2a2d",
+      "slug": "maddie-manns",
+      "full_name": "Maddie Manns",
+      "role": "Barn Center Manager",
+      "group": "staff"
+    },
+    {
+      "id": "3a7e12ef-b990-4de6-a639-ff9848174184",
+      "slug": "liz-marin",
+      "full_name": "Liz Marin",
+      "role": "Processing Supervisor",
+      "group": "staff"
+    },
+    {
+      "id": "bd7ad379-eabf-4e35-95bb-92d5d924241c",
+      "slug": "leanna-morris",
+      "full_name": "Leanna Morris",
+      "role": "Pricing and Processing Manager",
+      "group": "staff"
+    },
+    {
+      "id": "92ab2cc7-cfc7-40cf-8481-0b083acfe8ed",
+      "slug": "steve-floyd",
+      "full_name": "Steve Floyd",
+      "role": "Logistics Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "c02830dc-01d3-4a58-aeac-71b1454746e4",
+      "slug": "curtis-roundtree",
+      "full_name": "Curtis Roundtree",
+      "role": "Driver",
+      "group": "staff"
+    },
+    {
+      "id": "d2c468dc-138a-4624-a3e3-2f2f7e8d60c9",
+      "slug": "roger-patton",
+      "full_name": "Roger Patton",
+      "role": "Driver",
+      "group": "staff"
+    },
+    {
+      "id": "8c9d9556-ee63-40e2-86f1-9bfcab042295",
+      "slug": "robert-collins",
+      "full_name": "Robert Collins",
+      "role": "Driver",
+      "group": "staff"
+    },
+    {
+      "id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+      "slug": "charlie-l-cantrell",
+      "full_name": "Charlie L. Cantrell",
+      "existing": true,
+      "role": "Chairman",
+      "group": "executive"
+    },
+    {
+      "id": "f0830777-1425-4899-9005-05e67c41ec3f",
+      "slug": "blake-sullivan",
+      "full_name": "Blake Sullivan",
+      "existing": true,
+      "role": "Vice Chair",
+      "group": "executive"
+    },
+    {
+      "id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+      "slug": "beverly-olson",
+      "full_name": "Beverly Olson",
+      "existing": true,
+      "role": "Secretary",
+      "group": "executive"
+    },
+    {
+      "id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+      "slug": "susan-collins",
+      "full_name": "Susan Collins",
+      "existing": true,
+      "role": "Treasurer",
+      "group": "executive"
+    },
+    {
+      "id": "6884a46b-09a1-4172-ab29-2e14e8baffb4",
+      "slug": "bill-argo",
+      "full_name": "Bill Argo",
+      "role": "Member-at-Large",
+      "group": "executive"
+    },
+    {
+      "id": "244606a3-c973-4583-8e3b-a4070d33948a",
+      "slug": "alfred-sams",
+      "full_name": "Alfred Sams",
+      "role": "Member-at-Large",
+      "group": "executive"
+    },
+    {
+      "id": "ecb8a797-07be-4416-9b72-7113098b3dca",
+      "slug": "buddy-glawson",
+      "full_name": "Buddy Glawson",
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "c0aeb873-9877-4705-ad39-e3dafe78cee9",
+      "slug": "charlie-griffis",
+      "full_name": "Charlie Griffis",
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "4edcb8da-5ad0-40de-a148-d71d37f60199",
+      "slug": "frank-malloy",
+      "full_name": "Frank Malloy",
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "845be3af-7bff-4677-b73d-30c6b2d93927",
+      "slug": "chris-r-sheridan",
+      "full_name": "Chris R. Sheridan",
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "2a0b36ba-c961-4b18-a6b0-b739eabf17e2",
+      "slug": "louis-frank-tompkins",
+      "full_name": "Louis Frank Tompkins",
+      "existing": true,
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "4dcabc78-f919-451e-aff8-905c40619d1c",
+      "slug": "wimberly-treadwell",
+      "full_name": "Wimberly Treadwell",
+      "role": "Director",
+      "group": "board"
+    },
+    {
+      "id": "37e50528-53ec-48ad-be90-96b71a014382",
+      "slug": "darrell-bridges",
+      "full_name": "Darrell Bridges",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "62411b98-f5c2-41b3-b54f-4d4671093f8b",
+      "slug": "bob-brown",
+      "full_name": "Bob Brown",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "b0d0fa33-2c5c-4128-bc65-7ae64d931a65",
+      "slug": "mark-byrd",
+      "full_name": "Mark Byrd",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "slug": "verda-colvin",
+      "full_name": "Verda Colvin",
+      "existing": true,
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "bf0d6d1b-c1ff-41e2-a041-7658956d37d0",
+      "slug": "cleve-cunningham",
+      "full_name": "Cleve Cunningham",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "4a7f9ed5-23d7-4bf7-8d09-07bcc240a305",
+      "slug": "ashley-copelan",
+      "full_name": "Ashley Copelan",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "198888fd-75ca-43a9-87c5-1f477ee1511f",
+      "slug": "carolyn-crayton",
+      "full_name": "Carolyn Crayton",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "1912a900-5d7d-4984-981f-8db73642e6db",
+      "slug": "david-davis",
+      "full_name": "David Davis",
+      "existing": true,
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "962f08e0-0ed4-41b4-9dbe-3ad52773e5c3",
+      "slug": "hal-greer",
+      "full_name": "Hal Greer",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "c1b868ec-86a2-46b3-b809-ff66373e3e38",
+      "slug": "mike-jenkins",
+      "full_name": "Mike Jenkins",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "221f0eb4-c9c0-4c78-9db9-3a5163461c29",
+      "slug": "tommy-mixon",
+      "full_name": "Tommy Mixon",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "886ec3c8-b4ba-43db-a65f-842608e156af",
+      "slug": "robert-reichert",
+      "full_name": "Robert Reichert",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    },
+    {
+      "id": "efaaad6d-c48e-4716-a4fe-cbbafad8bc27",
+      "slug": "jeff-thompson",
+      "full_name": "Jeff Thompson",
+      "role": "Advisory Board Member",
+      "group": "advisory"
+    }
+  ],
+  "relationships": [
+    [
+      "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "27de30b7-e867-44cd-8c2e-66bd25b7c1a4",
+      "Executive leadership board",
+      "Executive board of",
+      "https://www.rescuemissionga.com/about-us/leadership/"
+    ],
+    [
+      "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "b8d9a11b-f71f-4b84-9da1-6494e0fb0796",
+      "Board of directors",
+      "Board of directors of",
+      "https://www.rescuemissionga.com/about-us/leadership/"
+    ],
+    [
+      "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "c875bb12-e08c-4c6a-8454-065d1ddf8f9f",
+      "Advised by",
+      "Advisory board to",
+      "https://www.rescuemissionga.com/about-us/leadership/"
+    ],
+    [
+      "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "Fall 2026 transitional-home grant supporter",
+      "Fall 2026 transitional-home grant recipient",
+      "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/"
+    ]
+  ],
+  "notes": "37 staff and 25 board/advisory members; 49 new people and 13 reused profiles. Four unnamed vacancies excluded. Malformed/possibly mismatched email fields not imported. Existing images preserved; no nongovernment headshots uploaded. Source: https://www.rescuemissionga.com/about-us/leadership/."
+}

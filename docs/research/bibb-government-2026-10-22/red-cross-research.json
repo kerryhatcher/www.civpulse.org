@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-23",
+  "chapter_id": "a3254474-5a15-4757-9c3a-7478429b2efc",
+  "organizations": {
+    "region": {
+      "id": "76f79ff8-f360-465f-8be9-c37ee1a52da5",
+      "slug": "american-red-cross-georgia-region",
+      "name": "American Red Cross Georgia Region"
+    },
+    "office": {
+      "id": "553582a4-6a7f-4728-9a9c-15bebd5791b6",
+      "slug": "american-red-cross-macon-office",
+      "name": "American Red Cross Macon Office"
+    },
+    "board": {
+      "id": "a34b7148-5870-4059-a893-dd95f800e879",
+      "slug": "american-red-cross-central-midwest-georgia-board",
+      "name": "American Red Cross Central Midwest Georgia Board of Directors"
+    }
+  },
+  "people": [
+    {
+      "id": "6d125c22-3757-4fa7-8e0d-b53bb4f4eb37",
+      "slug": "holly-long",
+      "full_name": "Holly Long",
+      "role": "Executive Director",
+      "group": "chapter",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "2117aa1e-0887-41a9-85ec-17cb484626b9",
+      "slug": "teyona-little",
+      "full_name": "Teyona Little",
+      "role": "Business Operations Coordinator",
+      "group": "chapter",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "4ef020af-112d-4354-8ac5-640964952fb4",
+      "slug": "lakenya-drayton",
+      "full_name": "LaKenya Drayton",
+      "role": "Senior Volunteer Services Specialist",
+      "group": "chapter",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "b95f1002-27b8-45fd-ad9f-d8b80d8ccba5",
+      "slug": "virgil-watkins-jr",
+      "full_name": "Virgil Watkins, Jr.",
+      "role": "Community Disaster Program Manager",
+      "group": "chapter",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "e8577c40-53f6-4d6e-a211-a481a6e2d4be",
+      "slug": "lee-malone-ii",
+      "full_name": "Lee Malone II",
+      "role": "Community Disaster Program Specialist",
+      "group": "chapter",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "89b563cf-b0d3-4e55-a855-d1560221f7f9",
+      "slug": "david-gowan",
+      "full_name": "David Gowan",
+      "existing": true,
+      "role": "FY 2027 Board Chair",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "34a1842c-da01-406a-9aa1-734cf770bccd",
+      "slug": "johnnetta-anderson",
+      "full_name": "Johnnetta Anderson",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "230826bf-0759-482b-a5ef-cc4cecfbdd9c",
+      "slug": "taryl-anderson",
+      "full_name": "Taryl Anderson",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "5de35255-95b6-4418-8a51-84351b53c800",
+      "slug": "lee-gerdes",
+      "full_name": "Lee Gerdes",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "14584e0d-b8ea-4dc8-9a95-801456b1796f",
+      "slug": "christy-keeth",
+      "full_name": "Christy Keeth",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "24c3c3ec-70f2-4f57-b34f-eeb5c73d6ee1",
+      "slug": "john-mckibben",
+      "full_name": "John McKibben",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "85250cfb-a1b1-45ad-972c-8502e6386413",
+      "slug": "harry-patel",
+      "full_name": "Harry Patel",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "c010ac48-b806-4715-906d-a28edddfea15",
+      "slug": "rhonda-smith",
+      "full_name": "Rhonda Smith",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "8519c547-076e-4d8c-bc7a-2c75141489f1",
+      "slug": "debbie-thomason",
+      "full_name": "Debbie Thomason",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "1f0372b5-eaf7-477e-991f-e0ec8605e4ca",
+      "slug": "holly-williams",
+      "full_name": "Holly Williams",
+      "role": "FY 2027 Board Member",
+      "group": "board",
+      "organization_id": "a3254474-5a15-4757-9c3a-7478429b2efc"
+    },
+    {
+      "id": "99585943-8b7e-49cf-8030-397ba73b189f",
+      "slug": "alicia-doherty",
+      "full_name": "Alicia Doherty",
+      "role": "Regional Executive",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    },
+    {
+      "id": "2dd1a2ca-ad77-4829-8f2c-9974a511e289",
+      "slug": "garrett-reid",
+      "full_name": "Garrett Reid",
+      "role": "Regional Donor Services Executive",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    },
+    {
+      "id": "7c120708-0d08-4cff-934a-06d505fa5e33",
+      "slug": "jill-deskins",
+      "full_name": "Jill Deskins",
+      "role": "Regional Volunteer Services Officer",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    },
+    {
+      "id": "f22766d5-3fb9-4436-a31b-9b943f4ae315",
+      "slug": "carla-dillard-homer",
+      "full_name": "Carla Dillard Homer",
+      "role": "Chief Operating Officer",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    },
+    {
+      "id": "48637d86-f846-41cf-87c9-34aeff461480",
+      "slug": "adelaide-bush-kirk",
+      "full_name": "Adelaide Bush Kirk",
+      "role": "Regional Disaster Officer",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    },
+    {
+      "id": "d45a2f20-e33d-45c2-b40e-56edd85b7525",
+      "slug": "luke-lindsey",
+      "full_name": "Luke Lindsey",
+      "role": "Regional Chief Development Officer",
+      "group": "region",
+      "organization_id": "76f79ff8-f360-465f-8be9-c37ee1a52da5"
+    }
+  ],
+  "relationships": [
+    [
+      "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "76f79ff8-f360-465f-8be9-c37ee1a52da5",
+      "Chapter within",
+      "Includes chapter",
+      "https://www.redcross.org/local/georgia/about-us/locations.html"
+    ],
+    [
+      "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "553582a4-6a7f-4728-9a9c-15bebd5791b6",
+      "Operates local office",
+      "Office of",
+      "https://www.redcross.org/local/georgia/about-us/locations/central-midwest-georgia.html"
+    ],
+    [
+      "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "a34b7148-5870-4059-a893-dd95f800e879",
+      "Chapter board",
+      "Board of",
+      "https://www.redcross.org/local/georgia/about-us/locations/central-midwest-georgia.html"
+    ],
+    [
+      "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "7d948f1e-3eb9-4033-b42b-67b79f02c83c",
+      "Supports",
+      "Supported by",
+      "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/"
+    ],
+    [
+      "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "2026 home-fire assistance grant supporter",
+      "2026 home-fire assistance grant recipient",
+      "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-345000-in-grants-to-nonprofits-serving-central-georgia/"
+    ]
+  ],
+  "notes": "15 chapter staff/board and 6 region leaders. FY 2027 board label preserved. David Gowan profile reused. Office hours omitted due conflicting official chapter and office pages. No nongovernment headshots uploaded."
+}

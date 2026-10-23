@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-23",
+  "organization_id": "c8390ac6-2c41-4489-b73d-691e65cd8870",
+  "housing": {
+    "id": "d4d90fba-8283-430a-9e93-92b34479b045",
+    "slug": "salvation-army-central-georgia-housing-homeless-services",
+    "name": "Salvation Army of Central Georgia Housing and Homeless Services"
+  },
+  "people": [
+    {
+      "id": "2a0736db-7a10-46b3-956d-95acbeef39cc",
+      "slug": "tim-blevins",
+      "full_name": "Tim Blevins",
+      "role": "Captain / Central Georgia Corps Officer",
+      "source": "https://disaster.salvationarmyusa.org/articles/2026/03/11/the-salvation-army-serves-georgia-state-defense-force-during-training-exercise"
+    },
+    {
+      "id": "e385934c-f6c9-4198-a8df-43da35035a98",
+      "slug": "paula-blevins",
+      "full_name": "Paula Blevins",
+      "role": "Captain / Central Georgia Corps Officer",
+      "source": "https://disaster.salvationarmyusa.org/articles/2026/03/11/the-salvation-army-serves-georgia-state-defense-force-during-training-exercise"
+    },
+    {
+      "id": "31664e1e-0933-4d65-8644-9543ed378686",
+      "slug": "carrie-owen",
+      "full_name": "Carrie Owen",
+      "role": "Development Director",
+      "source": "https://www.salvationarmyusa.org/usa-southern-territory/georgia/central-georgia/red-kettle-sponsorship-program/"
+    },
+    {
+      "id": "bf56f347-28ef-425d-8d24-1e8cdc646908",
+      "slug": "latresa-white",
+      "full_name": "Latresa White",
+      "role": "Social Service Director (partner directory)",
+      "source": "https://www.unitedwaycg.org/ProgramPartners"
+    }
+  ],
+  "relationships": [
+    [
+      "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "d4d90fba-8283-430a-9e93-92b34479b045",
+      "Operates",
+      "Program of",
+      "https://www.salvationarmyusa.org/usa-southern-territory/georgia/central-georgia/homelessness/"
+    ],
+    [
+      "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "7d948f1e-3eb9-4033-b42b-67b79f02c83c",
+      "Supports",
+      "Supported by",
+      "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/"
+    ],
+    [
+      "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+      "Grantee partner listed by",
+      "Lists as grantee partner",
+      "https://www.unitedwaycg.org/ProgramPartners"
+    ],
+    [
+      "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "37020420-eb21-4c44-a267-b0aec47db269",
+      "Community-development partner (2026 recognition)",
+      "Community-development partner (2026 recognition)",
+      "https://www.maconbibb.us/communitydevelopmentweek2026/"
+    ]
+  ],
+  "notes": "Regional structure confirmed by official discovery page. Blevins officers confirmed in March 2026 official report; Carrie Owen on current sponsorship page; Latresa White partner directory attribution explicit. Local housing figures separated from national statistics. Current advisory board not established. No nongovernment profile photos added."
+}

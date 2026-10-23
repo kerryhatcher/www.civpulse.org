@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-23",
+  "organization_id": "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+  "board": {
+    "id": "51e2c996-5ec7-4035-a337-1da56753b8e2",
+    "slug": "loaves-and-fishes-ministry-of-macon-board-of-directors",
+    "name": "Loaves and Fishes Ministry of Macon Board of Directors"
+  },
+  "center": {
+    "id": "2922452d-b189-4c5e-b887-615419d4ae4c",
+    "slug": "jack-steppe-day-life-center",
+    "name": "Jack Steppe Day Life Center"
+  },
+  "people": [
+    {
+      "id": "745808f0-5930-4ea8-9d3c-03cce0a2aa60",
+      "slug": "janet-wright",
+      "full_name": "Janet Wright",
+      "role": "Executive Director"
+    },
+    {
+      "id": "8c08f304-e7a7-438d-8516-7d1c4ae23269",
+      "slug": "mekayla-murphy",
+      "full_name": "Mekayla Murphy",
+      "role": "Coordinator of Client Services"
+    },
+    {
+      "id": "3178dbc6-c9c5-40a9-9dff-c7f391da733f",
+      "slug": "eva-balkcom",
+      "full_name": "Eva Balkcom",
+      "role": "Food Pantry Coordinator"
+    },
+    {
+      "id": "47b67810-1acb-4e25-baa8-9ea7c2acb537",
+      "slug": "shelia-luby",
+      "full_name": "Shelia Luby",
+      "role": "Food Pantry Support"
+    },
+    {
+      "id": "70e724b4-a20d-4fbf-abd9-3e5383eb5bd8",
+      "slug": "joel-grist",
+      "full_name": "Joel Grist",
+      "role": "Board President"
+    },
+    {
+      "id": "948f9a2a-003e-4423-8628-55c763716fac",
+      "slug": "joy-king",
+      "full_name": "Joy King",
+      "role": "Board Vice President"
+    },
+    {
+      "id": "67d29fde-1394-41d7-a545-1642b5539f05",
+      "slug": "debra-singleton",
+      "full_name": "Debra Singleton",
+      "role": "Board Secretary"
+    },
+    {
+      "id": "b5fef66d-db23-402d-920c-464ee05f1fd5",
+      "slug": "chloe-napier",
+      "full_name": "Chloe Napier",
+      "role": "Past Board President"
+    },
+    {
+      "id": "4669e433-4990-4c92-90e1-264f6d08b684",
+      "slug": "deborah-macmillan",
+      "full_name": "Deborah MacMillan",
+      "role": "Board Member"
+    },
+    {
+      "id": "ebc839a6-0213-45a3-a224-4151643314b6",
+      "slug": "sam-mcduffie",
+      "full_name": "Sam McDuffie",
+      "role": "Board Member"
+    },
+    {
+      "id": "4e6e6546-bc64-409f-9a0f-0ce7d58be5cf",
+      "slug": "randy-stephens",
+      "full_name": "Randy Stephens",
+      "role": "Board Member"
+    },
+    {
+      "id": "02277c6d-1066-411e-9dba-acb5e3115cb3",
+      "slug": "luke-eady",
+      "full_name": "Luke Eady",
+      "role": "Board Member"
+    },
+    {
+      "id": "1261f3af-db56-4fb7-a5a2-7d08cd9363a9",
+      "slug": "ralph-hawkins",
+      "full_name": "Ralph Hawkins",
+      "role": "Board Member"
+    },
+    {
+      "id": "51c6312d-1ed0-4046-a388-2011f52b98ef",
+      "slug": "harriet-steele",
+      "full_name": "Harriet Steele",
+      "role": "Board Member"
+    },
+    {
+      "id": "05860a6c-3b55-4ec8-90f4-db7de23dc332",
+      "slug": "nidia-svare",
+      "full_name": "Nidia Svare",
+      "role": "Board Member"
+    },
+    {
+      "id": "a1f97743-e213-46bd-8b92-ce7936bf0dd9",
+      "slug": "julia-meredith",
+      "full_name": "Julia Meredith",
+      "role": "Board Member"
+    },
+    {
+      "id": "9657d5b8-b5d6-4abf-87f6-f655e94d0933",
+      "slug": "ronnie-mays",
+      "full_name": "Ronnie Mays",
+      "role": "Board Member"
+    },
+    {
+      "id": "4e860448-c769-4af7-8c44-7666a34ca43e",
+      "slug": "george-mccommon",
+      "full_name": "George McCommon",
+      "role": "Board Member"
+    },
+    {
+      "id": "9cef2ea7-18d8-4c48-b282-11c26d3ece9f",
+      "slug": "kay-hall",
+      "full_name": "Kay Hall",
+      "role": "Board Member"
+    },
+    {
+      "id": "b8656cc6-e077-4c79-ab52-8cd31e7b31e0",
+      "slug": "bob-meloche",
+      "full_name": "Bob Meloche",
+      "role": "Board Member"
+    },
+    {
+      "id": "9f0e68a8-295d-400f-b68d-e8f1cf77c4d3",
+      "slug": "janet-lawson",
+      "full_name": "Janet Lawson",
+      "role": "Board Member"
+    },
+    {
+      "id": "1d6e5f19-33d8-461e-80b9-4a4f43701b49",
+      "slug": "vicki-williams",
+      "full_name": "Vicki Williams",
+      "role": "Board Member"
+    },
+    {
+      "id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+      "slug": "harold-young",
+      "full_name": "Harold Young",
+      "existing": true,
+      "role": "Board Member"
+    }
+  ],
+  "relationships": [
+    [
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "51e2c996-5ec7-4035-a337-1da56753b8e2",
+      "Governed by",
+      "Governing board of",
+      "https://www.loavesandfishesministry.org/about-us/"
+    ],
+    [
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "2922452d-b189-4c5e-b887-615419d4ae4c",
+      "Operates",
+      "Operated by",
+      "https://www.loavesandfishesministry.org/about-us/"
+    ],
+    [
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "7d948f1e-3eb9-4033-b42b-67b79f02c83c",
+      "Supports",
+      "Supported by",
+      "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/"
+    ],
+    [
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+      "Grant supporter listed for 2022/2023",
+      "Grant recipient listed for 2022/2023",
+      "https://www.loavesandfishesministry.org/donors/"
+    ],
+    [
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "Grant supporter listed for 2022/2023",
+      "Grant recipient listed for 2022/2023",
+      "https://www.loavesandfishesministry.org/donors/"
+    ]
+  ],
+  "notes": "22 new people; existing Harold Young profile reused with corroborating NAACP gala biography linking Tubman director to Loaves board. Published roster is undated. Historical grant relationships dated 2022/2023. No new profile photos.",
+  "identity_source": "https://fliphtml5.com/nqchk/pkrk/NAACP_Henry_County_FF_Gala_2024/29/"
+}

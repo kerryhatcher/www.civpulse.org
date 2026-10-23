@@ -1,0 +1,10 @@
+{
+  "build": "6c5923ef-d1a9-4e2d-9c66-75509c19f048",
+  "version": "460d02a4-7406-4204-8060-1be075f9d140",
+  "new_organizations": 1,
+  "new_people": 5,
+  "updated_people": 3,
+  "relationships": 4,
+  "pages": 1075,
+  "checks": "Astro 0 errors and warnings; production migration validation and build passed. 8 staff, retained CBF affiliations and 8 directional organization links passed live. Browser church and reused Cameron profile verified; no console errors."
+}

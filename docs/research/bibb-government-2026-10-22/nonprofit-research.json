@@ -1,0 +1,4019 @@
+{
+  "verified_at": "2026-10-23T04:38:20.463Z",
+  "scope": "Nonprofits and faith-based civic organizations serving Macon-Bibb or Middle Georgia, explicitly referenced in the county outside-agency directory, 2026 grants and partnerships. A government reference is not an endorsement or proof of a county appointment. Named programs are identified as programs rather than separate legal entities. Corporate partners and public agencies are excluded from nonprofit classification. Leadership is added only where independently verified; no new portraits are taken from nonprofit websites. National educational resources directly linked by the county directory are also included. National educational resources directly linked by the county directory are also included.",
+  "sources": {
+    "directory": "https://www.maconbibb.us/outsideagencies/",
+    "fall": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+    "mvp": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+    "development": "https://www.maconbibb.us/communitydevelopmentweek2026/",
+    "brookdale": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/"
+  },
+  "organizations": [
+    {
+      "name": "Macon-Bibb Citizen Advocacy",
+      "slug": "macon-bibb-citizen-advocacy",
+      "summary": "Independent community organization connecting people with developmental disabilities and unpaid citizen advocates in enduring personal relationships.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.maconbibbcitizenadvocacy.org/",
+      "saved": {
+        "id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+        "slug": "macon-bibb-citizen-advocacy",
+        "name": "Macon-Bibb Citizen Advocacy"
+      }
+    },
+    {
+      "name": "Middle Georgia Community Food Bank",
+      "slug": "middle-georgia-community-food-bank",
+      "summary": "Macon-based food bank distributing food through community agencies across 24 Middle Georgia counties.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://mgcfb.org/",
+      "saved": {
+        "id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+        "slug": "middle-georgia-community-food-bank",
+        "name": "Middle Georgia Community Food Bank"
+      }
+    },
+    {
+      "name": "Macon-Bibb County Economic Opportunity Council",
+      "slug": "macon-bibb-county-economic-opportunity-council",
+      "summary": "Community action organization addressing poverty through early childhood education, energy assistance, transportation and family support. Its 15-member governing board includes public officials and community representatives.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.maconbibbeoc.com/",
+      "saved": {
+        "id": "dbc7610a-8155-4412-93de-87eb72630943",
+        "slug": "macon-bibb-county-economic-opportunity-council",
+        "name": "Macon-Bibb County Economic Opportunity Council"
+      }
+    },
+    {
+      "name": "Keep Macon-Bibb Beautiful",
+      "slug": "keep-macon-bibb-beautiful",
+      "summary": "Community beautification organization supporting litter prevention, recycling, education and volunteer projects; listed by county government as the Keep Macon-Bibb Beautiful Commission.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://keepmaconbibbbeautiful.org/",
+      "saved": {
+        "id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+        "slug": "keep-macon-bibb-beautiful",
+        "name": "Keep Macon-Bibb Beautiful"
+      }
+    },
+    {
+      "name": "Macon Arts Alliance",
+      "slug": "macon-arts-alliance",
+      "summary": "Regional arts organization and the designated arts agency for Macon-Bibb County, supporting artists, arts organizations, public art and the Mill Hill arts district.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.maconartsalliance.org/",
+      "saved": {
+        "id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+        "slug": "macon-arts-alliance",
+        "name": "Macon Arts Alliance"
+      }
+    },
+    {
+      "name": "Macon Regional Crimestoppers",
+      "slug": "macon-regional-crimestoppers",
+      "summary": "Regional community crime-prevention organization providing an anonymous tip and reward program in cooperation with law enforcement.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://crimestop.us/",
+      "saved": {
+        "id": "cadfb929-7335-4474-97b8-0fb6337ea429",
+        "slug": "macon-regional-crimestoppers",
+        "name": "Macon Regional Crimestoppers"
+      }
+    },
+    {
+      "name": "Museum of Arts and Sciences",
+      "slug": "museum-of-arts-and-sciences",
+      "summary": "Macon museum providing arts and sciences exhibitions, educational programs, a planetarium and natural-history experiences.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://masmacon.org/",
+      "saved": {
+        "id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+        "slug": "museum-of-arts-and-sciences",
+        "name": "Museum of Arts and Sciences"
+      }
+    },
+    {
+      "name": "Museum of Aviation Foundation",
+      "slug": "museum-of-aviation-foundation",
+      "summary": "Private charitable foundation supporting aviation preservation and STEM education at the Museum of Aviation near Robins Air Force Base. The foundation states it is not part of the Department of Defense and has no governmental status.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://museumofaviation.org/",
+      "saved": {
+        "id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+        "slug": "museum-of-aviation-foundation",
+        "name": "Museum of Aviation Foundation"
+      }
+    },
+    {
+      "name": "Crisis Line & Safe House of Central Georgia",
+      "slug": "crisis-line-safe-house-of-central-georgia",
+      "summary": "Nonprofit providing crisis intervention, shelter, counseling, legal advocacy and sexual assault services to survivors and their children.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://cl-sh.org/",
+      "saved": {
+        "id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+        "slug": "crisis-line-safe-house-of-central-georgia",
+        "name": "Crisis Line & Safe House of Central Georgia"
+      }
+    },
+    {
+      "name": "Tubman African American Museum",
+      "slug": "tubman-african-american-museum",
+      "summary": "Macon cultural institution sharing African American art, history and culture through exhibitions, education and civic engagement.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://tubmanmuseum.com/",
+      "saved": {
+        "id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+        "slug": "tubman-african-american-museum",
+        "name": "Tubman African American Museum"
+      }
+    },
+    {
+      "name": "International Cherry Blossom Festival",
+      "slug": "international-cherry-blossom-festival",
+      "summary": "Macon community festival organization presenting the annual Cherry Blossom Festival and related cultural events.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://cherryblossom.com/",
+      "saved": {
+        "id": "603aade1-ff4e-452c-b02c-1e580c999667",
+        "slug": "international-cherry-blossom-festival",
+        "name": "International Cherry Blossom Festival"
+      }
+    },
+    {
+      "name": "Douglass Theatre",
+      "slug": "douglass-theatre",
+      "summary": "Historic Macon cultural institution presenting music, theater, film, arts education and community programs, with a focus on African American heritage.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.douglasstheatre.org/",
+      "saved": {
+        "id": "cd3361bc-3559-4baa-996c-e1c5544036cf",
+        "slug": "douglass-theatre",
+        "name": "Douglass Theatre"
+      }
+    },
+    {
+      "name": "Visit Macon",
+      "slug": "visit-macon",
+      "summary": "Macon-Bibb destination marketing organization, also identified in the county directory as the Macon-Bibb Visitors Bureau.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://visitmacon.org/",
+      "saved": {
+        "id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+        "slug": "visit-macon",
+        "name": "Visit Macon"
+      }
+    },
+    {
+      "name": "Greater Macon Chamber of Commerce",
+      "slug": "greater-macon-chamber-of-commerce",
+      "summary": "Business membership organization supporting economic prosperity, workforce development, civic leadership and business advocacy in Macon-Bibb County.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://maconchamber.com/",
+      "saved": {
+        "id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+        "slug": "greater-macon-chamber-of-commerce",
+        "name": "Greater Macon Chamber of Commerce"
+      }
+    },
+    {
+      "name": "Rebuilding Macon",
+      "slug": "rebuilding-macon",
+      "summary": "Nonprofit repairing homes of low-income homeowners, particularly elderly and disabled residents, to support safe and independent living.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.rebuildingmacon.org/",
+      "saved": {
+        "id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+        "slug": "rebuilding-macon",
+        "name": "Rebuilding Macon"
+      }
+    },
+    {
+      "name": "Mercer University",
+      "slug": "mercer-university",
+      "summary": "Private nonprofit university based in Macon. County government lists Mercer in its agency directory and identifies it as a Brookdale supporter and partner in the planned Unionville free clinic.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.mercer.edu/",
+      "saved": {
+        "id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+        "slug": "mercer-university",
+        "name": "Mercer University"
+      }
+    },
+    {
+      "name": "Wesleyan College",
+      "slug": "wesleyan-college",
+      "summary": "Private nonprofit college in Macon, included in the county government outside-agencies directory.",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "website_url": "https://www.wesleyancollege.edu/",
+      "saved": {
+        "id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+        "slug": "wesleyan-college",
+        "name": "Wesleyan College"
+      }
+    },
+    {
+      "name": "Best Buddies in Georgia",
+      "slug": "best-buddies-in-georgia",
+      "summary": "Regional program supporting friendships and inclusion for people with intellectual and developmental disabilities; the fall 2026 grant supports school chapters in Bibb, Baldwin and Monroe counties.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.bestbuddies.org/georgia/",
+      "saved": {
+        "id": "070e700d-24ce-41ef-b187-f0a930ccb96a",
+        "slug": "best-buddies-in-georgia",
+        "name": "Best Buddies in Georgia"
+      }
+    },
+    {
+      "name": "Bibb Mt. Zion Baptist Church",
+      "slug": "bibb-mt-zion-baptist-church",
+      "summary": "Macon faith-based organization whose Middle Georgia Mentorship Alliance received a fall 2026 community-foundation grant to coordinate youth mentoring.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "804f3b28-5af9-48f3-898d-6df5be0568a8",
+        "slug": "bibb-mt-zion-baptist-church",
+        "name": "Bibb Mt. Zion Baptist Church"
+      }
+    },
+    {
+      "name": "Big Brothers Big Sisters of the Heart of Georgia",
+      "slug": "big-brothers-big-sisters-of-the-heart-of-georgia",
+      "summary": "Youth mentoring nonprofit serving Central Georgia; its Big Futures program connects students with education and career opportunities.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://bbbsga.org/",
+      "saved": {
+        "id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+        "slug": "big-brothers-big-sisters-of-the-heart-of-georgia",
+        "name": "Big Brothers Big Sisters of the Heart of Georgia"
+      }
+    },
+    {
+      "name": "Central Georgia CASA",
+      "slug": "central-georgia-casa",
+      "summary": "Nonprofit recruiting and supporting court-appointed volunteer advocates for children in foster care in the Macon Judicial Circuit.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.cgcasa.org/",
+      "saved": {
+        "id": "9bede253-4a26-49ca-935e-6d252253ada3",
+        "slug": "central-georgia-casa",
+        "name": "Central Georgia CASA"
+      }
+    },
+    {
+      "name": "Central Georgia Council, Scouting America",
+      "slug": "central-georgia-council-scouting-america",
+      "summary": "Local Scouting council providing youth leadership and mentoring. County grant announcements retain its former Boy Scouts of America name and council number 096.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.centralgeorgiacouncil.org/",
+      "saved": {
+        "id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+        "slug": "central-georgia-council-scouting-america",
+        "name": "Central Georgia Council, Scouting America"
+      }
+    },
+    {
+      "name": "Coach John M. Peacock Foundation",
+      "slug": "coach-john-m-peacock-foundation",
+      "summary": "Regional charitable organization whose fall 2026 grant supports an accessible public alleyway, seating, art and pollinator planting in downtown Eastman.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "24ffb3a4-206f-45b3-b0ff-88a8f7d675a4",
+        "slug": "coach-john-m-peacock-foundation",
+        "name": "Coach John M. Peacock Foundation"
+      }
+    },
+    {
+      "name": "Family Advancement Ministries",
+      "slug": "family-advancement-ministries",
+      "summary": "Community ministry providing case management, job readiness and assistance with essential family needs; county government identifies it as a CDBG partner.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.familyadvancementministries.org/",
+      "saved": {
+        "id": "fb015ca5-240e-4ff9-b421-276ee93d386a",
+        "slug": "family-advancement-ministries",
+        "name": "Family Advancement Ministries"
+      }
+    },
+    {
+      "name": "Girl Scouts of Historic Georgia",
+      "slug": "girl-scouts-of-historic-georgia",
+      "summary": "Regional Girl Scout council whose outreach program brings leadership, STEM and financial-literacy activities to girls in Bibb County.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.gshg.org/",
+      "saved": {
+        "id": "df7291fd-50e7-4d22-b167-7d870718bfa6",
+        "slug": "girl-scouts-of-historic-georgia",
+        "name": "Girl Scouts of Historic Georgia"
+      }
+    },
+    {
+      "name": "I Am Kali",
+      "slug": "i-am-kali",
+      "summary": "Youth nonprofit whose fall 2026 grant supports leadership workshops, mentorship, entrepreneurship and wellness for girls ages 10–13.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "00a9eeeb-d20f-42cf-bdc0-f54b78391e13",
+        "slug": "i-am-kali",
+        "name": "I Am Kali"
+      }
+    },
+    {
+      "name": "Joining Our Youth",
+      "slug": "joining-our-youth",
+      "summary": "Community nonprofit providing mentoring, tutoring, leadership development and life skills to children and teens in Macon’s Davis Homes community.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "12ca0e75-3088-436b-93e4-af6b9e07977f",
+        "slug": "joining-our-youth",
+        "name": "Joining Our Youth"
+      }
+    },
+    {
+      "name": "Little Disciples Educational Services",
+      "slug": "little-disciples-educational-services",
+      "summary": "Community nonprofit whose Bridge the Gap Success Program supplies students with school materials, shoes, hygiene products and sensory-friendly items.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "71e04e45-2ae8-45bd-a2ee-cdbaff8c8031",
+        "slug": "little-disciples-educational-services",
+        "name": "Little Disciples Educational Services"
+      }
+    },
+    {
+      "name": "Macon Hope — First Tee Middle Georgia",
+      "slug": "macon-hope-first-tee-middle-georgia",
+      "summary": "Youth nonprofit operating First Tee Middle Georgia, combining golf instruction with life skills and leadership development.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://firstteemiddlegeorgia.org/",
+      "saved": {
+        "id": "8a60ba0c-d5bf-4e6b-a2a0-8d8839b0a73d",
+        "slug": "macon-hope-first-tee-middle-georgia",
+        "name": "Macon Hope — First Tee Middle Georgia"
+      }
+    },
+    {
+      "name": "Meals on Wheels of Middle Georgia",
+      "slug": "meals-on-wheels-of-middle-georgia",
+      "summary": "Nonprofit delivering nutritious meals and wellness checks to homebound seniors.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.mealsonwheelsmidga.com/",
+      "saved": {
+        "id": "955f8698-dc88-4946-aa79-7496ddb2c332",
+        "slug": "meals-on-wheels-of-middle-georgia",
+        "name": "Meals on Wheels of Middle Georgia"
+      }
+    },
+    {
+      "name": "Mother’s Nest",
+      "slug": "mother-s-nest",
+      "summary": "Community nonprofit providing childbirth education, mental health support, nutrition information and prenatal resources for vulnerable pregnant women.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "2a97254f-55eb-4fca-a0d5-978f986a4678",
+        "slug": "mother-s-nest",
+        "name": "Mother’s Nest"
+      }
+    },
+    {
+      "name": "Mt. Zion Baptist Church — Upson County",
+      "slug": "mt-zion-baptist-church-upson-county",
+      "summary": "Regional faith-based grant recipient developing a rural food pantry and community center with food distribution, computer access and career-readiness activities. This is distinct from Bibb Mt. Zion Baptist Church.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "7e7afc77-75be-43b5-905c-f992b98e4dc3",
+        "slug": "mt-zion-baptist-church-upson-county",
+        "name": "Mt. Zion Baptist Church — Upson County"
+      }
+    },
+    {
+      "name": "Rescue Mission of Middle Georgia",
+      "slug": "rescue-mission-of-middle-georgia",
+      "summary": "Faith-based life recovery nonprofit serving people facing addiction, homelessness, violence and other challenges. Its fall 2026 grant supports a transitional home for men completing its recovery program.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.rescuemissionga.com/",
+      "saved": {
+        "id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+        "slug": "rescue-mission-of-middle-georgia",
+        "name": "Rescue Mission of Middle Georgia"
+      }
+    },
+    {
+      "name": "Sleep in Heavenly Peace — Macon Chapter",
+      "slug": "sleep-in-heavenly-peace-macon-chapter",
+      "summary": "Local chapter of a charitable organization mobilizing volunteers to build and deliver beds to children who do not have one.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "saved": {
+        "id": "983e3e0b-88fe-4272-876c-b3d23f7f9ae5",
+        "slug": "sleep-in-heavenly-peace-macon-chapter",
+        "name": "Sleep in Heavenly Peace — Macon Chapter"
+      }
+    },
+    {
+      "name": "The Arc Macon",
+      "slug": "the-arc-macon",
+      "summary": "Disability-services and advocacy nonprofit whose fall 2026 grant supports families navigating disability services, Medicaid waivers and special education.",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "website_url": "https://www.thearcmacon.org/",
+      "saved": {
+        "id": "f9e08bf8-aaa8-4f37-9c10-f5181c1a7502",
+        "slug": "the-arc-macon",
+        "name": "The Arc Macon"
+      }
+    },
+    {
+      "name": "100 Black Men of Macon-Middle Georgia",
+      "slug": "100-black-men-of-macon-middle-georgia",
+      "summary": "Community mentoring organization supporting youth education, literacy, life skills and exposure to new opportunities; a 2026 Macon Violence Prevention grant recipient.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+        "slug": "100-black-men-of-macon-middle-georgia",
+        "name": "100 Black Men of Macon-Middle Georgia"
+      }
+    },
+    {
+      "name": "Lead With Literacy",
+      "slug": "lead-with-literacy",
+      "summary": "Community literacy organization named among the 2026 Macon Violence Prevention grant recipients.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "79cc029e-abe0-40c0-8460-c020098fd7e0",
+        "slug": "lead-with-literacy",
+        "name": "Lead With Literacy"
+      }
+    },
+    {
+      "name": "Men About Change",
+      "slug": "men-about-change",
+      "summary": "Youth mentoring nonprofit supporting young men’s academic achievement, emotional development and self-esteem; a 2026 MVP grant recipient.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "website_url": "https://www.menaboutchange.org/",
+      "saved": {
+        "id": "ae4f2331-7872-43fa-99e6-e9883c941b43",
+        "slug": "men-about-change",
+        "name": "Men About Change"
+      }
+    },
+    {
+      "name": "Next Level Community Development Center",
+      "slug": "next-level-community-development-center",
+      "summary": "Community organization named among the 2026 Macon Violence Prevention grant recipients supporting local children and families.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "d11b2901-2486-4fd0-925f-d60d10ec3145",
+        "slug": "next-level-community-development-center",
+        "name": "Next Level Community Development Center"
+      }
+    },
+    {
+      "name": "Appleton Episcopal Ministries",
+      "slug": "appleton-episcopal-ministries",
+      "summary": "Faith-based community ministry named among the 2026 Macon Violence Prevention grant recipients.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "db4090d6-4d30-46ee-9c55-fcb44b1e6d35",
+        "slug": "appleton-episcopal-ministries",
+        "name": "Appleton Episcopal Ministries"
+      }
+    },
+    {
+      "name": "Campus Clubs",
+      "slug": "campus-clubs",
+      "summary": "Macon youth ministry providing academic support, life skills, recreation and summer programming; a 2026 MVP grant recipient.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "website_url": "https://www.campusclubsmacon.org/",
+      "saved": {
+        "id": "b6c9d380-4743-47e3-bc1f-45cff42c7fbc",
+        "slug": "campus-clubs",
+        "name": "Campus Clubs"
+      }
+    },
+    {
+      "name": "Diamonds On Our Mind Foundation",
+      "slug": "diamonds-on-our-mind-foundation",
+      "summary": "Community foundation named among the 2026 Macon Violence Prevention grant recipients supporting local youth and families.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "755d131e-f94c-433f-bc0e-2d3a745897ea",
+        "slug": "diamonds-on-our-mind-foundation",
+        "name": "Diamonds On Our Mind Foundation"
+      }
+    },
+    {
+      "name": "Epsilon Beta Lambda Foundation",
+      "slug": "epsilon-beta-lambda-foundation",
+      "summary": "Community charitable organization named among the 2026 Macon Violence Prevention grant recipients.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "a9efd622-f398-418c-a0b3-30727d89ef9c",
+        "slug": "epsilon-beta-lambda-foundation",
+        "name": "Epsilon Beta Lambda Foundation"
+      }
+    },
+    {
+      "name": "Family Counseling Center of Central Georgia",
+      "slug": "family-counseling-center-of-central-georgia",
+      "summary": "Private nonprofit providing affordable mental health counseling and family support; a county community-development partner and 2026 MVP grant recipient.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "website_url": "https://www.fcccg.org/",
+      "saved": {
+        "id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+        "slug": "family-counseling-center-of-central-georgia",
+        "name": "Family Counseling Center of Central Georgia"
+      }
+    },
+    {
+      "name": "Girls Dig Deeper Initiative",
+      "slug": "girls-dig-deeper-initiative",
+      "summary": "Youth nonprofit providing learning experiences, mentoring and personal development for teenage girls; a 2026 MVP grant recipient.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+        "slug": "girls-dig-deeper-initiative",
+        "name": "Girls Dig Deeper Initiative"
+      }
+    },
+    {
+      "name": "Living Bread Restoration Outreach",
+      "slug": "living-bread-restoration-outreach",
+      "summary": "Community outreach organization named among the 2026 Macon Violence Prevention grant recipients.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "saved": {
+        "id": "72b01618-5bbb-4a62-a99e-082efd520edb",
+        "slug": "living-bread-restoration-outreach",
+        "name": "Living Bread Restoration Outreach"
+      }
+    },
+    {
+      "name": "Pace Center for Girls — Macon",
+      "slug": "pace-center-for-girls-macon",
+      "summary": "Local girls’ support program of Pace Center for Girls, named among the 2026 Macon Violence Prevention grant recipients.",
+      "government_source": "https://www.maconbibb.us/mayor-community-foundation-announce-4th-round-of-mvp-grants/",
+      "website_url": "https://www.pacecenter.org/",
+      "saved": {
+        "id": "b632c214-b6b6-41ed-a2c1-b4f14cda949c",
+        "slug": "pace-center-for-girls-macon",
+        "name": "Pace Center for Girls — Macon"
+      }
+    },
+    {
+      "name": "HomeFirst Housing Resource Services",
+      "slug": "homefirst-housing-resource-services",
+      "summary": "HUD-approved housing counseling organization providing homebuyer education, financial literacy, pre-purchase counseling and foreclosure prevention.",
+      "government_source": "https://www.maconbibb.us/communitydevelopmentweek2026/",
+      "saved": {
+        "id": "2838b5a6-b504-4296-aecd-9ff2be18b930",
+        "slug": "homefirst-housing-resource-services",
+        "name": "HomeFirst Housing Resource Services"
+      }
+    },
+    {
+      "name": "The Mentors Project of Bibb County",
+      "slug": "the-mentors-project-of-bibb-county",
+      "summary": "Youth mentoring organization listed among county community-development partners and Brookdale Resource Center supporters.",
+      "government_source": "https://www.maconbibb.us/communitydevelopmentweek2026/",
+      "saved": {
+        "id": "e131019f-badc-473f-bde8-a85715431fa6",
+        "slug": "the-mentors-project-of-bibb-county",
+        "name": "The Mentors Project of Bibb County"
+      }
+    },
+    {
+      "name": "River Edge Foundation",
+      "slug": "river-edge-foundation",
+      "summary": "Georgia 501(c)(3) established by River Edge to develop affordable housing and provide supportive services for people experiencing homelessness and disability. Distinct from the public River Edge Behavioral Health community services board.",
+      "government_source": "https://www.maconbibb.us/communitydevelopmentweek2026/",
+      "website_url": "https://river-edge.org/",
+      "saved": {
+        "id": "5fa13bbd-d3ef-4627-bdaa-a862991c075c",
+        "slug": "river-edge-foundation",
+        "name": "River Edge Foundation"
+      }
+    },
+    {
+      "name": "Community Partnership — Bibb County Family Connection",
+      "slug": "community-partnership-bibb-county-family-connection",
+      "summary": "Macon-Bibb 501(c)(3) coordinating community partnerships as part of the Georgia Family Connection network; recognized by county government for supporting Brookdale.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "website_url": "https://bibbcommunitypartnership.org/",
+      "saved": {
+        "id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+        "slug": "community-partnership-bibb-county-family-connection",
+        "name": "Community Partnership — Bibb County Family Connection"
+      }
+    },
+    {
+      "name": "Macon Periods Easier",
+      "slug": "macon-periods-easier",
+      "summary": "Nonprofit addressing period poverty and menstrual-health education; county government identifies it as a Brookdale supporter and a partner in making period products available in county restrooms.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "saved": {
+        "id": "07d79079-9a9e-4110-8e32-e0093168c480",
+        "slug": "macon-periods-easier",
+        "name": "Macon Periods Easier"
+      }
+    },
+    {
+      "name": "Choosing a Quality Life",
+      "slug": "choosing-a-quality-life",
+      "summary": "Community nonprofit supporting accessible mental-health and wellness services; county government identifies it as a Brookdale Resource Center supporter.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "saved": {
+        "id": "afcd84f0-cc82-4df6-9493-78fb8008fe95",
+        "slug": "choosing-a-quality-life",
+        "name": "Choosing a Quality Life"
+      }
+    },
+    {
+      "name": "American Red Cross — Central Midwest Georgia",
+      "slug": "american-red-cross-central-midwest-georgia",
+      "summary": "Regional American Red Cross chapter supporting disaster preparedness, emergency response and services to military families; recognized by county government as a Brookdale supporter.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "website_url": "https://www.redcross.org/local/georgia.html",
+      "saved": {
+        "id": "a3254474-5a15-4757-9c3a-7478429b2efc",
+        "slug": "american-red-cross-central-midwest-georgia",
+        "name": "American Red Cross — Central Midwest Georgia"
+      }
+    },
+    {
+      "name": "Goodwill Industries of Middle Georgia and the CSRA",
+      "slug": "goodwill-industries-of-middle-georgia-and-the-csra",
+      "summary": "Regional charitable organization providing employment, education and community services; named by the county as Goodwill of Central Georgia among Brookdale supporters.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "website_url": "https://www.goodwillworks.org/",
+      "saved": {
+        "id": "281e110c-1d89-41d2-8bf0-addbc88edc45",
+        "slug": "goodwill-industries-of-middle-georgia-and-the-csra",
+        "name": "Goodwill Industries of Middle Georgia and the CSRA"
+      }
+    },
+    {
+      "name": "Loaves and Fishes Ministry of Macon",
+      "slug": "loaves-and-fishes-ministry-of-macon",
+      "summary": "Community charitable ministry assisting people in need; recognized among Brookdale Resource Center supporters in the county’s January 2026 anniversary article.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "saved": {
+        "id": "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+        "slug": "loaves-and-fishes-ministry-of-macon",
+        "name": "Loaves and Fishes Ministry of Macon"
+      }
+    },
+    {
+      "name": "Society of St. Andrew — Georgia",
+      "slug": "society-of-st-andrew-georgia",
+      "summary": "Food-rescue and hunger-relief nonprofit named among Brookdale Resource Center supporters by county government.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "website_url": "https://endhunger.org/georgia/",
+      "saved": {
+        "id": "a1224a88-0e9e-418f-974c-242ab2d28316",
+        "slug": "society-of-st-andrew-georgia",
+        "name": "Society of St. Andrew — Georgia"
+      }
+    },
+    {
+      "name": "First Choice Primary Care",
+      "slug": "first-choice-primary-care",
+      "summary": "Community nonprofit health center providing primary care in Middle Georgia; recognized by county government as a Brookdale supporter.",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "website_url": "https://www.firstchoiceprimarycare.org/",
+      "saved": {
+        "id": "3f07a696-d49b-47da-88b7-fb186b0d0dbe",
+        "slug": "first-choice-primary-care",
+        "name": "First Choice Primary Care"
+      }
+    },
+    {
+      "name": "Keryx Ministries",
+      "slug": "keryx-ministries",
+      "summary": "Faith-based nonprofit charity serving Unionville families since 1998; partnering with Macon-Bibb County and Mercer on a free clinic anticipated to open in March 2027.",
+      "government_source": "https://www.maconbibb.us/unionvilleclinicgroundbreaking2026/",
+      "saved": {
+        "id": "5690d28c-5e1c-4e3c-bca0-70d97d6700e6",
+        "slug": "keryx-ministries",
+        "name": "Keryx Ministries"
+      }
+    },
+    {
+      "name": "The Peyton Anderson Foundation",
+      "slug": "the-peyton-anderson-foundation",
+      "summary": "Macon philanthropic foundation supporting community projects, including affordable housing in partnership with Macon-Bibb County.",
+      "government_source": "https://www.maconbibb.us/housingfundexecdirector/",
+      "website_url": "https://www.peytonanderson.org/",
+      "saved": {
+        "id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+        "slug": "the-peyton-anderson-foundation",
+        "name": "The Peyton Anderson Foundation"
+      }
+    },
+    {
+      "name": "Macon-Bibb Mayor’s Literacy Alliance",
+      "slug": "macon-bibb-mayor-s-literacy-alliance",
+      "summary": "Countywide literacy collaborative supporting children, adults and families through education, family engagement and community partnerships.",
+      "government_source": "https://www.maconbibb.us/literacy-week-macon-bibb-2026/",
+      "website_url": "https://www.mbmla.org/",
+      "saved": {
+        "id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+        "slug": "macon-bibb-mayor-s-literacy-alliance",
+        "name": "Macon-Bibb Mayor’s Literacy Alliance"
+      }
+    },
+    {
+      "name": "Otis Redding Foundation",
+      "slug": "otis-redding-foundation",
+      "summary": "Macon charitable foundation supporting music education and the philanthropic legacy of Otis Redding; referenced in the county’s 2026 Otis Redding Way dedication announcement.",
+      "government_source": "https://www.maconbibb.us/macon-bibb-to-dedicate-otis-redding-way-in-honor-of-music-legend/",
+      "website_url": "https://otisreddingfoundation.org/",
+      "saved": {
+        "id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+        "slug": "otis-redding-foundation",
+        "name": "Otis Redding Foundation"
+      }
+    },
+    {
+      "name": "Community Foundation of Central Georgia",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "existing_only": true,
+      "existing": {
+        "id": "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+        "name": "Community Foundation of Central Georgia",
+        "slug": "community-foundation-of-central-georgia",
+        "email": "info@cfcga.org",
+        "phone": "478-750-9338",
+        "logo_path": null,
+        "created_at": "2026-10-23T03:29:00.626631+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:29:00.626631+00:00",
+        "description": "Macon-based community foundation founded in 1993 to encourage philanthropy and strengthen Central Georgia communities. CFCG serves 21 counties, including Bibb, through charitable funds, nonprofit grants, scholarships, and community partnerships. It works with individuals, families, businesses, and nonprofit organizations to support local needs and long-term charitable goals. Kathryn H. Dennis leads the staff as president; Cynde M. Dickey chairs the 2026-27 board.\n\nSources: https://cfcga.org/about/history-and-mission/ ; https://cfcga.org/about/counties/ ; https://cfcga.org/about/our-team/ ; https://cfcga.org/about/board-of-directors/",
+        "website_url": "https://cfcga.org/",
+        "address_line": "577 Mulberry Street, Suite 1600, Macon, GA 31201"
+      },
+      "saved": {
+        "id": "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+        "slug": "community-foundation-of-central-georgia",
+        "name": "Community Foundation of Central Georgia"
+      }
+    },
+    {
+      "name": "NewTown Macon",
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "existing_only": true,
+      "existing": {
+        "id": "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "name": "NewTown Macon",
+        "slug": "newtown-macon",
+        "email": "info@newtownmacon.com",
+        "phone": "478-722-9909",
+        "logo_path": null,
+        "created_at": "2026-10-23T03:27:44.259312+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:27:44.259312+00:00",
+        "description": "Independent nonprofit working to revitalize downtown Macon by investing in local people and businesses. Its programs include business and real-estate financing, entrepreneur and developer training, downtown events, and the Ocmulgee Heritage Trail. Knight Foundation is a documented funder and partner. The current staff page lists James Fritze as president and CEO and Erin Keller as chief of staff and vice president for development.\n\nSources: https://newtownmacon.com/ ; https://newtownmacon.com/our-work/staff/ ; https://knightfoundation.org/articles/grantee-story/newtown-macon/",
+        "website_url": "https://newtownmacon.com/",
+        "address_line": "555 Poplar St., Macon, GA 31201"
+      },
+      "saved": {
+        "id": "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "slug": "newtown-macon",
+        "name": "NewTown Macon"
+      }
+    },
+    {
+      "name": "Historic Macon Foundation",
+      "government_source": "https://www.maconbibb.us/housingfundexecdirector/",
+      "existing_only": true,
+      "existing": {
+        "id": "4a3641a0-bfa6-412e-9d0e-4ee7df280179",
+        "name": "Historic Macon Foundation",
+        "slug": "historic-macon-foundation",
+        "email": null,
+        "phone": "478-742-5084",
+        "logo_path": null,
+        "created_at": "2026-10-23T03:30:23.262333+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:30:23.262333+00:00",
+        "description": "Macon preservation nonprofit working to strengthen neighborhoods by protecting historic architecture and sharing local history. Programs include neighborhood revitalization, historic-property rehabilitation, preservation consulting, educational programs, a tool library, and the Fading Five endangered-places initiative. The foundation formed in 2003 through the merger of the Middle Georgia Historical Society and Macon Heritage Foundation, with roots dating to 1964. Emily Hopkins is executive director.\n\nSources: https://historicmacon.org/who-we-are ; https://historicmacon.org/contact",
+        "website_url": "https://historicmacon.org/",
+        "address_line": "950 Third St., Macon, GA 31201"
+      },
+      "saved": {
+        "id": "4a3641a0-bfa6-412e-9d0e-4ee7df280179",
+        "slug": "historic-macon-foundation",
+        "name": "Historic Macon Foundation"
+      }
+    },
+    {
+      "name": "John S. and James L. Knight Foundation",
+      "government_source": "https://www.maconbibb.us/housingfundexecdirector/",
+      "existing_only": true,
+      "existing": {
+        "id": "709fa82d-5606-4d59-bb34-f8277fd774c4",
+        "name": "John S. and James L. Knight Foundation",
+        "slug": "knight-foundation",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T03:27:43.164809+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:27:43.164809+00:00",
+        "description": "National philanthropic foundation supporting journalism, arts, information and society, and community impact. Macon is one of its 26 communities with historic Knight newspaper ties. Its Macon investments support locally led revitalization and civic life; a Knight grantee story documents $1.5 million in support for NewTown Macon's work. The current staff directory lists Lynn Murphey as Director/Macon and Maribel Pérez Wadsworth as president and CEO.\n\nSources: https://knightfoundation.org/about/staff/ ; https://knightfoundation.org/articles/grantee-story/newtown-macon/",
+        "website_url": "https://knightfoundation.org/",
+        "address_line": null
+      },
+      "saved": {
+        "id": "709fa82d-5606-4d59-bb34-f8277fd774c4",
+        "slug": "knight-foundation",
+        "name": "John S. and James L. Knight Foundation"
+      }
+    },
+    {
+      "name": "United Way of Central Georgia",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "existing_only": true,
+      "existing": {
+        "id": "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+        "name": "United Way of Central Georgia",
+        "slug": "united-way-of-central-georgia",
+        "email": null,
+        "phone": "478-745-4732",
+        "logo_path": null,
+        "created_at": "2026-10-23T03:35:30.792966+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:35:30.792966+00:00",
+        "description": "Regional nonprofit supporting community programs and partnerships in Central Georgia. Its programs include education, family support, and Brookdale Resource Center. The current staff directory lists Carl Tims as president and CEO. Its former United to End Homelessness initiative ended after grant funding expired, according to September 2026 GPB reporting.\n\nSources: https://unitedwaycg.org/our-staff ; https://www.gpb.org/news/2026/09/02/amid-downtown-business-concerns-macon-mulls-stricter-rules-for-the-homeless",
+        "website_url": "https://unitedwaycg.org/",
+        "address_line": "277 MLK Jr. Blvd, Suite 301, Macon, GA 31201"
+      },
+      "saved": {
+        "id": "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+        "slug": "united-way-of-central-georgia",
+        "name": "United Way of Central Georgia"
+      }
+    },
+    {
+      "name": "Daybreak Resource Center — Depaul USA",
+      "government_source": "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-350000-in-grants-to-21-nonprofits/",
+      "existing_only": true,
+      "existing": {
+        "id": "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+        "name": "Daybreak Resource Center — Depaul USA",
+        "slug": "daybreak-resource-center",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T03:35:33.854269+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:35:33.854269+00:00",
+        "description": "Depaul USA's Macon resource center supporting people experiencing homelessness through housing placement, case management, meals, hygiene services, healthcare access, and other assistance. Part of Depaul USA's broader Macon programming, including housing and medical respite. February 2026 reporting identifies Sister Deborah Mallott as director.\n\nSources: https://depaulusa.org/programs/macon/ ; https://www.wpganews.com/2026/02/27/macon-shelter-hosts-annual-sleepout-fundraiser-amid-rise-street-homelessness/",
+        "website_url": "https://depaulusa.org/programs/macon/",
+        "address_line": null
+      },
+      "saved": {
+        "id": "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+        "slug": "daybreak-resource-center",
+        "name": "Daybreak Resource Center — Depaul USA"
+      }
+    },
+    {
+      "name": "The Salvation Army of Central Georgia",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "existing_only": true,
+      "existing": {
+        "id": "c8390ac6-2c41-4489-b73d-691e65cd8870",
+        "name": "The Salvation Army of Central Georgia",
+        "slug": "salvation-army-central-georgia",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T03:35:34.476988+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:35:34.476988+00:00",
+        "description": "Local Salvation Army ministry serving Macon and Central Georgia, including assistance for people experiencing homelessness. Identified among Macon's shelter providers in February 2025 reporting.\n\nSources: https://www.salvationarmyusa.org/usa-southern-territory/georgia/central-georgia/ ; https://www.gpb.org/news/2025/02/14/these-macon-laws-prohibit-homeless-camps-arrests-are-rare-heres-why",
+        "website_url": "https://www.salvationarmyusa.org/usa-southern-territory/georgia/central-georgia/",
+        "address_line": null
+      },
+      "saved": {
+        "id": "c8390ac6-2c41-4489-b73d-691e65cd8870",
+        "slug": "salvation-army-central-georgia",
+        "name": "The Salvation Army of Central Georgia"
+      }
+    },
+    {
+      "name": "Georgia Women (And Those Who Stand With Us)",
+      "government_source": "https://www.maconbibb.us/five-years-of-hope-brookdale-resource-center/",
+      "existing_only": true,
+      "existing": {
+        "id": "41c643c0-5995-4050-8e34-ab110d91c0fb",
+        "name": "Georgia Women (And Those Who Stand With Us)",
+        "slug": "georgia-women-and-those-who-stand-with-us",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T03:20:05.960733+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:20:05.960733+00:00",
+        "description": "Nonpartisan civic advocacy group founded in Middle Georgia in 2017, with documented organizing in Macon-Bibb County. Its work includes issues affecting women and families, voting access, paid family leave, and menstrual equity. Claire Cox is a documented co-founder; Marty Koplin is a documented founding member and former co-president. These founding and historical roles do not establish the current officer roster.\n\nSources: https://www.gpb.org/news/2018/03/08/women-in-georgia-and-across-the-nation-are-running-for-office-in-record-numbers ; https://my.lwv.org/sites/default/files/uber-free-rides-press-release.pdf ; https://www.mercercluster.com/article/2026/03/no-kings-protest-march-2026",
+        "website_url": null,
+        "address_line": null
+      },
+      "saved": {
+        "id": "41c643c0-5995-4050-8e34-ab110d91c0fb",
+        "slug": "georgia-women-and-those-who-stand-with-us",
+        "name": "Georgia Women (And Those Who Stand With Us)"
+      }
+    },
+    {
+      "name": "Macon Milledgeville Regional Habitat for Humanity",
+      "slug": "macon-milledgeville-regional-habitat-for-humanity",
+      "summary": "Regional nonprofit building and repairing affordable homes. Formerly identified as Macon Area Habitat for Humanity in county partnership lists. The county’s October 2026 Napier Heights announcement uses the current regional name and identifies Ivey Hall as executive director.",
+      "government_source": "https://www.maconbibb.us/building-homes-building-hope-in-napier-heights/",
+      "website_url": "https://www.mmrhabitat.org/",
+      "saved": {
+        "id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+        "slug": "macon-milledgeville-regional-habitat-for-humanity",
+        "name": "Macon Milledgeville Regional Habitat for Humanity"
+      }
+    },
+    {
+      "name": "Bike Walk Macon",
+      "existing": {
+        "id": "93823e8e-c6a0-46b4-8311-9a6d92ea5178",
+        "name": "Bike Walk Macon",
+        "slug": "bike-walk-macon",
+        "email": "hello@bikewalkmacon.com",
+        "phone": "478-832-3324",
+        "logo_path": null,
+        "created_at": "2026-10-23T03:32:07.672924+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T03:32:07.672924+00:00",
+        "description": "Grassroots bicycle and pedestrian advocacy nonprofit serving Macon-Bibb County. It promotes safer, more accessible walking, cycling, and transportation choices through advocacy, education, traffic-calming projects, and community events, including Open Streets Macon and Macon Bike Party. Its work began in 2015 with support from the Knight-funded Emerging City Champions fellowship. Kaylee Pruitt became executive director on May 20, 2026, succeeding founder Rachel Umana.\n\nSources: https://www.bikewalkmacon.com/aboutus ; https://www.bikewalkmacon.com/blog/bike-walk-macon-names-kaylee-pruitt-as-new-executive-director ; https://www.bikewalkmacon.com/ourteam",
+        "website_url": "https://www.bikewalkmacon.com/",
+        "address_line": "830 High Street, Macon, GA 31201"
+      },
+      "saved": {
+        "id": "93823e8e-c6a0-46b4-8311-9a6d92ea5178",
+        "slug": "bike-walk-macon",
+        "name": "Bike Walk Macon"
+      },
+      "government_source": "https://www.maconbibb.us/maconsbigbikeride/",
+      "existing_only": true
+    },
+    {
+      "name": "Piedmont Macon Medical Center",
+      "slug": "piedmont-macon-medical-center",
+      "saved": {
+        "id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+        "name": "Piedmont Macon Medical Center",
+        "slug": "piedmont-macon-medical-center",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T04:46:14.291335+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T04:46:14.291335+00:00",
+        "description": "Macon hospital within nonprofit Piedmont Healthcare. County government identifies it as a partner in a 2026 community grief-support event. Formerly Coliseum Medical Centers; Piedmont’s official history records its transition to the nonprofit system in 2021.\n\nSources: https://www.maconbibb.us/griefsupportsession41626/ ; https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+        "website_url": "https://www.piedmont.org/locations/piedmont-macon-medical",
+        "address_line": null
+      },
+      "government_source": "https://www.maconbibb.us/griefsupportsession41626/",
+      "summary": "Macon hospital within nonprofit Piedmont Healthcare. County government identifies it as a partner in a 2026 community grief-support event. Formerly Coliseum Medical Centers; Piedmont’s official history records its transition to the nonprofit system in 2021.\n\nSources: https://www.maconbibb.us/griefsupportsession41626/ ; https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "website_url": "https://www.piedmont.org/locations/piedmont-macon-medical"
+    },
+    {
+      "name": "Piedmont Macon North Hospital",
+      "slug": "piedmont-macon-north-hospital",
+      "saved": {
+        "id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+        "name": "Piedmont Macon North Hospital",
+        "slug": "piedmont-macon-north-hospital",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T04:46:15.514448+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T04:46:15.514448+00:00",
+        "description": "Macon hospital within nonprofit Piedmont Healthcare. The county’s April 2026 grief-support announcement identifies both Macon hospital campuses as part of Georgia’s largest nonprofit hospital system. Formerly Coliseum Northside Hospital.\n\nSources: https://www.maconbibb.us/griefsupportsession41626/ ; https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+        "website_url": "https://www.piedmont.org/locations/piedmont-macon-north",
+        "address_line": null
+      },
+      "government_source": "https://www.maconbibb.us/griefsupportsession41626/",
+      "summary": "Macon hospital within nonprofit Piedmont Healthcare. The county’s April 2026 grief-support announcement identifies both Macon hospital campuses as part of Georgia’s largest nonprofit hospital system. Formerly Coliseum Northside Hospital.\n\nSources: https://www.maconbibb.us/griefsupportsession41626/ ; https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "website_url": "https://www.piedmont.org/locations/piedmont-macon-north"
+    },
+    {
+      "name": "National Cybersecurity Alliance",
+      "slug": "national-cybersecurity-alliance",
+      "saved": {
+        "id": "93d71ca9-ebc1-436d-abcc-409d87a0354f",
+        "name": "National Cybersecurity Alliance",
+        "slug": "national-cybersecurity-alliance",
+        "email": null,
+        "phone": null,
+        "logo_path": null,
+        "created_at": "2026-10-23T04:46:17.123836+00:00",
+        "social_url": null,
+        "updated_at": "2026-10-23T04:46:17.123836+00:00",
+        "description": "National nonprofit providing public cybersecurity and privacy education. Macon-Bibb County links to its Stay Safe Online resource in the official outside-agencies directory as “NCSA – Stay Safe Online.” This is a national resource, not a Macon-based organization.\n\nSources: https://www.maconbibb.us/outsideagencies/ ; https://www.staysafeonline.org/aboutus",
+        "website_url": "https://www.staysafeonline.org/",
+        "address_line": null
+      },
+      "government_source": "https://www.maconbibb.us/outsideagencies/",
+      "summary": "National nonprofit providing public cybersecurity and privacy education. Macon-Bibb County links to its Stay Safe Online resource in the official outside-agencies directory as “NCSA – Stay Safe Online.” This is a national resource, not a Macon-based organization.\n\nSources: https://www.maconbibb.us/outsideagencies/ ; https://www.staysafeonline.org/aboutus",
+      "website_url": "https://www.staysafeonline.org/"
+    }
+  ],
+  "people": [
+    {
+      "full_name": "Verda Colvin",
+      "role": "Board Chair and Secretary",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "slug": "verda-colvin"
+    },
+    {
+      "full_name": "Kendra Russell",
+      "role": "Treasurer",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+      "slug": "kendra-russell"
+    },
+    {
+      "full_name": "Natacha Ansley",
+      "role": "Coordinator — Macon/Oconee Area/Milledgeville",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "000cd7bb-3a34-4ec7-ae37-cb978abe8655",
+      "slug": "natacha-ansley"
+    },
+    {
+      "full_name": "Cindy Tengelsen",
+      "role": "Office Manager",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "ebcb62e8-eafd-45ce-b0ba-65861c79529b",
+      "slug": "cindy-tengelsen"
+    },
+    {
+      "full_name": "Pamela White-Colbert",
+      "role": "Board Member",
+      "organization": "Macon-Bibb Citizen Advocacy",
+      "organization_id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "source": "https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/",
+      "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+      "slug": "pamela-white-colbert"
+    },
+    {
+      "full_name": "David Danzie",
+      "role": "Board Chairman",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+      "slug": "david-danzie"
+    },
+    {
+      "full_name": "Nancy Nash",
+      "role": "Vice Chair",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "slug": "nancy-nash"
+    },
+    {
+      "full_name": "Alvin Lindsey",
+      "role": "Secretary",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "5dbfe4bc-0880-44a5-a12d-30c7eb7a1750",
+      "slug": "alvin-lindsey"
+    },
+    {
+      "full_name": "Bob Hatcher",
+      "role": "Treasurer",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/about-us/",
+      "person_id": "5b68645a-51f7-4c31-bc99-c9f294ff0e78",
+      "slug": "bob-hatcher"
+    },
+    {
+      "full_name": "Sarita R. Hill",
+      "role": "Chief Executive Officer",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/",
+      "person_id": "edd73fe7-c987-4098-8b9b-33ad0d10e3c6",
+      "slug": "sarita-r-hill"
+    },
+    {
+      "full_name": "Ike E. Mack",
+      "role": "Board President",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "29740a71-7f9f-451b-aede-fc823e872aac",
+      "slug": "ike-e-mack"
+    },
+    {
+      "full_name": "Isaac Grant",
+      "role": "Board Vice President",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "6fd90ab5-60a2-4e09-9a4b-e41d96ac84fe",
+      "slug": "isaac-grant"
+    },
+    {
+      "full_name": "Sam Henderson",
+      "role": "Board Secretary",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "c8d58602-6289-47d1-82ca-4eb64599b7ef",
+      "slug": "sam-henderson"
+    },
+    {
+      "full_name": "Susan Joanis",
+      "role": "Assistant Secretary",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "c118f7b2-6783-47d9-8840-fc009e829581",
+      "slug": "susan-joanis"
+    },
+    {
+      "full_name": "LaConstance Smith",
+      "role": "Board Treasurer",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "074fddde-320f-4d1d-a144-081bbbd5b20c",
+      "slug": "laconstance-smith"
+    },
+    {
+      "full_name": "James L. Bumpus",
+      "role": "Board Member",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "25a915ef-6895-47a4-b358-523e1c187332",
+      "slug": "james-l-bumpus"
+    },
+    {
+      "full_name": "Pamela White-Colbert",
+      "role": "Board Member",
+      "organization": "Macon-Bibb County Economic Opportunity Council",
+      "organization_id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "source": "https://www.maconbibbeoc.com/about-us/board-of-directors/",
+      "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+      "slug": "pamela-white-colbert"
+    },
+    {
+      "full_name": "Asha Ellen",
+      "role": "Executive Director",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "bf4450d9-b836-4582-9242-c46ff1bafcbe",
+      "slug": "asha-ellen"
+    },
+    {
+      "full_name": "Willie Pitts",
+      "role": "Board Chair",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "31aeb847-01b7-4afc-97a9-628a76a0bf5d",
+      "slug": "willie-pitts"
+    },
+    {
+      "full_name": "Natasha Christian",
+      "role": "Immediate Past Chair",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "31c3739e-805c-4ce9-892c-9df5e0667243",
+      "slug": "natasha-christian"
+    },
+    {
+      "full_name": "Laurie Fickling",
+      "role": "Treasurer",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "f2b766cd-54c2-46af-8ee8-0cbf8bb32185",
+      "slug": "laurie-fickling"
+    },
+    {
+      "full_name": "Jaquana Barnes Mosley",
+      "role": "Treasurer Elect",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "06fc303b-13e8-4b28-87cf-36cb7121726c",
+      "slug": "jaquana-barnes-mosley"
+    },
+    {
+      "full_name": "Chris Howard",
+      "role": "Secretary",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "2a9496ee-8dc3-4304-a5f7-a868262532a6",
+      "slug": "chris-howard"
+    },
+    {
+      "full_name": "Brandi Simpson Miller",
+      "role": "Historian",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "ec8b4187-9282-4594-93dc-c14ad98486e1",
+      "slug": "brandi-simpson-miller"
+    },
+    {
+      "full_name": "Justin Hollingsworth",
+      "role": "Legal Counsel",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "2bea306d-3225-4258-b491-a3acd260a2fc",
+      "slug": "justin-hollingsworth"
+    },
+    {
+      "full_name": "George Crawley",
+      "role": "Program Coordinator",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "ca5cb31c-aafb-4001-b9f6-e292fe2fb90f",
+      "slug": "george-crawley"
+    },
+    {
+      "full_name": "Ty Fiveash",
+      "role": "Volunteer and Event Coordinator",
+      "organization": "Keep Macon-Bibb Beautiful",
+      "organization_id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "source": "https://keepmaconbibbbeautiful.org/board-staff/",
+      "person_id": "6f567b22-60bf-4de4-9106-86be1fd96e56",
+      "slug": "ty-fiveash"
+    },
+    {
+      "full_name": "Julie Wilkerson",
+      "role": "Executive Director",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "0e87ccd1-a4b7-4cbb-af3b-2b9fcdf0e0e8",
+      "slug": "julie-wilkerson"
+    },
+    {
+      "full_name": "Maria Andrade",
+      "role": "Project Director",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "8fb073da-00f8-4acd-abc2-914c712f73b8",
+      "slug": "maria-andrade"
+    },
+    {
+      "full_name": "Ginny Lane Sheridan",
+      "role": "Curator",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "4721c28d-736a-4fe8-b82a-616689b5f182",
+      "slug": "ginny-lane-sheridan"
+    },
+    {
+      "full_name": "Brooks Corwin",
+      "role": "Development Associate",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "43f7e38e-5d87-46b2-b405-9bfef633e7ee",
+      "slug": "brooks-corwin"
+    },
+    {
+      "full_name": "Erin Hawkins",
+      "role": "Board President",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "fc063f54-da7b-4666-9765-b78ace75e99f",
+      "slug": "erin-hawkins"
+    },
+    {
+      "full_name": "Tabatha Duncan",
+      "role": "Board Vice-President",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "aea7ee33-24e6-48d2-bd04-5c2056b14219",
+      "slug": "tabatha-duncan"
+    },
+    {
+      "full_name": "Autumn VanGunten",
+      "role": "Board Secretary",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "d16d6611-0285-4b58-aeab-263dac7d1bcc",
+      "slug": "autumn-vangunten"
+    },
+    {
+      "full_name": "Lauren Roan-Parks",
+      "role": "Board Treasurer",
+      "organization": "Macon Arts Alliance",
+      "organization_id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "source": "https://www.maconartsalliance.org/about/",
+      "person_id": "b9df0f15-19ca-4736-ab4d-548110ce9e25",
+      "slug": "lauren-roan-parks"
+    },
+    {
+      "full_name": "Jim Greenhouse",
+      "role": "Executive Director",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "bf2d0fbf-6c69-4922-9ad0-29ce962d02aa",
+      "slug": "jim-greenhouse"
+    },
+    {
+      "full_name": "Kristie Jones",
+      "role": "Museum Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "a14247b8-a90a-461e-bd78-1f8a609e542e",
+      "slug": "kristie-jones"
+    },
+    {
+      "full_name": "Mallory Stone",
+      "role": "Education Director",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "57fb24af-f3c2-4ac1-8d62-502bccfad780",
+      "slug": "mallory-stone"
+    },
+    {
+      "full_name": "Lauryn Dawson",
+      "role": "Group Tour Coordinator and Collections Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "9193ca2e-a4db-4f34-b256-973dcac55ca9",
+      "slug": "lauryn-dawson"
+    },
+    {
+      "full_name": "Charles Ladson",
+      "role": "Exhibits Manager",
+      "organization": "Museum of Arts and Sciences",
+      "organization_id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "source": "https://masmacon.org/about/",
+      "person_id": "3e4786df-fb2f-4d7c-a219-192cd541b5f3",
+      "slug": "charles-ladson"
+    },
+    {
+      "full_name": "Lorra Lynch Jones",
+      "role": "President and CEO",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "ffd07c9c-cb28-4e92-95a3-267c7078e054",
+      "slug": "lorra-lynch-jones"
+    },
+    {
+      "full_name": "Howard “Chris” Davis",
+      "role": "Board Chairman",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "58af7d5f-7973-4fd7-8f44-66b0dbec539e",
+      "slug": "howard-chris-davis"
+    },
+    {
+      "full_name": "Susan Dryden",
+      "role": "Board Vice Chairman",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "1ad076dc-7805-4f53-9888-b9b6d094ad83",
+      "slug": "susan-dryden"
+    },
+    {
+      "full_name": "Chris McGuire",
+      "role": "Secretary-Treasurer",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "f7e23ea7-7216-453a-adaa-1cf9ffef2829",
+      "slug": "chris-mcguire"
+    },
+    {
+      "full_name": "David Hollingsworth",
+      "role": "Legal Counsel",
+      "organization": "Museum of Aviation Foundation",
+      "organization_id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "source": "https://museumofaviation.org/about/leadership/board-of-directors/",
+      "person_id": "15cc4778-e82d-4a97-a31e-c6b3c4ee1932",
+      "slug": "david-hollingsworth"
+    },
+    {
+      "full_name": "Ashleigh Coats",
+      "role": "Board Chair",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "872311b0-97f1-4a6c-84b8-f7c83efd312c",
+      "slug": "ashleigh-coats"
+    },
+    {
+      "full_name": "Bonnie Carlson",
+      "role": "Board Vice Chair",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "3d1ce37a-43e6-4552-bac5-b8887a462fc9",
+      "slug": "bonnie-carlson"
+    },
+    {
+      "full_name": "Holly Reeves",
+      "role": "Board Treasurer",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "7e5ffd43-8b97-4756-baae-f33bc6e3043e",
+      "slug": "holly-reeves"
+    },
+    {
+      "full_name": "Jamie Walden",
+      "role": "Board Secretary",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "f380c532-f1e2-4f81-b1b4-3b7f7b4a118a",
+      "slug": "jamie-walden"
+    },
+    {
+      "full_name": "Jonathan Adams",
+      "role": "Board Member",
+      "organization": "Crisis Line & Safe House of Central Georgia",
+      "organization_id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "source": "https://cl-sh.org/who-we-are/",
+      "person_id": "7712a6fe-7506-4a5a-8426-3817d35825b3",
+      "slug": "jonathan-adams"
+    },
+    {
+      "full_name": "Harold Young",
+      "role": "Executive Director and Special Events Manager",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+      "slug": "harold-young"
+    },
+    {
+      "full_name": "Barrie Miller-Howard",
+      "role": "Chief Financial Officer",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "68540d8e-de0f-4ec3-991f-ab328cfecd0e",
+      "slug": "barrie-miller-howard"
+    },
+    {
+      "full_name": "Jeff Bruce",
+      "role": "Director of Exhibitions",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "141b3f21-ac1c-48f4-8477-dad1bfd47b44",
+      "slug": "jeff-bruce"
+    },
+    {
+      "full_name": "Denise Y. Vanzant",
+      "role": "IT and Office Manager",
+      "organization": "Tubman African American Museum",
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "source": "https://tubmanmuseum.com/museum-staff/",
+      "person_id": "58b2edbf-2e6e-4e12-a58b-25f4a5727e9f",
+      "slug": "denise-y-vanzant"
+    },
+    {
+      "full_name": "Stacy Moore",
+      "role": "President and CEO",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "f2fe0891-5805-4858-8f71-5bfe20eed42b",
+      "slug": "stacy-moore"
+    },
+    {
+      "full_name": "Patty Gibbs",
+      "role": "2026–2027 Board Chair",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+      "slug": "patty-gibbs"
+    },
+    {
+      "full_name": "David Danzie",
+      "role": "2027 Festival Chair",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "31effe83-a589-459d-ac90-3af549fdce8b",
+      "slug": "david-danzie"
+    },
+    {
+      "full_name": "Katie Hart",
+      "role": "Director of Operations",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "1e06bdd6-aa8f-40ee-abd2-95ac3f99db00",
+      "slug": "katie-hart"
+    },
+    {
+      "full_name": "Jenny O’Neal",
+      "role": "Director of Finance and Administration",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "e2f0e82d-ef7e-4c4c-bc8b-9fe41da652e3",
+      "slug": "jenny-o-neal"
+    },
+    {
+      "full_name": "Hannah Jett Theus",
+      "role": "Director, Marketing and Fulfillment",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "81d0ebee-718d-484b-9612-3be8be29a0a9",
+      "slug": "hannah-jett-theus"
+    },
+    {
+      "full_name": "Robin Cochran",
+      "role": "Merchandise and Administrative Manager",
+      "organization": "International Cherry Blossom Festival",
+      "organization_id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "source": "https://cherryblossom.com/about-us/leadership/",
+      "person_id": "fa447994-8979-4f13-b42a-51727c7a9b8f",
+      "slug": "robin-cochran"
+    },
+    {
+      "full_name": "Gary Wheat",
+      "role": "President and CEO",
+      "organization": "Visit Macon",
+      "organization_id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+      "source": "https://masmacon.org/about/",
+      "person_id": "4b182fb5-c924-4fc5-809d-dfe6417652f0",
+      "slug": "gary-wheat"
+    },
+    {
+      "full_name": "Jessica Walden",
+      "role": "President and CEO",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "4dbda243-e095-4b00-84d2-4f0af4347e53",
+      "slug": "jessica-walden"
+    },
+    {
+      "full_name": "Jennifer Bronner",
+      "role": "Chief Financial Officer",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "a5a48cf2-7aa9-40ad-9237-15992eb714d5",
+      "slug": "jennifer-bronner"
+    },
+    {
+      "full_name": "J.R. Olive",
+      "role": "VP of Operations and Strategic Initiatives",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "a6e6f202-a9aa-4fb4-9416-6d0d074cdff7",
+      "slug": "j-r-olive"
+    },
+    {
+      "full_name": "Renita Patterson",
+      "role": "Vice President of Engagement",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "e548c94f-e50b-42b3-a29e-d28c3a9a0a73",
+      "slug": "renita-patterson"
+    },
+    {
+      "full_name": "Sherry Singleton",
+      "role": "Vice President of Communications",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "2928a887-30a4-4fe6-bdc6-9d83b8d8717d",
+      "slug": "sherry-singleton"
+    },
+    {
+      "full_name": "Jen Marshall",
+      "role": "Director of Investor Relations",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "8bd7fa7e-0367-4b89-9e74-03754bb58628",
+      "slug": "jen-marshall"
+    },
+    {
+      "full_name": "Alex Mason",
+      "role": "Director of Development",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "e6991351-6846-40f3-8cfd-1b1d5a4436eb",
+      "slug": "alex-mason"
+    },
+    {
+      "full_name": "Reid McLain",
+      "role": "Director of Workforce Programs and Strategies",
+      "organization": "Greater Macon Chamber of Commerce",
+      "organization_id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "source": "https://maconchamber.com/who-we-are/about-the-team/",
+      "person_id": "aab3a447-ce02-4773-94ed-5102e5e1bcf3",
+      "slug": "reid-mclain"
+    },
+    {
+      "full_name": "Derek Thomas",
+      "role": "Executive Director",
+      "organization": "Rebuilding Macon",
+      "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "source": "https://www.rebuildingmacon.org/team",
+      "person_id": "8b877a7f-07bc-49cd-86b8-b53d54214546",
+      "slug": "derek-thomas"
+    },
+    {
+      "full_name": "Tom Birmingham",
+      "role": "Construction Manager",
+      "organization": "Rebuilding Macon",
+      "organization_id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "source": "https://www.rebuildingmacon.org/team",
+      "person_id": "8566281f-013e-439d-9f98-36b85e450270",
+      "slug": "tom-birmingham"
+    },
+    {
+      "full_name": "Betsy Fitzgerald",
+      "role": "President and CEO",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "1568d78d-a5a6-46de-b20c-d2acca1bbe1e",
+      "slug": "betsy-fitzgerald"
+    },
+    {
+      "full_name": "Jackie Curtis",
+      "role": "Director of Programs",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "6c3c39b6-9b91-4770-b123-2825555f064e",
+      "slug": "jackie-curtis"
+    },
+    {
+      "full_name": "Fran Lugo-Camera",
+      "role": "Finance Director",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "4bdd819a-cb98-4aae-a6fc-0e5e19c0c3c3",
+      "slug": "fran-lugo-camera"
+    },
+    {
+      "full_name": "Bre’yanna Johnson",
+      "role": "Director of Marketing and Strategic Partnerships",
+      "organization": "Big Brothers Big Sisters of the Heart of Georgia",
+      "organization_id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "source": "https://bbbsga.org/our-team/",
+      "person_id": "8efada63-b71c-47fc-a380-36428b77fc04",
+      "slug": "bre-yanna-johnson"
+    },
+    {
+      "full_name": "Elizabeth Hammock",
+      "role": "Executive Director",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "b309940b-a86a-4d4c-a1c3-dc8b0f969fd5",
+      "slug": "elizabeth-hammock"
+    },
+    {
+      "full_name": "David McCain",
+      "role": "Board Chair",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "7bf74394-2fb8-4c7e-8452-b2d9c4164f0e",
+      "slug": "david-mccain"
+    },
+    {
+      "full_name": "Cathy Barnes",
+      "role": "Advocacy Coordinator",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "a4d9d245-159a-4faf-b21d-00342037d4c3",
+      "slug": "cathy-barnes"
+    },
+    {
+      "full_name": "Olivia Slaton",
+      "role": "Advocacy Coordinator",
+      "organization": "Central Georgia CASA",
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "source": "https://www.cgcasa.org/about",
+      "person_id": "ef6b189b-cca4-4866-8ed2-318fa6b54a6b",
+      "slug": "olivia-slaton"
+    },
+    {
+      "full_name": "Garrett L. Williams",
+      "role": "Scout Executive and CEO",
+      "organization": "Central Georgia Council, Scouting America",
+      "organization_id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+      "source": "https://www.centralgeorgiacouncil.org/staff/",
+      "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+      "slug": "garrett-l-williams"
+    },
+    {
+      "full_name": "Garrett L. Williams",
+      "role": "President",
+      "organization": "100 Black Men of Macon-Middle Georgia",
+      "organization_id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+      "source": "https://www.maconbibb.us/100-black-men-call-for-people-to-join-them-in-working-with-children/",
+      "person_id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+      "slug": "garrett-l-williams"
+    },
+    {
+      "full_name": "Pat Chastain",
+      "role": "President and CEO",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+      "slug": "pat-chastain"
+    },
+    {
+      "full_name": "Tina Hicks",
+      "role": "Vice President of Finance",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+      "slug": "tina-hicks"
+    },
+    {
+      "full_name": "Dawn Burns",
+      "role": "Vice President of Operations",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+      "slug": "dawn-burns"
+    },
+    {
+      "full_name": "Jason Beck",
+      "role": "Vice President of Programs",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+      "slug": "jason-beck"
+    },
+    {
+      "full_name": "Barbara Durham",
+      "role": "Development Director",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "34deeec3-b175-4307-b2fd-524d281f5551",
+      "slug": "barbara-durham"
+    },
+    {
+      "full_name": "Chako Scott",
+      "role": "Women’s Program Director",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+      "slug": "chako-scott"
+    },
+    {
+      "full_name": "Charlie L. Cantrell",
+      "role": "Board Chairman",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+      "slug": "charlie-l-cantrell"
+    },
+    {
+      "full_name": "Blake Sullivan",
+      "role": "Board Vice Chair",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f0830777-1425-4899-9005-05e67c41ec3f",
+      "slug": "blake-sullivan"
+    },
+    {
+      "full_name": "Beverly Olson",
+      "role": "Board Secretary",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+      "slug": "beverly-olson"
+    },
+    {
+      "full_name": "Susan Collins",
+      "role": "Board Treasurer",
+      "organization": "Rescue Mission of Middle Georgia",
+      "organization_id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "source": "https://www.rescuemissionga.com/about-us/leadership/",
+      "person_id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+      "slug": "susan-collins"
+    },
+    {
+      "full_name": "Christy Henry",
+      "role": "Executive Director",
+      "organization": "Family Counseling Center of Central Georgia",
+      "organization_id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+      "source": "https://www.maconbibb.us/griefsupportsession41626/",
+      "person_id": "df59f879-5c65-486a-a0da-17065875dc49",
+      "slug": "christy-henry"
+    },
+    {
+      "full_name": "Najiva Timothee",
+      "role": "Founder and Executive Director",
+      "organization": "Girls Dig Deeper Initiative",
+      "organization_id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+      "source": "https://www.maconbibb.us/gddifoodbank2026/",
+      "person_id": "f2854ac8-3ab5-4627-87f1-46266981d6af",
+      "slug": "najiva-timothee"
+    },
+    {
+      "full_name": "Jill Vanderhoek",
+      "role": "Executive Director",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "904918e5-481f-4449-a9b8-b146ca4f9b26",
+      "slug": "jill-vanderhoek"
+    },
+    {
+      "full_name": "Kendra Russell",
+      "role": "Board Chair",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+      "slug": "kendra-russell"
+    },
+    {
+      "full_name": "Dominique Johnson",
+      "role": "Board Vice Chair",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "b8411b00-e6fe-43d7-ba77-d87d331cf687",
+      "slug": "dominique-johnson"
+    },
+    {
+      "full_name": "Gregory Glover",
+      "role": "Treasurer",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "6fb6662c-1ed3-40b2-b42e-960181231d21",
+      "slug": "gregory-glover"
+    },
+    {
+      "full_name": "Verda Colvin",
+      "role": "Secretary",
+      "organization": "Community Partnership — Bibb County Family Connection",
+      "organization_id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "source": "https://bibbcommunitypartnership.org/who-we-are/board/",
+      "person_id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "slug": "verda-colvin"
+    },
+    {
+      "full_name": "Jim Montgomery",
+      "role": "Executive Director",
+      "organization": "Macon-Bibb Mayor’s Literacy Alliance",
+      "organization_id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+      "source": "https://www.maconbibb.us/literacy-week-macon-bibb-2026/",
+      "person_id": "ddaad83a-7231-4ef8-8d64-8ed2949692e5",
+      "slug": "jim-montgomery"
+    },
+    {
+      "full_name": "Karla Redding-Andrews",
+      "role": "Vice President and Executive Director",
+      "organization": "Otis Redding Foundation",
+      "organization_id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+      "source": "https://www.maconbibb.us/macon-bibb-to-dedicate-otis-redding-way-in-honor-of-music-legend/",
+      "person_id": "3c300192-db2d-4cbe-a3f8-b28bcfba610f",
+      "slug": "karla-redding-andrews"
+    },
+    {
+      "full_name": "Penny L. Elkins",
+      "role": "President",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/",
+      "person_id": "91f646a0-08c8-4403-a2c2-22223b3b2a33",
+      "slug": "penny-l-elkins"
+    },
+    {
+      "full_name": "Meaghan Blight",
+      "role": "President",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "c62a4dfd-337c-41bd-9363-6366b4009f33",
+      "slug": "meaghan-blight"
+    },
+    {
+      "full_name": "Ivey Hall",
+      "role": "Executive Director",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "40addf0d-a363-4870-9dd2-f24c0081f923",
+      "slug": "ivey-hall"
+    },
+    {
+      "full_name": "Kathleen Matthews",
+      "role": "2026–2027 Board President",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "dcb17d8b-dd1b-49c4-9eca-7abb07c74c36",
+      "slug": "kathleen-matthews"
+    },
+    {
+      "full_name": "Courtney Erikson",
+      "role": "Board Vice President",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "fe8507a4-eba0-479e-921e-1722f738f48e",
+      "slug": "courtney-erikson"
+    },
+    {
+      "full_name": "Weston Stroud",
+      "role": "Board Secretary",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+      "slug": "weston-stroud"
+    },
+    {
+      "full_name": "Jim Manley",
+      "role": "Board Treasurer",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "836ec619-3344-41ea-b929-0dea6acee4a7",
+      "slug": "jim-manley"
+    },
+    {
+      "full_name": "Jennifer Sellers",
+      "role": "Financial and Family Services Manager",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "9fe3b9a3-ed41-4cfb-8bac-7d44ed0a2c19",
+      "slug": "jennifer-sellers"
+    },
+    {
+      "full_name": "Ellie Johnson",
+      "role": "Senior Outreach Manager",
+      "organization": "Macon Milledgeville Regional Habitat for Humanity",
+      "organization_id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "source": "https://www.mmrhabitat.org/meet-mahfh",
+      "person_id": "f9de5ca8-cc50-4fb2-a09f-48e7cbf7e470",
+      "slug": "ellie-johnson"
+    },
+    {
+      "full_name": "Karen J. Lambert",
+      "role": "President and CEO",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "b2c7672a-5314-403f-97d7-b1dd182f9cf2",
+      "slug": "karen-j-lambert"
+    },
+    {
+      "full_name": "Gail Mansfield",
+      "role": "Director of Finance",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "129e0bb3-8503-41e8-bc8e-a1ca51fb313d",
+      "slug": "gail-mansfield"
+    },
+    {
+      "full_name": "Charla Ivey",
+      "role": "Program Director",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "9838a34f-70cf-40fc-929c-9c71741f664a",
+      "slug": "charla-ivey"
+    },
+    {
+      "full_name": "Chenza Stokes",
+      "role": "Project Manager",
+      "organization": "The Peyton Anderson Foundation",
+      "organization_id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "source": "https://www.peytonanderson.org/about/staff/",
+      "person_id": "b015a617-9755-4e2c-8a28-c244efa961ef",
+      "slug": "chenza-stokes"
+    },
+    {
+      "full_name": "Melody Blake",
+      "role": "Provost and VP for Academic Affairs",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "2ec810eb-cfb1-45c8-8377-8f74a1fc3339",
+      "slug": "melody-blake"
+    },
+    {
+      "full_name": "Dwight Frederick",
+      "role": "VP of Business Operations and Finance / CFO",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "969db5fb-2edb-4886-b65a-8a507744a9dc",
+      "slug": "dwight-frederick"
+    },
+    {
+      "full_name": "Carrie Ingoldsby",
+      "role": "VP for Student Affairs and Dean of Students",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "d66eca81-64e9-48e3-9c81-b35d8662de42",
+      "slug": "carrie-ingoldsby"
+    },
+    {
+      "full_name": "Jolynn Allgood",
+      "role": "Director of Human Resources",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "25580be0-cae9-4bee-9b2e-fe26a1211bd3",
+      "slug": "jolynn-allgood"
+    },
+    {
+      "full_name": "Seth Berkebile",
+      "role": "Athletic Director",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "8b37b1d7-87f2-4a9b-91e4-a64b4330372e",
+      "slug": "seth-berkebile"
+    },
+    {
+      "full_name": "Jessica Tucker",
+      "role": "Director of President’s Office and Trustee Relations",
+      "organization": "Wesleyan College",
+      "organization_id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "source": "https://www.wesleyancollege.edu/about/President-and-Leadership-Team.cfm",
+      "person_id": "eaed1454-bf20-4d02-b148-fbd98299c33e",
+      "slug": "jessica-tucker"
+    },
+    {
+      "full_name": "Kellie R. Appel",
+      "role": "Senior VP for Strategic Initiatives",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "60545a37-9406-49fb-95bc-bc1c0c0bdbf5",
+      "slug": "kellie-r-appel"
+    },
+    {
+      "full_name": "Julia Davis",
+      "role": "Senior VP for Administration and Finance",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "2a8f55dd-9821-4a73-837e-c67ea05479cb",
+      "slug": "julia-davis"
+    },
+    {
+      "full_name": "Matthew R. Hall",
+      "role": "Senior VP, General Counsel and Corporate Secretary",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "68e3e588-6f9e-49ef-bbba-8447ed995412",
+      "slug": "matthew-r-hall"
+    },
+    {
+      "full_name": "Maria Hammett",
+      "role": "Interim Senior VP for Enrollment Management",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "4c0987f9-2f0a-4290-9aba-1db7548b684f",
+      "slug": "maria-hammett"
+    },
+    {
+      "full_name": "Mary Bowman Hampton",
+      "role": "Senior VP for University Marketing",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "e137adca-ac21-4313-b46a-01bd152b8748",
+      "slug": "mary-bowman-hampton"
+    },
+    {
+      "full_name": "Keith E. Howard",
+      "role": "Vice Provost",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "b8d1388f-1dbc-4b8b-9125-36aaaea9b0d4",
+      "slug": "keith-e-howard"
+    },
+    {
+      "full_name": "Kathryn D. Kloepper",
+      "role": "Chief of Staff",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "b1f6751c-eb16-488f-9d3b-9fd30c904ea8",
+      "slug": "kathryn-d-kloepper"
+    },
+    {
+      "full_name": "Lisa M. Lundquist",
+      "role": "Executive VP for Academic Affairs and Provost",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "f2456ea9-10a2-4941-b659-717699c50049",
+      "slug": "lisa-m-lundquist"
+    },
+    {
+      "full_name": "John A. Patterson",
+      "role": "Senior VP for University Advancement",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "8a7fcbbe-0188-4f64-9360-c7e44cf5ab77",
+      "slug": "john-a-patterson"
+    },
+    {
+      "full_name": "Douglas R. Pearson",
+      "role": "VP and Dean of Students for Macon",
+      "organization": "Mercer University",
+      "organization_id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "source": "https://www.mercer.edu/about-mercer/office-of-the-president/presidents-cabinet/",
+      "person_id": "8d3754d0-3a07-4946-8341-c8013af11d45",
+      "slug": "douglas-r-pearson"
+    },
+    {
+      "full_name": "Stephen Daugherty",
+      "role": "Chief Executive Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "df170e69-b6df-47ba-bb5b-c8fd29b9f685",
+      "slug": "stephen-daugherty"
+    },
+    {
+      "full_name": "Alisha Neal",
+      "role": "Chief Financial Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "7124cac6-6864-4ede-8c08-9db9db6a9bd5",
+      "slug": "alisha-neal"
+    },
+    {
+      "full_name": "Claire Paris",
+      "role": "Chief Medical Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "b76dbeab-ceb8-4fe9-b066-e89d6bb2a82f",
+      "slug": "claire-paris"
+    },
+    {
+      "full_name": "Scott Strong",
+      "role": "Chief Operations Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "e6af0dbd-f3b5-4c6f-9804-f1b92b3039d6",
+      "slug": "scott-strong"
+    },
+    {
+      "full_name": "Elizabeth Larkins",
+      "role": "Chief Nursing Officer",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "4409ed0a-f3e0-4bdc-8dd5-2ed5c45defb0",
+      "slug": "elizabeth-larkins"
+    },
+    {
+      "full_name": "Angie Walker",
+      "role": "Executive Director, Human Resources",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "bf009b0a-5f70-44a1-88fb-bc72fb6601ad",
+      "slug": "angie-walker"
+    },
+    {
+      "full_name": "Robin Parker",
+      "role": "Executive Director, Community Development & Patient Support",
+      "organization": "Piedmont Macon Medical Center",
+      "organization_id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-medical-center-leadership",
+      "person_id": "4f164ec3-0ab7-4880-8083-df3d4f273ccc",
+      "slug": "robin-parker"
+    },
+    {
+      "full_name": "Stephen Daugherty",
+      "role": "Chief Executive Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "df170e69-b6df-47ba-bb5b-c8fd29b9f685",
+      "slug": "stephen-daugherty"
+    },
+    {
+      "full_name": "Alisha Neal",
+      "role": "Chief Financial Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "7124cac6-6864-4ede-8c08-9db9db6a9bd5",
+      "slug": "alisha-neal"
+    },
+    {
+      "full_name": "Claire Paris",
+      "role": "Chief Medical Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "b76dbeab-ceb8-4fe9-b066-e89d6bb2a82f",
+      "slug": "claire-paris"
+    },
+    {
+      "full_name": "Scott Strong",
+      "role": "Chief Operations Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "e6af0dbd-f3b5-4c6f-9804-f1b92b3039d6",
+      "slug": "scott-strong"
+    },
+    {
+      "full_name": "Elizabeth Larkins",
+      "role": "Chief Nursing Officer",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "4409ed0a-f3e0-4bdc-8dd5-2ed5c45defb0",
+      "slug": "elizabeth-larkins"
+    },
+    {
+      "full_name": "Angie Walker",
+      "role": "Executive Director, Human Resources",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "bf009b0a-5f70-44a1-88fb-bc72fb6601ad",
+      "slug": "angie-walker"
+    },
+    {
+      "full_name": "Robin Parker",
+      "role": "Executive Director, Community Development & Patient Support",
+      "organization": "Piedmont Macon North Hospital",
+      "organization_id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "source": "https://www.piedmont.org/about-piedmont/hospital-leadership/piedmont-macon-north-hospital-leadership",
+      "person_id": "4f164ec3-0ab7-4880-8083-df3d4f273ccc",
+      "slug": "robin-parker"
+    },
+    {
+      "full_name": "Kathy McCollum",
+      "role": "President and CEO",
+      "organization": "Middle Georgia Community Food Bank",
+      "organization_id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "source": "https://mgcfb.org/wp-content/uploads/2026/10/MGCFB-Fall26-Newsletter-Final2_new.pdf",
+      "person_id": "d76fa528-02c4-4584-80e2-b513363ea5fc",
+      "slug": "kathy-mccollum"
+    }
+  ],
+  "exclusions": [
+    {
+      "name": "Goldcoaster Group",
+      "reason": "County partnership list includes businesses; nonprofit status not verified."
+    },
+    {
+      "name": "Fort Hawkins",
+      "reason": "County reference verified, but linked website is parked; current operating organization and leadership not verified."
+    },
+    {
+      "name": "Leadership Macon Endowment Fund",
+      "reason": "Fund, not a separate operating organization; represented through Greater Macon Chamber profile."
+    },
+    {
+      "name": "Macon Coalition to End Homelessness",
+      "reason": "Referenced by county, but current legal entity and leadership require confirmation."
+    },
+    {
+      "name": "Better Business Bureau",
+      "reason": "County directory links the national network; local operating entity and current leadership were not resolved in this pass."
+    },
+    {
+      "name": "Better Business Bureau",
+      "reason": "County directory links the national network; local operating entity and current leadership were not resolved in this pass."
+    }
+  ],
+  "statistics": {
+    "organizations": 75,
+    "new_organizations": 66,
+    "updated_organizations": 9,
+    "people": 133,
+    "new_people": 129,
+    "updated_people": 4,
+    "affiliations": 145,
+    "new_portraits": 0
+  },
+  "verification": [
+    {
+      "type": "organization",
+      "id": "68d406d7-565b-403a-bbd6-4ec807ed5cc6",
+      "name": "Macon-Bibb Citizen Advocacy",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "6e0b85f8-fa1e-4ebc-a71b-63167c147972",
+      "name": "Middle Georgia Community Food Bank",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "dbc7610a-8155-4412-93de-87eb72630943",
+      "name": "Macon-Bibb County Economic Opportunity Council",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "2e8e8091-5c50-44ac-a23d-4383f8c32a50",
+      "name": "Keep Macon-Bibb Beautiful",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "4b5b8dab-0159-4930-975f-bcdfb0a8cd30",
+      "name": "Macon Arts Alliance",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "cadfb929-7335-4474-97b8-0fb6337ea429",
+      "name": "Macon Regional Crimestoppers",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "9d098a93-57f3-4678-9273-8c80e2698f65",
+      "name": "Museum of Arts and Sciences",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "b63b1fd8-8a3a-4533-9753-1dcced6473de",
+      "name": "Museum of Aviation Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "93f91fdd-65e5-4323-b7ea-0982d241b65c",
+      "name": "Crisis Line & Safe House of Central Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "ff4ea849-2862-4559-b1b6-439356c0b7a5",
+      "name": "Tubman African American Museum",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "603aade1-ff4e-452c-b02c-1e580c999667",
+      "name": "International Cherry Blossom Festival",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "cd3361bc-3559-4baa-996c-e1c5544036cf",
+      "name": "Douglass Theatre",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "6da5d24c-bdad-4aec-9ca9-9234fb0e874a",
+      "name": "Visit Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "7249608f-df9d-42fc-ae00-b7e143cf95b1",
+      "name": "Greater Macon Chamber of Commerce",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "97b264b0-1bd9-4b52-9131-fb079e68a8a2",
+      "name": "Rebuilding Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "33f24f5d-a8e3-430f-97b6-ac21639fd0e8",
+      "name": "Mercer University",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "3008acd1-5a21-4ff5-87ca-9ed3b1dae8a3",
+      "name": "Wesleyan College",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "070e700d-24ce-41ef-b187-f0a930ccb96a",
+      "name": "Best Buddies in Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "804f3b28-5af9-48f3-898d-6df5be0568a8",
+      "name": "Bibb Mt. Zion Baptist Church",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "54adffb4-60c8-4557-9876-28fe7d42e663",
+      "name": "Big Brothers Big Sisters of the Heart of Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "9bede253-4a26-49ca-935e-6d252253ada3",
+      "name": "Central Georgia CASA",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "4f176a1b-2dd0-4e31-a077-bf64595b01e7",
+      "name": "Central Georgia Council, Scouting America",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "24ffb3a4-206f-45b3-b0ff-88a8f7d675a4",
+      "name": "Coach John M. Peacock Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "fb015ca5-240e-4ff9-b421-276ee93d386a",
+      "name": "Family Advancement Ministries",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "df7291fd-50e7-4d22-b167-7d870718bfa6",
+      "name": "Girl Scouts of Historic Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "00a9eeeb-d20f-42cf-bdc0-f54b78391e13",
+      "name": "I Am Kali",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "12ca0e75-3088-436b-93e4-af6b9e07977f",
+      "name": "Joining Our Youth",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "71e04e45-2ae8-45bd-a2ee-cdbaff8c8031",
+      "name": "Little Disciples Educational Services",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "8a60ba0c-d5bf-4e6b-a2a0-8d8839b0a73d",
+      "name": "Macon Hope — First Tee Middle Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "955f8698-dc88-4946-aa79-7496ddb2c332",
+      "name": "Meals on Wheels of Middle Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "2a97254f-55eb-4fca-a0d5-978f986a4678",
+      "name": "Mother’s Nest",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "7e7afc77-75be-43b5-905c-f992b98e4dc3",
+      "name": "Mt. Zion Baptist Church — Upson County",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "5334b46e-9a84-4c67-9767-a78be0ac13f8",
+      "name": "Rescue Mission of Middle Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "983e3e0b-88fe-4272-876c-b3d23f7f9ae5",
+      "name": "Sleep in Heavenly Peace — Macon Chapter",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "f9e08bf8-aaa8-4f37-9c10-f5181c1a7502",
+      "name": "The Arc Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "c08c7c25-f84d-45be-b553-8e1955c76272",
+      "name": "100 Black Men of Macon-Middle Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "79cc029e-abe0-40c0-8460-c020098fd7e0",
+      "name": "Lead With Literacy",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "ae4f2331-7872-43fa-99e6-e9883c941b43",
+      "name": "Men About Change",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "d11b2901-2486-4fd0-925f-d60d10ec3145",
+      "name": "Next Level Community Development Center",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "db4090d6-4d30-46ee-9c55-fcb44b1e6d35",
+      "name": "Appleton Episcopal Ministries",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "b6c9d380-4743-47e3-bc1f-45cff42c7fbc",
+      "name": "Campus Clubs",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "755d131e-f94c-433f-bc0e-2d3a745897ea",
+      "name": "Diamonds On Our Mind Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "a9efd622-f398-418c-a0b3-30727d89ef9c",
+      "name": "Epsilon Beta Lambda Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "5414ac79-9371-4686-9128-58e6ba8c60e7",
+      "name": "Family Counseling Center of Central Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "374a36c2-fe8b-4080-a9ac-a5d8c49c2e9f",
+      "name": "Girls Dig Deeper Initiative",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "72b01618-5bbb-4a62-a99e-082efd520edb",
+      "name": "Living Bread Restoration Outreach",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "b632c214-b6b6-41ed-a2c1-b4f14cda949c",
+      "name": "Pace Center for Girls — Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "2838b5a6-b504-4296-aecd-9ff2be18b930",
+      "name": "HomeFirst Housing Resource Services",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "e131019f-badc-473f-bde8-a85715431fa6",
+      "name": "The Mentors Project of Bibb County",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "5fa13bbd-d3ef-4627-bdaa-a862991c075c",
+      "name": "River Edge Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "aaeefb3b-b257-46f1-8c4a-e3330ad90bf5",
+      "name": "Community Partnership — Bibb County Family Connection",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "07d79079-9a9e-4110-8e32-e0093168c480",
+      "name": "Macon Periods Easier",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "afcd84f0-cc82-4df6-9493-78fb8008fe95",
+      "name": "Choosing a Quality Life",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "a3254474-5a15-4757-9c3a-7478429b2efc",
+      "name": "American Red Cross — Central Midwest Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "281e110c-1d89-41d2-8bf0-addbc88edc45",
+      "name": "Goodwill Industries of Middle Georgia and the CSRA",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "name": "Loaves and Fishes Ministry of Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "a1224a88-0e9e-418f-974c-242ab2d28316",
+      "name": "Society of St. Andrew — Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "3f07a696-d49b-47da-88b7-fb186b0d0dbe",
+      "name": "First Choice Primary Care",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "5690d28c-5e1c-4e3c-bca0-70d97d6700e6",
+      "name": "Keryx Ministries",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "d64bb084-6c7a-4f7f-8eb5-8a64ab8c1f12",
+      "name": "The Peyton Anderson Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "84a3808c-1dd7-48e8-a931-291bc45431b1",
+      "name": "Macon-Bibb Mayor’s Literacy Alliance",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "1f22a55d-9d44-454f-a390-a05855f7d566",
+      "name": "Otis Redding Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "name": "Community Foundation of Central Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+      "name": "NewTown Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "4a3641a0-bfa6-412e-9d0e-4ee7df280179",
+      "name": "Historic Macon Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "709fa82d-5606-4d59-bb34-f8277fd774c4",
+      "name": "John S. and James L. Knight Foundation",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "56312373-b1d8-4796-9c9c-97f7d681f2b6",
+      "name": "United Way of Central Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+      "name": "Daybreak Resource Center — Depaul USA",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "name": "The Salvation Army of Central Georgia",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "41c643c0-5995-4050-8e34-ab110d91c0fb",
+      "name": "Georgia Women (And Those Who Stand With Us)",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "838cbf85-f9f0-41f6-8f8b-699e9a793506",
+      "name": "Macon Milledgeville Regional Habitat for Humanity",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "93823e8e-c6a0-46b4-8311-9a6d92ea5178",
+      "name": "Bike Walk Macon",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "598bcd8c-ff49-436e-b557-3aec715c57d5",
+      "name": "Piedmont Macon Medical Center",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "e3ac102d-2ae2-4db3-92f1-680b3044f6f9",
+      "name": "Piedmont Macon North Hospital",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "organization",
+      "id": "93d71ca9-ebc1-436d-abcc-409d87a0354f",
+      "name": "National Cybersecurity Alliance",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "bc6317dc-c300-4c6f-ad86-66865a80dfce",
+      "name": "Verda Colvin",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b07905bb-27a9-482e-aea0-84b91f24d46d",
+      "name": "Kendra Russell",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "000cd7bb-3a34-4ec7-ae37-cb978abe8655",
+      "name": "Natacha Ansley",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ebcb62e8-eafd-45ce-b0ba-65861c79529b",
+      "name": "Cindy Tengelsen",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "1d525469-97fa-4023-9665-89dba6341074",
+      "name": "Pamela White-Colbert",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "31effe83-a589-459d-ac90-3af549fdce8b",
+      "name": "David Danzie",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "name": "Nancy Nash",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "5dbfe4bc-0880-44a5-a12d-30c7eb7a1750",
+      "name": "Alvin Lindsey",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "5b68645a-51f7-4c31-bc99-c9f294ff0e78",
+      "name": "Bob Hatcher",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "edd73fe7-c987-4098-8b9b-33ad0d10e3c6",
+      "name": "Sarita R. Hill",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "29740a71-7f9f-451b-aede-fc823e872aac",
+      "name": "Ike E. Mack",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "6fd90ab5-60a2-4e09-9a4b-e41d96ac84fe",
+      "name": "Isaac Grant",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "c8d58602-6289-47d1-82ca-4eb64599b7ef",
+      "name": "Sam Henderson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "c118f7b2-6783-47d9-8840-fc009e829581",
+      "name": "Susan Joanis",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "074fddde-320f-4d1d-a144-081bbbd5b20c",
+      "name": "LaConstance Smith",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "25a915ef-6895-47a4-b358-523e1c187332",
+      "name": "James L. Bumpus",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "bf4450d9-b836-4582-9242-c46ff1bafcbe",
+      "name": "Asha Ellen",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "31aeb847-01b7-4afc-97a9-628a76a0bf5d",
+      "name": "Willie Pitts",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "31c3739e-805c-4ce9-892c-9df5e0667243",
+      "name": "Natasha Christian",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f2b766cd-54c2-46af-8ee8-0cbf8bb32185",
+      "name": "Laurie Fickling",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "06fc303b-13e8-4b28-87cf-36cb7121726c",
+      "name": "Jaquana Barnes Mosley",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "2a9496ee-8dc3-4304-a5f7-a868262532a6",
+      "name": "Chris Howard",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ec8b4187-9282-4594-93dc-c14ad98486e1",
+      "name": "Brandi Simpson Miller",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "2bea306d-3225-4258-b491-a3acd260a2fc",
+      "name": "Justin Hollingsworth",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ca5cb31c-aafb-4001-b9f6-e292fe2fb90f",
+      "name": "George Crawley",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "6f567b22-60bf-4de4-9106-86be1fd96e56",
+      "name": "Ty Fiveash",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "0e87ccd1-a4b7-4cbb-af3b-2b9fcdf0e0e8",
+      "name": "Julie Wilkerson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8fb073da-00f8-4acd-abc2-914c712f73b8",
+      "name": "Maria Andrade",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4721c28d-736a-4fe8-b82a-616689b5f182",
+      "name": "Ginny Lane Sheridan",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "43f7e38e-5d87-46b2-b405-9bfef633e7ee",
+      "name": "Brooks Corwin",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "fc063f54-da7b-4666-9765-b78ace75e99f",
+      "name": "Erin Hawkins",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "aea7ee33-24e6-48d2-bd04-5c2056b14219",
+      "name": "Tabatha Duncan",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "d16d6611-0285-4b58-aeab-263dac7d1bcc",
+      "name": "Autumn VanGunten",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b9df0f15-19ca-4736-ab4d-548110ce9e25",
+      "name": "Lauren Roan-Parks",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "bf2d0fbf-6c69-4922-9ad0-29ce962d02aa",
+      "name": "Jim Greenhouse",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "a14247b8-a90a-461e-bd78-1f8a609e542e",
+      "name": "Kristie Jones",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "57fb24af-f3c2-4ac1-8d62-502bccfad780",
+      "name": "Mallory Stone",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "9193ca2e-a4db-4f34-b256-973dcac55ca9",
+      "name": "Lauryn Dawson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "3e4786df-fb2f-4d7c-a219-192cd541b5f3",
+      "name": "Charles Ladson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ffd07c9c-cb28-4e92-95a3-267c7078e054",
+      "name": "Lorra Lynch Jones",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "58af7d5f-7973-4fd7-8f44-66b0dbec539e",
+      "name": "Howard “Chris” Davis",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "1ad076dc-7805-4f53-9888-b9b6d094ad83",
+      "name": "Susan Dryden",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f7e23ea7-7216-453a-adaa-1cf9ffef2829",
+      "name": "Chris McGuire",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "15cc4778-e82d-4a97-a31e-c6b3c4ee1932",
+      "name": "David Hollingsworth",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "872311b0-97f1-4a6c-84b8-f7c83efd312c",
+      "name": "Ashleigh Coats",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "3d1ce37a-43e6-4552-bac5-b8887a462fc9",
+      "name": "Bonnie Carlson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "7e5ffd43-8b97-4756-baae-f33bc6e3043e",
+      "name": "Holly Reeves",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f380c532-f1e2-4f81-b1b4-3b7f7b4a118a",
+      "name": "Jamie Walden",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "7712a6fe-7506-4a5a-8426-3817d35825b3",
+      "name": "Jonathan Adams",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "c17ef11f-9349-43d1-bd78-2aa2b5e33f9f",
+      "name": "Harold Young",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "68540d8e-de0f-4ec3-991f-ab328cfecd0e",
+      "name": "Barrie Miller-Howard",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "141b3f21-ac1c-48f4-8477-dad1bfd47b44",
+      "name": "Jeff Bruce",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "58b2edbf-2e6e-4e12-a58b-25f4a5727e9f",
+      "name": "Denise Y. Vanzant",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f2fe0891-5805-4858-8f71-5bfe20eed42b",
+      "name": "Stacy Moore",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+      "name": "Patty Gibbs",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "1e06bdd6-aa8f-40ee-abd2-95ac3f99db00",
+      "name": "Katie Hart",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e2f0e82d-ef7e-4c4c-bc8b-9fe41da652e3",
+      "name": "Jenny O’Neal",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "81d0ebee-718d-484b-9612-3be8be29a0a9",
+      "name": "Hannah Jett Theus",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "fa447994-8979-4f13-b42a-51727c7a9b8f",
+      "name": "Robin Cochran",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4b182fb5-c924-4fc5-809d-dfe6417652f0",
+      "name": "Gary Wheat",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4dbda243-e095-4b00-84d2-4f0af4347e53",
+      "name": "Jessica Walden",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "a5a48cf2-7aa9-40ad-9237-15992eb714d5",
+      "name": "Jennifer Bronner",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "a6e6f202-a9aa-4fb4-9416-6d0d074cdff7",
+      "name": "J.R. Olive",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e548c94f-e50b-42b3-a29e-d28c3a9a0a73",
+      "name": "Renita Patterson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "2928a887-30a4-4fe6-bdc6-9d83b8d8717d",
+      "name": "Sherry Singleton",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8bd7fa7e-0367-4b89-9e74-03754bb58628",
+      "name": "Jen Marshall",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e6991351-6846-40f3-8cfd-1b1d5a4436eb",
+      "name": "Alex Mason",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "aab3a447-ce02-4773-94ed-5102e5e1bcf3",
+      "name": "Reid McLain",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8b877a7f-07bc-49cd-86b8-b53d54214546",
+      "name": "Derek Thomas",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8566281f-013e-439d-9f98-36b85e450270",
+      "name": "Tom Birmingham",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "1568d78d-a5a6-46de-b20c-d2acca1bbe1e",
+      "name": "Betsy Fitzgerald",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "6c3c39b6-9b91-4770-b123-2825555f064e",
+      "name": "Jackie Curtis",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4bdd819a-cb98-4aae-a6fc-0e5e19c0c3c3",
+      "name": "Fran Lugo-Camera",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8efada63-b71c-47fc-a380-36428b77fc04",
+      "name": "Bre’yanna Johnson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b309940b-a86a-4d4c-a1c3-dc8b0f969fd5",
+      "name": "Elizabeth Hammock",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "7bf74394-2fb8-4c7e-8452-b2d9c4164f0e",
+      "name": "David McCain",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "a4d9d245-159a-4faf-b21d-00342037d4c3",
+      "name": "Cathy Barnes",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ef6b189b-cca4-4866-8ed2-318fa6b54a6b",
+      "name": "Olivia Slaton",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ae08d37f-defa-4ea7-8590-43c7f25002f6",
+      "name": "Garrett L. Williams",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e5e82c63-6a40-433b-8239-8012b2728f7a",
+      "name": "Pat Chastain",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "12aa0312-1d3e-446e-9088-1d6874fdcd9b",
+      "name": "Tina Hicks",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "caecdee3-4ad8-4b44-9adb-f338146bf479",
+      "name": "Dawn Burns",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f0aa7029-6cd8-4293-b323-3f8db0574909",
+      "name": "Jason Beck",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "34deeec3-b175-4307-b2fd-524d281f5551",
+      "name": "Barbara Durham",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "1c516628-7968-406e-869c-7ced8f2cde9e",
+      "name": "Chako Scott",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "006d92d2-a5dd-4f62-8aca-9101d593c08c",
+      "name": "Charlie L. Cantrell",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f0830777-1425-4899-9005-05e67c41ec3f",
+      "name": "Blake Sullivan",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "702c634e-3459-4239-ab95-fe2a3f29a975",
+      "name": "Beverly Olson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f1c465b6-a665-4e5c-a789-de642c535dea",
+      "name": "Susan Collins",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "df59f879-5c65-486a-a0da-17065875dc49",
+      "name": "Christy Henry",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f2854ac8-3ab5-4627-87f1-46266981d6af",
+      "name": "Najiva Timothee",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "904918e5-481f-4449-a9b8-b146ca4f9b26",
+      "name": "Jill Vanderhoek",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b8411b00-e6fe-43d7-ba77-d87d331cf687",
+      "name": "Dominique Johnson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "6fb6662c-1ed3-40b2-b42e-960181231d21",
+      "name": "Gregory Glover",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "ddaad83a-7231-4ef8-8d64-8ed2949692e5",
+      "name": "Jim Montgomery",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "3c300192-db2d-4cbe-a3f8-b28bcfba610f",
+      "name": "Karla Redding-Andrews",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "91f646a0-08c8-4403-a2c2-22223b3b2a33",
+      "name": "Penny L. Elkins",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "c62a4dfd-337c-41bd-9363-6366b4009f33",
+      "name": "Meaghan Blight",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "40addf0d-a363-4870-9dd2-f24c0081f923",
+      "name": "Ivey Hall",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "dcb17d8b-dd1b-49c4-9eca-7abb07c74c36",
+      "name": "Kathleen Matthews",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "fe8507a4-eba0-479e-921e-1722f738f48e",
+      "name": "Courtney Erikson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+      "name": "Weston Stroud",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "836ec619-3344-41ea-b929-0dea6acee4a7",
+      "name": "Jim Manley",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "9fe3b9a3-ed41-4cfb-8bac-7d44ed0a2c19",
+      "name": "Jennifer Sellers",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f9de5ca8-cc50-4fb2-a09f-48e7cbf7e470",
+      "name": "Ellie Johnson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b2c7672a-5314-403f-97d7-b1dd182f9cf2",
+      "name": "Karen J. Lambert",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "129e0bb3-8503-41e8-bc8e-a1ca51fb313d",
+      "name": "Gail Mansfield",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "9838a34f-70cf-40fc-929c-9c71741f664a",
+      "name": "Charla Ivey",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b015a617-9755-4e2c-8a28-c244efa961ef",
+      "name": "Chenza Stokes",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "2ec810eb-cfb1-45c8-8377-8f74a1fc3339",
+      "name": "Melody Blake",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "969db5fb-2edb-4886-b65a-8a507744a9dc",
+      "name": "Dwight Frederick",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "d66eca81-64e9-48e3-9c81-b35d8662de42",
+      "name": "Carrie Ingoldsby",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "25580be0-cae9-4bee-9b2e-fe26a1211bd3",
+      "name": "Jolynn Allgood",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8b37b1d7-87f2-4a9b-91e4-a64b4330372e",
+      "name": "Seth Berkebile",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "eaed1454-bf20-4d02-b148-fbd98299c33e",
+      "name": "Jessica Tucker",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "60545a37-9406-49fb-95bc-bc1c0c0bdbf5",
+      "name": "Kellie R. Appel",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "2a8f55dd-9821-4a73-837e-c67ea05479cb",
+      "name": "Julia Davis",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "68e3e588-6f9e-49ef-bbba-8447ed995412",
+      "name": "Matthew R. Hall",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4c0987f9-2f0a-4290-9aba-1db7548b684f",
+      "name": "Maria Hammett",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e137adca-ac21-4313-b46a-01bd152b8748",
+      "name": "Mary Bowman Hampton",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b8d1388f-1dbc-4b8b-9125-36aaaea9b0d4",
+      "name": "Keith E. Howard",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b1f6751c-eb16-488f-9d3b-9fd30c904ea8",
+      "name": "Kathryn D. Kloepper",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "f2456ea9-10a2-4941-b659-717699c50049",
+      "name": "Lisa M. Lundquist",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8a7fcbbe-0188-4f64-9360-c7e44cf5ab77",
+      "name": "John A. Patterson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "8d3754d0-3a07-4946-8341-c8013af11d45",
+      "name": "Douglas R. Pearson",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "df170e69-b6df-47ba-bb5b-c8fd29b9f685",
+      "name": "Stephen Daugherty",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "7124cac6-6864-4ede-8c08-9db9db6a9bd5",
+      "name": "Alisha Neal",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "b76dbeab-ceb8-4fe9-b066-e89d6bb2a82f",
+      "name": "Claire Paris",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "e6af0dbd-f3b5-4c6f-9804-f1b92b3039d6",
+      "name": "Scott Strong",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4409ed0a-f3e0-4bdc-8dd5-2ed5c45defb0",
+      "name": "Elizabeth Larkins",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "bf009b0a-5f70-44a1-88fb-bc72fb6601ad",
+      "name": "Angie Walker",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "4f164ec3-0ab7-4880-8083-df3d4f273ccc",
+      "name": "Robin Parker",
+      "ok": true,
+      "roleFailures": []
+    },
+    {
+      "type": "person",
+      "id": "d76fa528-02c4-4584-80e2-b513363ea5fc",
+      "name": "Kathy McCollum",
+      "ok": true,
+      "roleFailures": []
+    }
+  ],
+  "leadership_gaps": [
+    {
+      "name": "Macon Regional Crimestoppers",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Douglass Theatre",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Best Buddies in Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Bibb Mt. Zion Baptist Church",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Coach John M. Peacock Foundation",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Family Advancement Ministries",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Girl Scouts of Historic Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "I Am Kali",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Joining Our Youth",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Little Disciples Educational Services",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Macon Hope — First Tee Middle Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Meals on Wheels of Middle Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Mother’s Nest",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Mt. Zion Baptist Church — Upson County",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Sleep in Heavenly Peace — Macon Chapter",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "The Arc Macon",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Lead With Literacy",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Men About Change",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Next Level Community Development Center",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Appleton Episcopal Ministries",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Campus Clubs",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Diamonds On Our Mind Foundation",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Epsilon Beta Lambda Foundation",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Living Bread Restoration Outreach",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Pace Center for Girls — Macon",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "HomeFirst Housing Resource Services",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "The Mentors Project of Bibb County",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "River Edge Foundation",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Macon Periods Easier",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Choosing a Quality Life",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "American Red Cross — Central Midwest Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Goodwill Industries of Middle Georgia and the CSRA",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Loaves and Fishes Ministry of Macon",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Society of St. Andrew — Georgia",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "First Choice Primary Care",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Keryx Ministries",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    },
+    {
+      "name": "Community Foundation of Central Georgia",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "NewTown Macon",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "Historic Macon Foundation",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "John S. and James L. Knight Foundation",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "United Way of Central Georgia",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "Daybreak Resource Center — Depaul USA",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "The Salvation Army of Central Georgia",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "Georgia Women (And Those Who Stand With Us)",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "Bike Walk Macon",
+      "note": "Existing profile retained; this pass adds government-reference provenance."
+    },
+    {
+      "name": "National Cybersecurity Alliance",
+      "note": "No current executive or officer independently verified in the sources reviewed."
+    }
+  ],
+  "deployment": {
+    "build_uuid": "2b9e84a9-c1e0-4993-9b2d-a033d4b53f9a",
+    "worker_version": "b9c2533a-7b5c-415e-86e2-99c2ee00f8ce",
+    "outcome": "success",
+    "profile_pages_passed": 208
+  }
+}

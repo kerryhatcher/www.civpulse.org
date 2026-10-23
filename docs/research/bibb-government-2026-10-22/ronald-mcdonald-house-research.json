@@ -1,0 +1,285 @@
+{
+  "verified_at": "2026-10-23",
+  "organizations": [
+    {
+      "id": "86f6d9e5-c2a7-4a52-9abc-4f0421fab804",
+      "slug": "ronald-mcdonald-house-central-southwest-georgia",
+      "name": "Ronald McDonald House of Central and Southwest Georgia"
+    },
+    {
+      "id": "548d5830-8857-486c-9f03-7b63b07f4b8b",
+      "slug": "ronald-mcdonald-house-central-southwest-georgia-board",
+      "name": "Ronald McDonald House of Central and Southwest Georgia Board of Directors"
+    },
+    {
+      "id": "580fbf46-cf6e-432e-b796-8d6e3bfa084b",
+      "slug": "ronald-mcdonald-house-macon",
+      "name": "Ronald McDonald House in Macon"
+    }
+  ],
+  "people": [
+    {
+      "id": "881cd5a8-3d80-49aa-9a71-93c3c27c3892",
+      "slug": "patty-gibbs",
+      "full_name": "Patty Gibbs",
+      "existing": true,
+      "role": "President & CEO",
+      "group": "staff"
+    },
+    {
+      "id": "0a73d623-cd2d-4240-a0ee-8ed92cd827b1",
+      "slug": "robby-walker",
+      "full_name": "Robby Walker",
+      "role": "Director of Operations",
+      "group": "staff"
+    },
+    {
+      "id": "9032d3cb-13e7-4a89-af97-7a5e5b6a7195",
+      "slug": "jody-long",
+      "full_name": "Jody Long",
+      "role": "Director of Development",
+      "group": "staff"
+    },
+    {
+      "id": "8bec588e-33d7-4c1d-a911-a759933c8b2e",
+      "slug": "keondria-wimberly",
+      "full_name": "Keondria Wimberly",
+      "role": "Assistant Director, Programs & Services",
+      "group": "staff"
+    },
+    {
+      "id": "7ad29d15-5c1e-4b54-b71e-5d2c439f0849",
+      "slug": "chris-childers",
+      "full_name": "Chris Childers",
+      "role": "Director, Community and Corporate Engagement",
+      "group": "staff"
+    },
+    {
+      "id": "574439cc-6a86-4e63-ab35-7b388e57f597",
+      "slug": "brenda-usry",
+      "full_name": "Brenda Usry",
+      "role": "Financial Manager / Executive Administrative Assistant",
+      "group": "staff"
+    },
+    {
+      "id": "9cfd430d-b89c-4776-a25c-dd7379bd3347",
+      "slug": "rachael-jones",
+      "full_name": "Rachael Jones",
+      "role": "Resident Manager",
+      "group": "staff"
+    },
+    {
+      "id": "37982c47-62ee-4342-a4e7-f723218c1eb3",
+      "slug": "cara-heard",
+      "full_name": "Cara Heard",
+      "role": "Events Manager",
+      "group": "staff"
+    },
+    {
+      "id": "0777cf49-2e4f-4c95-b02a-1f2f0b4b1cbb",
+      "slug": "courtney-sinclair",
+      "full_name": "Courtney Sinclair",
+      "role": "Evening Manager",
+      "group": "staff"
+    },
+    {
+      "id": "51c35ff2-a730-494d-b901-8424c5823382",
+      "slug": "barneika-williams",
+      "full_name": "Barneika Williams",
+      "role": "Resident Manager",
+      "group": "staff"
+    },
+    {
+      "id": "00729334-a531-4023-9e5f-f2a9a7155f60",
+      "slug": "blair-train",
+      "full_name": "Blair Train",
+      "role": "Development Administrative Assistant",
+      "group": "staff"
+    },
+    {
+      "id": "98f14b4d-229f-451e-81d9-621af5b93f9b",
+      "slug": "kelsey-dixon",
+      "full_name": "Kelsey Dixon",
+      "role": "Team Ronald McDonald House Coordinator",
+      "group": "staff"
+    },
+    {
+      "id": "a75d0e67-698d-44b0-820b-e1694db7687e",
+      "slug": "ken-burgamy",
+      "full_name": "Ken Burgamy",
+      "role": "Communications",
+      "group": "staff"
+    },
+    {
+      "id": "24306c19-b18f-4e6b-9737-941e96247b89",
+      "slug": "valerie-stevenson",
+      "full_name": "Valerie Stevenson",
+      "role": "Housekeeping",
+      "group": "staff"
+    },
+    {
+      "id": "d37da69e-9f14-47c0-ad24-f0c265b6b657",
+      "slug": "kenika-gore",
+      "full_name": "Kenika Gore",
+      "role": "Housekeeping",
+      "group": "staff"
+    },
+    {
+      "id": "b1daed17-70d7-426b-aa10-cb649939ddb7",
+      "slug": "elizabeth-schorr",
+      "full_name": "Elizabeth Schorr",
+      "role": "Marketing",
+      "group": "staff"
+    },
+    {
+      "id": "10bd94e0-dd90-4759-9be6-f4f852676e79",
+      "slug": "sandy-duke",
+      "full_name": "Sandy Duke",
+      "role": "2026 Board Chair",
+      "group": "board"
+    },
+    {
+      "id": "1ab170d2-028c-490d-ad09-179a05b12390",
+      "slug": "jennifer-roberts",
+      "full_name": "Jennifer Roberts",
+      "role": "2026 Board Vice Chair",
+      "group": "board"
+    },
+    {
+      "id": "91dd80ad-554a-4735-83f1-c98b33503782",
+      "slug": "chris-snow",
+      "full_name": "Chris Snow",
+      "role": "2026 Board Secretary",
+      "group": "board"
+    },
+    {
+      "id": "a1f80f43-c8bf-449b-8ad1-80622307162d",
+      "slug": "ron-busby",
+      "full_name": "Ron Busby",
+      "role": "2026 Board Treasurer",
+      "group": "board"
+    },
+    {
+      "id": "76d8f7a0-c6f9-4766-897c-270e16ef08ce",
+      "slug": "jennifer-adrien",
+      "full_name": "Jennifer Adrien",
+      "role": "2026 Past Board Chair",
+      "group": "board"
+    },
+    {
+      "id": "e87050f8-809a-4af9-b67e-0f104079212d",
+      "slug": "tim-bergl",
+      "full_name": "Tim Bergl",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "b24a3af6-c383-46b5-a23a-1b43d4088b7a",
+      "slug": "kevin-bryant",
+      "full_name": "Kevin Bryant",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "0638b88f-72c7-48aa-9de1-ab3091c6cfbb",
+      "slug": "amy-ethridge",
+      "full_name": "Amy Ethridge",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "f5a66b31-2892-4bfb-937e-c472b76e7b19",
+      "slug": "katherine-eubanks",
+      "full_name": "Katherine Eubanks",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "6a30503e-0767-4998-ad76-0ab2e5b38ff9",
+      "slug": "jon-hawk",
+      "full_name": "Jon Hawk",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "3898a904-13ea-40e2-9245-02ea9de15007",
+      "slug": "jennifer-heleski",
+      "full_name": "Jennifer Heleski",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "eed7d4a6-902e-449d-b640-63c0d6e5712b",
+      "slug": "lori-johnson",
+      "full_name": "Lori Johnson",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "6134ccf9-b236-4b53-851e-9e78ce149af4",
+      "slug": "brad-michael",
+      "full_name": "Brad Michael",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "cfbce0e7-3f6a-43e8-a5fd-8302c56c4a0f",
+      "slug": "jessica-sizemore-deen",
+      "full_name": "Jessica Sizemore Deen",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "11ca9db8-57be-4359-9a20-2665044dd4c0",
+      "slug": "keith-smallwood",
+      "full_name": "Keith Smallwood",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "2888753c-c095-4dc5-87cf-ccd9b098f6de",
+      "slug": "george-suarez",
+      "full_name": "George Suarez",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "7f133166-826e-49e5-b655-6c095c72e7dd",
+      "slug": "diana-sutton",
+      "full_name": "Diana Sutton",
+      "role": "2026 Board Member",
+      "group": "board"
+    },
+    {
+      "id": "4e42d850-bd06-4d9a-8c90-41fa1623c6b1",
+      "slug": "kari-willingham",
+      "full_name": "Kari Willingham",
+      "role": "2026 Board Member",
+      "group": "board"
+    }
+  ],
+  "relationships": [
+    [
+      "86f6d9e5-c2a7-4a52-9abc-4f0421fab804",
+      "548d5830-8857-486c-9f03-7b63b07f4b8b",
+      "Governed by",
+      "Governing board of",
+      "https://ronaldmcdonaldhousecentralswga.org/about-us/board-of-directors/"
+    ],
+    [
+      "86f6d9e5-c2a7-4a52-9abc-4f0421fab804",
+      "580fbf46-cf6e-432e-b796-8d6e3bfa084b",
+      "Operates",
+      "Operated by",
+      "https://ronaldmcdonaldhousecentralswga.org/about-us/our-house/"
+    ],
+    [
+      "86f6d9e5-c2a7-4a52-9abc-4f0421fab804",
+      "90078d47-bf0a-4113-bbfb-ede00fbbaeef",
+      "2026 Share a Night grant supporter",
+      "2026 Share a Night grant recipient",
+      "https://www.maconbibb.us/community-foundation-of-central-georgia-awards-more-than-345000-in-grants-to-nonprofits-serving-central-georgia/"
+    ]
+  ],
+  "notes": "October 2026 rebrand confirmed by current official site, legacy domain redirect and October 21 news release. 16 staff and 18 unique 2026 directors; duplicate Chris Snow omitted. Patty Gibbs reused, 33 new people. No nongovernment profile photos used. Source HTML saved in /tmp/bibb-research from official pages."
+}

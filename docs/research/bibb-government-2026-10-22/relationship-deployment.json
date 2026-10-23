@@ -1,0 +1,30 @@
+{
+  "verified_at": "2026-10-23T05:11:50.843Z",
+  "commit": "bb56be908a66f8eac945cd14084da46c00694ae0",
+  "migration": "20261117000001_organization_relationships",
+  "relationships": 19,
+  "reciprocal_links": 38,
+  "profiles": 29,
+  "public_pages_built": 856,
+  "web": {
+    "build_uuid": "98bb3d43-a8ed-4ecf-9a20-622431116a17",
+    "version": "2c53d844-87d1-4708-9ac1-46f6ddf632c0",
+    "outcome": "success"
+  },
+  "mcp": {
+    "build_uuid": "804b07fc-2faf-45d5-a28d-14da04a1fab5",
+    "version": "e6201d4b-3543-42b6-839d-75a84c956aef",
+    "outcome": "success"
+  },
+  "checks": {
+    "astro": "0 errors, 0 warnings",
+    "mcp_types": "passed",
+    "database_permissions_integrity": "20 assertions passed",
+    "mcp_integration": "passed including relationship CRUD and role enforcement",
+    "local_browser": "anonymous links and signed-in admin edit passed",
+    "production_browser": "both requested reciprocal examples passed; no console errors",
+    "rls_enabled": true,
+    "security_invoker": true,
+    "new_relationship_security_findings": 0
+  }
+}

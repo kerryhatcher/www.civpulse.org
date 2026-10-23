@@ -1,0 +1,11 @@
+{
+  "build": "cbe666cb-1864-4a7e-a478-41ac21c706e8",
+  "version": "9454b697-2ce5-4474-a12e-e6995b6274e8",
+  "new_people": 49,
+  "reused_people": 13,
+  "new_organizations": 3,
+  "updated_organizations": 1,
+  "relationships": 4,
+  "pages": 996,
+  "checks": "Astro 0 errors and warnings; 62 people with board affiliations and 8 directional links verified in build. Live browser mission and advisory board checked; no console errors."
+}

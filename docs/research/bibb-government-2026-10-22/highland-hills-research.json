@@ -1,0 +1,92 @@
+{
+  "verified_at": "2026-10-23",
+  "organization": {
+    "id": "6fd9e44d-cc96-4a37-a916-f3a479eca14d",
+    "slug": "highland-hills-baptist-church",
+    "name": "Highland Hills Baptist Church"
+  },
+  "people": [
+    {
+      "id": "2842e18d-4296-459b-a6ff-f7fb46898245",
+      "slug": "caitlin-brown",
+      "full_name": "Caitlin Brown",
+      "existing": true,
+      "role": "Pastor / Minister of Service & Community"
+    },
+    {
+      "id": "3f45371d-2ea1-4170-9432-af35deb1c0db",
+      "slug": "ethan-brown",
+      "full_name": "Ethan Brown",
+      "existing": true,
+      "role": "Pastor / Minister of Care & Discipleship"
+    },
+    {
+      "id": "50697eb8-1856-4e6f-ad0c-a447bc730d41",
+      "slug": "gerald-carper",
+      "full_name": "Gerald Carper",
+      "role": "Organist"
+    },
+    {
+      "id": "8ec570da-78fd-4a4a-9e9f-9b6d36401356",
+      "slug": "richard-kosowski",
+      "full_name": "Richard Kosowski",
+      "role": "Interim Minister of Music"
+    },
+    {
+      "id": "852a9ffa-3ebc-40bb-bc1c-a692ee9cdd7e",
+      "slug": "cameron-schroeder",
+      "full_name": "Cameron Schroeder",
+      "existing": true,
+      "role": "Church Secretary / Ministry Associate"
+    },
+    {
+      "id": "40426008-2f41-40a5-a9ae-500100c0eeab",
+      "slug": "charlie-barton",
+      "full_name": "Charlie Barton",
+      "role": "Maintenance Supervisor"
+    },
+    {
+      "id": "217d991f-c3d1-469c-85d3-dec5f3340751",
+      "slug": "christy-price",
+      "full_name": "Christy Price",
+      "role": "Childcare Coordinator"
+    },
+    {
+      "id": "574164b3-17d1-487e-97cc-03dde9e50d33",
+      "slug": "brenda-anthony",
+      "full_name": "Brenda Anthony",
+      "role": "Custodian"
+    }
+  ],
+  "relationships": [
+    [
+      "6fd9e44d-cc96-4a37-a916-f3a479eca14d",
+      "7049dd3a-1642-4706-9829-ad2b7d7cd4d1",
+      "Participating congregation in",
+      "Participating congregation",
+      "https://cbfga.org/churches/"
+    ],
+    [
+      "6fd9e44d-cc96-4a37-a916-f3a479eca14d",
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "Monthly meal-packing partner",
+      "Monthly meal-packing partner",
+      "https://www.highlandhillsbaptist.org/projects-partners"
+    ],
+    [
+      "6fd9e44d-cc96-4a37-a916-f3a479eca14d",
+      "7d948f1e-3eb9-4033-b42b-67b79f02c83c",
+      "Community partner",
+      "Community partner",
+      "https://www.highlandhillsbaptist.org/projects-partners"
+    ],
+    [
+      "6fd9e44d-cc96-4a37-a916-f3a479eca14d",
+      "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+      "Community partner",
+      "Community partner",
+      "https://www.highlandhillsbaptist.org/projects-partners"
+    ]
+  ],
+  "notes": "Five new people and three existing CBFGA profiles updated with additional roles and church affiliations. Caitlin Childers Brown is existing Caitlin Brown; preserved name and slug, noted full church-listed name in description. Cameron educational biography not copied because church biography is older than CBFGA graduation account. Nongovernment headshots excluded."
+}

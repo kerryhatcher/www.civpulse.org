@@ -1,0 +1,497 @@
+{
+  "date": "2026-10-23",
+  "organizations": {
+    "church": {
+      "id": "bf8ea174-41a4-4202-a56c-87368f7ba267",
+      "slug": "centenary-united-methodist-church",
+      "name": "Centenary United Methodist Church"
+    },
+    "ccmi": {
+      "id": "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "slug": "centenary-community-ministries",
+      "name": "Centenary Community Ministries, Inc."
+    },
+    "board": {
+      "id": "f52448a9-d58d-466c-910d-c02ac551d526",
+      "slug": "centenary-community-ministries-board",
+      "name": "Centenary Community Ministries Board of Directors"
+    },
+    "housing": {
+      "id": "8a63ecac-34df-4725-a190-3abc59e32598",
+      "slug": "ccmi-transitional-house",
+      "name": "CCMI Transitional House"
+    },
+    "garden": {
+      "id": "df539105-a31c-4cc3-8492-40b01701e5dd",
+      "slug": "ccmi-community-garden",
+      "name": "CCMI Community Garden"
+    },
+    "bikes": {
+      "id": "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "slug": "re-cycle-macon-ccmi",
+      "name": "Re-Cycle Macon — CCMI"
+    },
+    "breakfast": {
+      "id": "fb2a7772-1ed5-405c-93ae-2603ba3b0648",
+      "slug": "ccmi-community-breakfast",
+      "name": "CCMI Community Breakfast"
+    },
+    "utility": {
+      "id": "8d1b15ef-34e3-474f-b4b7-077b28dbb48a",
+      "slug": "ccmi-utility-assistance",
+      "name": "CCMI Utility Assistance"
+    }
+  },
+  "people": [
+    {
+      "id": "efd146e4-c3b0-43f4-ad95-12c55ea8ee78",
+      "slug": "sara-pugh-montgomery",
+      "full_name": "Sara Pugh Montgomery",
+      "role": "Senior Pastor",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Senior Pastor"
+        ]
+      ]
+    },
+    {
+      "id": "fee0d9e3-6d63-4f84-9738-e7e19f2d7746",
+      "slug": "beth-dunwody",
+      "full_name": "Beth Dunwody",
+      "role": "Spiritual Director",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Spiritual Director"
+        ]
+      ]
+    },
+    {
+      "id": "037dd92e-d4f0-414f-b108-69194bb9e023",
+      "slug": "m-kadar-jones",
+      "full_name": "M. Kadar Jones",
+      "role": "Minister of Music",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Minister of Music"
+        ]
+      ]
+    },
+    {
+      "id": "877f5899-05ed-4f58-9176-9d84e98216e5",
+      "slug": "debra-clapp",
+      "full_name": "Debra Clapp",
+      "role": "Financial Administrator",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Financial Administrator"
+        ]
+      ]
+    },
+    {
+      "id": "a51b8359-349b-42bb-8818-ec6d2e3eb943",
+      "slug": "amanda-cook",
+      "full_name": "Amanda Cook",
+      "role": "Office Manager",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Office Manager"
+        ]
+      ]
+    },
+    {
+      "id": "9fafb79d-325f-4867-b782-0407500d9d9d",
+      "slug": "racheal-ryan",
+      "full_name": "Racheal Ryan",
+      "role": "Nursery Coordinator",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Nursery Coordinator"
+        ]
+      ]
+    },
+    {
+      "id": "b4ea803e-cc40-4118-bae8-1a2698de6547",
+      "slug": "laura-sugg",
+      "full_name": "Laura Sugg",
+      "role": "Children & Disability Coordinator",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Children & Disability Coordinator"
+        ]
+      ]
+    },
+    {
+      "id": "380422c9-8040-445f-89c9-b8fd14e86c4e",
+      "slug": "james-smith",
+      "full_name": "James Smith",
+      "role": "Transitional House / Facilities Manager",
+      "group": "shared",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Transitional House / Facilities Manager"
+        ],
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Transitional House / Facilities Manager"
+        ],
+        [
+          "8a63ecac-34df-4725-a190-3abc59e32598",
+          "Transitional House / Facilities Manager"
+        ]
+      ]
+    },
+    {
+      "id": "24f046fd-8fd9-424e-a3e3-ad7983e712c2",
+      "slug": "rachel-paul-hartman",
+      "full_name": "Rachel Paul Hartman",
+      "role": "CCMI Executive Director",
+      "group": "shared",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "CCMI Executive Director"
+        ],
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "CCMI Executive Director"
+        ]
+      ]
+    },
+    {
+      "id": "e14a87d5-cae6-47b8-b7dc-caa211f910e6",
+      "slug": "phillip-boyd",
+      "full_name": "Phillip Boyd",
+      "role": "Case Manager / Addictions Specialist",
+      "group": "shared",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Case Manager / Addictions Specialist"
+        ],
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Case Manager / Addictions Specialist"
+        ],
+        [
+          "8a63ecac-34df-4725-a190-3abc59e32598",
+          "Case Manager / Addictions Specialist"
+        ]
+      ]
+    },
+    {
+      "id": "57e52e5c-44d4-4e39-a2da-1e4f945d41db",
+      "slug": "elliott-dunwody",
+      "full_name": "Elliott Dunwody",
+      "role": "Video Production",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Video Production"
+        ]
+      ]
+    },
+    {
+      "id": "6c338679-fb83-4db8-927c-193b90ae0555",
+      "slug": "vicki-hinson",
+      "full_name": "Vicki Hinson",
+      "role": "Hospitality Coordinator",
+      "group": "church",
+      "affiliations": [
+        [
+          "bf8ea174-41a4-4202-a56c-87368f7ba267",
+          "Hospitality Coordinator"
+        ]
+      ]
+    },
+    {
+      "id": "403c4d4f-9457-4889-ac6e-aad7f2480e23",
+      "slug": "dennis-hasty",
+      "full_name": "Dennis Hasty",
+      "role": "Transitional House / Community Garden Manager",
+      "group": "ccmi",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Transitional House / Community Garden Manager"
+        ],
+        [
+          "8a63ecac-34df-4725-a190-3abc59e32598",
+          "Transitional House / Community Garden Manager"
+        ],
+        [
+          "df539105-a31c-4cc3-8492-40b01701e5dd",
+          "Community Garden Manager"
+        ]
+      ]
+    },
+    {
+      "id": "392da000-5988-4621-a537-7fe616f50a7d",
+      "slug": "laura-pounds",
+      "full_name": "Laura Pounds",
+      "role": "Financial Administrator",
+      "group": "ccmi",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Financial Administrator"
+        ]
+      ]
+    },
+    {
+      "id": "3c9743c3-f7f6-4f45-b337-02c1d191e556",
+      "slug": "joan-cabral",
+      "full_name": "Joan Cabral",
+      "role": "Front Desk",
+      "group": "ccmi",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Front Desk"
+        ],
+        [
+          "df539105-a31c-4cc3-8492-40b01701e5dd",
+          "Garden Contact"
+        ]
+      ]
+    },
+    {
+      "id": "60471424-da38-4a04-bc0f-30564e44087e",
+      "slug": "rose-thornburg",
+      "full_name": "Rose Thornburg",
+      "role": "Board Member",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Member"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Member"
+        ]
+      ]
+    },
+    {
+      "id": "43c5da23-5a8e-4659-a6e9-f686ad679855",
+      "slug": "julie-darragh",
+      "full_name": "Julie Darragh",
+      "role": "Board Member",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Member"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Member"
+        ]
+      ]
+    },
+    {
+      "id": "4367ebac-bf25-43c6-8a8a-e13c16d73bf7",
+      "slug": "chad-harvey",
+      "full_name": "Chad Harvey",
+      "role": "Board Member",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Member"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Member"
+        ]
+      ]
+    },
+    {
+      "id": "046620e0-d5cb-428c-8832-0f1330415c3f",
+      "slug": "kaitlyn-harvey",
+      "full_name": "Kaitlyn Harvey",
+      "role": "Board Member",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Member"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Member"
+        ]
+      ]
+    },
+    {
+      "id": "41101c74-a9e0-441b-be63-68f1ec49263a",
+      "slug": "samantha-click",
+      "full_name": "Samantha Click",
+      "role": "Board President",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board President"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board President"
+        ]
+      ]
+    },
+    {
+      "id": "86209346-9704-47e6-a38d-4240edd361af",
+      "slug": "danielle-taylor",
+      "full_name": "Danielle Taylor",
+      "role": "Board Treasurer",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Treasurer"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Treasurer"
+        ]
+      ]
+    },
+    {
+      "id": "896435b9-5a89-4fd4-9445-cb7167456a36",
+      "slug": "walker-johnson",
+      "full_name": "Walker Johnson",
+      "role": "Board Scribe",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Scribe"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Scribe"
+        ]
+      ]
+    },
+    {
+      "id": "8df4e111-1d4a-4f0f-9691-884e5a206a13",
+      "slug": "matt-harper",
+      "full_name": "Matt Harper",
+      "role": "Board Member",
+      "group": "board",
+      "affiliations": [
+        [
+          "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+          "Board Member"
+        ],
+        [
+          "f52448a9-d58d-466c-910d-c02ac551d526",
+          "Board Member"
+        ]
+      ]
+    }
+  ],
+  "relationships": [
+    [
+      "bf8ea174-41a4-4202-a56c-87368f7ba267",
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "Founded affiliated nonprofit (2009)",
+      "Founded by (2009)",
+      "https://centenarycommunityministries.org/who-we-are"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "f52448a9-d58d-466c-910d-c02ac551d526",
+      "Governed by",
+      "Governing board of",
+      "https://centenarycommunityministries.org/new-page-1"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "8a63ecac-34df-4725-a190-3abc59e32598",
+      "Operates program",
+      "Program of",
+      "https://centenarycommunityministries.org/transitional-housing-2"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "df539105-a31c-4cc3-8492-40b01701e5dd",
+      "Operates program",
+      "Program of",
+      "https://centenarycommunityministries.org/ministries"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "Operates program",
+      "Program of",
+      "https://centenarycommunityministries.org/recycle-macon"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "fb2a7772-1ed5-405c-93ae-2603ba3b0648",
+      "Operates program",
+      "Program of",
+      "https://centenarycommunityministries.org/community-breakfast"
+    ],
+    [
+      "9640b03e-0b2d-4d82-ae1e-830327d7795e",
+      "8d1b15ef-34e3-474f-b4b7-077b28dbb48a",
+      "Operates program",
+      "Program of",
+      "https://centenarycommunityministries.org/utilityassistance"
+    ],
+    [
+      "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "ae6239d5-e1bf-4439-891f-e5599336bec0",
+      "Receives bicycle referrals from",
+      "Refers clients for bicycles",
+      "https://centenarycommunityministries.org/recycle-macon"
+    ],
+    [
+      "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "ce15c3bf-a58e-4c5d-bb87-43ef44fbc962",
+      "Receives bicycle referrals from",
+      "Refers clients for bicycles",
+      "https://centenarycommunityministries.org/recycle-macon"
+    ],
+    [
+      "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "7d948f1e-3eb9-4033-b42b-67b79f02c83c",
+      "Receives bicycle referrals from",
+      "Refers clients for bicycles",
+      "https://centenarycommunityministries.org/recycle-macon"
+    ],
+    [
+      "c0f96c32-d12a-4431-86ad-6efe121d6665",
+      "c8390ac6-2c41-4489-b73d-691e65cd8870",
+      "Receives bicycle referrals from",
+      "Refers clients for bicycles",
+      "https://centenarycommunityministries.org/recycle-macon"
+    ],
+    [
+      "bf8ea174-41a4-4202-a56c-87368f7ba267",
+      "f30ff10c-a5f4-4c02-916a-76a11999f75d",
+      "Affiliated church listed by",
+      "Affiliated church",
+      "https://www.loavesandfishesministry.org/about-us/"
+    ]
+  ],
+  "notes": "Church and CCMI distinguished as separate organizations; five programs and board linked. 12 named church staff, 6 nonprofit staff (3 shared), 8 board members = 23 unique people. First-name-only Sam not created. Current official staff pages used over January 2026 newsletter. No sensitive personal histories or nongovernment profile photos copied."
+}

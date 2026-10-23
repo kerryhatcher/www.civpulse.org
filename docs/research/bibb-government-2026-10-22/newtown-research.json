@@ -1,0 +1,777 @@
+{
+  "verified_at": "2026-10-23",
+  "organization_id": "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+  "organizations": [
+    {
+      "key": "loans",
+      "name": "NewTown Loans, LLC",
+      "slug": "newtown-loans",
+      "website_url": "https://newtownmacon.com/our-work/staff/",
+      "description": "Community Development Financial Institution led by Lauren Marshall. Provides financing, training and technical assistance for small businesses and real-estate development; NewTown's staff page identifies a $21 million loan fund.\n\nSource: https://newtownmacon.com/our-work/staff/ (reviewed October 23, 2026).",
+      "id": "3c595583-9f16-4232-8af6-15eae7b49218"
+    },
+    {
+      "key": "bid",
+      "name": "Downtown Macon Business Improvement District",
+      "slug": "downtown-macon-business-improvement-district",
+      "website_url": "https://newtownmacon.com/experience/bid/",
+      "description": "Self-taxing downtown district led by a seven-member volunteer board. Its board contracts with NewTown Macon BID Management, staffed by NewTown Macon. The published board roster is undated; the page mixes 2026 impact figures with older meeting and district-term information, so current legal term dates have not been established.\n\nSource: https://newtownmacon.com/experience/bid/ (reviewed October 23, 2026).",
+      "id": "f4afd172-36d1-4a05-baa1-2fc1b213983c"
+    },
+    {
+      "key": "bidboard",
+      "name": "Downtown Macon Business Improvement District Board of Directors",
+      "slug": "downtown-macon-bid-board-of-directors",
+      "website_url": "https://newtownmacon.com/experience/bid/",
+      "description": "Seven-member volunteer governing board overseeing implementation of the district plan. Published roster checked October 23, 2026; individual terms are not stated and surrounding meeting information is older.\n\nSource: https://newtownmacon.com/experience/bid/ (reviewed October 23, 2026).",
+      "id": "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+    },
+    {
+      "key": "main",
+      "name": "Main Street Macon",
+      "slug": "main-street-macon",
+      "website_url": "https://newtownmacon.com/experience/main-street-macon/",
+      "description": "Downtown revitalization program founded in 2011. Macon-Bibb County transferred program responsibilities and Main Street accreditation to NewTown Macon in 2018. Its board leads promotional and placemaking efforts and supports the Downtown Macon Community Association.\n\nSource: https://newtownmacon.com/experience/main-street-macon/ (reviewed October 23, 2026).",
+      "id": "9b3d9bf0-02f5-41e0-830a-eb6fae17e139"
+    },
+    {
+      "key": "mainboard",
+      "name": "Main Street Macon Board",
+      "slug": "main-street-macon-board",
+      "website_url": "https://newtownmacon.com/experience/main-street-macon/",
+      "description": "Leadership body for Main Street Macon's promotional, business-support and placemaking work. The official program page publishes an undated roster without term dates; the roster is retained as published, rather than independently certified as a 2026 term.\n\nSource: https://newtownmacon.com/experience/main-street-macon/ (reviewed October 23, 2026).",
+      "id": "9c75c33a-5dac-47f3-8129-7714084c8955"
+    },
+    {
+      "key": "dmca",
+      "name": "Downtown Macon Community Association",
+      "slug": "downtown-macon-community-association",
+      "website_url": "https://newtownmacon.com/business-resources/dmca/",
+      "description": "Downtown business community association supporting connections among retailers, hospitality, services and other businesses. NewTown Macon hosts its information and provides a staff liaison. Its page lists 2026 meetings and a four-person executive committee.\n\nSource: https://newtownmacon.com/business-resources/dmca/ (reviewed October 23, 2026).",
+      "id": "2d3a934f-f76d-4351-8b06-6039681cf521"
+    },
+    {
+      "key": "ddi",
+      "name": "Habersham Downtown Dreams Initiative",
+      "slug": "habersham-downtown-dreams-initiative",
+      "website_url": "https://newtownmacon.com/business-resources/downtown-diversity-initiative/",
+      "description": "Entrepreneur training program developed by NewTown Macon in partnership with Alex Habersham, publisher of the Macon-Middle Georgia Black Pages. Began in 2018; its 2026 offering is an eight-week cohort. The official page now calls it the Habersham Downtown Dreams Initiative (DDI).\n\nSource: https://newtownmacon.com/business-resources/downtown-diversity-initiative/ (reviewed October 23, 2026).",
+      "id": "ed9cfd20-aa5b-40c2-93da-2c597a1c3cdd"
+    },
+    {
+      "key": "trail",
+      "name": "Ocmulgee Heritage Trail",
+      "slug": "ocmulgee-heritage-trail",
+      "website_url": "https://newtownmacon.com/trails/history-of-the-trail/",
+      "description": "Public-private recreational trail partnership. NewTown Macon plans expansions and raises private funds; Macon-Bibb County operates and maintains completed improvements as public park facilities. This record represents the trail initiative, without implying a separate corporation.\n\nSource: https://newtownmacon.com/trails/history-of-the-trail/ (reviewed October 23, 2026).",
+      "id": "eab7f7a5-ce90-40a9-aa89-4647edba6599"
+    },
+    {
+      "key": "trailcommittee",
+      "name": "Ocmulgee Heritage Trail Committee",
+      "slug": "ocmulgee-heritage-trail-committee",
+      "website_url": "https://newtownmacon.com/our-work/staff/",
+      "description": "Trail committee identified on NewTown Macon's staff page. Trails Director Mike Ford provides staff support. A full committee roster and its appointment terms were not published on that page.\n\nSource: https://newtownmacon.com/our-work/staff/ (reviewed October 23, 2026).",
+      "id": "0538d7f7-bb98-4ea2-9be8-dfe1b98efa1a"
+    },
+    {
+      "key": "land",
+      "name": "Ocmulgee Land Trust",
+      "slug": "ocmulgee-land-trust",
+      "website_url": "https://newtownmacon.com/our-work/staff/",
+      "description": "Land trust identified in NewTown Macon's official staff biography for Mike Ford, which states that he has served as its president since July 2011. This source does not establish a parent-subsidiary relationship with NewTown Macon.\n\nSource: https://newtownmacon.com/our-work/staff/ (reviewed October 23, 2026).",
+      "id": "91b2f2dd-eb34-4937-83a2-22de3e2d203e"
+    }
+  ],
+  "people": [
+    {
+      "name": "James Fritze",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "President and CEO",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "email": "james@newtownmacon.com",
+      "id": "3c80e2f7-a9ed-4162-a4ff-5a2504d333cb",
+      "slug": "james-fritze",
+      "new": false,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Erin Keller",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Chief of Staff and VP for Development",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "erin@newtownmacon.com",
+      "id": "0488a70b-7b56-460c-bebf-00a756fc4f4a",
+      "slug": "erin-keller",
+      "new": false,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Lauren Mauldin Marshall",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Vice President of Community Development",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "loans",
+          "role": "Leads NewTown Loans",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "lauren@newtownmacon.com",
+      "id": "e98fcf66-bc55-4d2f-874f-10b930dce236",
+      "slug": "lauren-mauldin-marshall",
+      "new": false,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "3c595583-9f16-4232-8af6-15eae7b49218"
+      ]
+    },
+    {
+      "name": "George Thomas Jr.",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Director of Leasing & Office",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "george@newtownmacon.com",
+      "id": "ff22eace-940c-4a51-9fbc-f9bb83b021ef",
+      "slug": "george-thomas-jr",
+      "new": false,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Mike Ford",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Trails Director",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "land",
+          "role": "President (since July 2011 per published biography)",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "trailcommittee",
+          "role": "Staff Support",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "mike@newtownmacon.com",
+      "id": "404a6baf-f200-485c-90fb-051a4ce242ec",
+      "slug": "mike-ford",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "91b2f2dd-eb34-4937-83a2-22de3e2d203e",
+        "0538d7f7-bb98-4ea2-9be8-dfe1b98efa1a"
+      ]
+    },
+    {
+      "name": "Bryanna Hollis",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Portfolio Manager",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "loans",
+          "role": "Portfolio Manager",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "bryanna@newtownmacon.com",
+      "id": "935bc07c-eb76-4aff-913d-c79c10484a48",
+      "slug": "bryanna-hollis",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "3c595583-9f16-4232-8af6-15eae7b49218"
+      ]
+    },
+    {
+      "name": "Candler Bennett",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Controller",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "candler@newtownmacon.com",
+      "id": "f8a3d8c9-6fe8-4974-86db-c314eeb735a2",
+      "slug": "candler-bennett",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Bill Fulger",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Director of Construction",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "bill@newtownmacon.com",
+      "id": "6532b9a5-269d-45b7-9642-89e1262ed875",
+      "slug": "bill-fulger",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Isaac Campuzano",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Business Development Officer",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "isaac@newtownmacon.com",
+      "id": "07932dda-b718-400e-b07c-f807675edeeb",
+      "slug": "isaac-campuzano",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Annette Anderson",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Finance Assistant",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "annette@newtownmacon.com",
+      "id": "63b3bc0a-27e1-45f7-b32f-570baded26f6",
+      "slug": "annette-anderson",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Haley Purvis",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Digital Content Manager",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        },
+        {
+          "key": "dmca",
+          "role": "Secretary & NewTown Macon Liaison",
+          "source": "https://newtownmacon.com/business-resources/dmca/"
+        }
+      ],
+      "email": "haley@newtownmacon.com",
+      "id": "8dc6a700-53ee-4c31-ba19-573e37ecb52c",
+      "slug": "haley-purvis",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9",
+        "2d3a934f-f76d-4351-8b06-6039681cf521"
+      ]
+    },
+    {
+      "name": "Mark Thompson",
+      "roles": [
+        {
+          "key": "newtown",
+          "role": "Photographer & Special Events Assistant",
+          "source": "https://newtownmacon.com/our-work/staff/"
+        }
+      ],
+      "email": "mark@newtownmacon.com",
+      "id": "9b37a38f-c017-4b4c-8e21-8b1de5bb403b",
+      "slug": "mark-thompson",
+      "new": true,
+      "links": [
+        "78a347ff-bef3-4f04-933e-1ee0b5dc4dc9"
+      ]
+    },
+    {
+      "name": "Larry Brumley",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "3d95f55e-85e4-448a-9d28-a3366e125050",
+      "slug": "larry-brumley",
+      "new": true,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Kaitlynn Kressin",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "b287ed93-aeef-4cb4-8f79-1e891e60280c",
+      "slug": "kaitlynn-kressin",
+      "new": false,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Nichols Riggins",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "39323478-5d98-4e7f-be53-a7f6be747fde",
+      "slug": "nichols-riggins",
+      "new": true,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Tim Thornton",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "f928c631-8edb-4204-b8ee-6adefab1058f",
+      "slug": "tim-thornton",
+      "new": true,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Wimberly Treadwell",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "4dcabc78-f919-451e-aff8-905c40619d1c",
+      "slug": "wimberly-treadwell",
+      "new": false,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Tom Wight",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "4ad7a6d5-1b05-423f-8f28-5ebd7aa054af",
+      "slug": "tom-wight",
+      "new": true,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Lester Miller",
+      "roles": [
+        {
+          "key": "bidboard",
+          "role": "Board Member (published roster)",
+          "source": "https://newtownmacon.com/experience/bid/"
+        }
+      ],
+      "id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "slug": "lester-miller",
+      "new": false,
+      "links": [
+        "53cbb473-9682-4650-a0b9-cbde557fd4f9"
+      ]
+    },
+    {
+      "name": "Lauren Barber",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Chair",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "06c47a3e-63e7-4e9a-93ef-bb662069df64",
+      "slug": "lauren-barber",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Trish Whitley",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Immediate Past President",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "cd98cd67-6fcc-4ddc-bb66-7eaa958f63f6",
+      "slug": "trish-whitley",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Scott Mitchell",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Treasurer & Marketing Committee Chair",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "2e5d54f7-2863-4503-b4a5-b5524c7ca0b6",
+      "slug": "scott-mitchell",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Stacy Lane",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "f45e62b1-305f-4c86-888c-4b9c700adddc",
+      "slug": "stacy-lane",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Anthony Howard",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "8eb409b3-a982-43d8-88bf-7fdba6711c33",
+      "slug": "anthony-howard",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Wanzina Jackson",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Ex Officio",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "e5b1d385-78db-4027-bc85-91ece2017e4a",
+      "slug": "wanzina-jackson",
+      "new": false,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Bryan Nichols",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "4f203f62-8406-4def-85a5-d0f693c20858",
+      "slug": "bryan-nichols",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Kimberly Silvey",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "4a0c5b0e-0627-4ea1-9c5c-86ff55346695",
+      "slug": "kimberly-silvey",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Johnny Cohen",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "d305c6f1-bb3e-40da-a085-69788beaed3c",
+      "slug": "johnny-cohen",
+      "new": true,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Alex Morrison",
+      "roles": [
+        {
+          "key": "mainboard",
+          "role": "Board Member",
+          "source": "https://newtownmacon.com/experience/main-street-macon/"
+        }
+      ],
+      "id": "8577c8ea-49f2-4a12-998a-2b684c941fd7",
+      "slug": "alex-morrison",
+      "new": false,
+      "links": [
+        "9c75c33a-5dac-47f3-8129-7714084c8955"
+      ]
+    },
+    {
+      "name": "Kaylee Pruitt",
+      "roles": [
+        {
+          "key": "dmca",
+          "role": "Executive Committee Chair",
+          "source": "https://newtownmacon.com/business-resources/dmca/"
+        }
+      ],
+      "id": "2dabc2b2-aa8e-40d7-abfa-eb6470dea914",
+      "slug": "kaylee-pruitt",
+      "new": false,
+      "links": [
+        "2d3a934f-f76d-4351-8b06-6039681cf521"
+      ]
+    },
+    {
+      "name": "Jonathan Shuster",
+      "roles": [
+        {
+          "key": "dmca",
+          "role": "Executive Committee Vice Chair",
+          "source": "https://newtownmacon.com/business-resources/dmca/"
+        }
+      ],
+      "id": "005b836e-3697-4b40-8259-e1fc67c76f07",
+      "slug": "jonathan-shuster",
+      "new": true,
+      "links": [
+        "2d3a934f-f76d-4351-8b06-6039681cf521"
+      ]
+    },
+    {
+      "name": "Lateefah Conner",
+      "roles": [
+        {
+          "key": "dmca",
+          "role": "Executive Committee Membership Chair",
+          "source": "https://newtownmacon.com/business-resources/dmca/"
+        }
+      ],
+      "id": "aa049b6c-6044-4210-9d4d-9e06f63e53f2",
+      "slug": "lateefah-conner",
+      "new": true,
+      "links": [
+        "2d3a934f-f76d-4351-8b06-6039681cf521"
+      ]
+    },
+    {
+      "name": "Alex Habersham",
+      "roles": [
+        {
+          "key": "ddi",
+          "role": "Program Partner",
+          "source": "https://newtownmacon.com/business-resources/downtown-diversity-initiative/"
+        }
+      ],
+      "id": "1392243f-aa0e-4644-a7a9-9c3190828a8f",
+      "slug": "alex-habersham",
+      "new": true,
+      "links": [
+        "ed9cfd20-aa5b-40c2-93da-2c597a1c3cdd"
+      ]
+    }
+  ],
+  "relationships": [
+    [
+      "newtown",
+      "loans",
+      "Lending organization",
+      "Associated revitalization nonprofit",
+      "https://newtownmacon.com/our-work/staff/"
+    ],
+    [
+      "newtown",
+      "bid",
+      "District served through BID management",
+      "Management staffing nonprofit",
+      "https://newtownmacon.com/experience/bid/"
+    ],
+    [
+      "bid",
+      "bidboard",
+      "Governing board",
+      "District governed",
+      "https://newtownmacon.com/experience/bid/"
+    ],
+    [
+      "newtown",
+      "main",
+      "Main Street program",
+      "Program administrator",
+      "https://newtownmacon.com/experience/main-street-macon/"
+    ],
+    [
+      "main",
+      "mainboard",
+      "Program board",
+      "Program served",
+      "https://newtownmacon.com/experience/main-street-macon/"
+    ],
+    [
+      "newtown",
+      "dmca",
+      "Downtown association with staff liaison",
+      "Staff liaison provider",
+      "https://newtownmacon.com/business-resources/dmca/"
+    ],
+    [
+      "main",
+      "dmca",
+      "Supported downtown association",
+      "Supporting Main Street program",
+      "https://newtownmacon.com/experience/main-street-macon/"
+    ],
+    [
+      "newtown",
+      "ddi",
+      "Entrepreneur training program",
+      "Program organizer",
+      "https://newtownmacon.com/business-resources/downtown-diversity-initiative/"
+    ],
+    [
+      "newtown",
+      "trail",
+      "Trail initiative planned and fundraised for",
+      "Expansion planning and private fundraising partner",
+      "https://newtownmacon.com/trails/history-of-the-trail/"
+    ],
+    [
+      "trail",
+      "trailcommittee",
+      "Trail committee",
+      "Trail initiative supported",
+      "https://newtownmacon.com/our-work/staff/"
+    ],
+    [
+      "newtown",
+      "trailcommittee",
+      "Committee receiving staff support",
+      "Staff support provider",
+      "https://newtownmacon.com/our-work/staff/"
+    ],
+    [
+      "newtown",
+      "knight",
+      "Documented funder",
+      "Grantee",
+      "https://knightfoundation.org/articles/grantee-story/newtown-macon/"
+    ],
+    [
+      "trail",
+      "county",
+      "Public operator and maintainer",
+      "Public-private trail partnership",
+      "https://newtownmacon.com/trails/history-of-the-trail/"
+    ],
+    [
+      "main",
+      "ecd",
+      "Former program department (before 2018 transfer)",
+      "Formerly housed Main Street program",
+      "https://newtownmacon.com/experience/main-street-macon/"
+    ]
+  ],
+  "notes": [
+    "No nonprofit-sourced profile photos added. Existing government-sourced images preserved.",
+    "Main Street and BID board terms are not stated; roster caveats appear in records.",
+    "NewTown corporate governing board full current roster was not located.",
+    "Josh Rogers memorial excluded from current staff."
+  ],
+  "readback": {
+    "people": 33,
+    "new_people": 23,
+    "reused_people": 10,
+    "affiliations_verified": true
+  },
+  "build_uuid": "644e82db-d461-4dac-ba1f-298922fceb9a"
+}

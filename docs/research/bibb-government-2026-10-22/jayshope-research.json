@@ -1,0 +1,103 @@
+{
+  "verified_at": "2026-10-23",
+  "organization": {
+    "id": "275295bc-f02b-4db7-9df5-38b3596cdee3",
+    "slug": "jays-hope-foundation",
+    "name": "Jay's HOPE Foundation"
+  },
+  "board": {
+    "id": "32e35780-fe8b-4b15-ad07-9e833b6f8907",
+    "slug": "jays-hope-foundation-board-of-directors",
+    "name": "Jay's HOPE Foundation Board of Directors"
+  },
+  "people": [
+    {
+      "id": "cbfaf994-c8a2-4a67-a7ed-8b9b7e35ec23",
+      "slug": "cindy-gaskins",
+      "full_name": "Cindy Gaskins",
+      "role": "Executive Director",
+      "source": "https://www.jayshope.org/our-staff/"
+    },
+    {
+      "id": "b59554bb-c339-446a-9a70-687c745a8dca",
+      "slug": "christie-johnson",
+      "full_name": "Christie Johnson",
+      "role": "Development Director",
+      "source": "https://www.jayshope.org/our-staff/"
+    },
+    {
+      "id": "63bf665b-aa18-42aa-a518-b21ca32d4609",
+      "slug": "amanda-dougherty",
+      "full_name": "Amanda Dougherty",
+      "role": "Family Event Coordinator",
+      "source": "https://www.jayshope.org/our-staff/"
+    },
+    {
+      "id": "6dec31d2-3340-44ea-90ca-3dd60505cb0d",
+      "slug": "jane-wilson",
+      "full_name": "Jane Wilson",
+      "role": "Tutor",
+      "source": "https://www.jayshope.org/our-staff/"
+    },
+    {
+      "id": "937fd349-e887-4773-ba4c-bd9f63b1eb28",
+      "slug": "jason-gaskins",
+      "full_name": "Jason Gaskins",
+      "role": "Board President",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "f51f8dfb-8650-4d35-8e55-1f900756434c",
+      "slug": "lisa-hays",
+      "full_name": "Lisa Hays",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "7808cf0c-9e38-48fb-b0d2-fe5e8c0293a8",
+      "slug": "lally-weaver",
+      "full_name": "Lally Weaver",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "3dccec6e-f578-4b7b-aafa-1a1391dea9a8",
+      "slug": "jed-jessup",
+      "full_name": "Jed Jessup",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "53b5dedd-67e3-4521-8964-7a2843397b7f",
+      "slug": "rusty-mclain",
+      "full_name": "Rusty McLain",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "afcfbdc5-4a78-4d7a-925c-6c514ba04656",
+      "slug": "steven-brewer",
+      "full_name": "Steven Brewer",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    },
+    {
+      "id": "b7cae47a-186e-4d68-89f3-7cb83d8e56c5",
+      "slug": "tj-heath",
+      "full_name": "TJ Heath",
+      "role": "Board Member",
+      "source": "https://www.jayshope.org/our-board-of-directors/"
+    }
+  ],
+  "affiliations": 18,
+  "relationships": 2,
+  "photos_added": 0,
+  "sources": [
+    "https://www.jayshope.org/our-staff/",
+    "https://www.jayshope.org/our-board-of-directors/",
+    "https://www.jayshope.org/our-families/",
+    "https://www.jayshope.org/our-supporters/",
+    "https://www.maconbibb.us/turnonthefountains/"
+  ],
+  "notes": "Published leadership roster is undated. Grant supporter relationship explicitly labeled 2020. No government-sourced profile photos identified."
+}

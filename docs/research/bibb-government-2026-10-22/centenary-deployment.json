@@ -1,0 +1,11 @@
+{
+  "failed_build": "d094c62d-e10c-4a9a-a0af-63bf4fc586f2",
+  "failure": "GitHub checks API HTTP 403; normal guarded retry succeeded",
+  "build": "eddab0b7-4286-4630-9337-1064adfdfbf9",
+  "version": "3968a8ae-f901-4e69-8777-75f569b6e20d",
+  "new_organizations": 8,
+  "new_people": 23,
+  "relationships": 12,
+  "pages": 1121,
+  "checks": "Astro 0 errors and warnings; production migration validation and build passed. Browser church and CCMI verified without console errors."
+}

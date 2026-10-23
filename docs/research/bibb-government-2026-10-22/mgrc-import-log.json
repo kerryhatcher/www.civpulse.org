@@ -1,0 +1,1426 @@
+{
+  "status": "complete",
+  "researched_on": "2026-10-23",
+  "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+  "people_covered": 67,
+  "people_created": 65,
+  "people_reused": 2,
+  "roles_created": 67,
+  "official_portraits_saved": 2,
+  "notes": [
+    "The leadership page states a 60-member council; the council directory lists 59 named members. Only named members are imported.",
+    "The general council page labels Denese Shinholster as treasurer; the dated 2026–27 officers page identifies her as vice chair and Laura Mathis as ex-officio treasurer. The dated officer list is used.",
+    "Roster spellings and council seat categories are preserved. Individual appointment dates and service terms are not inferred.",
+    "The Aging Advisory Council page says appointments are not yet made; the Ethics Committee has no named appointees. No members were invented.",
+    "Only senior management, department directors and the executive assistant are included from the staff directory."
+  ],
+  "verification": [
+    {
+      "name": "Emily Davis",
+      "id": "b90954c5-3439-45b5-b952-33e7d37d8379",
+      "ok": true,
+      "role": "County Member; County Commissioner — Baldwin County",
+      "photo": false
+    },
+    {
+      "name": "Denese Shinholster",
+      "id": "98e39565-5e69-438c-aa3e-f96dbebe0736",
+      "ok": true,
+      "role": "Council Vice Chair; Milledgeville Municipal Member",
+      "photo": false
+    },
+    {
+      "name": "Veronica Womack",
+      "id": "5076d3e7-a67d-4a36-9bb9-56e065a1fd9a",
+      "ok": true,
+      "role": "Non-public Member — Baldwin County",
+      "photo": false
+    },
+    {
+      "name": "Kay McGiboney",
+      "id": "ece65182-4133-4a68-9e38-e6fd3e142dc1",
+      "ok": true,
+      "role": "Associate Member — Baldwin County",
+      "photo": false
+    },
+    {
+      "name": "Shonya Mapp",
+      "id": "cf5419b6-8ee1-4a99-8037-7cddab7837e9",
+      "ok": true,
+      "role": "Associate Member — Baldwin County",
+      "photo": false
+    },
+    {
+      "name": "Dale Jump",
+      "id": "7a758d34-d937-4a09-a6e7-a4d33dc71bec",
+      "ok": true,
+      "role": "County Member; County Commissioner — Crawford County",
+      "photo": false
+    },
+    {
+      "name": "Will Carroll",
+      "id": "6c9ab278-c950-42fa-b3f5-98859feba0dd",
+      "ok": true,
+      "role": "Municipal Member — Crawford County",
+      "photo": false
+    },
+    {
+      "name": "Kerry Dunaway",
+      "id": "d6f8cfa5-041a-4558-9439-547cbf8d638e",
+      "ok": true,
+      "role": "Council Secretary; Crawford Non-public Member",
+      "photo": false
+    },
+    {
+      "name": "Troy Cook",
+      "id": "24bc7fec-5b48-4a8d-99a1-9e81d77cfa7e",
+      "ok": true,
+      "role": "Associate Member — Crawford County",
+      "photo": false
+    },
+    {
+      "name": "Brant Bailey",
+      "id": "e6a534a0-6ef3-4a22-8acc-35dff3ce06bb",
+      "ok": true,
+      "role": "Associate Member — Crawford County",
+      "photo": false
+    },
+    {
+      "name": "Dan Perdue",
+      "id": "b8632cf4-8987-436d-a30f-ae7b2527b4ff",
+      "ok": true,
+      "role": "County Member; County Commission Chairman — Houston County",
+      "photo": false
+    },
+    {
+      "name": "Randall Walker",
+      "id": "ed6f6546-5775-4152-bca8-d265528620cc",
+      "ok": true,
+      "role": "Municipal Member; Perry Mayor — Houston County",
+      "photo": false
+    },
+    {
+      "name": "George E. Slappey",
+      "id": "8cde54b0-b205-4014-8d21-592e9acd5d58",
+      "ok": true,
+      "role": "Non-public Member — Houston County",
+      "photo": false
+    },
+    {
+      "name": "LaRhonda Patrick",
+      "id": "d36c3c01-9372-4d1e-9ffa-44a15316d084",
+      "ok": true,
+      "role": "Associate Member; Warner Robins Mayor — Houston County",
+      "photo": false
+    },
+    {
+      "name": "Clifford Holmes",
+      "id": "495519c4-f410-49f7-bfb6-7838cbba62c1",
+      "ok": true,
+      "role": "Associate Member; Warner Robins Councilman — Houston County",
+      "photo": false
+    },
+    {
+      "name": "Chris Weidner",
+      "id": "819f04a3-2367-4874-9f7d-001e227e4ddb",
+      "ok": true,
+      "role": "County Member; County Commission Chairman — Jones County",
+      "photo": false
+    },
+    {
+      "name": "Ed Barbee",
+      "id": "7da3f33c-b3ad-4d93-bb2b-10109d414394",
+      "ok": true,
+      "role": "Municipal Member; Gray Mayor — Jones County",
+      "photo": false
+    },
+    {
+      "name": "Natalie Lurie",
+      "id": "39e8a421-5fe6-4bb6-903e-8ca3c31042f2",
+      "ok": true,
+      "role": "Non-public Member — Jones County",
+      "photo": false
+    },
+    {
+      "name": "Steve Johnson",
+      "id": "69259844-9752-4b39-80aa-cd1282e07cc6",
+      "ok": true,
+      "role": "Associate Member — Jones County",
+      "photo": false
+    },
+    {
+      "name": "Joy Carr",
+      "id": "58e549ff-e574-4551-b731-3b258d26fd07",
+      "ok": true,
+      "role": "Associate Member — Jones County",
+      "photo": false
+    },
+    {
+      "name": "Lester Miller",
+      "id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "ok": true,
+      "role": "Macon-Bibb County Member; Pension Committee",
+      "photo": true
+    },
+    {
+      "name": "Valerie Wynn",
+      "id": "744fd23b-2f67-4c38-8539-1b614c30624b",
+      "ok": true,
+      "role": "Macon-Bibb Municipal Member; Budget Committee",
+      "photo": true
+    },
+    {
+      "name": "Carlos McCloud",
+      "id": "e4a600c1-5bb7-4726-9e7c-57177502872a",
+      "ok": true,
+      "role": "Macon-Bibb Non-public Member; Executive Committee",
+      "photo": false
+    },
+    {
+      "name": "Wallace Herring",
+      "id": "1fd11136-a9d6-4c77-b7c1-9b5c96637be1",
+      "ok": true,
+      "role": "Associate Member — Macon-Bibb County",
+      "photo": false
+    },
+    {
+      "name": "Michelle Parks",
+      "id": "0df66970-2166-455c-8ded-4e9c02a542fd",
+      "ok": true,
+      "role": "Associate Member — Macon-Bibb County",
+      "photo": false
+    },
+    {
+      "name": "Lamarcus Davis",
+      "id": "0a309f97-b51c-4493-b2c1-5a06e3dd0930",
+      "ok": true,
+      "role": "Associate Member; County Commissioner — Monroe County",
+      "photo": false
+    },
+    {
+      "name": "Mike Dodd",
+      "id": "273c1291-435e-41dd-8d05-e86b8a240966",
+      "ok": true,
+      "role": "Associate Member; Forsyth Councilman — Monroe County",
+      "photo": false
+    },
+    {
+      "name": "Chad Tyler",
+      "id": "08e1b583-faed-4991-bf2f-9e9b4ec80e2e",
+      "ok": true,
+      "role": "Non-public Member — Monroe County",
+      "photo": false
+    },
+    {
+      "name": "Don Carter",
+      "id": "3ca2afdf-5219-49f8-97f0-bd01eebf610e",
+      "ok": true,
+      "role": "Non-public Member — Monroe County",
+      "photo": false
+    },
+    {
+      "name": "Nolan Howard",
+      "id": "a9b0a4b2-7439-444a-9713-a024e9aa68c5",
+      "ok": true,
+      "role": "Associate Member — Monroe County",
+      "photo": false
+    },
+    {
+      "name": "Martin Moseley",
+      "id": "3369e3aa-30ac-4428-995d-3b6700fc0f99",
+      "ok": true,
+      "role": "County Member; County Commission Chairman — Peach County",
+      "photo": false
+    },
+    {
+      "name": "Michael Chidester",
+      "id": "f4c01e01-b855-46c5-897f-dae67bddd843",
+      "ok": true,
+      "role": "Municipal Member; Byron Mayor — Peach County",
+      "photo": false
+    },
+    {
+      "name": "Marcus Agostino",
+      "id": "c63dd6d2-49fb-42d4-adde-1fc65283a9bc",
+      "ok": true,
+      "role": "Non-public Member — Peach County",
+      "photo": false
+    },
+    {
+      "name": "Alton Howard",
+      "id": "f13ca925-0e90-496b-a606-d68cf01043f7",
+      "ok": true,
+      "role": "Associate Member; Fort Valley Council Member — Peach County",
+      "photo": false
+    },
+    {
+      "name": "James Richardson",
+      "id": "165e5f30-b751-48f5-8a11-9a1e09552159",
+      "ok": true,
+      "role": "Associate Member; Byron Councilman — Peach County",
+      "photo": false
+    },
+    {
+      "name": "Jenna S. Mashburn",
+      "id": "c396e211-dfa7-4b38-87f6-ce66364ab0f0",
+      "ok": true,
+      "role": "Council Chair; Pulaski County Member",
+      "photo": true
+    },
+    {
+      "name": "Bernice Banks",
+      "id": "8a552636-e98e-4e41-b0e9-d95c738f144a",
+      "ok": true,
+      "role": "Municipal Member; Hawkinsville Commissioner — Pulaski County",
+      "photo": false
+    },
+    {
+      "name": "Sara Myers",
+      "id": "93c8a01f-3281-4f27-884f-74a728e10694",
+      "ok": true,
+      "role": "Non-public Member — Pulaski County",
+      "photo": false
+    },
+    {
+      "name": "Ramsey Howard",
+      "id": "c5cb6138-c2c0-41c4-a3e2-bc7227ccb2b0",
+      "ok": true,
+      "role": "Associate Member — Pulaski County",
+      "photo": false
+    },
+    {
+      "name": "Kyle Goss",
+      "id": "7ec8c6c4-a6a7-4d71-a0af-20f203ce8968",
+      "ok": true,
+      "role": "Associate Member — Pulaski County",
+      "photo": false
+    },
+    {
+      "name": "Bill Sharp",
+      "id": "07da3c8e-f7c9-472c-8c6e-e106847f08ef",
+      "ok": true,
+      "role": "County Member; County Commissioner — Putnam County",
+      "photo": false
+    },
+    {
+      "name": "John Reid",
+      "id": "6b9ac97d-d2b4-4bc5-91cb-9cf18bc6a12a",
+      "ok": true,
+      "role": "Municipal Member; Eatonton Mayor — Putnam County",
+      "photo": false
+    },
+    {
+      "name": "Charles Gray",
+      "id": "3a4c000b-77e0-4ca8-a24f-81e8c1555c2c",
+      "ok": true,
+      "role": "Non-public Member — Putnam County",
+      "photo": false
+    },
+    {
+      "name": "Gary Sanders",
+      "id": "3236f04d-2140-4989-963f-9cac796ff1f6",
+      "ok": true,
+      "role": "Associate Member — Putnam County",
+      "photo": false
+    },
+    {
+      "name": "Richard Garrett",
+      "id": "07a74612-78c3-4687-9730-73866c692631",
+      "ok": true,
+      "role": "Associate Member — Putnam County",
+      "photo": false
+    },
+    {
+      "name": "Ken Fowler",
+      "id": "ea91c848-f782-45cd-95bc-33f15be53245",
+      "ok": true,
+      "role": "County Member; County Commission Chairman — Twiggs County",
+      "photo": false
+    },
+    {
+      "name": "Charles Williams",
+      "id": "87381ac5-fb1b-4e59-8c03-4e8e0241d17c",
+      "ok": true,
+      "role": "Municipal Member; Jeffersonville Mayor — Twiggs County",
+      "photo": false
+    },
+    {
+      "name": "Virginia Lee",
+      "id": "02f8a712-c6b7-41c9-9191-0629c6666238",
+      "ok": true,
+      "role": "Non-public Member — Twiggs County",
+      "photo": false
+    },
+    {
+      "name": "Kathryn Epps",
+      "id": "6283aa11-364e-4c7f-9ebb-c486c4fb6004",
+      "ok": true,
+      "role": "Associate Member — Twiggs County",
+      "photo": false
+    },
+    {
+      "name": "Judy Sherling",
+      "id": "912dd36c-794a-4e32-ad15-6907b94ef73f",
+      "ok": true,
+      "role": "Associate Member — Twiggs County",
+      "photo": false
+    },
+    {
+      "name": "Flint Shepherd",
+      "id": "084a5e1f-05b6-472e-aad7-a1cbecd9ba15",
+      "ok": true,
+      "role": "County Member — Wilkinson County",
+      "photo": false
+    },
+    {
+      "name": "Marty Dominy",
+      "id": "6ce99642-bbce-4c64-bff9-a839180b6218",
+      "ok": true,
+      "role": "Non-public Member — Wilkinson County",
+      "photo": false
+    },
+    {
+      "name": "Lloyd Hatfield",
+      "id": "cc05200e-4b63-4b07-a900-9f8d4054e3f4",
+      "ok": true,
+      "role": "Associate Member; Ivey Councilman — Wilkinson County",
+      "photo": false
+    },
+    {
+      "name": "Aprill-Adside Smith",
+      "id": "967441f2-1af1-4848-9bfe-7632203f20c8",
+      "ok": true,
+      "role": "Associate Member; Gordon Mayor — Wilkinson County",
+      "photo": false
+    },
+    {
+      "name": "Kyle Swicord",
+      "id": "8855e7c9-1ce7-4e85-9864-658f86793760",
+      "ok": true,
+      "role": "Associate Member — Wilkinson County",
+      "photo": false
+    },
+    {
+      "name": "James Vaughn",
+      "id": "d5a326bb-7b45-47f0-8241-ea6ea9da46ca",
+      "ok": true,
+      "role": "Governor’s Appointee — State",
+      "photo": false
+    },
+    {
+      "name": "Nancy Nash",
+      "id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "ok": true,
+      "role": "Governor’s Appointee — State",
+      "photo": false
+    },
+    {
+      "name": "Tommy Stalnaker",
+      "id": "7e102341-6136-4914-b6a2-ad7c0bab27d1",
+      "ok": true,
+      "role": "Governor’s Appointee — State",
+      "photo": false
+    },
+    {
+      "name": "James A. Epps Jr.",
+      "id": "4720cd11-f382-44f8-87a0-8d6d38c0038b",
+      "ok": true,
+      "role": "Lieutenant Governor’s Appointee — State",
+      "photo": false
+    },
+    {
+      "name": "Laura M. Mathis",
+      "id": "e30ff47a-6f46-4c86-a19f-32a4908eac14",
+      "ok": true,
+      "role": "Executive Director; ex-officio Council Treasurer (2026–27)",
+      "photo": true
+    },
+    {
+      "name": "Tiffany Andrews",
+      "id": "72174ccb-ef32-4080-84f1-93d22e20e256",
+      "ok": true,
+      "role": "Deputy Director",
+      "photo": false
+    },
+    {
+      "name": "Brent Lanford",
+      "id": "275ad756-197f-423d-a97a-89b5d5d1f192",
+      "ok": true,
+      "role": "Chief Information Officer",
+      "photo": false
+    },
+    {
+      "name": "Michael Huckaby",
+      "id": "7073a206-621e-4e14-941e-2f982f326921",
+      "ok": true,
+      "role": "Director of Aging",
+      "photo": false
+    },
+    {
+      "name": "Matt Garvin",
+      "id": "99d03748-afe6-4179-ae06-5fdc2b3295ad",
+      "ok": true,
+      "role": "Director of Finance",
+      "photo": false
+    },
+    {
+      "name": "Greg Boike",
+      "id": "318bba02-672d-4347-952f-b97ed62bd812",
+      "ok": true,
+      "role": "Director of Planning and Public Administration",
+      "photo": false
+    },
+    {
+      "name": "Michelle Grembowski",
+      "id": "5b6779d1-303d-4e93-8176-fc9cc6608245",
+      "ok": true,
+      "role": "Director of Technology Services",
+      "photo": false
+    },
+    {
+      "name": "Kim Stanton",
+      "id": "43f56fbc-59d2-480c-981c-42c6061524f9",
+      "ok": true,
+      "role": "Executive Assistant",
+      "photo": false
+    }
+  ],
+  "operations": [
+    {
+      "type": "person",
+      "action": "create",
+      "id": "b90954c5-3439-45b5-b952-33e7d37d8379",
+      "slug": "emily-davis",
+      "full_name": "Emily Davis"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "98e39565-5e69-438c-aa3e-f96dbebe0736",
+      "slug": "denese-shinholster",
+      "full_name": "Denese Shinholster"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "5076d3e7-a67d-4a36-9bb9-56e065a1fd9a",
+      "slug": "veronica-womack",
+      "full_name": "Veronica Womack"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "ece65182-4133-4a68-9e38-e6fd3e142dc1",
+      "slug": "kay-mcgiboney",
+      "full_name": "Kay McGiboney"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "cf5419b6-8ee1-4a99-8037-7cddab7837e9",
+      "slug": "shonya-mapp",
+      "full_name": "Shonya Mapp"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "7a758d34-d937-4a09-a6e7-a4d33dc71bec",
+      "slug": "dale-jump",
+      "full_name": "Dale Jump"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "6c9ab278-c950-42fa-b3f5-98859feba0dd",
+      "slug": "will-carroll",
+      "full_name": "Will Carroll"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "d6f8cfa5-041a-4558-9439-547cbf8d638e",
+      "slug": "kerry-dunaway",
+      "full_name": "Kerry Dunaway"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "24bc7fec-5b48-4a8d-99a1-9e81d77cfa7e",
+      "slug": "troy-cook",
+      "full_name": "Troy Cook"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "e6a534a0-6ef3-4a22-8acc-35dff3ce06bb",
+      "slug": "brant-bailey",
+      "full_name": "Brant Bailey"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "b8632cf4-8987-436d-a30f-ae7b2527b4ff",
+      "slug": "dan-perdue",
+      "full_name": "Dan Perdue"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "ed6f6546-5775-4152-bca8-d265528620cc",
+      "slug": "randall-walker",
+      "full_name": "Randall Walker"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "8cde54b0-b205-4014-8d21-592e9acd5d58",
+      "slug": "george-e-slappey",
+      "full_name": "George E. Slappey"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "d36c3c01-9372-4d1e-9ffa-44a15316d084",
+      "slug": "larhonda-patrick",
+      "full_name": "LaRhonda Patrick"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "495519c4-f410-49f7-bfb6-7838cbba62c1",
+      "slug": "clifford-holmes",
+      "full_name": "Clifford Holmes"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "819f04a3-2367-4874-9f7d-001e227e4ddb",
+      "slug": "chris-weidner",
+      "full_name": "Chris Weidner"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "7da3f33c-b3ad-4d93-bb2b-10109d414394",
+      "slug": "ed-barbee",
+      "full_name": "Ed Barbee"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "39e8a421-5fe6-4bb6-903e-8ca3c31042f2",
+      "slug": "natalie-lurie",
+      "full_name": "Natalie Lurie"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "69259844-9752-4b39-80aa-cd1282e07cc6",
+      "slug": "steve-johnson",
+      "full_name": "Steve Johnson"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "58e549ff-e574-4551-b731-3b258d26fd07",
+      "slug": "joy-carr",
+      "full_name": "Joy Carr"
+    },
+    {
+      "type": "person",
+      "action": "update",
+      "id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "name": "Lester Miller"
+    },
+    {
+      "type": "person",
+      "action": "update",
+      "id": "744fd23b-2f67-4c38-8539-1b614c30624b",
+      "name": "Valerie Wynn"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "e4a600c1-5bb7-4726-9e7c-57177502872a",
+      "slug": "carlos-mccloud",
+      "full_name": "Carlos McCloud"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "1fd11136-a9d6-4c77-b7c1-9b5c96637be1",
+      "slug": "wallace-herring",
+      "full_name": "Wallace Herring"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "0df66970-2166-455c-8ded-4e9c02a542fd",
+      "slug": "michelle-parks",
+      "full_name": "Michelle Parks"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "0a309f97-b51c-4493-b2c1-5a06e3dd0930",
+      "slug": "lamarcus-davis",
+      "full_name": "Lamarcus Davis"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "273c1291-435e-41dd-8d05-e86b8a240966",
+      "slug": "mike-dodd",
+      "full_name": "Mike Dodd"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "08e1b583-faed-4991-bf2f-9e9b4ec80e2e",
+      "slug": "chad-tyler",
+      "full_name": "Chad Tyler"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "3ca2afdf-5219-49f8-97f0-bd01eebf610e",
+      "slug": "don-carter",
+      "full_name": "Don Carter"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "a9b0a4b2-7439-444a-9713-a024e9aa68c5",
+      "slug": "nolan-howard",
+      "full_name": "Nolan Howard"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "3369e3aa-30ac-4428-995d-3b6700fc0f99",
+      "slug": "martin-moseley",
+      "full_name": "Martin Moseley"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "f4c01e01-b855-46c5-897f-dae67bddd843",
+      "slug": "michael-chidester",
+      "full_name": "Michael Chidester"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "c63dd6d2-49fb-42d4-adde-1fc65283a9bc",
+      "slug": "marcus-agostino",
+      "full_name": "Marcus Agostino"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "f13ca925-0e90-496b-a606-d68cf01043f7",
+      "slug": "alton-howard",
+      "full_name": "Alton Howard"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "165e5f30-b751-48f5-8a11-9a1e09552159",
+      "slug": "james-richardson",
+      "full_name": "James Richardson"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "c396e211-dfa7-4b38-87f6-ce66364ab0f0",
+      "slug": "jenna-s-mashburn",
+      "full_name": "Jenna S. Mashburn"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "8a552636-e98e-4e41-b0e9-d95c738f144a",
+      "slug": "bernice-banks",
+      "full_name": "Bernice Banks"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "93c8a01f-3281-4f27-884f-74a728e10694",
+      "slug": "sara-myers",
+      "full_name": "Sara Myers"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "c5cb6138-c2c0-41c4-a3e2-bc7227ccb2b0",
+      "slug": "ramsey-howard",
+      "full_name": "Ramsey Howard"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "7ec8c6c4-a6a7-4d71-a0af-20f203ce8968",
+      "slug": "kyle-goss",
+      "full_name": "Kyle Goss"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "07da3c8e-f7c9-472c-8c6e-e106847f08ef",
+      "slug": "bill-sharp",
+      "full_name": "Bill Sharp"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "6b9ac97d-d2b4-4bc5-91cb-9cf18bc6a12a",
+      "slug": "john-reid",
+      "full_name": "John Reid"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "3a4c000b-77e0-4ca8-a24f-81e8c1555c2c",
+      "slug": "charles-gray",
+      "full_name": "Charles Gray"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "3236f04d-2140-4989-963f-9cac796ff1f6",
+      "slug": "gary-sanders",
+      "full_name": "Gary Sanders"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "07a74612-78c3-4687-9730-73866c692631",
+      "slug": "richard-garrett",
+      "full_name": "Richard Garrett"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "ea91c848-f782-45cd-95bc-33f15be53245",
+      "slug": "ken-fowler",
+      "full_name": "Ken Fowler"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "87381ac5-fb1b-4e59-8c03-4e8e0241d17c",
+      "slug": "charles-williams",
+      "full_name": "Charles Williams"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "02f8a712-c6b7-41c9-9191-0629c6666238",
+      "slug": "virginia-lee",
+      "full_name": "Virginia Lee"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "6283aa11-364e-4c7f-9ebb-c486c4fb6004",
+      "slug": "kathryn-epps",
+      "full_name": "Kathryn Epps"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "912dd36c-794a-4e32-ad15-6907b94ef73f",
+      "slug": "judy-sherling",
+      "full_name": "Judy Sherling"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "084a5e1f-05b6-472e-aad7-a1cbecd9ba15",
+      "slug": "flint-shepherd",
+      "full_name": "Flint Shepherd"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "6ce99642-bbce-4c64-bff9-a839180b6218",
+      "slug": "marty-dominy",
+      "full_name": "Marty Dominy"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "cc05200e-4b63-4b07-a900-9f8d4054e3f4",
+      "slug": "lloyd-hatfield",
+      "full_name": "Lloyd Hatfield"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "967441f2-1af1-4848-9bfe-7632203f20c8",
+      "slug": "aprill-adside-smith",
+      "full_name": "Aprill-Adside Smith"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "8855e7c9-1ce7-4e85-9864-658f86793760",
+      "slug": "kyle-swicord",
+      "full_name": "Kyle Swicord"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "d5a326bb-7b45-47f0-8241-ea6ea9da46ca",
+      "slug": "james-vaughn",
+      "full_name": "James Vaughn"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "slug": "nancy-nash",
+      "full_name": "Nancy Nash"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "7e102341-6136-4914-b6a2-ad7c0bab27d1",
+      "slug": "tommy-stalnaker",
+      "full_name": "Tommy Stalnaker"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "4720cd11-f382-44f8-87a0-8d6d38c0038b",
+      "slug": "james-a-epps-jr",
+      "full_name": "James A. Epps Jr."
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "e30ff47a-6f46-4c86-a19f-32a4908eac14",
+      "slug": "laura-m-mathis",
+      "full_name": "Laura M. Mathis"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "72174ccb-ef32-4080-84f1-93d22e20e256",
+      "slug": "tiffany-andrews",
+      "full_name": "Tiffany Andrews"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "275ad756-197f-423d-a97a-89b5d5d1f192",
+      "slug": "brent-lanford",
+      "full_name": "Brent Lanford"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "7073a206-621e-4e14-941e-2f982f326921",
+      "slug": "michael-huckaby",
+      "full_name": "Michael Huckaby"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "99d03748-afe6-4179-ae06-5fdc2b3295ad",
+      "slug": "matt-garvin",
+      "full_name": "Matt Garvin"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "318bba02-672d-4347-952f-b97ed62bd812",
+      "slug": "greg-boike",
+      "full_name": "Greg Boike"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "5b6779d1-303d-4e93-8176-fc9cc6608245",
+      "slug": "michelle-grembowski",
+      "full_name": "Michelle Grembowski"
+    },
+    {
+      "type": "person",
+      "action": "create",
+      "id": "43f56fbc-59d2-480c-981c-42c6061524f9",
+      "slug": "kim-stanton",
+      "full_name": "Kim Stanton"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "b90954c5-3439-45b5-b952-33e7d37d8379",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commissioner — Baldwin County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "98e39565-5e69-438c-aa3e-f96dbebe0736",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Council Vice Chair; Milledgeville Municipal Member"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "5076d3e7-a67d-4a36-9bb9-56e065a1fd9a",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Baldwin County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "ece65182-4133-4a68-9e38-e6fd3e142dc1",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Baldwin County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "cf5419b6-8ee1-4a99-8037-7cddab7837e9",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Baldwin County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "7a758d34-d937-4a09-a6e7-a4d33dc71bec",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commissioner — Crawford County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "6c9ab278-c950-42fa-b3f5-98859feba0dd",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member — Crawford County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "d6f8cfa5-041a-4558-9439-547cbf8d638e",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Council Secretary; Crawford Non-public Member"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "24bc7fec-5b48-4a8d-99a1-9e81d77cfa7e",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Crawford County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "e6a534a0-6ef3-4a22-8acc-35dff3ce06bb",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Crawford County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "b8632cf4-8987-436d-a30f-ae7b2527b4ff",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commission Chairman — Houston County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "ed6f6546-5775-4152-bca8-d265528620cc",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Perry Mayor — Houston County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "8cde54b0-b205-4014-8d21-592e9acd5d58",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Houston County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "d36c3c01-9372-4d1e-9ffa-44a15316d084",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Warner Robins Mayor — Houston County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "495519c4-f410-49f7-bfb6-7838cbba62c1",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Warner Robins Councilman — Houston County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "819f04a3-2367-4874-9f7d-001e227e4ddb",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commission Chairman — Jones County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "7da3f33c-b3ad-4d93-bb2b-10109d414394",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Gray Mayor — Jones County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "39e8a421-5fe6-4bb6-903e-8ca3c31042f2",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Jones County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "69259844-9752-4b39-80aa-cd1282e07cc6",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Jones County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "58e549ff-e574-4551-b731-3b258d26fd07",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Jones County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Macon-Bibb County Member; Pension Committee"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "744fd23b-2f67-4c38-8539-1b614c30624b",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Macon-Bibb Municipal Member; Budget Committee"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "e4a600c1-5bb7-4726-9e7c-57177502872a",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Macon-Bibb Non-public Member; Executive Committee"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "1fd11136-a9d6-4c77-b7c1-9b5c96637be1",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Macon-Bibb County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "0df66970-2166-455c-8ded-4e9c02a542fd",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Macon-Bibb County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "0a309f97-b51c-4493-b2c1-5a06e3dd0930",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; County Commissioner — Monroe County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "273c1291-435e-41dd-8d05-e86b8a240966",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Forsyth Councilman — Monroe County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "08e1b583-faed-4991-bf2f-9e9b4ec80e2e",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Monroe County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "3ca2afdf-5219-49f8-97f0-bd01eebf610e",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Monroe County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "a9b0a4b2-7439-444a-9713-a024e9aa68c5",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Monroe County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "3369e3aa-30ac-4428-995d-3b6700fc0f99",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commission Chairman — Peach County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "f4c01e01-b855-46c5-897f-dae67bddd843",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Byron Mayor — Peach County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "c63dd6d2-49fb-42d4-adde-1fc65283a9bc",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Peach County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "f13ca925-0e90-496b-a606-d68cf01043f7",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Fort Valley Council Member — Peach County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "165e5f30-b751-48f5-8a11-9a1e09552159",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Byron Councilman — Peach County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "c396e211-dfa7-4b38-87f6-ce66364ab0f0",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Council Chair; Pulaski County Member"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "8a552636-e98e-4e41-b0e9-d95c738f144a",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Hawkinsville Commissioner — Pulaski County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "93c8a01f-3281-4f27-884f-74a728e10694",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Pulaski County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "c5cb6138-c2c0-41c4-a3e2-bc7227ccb2b0",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Pulaski County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "7ec8c6c4-a6a7-4d71-a0af-20f203ce8968",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Pulaski County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "07da3c8e-f7c9-472c-8c6e-e106847f08ef",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commissioner — Putnam County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "6b9ac97d-d2b4-4bc5-91cb-9cf18bc6a12a",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Eatonton Mayor — Putnam County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "3a4c000b-77e0-4ca8-a24f-81e8c1555c2c",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Putnam County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "3236f04d-2140-4989-963f-9cac796ff1f6",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Putnam County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "07a74612-78c3-4687-9730-73866c692631",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Putnam County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "ea91c848-f782-45cd-95bc-33f15be53245",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member; County Commission Chairman — Twiggs County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "87381ac5-fb1b-4e59-8c03-4e8e0241d17c",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Municipal Member; Jeffersonville Mayor — Twiggs County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "02f8a712-c6b7-41c9-9191-0629c6666238",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Twiggs County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "6283aa11-364e-4c7f-9ebb-c486c4fb6004",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Twiggs County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "912dd36c-794a-4e32-ad15-6907b94ef73f",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Twiggs County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "084a5e1f-05b6-472e-aad7-a1cbecd9ba15",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "County Member — Wilkinson County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "6ce99642-bbce-4c64-bff9-a839180b6218",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Non-public Member — Wilkinson County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "cc05200e-4b63-4b07-a900-9f8d4054e3f4",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Ivey Councilman — Wilkinson County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "967441f2-1af1-4848-9bfe-7632203f20c8",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member; Gordon Mayor — Wilkinson County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "8855e7c9-1ce7-4e85-9864-658f86793760",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Associate Member — Wilkinson County"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "d5a326bb-7b45-47f0-8241-ea6ea9da46ca",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Governor’s Appointee — State"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Governor’s Appointee — State"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "7e102341-6136-4914-b6a2-ad7c0bab27d1",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Governor’s Appointee — State"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "4720cd11-f382-44f8-87a0-8d6d38c0038b",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Lieutenant Governor’s Appointee — State"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "e30ff47a-6f46-4c86-a19f-32a4908eac14",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Executive Director; ex-officio Council Treasurer (2026–27)"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "72174ccb-ef32-4080-84f1-93d22e20e256",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Deputy Director"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "275ad756-197f-423d-a97a-89b5d5d1f192",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Chief Information Officer"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "7073a206-621e-4e14-941e-2f982f326921",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Director of Aging"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "99d03748-afe6-4179-ae06-5fdc2b3295ad",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Director of Finance"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "318bba02-672d-4347-952f-b97ed62bd812",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Director of Planning and Public Administration"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "5b6779d1-303d-4e93-8176-fc9cc6608245",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Director of Technology Services"
+    },
+    {
+      "type": "affiliation",
+      "action": "create",
+      "person_id": "43f56fbc-59d2-480c-981c-42c6061524f9",
+      "organization_id": "e4c31702-846c-4aee-84aa-195894638df6",
+      "role": "Executive Assistant"
+    }
+  ]
+}

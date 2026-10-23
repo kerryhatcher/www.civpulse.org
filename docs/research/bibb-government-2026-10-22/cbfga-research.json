@@ -1,0 +1,209 @@
+{
+  "verified_at": "2026-10-23",
+  "sources": [
+    "https://cbfga.org/leadership/",
+    "https://cbfga.org/who-we-are/",
+    "https://cbfga.org/contact/"
+  ],
+  "organizations": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"id\": \"7049dd3a-1642-4706-9829-ad2b7d7cd4d1\",\n  \"slug\": \"cooperative-baptist-fellowship-of-georgia\",\n  \"name\": \"Cooperative Baptist Fellowship of Georgia\"\n}"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"id\": \"8209e514-20a0-4752-9c70-79afb7661f87\",\n  \"slug\": \"cbf-georgia-coordinating-council\",\n  \"name\": \"CBF Georgia Coordinating Council\"\n}"
+        }
+      ],
+      "structuredContent": null,
+      "isError": false
+    }
+  ],
+  "people": [
+    {
+      "id": "89c4ff94-885f-4324-a73d-d5efedc940a6",
+      "slug": "ruth-perkins-lee",
+      "full_name": "Ruth Perkins Lee",
+      "role": "Executive Coordinator"
+    },
+    {
+      "id": "a6fb3a9f-3e15-42db-9cca-02a1fc4f426e",
+      "slug": "ron-mcclung",
+      "full_name": "Ron McClung",
+      "role": "Associate Coordinator"
+    },
+    {
+      "id": "0f9efc35-80d8-48f8-a7bb-f19c8225fb32",
+      "slug": "rachel-s-greco",
+      "full_name": "Rachel S. Greco",
+      "role": "Director for Engagement and Communications"
+    },
+    {
+      "id": "8f8b48cb-bb3c-4de7-98a9-996d83a90620",
+      "slug": "teri-moore",
+      "full_name": "Teri Moore",
+      "role": "Administrative Assistant"
+    },
+    {
+      "id": "852a9ffa-3ebc-40bb-bc1c-a692ee9cdd7e",
+      "slug": "cameron-schroeder",
+      "full_name": "Cameron Schroeder",
+      "role": "Intern"
+    },
+    {
+      "id": "2842e18d-4296-459b-a6ff-f7fb46898245",
+      "slug": "caitlin-brown",
+      "full_name": "Caitlin Brown",
+      "role": "Moderator"
+    },
+    {
+      "id": "bfc28d2d-ca86-4550-a027-2481b66ad57d",
+      "slug": "alex-gallimore",
+      "full_name": "Alex Gallimore",
+      "role": "Moderator-elect"
+    },
+    {
+      "id": "e1fb622d-0277-48dc-9cd9-be985433e678",
+      "slug": "matt-sapp",
+      "full_name": "Matt Sapp",
+      "role": "Past Moderator"
+    },
+    {
+      "id": "48f79488-fc90-4ed1-82ff-c80d12a92613",
+      "slug": "shelley-woodruff",
+      "full_name": "Shelley Woodruff",
+      "role": "Clerk"
+    },
+    {
+      "id": "0b1a4cb1-96b8-4af7-899b-4366b12deb8d",
+      "slug": "tricia-etheridge",
+      "full_name": "Tricia Etheridge",
+      "role": "Treasurer"
+    },
+    {
+      "id": "a48c2a22-7780-49d3-bf46-8522146a3cb1",
+      "slug": "jessica-asbell-oravec",
+      "full_name": "Jessica Asbell Oravec",
+      "role": "Endowment Management Board Chair"
+    },
+    {
+      "id": "da814db4-7d98-490b-81e9-4a3b7d80c5da",
+      "slug": "kristen-mathis",
+      "full_name": "Kristen Mathis",
+      "role": "Coordinating Council, At Large"
+    },
+    {
+      "id": "a7863b6e-faa0-42f2-adb9-af5a9db3b26a",
+      "slug": "nick-dawson",
+      "full_name": "Nick Dawson",
+      "role": "Coordinating Council, At Large"
+    },
+    {
+      "id": "a61fe149-2dda-4be8-9168-efc3abcbd1aa",
+      "slug": "jonathan-barlow",
+      "full_name": "Jonathan Barlow",
+      "role": "Missions Team Chair"
+    },
+    {
+      "id": "954b3212-7c0f-4605-896b-14e0490c9cb5",
+      "slug": "pat-turner",
+      "full_name": "Pat Turner",
+      "role": "Missions Team"
+    },
+    {
+      "id": "805c9406-7467-4621-b953-58375481f67f",
+      "slug": "harold-tessendorf",
+      "full_name": "Harold Tessendorf",
+      "role": "Missions Team"
+    },
+    {
+      "id": "ee66ca0c-f515-4c2e-8dea-e3a97c28b68a",
+      "slug": "dylan-bowden",
+      "full_name": "Dylan Bowden",
+      "role": "Missions Team"
+    },
+    {
+      "id": "9310992d-f37d-4d25-87e6-2d6232a403c9",
+      "slug": "shelley-tolbert",
+      "full_name": "Shelley Tolbert",
+      "role": "Missions Team"
+    },
+    {
+      "id": "eb386353-d41f-4bd2-ab1e-4377375630f7",
+      "slug": "devita-parnell",
+      "full_name": "Devita Parnell",
+      "role": "Congregational Life Chair"
+    },
+    {
+      "id": "3f45371d-2ea1-4170-9432-af35deb1c0db",
+      "slug": "ethan-brown",
+      "full_name": "Ethan Brown",
+      "role": "Congregational Life"
+    },
+    {
+      "id": "c21a3e58-528e-4967-8fa3-b3d54e9a9823",
+      "slug": "justin-safley",
+      "full_name": "Justin Safley",
+      "role": "Congregational Life"
+    },
+    {
+      "id": "8b54a64f-c296-46d1-b0ba-68665c850e33",
+      "slug": "allie-osborne",
+      "full_name": "Allie Osborne",
+      "role": "Congregational Life"
+    },
+    {
+      "id": "9c3da83b-1f67-4eaf-aa0d-2f7bd924ad0c",
+      "slug": "emily-richardson-dion",
+      "full_name": "Emily Richardson-Dion",
+      "role": "Congregational Life"
+    },
+    {
+      "id": "73081eb2-1577-4a7c-bcf9-b73e27f6b2b2",
+      "slug": "nathan-byrd",
+      "full_name": "Nathan Byrd",
+      "role": "Leadership Development Team Chair"
+    },
+    {
+      "id": "16bdb807-8f74-4d9e-8065-12acfaa9623b",
+      "slug": "tony-lankford",
+      "full_name": "Tony Lankford",
+      "role": "Leadership Development Team"
+    },
+    {
+      "id": "93844e64-ec27-4cdc-8cf4-4a066d94f486",
+      "slug": "andrea-johnson",
+      "full_name": "Andrea Johnson",
+      "role": "Leadership Development Team"
+    },
+    {
+      "id": "88937b79-6887-4470-a804-346d9e19e273",
+      "slug": "daniel-potter",
+      "full_name": "Daniel Potter",
+      "role": "Leadership Development Team"
+    },
+    {
+      "id": "eafca4a6-5804-459a-89bf-7a4d75e2715a",
+      "slug": "milligan-hall",
+      "full_name": "Milligan Hall",
+      "role": "Leadership Development Team"
+    },
+    {
+      "id": "a93c039a-aa49-4e4a-969c-da7ec5bdd00f",
+      "slug": "william-neal",
+      "full_name": "William Neal",
+      "role": "Leadership Development Team"
+    }
+  ],
+  "affiliations_count": 53,
+  "photos_added": 0,
+  "notes": "Current leadership page used over stale contact-page former coordinator email. No nongovernment photos used. Search timeouts resolved using exact-name database duplicate check. Organization reciprocal relationship saved via Supabase connector because current Civic tool catalog lacks deployed relationship tools."
+}
