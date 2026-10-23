@@ -145,6 +145,17 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     website_url: z.string().nullish(),
     social_url: z.string().nullish(),
     logo_path: z.string().nullish(),
+    sos_control_number: z.string().nullish(),
+    sos_business_type: z.string().nullish(),
+    sos_status: z.string().nullish(),
+    sos_formation_date: z.iso.date().nullish(),
+    sos_last_annual_registration: z.string().nullish(),
+    sos_principal_office: z.string().nullish(),
+    sos_registered_agent: z.string().nullish(),
+    sos_county: z.string().nullish(),
+    sos_naics_code: z.string().nullish(),
+    sos_officers: z.string().nullish(),
+    sos_record_url: z.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish(),
   };
   create("organization", "organizations", "Create an organization (admin only).", orgShape, "id, slug, name");
   update("organization", "organizations", "Update an organization (admin only).", orgShape, "id, slug, name");

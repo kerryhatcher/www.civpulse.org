@@ -11,10 +11,21 @@ export interface Organization {
   website_url: string | null;
   social_url: string | null;
   logo_path: string | null;
+  sos_control_number?: string | null;
+  sos_business_type?: string | null;
+  sos_status?: string | null;
+  sos_formation_date?: string | null;
+  sos_last_annual_registration?: string | null;
+  sos_principal_office?: string | null;
+  sos_registered_agent?: string | null;
+  sos_county?: string | null;
+  sos_naics_code?: string | null;
+  sos_officers?: string | null;
+  sos_record_url?: string | null;
 }
 
 export const ORGANIZATION_COLUMNS =
-  'id, slug, name, description, email, phone, address_line, website_url, social_url, logo_path';
+  'id, slug, name, description, email, phone, address_line, website_url, social_url, logo_path, sos_control_number, sos_business_type, sos_status, sos_formation_date, sos_last_annual_registration, sos_principal_office, sos_registered_agent, sos_county, sos_naics_code, sos_officers, sos_record_url';
 
 /**
  * Loads organizations at build time. A build without Supabase env vars, or with

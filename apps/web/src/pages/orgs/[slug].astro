@@ -59,6 +59,19 @@ interface Props {
 const { org, map, people, related } = Astro.props;
 const logo = organizationLogoUrl(org.logo_path);
 
+const registration = [
+  { label: 'Control number', value: org.sos_control_number },
+  { label: 'Business type', value: org.sos_business_type },
+  { label: 'Registration status', value: org.sos_status },
+  { label: 'Formation date', value: org.sos_formation_date },
+  { label: 'Last annual registration', value: org.sos_last_annual_registration },
+  { label: 'Principal office', value: org.sos_principal_office },
+  { label: 'Registered agent', value: org.sos_registered_agent },
+  { label: 'County', value: org.sos_county },
+  { label: 'NAICS code / description', value: org.sos_naics_code },
+  { label: 'Officers', value: org.sos_officers },
+].filter(item => item.value);
+
 const contact = [
   { label: 'Email', value: org.email, href: org.email ? `mailto:${org.email}` : null },
   {
@@ -171,6 +184,17 @@ const contact = [
             </article>
           ))}
         </div>
+      </section>
+    )}
+
+    {(registration.length > 0 || org.sos_record_url) && (
+      <section class="org-contact" aria-labelledby="org-registration-title">
+        <h2 id="org-registration-title">Georgia business registration</h2>
+        <p>Details from compiled research. Registration status and officers may have changed.</p>
+        <dl class="account-list">
+          {registration.map(item => <div><dt>{item.label}</dt><dd style="white-space: pre-line">{item.value?.replaceAll("**", "")}</dd></div>)}
+        </dl>
+        {org.sos_record_url && <p><a href={org.sos_record_url}>View Georgia SOS record</a></p>}
       </section>
     )}
 

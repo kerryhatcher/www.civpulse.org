@@ -80,6 +80,24 @@ import AdminTabs from '../../components/AdminTabs.astro';
           <img class="org-logo-preview" data-org-logo-preview alt="Logo preview" hidden />
         </div>
 
+        <fieldset>
+          <legend>Georgia Secretary of State (optional)</legend>
+          <p>Registration details as recorded in source research; these may be historical.</p>
+          <div class="field-grid">
+            <label class="field"><span>Control number</span><input type="text" name="sos_control_number" /></label>
+            <label class="field"><span>Business type</span><input type="text" name="sos_business_type" /></label>
+            <label class="field"><span>Registration status</span><input type="text" name="sos_status" /></label>
+            <label class="field"><span>Formation date</span><input type="date" name="sos_formation_date" /></label>
+            <label class="field"><span>Last annual registration</span><input type="text" name="sos_last_annual_registration" /></label>
+            <label class="field"><span>Principal office</span><input type="text" name="sos_principal_office" /></label>
+            <label class="field"><span>Registered agent</span><input type="text" name="sos_registered_agent" /></label>
+            <label class="field"><span>County</span><input type="text" name="sos_county" /></label>
+            <label class="field"><span>NAICS code / description</span><input type="text" name="sos_naics_code" /></label>
+            <label class="field"><span>Officers</span><textarea name="sos_officers" rows="4"></textarea></label>
+            <label class="field"><span>SOS record URL</span><input type="url" name="sos_record_url" /></label>
+          </div>
+        </fieldset>
+
         <div class="org-form-actions">
           <button class="button-link" type="submit">Create organization</button>
           <button type="button" data-org-cancel hidden>Cancel</button>

@@ -1,0 +1,57 @@
+{
+  "source": "Saved mbresearch Markdown on Kudzu and Thor; historical information, not a fresh registry verification.",
+  "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+  "organizations": [
+    {
+      "id": "bbdac1ed-d8b4-4e13-baff-25e2a8f628c7",
+      "slug": "advance-alliance-of-georgia",
+      "name": "Advance Alliance of Georgia",
+      "sos_control_number": "23183243",
+      "sos_record_url": null
+    },
+    {
+      "id": "1d21cb62-0cf2-41e5-8566-c9d02b7c8f72",
+      "slug": "advance-alliance-of-georgia-action-fund",
+      "name": "Advance Alliance of Georgia Action Fund, Inc.",
+      "sos_control_number": "23183280",
+      "sos_record_url": "https://ecorp.sos.ga.gov/businesssearch/BusinessInformation?businessId=4034758&businessType=Domestic%2520Nonprofit%2520Corporation&fromSearch=True"
+    },
+    {
+      "id": "87dc76af-7106-4fb5-afc4-ebfb8cdb4964",
+      "slug": "lmm-investments",
+      "name": "LMM Investments, LLC",
+      "sos_control_number": null,
+      "sos_record_url": null
+    },
+    {
+      "id": "3631ecc1-4162-499e-a086-eb21fb0e5c5b",
+      "slug": "game-on-training",
+      "name": "Game On Training, LLC",
+      "sos_control_number": null,
+      "sos_record_url": null
+    },
+    {
+      "id": "80b3e854-5655-47f0-9bb4-f3a59e4aa3f7",
+      "slug": "gallery-of-styles",
+      "name": "Gallery of Styles",
+      "sos_control_number": null,
+      "sos_record_url": null
+    },
+    {
+      "id": "9ba8ac69-7d63-4ea6-a0bb-8ec6f562221a",
+      "slug": "southern-majority",
+      "name": "Southern Majority",
+      "sos_control_number": "17058295",
+      "sos_record_url": "https://ecorp.sos.ga.gov/BusinessSearch/BusinessInformation?businessId=2348185&businessType=Domestic%20Limited%20Liability%20Company&fromSearch=True"
+    },
+    {
+      "id": "9d86a6cd-283e-4564-9d3b-9acf50386c66",
+      "slug": "lester-m-miller-law-practice",
+      "name": "Lester M. Miller’s law practice",
+      "sos_control_number": null,
+      "sos_record_url": null
+    }
+  ],
+  "verified": "Read back all seven organization records and Lester Miller's affiliation list.",
+  "deployment": "Database changes are live; public static pages require rebuild/deploy."
+}

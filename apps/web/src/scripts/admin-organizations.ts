@@ -1,7 +1,7 @@
 import { uploadProfileImage, initImagePreview } from '../lib/media';
 import { getSupabase } from '../lib/supabase';
 import { organizationLogoUrl } from '../lib/supabase-build';
-import type { Organization } from '../lib/organizations';
+import { ORGANIZATION_COLUMNS, type Organization } from '../lib/organizations';
 import { initOrganizationRelationships } from './admin-organization-relationships';
 
 type MessageKind = 'info' | 'error' | 'success';
@@ -134,6 +134,17 @@ export async function initOrganizationAdmin(): Promise<void> {
     set('address_line', org.address_line);
     set('website_url', org.website_url);
     set('social_url', org.social_url);
+    set('sos_control_number', org.sos_control_number ?? null);
+    set('sos_business_type', org.sos_business_type ?? null);
+    set('sos_status', org.sos_status ?? null);
+    set('sos_formation_date', org.sos_formation_date ?? null);
+    set('sos_last_annual_registration', org.sos_last_annual_registration ?? null);
+    set('sos_principal_office', org.sos_principal_office ?? null);
+    set('sos_registered_agent', org.sos_registered_agent ?? null);
+    set('sos_county', org.sos_county ?? null);
+    set('sos_naics_code', org.sos_naics_code ?? null);
+    set('sos_officers', org.sos_officers ?? null);
+    set('sos_record_url', org.sos_record_url ?? null);
     if (fileField) fileField.value = '';
     editingLogoPath = org.logo_path;
     slugTouched = true;
@@ -200,9 +211,7 @@ export async function initOrganizationAdmin(): Promise<void> {
   async function loadOrganizations(): Promise<void> {
     const { data, error } = await supabase
       .from('organizations')
-      .select(
-        'id, slug, name, description, email, phone, address_line, website_url, social_url, logo_path',
-      )
+      .select(ORGANIZATION_COLUMNS)
       .order('name');
 
     if (error) {
@@ -274,6 +283,17 @@ export async function initOrganizationAdmin(): Promise<void> {
         website_url: textOrNull(values.get('website_url')),
         social_url: textOrNull(values.get('social_url')),
         logo_path: logoPath,
+        sos_control_number: textOrNull(values.get('sos_control_number')),
+        sos_business_type: textOrNull(values.get('sos_business_type')),
+        sos_status: textOrNull(values.get('sos_status')),
+        sos_formation_date: textOrNull(values.get('sos_formation_date')),
+        sos_last_annual_registration: textOrNull(values.get('sos_last_annual_registration')),
+        sos_principal_office: textOrNull(values.get('sos_principal_office')),
+        sos_registered_agent: textOrNull(values.get('sos_registered_agent')),
+        sos_county: textOrNull(values.get('sos_county')),
+        sos_naics_code: textOrNull(values.get('sos_naics_code')),
+        sos_officers: textOrNull(values.get('sos_officers')),
+        sos_record_url: textOrNull(values.get('sos_record_url')),
       };
 
       const { error } = id

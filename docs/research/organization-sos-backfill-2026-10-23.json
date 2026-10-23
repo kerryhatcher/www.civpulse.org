@@ -1,0 +1,84 @@
+{
+  "source_description": "User compiled mbresearch Markdown on Kudzu and Thor. Historical values, not freshly verified.",
+  "records": [
+    {
+      "slug": "historic-macon-foundation",
+      "name": "Historic Macon Foundation",
+      "source": "thor:/hatch1/projects/bak26/All_Know/input/mbresearch/Orgs/Historic_Macon_Foundation.md",
+      "data": {
+        "sos_control_number": "H601873",
+        "sos_business_type": "Domestic Nonprofit Corporation",
+        "sos_status": "Active/Compliance",
+        "sos_formation_date": "1976-02-27",
+        "sos_last_annual_registration": "2026",
+        "sos_principal_office": "PO Box 13358, Macon, GA, 31208-3358, USA",
+        "sos_registered_agent": "Nathan Lott, 950 Third Street, Macon, GA, 31201, USA",
+        "sos_county": "Bibb",
+        "sos_record_url": "https://ecorp.sos.ga.gov/BusinessSearch/BusinessInformation?businessId=534677&businessType=Domestic%20Nonprofit%20Corporation&fromSearch=True",
+        "sos_officers": "- **CEO:** Bowen Shoemaker, 950 Third St, Macon, GA, 31201, USA\n- **Secretary:** Fran Fickling, 950 Third St, Macon, GA, 31201, USA\n- **CFO:** Pat Muse, 950 Third St, Macon, GA, 31201, USA"
+      },
+      "organization_id": "4a3641a0-bfa6-412e-9d0e-4ee7df280179"
+    },
+    {
+      "slug": "tubman-african-american-museum",
+      "name": "Tubman Museum",
+      "source": "thor:/hatch1/projects/bak26/All_Know/input/mbresearch/Orgs/Tubman_Museum.md",
+      "data": {
+        "sos_control_number": "J102177",
+        "sos_business_type": "Domestic Nonprofit Corporation",
+        "sos_status": "Active/Compliance",
+        "sos_formation_date": "1980-01-10",
+        "sos_last_annual_registration": "2026",
+        "sos_principal_office": "310 Cherry ST, MACON, GA, 31201, USA",
+        "sos_registered_agent": "Harold Young",
+        "sos_county": "Bibb",
+        "sos_record_url": "https://ecorp.sos.ga.gov/BusinessSearch/BusinessInformation?businessId=606602&businessType=Domestic%20Nonprofit%20Corporation&fromSearch=True",
+        "sos_officers": "- **CFO:** Barrie Diane Miller-Howard, 310 Cherry ST, Macon, GA, 31201, USA\n- **CEO:** Harold Young, 310 Cherry ST, Macon, GA, 31201, USA\n- **Secretary:** Renita Patterson, 3370 Club Drive, Macon, GA, 31217-4906, USA"
+      },
+      "organization_id": "ff4ea849-2862-4559-b1b6-439356c0b7a5"
+    },
+    {
+      "slug": "central-georgia-casa",
+      "name": "Central Georgia CASA, Inc.",
+      "source": "thor:/hatch1/projects/bak26/All_Know/input/mbresearch/Orgs/Central_Georgia_CASA,_Inc.md",
+      "data": {
+        "sos_control_number": "0029550",
+        "sos_business_type": "Domestic Nonprofit Corporation",
+        "sos_status": "Active/Compliance",
+        "sos_formation_date": "2000-06-26",
+        "sos_last_annual_registration": "2026",
+        "sos_principal_office": "3888 Northside Drive, Suite B, Macon, GA, 31210, USA",
+        "sos_registered_agent": "Elizabeth Hammock",
+        "sos_county": "Bibb",
+        "sos_record_url": "https://ecorp.sos.ga.gov/BusinessSearch/BusinessInformation?businessId=29550&businessType=Domestic%20Nonprofit%20Corporation&fromSearch=True",
+        "sos_officers": "- Susanna Gwen Patterson — Principal/officer (per GA SoS officer search; exact title not captured)\n- Elizabeth Hammock — Registered Agent"
+      },
+      "organization_id": "9bede253-4a26-49ca-935e-6d252253ada3"
+    },
+    {
+      "slug": "bike-walk-macon",
+      "name": "Bike Walk Macon",
+      "source": "thor:/hatch1/projects/bak26/All_Know/input/mbresearch/Orgs/Bike_Walk_Macon.md",
+      "data": {
+        "sos_control_number": "16099724",
+        "sos_business_type": "Domestic Nonprofit Corporation",
+        "sos_status": "Active/Compliance",
+        "sos_formation_date": "2016-10-21",
+        "sos_last_annual_registration": "2028",
+        "sos_principal_office": "1120 Oakcliff Rd, PO Box 1952, Macon, GA, 31202, USA",
+        "sos_registered_agent": "Curtis Hertwig, J.",
+        "sos_county": "Bibb",
+        "sos_naics_code": "Arts, Entertainment, and Recreation",
+        "sos_record_url": "https://ecorp.sos.ga.gov/BusinessSearch/BusinessInformation?businessId=2259170&businessType=Domestic%20Nonprofit%20Corporation&fromSearch=True"
+      },
+      "organization_id": "93823e8e-c6a0-46b4-8311-9a6d92ea5178"
+    }
+  ],
+  "skipped": [
+    {
+      "name": "NewTown Macon",
+      "reason": "Saved registration is an LLC formed in 2017, while the notes describe the nonprofit established in 1996; legal entity match needs verification."
+    }
+  ],
+  "production_verification": "Applied both migrations to CivicPulse project drzcrodqflzkzzbqsags and read back all four control numbers, formation dates, annual registrations and record URLs."
+}

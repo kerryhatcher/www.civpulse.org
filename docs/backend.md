@@ -918,3 +918,27 @@ behavior remains an unresolved verification limitation. The repository includes 
 References: [Supabase CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha),
 [Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits), and
 [Cloudflare test keys](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).
+
+## Georgia Secretary of State organization records
+
+Organizations have nullable `sos_control_number`, `sos_business_type`, `sos_status`,
+`sos_formation_date` (date), `sos_last_annual_registration`, `sos_principal_office`,
+`sos_registered_agent`, `sos_county`, `sos_naics_code`, `sos_officers` and
+`sos_record_url` fields. Control numbers remain text to preserve leading zeros;
+annual registration remains text to preserve year-only source values. Officers
+are optional text, separate from Civic Pulse person affiliations. SOS URLs must
+use HTTPS on `ecorp.sos.ga.gov`. Existing public-read/admin-write organization
+RLS applies unchanged. Admin forms and MCP create/update tools accept the fields;
+public profiles show available details and omit the section when empty.
+
+These are historical research values, not a live registry feed. The October 23,
+2026 backfill matches existing slugs only and fills null fields without creating
+organizations or overwriting populated values. Sources and the deferred NewTown
+legal-entity mismatch are recorded in
+`docs/research/organization-sos-backfill-2026-10-23.json`. The migration versions
+match the hosted Supabase migration history. Because older repository migrations
+already use future timestamps, apply these locally with
+`SUPABASE_TELEMETRY_DISABLED=1 bun run supabase migration up --include-all`.
+
+Verify with `SOS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/organization-sos-db.test.ts` (fixtures roll back).
