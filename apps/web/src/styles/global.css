@@ -366,6 +366,48 @@ details[open] summary {
   overflow-wrap: anywhere;
 }
 
+.docs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.docs-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 9px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  text-decoration: none;
+}
+
+.docs-nav a:hover,
+.docs-nav a[aria-current="page"] {
+  border-color: var(--ink);
+  background: var(--sage);
+}
+
+.docs-content {
+  padding-top: 4px;
+}
+
+.docs-content ol,
+.docs-content ul {
+  padding-left: 1.5rem;
+}
+
+.docs-content li {
+  padding-left: 0.25rem;
+}
+
+.docs-content li + li {
+  margin-top: 12px;
+}
+
 /* ---------- Home ---------- */
 
 .home-intro {

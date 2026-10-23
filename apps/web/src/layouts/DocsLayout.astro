@@ -1,0 +1,35 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+  };
+}
+
+const { title, description } = Astro.props.frontmatter;
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const sections = [
+  { href: '/docs/', label: 'Overview' },
+  { href: '/docs/users/', label: 'Using Civic Pulse' },
+  { href: '/docs/admins/', label: 'Admin guide' },
+];
+---
+
+<Layout title={title} description={description}>
+  <main id="main">
+    <div class="page-intro">
+      <h1>{title}</h1>
+      <p>{description}</p>
+    </div>
+    <nav class="docs-nav" aria-label="Documentation sections">
+      {sections.map((section) => (
+        <a href={section.href} aria-current={path === section.href.replace(/\/+$/, '') ? 'page' : undefined}>
+          {section.label}
+        </a>
+      ))}
+    </nav>
+    <article class="prose docs-content"><slot /></article>
+  </main>
+</Layout>
