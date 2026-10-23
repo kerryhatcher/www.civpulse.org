@@ -199,7 +199,7 @@ for every push to `main`; after resolving a failure, rerun the Cloudflare build.
 Keep schema changes backward compatible with the currently deployed frontend.
 
 The guard uses GitHub's public checks API, without database credentials. An optional
-`GITHUB_TOKEN` with Checks read permission raises API rate limits (set it as a
+read-only `GITHUB_TOKEN` raises API rate limits (set it as a
 build secret, never a `PUBLIC_*` value). Cloudflare build runners can share an
 egress IP and exhaust GitHub's anonymous quota. The guard retries confirmed
 HTTP 403/429 rate limits up to four times within its ten-minute budget, respecting
@@ -207,7 +207,7 @@ HTTP 403/429 rate limits up to four times within its ten-minute budget, respecti
 exponential backoff starting at one minute. It never treats a rate-limit response
 as migration success. Permission-denied 403s still fail immediately. Rate limits
 beyond the budget report the next retry time and block deployment; configure a
-repository-scoped fine-grained token with only Checks read permission as the
+repository-scoped fine-grained token with the minimum required read access as the
 Cloudflare build secret `GITHUB_TOKEN` when persistent rate limiting occurs.
 Do not copy a broad personal CLI token into build settings or disable the gate.
 Local `bun run deploy` and
@@ -216,6 +216,16 @@ Local `bun run deploy` and
 trusted-app/commit matching, reruns, waiting, API failures, timeout behavior, and
 rate-limit recovery/budgets; the Migration deployment gate workflow runs these
 tests on pushes and PRs.
+
+Production's Cloudflare build secret `GITHUB_TOKEN` uses the fine-grained token
+**civpulse-cloudflare-migration-checks**, restricted to `kerryhatcher/www.civpulse.org`,
+with read-only Metadata permission and no user or write permissions. Because this
+repository is public, its check-run endpoint accepts this narrower token; access
+was verified against the guard's exact API request. It expires **October 23, 2027**.
+Rotate it in GitHub's fine-grained token settings and replace the encrypted
+Cloudflare **Settings → Builds → Variables and secrets** value before expiration.
+If the repository becomes private, re-evaluate the required Checks read access.
+
 Keep production's applied migration files on `main`. Applying a feature-branch
 migration to production before its file reaches `main` blocks subsequent Supabase
 checks with “Remote migration versions not found in local migrations directory.”
