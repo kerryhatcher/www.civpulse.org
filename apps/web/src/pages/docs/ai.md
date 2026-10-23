@@ -4,7 +4,7 @@ title: AI plugins, MCP, and skills
 description: Connect your AI assistant to Civic Pulse, choose a plugin, and use reusable civic workflows.
 ---
 
-An AI assistant can search Civic Pulse and, with an administrator account, help maintain records. Start with a direct MCP connection if you want to use the live service today. You do not need to run a server or build a plugin to connect.
+An AI assistant can search Civic Pulse and, with an administrator account, help maintain records. Choose a plugin for packaged workflows, or connect directly to MCP for live tools. The shared civic skills also work with public sources without an MCP connection. You do not need to run a server to use the hosted service.
 
 ## What each part does
 
@@ -12,9 +12,9 @@ An AI assistant can search Civic Pulse and, with an administrator account, help 
 - A **plugin** packages a connection and other capabilities for a particular AI application, such as ChatGPT, Codex, or Pi.
 - A **skill** gives the assistant instructions for a repeatable workflow, such as researching an election or preparing a map. Installing a skill does not sign you in or grant additional access.
 
-Choose [ChatGPT](#connect-in-chatgpt), [Codex](#connect-in-codex), [another MCP client](#connect-another-mcp-client), or read about [plugins and their repositories](#plugins-and-source-repositories).
+Choose [ChatGPT](#connect-in-chatgpt), [Codex](#connect-in-codex), [Pi](#pi), [another MCP client](#connect-another-mcp-client), or [standalone skills](#shared-skills).
 
-## Before connecting
+## Before connecting live tools
 
 1. [Create a Civic Pulse account](/signup/) if you do not already have one, then [sign in](/signin/). Confirm your email if prompted.
 2. Use a client that supports **Streamable HTTP** and **OAuth** for remote MCP servers.
@@ -91,17 +91,71 @@ The archive is written under `dist/plugins/`. Building it does not install or pu
 
 ### Pi
 
-[CivicPulse/civpulse-pi](https://github.com/CivicPulse/civpulse-pi) is the repository for the Pi agent harness plugin. Its current README is a placeholder and does not yet publish an installation or authentication procedure. Check that repository for the released package and its instructions before installing. A repository link alone does not add MCP support to Pi.
+[CivicPulse/civpulse-pi](https://github.com/CivicPulse/civpulse-pi) adds the hosted MCP connection, four bundled civic skills, workflow commands, and a write-confirmation guard to the Pi agent harness. The package requires **Pi 1.3.0 or newer**. Install it with:
 
-When the plugin's setup is available, connect it to the same Civic Pulse MCP URL, authorize your own account, and test identity and search before requesting edits. If you already use an OAuth-capable MCP integration in Pi, configure that integration using its own documentation and the endpoint above.
+```sh
+pi install git:github.com/CivicPulse/civpulse-pi
+```
+
+Add `--local` to install for the current project instead of your user account. In an existing Pi session, run `/reload` after installation. Then:
+
+1. Run `/civpulse` to inspect the effective server URL, authentication mode, and write-guard setting. The default URL is the hosted endpoint shown above; normal setup needs no environment variables or API key.
+2. Run `/mcp`, select **Civic Pulse**, and choose **Sign in**.
+3. Complete browser sign-in and the Civic Pulse consent screen with your own account. Pi stores the authorization locally and refreshes it automatically.
+4. Ask which account is connected, then try `/civpulse-research upcoming elections in Macon-Bibb`.
+
+The package provides these workflow commands:
+
+- `/civpulse-research <topic>` — research civic records and sources.
+- `/civpulse-edit <change>` — create, update, or delete supported content, subject to your account's permissions.
+- `/civpulse-map <work>` — work with maps, layers, and geographic features.
+- `/civpulse-user-admin <request>` — find accounts or explicitly promote an existing user as an administrator.
+
+You can load a bundled skill explicitly with `/skill:civic-research`. Leave the package's write-confirmation guard enabled and review proposed changes. Its default behavior requires confirmation for writes and blocks them when no confirmation dialog is available; the database still enforces your account's permissions.
+
+If an older configuration takes precedence, inspect `/mcp` and `/civpulse`. A `civpulse` server in your existing `mcp.json` can override the extension's registration. See the [Pi package README](https://github.com/CivicPulse/civpulse-pi#configuration) for configuration and the setup doctor. Bun is required if you run the repository's doctor or tests.
 
 ### Shared skills
 
-[CivicPulse/skills](https://github.com/CivicPulse/skills) is the planned home for shared Civic Pulse skills. It currently has a placeholder README, so no standalone skill installation procedure is published there yet. For now, the OpenAI plugin includes the workflows described below. Follow the shared repository's instructions when those skills are released for your chosen host.
+[CivicPulse/skills](https://github.com/CivicPulse/skills) provides seven standalone civic skills. They work with public sources in supported skill-capable agents, and can use Civic Pulse MCP tools for structured lookups when connected. You do not need a Civic Pulse account or MCP connection to use their public-source workflows.
+
+With Bun installed, preview the collection before choosing what to install:
+
+```sh
+bunx skills add CivicPulse/skills --list
+```
+
+Install the collection into the current project, then follow the installer's prompts for your agent:
+
+```sh
+bunx skills add CivicPulse/skills
+```
+
+To select specific skills, or install globally for your user account instead of one project:
+
+```sh
+bunx skills add CivicPulse/skills \
+  --skill civic-events --skill civic-writing
+bunx skills add CivicPulse/skills -g
+```
+
+The collection includes:
+
+- **civic-research:** officials, candidates, elections, ballot measures, and organizations.
+- **civic-events:** meetings, hearings, civic events, deadlines, and calendar feeds.
+- **civic-geography:** districts, precincts, boundaries, GeoJSON, and map layers.
+- **civic-data:** budgets, campaign finance, voting records, and open-data cleanup.
+- **civic-writing:** biographies, explainers, meeting recaps, and issue briefs.
+- **civic-fact-check:** verifying civic claims and preparing sourced corrections.
+- **civic-participation:** voting information, contacting officials, public comment, and records requests.
+
+Reload your agent or start a new session after installation. Ask by workflow name, for example: “Use civic-events to find the next public hearing and cite the official notice.” Use your host's skill picker or explicit invocation syntax when available. If a plugin already supplies `civic-research`, install the additional skills you need without unintentionally replacing that bundled workflow.
+
+Installing these skills supplies instructions, not a live account connection. Follow the MCP setup for your client if you also want structured Civic Pulse records. The shared collection has different coverage from the four skills bundled with the OpenAI and Pi plugins; it does not include their admin editing or user-promotion workflows.
 
 ## Use skills and live tools together
 
-The OpenAI package currently includes four skills:
+The OpenAI and Pi packages each bundle four skills for the live Civic Pulse service:
 
 - **civic-research:** find organizations, people, elections, articles, and events, and verify information against sources.
 - **civic-editing:** maintain supported records, relationships, images, and your own display name.

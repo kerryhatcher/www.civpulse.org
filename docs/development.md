@@ -264,5 +264,9 @@ OAuth, skills and troubleshooting. `DocsLayout.astro` links it from every docs
 page; the visitor and admin guides link to it instead of duplicating setup steps.
 The guide points to `CivicPulse/civpulse-openai`, `CivicPulse/civpulse-pi` and
 `CivicPulse/skills`. Verify repository READMEs before changing release/install
-instructions: the Pi and shared-skills READMEs are currently placeholders.
+instructions. Pi now documents Git-package installation, OAuth through `/mcp`,
+workflow commands and its default write guard. The shared repository documents
+seven standalone public-source skills, installed with `bunx skills add`.
+Distinguish those seven skills from the four live-service workflows bundled
+with the OpenAI and Pi plugins; MCP authorization is a separate setup step.
 Do not present private registered app bindings as public directory availability.
