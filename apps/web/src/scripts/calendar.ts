@@ -7,7 +7,7 @@ import {
   type EventRecord,
 } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
-import { MEETING_BUCKET, type MeetingRecord } from '../lib/meetings';
+import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
@@ -449,8 +449,11 @@ async function fillMeetingView(id: string): Promise<void> {
         const { data, error } = await getSupabase().storage.from(MEETING_BUCKET)
           .createSignedUrl(file.storage_path, 60, { download: file.file_name });
         button.disabled = false;
-        if (error || !data) { button.textContent = 'Download unavailable'; return; }
-        location.href = data.signedUrl;
+        const url = data ? meetingDownloadUrl(data.signedUrl) : null;
+        if (error || !url) { button.textContent = 'Download unavailable'; return; }
+        const link = document.createElement('a');
+        link.href = url;
+        link.click();
       })());
       item.append(button); attachmentList.append(item);
     }

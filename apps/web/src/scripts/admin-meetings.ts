@@ -1,5 +1,5 @@
 import { getSupabase } from '../lib/supabase';
-import { MEETING_BUCKET, MEETING_FILE_TYPES, type MeetingRecord } from '../lib/meetings';
+import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 
 type Person = { id: string; full_name: string };
 
@@ -197,8 +197,13 @@ export async function initMeetingAdmin(): Promise<void> {
       const download = action('Download', () => void (async () => {
         const { data, error } = await supabase.storage.from(MEETING_BUCKET)
           .createSignedUrl(file.storage_path, 60, { download: file.file_name });
-        if (error || !data) message(error?.message ?? 'Download unavailable.', true);
-        else location.href = data.signedUrl;
+        const url = data ? meetingDownloadUrl(data.signedUrl) : null;
+        if (error || !url) message(error?.message ?? 'Download unavailable.', true);
+        else {
+          const link = document.createElement('a');
+          link.href = url;
+          link.click();
+        }
       })());
       const remove = action('Delete', () => void (async () => {
         if (!confirm(`Delete attachment “${file.file_name}”?`)) return;

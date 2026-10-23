@@ -31,6 +31,19 @@ export interface MeetingRecord {
 
 export const MEETING_BUCKET = 'meeting-attachments';
 
+/** Only follow signed download links issued by this site's Supabase project. */
+export function meetingDownloadUrl(signedUrl: string): string | null {
+  try {
+    const origin = new URL(import.meta.env.PUBLIC_SUPABASE_URL);
+    const url = new URL(signedUrl, origin);
+    if (url.origin !== origin.origin ||
+        !url.pathname.startsWith(`/storage/v1/object/sign/${MEETING_BUCKET}/`)) return null;
+    return url.href;
+  } catch {
+    return null;
+  }
+}
+
 export const MEETING_FILE_TYPES: Record<string, string> = {
   pdf: 'application/pdf', txt: 'text/plain', csv: 'text/csv',
   doc: 'application/msword',
