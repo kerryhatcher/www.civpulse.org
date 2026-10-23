@@ -193,19 +193,29 @@ Supabase's GitHub integration deploys migrations and declared Edge Functions. Th
 pipeline runs `bun run check:migrations` before building and deploying. The guard
 waits up to ten minutes for the official Supabase GitHub app's `Supabase Preview`
 check to succeed for the checkout's full commit SHA. A migration-history mismatch,
-failed/skipped/cancelled check, API error, or timeout blocks deployment. A missing
+failed/skipped/cancelled check, unrecoverable API error, or timeout blocks deployment. A missing
 check never counts as success. Keep the Supabase production integration enabled
 for every push to `main`; after resolving a failure, rerun the Cloudflare build.
 Keep schema changes backward compatible with the currently deployed frontend.
 
 The guard uses GitHub's public checks API, without database credentials. An optional
 `GITHUB_TOKEN` with Checks read permission raises API rate limits (set it as a
-build secret, never a `PUBLIC_*` value). API rate limiting blocks deployment and
-requires a retry or token configuration. Local `bun run deploy` and
+build secret, never a `PUBLIC_*` value). Cloudflare build runners can share an
+egress IP and exhaust GitHub's anonymous quota. The guard retries confirmed
+HTTP 403/429 rate limits up to four times within its ten-minute budget, respecting
+`Retry-After` and `x-ratelimit-reset`; secondary limits without a reset use
+exponential backoff starting at one minute. It never treats a rate-limit response
+as migration success. Permission-denied 403s still fail immediately. Rate limits
+beyond the budget report the next retry time and block deployment; configure a
+repository-scoped fine-grained token with only Checks read permission as the
+Cloudflare build secret `GITHUB_TOKEN` when persistent rate limiting occurs.
+Do not copy a broad personal CLI token into build settings or disable the gate.
+Local `bun run deploy` and
 `bun run mcp:deploy` use the same guard; unpushed commits cannot pass it.
 `bun test scripts/tests/check-migrations.test.ts` covers mismatch rejection,
-trusted-app/commit matching, reruns, waiting, API failures, and timeout behavior;
-the Migration deployment gate workflow runs these tests on pushes and PRs.
+trusted-app/commit matching, reruns, waiting, API failures, timeout behavior, and
+rate-limit recovery/budgets; the Migration deployment gate workflow runs these
+tests on pushes and PRs.
 Keep production's applied migration files on `main`. Applying a feature-branch
 migration to production before its file reaches `main` blocks subsequent Supabase
 checks with “Remote migration versions not found in local migrations directory.”
