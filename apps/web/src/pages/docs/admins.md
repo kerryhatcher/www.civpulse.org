@@ -29,8 +29,20 @@ Calendars and events can be **Public** (listed and searchable), **Unlisted** (av
 
 Admin changes are saved to the database immediately. The calendar and meeting viewer load records in the browser. Other public pages built from database content need a rebuild and deployment before edits appear there.
 
+## Publish saved changes
+
+1. Save your edits, then open [Publish](/admin/publish/) from the admin navigation.
+2. Select **Publish changes** to rebuild the public site with saved changes from all admins. Unsaved edits are not included.
+3. Watch **Build status**: queued, preparing, building and deploying, then **Published successfully**. Status updates every 10 seconds while the page is open. You can leave and return later, or select **Refresh status**.
+4. Open **View public site** after publication to check the result. If you saved more edits during the build, publish again after it finishes so those edits are included.
+
+If another build is in progress, wait for it to finish. A failed, canceled, or skipped build does not confirm publication; use **View build logs in Cloudflare** to investigate. Migration validation and the usual build checks must pass before deployment. If a request times out, refresh status before trying again because Cloudflare may already have accepted it. If publishing is not configured, ask the site maintainer to complete the Edge Function setup.
+
+Publishing rebuilds from the production code on `main`; it does not publish unmerged code. It also does not make private records public. Changing a previously public record to private still requires a successful rebuild to remove the old public page.
+
 ## Other admin areas
 
+- [Publish](/admin/publish/): rebuild the public site and check deployment status.
 - [Users](/admin/users/): find registered accounts and grant admin access when appropriate.
 - [Organizations](/admin/organizations/) and [People](/admin/people/): maintain profiles and the people referenced by meeting attendance.
 - [Offices](/admin/offices/) and [Elections](/admin/elections/): maintain offices, contests, candidates, and election information.
