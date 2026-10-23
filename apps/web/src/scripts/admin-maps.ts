@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { createMapSettingsEditor } from '../lib/map-settings-editor';
 import { createGeoJSONLayer } from '../lib/map-rendering';
 import L from 'leaflet';
@@ -507,6 +508,7 @@ export async function initMapAdmin(): Promise<void> {
 
     const actions = document.createElement('div');
     actions.className = 'org-row-actions';
+        actions.append(historyLink('maps', record.id));
 
     const preview = document.createElement('button');
     preview.type = 'button';

@@ -1,0 +1,15 @@
+---
+import { historyUrl } from '../lib/history';
+interface Props { table: string; id?: string }
+const { table, id } = Astro.props;
+---
+<p><a href={id ? historyUrl(table, id) : '/history/'} data-history-link data-history-table={table}>View history</a></p>
+<script>
+  import { historyUrl } from '../lib/history';
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-history-link]')) {
+    if (link.getAttribute('href') !== '/history/') continue;
+    const id = new URLSearchParams(location.search).get('id');
+    if (id) link.href = historyUrl(link.dataset.historyTable!, id);
+    else link.hidden = true;
+  }
+</script>

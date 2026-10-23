@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { uploadProfileImage, initImagePreview } from '../lib/media';
 import {
   COMMON_ROLES,
@@ -260,6 +261,7 @@ export async function initPeopleAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('people', person.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -477,6 +479,7 @@ export async function initPeopleAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('person_organizations', JSON.stringify({person_id: affiliation.person_id, organization_id: affiliation.organization_id})));
 
         const edit = document.createElement('button');
         edit.type = 'button';

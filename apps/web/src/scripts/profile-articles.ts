@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
 import { getSupabase } from '../lib/supabase';
 
@@ -18,7 +19,7 @@ function renderArticle(article: ProfileArticle): HTMLLIElement {
   fetched.textContent = articleFetchedLabel(article.fetched_on);
   const published = document.createElement('span'); published.className = 'candidate-meta';
   published.textContent = articlePublishedLabel(article.published_on);
-  link.append(title, source, published, fetched, role); item.append(link);
+  link.append(title, source, published, fetched, role); item.append(link, historyLink('articles', article.id));
   return item;
 }
 

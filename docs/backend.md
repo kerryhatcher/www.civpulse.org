@@ -998,3 +998,51 @@ maintenance. Never put confidential files in the public profile-media bucket.
 Verify with `RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/records-requests-db.test.ts`.
 The transaction rolls back its fixtures, covering anonymous, non-owner, owner,
 admin, transfers, fee validation, private metadata and file enumeration.
+
+## Civic object audit history
+
+The `20261119000000_object_history` migration installs row triggers on the 23
+civic tables registered in `audit.objects`: organizations, people, elections,
+contests, candidates, ballot questions, offices/terms, affiliations and organization
+relationships, articles/associations, maps/layers/features/memberships,
+calendars/events, and meeting attendance/votes/choices/attachments. Account/Auth
+and admin membership records are deliberately excluded. Add new civic tables and
+all visibility-bearing references to this registry in an append-only migration.
+The registry's parent graph must remain acyclic; relationship key columns must
+match the table's primary key.
+
+`audit.revisions` stores immutable before/after JSON, operation, monotonic revision
+ID, transaction ID, wall-clock time, `auth.uid()` and a snapshot of the editor's
+display name. It has no foreign keys to content or users, so deletions preserve
+evidence. Derived search documents and automatic `updated_at` changes are omitted;
+no-op saves create no revision. Tracking is transactional and includes cascades;
+rolled-back edits leave no revision. SQL/service-role imports without an end-user
+JWT are truthfully attributed to System / import. There is no historical backfill.
+
+Both audit tables have RLS and the `audit` schema is inaccessible to API roles.
+Neither regular users nor admins have direct mutation/read access. The sole read
+API is `get_object_history(p_table, p_object_id, p_before, p_limit)`; it checks
+`is_admin()` in a security-definer function with an empty search path. Admins can
+browse all changes or filter by table/object. Other callers must supply an object.
+Composite object keys are canonical JSON objects containing their primary-key
+columns; ordinary objects use UUIDs, geographic features use bigint strings.
+A GIN subjects index associates relationship changes with every owning/referenced
+object; the feed uses descending revision-ID cursor pagination (default 25,
+maximum 100), avoiding offset drift from new edits.
+
+Public access requires both snapshots to have been public at edit time and every
+referenced object to remain public now. A hidden-to-public transition is omitted
+because its before snapshot contains hidden data. A deleted object uses its latest
+public deletion as a tombstone; deletion of a hidden object never releases older
+public snapshots. Cascading deletes with missing parents may be conservatively
+admin-only. Historical references are checked as well as current ones, preventing
+an old relationship from exposing a now-hidden person or election. Public payloads
+omit editor UUIDs and private meeting storage paths. Display names are public
+attribution; account emails are never used as fallback names. Full before/after
+payloads, including storage paths, remain available to admins. Only trusted
+registry table names enter dynamic SQL. Helpers have no public EXECUTE privileges.
+
+Run `HISTORY_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/history-db.test.ts` for transactional access regression
+checks. Normal database owners can change schema/data as usual; this is an
+application-level append-only audit log, not an external tamper-proof ledger.

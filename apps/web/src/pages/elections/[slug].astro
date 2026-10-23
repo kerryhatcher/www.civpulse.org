@@ -1,4 +1,5 @@
 ---
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import Layout from '../../layouts/Layout.astro';
 import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
@@ -177,6 +178,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
     <p class="org-back">
       <a href="/elections/">← All elections</a>
     </p>
+  <ObjectHistoryLink table="elections" id={election.id} />
   </main>
 </Layout>
 
