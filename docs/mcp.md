@@ -64,8 +64,7 @@ and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every o
   reusable layers, contests, ballot questions, articles, all their editable
   relationships, individual stored features and image storage.
 - **Own account:** any signed-in user can read their profile. All MCP mutations,
-  including display-name updates, require an admin. Regular users can edit their
-  display name on the website Account page.
+  including display-name updates, require an admin.
 - **Admin accounts:** `search_users` finds registered accounts by email/display
   name and paginates 50 at a time with `offset`. `promote_user_to_admin` promotes
   another existing account; it grants private-content access, content writes and
