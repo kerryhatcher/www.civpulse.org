@@ -48,6 +48,11 @@ the [README](./README.md) too.
 - `bun run dev` from the repo root starts local Supabase (if needed) and runs the
   Astro dev server. Local admin login: `test@civpulse.org` /
   `civicpulse-test-123` (`bun run db:seed-user`).
+- Every site change must include a relevant Markdown documentation update in the
+  same change. Update `apps/web/src/pages/docs/users.md` for visitor workflows,
+  `apps/web/src/pages/docs/admins.md` for admin workflows, and the appropriate
+  file under `docs/` for architecture, backend, or development changes. Keep
+  instructions and links aligned with the implemented site.
 - Before calling work done: run `bun run check` and `bun run build`, and exercise
   the affected flow in a browser — anonymous **and** signed-in where access rules
   are involved. No browser console errors.
