@@ -224,6 +224,66 @@ comparing it with `supabase_migrations.schema_migrations`; do not delete history
 entries or rerun applied SQL to make the check pass.
 Redeploy the web Worker after editing prerendered public content in the admin.
 
+### Manual publishing setup
+
+The [Publish admin page](/admin/publish/) calls the `publish` Supabase Edge
+Function. It verifies the user with Auth, checks `public.is_admin()` on each
+request, and either requests a production build or returns its status. It reuses
+active production builds, including builds started by Git pushes or other admins.
+No automatic database triggers are installed.
+
+Configure the following **Supabase Edge Function secrets**, never `PUBLIC_*`
+variables, source files, or browser configuration:
+
+| Secret | Value |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | Kerry Personal account ID (`6d837580a4d0641139ecada9e74076b8`) |
+| `CLOUDFLARE_WORKER_TAG` | Immutable tag for `civpulse-web-new` (`2bf0468f854440eebeb10454be815eaa`), not the Worker name |
+| `CLOUDFLARE_BUILDS_READ_TOKEN` | Cloudflare API token with **Workers CI Read** permission scoped to this account; used only for status |
+| `CLOUDFLARE_DEPLOY_HOOK_URL` | A Workers Builds Deploy Hook URL for **`civpulse-web-new`, branch `main`** |
+| `PUBLISH_ALLOWED_ORIGINS` | Optional comma-separated exact origins; defaults to `https://www.civpulse.org,https://new.civpulse.org` |
+
+Create the hook under **Workers & Pages → civpulse-web-new → Settings → Builds →
+Deploy Hooks**. The hook URL is a credential. Store it and the read token in a
+gitignored env file, then upload with
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase secrets set --project-ref drzcrodqflzkzzbqsags --env-file /absolute/path/to/publish.env`.
+Do not print or log that file. Supabase injects its own `SUPABASE_URL` and public
+`SUPABASE_ANON_KEY`; the function does not need a service-role key.
+
+The `functions.publish` entry in `supabase/config.toml` declares the function for
+the existing Supabase GitHub deployment integration. For a deliberate standalone
+deployment, run `bun run check:migrations` first, then
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions deploy publish --project-ref drzcrodqflzkzzbqsags`.
+The handler also validates the session itself; keep `verify_jwt = true` in hosted
+configuration. Deploy the frontend through the existing guarded pipeline.
+
+Keep both existing Cloudflare commands unchanged:
+`bun run check:migrations && bun run check && bun run build` and
+`bun run check:migrations && bun run --cwd apps/web wrangler deploy`.
+Hook-triggered builds still check the exact Git checkout's Supabase migration
+status. Rebuilding the same commit needs no new commit or new migration check
+when its existing check is successful. The publish function never overrides
+build commands or accepts branch/Worker choices from callers.
+
+The admin page polls every 10 seconds during a build and pins the returned build
+ID in session storage until it finishes. On a fresh visit it loads the latest
+`main` build. Status reads reject build IDs belonging to another Worker/branch.
+Only a stopped build with outcome `success` is shown as published; failures,
+cancellations, skipped builds, and unknown outcomes never imply publication.
+A failed status read disables publishing until a successful refresh. Ambiguous
+publish requests are not retried automatically. Cloudflare deduplicates hook
+requests while queued/initializing; there is no database lock across concurrent
+admins. Save edits before publishing and publish again after an active build if
+you edited content during it. This feature does not track unpublished revisions.
+
+For local development, use a separate hook/Worker if testing real deployments;
+never point routine local tests at the production hook. Use a gitignored env
+file with `PUBLISH_ALLOWED_ORIGINS=http://localhost:4321` (substitute the actual
+Astro origin) and run
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions serve publish --env-file /absolute/path/to/publish.env`.
+`bun run publish:check` type-checks the handler. `bun run publish:test` exercises auth, scope isolation, sanitized statuses,
+request failures, and deduplication with mock upstream calls and never deploys.
+
 ### Profile media development and deployment
 
 - `bun run media:check` and `bun run media:test` check the upload Worker.

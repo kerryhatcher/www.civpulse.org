@@ -98,6 +98,16 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 ## Auth and admin
 
+- `/admin/publish/` requests a manual production rebuild through the `publish`
+  Supabase Edge Function. Every request verifies the user's token with Auth and
+  checks `public.is_admin()` using that token. The function calls a secret
+  Cloudflare Workers Builds Deploy Hook for `civpulse-web-new` on `main`;
+  Cloudflare runs the existing migration checks, build, and deploy commands.
+  Build status is read from Cloudflare using a server-only Workers CI Read token.
+  Only selected status fields are returned, never build environment variables,
+  raw logs, credentials, or the hook URL. No service-role key or new tables are
+  needed. See [development.md](./development.md#manual-publishing-setup).
+
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
   `/admin/maps/`, `/admin/offices/`, `/admin/calendars/`, `/admin/elections/`, `/admin/articles/` with an admin tab
