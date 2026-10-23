@@ -806,7 +806,7 @@ Setup completed on October 22, 2026:
   Allowed hostnames are exactly `www.civpulse.org` and `new.civpulse.org`.
 - Saved `PUBLIC_TURNSTILE_SITEKEY` in the existing `civpulse-web-new` production
   build trigger (`3bb52786-1d86-457b-bec2-33195bf3196f`). Existing build variables
-  were preserved. No frontend deployment was started.
+  were preserved. The frontend was subsequently deployed through Workers Builds.
 - Stored the secret as `TURNSTILE_PRODUCTION_SECRET` and the public key as
   `TURNSTILE_PRODUCTION_SITEKEY` in the existing ignored `apps/web/.env`, with
   permissions `0600`. These non-public bootstrap variables are not used by the
@@ -830,14 +830,32 @@ Setup completed on October 22, 2026:
   CivicPulse server credentials. Credentials are stored only in Supabase's
   encrypted SMTP configuration, not in the repository or frontend. Email
   confirmation remains enabled. Supabase sets the initial sending quota to
-  30 emails/hour; actual delivery has not yet been tested. The existing Postmark
+  30 emails/hour. Delivery was verified with the approved blackhole test below. The existing Postmark
   account plan has a shared 100-email monthly allowance; no plan upgrade was made.
 - Set the hosted Site URL to `https://www.civpulse.org`, with exact redirects
   `https://www.civpulse.org/account/` and `https://new.civpulse.org/account/`.
-- Production Turnstile settings are staged for activation after the protected
-  frontend deploys. The release uses the existing Supabase GitHub migration check
-  and Cloudflare Workers Builds pipeline. Real-token success/replay and SMTP
-  delivery verification remain release checks until recorded below.
+- Deployed release commit `d592872a142c3fef96ae5128367afe19f5050110` through
+  the existing Supabase GitHub migration check and Workers Builds. Both web and
+  MCP builds succeeded. The web Worker version is
+  `a1a204ad-6658-4598-a2bf-8e9fb3554bdb`. Follow-up commit `5e5b285` documents
+  the official public local test key for Semgrep; all its CI checks passed.
+- Enabled hosted CAPTCHA with Turnstile and the verified production widget
+  secret after the frontend deployed. Missing and invalid tokens were rejected
+  by both signup and password-token endpoints with `captcha_failed`.
+- Verified an approved live signup as **Registration QA** using Postmark's
+  `test@blackhole.postmarkapp.com`. Postmark delivered exactly one confirmation
+  email from **Civic Pulse <accounts@civpulse.org>** (message
+  `c1502d3f-de2a-4b75-ac21-dc34020fe62d`). Before confirmation, password login
+  returned `Email not confirmed`. The delivered confirmation returned to the
+  exact `/account/` redirect and showed role **User**. Password login then
+  succeeded with a fresh Turnstile token. Regular-user access to `/admin/users/`
+  was denied; anonymous access redirected to signin. No application console
+  errors appeared. The QA session was signed out; the approved test account
+  remains a regular user in production. No live admin promotion was performed.
+- Real-token signup/signin and backend rejection checks passed. A direct replay
+  test against hosted Auth has not been performed. Local transactional access
+  tests cover admin-only account listing/promotion and anonymous/user visibility
+  parity; the full local MCP regression suite also passed.
 
 `supabase/config.toml` configures the **local stack**; it does not enable hosted
 CAPTCHA or email protections. Coordinate these settings with the frontend release:
@@ -869,9 +887,8 @@ CAPTCHA or email protections. Coordinate these settings with the frontend releas
    complement email confirmation; none guarantees that every account is human.
 
 Do not silently disable CAPTCHA to resolve a deployment problem. Restore the
-matching frontend/key configuration instead. Hosted settings, a production widget,
-and real-token replay validation remain deployment tasks until explicitly applied
-and verified. The repository includes no production Turnstile secret.
+matching frontend/key configuration instead. Hosted settings and the production widget are configured as recorded above.
+Direct real-token replay validation remains an outstanding verification check. The repository includes no production Turnstile secret.
 
 References: [Supabase CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha),
 [Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits), and
