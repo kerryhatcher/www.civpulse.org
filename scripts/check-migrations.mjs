@@ -28,6 +28,7 @@ export async function waitForMigrations(sha, {
   if (!/^[a-f0-9]{40}$/.test(sha)) throw new Error('A full commit SHA is required for the migration check.');
   const deadline = now() + timeoutMs;
   const url = `https://api.github.com/repos/${repository}/commits/${sha}/check-runs?check_name=Supabase%20Preview&filter=all&per_page=100`;
+  let rateLimitRetries = 0;
   console.log(`Waiting for Supabase migration validation of ${sha}…`);
   while (now() < deadline) {
     const response = await fetchChecks(url, {
@@ -39,8 +40,37 @@ export async function waitForMigrations(sha, {
       cache: 'no-store',
       signal: AbortSignal.timeout(Math.min(15_000, deadline - now())),
     });
-    // Never log API response bodies: they are not needed to diagnose auth/rate limits.
-    if (!response.ok) throw new Error(`GitHub checks API returned HTTP ${response.status}; deployment blocked. Check API access/rate limits and retry.`);
+    if (!response.ok) {
+      // A shared Cloudflare egress IP can exhaust GitHub's anonymous quota.
+      // Retry only confirmed rate limits; a forbidden check is not permission to deploy.
+      const retryAfter = response.headers.get('retry-after');
+      const remaining = response.headers.get('x-ratelimit-remaining');
+      const reset = response.headers.get('x-ratelimit-reset');
+      let secondaryLimit = false;
+      if (response.status === 403 && !retryAfter && remaining !== '0') {
+        const error = await response.json().catch(() => null);
+        secondaryLimit = typeof error?.message === 'string' && /secondary rate limit/i.test(error.message);
+      }
+      const rateLimited = response.status === 429 || (response.status === 403 &&
+        (remaining === '0' || retryAfter !== null || secondaryLimit));
+      if (!rateLimited) throw new Error(`GitHub checks API returned HTTP ${response.status}; deployment blocked. Check API permissions and credentials.`);
+      const fallback = 60_000 * 2 ** rateLimitRetries++;
+      const retryAt = retryAfter !== null && retryAfter.trim() !== '' && Number.isFinite(Number(retryAfter))
+        ? now() + Math.max(0, Number(retryAfter)) * 1000
+        : Date.parse(retryAfter ?? '');
+      const resetAt = remaining === '0' && reset !== null && reset.trim() !== '' && Number.isFinite(Number(reset))
+        ? Number(reset) * 1000 + 1000 : NaN;
+      const delay = Math.max(1000, Number.isFinite(retryAt) ? retryAt - now() : 0,
+        Number.isFinite(resetAt) ? resetAt - now() : 0,
+        !Number.isFinite(retryAt) && !Number.isFinite(resetAt) ? fallback : 0);
+      if (rateLimitRetries > 4 || delay >= deadline - now()) {
+        throw new Error(`GitHub checks API rate limit (HTTP ${response.status}) exceeds the deployment wait budget; deployment blocked. Next retry: ${new Date(now() + delay).toISOString()}. Configure a repository-scoped GITHUB_TOKEN build secret with Checks read permission, or retry after the rate limit resets.`);
+      }
+      // Never print response bodies or credentials, including arbitrary error messages.
+      console.log(`GitHub checks API rate limited (HTTP ${response.status}); retrying in ${Math.ceil(delay / 1000)} seconds.`);
+      await sleep(delay);
+      continue;
+    }
     const body = await response.json();
     if (!Array.isArray(body.check_runs)) throw new Error('Invalid GitHub checks response; deployment blocked.');
     if (migrationCheckState(body.check_runs, sha) === 'success') {
