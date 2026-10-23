@@ -71,6 +71,10 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   and filters events by organization/calendar through `search_events`; unlisted
   and private events use the `/calendar/view/?id=<uuid>` shell gated by
   `get_event`.
+- Meetings are calendar events marked `is_meeting`. Admins add notes, transcripts,
+  attendance, votes, and attachments at `/admin/meetings/`. The event viewer
+  loads these records through `get_meeting`; private meeting files are served
+  through short-lived signed URLs from a private Supabase Storage bucket.
 - People: records for officials, elected office holders, and candidates, linked
   to organizations with a role. Public pages are `/people/<slug>/` (prerendered)
   and `/people/` browses/search through `search_people`; unlisted/private people

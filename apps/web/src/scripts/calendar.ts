@@ -7,6 +7,7 @@ import {
   type EventRecord,
 } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
+import { MEETING_BUCKET, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
@@ -30,6 +31,13 @@ function renderEventCard(event: EventRecord): HTMLElement {
   link.textContent = event.title;
   heading.append(link);
   card.append(heading);
+
+  if (event.is_meeting) {
+    const meeting = document.createElement('span');
+    meeting.className = 'visibility-badge';
+    meeting.textContent = 'Meeting';
+    card.append(meeting);
+  }
 
   if (event.visibility !== 'public') {
     const badge = document.createElement('span');
@@ -298,6 +306,7 @@ interface EventViewResponse {
     all_day: boolean;
     location: string | null;
     url: string | null;
+    is_meeting: boolean;
   };
   calendar?: { id: string; name: string };
   organization?: { id: string; name: string; slug: string };
@@ -386,6 +395,68 @@ function fillEventView(response: EventViewResponse): void {
   viewer.hidden = false;
 }
 
+async function fillMeetingView(id: string): Promise<void> {
+  const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
+  if (error || !data || data.status !== 'ok') return;
+  const meeting = data as MeetingRecord;
+  const root = document.querySelector<HTMLElement>('[data-meeting-details]');
+  if (!root) return;
+  root.hidden = false;
+  const textSection = (sectionSelector: string, textSelector: string, value: string | null | undefined) => {
+    const section = document.querySelector<HTMLElement>(sectionSelector);
+    const text = document.querySelector<HTMLElement>(textSelector);
+    if (section && text && value) { text.textContent = value; section.hidden = false; }
+  };
+  textSection('[data-meeting-notes]', '[data-meeting-notes-text]', meeting.event?.meeting_notes);
+  textSection('[data-meeting-transcript]', '[data-meeting-transcript-text]', meeting.event?.meeting_transcript);
+
+  const attendance = document.querySelector<HTMLElement>('[data-meeting-attendance]');
+  const attendanceList = document.querySelector<HTMLElement>('[data-meeting-attendance-list]');
+  if (attendance && attendanceList && meeting.attendance?.length) {
+    attendance.hidden = false;
+    for (const person of meeting.attendance) {
+      const item = document.createElement('li');
+      item.textContent = `${person.full_name} — ${person.status}${person.note ? ` (${person.note})` : ''}`;
+      attendanceList.append(item);
+    }
+  }
+  const votes = document.querySelector<HTMLElement>('[data-meeting-votes]');
+  const voteList = document.querySelector<HTMLElement>('[data-meeting-vote-list]');
+  if (votes && voteList && meeting.votes?.length) {
+    votes.hidden = false;
+    for (const vote of meeting.votes) {
+      const article = document.createElement('article');
+      const heading = document.createElement('h4'); heading.textContent = vote.subject; article.append(heading);
+      if (vote.description) { const detail = document.createElement('p'); detail.textContent = vote.description; article.append(detail); }
+      const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${vote.outcome ?? 'Not recorded'}`; article.append(outcome);
+      const choices = document.createElement('ul');
+      for (const choice of vote.choices) {
+        const item = document.createElement('li'); item.textContent = `${choice.full_name}: ${choice.choice}`; choices.append(item);
+      }
+      article.append(choices); voteList.append(article);
+    }
+  }
+  const attachments = document.querySelector<HTMLElement>('[data-meeting-attachments]');
+  const attachmentList = document.querySelector<HTMLElement>('[data-meeting-attachment-list]');
+  if (attachments && attachmentList && meeting.attachments?.length) {
+    attachments.hidden = false;
+    for (const file of meeting.attachments) {
+      const item = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button'; button.textContent = file.file_name;
+      button.addEventListener('click', () => void (async () => {
+        button.disabled = true;
+        const { data, error } = await getSupabase().storage.from(MEETING_BUCKET)
+          .createSignedUrl(file.storage_path, 60, { download: file.file_name });
+        button.disabled = false;
+        if (error || !data) { button.textContent = 'Download unavailable'; return; }
+        location.href = data.signedUrl;
+      })());
+      item.append(button); attachmentList.append(item);
+    }
+  }
+}
+
 /** Viewer for any event uuid (public, unlisted, or private). */
 export async function initEventViewFromUrl(): Promise<void> {
   const viewer = document.querySelector<HTMLElement>('[data-event-viewer]');
@@ -415,6 +486,7 @@ export async function initEventViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillEventView(response);
+  if (response.event?.is_meeting) await fillMeetingView(response.event.id);
 
   if (response.event && (await isCurrentUserAdmin())) {
     const edit = document.querySelector<HTMLAnchorElement>('[data-event-edit-link]');

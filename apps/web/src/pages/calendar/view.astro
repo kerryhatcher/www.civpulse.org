@@ -20,6 +20,14 @@ import Layout from '../../layouts/Layout.astro';
       <p data-event-link hidden>
         <a class="button-link" data-event-url target="_blank" rel="noopener">Event details</a>
       </p>
+      <section data-meeting-details hidden class="meeting-details">
+        <h2>Meeting record</h2>
+        <section data-meeting-notes hidden><h3>Notes and minutes</h3><p data-meeting-notes-text class="meeting-text"></p></section>
+        <section data-meeting-transcript hidden><h3>Transcript</h3><p data-meeting-transcript-text class="meeting-text"></p></section>
+        <section data-meeting-attendance hidden><h3>Attendance</h3><ul data-meeting-attendance-list></ul></section>
+        <section data-meeting-votes hidden><h3>Votes</h3><div data-meeting-vote-list></div></section>
+        <section data-meeting-attachments hidden><h3>Attachments</h3><ul data-meeting-attachment-list></ul></section>
+      </section>
       <p class="event-detail-actions">
         <a class="button-link event-edit" data-event-edit-link hidden>Edit event</a>
         <a class="event-back" data-event-calendar-link href="/calendar/">← Back to the calendar</a>

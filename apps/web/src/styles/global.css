@@ -2426,3 +2426,17 @@ textarea::placeholder {
 }
 .event-details summary { cursor: pointer; color: var(--ink); font-size: 14px; }
 .event-details p, .event-details a { margin-top: 12px; }
+.meeting-details {
+  margin-block: 2rem;
+  padding-block: 1.5rem;
+  border-block: 1px solid var(--line);
+}
+.meeting-details section { margin-top: 1.5rem; }
+.meeting-details h3, .meeting-details h4 { margin-bottom: .5rem; }
+.meeting-details article { padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.meeting-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.meeting-admin .org-form { margin-top: 1.5rem; }
+.meeting-inline-form { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+.meeting-inline-form .field { flex: 1 1 12rem; }
+.meeting-vote { display: block; }
+.meeting-vote form { margin-block: .75rem; }

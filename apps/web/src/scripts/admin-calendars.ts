@@ -419,6 +419,13 @@ export async function initCalendarAdmin(): Promise<void> {
         edit.textContent = 'Edit';
         edit.addEventListener('click', () => startEventEdit(event));
 
+        if (event.is_meeting) {
+          const meeting = document.createElement('a');
+          meeting.href = `/admin/meetings/?event=${event.id}`;
+          meeting.textContent = 'Meeting records';
+          actions.append(meeting);
+        }
+
         const remove = document.createElement('button');
         remove.type = 'button';
         remove.className = 'button-danger';
@@ -452,6 +459,8 @@ export async function initCalendarAdmin(): Promise<void> {
     if (eventStarts) eventStarts.value = toDatetimeLocal(event.starts_at);
     if (eventEnds) eventEnds.value = toDatetimeLocal(event.ends_at);
     if (eventAllDay) eventAllDay.checked = event.all_day;
+    const meeting = eventFormEl.querySelector<HTMLInputElement>('input[name="is_meeting"]');
+    if (meeting) meeting.checked = event.is_meeting;
     if (eventVisibility) eventVisibility.value = event.visibility;
     if (eventElection) eventElection.value = event.election_id ?? '';
     if (eventDateKind) eventDateKind.value = event.election_date_kind ?? '';
@@ -496,6 +505,11 @@ export async function initCalendarAdmin(): Promise<void> {
       ? (visibilityValue as CalendarVisibility)
       : 'public';
     const electionId = String(values.get('election_id') ?? '').trim();
+    const isMeeting = values.get('is_meeting') !== null;
+    if (isMeeting && electionId) {
+      setMessage(eventFormEl, '[data-event-message]', 'A meeting cannot also be an election key date.', 'error');
+      return;
+    }
     const electionDateKind = electionId
       ? String(values.get('election_date_kind') ?? '').trim()
       : '';
@@ -534,6 +548,7 @@ export async function initCalendarAdmin(): Promise<void> {
         visibility,
         election_id: electionId || null,
         election_date_kind: electionDateKind || null,
+        is_meeting: isMeeting,
       };
 
       const { error } = id

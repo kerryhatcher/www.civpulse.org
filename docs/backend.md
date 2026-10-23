@@ -309,6 +309,25 @@ Follows the Supabase full-text search guide:
   calls `public.get_event(uuid)`. Admins see an “Edit event” button that
   deep-links to `/admin/calendars/?editEvent=<id>`.
 
+### Meeting records
+
+An event marked `is_meeting` can hold `meeting_notes` and `meeting_transcript`.
+`meeting_attendance` links existing people to the meeting as present, absent, or
+excused. `meeting_votes` stores each motion and its outcome;
+`meeting_vote_choices` records each present person's yes, no, abstain, or
+recused choice. Changing an attendee to absent or excused clears their choices.
+All four meeting child tables have admin-only Data API access under RLS.
+`get_meeting(uuid)` applies the event and calendar visibility rules before
+returning the public record, and omits hidden people for non-admin callers.
+
+Meeting files live in the private `meeting-attachments` Storage bucket. Admins
+can upload PDF, Office, OpenDocument, text, and CSV files up to 25 MB. The
+`meeting_attachments` table holds file metadata and paths; a Storage SELECT
+policy checks the parent meeting's visibility before allowing a signed download
+URL. Object paths are immutable UUID names beneath the meeting ID. Removing an
+attachment deletes its object and metadata. Deleting a meeting cascades metadata,
+but may leave its Storage objects for later cleanup.
+
 ### Calendar/event visibility
 
 Calendars and events each have `public | unlisted | private`, the same rules as

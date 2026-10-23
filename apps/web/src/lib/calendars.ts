@@ -16,6 +16,7 @@ export interface CalendarRef {
 /** An event flattened with its calendar and organization, as returned by RPCs. */
 export interface EventRecord {
   id: string;
+  is_meeting?: boolean;
   title: string;
   category?: string | null;
   updated_at?: string;
@@ -51,6 +52,7 @@ export interface CalendarRow {
 
 export interface EventRow {
   id: string;
+  is_meeting: boolean;
   calendar_id: string;
   title: string;
   category?: string | null;
@@ -68,7 +70,7 @@ export interface EventRow {
 
 export const CALENDAR_COLUMNS = 'id, organization_id, slug, name, description, visibility';
 export const EVENT_COLUMNS =
-  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind, category';
+  'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind, category, is_meeting';
 
 /** The shared event viewer shell. Unlisted and private events are uuid-only. */
 export function eventViewHref(id: string): string {

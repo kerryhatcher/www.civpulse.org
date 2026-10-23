@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+
+<Layout title="Meeting records admin" description="Manage meeting notes, attendance, votes and attachments.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Meeting records</h1>
+      <p>Create a meeting on the <a href="/admin/calendars/">Calendars</a> page, then add its records here.</p>
+    </div>
+    <AdminTabs />
+    <p class="status" data-meeting-gate>Checking access…</p>
+    <div class="empty-state" data-meeting-denied hidden>Admin access is required.</div>
+    <div class="admin-panel meeting-admin" data-meeting-admin hidden>
+      <label class="field"><span>Meeting</span><select data-meeting-select></select></label>
+      <p data-meeting-status class="auth-message" role="status" aria-live="polite"></p>
+      <div data-meeting-editor hidden>
+        <p><a data-meeting-view href="/calendar/">View meeting</a></p>
+        <form class="org-form" data-meeting-notes-form>
+          <h2>Notes and transcript</h2>
+          <label class="field"><span>Meeting notes or minutes</span><textarea name="meeting_notes" rows="8"></textarea></label>
+          <label class="field"><span>Transcript</span><textarea name="meeting_transcript" rows="10"></textarea></label>
+          <button class="button-link" type="submit">Save text</button>
+        </form>
+        <section class="org-form">
+          <h2>Attendance</h2>
+          <form data-attendance-form class="meeting-inline-form">
+            <label class="field"><span>Person</span><select name="person_id" required></select></label>
+            <label class="field"><span>Status</span><select name="status"><option value="present">Present</option><option value="absent">Absent</option><option value="excused">Excused</option></select></label>
+            <label class="field"><span>Note</span><input name="note" maxlength="500" placeholder="Optional" /></label>
+            <button class="button-link" type="submit">Add or update</button>
+          </form>
+          <div data-attendance-list class="org-list"></div>
+        </section>
+        <section class="org-form">
+          <h2>Votes</h2>
+          <form data-vote-form>
+            <label class="field"><span>What was voted on *</span><input name="subject" maxlength="300" required /></label>
+            <label class="field"><span>Details</span><textarea name="description" rows="3"></textarea></label>
+            <label class="field"><span>Outcome</span><select name="outcome"><option value="">Not recorded</option><option value="passed">Passed</option><option value="failed">Failed</option><option value="tabled">Tabled</option><option value="withdrawn">Withdrawn</option></select></label>
+            <button class="button-link" type="submit">Add vote</button>
+          </form>
+          <div data-vote-list class="org-list"></div>
+        </section>
+        <section class="org-form">
+          <h2>Attachments</h2>
+          <p>PDF, Word, spreadsheet, presentation, text and CSV files, up to 25 MB each.</p>
+          <form data-attachment-form class="meeting-inline-form">
+            <label class="field"><span>Files</span><input name="files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp,.txt,.csv" required /></label>
+            <button class="button-link" type="submit">Upload files</button>
+          </form>
+          <div data-attachment-list class="org-list"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { initMeetingAdmin } from '../../scripts/admin-meetings';
+  void initMeetingAdmin();
+</script>
