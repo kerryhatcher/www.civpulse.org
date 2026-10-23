@@ -856,7 +856,9 @@ Setup completed on October 22, 2026:
   Siteverify responses and the duplicate signup request returned HTTP 200 rather
   than `captcha_failed`. Replay rejection is therefore **not verified**. No new
   account was requested: the approved replay targeted the existing confirmed QA
-  account. Do not describe hosted replay protection as tested successfully. Local transactional access
+  account. A follow-up database check confirmed exactly one QA account, confirmed
+  and still non-admin. Do not describe hosted replay protection as tested
+  successfully. Local transactional access
   tests cover admin-only account listing/promotion and anonymous/user visibility
   parity; the full local MCP regression suite also passed.
 

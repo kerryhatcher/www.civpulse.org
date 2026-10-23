@@ -1,8 +1,8 @@
 {
   "plugin_id": "plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
   "plugin_url": "https://chatgpt.com/plugins/plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
-  "release_id": "pluginrel_6ada228e7640819180d4d64ba45f54b9",
-  "version": "1.0.1",
+  "release_id": "pluginrel_6adacfd7e684819198e11e69e7d6e8d6",
+  "version": "1.1.0",
   "scope": "USER",
   "discoverability": "PRIVATE",
   "source_directory": "plugins/civpulse",

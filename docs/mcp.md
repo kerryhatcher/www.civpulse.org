@@ -169,3 +169,26 @@ afterward. The script rejects hosted Supabase URLs and never prints tokens.
 For browser verification, use the consent and Account pages with the local
 seeded admin. Ensure `auth.site_url` matches the actual Astro port when following
 authorization redirects; Astro may choose another port if 4321 is occupied.
+
+## Account administration release
+
+MCP server version **1.2.0** was deployed from commit
+`d91cbf0361fb47fd0366e5068b4f4e9f15325774` through the existing Supabase gate
+and Workers Builds. Worker version: `8bedd1ae-b07e-456f-86be-1ee33cb6f486`.
+The connected production `whoami` returned the new `role` field successfully.
+Local OAuth integration tests exercised both new tools as admin and regular user,
+including promotion without refreshing the existing OAuth token. All release CI
+checks passed; no production account was promoted as a test.
+
+The private plugin **1.1.0** was published as release
+`pluginrel_6adacfd7e684819198e11e69e7d6e8d6` under the existing plugin and app IDs.
+Read-back verified 95 tool schemas, four skills, and preserved app connection and
+presentation. See [the release metadata](../plugins/civpulse-release.json).
+
+A connected host may retain its earlier catalog. For a direct custom ChatGPT MCP
+connection, refresh **Civic Pulse MCP** in the plugin connection details, then
+start a new conversation and verify `search_users` and `promote_user_to_admin`
+are available. See [OpenAI's metadata refresh guidance](https://developers.openai.com/plugins/deploy/connect-chatgpt).
+The user deferred this host refresh; direct invocation of the new tools through
+this existing ChatGPT connection has not yet been verified. The existing
+connection remains intact.
