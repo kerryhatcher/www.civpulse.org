@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { createMapSettingsEditor } from '../lib/map-settings-editor';
 import { applySwatch, createStyleEditor } from '../lib/layer-style-editor';
 import {
@@ -192,6 +193,7 @@ export async function initLayerAdmin(): Promise<void> {
 
     const actions = document.createElement('div');
     actions.className = 'org-row-actions';
+        actions.append(historyLink('layers', layer.id));
 
     const edit = document.createElement('button');
     edit.type = 'button';

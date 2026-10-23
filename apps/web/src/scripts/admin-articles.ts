@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl, type Article, type ArticlePerson, type ArticleOrganization } from '../lib/articles';
 import { getSupabase } from '../lib/supabase';
 
@@ -97,6 +98,7 @@ export async function initArticleAdmin(): Promise<void> {
       const links = document.createElement('p'); links.className = 'article-admin-links'; links.textContent = associationLabels(article).join('; ') || 'Not linked to any profiles';
       content.append(title, meta, links);
       const actions = document.createElement('div'); actions.className = 'org-row-actions';
+        actions.append(historyLink('articles', article.id));
       const editButton = document.createElement('button'); editButton.type = 'button'; editButton.textContent = 'Edit'; editButton.disabled = saving; editButton.addEventListener('click', () => edit(article));
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Delete'; remove.disabled = saving;
       remove.addEventListener('click', async () => {

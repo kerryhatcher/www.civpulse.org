@@ -1,4 +1,5 @@
 ---
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import Layout from '../../layouts/Layout.astro';
 import 'leaflet/dist/leaflet.css';
 ---
@@ -15,6 +16,7 @@ import 'leaflet/dist/leaflet.css';
 
     <div class="map-viewer-status empty-state" data-map-viewer-status hidden></div>
     <div class="map-viewer" data-map-viewer hidden></div>
+  <ObjectHistoryLink table="maps" />
   </main>
 </Layout>
 

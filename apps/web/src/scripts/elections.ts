@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { formatEventWhen } from '../lib/calendars';
 import {
   electionHref,
@@ -309,6 +310,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
     card.append(empty);
   }
 
+  card.append(historyLink('contests', contest.id));
   return card;
 }
 
@@ -332,6 +334,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
     const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);
   }
+  card.append(historyLink('ballot_questions', question.id));
   return card;
 }
 

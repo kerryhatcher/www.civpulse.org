@@ -45,3 +45,26 @@ other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflo
 Each assistant connects through your own Civic Pulse account. Admin tools require
 an admin account; review proposed changes before saving. Revoke access under
 [Account → Connected apps](/account/).
+
+## Audit log and record history
+
+Choose **Audit log** in the admin tabs to browse the live change feed. Filter by
+record type and optionally a record ID, or use **View history** on a public
+profile or an admin list row. Expand a revision for its earlier and later values.
+The admin view includes private, unlisted, and deleted records, editor display
+names and account IDs, revision IDs, and transaction IDs. A shared transaction ID
+helps identify related edits saved together, including cascade deletions.
+
+Civic data changes are captured in Postgres, including site edits, MCP writes,
+imports, relationship changes, meeting records, and stored geographic features.
+History survives record and editor-account deletion. Display names are captured
+at the time of the edit; unnamed accounts appear as **Editor**, and writes without
+a user session appear as **System / import**. Account profiles, authentication,
+and the admin allowlist are not civic objects and are outside this audit log.
+
+History cannot be edited or cleared through the site/API, including by admins.
+No prior edit history is fabricated: tracking starts when the migrations are
+applied. No-op saves and automatic updated timestamps/search indexes are omitted.
+To correct a record, use its normal editor; the correction creates a new revision.
+Public history applies both historical and current visibility, so an admin may
+see revisions that visitors cannot. No restore action is provided.

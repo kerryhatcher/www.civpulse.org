@@ -270,3 +270,20 @@ seven standalone public-source skills, installed with `bunx skills add`.
 Distinguish those seven skills from the four live-service workflows bundled
 with the OpenAI and Pi plugins; MCP authorization is a separate setup step.
 Do not present private registered app bindings as public directory availability.
+
+### History verification
+
+Apply the pending audit migrations to the local database with `bun run supabase
+migration up --include-all` (use the existing shared-backend checkout deliberately;
+do not reset it). Run the rollback-only suite with
+`HISTORY_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun
+test scripts/tests/history-db.test.ts`.
+
+In the browser, open a person or organization and choose **View history**. Check
+an expanded Before/After revision, **Load older changes**, and a relationship
+change. Anonymous and ordinary signed-in users must have the same public results.
+An admin opening **Audit log** can browse all types, including hidden/deleted
+records and editor account IDs. Verify a visibility change hides old revisions
+from public access, and that private history never enters the static build.
+History is fetched live through an RPC; profile text still follows the normal
+static-build lifecycle. No historical revisions exist before tracking is enabled.
