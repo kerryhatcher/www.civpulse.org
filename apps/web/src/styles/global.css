@@ -1061,6 +1061,7 @@ textarea::placeholder {
 
 .org-lede {
   margin-top: 12px;
+  overflow-wrap: anywhere;
   font-size: 18px;
   line-height: 1.55;
   max-width: 70ch;
