@@ -169,28 +169,28 @@ The site is static, so admin changes are only visible publicly after
 ### Automatic Cloudflare deployments
 
 Cloudflare Workers Builds connects `kerryhatcher/www.civpulse.org` on `main` to
-both existing Workers in the Kerry Personal account. Preview deployments are
-disabled. The build root is `/` so Bun installs the workspace lockfile; both
-builds use Node 24 and the existing Cloudflare-managed `Astro-starter` build token.
+the static website Worker in the Kerry Personal account. Preview deployments are
+disabled. The build root is `/` so Bun installs the workspace lockfile;
+the build uses Node 24 and the existing Cloudflare-managed `Astro-starter` build token.
 No deployment credentials are stored in the repository or GitHub variables.
 
 | Worker | Domain | Build command | Deploy command | Watch paths |
 | --- | --- | --- | --- | --- |
 | `civpulse-web-new` | `www.civpulse.org`, `new.civpulse.org` | `bun run check:migrations && bun run check && bun run build` | `bun run check:migrations && bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
-| `civpulse-mcp` | `mcp.civpulse.org` | `bun run check:migrations && bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
+
 
 The web build has `PUBLIC_SUPABASE_URL` set to the hosted project URL and
 `PUBLIC_SUPABASE_ANON_KEY` set to its current `sb_publishable_…` key. Despite the
 historical variable name, this accepts Supabase publishable keys as well as
-legacy anon keys. MCP uses that same publishable key in its Wrangler `vars`.
+legacy anon keys. The MCP Edge Function uses the public anon key injected by Supabase.
 These are public values; authorization still uses the caller's user token and
 RLS. Using the publishable format avoids JWT secret-scanner false positives
 without suppressing scanner rules.
 
-Manage these settings in each Worker's **Settings → Build** in Cloudflare.
+Manage these settings in the web Worker's **Settings → Build** in Cloudflare.
 Build status appears on the GitHub commit checks and in Cloudflare build logs.
-Supabase's GitHub integration deploys migrations separately. Both Workers Builds
-pipelines run `bun run check:migrations` before building and deploying. The guard
+Supabase's GitHub integration deploys migrations and declared Edge Functions. The web
+pipeline runs `bun run check:migrations` before building and deploying. The guard
 waits up to ten minutes for the official Supabase GitHub app's `Supabase Preview`
 check to succeed for the checkout's full commit SHA. A migration-history mismatch,
 failed/skipped/cancelled check, API error, or timeout blocks deployment. A missing
@@ -239,3 +239,18 @@ retained as a rollback origin; the Worker route takes precedence. To roll back,
 remove the www Worker route and revert its Wrangler declaration before the next
 build. The apex and HTTP redirects continue sending visitors to HTTPS www.
 The public ICS feed remains `/events.ics` on both hostnames.
+
+## Supabase MCP deployment
+
+MCP executes at `https://api.civpulse.org/functions/v1/mcp`. Source is in
+`apps/mcp/src`; run `bun run mcp:build` to regenerate the committed
+`supabase/functions/mcp/handler.js`. The Supabase GitHub integration deploys
+functions declared in `supabase/config.toml` on production pushes, after migrations.
+No new deployment credential is required. `bun run mcp:deploy` is the manual
+CLI path and requires Supabase CLI authentication. The former Cloudflare MCP
+build trigger was removed; its Worker serves only compatibility redirects.
+
+Run `bun run mcp:check`, `bun run scripts/build-mcp.mjs --check`,
+`bun test scripts/tests/mcp-handler.test.ts`, and `bun run mcp:test` (local DB)
+before release. The routing checks cover gateway path stripping, OAuth discovery
+and allowed origins. The full suite covers user/admin RLS, refresh and revocation.

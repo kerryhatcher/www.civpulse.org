@@ -1,6 +1,6 @@
 # Civic Pulse plugin
 
-Portable Codex/ChatGPT plugin connecting to https://mcp.civpulse.org/mcp over
+Portable Codex/ChatGPT plugin connecting to https://api.civpulse.org/functions/v1/mcp over
 streamable HTTP. This folder is the complete source; no credentials are bundled.
 The root Agent Plugins 1.0 manifest and `.codex-plugin/` compatibility manifest
 both link the registered ChatGPT connection through `.app.json`. The package
@@ -45,14 +45,14 @@ bun run mcp:check
 bun run mcp:test  # requires the running local Supabase stack
 ```
 
-The archive is written outside this folder to `dist/plugins/civpulse-1.1.0.zip`.
+The archive is written outside this folder to `dist/plugins/civpulse-1.2.0.zip`.
 The builder validates manifests, compatibility metadata, skill YAML and contained
 references, regenerates the catalog, excludes symlinks/credentials, and inspects
 the ZIP. Keep both manifests and the registered app mapping synchronized on edits.
 Bump both plugin versions together before uploading an updated release. The
-plugin version is independent of the MCP Worker version.
+plugin version is independent of the MCP server version.
 
-The private ChatGPT connection is `asdk_app_6ada21b2638c8191af7c86b9a80a5931`.
+The private ChatGPT connection is `asdk_app_6adb7102fd988191a89f556db8116075`.
 Users must connect their own Civic Pulse account. Merely packaging an HTTPS MCP
 URL does not register a ChatGPT cloud connection. Do not restore `mcp.json` or
 `.mcp.json` inside this account package, which would declare a second server.

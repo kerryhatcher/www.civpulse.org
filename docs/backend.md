@@ -663,7 +663,7 @@ lists immediately; new public person/organization pages still require a rebuild.
 
 ### Authenticated MCP content operations
 
-The MCP Worker forwards the verified user token; it never uses service-role
+The MCP Edge Function forwards the verified user token; it never uses service-role
 credentials. The append-only mcp_content_tools migration adds authenticated-only
 RPCs without changing RLS. `mcp_get_record` follows the caller's role-based discovery
 rules and returns article association sets only to admins. `mcp_layer_features`

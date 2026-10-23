@@ -113,8 +113,9 @@ for details.
 the static `apps/web/dist` output. `bun run deploy` builds the site and uploads
 it with Wrangler.
 
-Cloudflare Workers Builds deploys pushes to `main` automatically to
-`new.civpulse.org` and `mcp.civpulse.org`. Build settings, watch paths, and
+Cloudflare Workers Builds deploys the static website on pushes to `main`.
+The Supabase GitHub integration deploys the MCP Edge Function at
+`https://api.civpulse.org/functions/v1/mcp`. Build settings, watch paths, and
 public environment values are documented in [docs/development.md](docs/development.md).
 
 ## AI tooling

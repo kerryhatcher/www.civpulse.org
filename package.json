@@ -15,7 +15,7 @@
     "check:migrations": "bun run scripts/check-migrations.mjs",
     "mcp:check": "bun run --cwd apps/mcp check",
     "mcp:test": "bun run scripts/test-mcp-auth.mjs",
-    "mcp:deploy": "bun run check:migrations && bun run --cwd apps/mcp deploy",
+    "mcp:deploy": "bun run check:migrations && bun run mcp:check && bun run mcp:build && SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions deploy mcp --project-ref drzcrodqflzkzzbqsags",
     "deploy": "bun run --cwd apps/web deploy",
     "supabase": "supabase",
     "db:start": "supabase start",
@@ -34,7 +34,8 @@
     "plugin:build": "bun run scripts/build-plugin.mjs",
     "media:check": "bun run --cwd apps/media check",
     "media:test": "bun run --cwd apps/media test",
-    "media:deploy": "bun run --cwd apps/media deploy"
+    "media:deploy": "bun run --cwd apps/media deploy",
+    "mcp:build": "bun run scripts/build-mcp.mjs"
   },
   "devDependencies": {
     "supabase": "^2.121.0",

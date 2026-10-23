@@ -2,9 +2,6 @@
 // Integration test against the running LOCAL Supabase stack. Never uses hosted credentials.
 import assert from 'node:assert/strict';
 import { runCrudSuite } from './test-mcp-crud.mjs';
-import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
 const status = Bun.spawnSync(['bun', 'run', 'supabase', 'status', '--output', 'json'], { cwd: root });
@@ -13,7 +10,6 @@ const env = JSON.parse(status.stdout.toString());
 assert.equal(new URL(env.API_URL).hostname, '127.0.0.1', 'Tests must only use local Supabase');
 const auth = `${env.API_URL}/auth/v1`;
 const mcp = 'http://localhost:8789/mcp';
-const directory = await mkdtemp(join(tmpdir(), 'civpulse-mcp-auth-'));
 const users = [];
 const clients = [];
 const people = [];
@@ -104,19 +100,14 @@ try {
   const discoveryResult = await request(`${auth}/.well-known/oauth-authorization-server`);
   assert.ok(discoveryResult.response.ok, 'Enable local auth.oauth_server first');
   const discovery = discoveryResult.data;
-  await Bun.write(join(directory, 'wrangler.json'), JSON.stringify({
-    name: 'civpulse-mcp-auth-test', main: join(root, 'apps/mcp/src/index.ts'), compatibility_date: '2026-10-01',
-    compatibility_flags: ['nodejs_compat'], vars: {
-      SUPABASE_URL: env.API_URL, SUPABASE_ANON_KEY: env.ANON_KEY, MCP_RESOURCE_URL: mcp, AUTHORIZATION_SERVER: auth,
-    },
-  }));
-  worker = Bun.spawn(['bun', 'run', '--cwd', 'apps/mcp', 'wrangler', 'dev', '--config', join(directory, 'wrangler.json'),
-    '--port', '8789', '--inspector-port', '9239'], { cwd: root, stdout: 'ignore', stderr: 'ignore' });
+  worker = Bun.spawn(['bun', 'run', 'apps/mcp/src/local.ts'], { cwd: root, stdout: 'ignore', stderr: 'ignore',
+    env: { ...process.env, SUPABASE_URL: env.API_URL, SUPABASE_ANON_KEY: env.ANON_KEY, MCP_RESOURCE_URL: mcp, AUTHORIZATION_SERVER: auth },
+  });
   let ready = false;
   for (let attempt = 0; attempt < 100; attempt++) {
     try { await fetch(mcp); ready = true; break; } catch { await Bun.sleep(200); }
   }
-  assert.ok(ready, 'Local test Worker failed to start');
+  assert.ok(ready, 'Local test MCP server failed to start');
   for (const token of [null, 'not-a-token', 'e2JhZA.e30.abc', env.ANON_KEY, env.SERVICE_ROLE_KEY]) {
     const result = await rpc(token, 'initialize', {});
     assert.equal(result.response.status, 401, 'Missing, malformed, anon and service-role tokens must be rejected');
@@ -274,5 +265,4 @@ try {
   for (const id of people) await request(`${env.API_URL}/rest/v1/people?id=eq.${id}`, { token: env.SERVICE_ROLE_KEY, method: 'DELETE' });
   for (const id of clients) await request(`${auth}/admin/oauth/clients/${id}`, { token: env.SERVICE_ROLE_KEY, method: 'DELETE' });
   for (const id of users) await request(`${auth}/admin/users/${id}`, { token: env.SERVICE_ROLE_KEY, method: 'DELETE' });
-  await rm(directory, { recursive: true, force: true });
 }

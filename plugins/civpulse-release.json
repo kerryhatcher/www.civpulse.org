@@ -1,12 +1,14 @@
 {
   "plugin_id": "plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
   "plugin_url": "https://chatgpt.com/plugins/plugins_6ad98bfbb2408191ba4d8ce31edba4dd",
-  "release_id": "pluginrel_6adacfd7e684819198e11e69e7d6e8d6",
-  "version": "1.1.0",
+  "release_id": "pluginrel_6adb71e569f081918008256e85bca90c",
+  "version": "1.2.0",
   "scope": "USER",
   "discoverability": "PRIVATE",
   "source_directory": "plugins/civpulse",
   "build_command": "bun run plugin:build",
-  "registered_app_id": "asdk_app_6ada21b2638c8191af7c86b9a80a5931",
-  "connection_plugin_id": "plugin_asdk_app_6ada21b2638c8191af7c86b9a80a5931"
+  "registered_app_id": "asdk_app_6adb7102fd988191a89f556db8116075",
+  "connection_plugin_id": "plugin_asdk_app_6adb7102fd988191a89f556db8116075",
+  "mcp_endpoint": "https://api.civpulse.org/functions/v1/mcp",
+  "previous_registered_app_id": "asdk_app_6ada21b2638c8191af7c86b9a80a5931"
 }

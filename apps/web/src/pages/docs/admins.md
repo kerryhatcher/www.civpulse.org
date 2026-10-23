@@ -37,3 +37,12 @@ Admin changes are saved to the database immediately. The calendar and meeting vi
 - [Articles](/admin/articles/): add external articles and link them to people or organizations.
 - [Layers](/admin/layers/) and [Maps](/admin/maps/): manage geographic data and published maps.
 - [Calendars](/admin/calendars/) and [Meetings](/admin/meetings/): manage events and their meeting records.
+
+## Connect an AI agent
+
+Use `https://api.civpulse.org/functions/v1/mcp` as the remote MCP server URL,
+or install the Civic Pulse plugin and connect **Civic Pulse MCP (Supabase)**.
+Sign in with your Civic Pulse account and review the consent screen.
+The agent has your account’s supported access; administrator accounts can edit
+content and manage users. Revoke access under [Account → Connected apps](/account/).
+If your client still uses `mcp.civpulse.org`, update its URL and reconnect.

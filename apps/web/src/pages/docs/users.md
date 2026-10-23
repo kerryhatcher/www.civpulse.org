@@ -34,3 +34,12 @@ You do not need an account to browse public information. To create one, [create 
 **Unlisted** records can be opened with a direct link but do not appear in public listings or search. **Private** records require admin access. If a link says an admin account is required, signing in with a regular account will not open it.
 
 Information may change. Confirm important meeting, voting, or service details with the organization that published them.
+
+## Connect an AI agent
+
+Use `https://api.civpulse.org/functions/v1/mcp` as the remote MCP server URL,
+or install the Civic Pulse plugin and connect **Civic Pulse MCP (Supabase)**.
+Sign in with your Civic Pulse account and review the consent screen.
+The agent has your account’s supported access; administrator accounts can edit
+content and manage users. Revoke access under [Account → Connected apps](/account/).
+If your client still uses `mcp.civpulse.org`, update its URL and reconnect.

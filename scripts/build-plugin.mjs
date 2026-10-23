@@ -26,11 +26,11 @@ assert.equal(ui.category,'Productivity');
 assert.equal(legacy.skills,'./skills');
 assert.equal(legacy.apps,'./.app.json');
 assert.equal(manifest.extensions['com.openai'].apps,'./.app.json');
-assert.equal(app.apps.civpulse.id,'asdk_app_6ada21b2638c8191af7c86b9a80a5931');
+assert.equal(app.apps.civpulse.id,'asdk_app_6adb7102fd988191a89f556db8116075');
 assert.equal(legacy.mcpServers,undefined);
 assert.equal(await Bun.file(resolve(root,'mcp.json')).exists(),false);
 assert.equal(await Bun.file(resolve(root,'.mcp.json')).exists(),false);
-assert.equal(mcp.mcpServers.civpulse.url,'https://mcp.civpulse.org/mcp');
+assert.equal(mcp.mcpServers.civpulse.url,'https://api.civpulse.org/functions/v1/mcp');
 assert.equal(mcp.mcpServers.civpulse.type,'streamable-http');
 assert.deepEqual(mcp.mcpServers.civpulse.extensions['com.openai'].auth.client,{mode:'dcr'});
 for(const field of ['logo','composerIcon']){
