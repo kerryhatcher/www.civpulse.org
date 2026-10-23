@@ -222,10 +222,13 @@ try {
   assert.deepEqual(Object.keys(accounts[0]).sort(), ['created_at', 'display_name', 'email', 'id', 'role']);
   const profile = JSON.parse((await tool(readerToken, 'get_my_profile')).content[0].text);
   const searchName = `Account Search QA ${crypto.randomUUID()}`;
-  assert.ok(!(await tool(readerToken, 'update_my_profile', { display_name: searchName })).isError);
+  assert.ok((await tool(readerToken, 'update_my_profile', { display_name: searchName })).isError);
+  assert.equal(JSON.parse((await tool(readerToken, 'get_my_profile')).content[0].text).display_name, profile.display_name);
+  const adminProfile = JSON.parse((await tool(adminToken, 'get_my_profile')).content[0].text);
+  assert.ok(!(await tool(adminToken, 'update_my_profile', { display_name: searchName })).isError);
   const byName = JSON.parse((await tool(adminToken, 'search_users', { query: searchName })).content[0].text);
-  assert.ok(byName.some(account => account.id === reader.user.id), 'Display-name search resolves registered accounts');
-  assert.ok(!(await tool(readerToken, 'update_my_profile', { display_name: profile.display_name })).isError);
+  assert.ok(byName.some(account => account.id === admin.user.id), 'Display-name search resolves registered accounts');
+  assert.ok(!(await tool(adminToken, 'update_my_profile', { display_name: adminProfile.display_name })).isError);
   const page = JSON.parse((await tool(adminToken, 'search_users', { query: 'mcp-auth-' })).content[0].text);
   const nextPage = JSON.parse((await tool(adminToken, 'search_users', { query: 'mcp-auth-', offset: 1 })).content[0].text);
   assert.equal(nextPage[0].id, page[1].id, 'Account pagination forwards the requested offset');

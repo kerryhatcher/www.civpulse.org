@@ -27,7 +27,7 @@ export function createToolkit(server: McpServer, supabase: SupabaseClient) {
 
   function register<S extends z.ZodRawShape>(name: string, description: string, shape: S,
     run: (input: z.infer<z.ZodObject<S>>) => Promise<unknown>,
-    options: { write?: boolean; destructive?: boolean; idempotent?: boolean; ownProfile?: boolean } = {}) {
+    options: { write?: boolean; destructive?: boolean; idempotent?: boolean } = {}) {
     server.registerTool(name, {
       description, inputSchema: z.object(shape), annotations: {
         readOnlyHint: !options.write, destructiveHint: options.destructive ?? Boolean(options.write),
@@ -35,7 +35,7 @@ export function createToolkit(server: McpServer, supabase: SupabaseClient) {
       },
     }, async input => {
       try {
-        if (options.write && !options.ownProfile) await ensureAdmin();
+        if (options.write) await ensureAdmin();
         return ok(await run(input as z.infer<z.ZodObject<S>>));
       } catch (error) { return fail(error); }
     });
