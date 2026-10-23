@@ -395,6 +395,19 @@ details[open] summary {
   padding-top: 4px;
 }
 
+.docs-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: var(--radius);
+}
+
+.docs-content pre code {
+  padding: 0;
+  background: transparent;
+  overflow-wrap: normal;
+}
+
 .docs-content ol,
 .docs-content ul {
   padding-left: 1.5rem;

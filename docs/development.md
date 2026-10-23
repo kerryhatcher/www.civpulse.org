@@ -256,3 +256,13 @@ before release. The routing checks cover gateway path stripping, OAuth discovery
 and allowed origins. The full suite covers user/admin RLS, refresh and revocation.
 Browser CORS responses use literal values from the approved origin allowlist;
 they never echo an unchecked request header. Unknown origins receive 403.
+
+## Maintaining the public AI setup guide
+
+`apps/web/src/pages/docs/ai.md` is the visitor-facing guide for AI plugins, MCP,
+OAuth, skills and troubleshooting. `DocsLayout.astro` links it from every docs
+page; the visitor and admin guides link to it instead of duplicating setup steps.
+The guide points to `CivicPulse/civpulse-openai`, `CivicPulse/civpulse-pi` and
+`CivicPulse/skills`. Verify repository READMEs before changing release/install
+instructions: the Pi and shared-skills READMEs are currently placeholders.
+Do not present private registered app bindings as public directory availability.

@@ -1,5 +1,9 @@
 # MCP server
 
+For account setup and everyday use, see the site's
+[AI plugins, MCP, and skills guide](https://www.civpulse.org/docs/ai/).
+It covers ChatGPT, Codex, generic MCP clients, plugin availability and skills.
+
 Civic Pulse runs a remote [Model Context Protocol](https://modelcontextprotocol.io)
 server so people can let their AI agents search the directory and (for admins)
 edit and create records. Agents authenticate with **OpenID Connect / OAuth 2.1**

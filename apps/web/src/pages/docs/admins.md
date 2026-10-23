@@ -40,9 +40,8 @@ Admin changes are saved to the database immediately. The calendar and meeting vi
 
 ## Connect an AI agent
 
-Use `https://api.civpulse.org/functions/v1/mcp` as the remote MCP server URL,
-or install the Civic Pulse plugin and connect **Civic Pulse MCP (Supabase)**.
-Sign in with your Civic Pulse account and review the consent screen.
-The agent has your account’s supported access; administrator accounts can edit
-content and manage users. Revoke access under [Account → Connected apps](/account/).
-If your client still uses `mcp.civpulse.org`, update its URL and reconnect.
+Follow [AI plugins, MCP, and skills](/docs/ai/) for ChatGPT and Codex setup,
+other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflows.
+Each assistant connects through your own Civic Pulse account. Admin tools require
+an admin account; review proposed changes before saving. Revoke access under
+[Account → Connected apps](/account/).
