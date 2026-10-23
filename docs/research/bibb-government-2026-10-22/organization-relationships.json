@@ -1,0 +1,138 @@
+{
+  "verified_on": "2026-10-23",
+  "relationships": [
+    {
+      "organization_slug": "bibb-county-board-of-education",
+      "related_organization_slug": "bcsd",
+      "relationship": "School district governed by this board",
+      "reverse_relationship": "Governing board",
+      "source_url": "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "organization_slug": "macon-bibb-county-planning-and-zoning-commission",
+      "related_organization_slug": "macon-bibb-county-design-review-board",
+      "relationship": "Associated design review board",
+      "reverse_relationship": "Associated planning and zoning commission",
+      "source_url": "https://mbpz.org/team/"
+    },
+    {
+      "organization_slug": "macon-bibb-county-urban-development-authority",
+      "related_organization_slug": "downtown-macon-parking-advisory-board",
+      "relationship": "Parking advisory board appointed by this authority",
+      "reverse_relationship": "Appointing authority; advised on parking policy",
+      "source_url": "https://www.parkmacon.com/public-engagement"
+    },
+    {
+      "organization_slug": "macon-bibb-county-board-of-health",
+      "related_organization_slug": "macon-bibb-county-health-department",
+      "relationship": "County health department overseen by this board",
+      "reverse_relationship": "Local public-health governing board",
+      "source_url": "https://northcentralhealthdistrict.org/board-of-health/"
+    },
+    {
+      "organization_slug": "north-central-health-district",
+      "related_organization_slug": "macon-bibb-county-health-department",
+      "relationship": "County health department within the district",
+      "reverse_relationship": "Regional public-health district",
+      "source_url": "https://northcentralhealthdistrict.org/macon-bibb-county-health-department/"
+    },
+    {
+      "organization_slug": "macon-bibb-county-board-of-commissioners",
+      "related_organization_slug": "macon-bibb-county-clerk-of-commission",
+      "relationship": "Clerk maintaining commission records and supporting meetings",
+      "reverse_relationship": "Commission served by this clerk’s office",
+      "source_url": "https://www.maconbibb.us/clerk-of-commission/meet-the-clerk/"
+    },
+    {
+      "organization_slug": "macon-bibb-county-government",
+      "related_organization_slug": "macon-bibb-county-board-of-commissioners",
+      "relationship": "County legislative governing body",
+      "reverse_relationship": "Consolidated county government",
+      "source_url": "https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "organization_slug": "macon-bibb-county-government",
+      "related_organization_slug": "macon-bibb-county-manager-s-office",
+      "relationship": "County administrative leadership",
+      "reverse_relationship": "County government served by this office",
+      "source_url": "https://www.maconbibb.us/county-manager/"
+    },
+    {
+      "organization_slug": "macon-bibb-county-government",
+      "related_organization_slug": "middle-georgia-regional-commission",
+      "relationship": "Regional commission serving Macon-Bibb",
+      "reverse_relationship": "Member county government represented on the council",
+      "source_url": "https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "organization_slug": "macon-water-authority",
+      "related_organization_slug": "macon-water-authority-district-1",
+      "relationship": "District 1 elected board seat",
+      "reverse_relationship": "Authority on whose board this elected seat serves",
+      "source_url": "https://maconwater.org/your-mwa/board-members/"
+    },
+    {
+      "organization_slug": "river-edge-behavioral-health",
+      "related_organization_slug": "river-edge-foundation",
+      "relationship": "Charitable foundation established by River Edge",
+      "reverse_relationship": "Public community services board that established the foundation",
+      "source_url": "https://www.maconbibb.us/economic-community-development/program-highlights/"
+    },
+    {
+      "organization_slug": "united-way-of-central-georgia",
+      "related_organization_slug": "brookdale-resource-center",
+      "relationship": "Resource center operated by United Way",
+      "reverse_relationship": "Operating organization",
+      "source_url": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center"
+    },
+    {
+      "organization_slug": "brookdale-resource-center",
+      "related_organization_slug": "hello-house-at-brookdale",
+      "relationship": "Short-term shelter program within the resource center",
+      "reverse_relationship": "Resource center hosting this shelter program",
+      "source_url": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center"
+    },
+    {
+      "organization_slug": "united-way-of-central-georgia",
+      "related_organization_slug": "hello-house-at-brookdale",
+      "relationship": "Shelter program operated at Brookdale",
+      "reverse_relationship": "Operating organization",
+      "source_url": "https://www.unitedwaycg.org/news/hello-house-opens-brookdale-resource-center"
+    },
+    {
+      "organization_slug": "macon-arts-alliance",
+      "related_organization_slug": "macon-bibb-county-urban-development-authority",
+      "relationship": "Partner in the Mill Hill arts district",
+      "reverse_relationship": "Partner in the Mill Hill arts district",
+      "source_url": "https://www.maconartsalliance.org/about/"
+    },
+    {
+      "organization_slug": "piedmont-macon-medical-center",
+      "related_organization_slug": "piedmont-macon-north-hospital",
+      "relationship": "Fellow Macon hospital within Piedmont Healthcare",
+      "reverse_relationship": "Fellow Macon hospital within Piedmont Healthcare",
+      "source_url": "https://www.maconbibb.us/griefsupportsession41626/"
+    },
+    {
+      "organization_slug": "bibb-county-superior-court",
+      "related_organization_slug": "bibb-county-clerk-of-superior-court",
+      "relationship": "Clerk maintaining Superior Court records",
+      "reverse_relationship": "Court whose records this office maintains",
+      "source_url": "https://www.maconbibb.us/superior-court/clerk-of-superior-court/"
+    },
+    {
+      "organization_slug": "bibb-county-solicitor-general-s-office",
+      "related_organization_slug": "state-court-of-bibb-county",
+      "relationship": "Court in which the solicitor prosecutes misdemeanor cases",
+      "reverse_relationship": "Office prosecuting misdemeanor cases in this court",
+      "source_url": "https://www.maconbibb.us/solicitor/"
+    },
+    {
+      "organization_slug": "bibb-county-solicitor-general-s-office",
+      "related_organization_slug": "macon-bibb-county-municipal-court",
+      "relationship": "Court in which the solicitor prosecutes misdemeanor cases",
+      "reverse_relationship": "Office prosecuting misdemeanor cases in this court",
+      "source_url": "https://www.maconbibb.us/solicitor/"
+    }
+  ]
+}

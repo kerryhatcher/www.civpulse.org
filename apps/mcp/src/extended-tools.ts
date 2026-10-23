@@ -117,6 +117,16 @@ export function registerExtendedTools(server: McpServer, supabase: SupabaseClien
   remove('ballot_question', 'ballot_questions', 'Delete a ballot question (admin only).');
   relationship('person_organization', 'person_organizations', ['person_id', 'organization_id'], { role: z.string().min(1).max(60) });
 
+  readRpc('get_organization_relationships', 'List related organizations, with labels normalized for the requested profile and source URLs.',
+    { organization_id: uuid }, 'get_organization_relationships', ({ organization_id }) => ({ p_organization_id: organization_id }));
+  const organizationRelationship = {
+    organization_id: uuid, related_organization_id: uuid,
+    relationship: z.string().trim().min(1).max(160), reverse_relationship: z.string().trim().min(1).max(160), source_url: url.nullish(),
+  };
+  create('organization_relationship', 'organization_relationships', 'Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.', organizationRelationship);
+  update('organization_relationship', 'organization_relationships', 'Update an organization relationship by id (admin only). Omitted fields are preserved.', organizationRelationship);
+  remove('organization_relationship', 'organization_relationships', 'Delete an organization relationship from both profiles, preserving both organizations (admin only).');
+
   const article = {
     title: z.string().trim().min(1).max(500), url, visibility: visibility.optional(),
     fetched_on: z.iso.date().nullish(), published_on: z.iso.date().nullish(),

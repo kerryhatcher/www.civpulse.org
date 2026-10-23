@@ -39,6 +39,20 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     const organization = (await reader('get_organization', { id: org.id })).organization;
     assert.equal(organization.slug, needle.toLowerCase());
     assert.equal(organization.name, `${needle} updated`);
+    const relatedOrg = await create('create_organization', { slug: `${needle.toLowerCase()}-related`, name: `${needle} related organization` });
+    const relationshipInput = { organization_id: org.id, related_organization_id: relatedOrg.id,
+      relationship: 'Governing board', reverse_relationship: 'School district', source_url: 'https://example.test/relationship' };
+    const orgRelationship = await create('create_organization_relationship', relationshipInput);
+    assert.equal((await reader('get_organization_relationships', { organization_id: org.id }))[0].related_organization_id, relatedOrg.id);
+    assert.equal((await reader('get_organization_relationships', { organization_id: relatedOrg.id }))[0].relationship, 'School district');
+    await denied('update_organization_relationship', { id: orgRelationship.id, relationship: 'Unauthorized' });
+    await admin('update_organization_relationship', { id: orgRelationship.id, reverse_relationship: 'Updated district' });
+    assert.equal((await reader('get_organization_relationships', { organization_id: relatedOrg.id }))[0].relationship, 'Updated district');
+    assert.ok((await tool(adminToken, 'create_organization_relationship', { ...relationshipInput,
+      organization_id: relatedOrg.id, related_organization_id: org.id })).isError, 'Reverse pairs must not duplicate a relationship');
+    await denied('delete_organization_relationship', { id: orgRelationship.id });
+    await admin('delete_organization_relationship', { id: orgRelationship.id });
+    assert.equal((await reader('get_organization_relationships', { organization_id: org.id })).length, 0);
     const calendar = await create('create_calendar', { organization_id: org.id, slug: needle.toLowerCase(), name: `${needle} calendar`, visibility: 'private' });
     await admin('update_calendar', { id: calendar.id, description: 'A partial calendar edit' });
     assert.equal((await admin('get_calendar', { id: calendar.id })).calendar.visibility, 'private');

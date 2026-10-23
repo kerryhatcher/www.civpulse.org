@@ -42,3 +42,21 @@ export async function fetchOrganizations(): Promise<Organization[]> {
 }
 
 export { organizationLogoUrl };
+
+export interface OrganizationRelationship {
+  id: string;
+  organization_id: string;
+  related_organization_id: string;
+  relationship: string;
+  reverse_relationship: string;
+  source_url: string | null;
+}
+
+/** Fail the build rather than publish profiles with silently missing links. */
+export async function fetchOrganizationRelationships(): Promise<OrganizationRelationship[]> {
+  const supabase = getBuildSupabase();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from('organization_relationships').select('*');
+  if (error) throw new Error(`Could not load organization relationships: ${error.message}`);
+  return (data ?? []) as OrganizationRelationship[];
+}

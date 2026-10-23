@@ -56,6 +56,25 @@ tied to the wrapper's.
 
 ## Schema
 
+Organization-to-organization links live in `organization_relationships`. Each row
+has two organization foreign keys, a `relationship` label for the first profile,
+a `reverse_relationship` label for the second, and an optional HTTP(S) source URL.
+One row appears on both profiles. A unique unordered-pair index rejects reverse
+duplicates; self-links and dangling organization IDs are rejected. Deleting an
+organization cascades only its relationship rows, preserving related organizations.
+
+Relationships are publicly readable, matching organizations. Only `is_admin()`
+users may insert, update or delete them. `get_organization_relationships(uuid)`
+is a security-invoker RPC returning labels and target names/slugs from the requested
+profile's perspective. The organization admin editor and MCP relationship tools
+use the same table and policies. Static organization profiles render links at build
+time; editing a relationship requires a web rebuild to publish it.
+
+Verify permissions, reciprocal labels, uniqueness, foreign keys and cleanup with
+`ORGANIZATION_RELATIONSHIPS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/organization-relationships-db.test.ts`.
+Fixtures roll back. The append-only migration seeds 19 source-backed relationships
+by existing slugs; empty development databases skip absent endpoints.
+
 Migrations are append-only files in `supabase/migrations/`.
 
 `profiles`:

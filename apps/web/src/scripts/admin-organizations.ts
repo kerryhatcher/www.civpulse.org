@@ -2,6 +2,7 @@ import { uploadProfileImage, initImagePreview } from '../lib/media';
 import { getSupabase } from '../lib/supabase';
 import { organizationLogoUrl } from '../lib/supabase-build';
 import type { Organization } from '../lib/organizations';
+import { initOrganizationRelationships } from './admin-organization-relationships';
 
 type MessageKind = 'info' | 'error' | 'success';
 
@@ -76,6 +77,7 @@ export async function initOrganizationAdmin(): Promise<void> {
   let slugTouched = false;
   let editingLogoPath: string | null = null;
   let allOrganizations: Organization[] = [];
+  const relationshipEditor = initOrganizationRelationships(supabase, () => allOrganizations);
 
   slugField?.addEventListener('input', () => {
     slugTouched = true;
@@ -105,6 +107,7 @@ export async function initOrganizationAdmin(): Promise<void> {
   }
 
   function resetForm(): void {
+    relationshipEditor.reset();
     formEl.reset();
     if (idField) idField.value = '';
     editingLogoPath = null;
@@ -117,6 +120,7 @@ export async function initOrganizationAdmin(): Promise<void> {
 
   function startEdit(org: Organization): void {
     if (!idField) return;
+    relationshipEditor.selectOrganization(org);
     idField.value = org.id;
     const set = (name: string, value: string | null) => {
       const field = formEl.querySelector<HTMLInputElement>(`[name="${name}"]`);

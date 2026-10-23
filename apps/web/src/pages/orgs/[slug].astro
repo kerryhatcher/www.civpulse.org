@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import {
   fetchOrganizations,
+  fetchOrganizationRelationships,
   organizationLogoUrl,
   type Organization,
 } from '../../lib/organizations';
@@ -11,7 +12,9 @@ import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
 import { fetchPublicPeopleForOrganization, personImageUrl, type Person } from '../../lib/people';
 
 export async function getStaticPaths() {
-  const [organizations, maps] = await Promise.all([fetchOrganizations(), fetchPublicMaps()]);
+  const [organizations, maps, relationships] = await Promise.all([
+    fetchOrganizations(), fetchPublicMaps(), fetchOrganizationRelationships(),
+  ]);
   const mapByOrganization = new Map<string, MapConfig>(
     maps
       .filter((map) => map.organization_id !== null)
@@ -25,23 +28,35 @@ export async function getStaticPaths() {
     }),
   );
 
-  return organizations.map((org) => ({
-    params: { slug: org.slug },
-    props: {
-      org,
-      map: mapByOrganization.get(org.id) ?? null,
-      people: peopleByOrganization.get(org.id) ?? [],
-    },
-  }));
+  const organizationById = new Map(organizations.map((org) => [org.id, org]));
+  return organizations.map((org) => {
+    const related = relationships.flatMap((link) => {
+      const forward = link.organization_id === org.id;
+      if (!forward && link.related_organization_id !== org.id) return [];
+      const organization = organizationById.get(forward ? link.related_organization_id : link.organization_id);
+      return organization ? [{ organization,
+        relationship: forward ? link.relationship : link.reverse_relationship, source_url: link.source_url }] : [];
+    }).sort((a, b) => a.organization.name.localeCompare(b.organization.name));
+    return {
+      params: { slug: org.slug },
+      props: {
+        org,
+        related,
+        map: mapByOrganization.get(org.id) ?? null,
+        people: peopleByOrganization.get(org.id) ?? [],
+      },
+    };
+  });
 }
 
 interface Props {
   org: Organization;
   map: MapConfig | null;
   people: { person: Person; role: string }[];
+  related: { organization: Organization; relationship: string; source_url: string | null }[];
 }
 
-const { org, map, people } = Astro.props;
+const { org, map, people, related } = Astro.props;
 const logo = organizationLogoUrl(org.logo_path);
 
 const contact = [
@@ -143,6 +158,21 @@ const contact = [
         </section>
       )
     }
+
+    {related.length > 0 && (
+      <section class="person-affiliations" aria-labelledby="related-organizations-title">
+        <h2 id="related-organizations-title">Related organizations</h2>
+        <div class="org-grid">
+          {related.map(({ organization, relationship, source_url }) => (
+            <article class="org-card">
+              <h3><a href={`/orgs/${organization.slug}/`}>{organization.name}</a></h3>
+              <p>{relationship}</p>
+              {source_url && <a href={source_url}>Relationship source</a>}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
 
     <OfficeTerms organizationId={org.id} />
     <ProfileArticles organizationId={org.id} />

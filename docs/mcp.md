@@ -47,6 +47,10 @@ and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every o
 - **Search/read:** all ten civic types, unified search with type/limit/offset,
   election children, article reading lists, affiliations, map layers and stored
   feature properties/geometry.
+- **Organization relationships:** `get_organization_relationships` returns related
+  bodies and source URLs from either profile's perspective. Admin-only
+  `create_organization_relationship`, `update_organization_relationship`, and
+  `delete_organization_relationship` manage one reciprocal row with two labels.
 - **Admin CRUD:** organizations, people, elections, calendars, events, maps,
   reusable layers, contests, ballot questions, articles, all their editable
   relationships, individual stored features and image storage.

@@ -87,6 +87,22 @@ import AdminTabs from '../../components/AdminTabs.astro';
         <p class="auth-message" data-org-message hidden role="status" aria-live="polite"></p>
       </form>
 
+      <section data-org-relationships hidden aria-labelledby="org-relationships-title">
+        <h2 id="org-relationships-title">Related organizations</h2>
+        <p data-org-relationships-context></p>
+        <p>Save a relationship once to show it on both organization profiles.</p>
+        <form class="org-form" data-org-relationship-form>
+          <input type="hidden" name="relationship_id" />
+          <label class="field"><span>Related organization</span><select name="related_organization_id" required></select></label>
+          <label class="field"><span>Label on this organization's profile</span><input name="relationship" maxlength="160" required placeholder="Governing board" /></label>
+          <label class="field"><span>Label on the related organization's profile</span><input name="reverse_relationship" maxlength="160" required placeholder="School district governed by this board" /></label>
+          <label class="field"><span>Source URL</span><input type="url" name="source_url" maxlength="2000" placeholder="https://" /></label>
+          <div class="org-form-actions"><button type="submit" class="button-link">Save relationship</button><button type="button" data-org-relationship-cancel>Clear</button></div>
+        </form>
+        <p class="auth-message" data-org-relationship-message role="status" aria-live="polite" hidden></p>
+        <div class="org-list" data-org-relationship-list></div>
+      </section>
+
       <section aria-labelledby="org-list-title">
         <h2 id="org-list-title">Published organizations</h2>
         <div class="org-list" data-org-list></div>
