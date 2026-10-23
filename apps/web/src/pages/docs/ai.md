@@ -24,7 +24,7 @@ Choose [ChatGPT](#connect-in-chatgpt), [Codex](#connect-in-codex), [Pi](#pi), [a
 https://api.civpulse.org/functions/v1/mcp
 ```
 
-Each person connects their own account. Regular accounts can research permitted public content and update their own display name. Administrators can also discover hidden content, edit supported records, search registered accounts, and promote another existing user. A connection does not turn a regular account into an administrator.
+Each person connects their own account. Regular accounts have read-only access to permitted content. Administrators can also discover hidden content, edit supported records, search registered accounts, and promote another existing user. A connection does not turn a regular account into an administrator.
 
 ## Connect in ChatGPT
 
