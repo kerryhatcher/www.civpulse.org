@@ -62,7 +62,7 @@ async function makeUser(admin) {
     });
     assert.ok(grant.response.ok, JSON.stringify(grant.data));
   }
-  const signedIn = await request(`${auth}/token?grant_type=password`, { method: 'POST', body: { email, password } });
+  const signedIn = await request(`${auth}/token?grant_type=password`, { method: 'POST', body: { email, password, gotrue_meta_security: { captcha_token: 'XXXX.DUMMY.TOKEN.XXXX' } } });
   assert.ok(signedIn.response.ok, JSON.stringify(signedIn.data));
   return signedIn.data;
 }
@@ -186,10 +186,10 @@ try {
     assert.equal(identity.is_admin, isAdmin);
     assert.ok(!(await tool(tokens.data.access_token, 'search_organizations')).isError);
     const visible = JSON.parse((await tool(tokens.data.access_token, 'search_people', { query: needle })).content[0].text);
-    assert.equal(visible.length, 3, 'Authenticated OAuth search must include public, unlisted and private fixtures');
+    assert.equal(visible.length, isAdmin ? 3 : 1, 'Only admin OAuth search includes unlisted and private fixtures');
     for (const id of people) {
       const record = JSON.parse((await tool(tokens.data.access_token, 'get_person', { id })).content[0].text);
-      assert.equal(record.status, 'ok');
+      assert.equal(record.status, !isAdmin && id === people[2] ? 'private' : 'ok');
     }
     const slug = `mcp-auth-${crypto.randomUUID()}`;
     const created = await tool(tokens.data.access_token, 'create_organization', { slug, name: 'Disposable local MCP auth test' });

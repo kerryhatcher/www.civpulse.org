@@ -80,7 +80,7 @@ function renderCard(person: Person): HTMLElement {
 }
 
 /** Public people directory. Search uses `search_people`, which widens to
- * unlisted/private records for signed-in visitors. */
+ * unlisted/private records for admins. */
 export function initPeopleSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-person-search]');
   const initial = document.querySelector<HTMLElement>('[data-person-initial]');
@@ -378,7 +378,7 @@ export async function initPersonViewFromUrl(): Promise<void> {
   }
 
   if (response.status === 'private') {
-    showViewerStatus(status, 'This person record is private. Sign in to view it.', true);
+    showViewerStatus(status, 'This person record is private. An admin account is required to view it.', true);
     return;
   }
 

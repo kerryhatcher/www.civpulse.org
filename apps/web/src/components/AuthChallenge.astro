@@ -1,0 +1,12 @@
+---
+import { turnstileSitekey } from '../lib/turnstile';
+interface Props { action: 'signup' | 'signin' }
+const { action } = Astro.props;
+const sitekey = turnstileSitekey(import.meta.env.PUBLIC_SUPABASE_URL, import.meta.env.PUBLIC_TURNSTILE_SITEKEY);
+---
+<div data-auth-challenge data-sitekey={sitekey} data-action={action}>
+  <div data-turnstile-widget></div>
+  <p class="auth-message" data-challenge-status role="status" aria-live="polite">Loading security check…</p>
+  <button type="button" data-challenge-retry hidden>Retry security check</button>
+</div>
+<noscript><p>Enable JavaScript to complete the security check and use this form.</p></noscript>

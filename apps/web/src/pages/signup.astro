@@ -1,16 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import AuthChallenge from '../components/AuthChallenge.astro';
 ---
 
 <Layout title="Create an account" description="Create your Civic Pulse account.">
   <main id="main" class="auth-page">
     <div class="auth-card">
       <h1>Join the pulse.</h1>
-      <p>Create an account to follow the decisions that shape where you live.</p>
+      <p>Create your Civic Pulse account. Accounts currently have the same content access as public visitors. Saved preferences are coming later.</p>
 
-      <form class="auth-form" data-auth-form="signup" novalidate>
+      <form class="auth-form" data-auth-form="signup">
         <label class="field">
-          <span>Name</span>
+          <span>Name (optional)</span>
           <input type="text" name="display_name" autocomplete="name" maxlength="80" />
         </label>
         <label class="field">
@@ -27,7 +28,13 @@ import Layout from '../layouts/Layout.astro';
             minlength="8"
           />
         </label>
-        <button class="button-link" type="submit">Create account</button>
+        <p>Use at least 8 characters for your password.</p>
+        <label class="signup-trap" aria-hidden="true">
+          Leave this field empty
+          <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+        </label>
+        <AuthChallenge action="signup" />
+        <button class="button-link" type="submit" disabled>Create account</button>
         <p class="auth-message" data-auth-message hidden role="status" aria-live="polite"></p>
       </form>
 
@@ -35,6 +42,10 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </main>
 </Layout>
+
+<style>
+  .signup-trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+</style>
 
 <script>
   import { initSignUp } from '../scripts/auth';

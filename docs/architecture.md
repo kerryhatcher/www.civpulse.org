@@ -36,8 +36,8 @@ docs/         architecture, backend, and development notes
 
 - Supabase Postgres with Row Level Security; Supabase Auth for email/password
   accounts; a `public.profiles` row per user created by a signup trigger.
-- `public.admins` is an allowlist (managed with the service role, e.g. by the
-  local seed script) and `public.is_admin()` is used by RLS policies.
+- `public.admins` is an allowlist (managed by existing admins through the Users
+  page, or by the service role for initial setup). RLS uses `public.is_admin()`.
 - Admin pages are client-rendered shells; the header/session is checked in the
   browser, but **RLS is the real enforcement**.
 - Full-text search uses stored generated `tsvector` columns + GIN indexes and
@@ -55,8 +55,8 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 | Value | Meaning |
 | --- | --- |
 | `public` | Listed, included in sitemap, appears for everyone |
-| `unlisted` | Reachable by uuid URL only; hidden from anonymous listings/search; signed-in users can find it |
-| `private` | Requires a signed-in user |
+| `unlisted` | Reachable by uuid URL only; hidden from anonymous listings/search; admins can find it |
+| `private` | Requires an admin |
 
 - Maps: public pages are `/maps/<slug>/` (prerendered); unlisted/private are
   served by the `/maps/view/` shell with `?id=<uuid>` and gated by the
@@ -129,3 +129,11 @@ Object names are immutable UUIDs. Replacing/deleting a record does not delete it
 old image, because a previous static build may still reference it. Failed saves
 can also leave unreferenced uploads. Cleanup is a future maintenance task, after
 checking references in both the database and deployed builds.
+
+## Account roles and registration
+
+Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. When email confirmation is enabled in Supabase, the confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Saved preferences are planned, not implemented.
+
+`public.admins` remains the only source of admin authority; user-editable metadata never grants roles. Admins use `/admin/users/` to search registered accounts and promote another user. The `admin_list_users` and `promote_user_to_admin` RPCs check `is_admin()` on every call, use an empty search path, and expose no service key. Promotion is immediate without a token refresh. Account profiles are readable only by their owner or admins.
+
+Verify with `ACCOUNTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/accounts-db.test.ts`. Fixtures roll back.

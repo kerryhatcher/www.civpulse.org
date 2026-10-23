@@ -71,7 +71,7 @@ function renderElectionCard(election: Election): HTMLElement {
 }
 
 /** Public elections directory. Search uses `search_elections`, which widens to
- * unlisted/private elections for signed-in visitors. */
+ * unlisted/private elections for admins. */
 export function initElectionSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-election-search]');
   const initial = document.querySelector<HTMLElement>('[data-election-initial]');
@@ -482,7 +482,7 @@ export async function initElectionViewFromUrl(): Promise<void> {
   }
 
   if (response.status === 'private') {
-    showViewerStatus(status, 'This election is private. Sign in to view it.', true);
+    showViewerStatus(status, 'This election is private. An admin account is required to view it.', true);
     return;
   }
 

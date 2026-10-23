@@ -26,9 +26,8 @@ bun run db:stop      # stop the stack
 
 ## Test user
 
-`bun run db:seed-user` creates a known local account (idempotent — it signs in if
-the user already exists). Local email confirmations are disabled, so the account
-works immediately:
+`bun run db:seed-user` creates or updates a known local account. The seed uses the
+local Auth admin API to confirm this development account, so it works immediately:
 
 | Field | Value |
 | --- | --- |
@@ -48,8 +47,8 @@ cp apps/web/.env.example apps/web/.env
 # PUBLIC_SUPABASE_ANON_KEY=<anon key>
 ```
 
-Studio runs at <http://127.0.0.1:54323>. Local email confirmations are disabled,
-so test users can sign in immediately.
+Studio runs at <http://127.0.0.1:54323>. Public registrations require email confirmation; inspect confirmation mail at
+<http://127.0.0.1:54324>. The seeded admin is already confirmed.
 
 The orchestration lives in [`scripts/dev.mjs`](../scripts/dev.mjs). It forces the
 Astro server into the foreground (`ASTRO_DEV_BACKGROUND=1`) so its lifetime is
@@ -136,9 +135,9 @@ Each layer has its own visibility. When a map is viewed, only the layers the
 caller may see are added:
 
 - `public` and `unlisted` layers render for everyone.
-- `private` layers render only for signed-in users.
+- `private` layers render only for admins.
 
-So a public map with a private layer shows that layer to signed-in users and
+So a public map with a private layer shows that layer to admins and
 silently omits it for everyone else. `public.get_map_layers(map_id)` is a
 `security definer` RPC that applies both the layer visibility and the map's own
 visibility (an anonymous caller cannot read layers of a private map). The
@@ -206,8 +205,8 @@ without needing access to the raw join table.
 | Visibility | Page | Listed | Sitemap | Search | Access |
 | --- | --- | --- | --- | --- | --- |
 | `public` | `/maps/<slug>/` (prerendered) | yes | yes | anon + signed-in | anyone |
-| `unlisted` | `/maps/view/?id=<uuid>` | no | no | signed-in only | anyone with the uuid |
-| `private` | `/maps/view/?id=<uuid>` | no | no | signed-in only | signed-in users |
+| `unlisted` | `/maps/view/?id=<uuid>` | no | no | admins only | anyone with the uuid |
+| `private` | `/maps/view/?id=<uuid>` | no | no | admins only | admins |
 
 - `/maps/view/` is the shared shell; it reads the uuid from `?id=` (or from a
   `/maps/u/<uuid>/` / `/maps/p/<uuid>/` path) and calls the
@@ -242,8 +241,8 @@ access before matching or ranking. Existing people, organization, map, and
 election directory searches reuse the same search implementation. Empty election
 browsing preserves upcoming-nearest-first, then past-newest-first order.
 
-Anonymous discovery includes public records only; signed-in discovery includes
-unlisted and private records under the existing visibility rules. Events also
+Anonymous and regular-user discovery includes public records only; admin discovery includes
+unlisted and private records. Events also
 inherit calendar and election gates. Election details omit hidden candidate
 profiles for anonymous callers. RPCs apply these checks with an empty search path;
 no private result data is embedded in prerendered HTML. Authentication changes
@@ -267,7 +266,7 @@ Follows the Supabase full-text search guide:
 - `public.search_maps(p_query text, p_limit int)` builds a query with
   `websearch_to_tsquery` (so `"quoted phrases"`, `or`, and `-negation` work) and
   ranks with `ts_rank`.
-- Anonymous callers only match `public` maps; signed-in callers also match
+- Anonymous callers only match `public` maps; admin callers also match
   `unlisted` and `private` maps. Unlisted maps stay unreachable through the Data
   API because the function is `security definer` and applies the filter itself.
 - The `/maps/` search box debounces input, calls the RPC, and links each result
@@ -300,14 +299,13 @@ calendar are visible, so a public event on a private calendar stays private.
 | Visibility | Listed | Search | Access |
 | --- | --- | --- | --- |
 | `public` | yes | anon + signed-in | anyone |
-| `unlisted` | no (uuid URL only) | signed-in only | anyone with the uuid |
-| `private` | no | signed-in only | signed-in users |
+| `unlisted` | no (uuid URL only) | admins only | anyone with the uuid |
+| `private` | no | admins only | admins |
 
 - `public.events` has **no** anonymous/authenticated select policy: because the
   rule depends on the owning calendar, all reads go through `security definer`
-  RPCs. `public.calendars` allows public reads (and private reads when signed
-  in), but unlisted calendars are still excluded from the Data API. Admins can
-  read both tables directly for the admin UI.
+  RPCs. Regular accounts can read public calendars directly. Admins can
+  read both tables, including hidden rows, directly for the admin UI.
 - `public.list_calendars(p_organization_id uuid)` returns the calendars the
   caller may see, with their organization, for the filter menus.
 - `public.search_events(p_query, p_organization_id, p_calendar_id, p_include_past, p_limit)`
@@ -340,11 +338,11 @@ events.
 | Visibility | Page | Listed | Sitemap | Search | Access |
 | --- | --- | --- | --- | --- | --- |
 | `public` | `/people/<slug>/` (prerendered) | yes | yes | anon + signed-in | anyone |
-| `unlisted` | `/people/view/?id=<uuid>` | no | no | signed-in only | anyone with the uuid |
-| `private` | `/people/view/?id=<uuid>` | no | no | signed-in only | signed-in users |
+| `unlisted` | `/people/view/?id=<uuid>` | no | no | admins only | anyone with the uuid |
+| `private` | `/people/view/?id=<uuid>` | no | no | admins only | admins |
 
-- RLS: public people are readable by anyone, private people by any
-  authenticated user, unlisted people are not readable through the Data API at
+- RLS: public people are readable by anyone, private people by
+  admins, unlisted people are not readable through the Data API at
   all (only through the RPC). Admins can read every row.
 - `person_organizations` has no blanket public read: a select policy exposes
   affiliations only when the linked person is public (and, for authenticated
@@ -361,12 +359,12 @@ events.
   (weight A), `title` (weight B), and `description` (weight C), with a GIN
   index.
 - `public.search_people(p_query text, p_limit int)` uses `websearch_to_tsquery`
-  + `ts_rank`. Anonymous callers only match `public` people; signed-in callers
+  + `ts_rank`. Anonymous callers only match `public` people; admin callers
   also match `unlisted` and `private` people. Unlisted people stay unreachable
   through the Data API because the function is `security definer` and applies
   the filter itself.
 - The `/people/` page shows the build-time public list to anonymous visitors,
-  swaps to `search_people` results as you type, and (when signed in) lists the
+  swaps to `search_people` results as you type, and (when signed in as an admin) lists the
   full set of people the caller can access with visibility badges.
 
 ## Elections
@@ -420,11 +418,11 @@ visibility, so they have no separate visibility column.
 | Visibility | Page | Listed | Sitemap | Search | Access |
 | --- | --- | --- | --- | --- | --- |
 | `public` | `/elections/<slug>/` (prerendered) | yes | yes | anon + signed-in | anyone |
-| `unlisted` | `/elections/view/?id=<uuid>` | no | no | signed-in only | anyone with the uuid |
-| `private` | `/elections/view/?id=<uuid>` | no | no | signed-in only | signed-in users |
+| `unlisted` | `/elections/view/?id=<uuid>` | no | no | admins only | anyone with the uuid |
+| `private` | `/elections/view/?id=<uuid>` | no | no | admins only | admins |
 
-- RLS: public elections are readable by anyone, private elections by any
-  authenticated user, unlisted elections are not readable through the Data API
+- RLS: public elections are readable by anyone, private elections by
+  admins, unlisted elections are not readable through the Data API
   at all (only through the RPC). Admins can read every row.
 - `contests` and `contest_candidates` have **no** public select policy: a
   contest is only visible when its election is, so all reads go through
@@ -441,7 +439,7 @@ visibility, so they have no separate visibility column.
   (weight A) and `description` (weight B), with a GIN index.
 - `public.search_elections(p_query text, p_limit int)` uses
   `websearch_to_tsquery` + `ts_rank` for nonempty queries; empty browsing orders upcoming elections first.
-  Anonymous callers only match `public` elections; signed-in callers also match
+  Anonymous callers only match `public` elections; admin callers also match
   `unlisted` and `private` elections.
 - `public.get_election(uuid)` returns `{status: ok|private|missing, election,
   organization, contests, dates}` for the election page and viewer, applying the
@@ -480,7 +478,7 @@ the database but invisible on the static site until the next build.
 ## Security model
 
 - Row Level Security is enabled on every application table.
-- Anyone may read a public profile; only the signed-in user may insert or update
+- Account profiles are readable by their owner or admins; users may insert or update
   their own profile.
 - Organizations are publicly readable; only members of `public.admins` may write
   them or their logos.
@@ -556,7 +554,7 @@ Person profiles load `get_person_candidacies(person_id)` in the browser on both
 public pages and the shared viewer. No candidacy or hidden-election data is
 embedded in public HTML. The RPC checks the person's visibility, then includes
 public elections for anonymous visitors and also unlisted/private elections for
-signed-in visitors, matching election search discovery rules.
+admins, matching election search discovery rules.
 
 Current candidacies have an election date today or later in America/New_York
 and a status of running, runoff, or pending. Past candidacies include earlier
@@ -609,11 +607,11 @@ removes that association while preserving the article and its other links.
 
 RLS protects all three tables. Only admins can modify articles or read/write
 association tables directly. Anonymous clients can directly read public article
-metadata; authenticated clients can also read private metadata; unlisted metadata
+metadata; admin clients can also read private metadata; unlisted metadata
 is available to admins or the profile RPCs. `get_person_articles` first checks
 the person's visibility; `get_organization_articles` checks that the public
 organization exists. Both return public articles anonymously, plus private and
-unlisted articles when signed in, matching the existing profile discovery rules.
+unlisted articles when signed in as an admin, matching the existing profile discovery rules.
 They return only that profile's own relationship, never other linked identities.
 
 “News & articles” lists load at runtime on public person pages, the person UUID
@@ -629,7 +627,7 @@ lists immediately; new public person/organization pages still require a rebuild.
 
 The MCP Worker forwards the verified user token; it never uses service-role
 credentials. The append-only mcp_content_tools migration adds authenticated-only
-RPCs without changing RLS. `mcp_get_record` follows existing signed-in discovery
+RPCs without changing RLS. `mcp_get_record` follows the caller's role-based discovery
 rules and returns article association sets only to admins. `mcp_layer_features`
 uses the existing containing-map geometry gate for non-admins, searches stored
 properties with pagination and returns bigint IDs as strings. Both read RPCs
@@ -719,8 +717,8 @@ Admins manage both resources in `/admin/offices/`. `offices` is publicly readabl
 `get_office_terms(p_person_id, p_organization_id)` returns service records through
 an empty-search-path security-definer function. At least one filter is required.
 Person UUID access permits public/unlisted people anonymously, private people
-only when signed in. Organization discovery permits only public people
-anonymously and includes hidden people when signed in, like person search.
+only when signed in as an admin. Organization discovery permits only public people
+anonymously and includes hidden people when signed in as an admin, like person search.
 
 Public person pages, the person UUID viewer and organization pages load service
 at runtime; no service associations are embedded in prerendered HTML. The RPC
@@ -757,3 +755,124 @@ normalized name, and inserts offices/service records without overwriting existin
 content. Missing people in empty development databases are skipped. Pending
 research and candidates without verified service are never converted into office
 records. An omitted history is not evidence that a candidate has never served.
+
+## Account roles and registration
+
+Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. Email confirmation is required by the local Auth configuration; configure the same requirement in hosted Auth. Confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Saved preferences are planned, not implemented.
+
+`public.admins` remains the only source of admin authority; user-editable metadata never grants roles. Admins use `/admin/users/` to search registered accounts and promote another user. The `admin_list_users` and `promote_user_to_admin` RPCs check `is_admin()` on every call, use an empty search path, and expose no service key. Promotion is immediate without a token refresh. Account profiles are readable only by their owner or admins.
+
+Verify with `ACCOUNTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/accounts-db.test.ts`. Fixtures roll back.
+
+## Signup bot and spam protection
+
+The static signup and password sign-in forms render a managed Cloudflare Turnstile
+challenge and send its token as Supabase Auth's `captchaToken` option. Supabase
+Auth performs server-side verification with Cloudflare before creating an account
+or issuing a password session. Enabling CAPTCHA in Supabase protects direct Auth
+API requests too; a browser-only widget is insufficient. Both forms are protected
+because Supabase's CAPTCHA setting also covers password sign-in. No server
+adapter, proxy Worker, or service-role key is added to the frontend.
+
+The forms fail closed while verification loads, fails, times out, or expires.
+Visitors can retry without reloading or losing their entries. Every Auth request
+resets the challenge, so retries require a fresh token. Concurrent form submissions
+are locked. A hidden signup honeypot discards simple automated submissions, but
+is only a secondary signal: bots can skip it, so it never substitutes for backend
+CAPTCHA, email verification, or rate limits.
+
+Local `supabase/config.toml` enables Turnstile using Cloudflare's **public test
+secret**, requires email confirmation, allows 10 signup-related requests per five
+minutes per IP, and imposes a 60-second per-address email resend interval. Auth
+also retains its email sending quota. Rate-limit buckets may permit short bursts;
+these are backend limits, not a browser timer. Restart the local stack to apply
+Auth config changes without resetting data. New local users confirm through
+Mailpit at <http://127.0.0.1:54324>. `bun run db:seed-user` uses the local-only
+admin API to create/confirm the bootstrap admin and still works with CAPTCHA on.
+
+Loopback Supabase URLs default to Cloudflare's public always-pass sitekey for
+local development. Hosted builds require `PUBLIC_TURNSTILE_SITEKEY` and reject
+Cloudflare test sitekeys. A missing production key fails the build instead of
+publishing an unusable or unprotected registration form. Test keys intentionally
+do not provide real bot resistance and cannot prove single-use/replay protection.
+
+### Hosted activation (required before deploying the protected forms)
+
+Setup completed on October 22, 2026:
+
+- Created **Civic Pulse account registration** in the existing **Kerry Personal**
+  Cloudflare account (`6d837580a4d0641139ecada9e74076b8`). Its public sitekey is
+  `0x4AAAAAAFhogiT62WO1vh4J`, mode is managed, and clearance is `no_clearance`.
+  Allowed hostnames are exactly `www.civpulse.org` and `new.civpulse.org`.
+- Saved `PUBLIC_TURNSTILE_SITEKEY` in the existing `civpulse-web-new` production
+  build trigger (`3bb52786-1d86-457b-bec2-33195bf3196f`). Existing build variables
+  were preserved. No frontend deployment was started.
+- Stored the secret as `TURNSTILE_PRODUCTION_SECRET` and the public key as
+  `TURNSTILE_PRODUCTION_SITEKEY` in the existing ignored `apps/web/.env`, with
+  permissions `0600`. These non-public bootstrap variables are not used by the
+  frontend or local Auth. Do not copy the secret into Cloudflare build variables.
+- Verified Cloudflare rejects missing, invalid, and public testing tokens using
+  the production secret. Successful real-token and replay checks are still pending
+  until the protected forms and hosted Auth configuration are live.
+- Signed in to the hosted CivicPulse dashboard through the approved GitHub flow.
+  Confirmed email verification is enabled; anonymous sign-ins and manual identity
+  linking are disabled. Password changes require recent authentication and the
+  current password. Leaked-password protection is currently disabled.
+- Set the hosted signup/sign-in rate limit to **10 requests per five minutes
+  per IP**, with a **60-second** minimum email resend interval.
+- Created the dedicated **CivicPulse** live Postmark server (`21158750`) after
+  explicit approval. Verified `civpulse.org` (Postmark domain `8208477`) using
+  the Postmark DKIM TXT record at `20261023023337pm._domainkey.civpulse.org`
+  and DNS-only Return-Path CNAME `pm-bounces.civpulse.org → pm.mtasv.net`.
+  Both records report **Verified** in Postmark. Existing SPF records were preserved.
+- Enabled custom SMTP in hosted Supabase with **Civic Pulse
+  <accounts@civpulse.org>**, `smtp.postmarkapp.com:587`, and the dedicated
+  CivicPulse server credentials. Credentials are stored only in Supabase's
+  encrypted SMTP configuration, not in the repository or frontend. Email
+  confirmation remains enabled. Supabase sets the initial sending quota to
+  30 emails/hour; actual delivery has not yet been tested. The existing Postmark
+  account plan has a shared 100-email monthly allowance; no plan upgrade was made.
+- Set the hosted Site URL to `https://www.civpulse.org`, with exact redirects
+  `https://www.civpulse.org/account/` and `https://new.civpulse.org/account/`.
+- Production Turnstile settings are staged for activation after the protected
+  frontend deploys. The release uses the existing Supabase GitHub migration check
+  and Cloudflare Workers Builds pipeline. Real-token success/replay and SMTP
+  delivery verification remain release checks until recorded below.
+
+`supabase/config.toml` configures the **local stack**; it does not enable hosted
+CAPTCHA or email protections. Coordinate these settings with the frontend release:
+
+1. Create a managed Turnstile widget in the existing Kerry Personal Cloudflare
+   account, restricted to `www.civpulse.org` and `new.civpulse.org`. Keep local
+   testing on the separate public test keys; do not allow localhost on the
+   production widget. The frontend uses actions `signup` and `signin`.
+2. Add its public sitekey as `PUBLIC_TURNSTILE_SITEKEY` in the web Worker's
+   **Build** environment. The secret must never have a `PUBLIC_` prefix or appear
+   in the frontend, repository, CI logs, chat, or a browser Siteverify request.
+3. In the CivicPulse Supabase project's **Authentication → Bot and Abuse
+   Protection**, select Turnstile, store the widget secret there, and enable CAPTCHA.
+   Supabase Auth owns Siteverify; there is no custom application handler or secret
+   binding in the static Worker. Domain restrictions are configured on the widget;
+   action values are not application authorization claims.
+4. Require **Confirm email** under the email provider settings. Set the site URL
+   to `https://www.civpulse.org` and allow `https://www.civpulse.org/account/`
+   and `https://new.civpulse.org/account/` redirects if both serve the forms.
+5. Configure signup-related rate limits to **10 requests / 5 minutes / IP** and
+   the email resend interval to **60 seconds**. Set the project-wide sending quota
+   to match legitimate traffic and monitor abuse; the built-in mail provider's
+   two-emails-per-hour limit is not suitable for a public launch. Use the project's
+   existing verified SMTP delivery configuration before opening registration.
+6. Deploy and verify a fresh real token succeeds, missing/invalid/expired/replayed
+   tokens fail at the Auth API, an unconfirmed account cannot sign in, and admin
+   login still works. Enabling hosted CAPTCHA before deploying the matching forms
+   will temporarily block old sign-in/signup clients. CAPTCHA and rate limits
+   complement email confirmation; none guarantees that every account is human.
+
+Do not silently disable CAPTCHA to resolve a deployment problem. Restore the
+matching frontend/key configuration instead. Hosted settings, a production widget,
+and real-token replay validation remain deployment tasks until explicitly applied
+and verified. The repository includes no production Turnstile secret.
+
+References: [Supabase CAPTCHA](https://supabase.com/docs/guides/auth/auth-captcha),
+[Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits), and
+[Cloudflare test keys](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).

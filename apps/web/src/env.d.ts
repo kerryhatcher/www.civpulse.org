@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_SUPABASE_URL: string;
   /** Supabase publishable/anon key. Never a service-role key. */
   readonly PUBLIC_SUPABASE_ANON_KEY: string;
+  /** Public Turnstile widget key. The secret belongs only in Supabase Auth settings. */
+  readonly PUBLIC_TURNSTILE_SITEKEY?: string;
 }
 
 interface ImportMeta {

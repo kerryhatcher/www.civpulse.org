@@ -1,130 +1,54 @@
 #!/usr/bin/env bun
-// Creates a known local test user for development.
-// Local-only: never run this against a hosted Supabase project.
-
+// Local-only bootstrap: create/confirm a known admin through the Auth admin API.
+// Public signups still require CAPTCHA and email verification.
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-
 const email = process.env.TEST_USER_EMAIL ?? 'test@civpulse.org';
 const password = process.env.TEST_USER_PASSWORD ?? 'civicpulse-test-123';
 const displayName = process.env.TEST_USER_NAME ?? 'Test User';
-
-const status = spawnSync('supabase', ['status', '-o', 'env'], {
-  cwd: root,
-  encoding: 'utf8',
-});
-
+const status = spawnSync('supabase', ['status', '-o', 'env'], { cwd: root, encoding: 'utf8' });
 if (status.status !== 0) {
   console.error('✖ Local Supabase is not running. Start it with `bun run db:start`.');
   process.exit(1);
 }
-
-const env = Object.fromEntries(
-  status.stdout
-    .split('\n')
-    .filter((line) => line.includes('='))
-    .map((line) => {
-      const index = line.indexOf('=');
-      return [line.slice(0, index).trim(), line.slice(index + 1).trim().replace(/^"|"$/g, '')];
-    }),
-);
-
+const env = Object.fromEntries(status.stdout.split('\n').filter(line => line.includes('=')).map(line => {
+  const index = line.indexOf('=');
+  return [line.slice(0, index).trim(), line.slice(index + 1).trim().replace(/^"|"$/g, '')];
+}));
 const url = env.API_URL;
-const anonKey = env.ANON_KEY;
-
-if (!url || !anonKey) {
-  console.error('✖ Could not read API_URL / ANON_KEY from `supabase status`.');
-  process.exit(1);
-}
-
-const headers = { apikey: anonKey, 'Content-Type': 'application/json' };
-
-async function signIn() {
-  const response = await fetch(`${url}/auth/v1/token?grant_type=password`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ email, password }),
-  });
-  return response.json().catch(() => ({}));
-}
-
-const signUpResponse = await fetch(`${url}/auth/v1/signup`, {
-  method: 'POST',
-  headers,
-  body: JSON.stringify({
-    email,
-    password,
-    data: { display_name: displayName },
-  }),
-});
-
-const signUpBody = await signUpResponse.json().catch(() => ({}));
-let user = signUpBody.user;
-
-if (!signUpResponse.ok) {
-  const message = signUpBody.msg ?? signUpBody.message ?? 'unknown error';
-  if (/already/i.test(message)) {
-    const session = await signIn();
-    user = session.user;
-    if (!user) {
-      console.error(`✖ User ${email} exists, but sign-in failed: ${session.msg ?? message}`);
-      process.exit(1);
-    }
-    console.log(`▸ Test user ${email} already exists (signed in to confirm).`);
-  } else {
-    console.error(`✖ Signup failed: ${message}`);
-    process.exit(1);
-  }
-} else {
-  console.log(`▸ Created test user ${email}.`);
-}
-
-const profileResponse = await fetch(
-  `${url}/rest/v1/profiles?id=eq.${user.id}&select=display_name`,
-  { headers: { apikey: anonKey } },
-);
-const profiles = await profileResponse.json().catch(() => []);
-
-if (!Array.isArray(profiles) || profiles.length === 0) {
-  console.error('✖ Profile row was not created by the signup trigger.');
-  process.exit(1);
-}
-
-// Admins are managed with the service role. The seed script is local-only.
 const serviceKey = env.SERVICE_ROLE_KEY;
-let isAdmin = false;
-if (serviceKey) {
-  const serviceHeaders = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` };
-  const existing = await fetch(`${url}/rest/v1/admins?user_id=eq.${user.id}&select=user_id`, {
-    headers: serviceHeaders,
-  })
-    .then((response) => response.json())
-    .catch(() => []);
-
-  if (Array.isArray(existing) && existing.length > 0) {
-    isAdmin = true;
-  } else {
-    const granted = await fetch(`${url}/rest/v1/admins`, {
-      method: 'POST',
-      headers: { ...serviceHeaders, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: user.id }),
-    });
-    if (!granted.ok) {
-      console.error(`✖ Could not grant admin: ${await granted.text()}`);
-      process.exit(1);
-    }
-    isAdmin = true;
-  }
-} else {
-  console.warn('⚠ SERVICE_ROLE_KEY not found; skipping admin grant.');
+if (!url || !['127.0.0.1', 'localhost', '[::1]'].includes(new URL(url).hostname) || !serviceKey) {
+  console.error('✖ Seeding requires a loopback Supabase API URL and its local service-role key.');
+  process.exit(1);
 }
-
-console.log('\nLocal test user ready:');
-console.log(`  email:        ${email}`);
-console.log(`  password:     ${password}`);
-console.log(`  display_name: ${profiles[0].display_name ?? '(none)'}`);
-console.log(`  user id:      ${user.id}`);
-console.log(`  admin:        ${isAdmin ? 'yes' : 'no'}`);
-console.log('\nSign in at /signin/ once the dev server is running.');
+const headers = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json' };
+async function request(path, options = {}) {
+  const response = await fetch(`${url}${path}`, { ...options, headers: { ...headers, ...options.headers } });
+  if (!response.ok) throw new Error(`Local seed request failed (${response.status}) at ${path.split('?')[0]}.`);
+  return response.status === 204 ? null : response.json();
+}
+try {
+  let user;
+  for (let page = 1; ; page++) {
+    const result = await request(`/auth/v1/admin/users?page=${page}&per_page=100`);
+    user = result.users.find(item => item.email?.toLowerCase() === email.toLowerCase());
+    if (user || result.users.length < 100) break;
+  }
+  const properties = { email, password, email_confirm: true, user_metadata: { display_name: displayName } };
+  user = await request(user ? `/auth/v1/admin/users/${user.id}` : '/auth/v1/admin/users', {
+    method: user ? 'PUT' : 'POST', body: JSON.stringify(properties),
+  });
+  const profiles = await request(`/rest/v1/profiles?id=eq.${user.id}&select=display_name`);
+  if (!Array.isArray(profiles) || profiles.length !== 1) throw new Error('Profile signup trigger did not create the local profile.');
+  await request('/rest/v1/admins', {
+    method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify({ user_id: user.id }),
+  });
+  console.log(`Local test admin ready: ${email} / ${password}`);
+  console.log('Sign in at /signin/ once the dev server is running.');
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}

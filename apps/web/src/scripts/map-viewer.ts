@@ -275,7 +275,7 @@ export async function initMapViewFromUrl(): Promise<void> {
   if (!id) { showStatus(status, 'Map not found.'); return; }
   const { data, error } = await getSupabase().rpc('get_map', { p_id: id });
   const result = data as { status?: string; map?: MapConfig } | null;
-  if (error || !result?.map) { showStatus(status, result?.status === 'private' ? 'This map is private. Sign in to view it.' : 'Map not found.', result?.status === 'private'); return; }
+  if (error || !result?.map) { showStatus(status, result?.status === 'private' ? 'This map is private. An admin account is required to view it.' : 'Map not found.', result?.status === 'private'); return; }
   try {
     const layers = await fetchLayers(result.map.id); status.hidden = true; container.hidden = false;
     const heading = document.querySelector('h1'); if (heading) heading.textContent = result.map.name;

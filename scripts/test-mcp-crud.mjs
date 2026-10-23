@@ -41,16 +41,22 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.equal(organization.name, `${needle} updated`);
     const calendar = await create('create_calendar', { organization_id: org.id, slug: needle.toLowerCase(), name: `${needle} calendar`, visibility: 'private' });
     await admin('update_calendar', { id: calendar.id, description: 'A partial calendar edit' });
-    assert.equal((await reader('get_calendar', { id: calendar.id })).calendar.visibility, 'private');
+    assert.equal((await admin('get_calendar', { id: calendar.id })).calendar.visibility, 'private');
+    assert.equal((await reader('get_calendar', { id: calendar.id })).status, 'missing');
+    await admin('update_calendar', { id: calendar.id, visibility: 'public' });
     assert.ok((await reader('search_calendars', { query: needle })).some(row => row.id === calendar.id));
     assert.ok((await reader('list_calendars', { organization_id: org.id })).some(row => row.id === calendar.id));
     const event = await create('create_event', { calendar_id: calendar.id, title: `${needle} event`, starts_at: '2027-11-02T12:00:00Z', visibility: 'private' });
     await admin('update_event', { id: event.id, location: 'Partial event edit' });
+    assert.equal((await reader('get_event', { id: event.id })).status, 'private');
+    await admin('update_event', { id: event.id, visibility: 'public' });
     assert.equal((await reader('get_event', { id: event.id })).event.location, 'Partial event edit');
     assert.ok((await reader('search_events', { query: needle, include_past: true })).some(row => row.id === event.id));
     const person = await create('create_person', { slug: `${needle.toLowerCase()}-person`, full_name: `${needle} person`, visibility: 'private' });
     const secondPerson = await create('create_person', { slug: `${needle.toLowerCase()}-other`, full_name: `${needle} other`, visibility: 'unlisted' });
     await admin('update_person', { id: person.id, description: 'Partial person edit' });
+    assert.equal((await reader('get_person', { id: person.id })).status, 'private');
+    await admin('update_person', { id: person.id, visibility: 'public' });
     assert.equal((await reader('get_person', { id: person.id })).person.description, 'Partial person edit');
     assert.ok((await reader('search_people', { query: needle })).some(row => row.id === person.id));
     const affiliation = await link('person_organization', { person_id: person.id, organization_id: org.id, role: 'Candidate' }, { role: 'Member' });
@@ -60,6 +66,10 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     await admin('update_map', { id: map.id, description: 'Partial map edit' });
     const remoteLayer = await create('create_layer', { name: `${needle} remote`, source_url: 'https://example.test/data.geojson', visibility: 'private', style: { color: '#123456' } });
     await admin('update_layer', { id: remoteLayer.id, description: 'Partial layer edit' });
+    assert.equal((await reader('get_map', { id: map.id })).status, 'private');
+    assert.equal((await reader('get_layer', { id: remoteLayer.id })).status, 'missing');
+    await admin('update_map', { id: map.id, visibility: 'public' });
+    await admin('update_layer', { id: remoteLayer.id, visibility: 'public' });
     await link('map_layer', { map_id: map.id, layer_id: remoteLayer.id, position: 1, style: { color: '#abcdef' } }, { position: 2 });
     const mapLayers = await reader('get_map_layers', { map_id: map.id });
     assert.equal(mapLayers.find(row => row.id === remoteLayer.id).style.color, '#abcdef');
@@ -74,7 +84,9 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     const stored = await admin('save_postgis_layer', { name: `${needle} stored`, visibility: 'private', geojson: initialGeometry });
     cleanup.push(() => admin('delete_layer', { id: stored.id }));
     await admin('save_postgis_layer', { id: stored.id, description: 'Metadata only; retain private visibility and features' });
-    assert.equal((await reader('get_layer', { id: stored.id })).layer.visibility, 'private');
+    assert.equal((await admin('get_layer', { id: stored.id })).layer.visibility, 'private');
+    assert.equal((await reader('get_layer', { id: stored.id })).status, 'missing');
+    await admin('save_postgis_layer', { id: stored.id, visibility: 'public' });
     await link('map_layer', { map_id: map.id, layer_id: stored.id, position: 0 }, { style: { color: '#332211' } });
     await denied('get_layer_geojson', { layer_id: stored.id });
     assert.equal((await reader('get_layer_geojson', { layer_id: stored.id, map_id: map.id })).features.length, 1);
@@ -100,6 +112,8 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
 
     const election = await create('create_election', { slug: `${needle.toLowerCase()}-election`, name: `${needle} election`, election_date: '2027-11-02', visibility: 'private' });
     await admin('update_election', { id: election.id, description: 'Partial election edit' });
+    assert.equal((await reader('get_election', { id: election.id })).status, 'private');
+    await admin('update_election', { id: election.id, visibility: 'public' });
     assert.ok((await reader('search_elections', { query: needle })).some(row => row.id === election.id));
     const contest = await create('create_contest', { election_id: election.id, office: `${needle} commissioner`, partisan: false });
     await admin('update_contest', { id: contest.id, seat: 'Seat 1' });
@@ -127,6 +141,8 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.equal(articleRead.article.fetched_on, '2026-10-21');
     assert.equal(articleRead.people[0].person_id, person.id);
     assert.equal(articleRead.organizations[0].organization_id, org.id);
+    assert.equal((await reader('get_article', { id: article.id })).status, 'missing');
+    await admin('update_article', { id: article.id, visibility: 'public' });
     assert.ok(!('people' in await reader('get_article', { id: article.id })), 'Do not expose admin-only association sets');
     assert.ok((await reader('search_articles', { query: needle })).some(row => row.id === article.id));
     assert.ok((await reader('get_person_articles', { person_id: person.id })).some(row => row.id === article.id));

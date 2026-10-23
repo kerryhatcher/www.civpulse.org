@@ -1,0 +1,33 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="Users admin" description="Manage Civic Pulse account roles.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Users</h1>
+      <p>Users have the same content access as public visitors. Admins can manage content and promote other users.</p>
+    </div>
+    <AdminTabs />
+    <p class="status" data-admin-gate>Checking access…</p>
+    <div class="prose" data-admin-denied hidden>
+      <p>Your account does not have admin access. <a href="/signin/?next=/admin/users/">Sign in with an admin account</a>.</p>
+    </div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <form class="org-form" data-user-search>
+        <label class="field"><span>Find an account by email or name</span><input type="search" name="query" maxlength="320" /></label>
+        <button type="submit">Search</button>
+      </form>
+      <p class="status" data-user-status role="status" aria-live="polite"></p>
+      <div class="org-list" data-user-list></div>
+      <div class="button-row">
+        <button type="button" data-users-previous disabled>Previous</button>
+        <button type="button" data-users-next disabled>Next</button>
+      </div>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initUsersAdmin } from '../../scripts/admin-users';
+  void initUsersAdmin();
+</script>

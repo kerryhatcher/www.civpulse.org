@@ -136,7 +136,7 @@ export async function initSiteSearch(): Promise<void> {
   window.addEventListener('popstate', () => { restoreUrl(); void search(); });
   const { data: { session } } = await supabase.auth.getSession();
   let identity = session?.user.id ?? null;
-  function showAccess(): void { access.textContent = identity ? 'Signed in — search includes public, unlisted, and private content you can access.' : 'Search shows public content. Sign in to search additional content you can access.'; }
+  function showAccess(): void { access.textContent = 'Search shows public content. Admins can also search unlisted and private content.'; }
   showAccess(); ready = true; await search();
   supabase.auth.onAuthStateChange((_event, current) => {
     const nextIdentity = current?.user.id ?? null;

@@ -8,6 +8,9 @@ test.skipIf(!process.env.CALENDAR_TEST_DATABASE_URL)('calendar range pagination 
   try {
     await sql.begin(async tx => {
       const suffix = crypto.randomUUID();
+      const adminId = crypto.randomUUID();
+      await tx`insert into auth.users(id,email) values (${adminId}, ${`calendar-qa-${suffix}@example.test`})`;
+      await tx`insert into public.admins(user_id) values (${adminId})`;
       const [org] = await tx`insert into public.organizations (name, slug) values ('Calendar QA', ${`calendar-qa-${suffix}`}) returning id`;
       const ids: Record<string, string> = {};
       for (const visibility of ['public', 'unlisted', 'private']) {
@@ -37,8 +40,10 @@ test.skipIf(!process.env.CALENDAR_TEST_DATABASE_URL)('calendar range pagination 
       await tx.unsafe('set local role authenticated');
       await tx`select set_config('request.jwt.claim.sub', ${crypto.randomUUID()}, true)`;
       const signedIn = await pages();
-      expect(signedIn).toHaveLength(511);
-      expect(signedIn.filter(item => item.title.startsWith('Hidden'))).toHaveLength(5);
+      expect(signedIn).toHaveLength(506);
+      expect(signedIn.filter(item => item.title.startsWith('Hidden'))).toHaveLength(0);
+      await tx`select set_config('request.jwt.claim.sub', ${adminId}, true)`;
+      expect(await pages()).toHaveLength(511);
       expect(await pages(true)).toHaveLength(506);
       throw rollback;
     });

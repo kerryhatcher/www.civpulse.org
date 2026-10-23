@@ -1,4 +1,5 @@
 import { getSupabase } from '../lib/supabase';
+import { initAuthChallenge } from './auth-challenge';
 
 type MessageKind = 'info' | 'error' | 'success';
 
@@ -27,19 +28,26 @@ function setText(root: ParentNode, selector: string, value: string): void {
   if (element) element.textContent = value;
 }
 
-async function withSubmitLock<T>(form: HTMLFormElement, run: () => Promise<T>): Promise<void> {
+async function withSubmitLock<T>(form: HTMLFormElement, run: () => Promise<T>, onSettled?: () => void): Promise<void> {
+  if (form.getAttribute('aria-busy') === 'true') return;
+  form.setAttribute('aria-busy', 'true');
   const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
   if (submit) submit.disabled = true;
   try {
     await run();
+  } catch {
+    setMessage(form, 'Could not reach Civic Pulse. Please try again.', 'error');
   } finally {
+    form.removeAttribute('aria-busy');
     if (submit) submit.disabled = false;
+    onSettled?.();
   }
 }
 
 export function initSignIn(): void {
   const form = document.querySelector<HTMLFormElement>('[data-auth-form="signin"]');
   if (!form) return;
+  const challenge = initAuthChallenge(form);
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -51,24 +59,30 @@ export function initSignIn(): void {
       setMessage(form, 'Enter your email and password.', 'error');
       return;
     }
+    const captchaToken = challenge.token();
+    if (!captchaToken) {
+      setMessage(form, 'Complete the security check before signing in.', 'error');
+      return;
+    }
 
     clearMessage(form);
     setMessage(form, 'Signing in…');
 
     void withSubmitLock(form, async () => {
-      const { error } = await getSupabase().auth.signInWithPassword({ email, password });
+      const { error } = await getSupabase().auth.signInWithPassword({ email, password, options: { captchaToken } });
       if (error) {
         setMessage(form, error.message, 'error');
         return;
       }
       window.location.assign(nextPath());
-    });
+    }, challenge.reset);
   });
 }
 
 export function initSignUp(): void {
   const form = document.querySelector<HTMLFormElement>('[data-auth-form="signup"]');
   if (!form) return;
+  const challenge = initAuthChallenge(form);
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -76,9 +90,19 @@ export function initSignUp(): void {
     const email = String(values.get('email') ?? '').trim();
     const password = String(values.get('password') ?? '');
     const displayName = String(values.get('display_name') ?? '').trim();
+    // A lightweight spam signal only. Supabase CAPTCHA and rate limits enforce protection.
+    if (String(values.get('company_website') ?? '').trim()) {
+      setMessage(form, 'Check your email to confirm your account.', 'success');
+      return;
+    }
 
     if (!email || !password) {
       setMessage(form, 'Enter an email and a password.', 'error');
+      return;
+    }
+    const captchaToken = challenge.token();
+    if (!captchaToken) {
+      setMessage(form, 'Complete the security check before creating an account.', 'error');
       return;
     }
 
@@ -89,7 +113,11 @@ export function initSignUp(): void {
       const { data, error } = await getSupabase().auth.signUp({
         email,
         password,
-        options: displayName ? { data: { display_name: displayName } } : undefined,
+        options: {
+          captchaToken,
+          emailRedirectTo: new URL('/account/', window.location.origin).href,
+          data: displayName ? { display_name: displayName } : {},
+        },
       });
 
       if (error) {
@@ -98,13 +126,13 @@ export function initSignUp(): void {
       }
 
       if (data.session) {
-        window.location.assign(nextPath());
+        window.location.assign(nextPath('/account/'));
         return;
       }
 
       form.reset();
       setMessage(form, 'Check your email to confirm your account.', 'success');
-    });
+    }, challenge.reset);
   });
 }
 
@@ -124,6 +152,7 @@ export async function initAccount(): Promise<void> {
 
   setText(root, '[data-account-email]', session.user.email ?? '—');
   setText(root, '[data-account-id]', session.user.id);
+  setText(root, '[data-account-role]', await isCurrentUserAdmin() ? 'Admin' : 'User');
 
   const { data: profile } = await supabase
     .from('profiles')

@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import AuthChallenge from '../components/AuthChallenge.astro';
 ---
 
 <Layout title="Sign in" description="Sign in to Civic Pulse.">
   <main id="main" class="auth-page">
     <div class="auth-card">
       <h1>Welcome back.</h1>
-      <p>Sign in to follow your community and save what matters.</p>
+      <p>Sign in to your Civic Pulse account.</p>
 
       <form class="auth-form" data-auth-form="signin" novalidate>
         <label class="field">
@@ -23,7 +24,8 @@ import Layout from '../layouts/Layout.astro';
             minlength="8"
           />
         </label>
-        <button class="button-link" type="submit">Sign in</button>
+        <AuthChallenge action="signin" />
+        <button class="button-link" type="submit" disabled>Sign in</button>
         <p class="auth-message" data-auth-message hidden role="status" aria-live="polite"></p>
       </form>
 

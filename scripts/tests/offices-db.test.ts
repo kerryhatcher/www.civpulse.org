@@ -36,7 +36,7 @@ test.skipIf(!process.env.OFFICES_TEST_DATABASE_URL)('office service dates, visib
       expect((await tx`select has_table_privilege('anon', 'public.offices', 'insert') allowed`)[0].allowed).toBe(false);
       await tx.unsafe('set local role authenticated');
       await tx`select set_config('request.jwt.claim.sub', ${crypto.randomUUID()}, true)`;
-      expect((await tx`select * from public.get_office_terms(null, ${org.id})`)).toHaveLength(6);
+      expect((await tx`select * from public.get_office_terms(null, ${org.id})`)).toHaveLength(4);
       expect((await tx`select * from public.office_terms where office_id = ${office.id}`)).toHaveLength(0);
       expect((await tx`update public.offices set name = 'Unauthorized' where id = ${office.id} returning id`)).toHaveLength(0);
       expect((await tx`delete from public.offices where id = ${office.id} returning id`)).toHaveLength(0);
@@ -50,6 +50,7 @@ test.skipIf(!process.env.OFFICES_TEST_DATABASE_URL)('office service dates, visib
       await denied(() => tx`insert into public.offices(organization_id, name) values (${org.id}, 'Unauthorized')`, '42501');
       await denied(() => tx`insert into public.office_terms(office_id, person_id, selection_method, starts_on) values (${office.id}, ${people.public}, 'elected', '1990-01-01')`, '42501');
       await tx`select set_config('request.jwt.claim.sub', ${adminId}, true)`;
+      expect((await tx`select * from public.get_office_terms(null, ${org.id})`)).toHaveLength(6);
       const [created] = await tx`insert into public.office_terms(office_id, person_id, selection_method, starts_on, ends_on) values (${office.id}, ${people.public}, 'appointed', '1990-01-01', '1992-01-01') returning id`;
       expect((await tx`update public.office_terms set ends_on = '1993-01-01' where id = ${created.id} returning id`)).toHaveLength(1);
       await denied(() => tx`update public.office_terms set ends_on = '1989-01-01' where id = ${created.id}`, '23514');

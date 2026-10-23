@@ -409,7 +409,7 @@ export async function initEventViewFromUrl(): Promise<void> {
   }
 
   if (response.status === 'private') {
-    showViewerStatus(status, 'This event is private. Sign in to view it.', true);
+    showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
     return;
   }
 

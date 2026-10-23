@@ -12,7 +12,7 @@ const local = ['127.0.0.1', 'localhost'].includes(new URL(url).hostname);
 if (!local && process.env.MAP_IMPORT_ALLOW_HOSTED !== '1') throw new Error('Hosted imports require MAP_IMPORT_ALLOW_HOSTED=1 and MAP_IMPORT_ACCESS_TOKEN for an existing admin.');
 let token = process.env.MAP_IMPORT_ACCESS_TOKEN;
 if (!token && local) {
-  const response = await fetch(`${url}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { apikey: key, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: process.env.TEST_USER_EMAIL ?? 'test@civpulse.org', password: process.env.TEST_USER_PASSWORD ?? 'civicpulse-test-123' }) });
+  const response = await fetch(`${url}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { apikey: key, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: process.env.TEST_USER_EMAIL ?? 'test@civpulse.org', password: process.env.TEST_USER_PASSWORD ?? 'civicpulse-test-123', gotrue_meta_security: { captcha_token: 'XXXX.DUMMY.TOKEN.XXXX' } }) });
   const auth = await response.json();
   if (!response.ok || !auth.access_token) throw new Error('Local admin sign-in failed. Run bun run db:seed-user.');
   token = auth.access_token;
