@@ -177,6 +177,8 @@ For changes, identify the exact record and fields. Review names, dates, sources,
 
 An approved assistant receives your account's supported access, including private content and administrative writes when you are an admin. The consent scopes `openid`, `email`, `profile`, and `offline_access` describe profile access and continued authorization; they do not make an admin connection read-only.
 
+Every MCP tool requires sign-in. Regular users have read-only access; all mutations, including display-name updates, require an admin. Account-directory reads remain admin-only.
+
 Content writes save to the database immediately. Some website views load live data; prerendered public profiles need a separate website rebuild and deployment. Installing a plugin or saving through MCP does not deploy the website. See the [admin guide](/docs/admins/#visibility-and-publication).
 
 To stop access, open [Account → Connected apps](/account/) on Civic Pulse and revoke the client's grant. This rejects its existing MCP access tokens and prevents refresh. You can also remove the connection from your AI client. Keep passwords, access tokens, and secret keys out of prompts, repositories, and configuration examples.

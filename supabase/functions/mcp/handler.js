@@ -37,7 +37,7 @@ function createToolkit(server, supabase) {
       }
     }, async (input) => {
       try {
-        if (options.write && !options.ownProfile)
+        if (options.write)
           await ensureAdmin();
         return ok(await run(input));
       } catch (error) {
@@ -299,12 +299,12 @@ function registerExtendedTools(server, supabase, user) {
       throw new Error(error.message);
     return data;
   });
-  register("update_my_profile", "Update your own display name. This does not grant admin access or edit another user.", { display_name: z2.string().min(1).max(80).nullable() }, async ({ display_name }) => {
+  register("update_my_profile", "Update your own display name (admin only). This does not grant admin access or edit another user.", { display_name: z2.string().min(1).max(80).nullable() }, async ({ display_name }) => {
     const { data, error } = await supabase.from("profiles").update({ display_name }).eq("id", user.id).select("id,display_name").single();
     if (error)
       throw new Error(error.message);
     return data;
-  }, { write: true, ownProfile: true, idempotent: true });
+  }, { write: true, idempotent: true });
   const bucket = z2.enum(["org-logos", "person-images"]);
   const path = z2.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine((value) => !value.split("/").some((part) => !part || part === "." || part === ".."), "Use a relative object path without dot segments");
   register("list_images", "Browse/search public organization logos or person images, with pagination.", { bucket, prefix: z2.string().max(512).default(""), search: z2.string().max(200).default(""), limit, offset }, async (input) => {
@@ -561,7 +561,7 @@ async function respond(request, env) {
   if (path === "/.well-known/oauth-protected-resource" || path === "/.well-known/oauth-protected-resource/mcp" || path === `${endpointPath}/.well-known/oauth-protected-resource`) {
     return Response.json(protectedResourceMetadata(env));
   }
-  if (path === "/" || path === `${endpointPath}/`) {
+  if (path === "/") {
     return Response.json({
       name: "Civic Pulse MCP",
       mcp_endpoint: env.MCP_RESOURCE_URL,
@@ -569,7 +569,7 @@ async function respond(request, env) {
       protected_resource_metadata: metadataUrl
     });
   }
-  if (path === endpointPath) {
+  if (path === endpointPath || path === `${endpointPath}/`) {
     const authorization = request.headers.get("Authorization") ?? "";
     const token = /^Bearer\s+(\S+)$/i.exec(authorization)?.[1];
     const unauthorized = (invalid = false) => Response.json({ error: invalid ? "invalid_token" : "unauthorized", error_description: "A valid Supabase user access token is required." }, { status: 401, headers: {
@@ -588,14 +588,14 @@ async function respond(request, env) {
       const result = await supabase.auth.getUser(token);
       if (result.error && (!result.error.status || result.error.status >= 500))
         throw result.error;
-      if (result.error || !result.data.user)
+      if (result.error || !result.data.user || result.data.user.is_anonymous)
         return unauthorized(true);
       const { data, error } = await supabase.auth.getClaims(token);
       if (error && (!error.status || error.status >= 500))
         throw error;
       const claims = data?.claims;
       const audience = claims?.aud;
-      if (error || !claims || claims.iss !== env.AUTHORIZATION_SERVER || !(audience === "authenticated" || Array.isArray(audience) && audience.includes("authenticated")) || claims.role !== "authenticated" || !claims.sub || !claims.exp || claims.exp <= Date.now() / 1000) {
+      if (error || !claims || claims.iss !== env.AUTHORIZATION_SERVER || !(audience === "authenticated" || Array.isArray(audience) && audience.includes("authenticated")) || claims.role !== "authenticated" || claims.is_anonymous === true || !claims.sub || !claims.exp || claims.exp <= Date.now() / 1000) {
         return unauthorized(true);
       }
       if (result.data.user.id !== claims.sub)

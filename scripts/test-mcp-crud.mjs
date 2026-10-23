@@ -182,9 +182,12 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.notEqual(`${page1[0].entity_type}:${page1[0].id}`, `${page2[0].entity_type}:${page2[0].id}`);
 
     const profile = await reader('get_my_profile');
-    await reader('update_my_profile', { display_name: `${needle} reader` });
-    assert.equal((await reader('get_my_profile')).display_name, `${needle} reader`);
-    await reader('update_my_profile', { display_name: profile.display_name });
+    await denied('update_my_profile', { display_name: `${needle} reader` });
+    assert.equal((await reader('get_my_profile')).display_name, profile.display_name);
+    const adminProfile = await admin('get_my_profile');
+    await admin('update_my_profile', { display_name: `${needle} admin` });
+    assert.equal((await admin('get_my_profile')).display_name, `${needle} admin`);
+    await admin('update_my_profile', { display_name: adminProfile.display_name });
     const path = `${profile.id}/${needle}.svg`;
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><rect width="1" height="1"/></svg>';
     const image = { bucket: 'person-images', path, content_type: 'image/svg+xml', data_base64: Buffer.from(svg).toString('base64') };

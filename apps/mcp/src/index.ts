@@ -60,7 +60,7 @@ async function respond(request: Request, env: Env): Promise<Response> {
     return Response.json(protectedResourceMetadata(env));
   }
 
-  if (path === "/" || path === `${endpointPath}/`) {
+  if (path === "/") {
     return Response.json({
       name: "Civic Pulse MCP",
       mcp_endpoint: env.MCP_RESOURCE_URL,
@@ -69,7 +69,7 @@ async function respond(request: Request, env: Env): Promise<Response> {
     });
   }
 
-  if (path === endpointPath) {
+  if (path === endpointPath || path === `${endpointPath}/`) {
     const authorization = request.headers.get("Authorization") ?? "";
     const token = /^Bearer\s+(\S+)$/i.exec(authorization)?.[1];
     const unauthorized = (invalid = false) => Response.json(
@@ -94,14 +94,14 @@ async function respond(request: Request, env: Env): Promise<Response> {
     try {
       const result = await supabase.auth.getUser(token);
       if (result.error && (!result.error.status || result.error.status >= 500)) throw result.error;
-      if (result.error || !result.data.user) return unauthorized(true);
+      if (result.error || !result.data.user || result.data.user.is_anonymous) return unauthorized(true);
       const { data, error } = await supabase.auth.getClaims(token);
       if (error && (!error.status || error.status >= 500)) throw error;
       const claims = data?.claims;
       const audience = claims?.aud;
       if (error || !claims || claims.iss !== env.AUTHORIZATION_SERVER ||
         !(audience === "authenticated" || (Array.isArray(audience) && audience.includes("authenticated"))) ||
-        claims.role !== "authenticated" || !claims.sub || !claims.exp || claims.exp <= Date.now() / 1000) {
+        claims.role !== "authenticated" || claims.is_anonymous === true || !claims.sub || !claims.exp || claims.exp <= Date.now() / 1000) {
         return unauthorized(true);
       }
       if (result.data.user.id !== claims.sub) return unauthorized(true);

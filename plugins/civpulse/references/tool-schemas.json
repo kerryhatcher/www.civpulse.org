@@ -4169,7 +4169,7 @@
   },
   {
     "name": "update_my_profile",
-    "description": "Update your own display name. This does not grant admin access or edit another user.",
+    "description": "Update your own display name (admin only). This does not grant admin access or edit another user.",
     "inputSchema": {
       "type": "object",
       "properties": {
