@@ -5,11 +5,10 @@ import Layout from '../layouts/Layout.astro';
   <main id="main">
     <div class="page-intro">
       <h1>Public document archive</h1>
-      <p>Find published agendas, minutes, meeting packets and transcripts. Search results link to the source documents and related meetings.</p>
+      <p>Find published agendas, minutes, meeting packets and transcripts. Search titles, filenames and document contents together. Results link to the source documents and related meetings.</p>
     </div>
     <form class="calendar-filters" data-document-search role="search">
       <label class="field field-wide"><span>Search documents</span><input type="search" name="q" maxlength="500" placeholder="Topic, name or phrase…" /></label>
-      <label class="field"><span>Search in</span><select name="mode"><option value="catalog">Titles and file names</option><option value="content">Document contents</option></select></label>
       <button class="button-link" type="submit" disabled>Search</button>
     </form>
     <p class="status" data-document-status role="status" aria-live="polite">Loading document archive…</p>
