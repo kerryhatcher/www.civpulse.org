@@ -34,6 +34,29 @@ docs/         architecture, backend, and development notes
 
 ## Backend
 
+### Runtime short-link exception
+
+The web Worker now has a small `apps/web/worker/index.ts` entrypoint for `/l/*`.
+`assets.run_worker_first` reserves that prefix; other routes remain static assets
+and missing assets fall back through `env.ASSETS.fetch`. Astro remains static,
+without a server adapter or on-demand page rendering. This is an explicit
+request-time redirect handler alongside the prerendered site.
+
+The handler calls Supabase `resolve_short_link` using only the public key, then
+returns an HTTP 302 with `Cache-Control: no-store` and `X-Robots-Tag: noindex,
+nofollow`. Destination edits and visit counts are live and do not require a
+rebuild. Unknown/paused links return 404, unsupported methods 405, and backend
+failures 503. HEAD resolves without counting; GET resolves and increments
+atomically before returning the redirect. Incoming query parameters are not
+forwarded; put any destination query parameters in the saved destination URL.
+The Worker does not fetch destination pages.
+
+Public Supabase bindings live in `apps/web/wrangler.jsonc`; they must match the
+frontend's build-time public project settings. Local `.dev.vars` overrides must
+point at the same local project used by the frontend. Neither requires a
+service-role key. QR codes encode the canonical Astro `site` origin
+(`https://www.civpulse.org`), including when viewed locally.
+
 - Supabase Postgres with Row Level Security; Supabase Auth for email/password
   accounts; a `public.profiles` row per user created by a signup trigger.
 - `public.admins` is an allowlist (managed by existing admins through the Users

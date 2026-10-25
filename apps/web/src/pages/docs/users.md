@@ -93,3 +93,15 @@ reconstructed. Imports and maintenance without a signed-in editor are labeled
 **System / import**. History updates immediately, even when the profile page still
 shows the previous static build. History is for inspection; it does not restore
 or roll back records.
+
+## Civic Pulse short links
+
+Shared links beginning with `https://www.civpulse.org/l/` redirect to a destination
+chosen by a Civic Pulse admin. Scanning a Civic Pulse QR code opens the same short
+URL. The destination may change while the shared URL and printed QR code stay the
+same. No account or JavaScript is required to follow a short link.
+
+A paused or unknown link displays a not-found message. A temporary service error
+asks you to try again. Link owners can see aggregate redirect counts and the last
+visit time, including repeated visits and bots; these statistics do not store
+your IP address, browser identity, or cookies.

@@ -99,6 +99,35 @@ non-public dates, multiple elections, narrow screens, keyboard focus, and the
 election-details link. Confirm anonymous and signed-in visitors receive the same
 public callouts and no hidden metadata appears in the built HTML.
 
+## Testing short links locally
+
+Run `bun run build`, then `bun run --cwd apps/web cf:dev` to exercise `/l/*`
+through the Cloudflare runtime. Astro dev/preview do not run the redirect handler.
+Create ignored `apps/web/.dev.vars` with only `PUBLIC_SUPABASE_URL` and
+`PUBLIC_SUPABASE_ANON_KEY` copied from the local frontend `.env.local` (or `.env`).
+Use a loopback Supabase project; do not use the service-role key. Wrangler's
+checked-in public defaults target production, so local overrides are required
+before testing visits. Avoid loading unrelated bootstrap secrets by setting
+`CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV=false` for Wrangler.
+
+Use `/admin/links/` on Wrangler's printed port to create/edit links, refresh
+counts, pause/reactivate, and download PNG/SVG QR files. QR codes intentionally
+use the production canonical site URL; replace the origin with Wrangler's local
+origin when testing the redirect locally. Confirm ordinary signed-in users
+cannot access the form and anonymous users go to signin. Downloading a QR must
+not increment statistics. Check `curl -I` leaves counts unchanged and GET adds
+one, including repeated and concurrent requests. Confirm existing shared codes
+resolve to the new destination after an edit without rebuilding.
+
+`bun run check` includes Worker TypeScript checks. Regenerate binding types with
+`CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV=false bunx wrangler types --include-runtime
+false --strict-vars false` from `apps/web` after changing bindings. Run
+`bun test scripts/tests/short-links.test.ts`; use `SHORT_LINKS_TEST_DATABASE_URL`
+for the opt-in database permissions/concurrency tests documented in backend.md.
+The Short links GitHub workflow runs the redirect tests and Worker type checks on
+pull requests and pushes to main. Database concurrency and permission checks run
+against the local test database before release.
+
 ## Secret scanning
 
 TruffleHog guards the repo against committed credentials.

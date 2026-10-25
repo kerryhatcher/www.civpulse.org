@@ -1046,3 +1046,34 @@ Run `HISTORY_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/post
 bun test scripts/tests/history-db.test.ts` for transactional access regression
 checks. Normal database owners can change schema/data as usual; this is an
 application-level append-only audit log, not an external tamper-proof ledger.
+
+## Short links
+
+`short_links` stores an immutable generated eight-character hexadecimal code,
+label, HTTP(S) target, active flag, and creation/edit timestamps. `short_link_stats`
+stores only a redirect total and last visit timestamp. Both tables enable RLS and
+allow direct SELECT only to admins. Anonymous visitors cannot enumerate link
+metadata or statistics; ordinary signed-in users see no rows. Authenticated
+clients have no direct writes, including admins, so clients cannot replace codes
+or forge a statistics total through table updates.
+
+`save_short_link(p_id, p_title, p_target_url, p_active)` checks `is_admin()` on
+every call. Creating a record generates a random code and retries collisions;
+updating changes only the label, destination, active state and edit timestamp.
+There is no user-facing delete/reuse operation. HTTP(S) URL checks reject
+credentials, spaces/control characters and direct Civic Pulse short-link loops.
+The browser normalizes targets and the Worker validates them before redirecting.
+
+`resolve_short_link(p_code, p_count default true)` is the only public access
+path. It returns one active target or null, never labels, IDs, or statistics.
+Its empty-search-path security-definer function takes a share lock on the link
+and atomically upserts its count and last visit. Concurrent requests do not lose
+increments; pausing/editing cannot interleave with that resolution transaction.
+Only GET requests count in the Worker; HEAD uses `p_count: false`.
+These are resolution counts, not unique visitors or destination page loads.
+Bots/repeats count, and the public RPC can also be called directly; totals are
+basic usage indicators, not fraud-resistant analytics. No visitor PII is stored.
+
+Verification: `SHORT_LINKS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/short-links.test.ts scripts/tests/short-links-db.test.ts`.
+Permission fixtures roll back; the concurrent-count fixture is deleted afterward.
