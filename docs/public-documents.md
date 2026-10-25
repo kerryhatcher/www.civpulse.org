@@ -162,12 +162,30 @@ unofficial extracted text. The PPTX remains downloadable but requires its TXT
 derivative for indexing. The committee/full-board school recording is shared;
 the selected full-board event retains its existing video URL.
 
-**Release status:** no pilot documents were uploaded or published in production.
-The connected MCP advertises `get_meeting` but its live server returned
-`Tool get_meeting not found`; the source/function bundle must be deployed before
-testing live uploads. Wrangler's existing authorization was expired. Cloudflare
-resources, custom-domain downloads and actual AI Search ingestion remain
-unverified. Do not interpret local search adapter results as successful indexing.
+**Production verification, October 25:** PR #12 deployed the catalog migration,
+admin mutation permission follow-up, MCP function and static site. PR #13 added
+the two-meeting publication allowlist. The archive API and dedicated public R2
+bucket/custom domain are deployed. The site build uses `PUBLIC_KB_API_URL`.
+Publication is enabled only for the two pilot IDs; content search is disabled
+and its AI Search binding is intentionally omitted until an instance exists.
+
+Nine attachments are stored on the production meeting records. Signed downloads
+of every attachment matched the local SHA-256 and size. See
+`scripts/fixtures/public-documents-production-pilot.json` for the exact files,
+attachment IDs, provenance and checksums. The school PPTX/agenda/transcript were
+uploaded through the admin UI; the other six uploads passed through MCP. The
+county Red Cross PDF transfer timed out without creating an attachment record;
+its all-page TXT derivative is the ninth production attachment instead.
+
+The live API returns 200 for status/catalog, 401 for anonymous publication, 403
+for untrusted origins and 503 for disabled content search. The public catalog is
+empty: automatic approval review required explicit permission for the exact nine
+public copies, so no R2 document was published. Review also rejected creation of
+Cloudflare's account-scoped AI Search Index Engine service credential; a token
+scoped only to this bucket's R2 object reads was rejected by Cloudflare's token
+registration API. These two approvals remain pending. Actual R2 document
+downloads, ingestion, indexed passages and live withdrawal remain unverified.
+Do not interpret local search adapter results as successful indexing.
 
 The database test installs this new migration inside a rollback transaction when
 needed, and rolls back all tables and fixtures. It covers anonymous, regular-user

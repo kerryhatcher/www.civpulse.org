@@ -1,0 +1,121 @@
+{
+  "verified_at": "2026-10-25T22:58:23.320Z",
+  "site": "https://www.civpulse.org/documents/",
+  "api": "https://kb-api.civpulse.org",
+  "public_destination": "https://kb.civpulse.org",
+  "bucket": "civpulse-public-documents",
+  "publication_status": "awaiting_explicit_approval",
+  "content_search_status": "awaiting_indexing_service_credential_approval",
+  "files": [
+    {
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "attachment_id": "ed837a3c-0dee-4573-852d-d7fa571513d0",
+      "file_name": "2026-02-19-academic-update-extracted.txt",
+      "mime_type": "text/plain",
+      "size_bytes": 16370,
+      "sha256": "5db6843d07d56a70aeeae95db9e9439632710568a1c787b6ff7dce486cc0b4e1",
+      "download_verified": true,
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "presentation",
+      "text_origin": "other"
+    },
+    {
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "attachment_id": "7f26ec1d-5e87-466d-bc69-2b441b42a833",
+      "file_name": "2026-02-19-investment-report.pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 222219,
+      "sha256": "d5e28c96d85a46fec6a64050fdf78d78309f3356ee05d7a657b6e44240e20d6b",
+      "download_verified": true,
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "other",
+      "text_origin": "official"
+    },
+    {
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "attachment_id": "d97bf274-6f8a-44cf-8c1a-ffa0dedad15d",
+      "file_name": "2026-02-19-agenda.pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1172522,
+      "sha256": "8440ec1d880aed7a8f78d204d2c7f1f0508fa08fd89db988123e2a27f7535b29",
+      "download_verified": true,
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "agenda",
+      "text_origin": "official"
+    },
+    {
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "attachment_id": "8ae2564c-1d4f-487e-bf08-e2729f8ba4dd",
+      "file_name": "2026-02-19-academic-update.pptx",
+      "mime_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "size_bytes": 4004660,
+      "sha256": "0a04b5d4d08ad411f3e2c23d95c3d42c2e72706135cdf9a39bb51b91869f0839",
+      "download_verified": true,
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "presentation",
+      "text_origin": "official"
+    },
+    {
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "attachment_id": "8730d6ac-5108-4dd4-977b-adb10a16c275",
+      "file_name": "2026-02-19-transcript.txt",
+      "mime_type": "text/plain",
+      "size_bytes": 109446,
+      "sha256": "52a03ce04ddc77484b5a45465269ea8eae9d23e26388a1ec3ecb7cdc8f47c3db",
+      "download_verified": true,
+      "source_url": "https://www.youtube.com/watch?v=wjYeLMR-3tE",
+      "document_kind": "transcript",
+      "text_origin": "automated_transcript"
+    },
+    {
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "attachment_id": "986dfcaa-c24a-49a9-b11f-60d95badfbba",
+      "file_name": "2026-03-18-agenda-packet-extracted.txt",
+      "mime_type": "text/plain",
+      "size_bytes": 3104858,
+      "sha256": "2c5bafaadf238395e5c4c4bd770f306b74ba6b735fe1bc30f10b783a78f0e574",
+      "download_verified": true,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "packet",
+      "text_origin": "other"
+    },
+    {
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "attachment_id": "53e50049-7965-4971-b101-482085a49161",
+      "file_name": "2026-03-18-splost-appropriations.pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 216098,
+      "sha256": "bc0aa00ea8857fab01a6a51509b818caab38f41f115b84d6a9489c859df784e9",
+      "download_verified": true,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "official"
+    },
+    {
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "attachment_id": "efa3f11a-125e-468c-8f63-ec91aa576a2f",
+      "file_name": "2026-03-18-roadway-stone-creek-extracted.txt",
+      "mime_type": "text/plain",
+      "size_bytes": 1272034,
+      "sha256": "7785f7d7b3a7dee28bcfcd5c4ca3ba6d9792351fbe71f6c27246b0950c515416",
+      "download_verified": true,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "other"
+    },
+    {
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "attachment_id": "a1cbdcc5-3989-4e78-a923-ebc3ecb45575",
+      "file_name": "2026-03-18-red-cross-agreement-extracted.txt",
+      "mime_type": "text/plain",
+      "size_bytes": 462085,
+      "sha256": "33ce4edd929a6325ac0639151772625494d36878212ed98840d94566dc198985",
+      "download_verified": true,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "other",
+      "derived_from": "2026-03-18-red-cross-agreement.pdf",
+      "derivative_note": "All-page text extraction used after the original PDF MCP transfer timed out. The original remains in the local inventory and at the official source."
+    }
+  ]
+}
