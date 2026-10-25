@@ -2537,3 +2537,10 @@ textarea::placeholder {
   .history-filter { display: grid; grid-template-columns: minmax(10rem, 1fr) minmax(16rem, 2fr) auto; align-items: start; gap: 1rem; max-width: none; }
   .history-filter > button { margin-top: 1.85rem; }
 }
+
+/* People directory controls share the site's form and pagination styles. */
+.people-controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin-block: 1.5rem; }
+.people-controls label { display: grid; gap: .4rem; flex: 1 1 12rem; min-width: 0; }
+.people-controls label:first-child { flex-grow: 2; }
+.people-controls input, .people-controls select { width: 100%; min-width: 0; }
+.people-pagination { align-items: center; flex-wrap: wrap; }
