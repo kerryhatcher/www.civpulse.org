@@ -189,6 +189,7 @@ its all-page TXT derivative is the ninth production attachment instead.
 
 All nine files are published. Every public R2 download matched its source SHA-256
 and size, with the expected MIME, attachment disposition and `no-store` headers.
+All nine AI Search items reached `completed` with no errors (1,042 chunks total).
 The live API returns 200 for status/catalog/search, 401 for anonymous publication
 and 403 for untrusted origins. Real indexed queries for `budget`, `Red Cross` and
 `Stone Creek` returned document passages and the correct meeting citations.
