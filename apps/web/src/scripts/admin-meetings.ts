@@ -49,7 +49,7 @@ export async function initMeetingAdmin(): Promise<void> {
   let people: Person[] = [];
   const refresh = async (): Promise<void> => {
     const id = select.value;
-    editor.hidden = true;
+    editor.hidden = !id || record?.event?.id !== id;
     if (!id) { record = null; return; }
     const { data, error } = await supabase.rpc('get_meeting', { p_id: id });
     if (select.value !== id) return;

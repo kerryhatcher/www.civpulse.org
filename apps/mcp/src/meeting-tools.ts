@@ -52,7 +52,7 @@ export function registerMeetingTools(server: McpServer, supabase: SupabaseClient
       const bucket = supabase.storage.from(BUCKET);
       const { error: uploadError } = await bucket.upload(storagePath, document.bytes, { contentType: document.contentType, upsert: false });
       if (uploadError) throw new Error(uploadError.message);
-      // Storage and Postgres are separate services. Compensate if metadata cannot be saved.
+      // Storage and Postgres are separate services. Retain bytes until metadata is confirmed.
       try {
         const { data, error } = await supabase.from('meeting_attachments').insert({
           id: attachmentId, meeting_id, file_name, storage_path: storagePath, mime_type: document.contentType, size_bytes: document.bytes.length,
@@ -63,11 +63,8 @@ export function registerMeetingTools(server: McpServer, supabase: SupabaseClient
         // An interrupted response can hide a committed insert. Do not remove
         // its object, or destroy evidence when the recovery read also fails.
         const recovered = await supabase.from('meeting_attachments').select(columns).eq('id', attachmentId).maybeSingle();
-        if (recovered.error) throw new Error(`Upload outcome uncertain for attachment ${attachmentId}; inspect get_meeting before retrying`);
-        if (recovered.data) return recovered.data;
-        const { error: cleanupError } = await bucket.remove([storagePath]);
-        if (cleanupError) throw new Error(`Attachment metadata was not saved and orphan cleanup failed for ${storagePath}: ${cleanupError.message}`);
-        throw error;
+        if (!recovered.error && recovered.data) return recovered.data;
+        throw new Error(`Upload outcome uncertain for attachment ${attachmentId}; retained object ${storagePath}. Inspect get_meeting before retrying or reconciling the upload`);
       }
     }, { write: true, destructive: false });
 

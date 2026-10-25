@@ -403,14 +403,9 @@ function registerMeetingTools(server, supabase) {
       return data;
     } catch (error) {
       const recovered = await supabase.from("meeting_attachments").select(columns).eq("id", attachmentId).maybeSingle();
-      if (recovered.error)
-        throw new Error(`Upload outcome uncertain for attachment ${attachmentId}; inspect get_meeting before retrying`);
-      if (recovered.data)
+      if (!recovered.error && recovered.data)
         return recovered.data;
-      const { error: cleanupError } = await bucket.remove([storagePath]);
-      if (cleanupError)
-        throw new Error(`Attachment metadata was not saved and orphan cleanup failed for ${storagePath}: ${cleanupError.message}`);
-      throw error;
+      throw new Error(`Upload outcome uncertain for attachment ${attachmentId}; retained object ${storagePath}. Inspect get_meeting before retrying or reconciling the upload`);
     }
   }, { write: true, destructive: false });
   register("get_meeting_attachment_url", "Get a 60-second download URL for an attachment of a permitted meeting. Requires both meeting_id and attachment_id; visibility is checked before signing. Never persist the expiring URL as a source link.", { meeting_id: uuid, attachment_id: uuid }, async ({ meeting_id, attachment_id }) => {

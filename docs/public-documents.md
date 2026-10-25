@@ -25,6 +25,10 @@ does **not** publish it, and nothing backfills existing attachments automaticall
 The API accepts browser origins only from `ALLOWED_ORIGINS` and returns the
 matching configured value in CORS responses. Attachment paths must contain the
 selected meeting UUID and a valid attachment UUID before Storage is contacted.
+Admin mutation RPCs explicitly revoke anonymous execution in the follow-up
+`20261122000000_public_document_admin_execute.sql` migration. Interrupted MCP
+attachment inserts retain their objects even when an immediate recovery read
+is empty; inspect the returned attachment ID before retrying or reconciling.
 
 ## Publication and recovery
 
@@ -96,8 +100,9 @@ to `false`; `PUBLIC_KB_API_URL` is unset in frontend builds.
    `PUBLICATION_ENABLED=true` only when publication is authorized; enable search
    after a known test document indexes. Neither flag initiates a bulk upload.
 5. Set `PUBLIC_KB_API_URL=https://kb-api.civpulse.org` in frontend build variables
-   and rebuild the website. Set server-only `KB_API_URL` in the Supabase MCP
-   function and deploy the generated function bundle. Refresh the MCP catalog.
+   and rebuild the website. The deployed Supabase MCP wrapper defaults to this
+   API URL; server-only `KB_API_URL` can override it. Deploy the generated function
+   bundle and refresh the MCP catalog.
 6. Limit the initial real-document pilot to the February 19, 2026 Bibb school
    board meeting and March 18, 2026 Macon-Bibb commission meeting. The user
    authorized those two meetings after the original synthetic-only restriction.

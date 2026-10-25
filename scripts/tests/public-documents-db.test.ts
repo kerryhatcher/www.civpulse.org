@@ -8,6 +8,8 @@ test.skipIf(!process.env.DOCUMENTS_TEST_DATABASE_URL)('public archive permission
   try {await sql.begin(async tx=>{
     const [table]=await tx`select to_regclass('public.public_documents') as relation`;
     if(!table.relation)await tx.unsafe(await Bun.file('supabase/migrations/20261121000000_public_document_archive.sql').text());
+    await tx.unsafe(await Bun.file('supabase/migrations/20261122000000_public_document_admin_execute.sql').text());
+    expect((await tx`select has_function_privilege('anon','public.withdraw_public_document(uuid)','execute') as allowed`)[0].allowed).toBe(false);
     const admin=crypto.randomUUID();const suffix=crypto.randomUUID();
     await tx`insert into auth.users(id,email) values(${admin},${`documents-${suffix}@example.test`})`;
     await tx`insert into public.admins(user_id) values(${admin})`;

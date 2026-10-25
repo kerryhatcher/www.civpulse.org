@@ -57,10 +57,11 @@ describe('upload failure recovery', () => {
     });
     return { result, removed };
   }
-  test('cleans up an object after a confirmed missing metadata insert', async () => {
+  test('preserves an object after an interrupted insert and an immediate empty read', async () => {
     const { result, removed } = await upload('missing');
     expect(result.isError).toBe(true);
-    expect(removed).toBe(true);
+    expect(removed).toBe(false);
+    expect(result.content[0].text).toContain('outcome uncertain');
   });
   test('recovers a committed insert without deleting the attachment', async () => {
     const { result, removed } = await upload('committed');
