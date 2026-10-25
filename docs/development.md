@@ -128,6 +128,12 @@ The Short links GitHub workflow runs the redirect tests and Worker type checks o
 pull requests and pushes to main. Database concurrency and permission checks run
 against the local test database before release.
 
+The October 25 short-link release also pins patched transitive dependencies:
+`body-parser` 2.4.0 and Undici 7.30.1 for consumers on major version 7. Undici 8
+consumers keep their existing major version. These root `overrides` resolve the
+Trivy release blockers without suppressing advisories. The version-scoped rule
+uses Bun lockfile version 3; Bun 1.4.3 is verified for installation and CI.
+
 ## Secret scanning
 
 TruffleHog guards the repo against committed credentials.
