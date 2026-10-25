@@ -8,9 +8,9 @@ const key=`documents/${id}/${'a'.repeat(64)}.txt`;
 const record={id,title:'Test agenda',file_name:'test.txt',object_key:key,mime_type:'text/plain',size_bytes:4,
   source_url:'https://example.test/agenda',document_kind:'agenda',text_origin:'official',status:'published',published_at:null,meetings:[]};
 const published: string[]=[]; const deleted: string[]=[]; const calls:string[]=[];
-let admin=true;let ready=true;let stale=false;let allowed=true;let lostFinish=false;let finalizing=false;
+let admin=true;let ready=true;let stale=false;let allowed=true;let lostFinish=false;let finalizing=false;let storageRedirect=false;
 let fetchMock:ReturnType<typeof spyOn>|undefined;
-afterEach(()=>{fetchMock?.mockRestore();published.length=0;deleted.length=0;calls.length=0;admin=true;ready=true;stale=false;allowed=true;lostFinish=false;finalizing=false;});
+afterEach(()=>{fetchMock?.mockRestore();published.length=0;deleted.length=0;calls.length=0;admin=true;ready=true;stale=false;allowed=true;lostFinish=false;finalizing=false;storageRedirect=false;});
 function env(overrides:Partial<RuntimeEnv>={}):RuntimeEnv {
   return {
     SUPABASE_URL:'https://db.example.test',SUPABASE_ANON_KEY:'public-test-key',
@@ -32,7 +32,7 @@ function mock(){fetchMock=spyOn(globalThis,'fetch').mockImplementation(async(inp
   if(url.endsWith('/is_admin'))return Response.json(admin);
   if(url.endsWith('/get_meeting'))return Response.json({status:'ok',event:{visibility:ready?'public':'private'},calendar:{visibility:'public'},
     attachments:[{id:attachment,file_name:'test.txt',storage_path:`${meeting}/${attachment}.txt`,mime_type:'text/plain',size_bytes:4}]});
-  if(url.includes('/storage/'))return new Response('test');
+  if(url.includes('/storage/')){expect(init?.redirect).toBe('manual');return storageRedirect?new Response(null,{status:302,headers:{Location:'https://untrusted.example/file'}}):new Response('test');}
   if(url.endsWith('/prepare_public_document'))return Response.json({...record,status:'pending',claim:attachment});
   if(url.endsWith('/finish_public_document')){finalizing=true;if(lostFinish)throw new Error('Connection interrupted');return Response.json(record);}
   if(url.endsWith('/get_public_document')){
@@ -74,6 +74,11 @@ test('publishes verified source bytes, then commits the catalog',async()=>{
   mock();const response=await handle(publication(),env());
   expect(response.status).toBe(201);expect(await response.json()).toMatchObject({id,url:`https://kb.civpulse.org/${key}`});
   expect(published).toEqual([key]);expect(finalizing).toBe(true);
+});
+test('source redirects are rejected without forwarding the caller credential',async()=>{
+  mock();storageRedirect=true;
+  expect((await handle(publication(),env())).status).toBe(502);
+  expect(published).toHaveLength(0);expect(calls.some(c=>c.startsWith('https://untrusted.example'))).toBe(false);
 });
 test('an interrupted finalization never deletes a possibly committed object',async()=>{
   mock();lostFinish=true;expect((await handle(publication(),env())).status).toBe(503);

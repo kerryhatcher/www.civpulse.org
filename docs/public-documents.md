@@ -25,6 +25,8 @@ does **not** publish it, and nothing backfills existing attachments automaticall
 The API accepts browser origins only from `ALLOWED_ORIGINS` and returns the
 matching configured value in CORS responses. Attachment paths must contain the
 selected meeting UUID and a valid attachment UUID before Storage is contacted.
+Storage fetches use Workers-supported `redirect: 'manual'` and reject non-2xx
+responses, so credentials cannot follow a redirect to another host.
 Admin mutation RPCs explicitly revoke anonymous execution in the follow-up
 `20261122000000_public_document_admin_execute.sql` migration. Interrupted MCP
 attachment inserts retain their objects even when an immediate recovery read

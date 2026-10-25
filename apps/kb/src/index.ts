@@ -93,7 +93,7 @@ async function publish(request: Request, env: RuntimeEnv, authorization: string)
     throw new HttpError('Unsupported attachment MIME type.',400);
   }
   const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/authenticated/meeting-attachments/${attachment.storage_path}`, {
-    headers: {Authorization:authorization,apikey:env.SUPABASE_ANON_KEY}, signal:AbortSignal.timeout(30000), redirect:'error',
+    headers: {Authorization:authorization,apikey:env.SUPABASE_ANON_KEY}, signal:AbortSignal.timeout(30000), redirect:'manual',
   });
   if (!response.ok) throw new HttpError('The source attachment could not be downloaded.',502);
   const bytes = await boundedBytes(response,MAX_BYTES);
