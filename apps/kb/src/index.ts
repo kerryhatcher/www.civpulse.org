@@ -44,7 +44,7 @@ async function rpc<T>(env: RuntimeEnv, name: string, args: Record<string,unknown
 function publicRecord(record: DocumentRecord, env: RuntimeEnv) {
   const {claim: _claim,...metadata} = record;
   const extension=record.object_key.split('.').pop()??'';
-  const supported=['pdf','txt','csv','docx','xls','xlsx','odt','ods'].includes(extension);
+  const supported=['pdf','txt','csv','docx','xls','xlsx','pptx','odt','ods'].includes(extension);
   const limit=['pdf','txt'].includes(extension)?10*1024*1024:4*1024*1024;
   const eligible=supported && record.size_bytes<=limit;
   return { ...metadata, url: `${env.PUBLIC_DOCUMENT_ORIGIN}/${record.object_key}`,
@@ -93,7 +93,7 @@ async function publish(request: Request, env: RuntimeEnv, authorization: string)
     throw new HttpError('Unsupported attachment MIME type.',400);
   }
   const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/authenticated/meeting-attachments/${attachment.storage_path}`, {
-    headers: {Authorization:authorization,apikey:env.SUPABASE_ANON_KEY}, signal:AbortSignal.timeout(30000), redirect:'error',
+    headers: {Authorization:authorization,apikey:env.SUPABASE_ANON_KEY}, signal:AbortSignal.timeout(30000), redirect:'manual',
   });
   if (!response.ok) throw new HttpError('The source attachment could not be downloaded.',502);
   const bytes = await boundedBytes(response,MAX_BYTES);
