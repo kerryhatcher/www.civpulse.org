@@ -72,8 +72,10 @@ The archive preserves the same PDF, TXT, CSV, Office and OpenDocument originals
 accepted by the meeting uploader. Downloadable does not mean indexed. The API
 marks unsupported/oversized originals as requiring a searchable derivative.
 Current AI Search limits are 10 MiB for TXT and PDFs with OCR enabled, and 4 MiB
-for supported rich formats. PPT/PPTX, legacy DOC and ODP need a supported PDF or
-TXT derivative with the current documented format list. No conversion service is
+for supported rich formats. The live pilot successfully indexed the 3.8 MiB
+PPTX presentation (six chunks), so PPTX is eligible within the 4 MiB conversion
+limit even though Cloudflare's published format table omits it. Keep its TXT
+fallback. Legacy PPT, DOC and ODP need a supported PDF or TXT derivative. No conversion service is
 included in this first version. Publish derivatives explicitly and identify OCR
 or automated transcription accurately. Local research critiques are not official
 minutes. Indexing eligibility is advisory; actual ingestion success must be
@@ -81,9 +83,10 @@ checked in Cloudflare's indexed items/logs.
 
 ## Activation
 
-This change ships **disabled**: no live resources, documents or existing attachment
-copies are created by a build. `PUBLICATION_ENABLED` and `SEARCH_ENABLED` default
-to `false`; `PUBLIC_KB_API_URL` is unset in frontend builds.
+Publication and content search are enabled in production for the approved
+two-meeting pilot. A build never copies attachments automatically.
+`PUBLICATION_MEETING_IDS` remains limited to the two approved event IDs. Local
+frontend builds without `PUBLIC_KB_API_URL` still show the preparation state.
 
 1. Apply the append-only `20261121000000_public_document_archive.sql` migration.
    The filename follows the existing future-dated meeting/audit migrations; it
@@ -93,7 +96,9 @@ to `false`; `PUBLIC_KB_API_URL` is unset in frontend builds.
    connect the R2 custom domain `kb.civpulse.org`. Keep the development `r2.dev`
    endpoint disabled. No private or unlisted material belongs in this bucket.
 3. Create an R2-backed AI Search instance with the configured name. Use the
-   dashboard to provision its service token scoped to the bucket. Enable hybrid
+   AI Search Index Engine service credential after explicit approval for its
+   account-level scope. Configure the instance to use only this dedicated
+   public bucket. Enable hybrid
    keyword/vector indexing and OCR, include `documents/**`, and configure custom
    metadata `document_id`, `document_kind`, `text_origin`. Leave the instance's
    public endpoint disabled. Set a deliberate sync interval and monitor indexing
@@ -160,16 +165,19 @@ the SPLOST ordinance, Red Cross agreement and extracted packet/roadway text.
 The original county packet (319,246,551 bytes) and roadway exhibit (71,881,354
 bytes) exceed the 25 MiB upload limit and must not be sent through MCP as base64.
 Their local TXT derivatives retain the original source URL and are labeled
-unofficial extracted text. The PPTX remains downloadable but requires its TXT
-derivative for indexing. The committee/full-board school recording is shared;
+unofficial extracted text. The live PPTX indexed successfully; its TXT derivative
+is also available. The committee/full-board school recording is shared;
 the selected full-board event retains its existing video URL.
 
 **Production verification, October 25:** PR #12 deployed the catalog migration,
 admin mutation permission follow-up, MCP function and static site. PR #13 added
 the two-meeting publication allowlist. The archive API and dedicated public R2
 bucket/custom domain are deployed. The site build uses `PUBLIC_KB_API_URL`.
-Publication is enabled only for the two pilot IDs; content search is disabled
-and its AI Search binding is intentionally omitted until an instance exists.
+Publication is enabled only for the two pilot IDs. The user explicitly approved
+the exact nine public copies and the account-scoped indexing credential. The
+R2-backed AI Search instance and Worker binding are deployed, with hybrid
+keyword/vector indexing and OCR enabled. The independent AI Search public
+endpoint remains disabled; public queries go through the catalog-checking API.
 
 Nine attachments are stored on the production meeting records. Signed downloads
 of every attachment matched the local SHA-256 and size. See
@@ -179,15 +187,20 @@ uploaded through the admin UI; the other six uploads passed through MCP. The
 county Red Cross PDF transfer timed out without creating an attachment record;
 its all-page TXT derivative is the ninth production attachment instead.
 
-The live API returns 200 for status/catalog, 401 for anonymous publication, 403
-for untrusted origins and 503 for disabled content search. The public catalog is
-empty: automatic approval review required explicit permission for the exact nine
-public copies, so no R2 document was published. Review also rejected creation of
-Cloudflare's account-scoped AI Search Index Engine service credential; a token
-scoped only to this bucket's R2 object reads was rejected by Cloudflare's token
-registration API. These two approvals remain pending. Actual R2 document
-downloads, ingestion, indexed passages and live withdrawal remain unverified.
-Do not interpret local search adapter results as successful indexing.
+All nine files are published. Every public R2 download matched its source SHA-256
+and size, with the expected MIME, attachment disposition and `no-store` headers.
+The live API returns 200 for status/catalog/search, 401 for anonymous publication
+and 403 for untrusted origins. Real indexed queries for `budget`, `Red Cross` and
+`Stone Creek` returned document passages and the correct meeting citations.
+Anonymous and signed-in browser checks use the real index. Automated tests cover
+withdrawal and stale-result suppression; the nine approved public copies are
+retained, so no live destructive withdrawal was performed on them.
+
+The original approvals were blocked by automatic review until the user explicitly
+approved both steps. The failed bucket-only reader credential was revoked after
+Cloudflare rejected its registration. No credential values were recorded. A
+manual sync can return `7020 sync_in_cooldown`; wait for the cooldown before
+requesting another sync rather than treating queued/running items as failures.
 
 The database test installs this new migration inside a rollback transaction when
 needed, and rolls back all tables and fixtures. It covers anonymous, regular-user

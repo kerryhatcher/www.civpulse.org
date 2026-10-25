@@ -4,8 +4,8 @@
   "api": "https://kb-api.civpulse.org",
   "public_destination": "https://kb.civpulse.org",
   "bucket": "civpulse-public-documents",
-  "publication_status": "awaiting_explicit_approval",
-  "content_search_status": "awaiting_indexing_service_credential_approval",
+  "publication_status": "published",
+  "content_search_status": "enabled_and_live_verified",
   "files": [
     {
       "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
@@ -17,7 +17,11 @@
       "download_verified": true,
       "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
       "document_kind": "presentation",
-      "text_origin": "other"
+      "text_origin": "other",
+      "document_id": "e30248f3-a0c2-48a3-ae8d-d3aaaa767ce4",
+      "public_url": "https://kb.civpulse.org/documents/e30248f3-a0c2-48a3-ae8d-d3aaaa767ce4/5db6843d07d56a70aeeae95db9e9439632710568a1c787b6ff7dce486cc0b4e1.txt",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
@@ -29,7 +33,11 @@
       "download_verified": true,
       "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
       "document_kind": "other",
-      "text_origin": "official"
+      "text_origin": "official",
+      "document_id": "6f4cedb1-7c6a-4fee-bb9b-7eb3c7220010",
+      "public_url": "https://kb.civpulse.org/documents/6f4cedb1-7c6a-4fee-bb9b-7eb3c7220010/d5e28c96d85a46fec6a64050fdf78d78309f3356ee05d7a657b6e44240e20d6b.pdf",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
@@ -41,7 +49,11 @@
       "download_verified": true,
       "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
       "document_kind": "agenda",
-      "text_origin": "official"
+      "text_origin": "official",
+      "document_id": "5f142998-b99f-444e-ab64-b3fbbec9093a",
+      "public_url": "https://kb.civpulse.org/documents/5f142998-b99f-444e-ab64-b3fbbec9093a/8440ec1d880aed7a8f78d204d2c7f1f0508fa08fd89db988123e2a27f7535b29.pdf",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
@@ -53,7 +65,11 @@
       "download_verified": true,
       "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
       "document_kind": "presentation",
-      "text_origin": "official"
+      "text_origin": "official",
+      "document_id": "08746fbe-36b0-44b5-b94a-2c0187da0783",
+      "public_url": "https://kb.civpulse.org/documents/08746fbe-36b0-44b5-b94a-2c0187da0783/0a04b5d4d08ad411f3e2c23d95c3d42c2e72706135cdf9a39bb51b91869f0839.pptx",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
@@ -65,7 +81,11 @@
       "download_verified": true,
       "source_url": "https://www.youtube.com/watch?v=wjYeLMR-3tE",
       "document_kind": "transcript",
-      "text_origin": "automated_transcript"
+      "text_origin": "automated_transcript",
+      "document_id": "f1dfe4e6-1552-4287-890f-4df8b130f763",
+      "public_url": "https://kb.civpulse.org/documents/f1dfe4e6-1552-4287-890f-4df8b130f763/52a03ce04ddc77484b5a45465269ea8eae9d23e26388a1ec3ecb7cdc8f47c3db.txt",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
@@ -77,7 +97,11 @@
       "download_verified": true,
       "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
       "document_kind": "packet",
-      "text_origin": "other"
+      "text_origin": "other",
+      "document_id": "64abf33a-3baa-4ab6-882f-2fef4db19bc8",
+      "public_url": "https://kb.civpulse.org/documents/64abf33a-3baa-4ab6-882f-2fef4db19bc8/2c5bafaadf238395e5c4c4bd770f306b74ba6b735fe1bc30f10b783a78f0e574.txt",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
@@ -89,7 +113,11 @@
       "download_verified": true,
       "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
       "document_kind": "other",
-      "text_origin": "official"
+      "text_origin": "official",
+      "document_id": "ee0d57e1-114e-45ca-81d0-a9a3724aaa1b",
+      "public_url": "https://kb.civpulse.org/documents/ee0d57e1-114e-45ca-81d0-a9a3724aaa1b/bc0aa00ea8857fab01a6a51509b818caab38f41f115b84d6a9489c859df784e9.pdf",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
@@ -101,7 +129,11 @@
       "download_verified": true,
       "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
       "document_kind": "other",
-      "text_origin": "other"
+      "text_origin": "other",
+      "document_id": "34c034de-694c-4346-a9b4-6fba981436bb",
+      "public_url": "https://kb.civpulse.org/documents/34c034de-694c-4346-a9b4-6fba981436bb/7785f7d7b3a7dee28bcfcd5c4ca3ba6d9792351fbe71f6c27246b0950c515416.txt",
+      "public_download_verified": true,
+      "index_eligible": true
     },
     {
       "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
@@ -115,7 +147,17 @@
       "document_kind": "other",
       "text_origin": "other",
       "derived_from": "2026-03-18-red-cross-agreement.pdf",
-      "derivative_note": "All-page text extraction used after the original PDF MCP transfer timed out. The original remains in the local inventory and at the official source."
+      "derivative_note": "All-page text extraction used after the original PDF MCP transfer timed out. The original remains in the local inventory and at the official source.",
+      "document_id": "0137e1b8-211a-4ce6-bd39-d62d67ccbc07",
+      "public_url": "https://kb.civpulse.org/documents/0137e1b8-211a-4ce6-bd39-d62d67ccbc07/33ce4edd929a6325ac0639151772625494d36878212ed98840d94566dc198985.txt",
+      "public_download_verified": true,
+      "index_eligible": true
     }
+  ],
+  "public_verified_at": "2026-10-25T23:07:04.575Z",
+  "verified_queries": [
+    "budget",
+    "Red Cross",
+    "Stone Creek"
   ]
 }

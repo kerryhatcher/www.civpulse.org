@@ -47,7 +47,7 @@ function publication(patch:Record<string,unknown>={}){return new Request('https:
   body:JSON.stringify({meeting_id:meeting,attachment_id:attachment,title:'Test agenda',source_url:'https://example.test/agenda',
     document_kind:'agenda',text_origin:'official',confirm_public:true,...patch}),
 });}
-test('publication is disabled by default and never writes R2',async()=>{
+test('paused publication never writes R2',async()=>{
   mock();const response=await handle(publication(),env({PUBLICATION_ENABLED:'false'}));
   expect(response.status).toBe(503);expect(published).toHaveLength(0);
 });

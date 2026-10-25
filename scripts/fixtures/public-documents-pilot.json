@@ -119,7 +119,7 @@
       "text_origin": "official",
       "derived": false,
       "accepted": true,
-      "index_eligible": false
+      "index_eligible": true
     },
     {
       "path": "school/2026-02-19-agenda.pdf",

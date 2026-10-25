@@ -44,7 +44,7 @@ async function rpc<T>(env: RuntimeEnv, name: string, args: Record<string,unknown
 function publicRecord(record: DocumentRecord, env: RuntimeEnv) {
   const {claim: _claim,...metadata} = record;
   const extension=record.object_key.split('.').pop()??'';
-  const supported=['pdf','txt','csv','docx','xls','xlsx','odt','ods'].includes(extension);
+  const supported=['pdf','txt','csv','docx','xls','xlsx','pptx','odt','ods'].includes(extension);
   const limit=['pdf','txt'].includes(extension)?10*1024*1024:4*1024*1024;
   const eligible=supported && record.size_bytes<=limit;
   return { ...metadata, url: `${env.PUBLIC_DOCUMENT_ORIGIN}/${record.object_key}`,
