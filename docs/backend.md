@@ -330,6 +330,13 @@ but may leave its Storage objects for later cleanup.
 
 ### Calendar/event visibility
 
+The explicit public document archive adds a separate catalog, deduplicated files
+and many-to-many meeting links. All catalog tables have RLS and revoked direct
+Data API access; publication RPCs check `is_admin()`. Public projections omit
+pending/withdrawn documents and hidden meeting relationships. Catalog and link
+changes participate in civic audit history. Publication does not inherit future
+meeting visibility changes. See [public-documents.md](./public-documents.md).
+
 Calendars and events each have `public | unlisted | private`, the same rules as
 maps and layers. An event is only visible when **both** it and its owning
 calendar are visible, so a public event on a private calendar stays private.

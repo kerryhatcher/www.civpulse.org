@@ -39,6 +39,9 @@
     "media:check": "bun run --cwd apps/media check",
     "media:test": "bun run --cwd apps/media test",
     "media:deploy": "bun run --cwd apps/media deploy",
+    "kb:check": "bun run --cwd apps/kb check",
+    "kb:test": "bun run --cwd apps/kb test",
+    "kb:dev": "bun run --cwd apps/kb dev",
     "mcp:build": "bun run scripts/build-mcp.mjs"
   },
   "devDependencies": {

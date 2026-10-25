@@ -6,6 +6,18 @@ description: Find a meeting, explore a map, check an election, and understand wh
 
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
+## Search public meeting documents
+
+Visit the [public document archive](/documents/) to browse published document
+titles and filenames. When content search is enabled, choose **Document
+contents** to find matching passages in agendas, minutes, packets and transcripts.
+Open the document, its original source, or a related meeting from each result.
+Automated transcripts and OCR may contain errors. Unsupported or oversized
+originals remain downloadable and show when a searchable derivative is needed.
+The archive displays a preparation message until configured; ordinary meeting
+attachments remain on their meeting pages.
+
+
 ## Find a meeting and read its notes
 
 1. Open the [community calendar](/calendar/). Use the month arrows to find a date. Select a day to show its events, or switch to **Agenda** for a list of upcoming events.

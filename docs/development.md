@@ -52,6 +52,10 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+For the public document archive Worker, local tests and activation sequence, see
+[public-documents.md](./public-documents.md). Publication and content search ship
+disabled; builds do not upload or backfill any meeting files.
+
 1. `bun run check` — `astro check` must report 0 errors.
 2. `bun run build` — the static build must succeed and write `apps/web/dist`.
 3. Exercise the flow in the browser and watch the console for errors.

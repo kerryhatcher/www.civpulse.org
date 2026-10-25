@@ -4,6 +4,31 @@ title: Admin guide
 description: Add board meeting notes and maintain the records people use across Civic Pulse.
 ---
 
+## Publish a meeting document to the public archive
+
+Archive publication is separate from uploading a meeting attachment. When the
+archive is configured, open **Meetings**, select a public meeting on a public
+calendar, and expand **Publish to public archive** beneath an attachment. Supply
+a title, original HTTPS source URL, document type and text origin, then confirm
+unrestricted public distribution. **Publish document** creates an independently
+public copy. Ordinary uploads never publish automatically.
+
+Review **Public archive publications** for pending, published and withdrawn
+copies. If a response is interrupted, check this list before retrying; pending
+attempts can be retried after ten minutes. Identical bytes reuse one document.
+For a combined committee/full-board transcript, the MCP's
+`link_public_document_meeting` links the published document to the other meeting
+without uploading another copy.
+
+Changing meeting visibility does not withdraw an archive publication. Use
+**Withdraw public document** to remove it from every linked meeting's archive
+record and delete the public file. Retry file cleanup if needed. Copies already
+downloaded elsewhere cannot be recalled. Pending publications must be resolved
+first. The operator initially keeps publication paused; no existing files are
+copied automatically. Oversized or unsupported originals need a supported PDF or
+TXT derivative for content search.
+
+
 Admin tools require an account with admin access. [Sign in to the Meetings admin page](/signin/?next=/admin/meetings/), or use **Admin** in the site header after signing in.
 
 ## Add notes from a board meeting
@@ -22,6 +47,17 @@ If the meeting is missing from the list, open [Calendars](/admin/calendars/). Cr
 - **Attachments:** Upload supporting PDF, Word, spreadsheet, presentation, text, or CSV files. Each file can be up to 25 MB.
 
 Check names, dates, and vote outcomes against the source record before saving. You can return to a meeting later to revise its records.
+
+### Add meeting files with an AI assistant
+
+An administrator connected through [Civic Pulse MCP](/docs/ai/) can set
+`is_meeting: true` on an event, save meeting notes or a transcript, and upload
+the same supported document types with `upload_meeting_attachment`. The assistant
+must first inspect `get_meeting` to avoid duplicate files. Uploads accept base64
+file contents and a plain filename, up to 25 MB per file. Files inherit the
+meeting and calendar visibility. `get_meeting_attachment_url` supplies a download
+link valid for 60 seconds; share the meeting page for lasting access. If the new
+tools are missing after a server update, refresh the connection's tool list.
 
 ## Visibility and publication
 

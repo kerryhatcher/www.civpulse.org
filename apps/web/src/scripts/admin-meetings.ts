@@ -1,5 +1,6 @@
 import { historyLink } from '../lib/history';
 import { getSupabase } from '../lib/supabase';
+import { documentApi, publicDocumentUrl } from '../lib/documents';
 import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 
 type Person = { id: string; full_name: string };
@@ -35,13 +36,23 @@ export async function initMeetingAdmin(): Promise<void> {
   if (!admin) { if (denied) denied.hidden = false; return; }
   panel.hidden = false;
 
+  const archiveApi = documentApi();
+  let publicationEnabled = false;
+  if (archiveApi) {
+    try {
+      const response = await fetch(`${archiveApi}/status`, { signal: AbortSignal.timeout(10000) });
+      if (response.ok) publicationEnabled = (await response.json()).publication_enabled === true;
+    } catch { /* Existing meeting editing remains available if the archive is offline. */ }
+  }
+
   let record: MeetingRecord | null = null;
   let people: Person[] = [];
   const refresh = async (): Promise<void> => {
     const id = select.value;
-    editor.hidden = !id;
+    editor.hidden = !id || record?.event?.id !== id;
     if (!id) { record = null; return; }
     const { data, error } = await supabase.rpc('get_meeting', { p_id: id });
+    if (select.value !== id) return;
     if (error || !data || data.status !== 'ok') {
       message(error?.message ?? 'Meeting could not be loaded.', true); return;
     }
@@ -59,6 +70,32 @@ export async function initMeetingAdmin(): Promise<void> {
       view.after(link);
     }
     renderAttendance(); renderVotes(); renderAttachments();
+    if (archiveApi) {
+      const section=document.querySelector<HTMLElement>('[data-publication-catalog]');
+      const list=document.querySelector<HTMLElement>('[data-publication-list]');
+      if (section && list) {
+        section.hidden=false;list.textContent='Loading publications…';
+        const {data:publications,error}=await supabase.rpc('list_public_documents',{p_meeting_id:id,p_admin:true,p_limit:50});
+        if (select.value!==id) return;
+        list.replaceChildren();
+        if (error) list.textContent='Publication status is temporarily unavailable. Check the catalog before retrying a publication.';
+        else for (const publication of publications??[]) {
+          const row=document.createElement('div');row.className='org-row';
+          const text=document.createElement('span');text.textContent=`${publication.title} · ${publication.status}`;row.append(text);
+          if (publication.status!=='pending') row.append(action(publication.status==='withdrawn'?'Retry file cleanup':'Withdraw public document',()=>void(async()=>{
+            if (!confirm(`Withdraw “${publication.title}” from the public archive and all linked meetings? Copies already downloaded elsewhere cannot be recalled.`)) return;
+            try {
+              const {data:{session}}=await supabase.auth.getSession();if (!session) throw new Error('Sign in again before withdrawing.');
+              const response=await fetch(`${archiveApi}/documents/${publication.id}/withdraw`,{method:'POST',headers:{Authorization:`Bearer ${session.access_token}`},signal:AbortSignal.timeout(30000)});
+              const data=await response.json();if(!response.ok)throw new Error(data.error||'Withdrawal could not be confirmed. Retry cleanup if needed.');
+              message('Publication withdrawn and public file removed. Search index cleanup follows the next sync.');await refresh();
+            }catch(error){message(error instanceof Error?error.message:'Withdrawal could not be confirmed.',true);}
+          })()));
+          list.append(row);
+        }
+        if (!error && !publications?.length) list.textContent='No public archive publications for this meeting.';
+      }
+    }
   };
 
   const { data: events, error: eventError } = await supabase.from('events')
@@ -219,6 +256,50 @@ export async function initMeetingAdmin(): Promise<void> {
         if (error) message(error.message, true); else { message('Attachment deleted.'); await refresh(); }
       })());
       row.append(name, download, remove); list.append(row);
+      if (archiveApi) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary'); summary.textContent = 'Publish to public archive'; details.append(summary);
+        const form = document.createElement('form'); form.className = 'org-form';
+        const note = document.createElement('p');
+        note.textContent = publicationEnabled
+          ? 'Publishing makes a permanent public copy, independently of this meeting’s visibility. Use only documents approved for public distribution.'
+          : 'Public archive publication is paused. Existing attachment uploads remain available.';
+        form.append(note);
+        const field = (labelText: string, input: HTMLInputElement | HTMLSelectElement) => {
+          const label = document.createElement('label'); label.className='field';
+          const span = document.createElement('span'); span.textContent=labelText; label.append(span,input); form.append(label);
+        };
+        const title=document.createElement('input'); title.value=file.file_name; title.required=true; title.maxLength=300; field('Document title',title);
+        const source=document.createElement('input'); source.type='url'; source.required=true; field('Original HTTPS source URL',source);
+        const kind=document.createElement('select');
+        for (const value of ['agenda','minutes','packet','presentation','spreadsheet','transcript','other']) kind.append(new Option(value,value));
+        field('Document type',kind);
+        const textOrigin=document.createElement('select');
+        for (const [value,label] of [['official','Official document'],['automated_transcript','Automated transcript'],['ocr','OCR text'],['other','Other unofficial text']]) textOrigin.append(new Option(label,value));
+        field('Text origin',textOrigin);
+        const confirmation=document.createElement('input'); confirmation.type='checkbox'; confirmation.required=true;
+        field('I confirm this document is approved for unrestricted public distribution.',confirmation);
+        const publish=document.createElement('button'); publish.type='submit'; publish.textContent='Publish document'; publish.disabled=!publicationEnabled; form.append(publish);
+        form.addEventListener('submit',event=>void (async()=>{
+          event.preventDefault(); if (!confirmation.checked || !publicationEnabled) return;
+          const meetingId=select!.value; publish.disabled=true;
+          try {
+            const {data:{session}}=await supabase.auth.getSession();
+            if (!session) throw new Error('Sign in again before publishing.');
+            const response=await fetch(`${archiveApi}/publish`,{
+              method:'POST',headers:{Authorization:`Bearer ${session.access_token}`,'Content-Type':'application/json'},
+              body:JSON.stringify({meeting_id:meetingId,attachment_id:file.id,title:title.value,source_url:source.value,
+                document_kind:kind.value,text_origin:textOrigin.value,confirm_public:true}),signal:AbortSignal.timeout(60000),
+            });
+            const data=await response.json(); if (!response.ok) throw new Error(data.error || 'Publication failed. Check the catalog before retrying.');
+            message(data.indexing?.eligible === false ? `Document published. ${data.indexing.reason}`
+              : 'Document published. Content search becomes available after indexing.');
+            const url=publicDocumentUrl(data.url);
+            if (url) { const link=document.createElement('a'); link.href=url; link.textContent='View public document';link.target='_blank';link.rel='noopener noreferrer';form.replaceChildren(link); }
+          } catch(error) { message(error instanceof Error?error.message:'Publication could not be confirmed. Check the catalog before retrying.',true); publish.disabled=false; }
+        })());
+        details.append(form);list.append(details);
+      }
     }
   }
   attachmentForm.addEventListener('submit', event => void (async () => {
