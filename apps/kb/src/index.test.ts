@@ -94,4 +94,6 @@ test('withdrawal updates the catalog before removing its R2 object',async()=>{
 test('untrusted browser origins cannot make archive requests',async()=>{
   mock();const request=new Request('https://kb-api.civpulse.org/status',{headers:{Origin:'https://evil.example'}});
   expect((await handle(request,env())).status).toBe(403);expect(calls).toHaveLength(0);
+  const trusted=await handle(new Request('https://kb-api.civpulse.org/status',{headers:{Origin:'https://www.civpulse.org'}}),env());
+  expect(trusted.status).toBe(200);expect(trusted.headers.get('Access-Control-Allow-Origin')).toBe('https://www.civpulse.org');
 });

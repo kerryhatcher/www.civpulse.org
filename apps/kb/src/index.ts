@@ -84,7 +84,8 @@ async function publish(request: Request, env: RuntimeEnv, authorization: string)
   if (meeting.status !== 'ok' || meeting.event?.visibility !== 'public' || meeting.calendar?.visibility !== 'public' || !attachment) {
     throw new HttpError('Publish only attachments of public, listed meetings.',400);
   }
-  if (!new RegExp(`^${body.meeting_id}/[0-9a-f-]{36}\\.[a-z0-9]+$`).test(attachment.storage_path)) throw new HttpError('Invalid attachment storage path.',400);
+  const storagePath = /^([0-9a-f-]{36})\/([0-9a-f-]{36})\.[a-z0-9]+$/.exec(attachment.storage_path);
+  if (!storagePath || storagePath[1]!==body.meeting_id || !uuid.test(storagePath[2])) throw new HttpError('Invalid attachment storage path.',400);
   if (!/^(application\/(pdf|msword|vnd\.[a-z0-9.+-]+)|text\/(plain|csv))$/.test(attachment.mime_type)) {
     throw new HttpError('Unsupported attachment MIME type.',400);
   }
@@ -113,10 +114,10 @@ async function publish(request: Request, env: RuntimeEnv, authorization: string)
 
 export async function handle(request: Request, env: RuntimeEnv): Promise<Response> {
   const url = new URL(request.url); const origin = request.headers.get('Origin');
-  const allowed = origin && env.ALLOWED_ORIGINS.split(',').includes(origin);
+  const allowed = env.ALLOWED_ORIGINS.split(',').find(trusted=>trusted===origin);
   const headers = new Headers({'Cache-Control':'no-store','Vary':'Origin','X-Content-Type-Options':'nosniff'});
   if (allowed) {
-    headers.set('Access-Control-Allow-Origin',origin);
+    headers.set('Access-Control-Allow-Origin',allowed);
     headers.set('Access-Control-Allow-Methods','GET, POST, OPTIONS');
     headers.set('Access-Control-Allow-Headers','Authorization, Content-Type');
   }

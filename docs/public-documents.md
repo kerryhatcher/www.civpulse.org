@@ -22,6 +22,10 @@ does **not** publish it, and nothing backfills existing attachments automaticall
   and similarity caching are disabled per request. Queries are explicitly
   submitted and rate limited to 20/minute per client IP per Cloudflare location.
 
+The API accepts browser origins only from `ALLOWED_ORIGINS` and returns the
+matching configured value in CORS responses. Attachment paths must contain the
+selected meeting UUID and a valid attachment UUID before Storage is contacted.
+
 ## Publication and recovery
 
 An admin chooses an existing attachment from a **public meeting on a public
