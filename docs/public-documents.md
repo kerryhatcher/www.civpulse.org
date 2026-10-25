@@ -100,6 +100,8 @@ to `false`; `PUBLIC_KB_API_URL` is unset in frontend builds.
    Use `scripts/fixtures/public-documents-pilot.json` to identify the selected
    files; do not bulk-import other meetings. Verify download bytes, metadata,
    actual indexed passages and withdrawal before expanding publication.
+   Both production pilot events currently have `is_meeting=false`; set it to
+   `true` through the deployed MCP event editor before attaching any pilot file.
 
 Do not enable a cache-everything rule on the download domain. Avoid uploading
 active HTML or private metadata; filenames are bounded and path-free, and file
