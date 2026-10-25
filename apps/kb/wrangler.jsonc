@@ -16,6 +16,7 @@
     "PUBLIC_DOCUMENT_ORIGIN": "https://kb.civpulse.org",
     "ALLOWED_ORIGINS": "https://new.civpulse.org,https://www.civpulse.org",
     "PUBLICATION_ENABLED": "false",
+    "PUBLICATION_MEETING_IDS": "dfaeff73-a52a-473f-bc88-242aeabfb713,e4097542-b298-4f29-a0b7-8c82fe4d7397",
     "SEARCH_ENABLED": "false"
   },
   "observability": { "enabled": true, "head_sampling_rate": 1 }

@@ -90,6 +90,7 @@ test.skipIf(!root || !process.env.DOCUMENTS_TEST_DATABASE_URL)('two real meeting
     });
     const chunks:{id:string;type:string;score:number;text:string;item:{key:string}}[]=[];
     const env={SUPABASE_URL:'https://pilot.example.test',SUPABASE_ANON_KEY:'public-test-key',PUBLIC_DOCUMENT_ORIGIN:'https://kb.civpulse.org',ALLOWED_ORIGINS:'http://localhost:4323',PUBLICATION_ENABLED:'true',SEARCH_ENABLED:'true',
+      PUBLICATION_MEETING_IDS:[...meetings.values()].join(','),
       DOCUMENTS:{put:async(key:string,bytes:Uint8Array)=>{objects.set(key,bytes.slice());},delete:async(key:string)=>{objects.delete(key);}},
       SEARCH_LIMITER:{limit:async()=>({success:true})},SEARCH:{search:async()=>({chunks})}} as unknown as RuntimeEnv;
     const published:Record<string,any>[]=[];
