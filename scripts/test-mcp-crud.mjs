@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 
 /** Runs with real OAuth user tokens against the local Worker and Supabase. */
-export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
+export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiKey }) {
   const cleanup = [];
   const needle = `McpCrud${crypto.randomUUID().replaceAll('-', '')}`;
   const admin = async (name, input = {}) => value(adminToken, name, input);
@@ -66,6 +66,34 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     await admin('update_event', { id: event.id, visibility: 'public' });
     assert.equal((await reader('get_event', { id: event.id })).event.location, 'Partial event edit');
     assert.ok((await reader('search_events', { query: needle, include_past: true })).some(row => row.id === event.id));
+    // Exercise the real Storage/RLS boundary, not just the upload schema.
+    const uploadInput = { meeting_id: event.id, file_name: 'archived-transcript.txt', data_base64: Buffer.from('Archived test transcript.').toString('base64') };
+    assert.ok((await tool(adminToken, 'upload_meeting_attachment', uploadInput)).isError, 'Ordinary events cannot accept meeting files');
+    await denied('update_event', { id: event.id, is_meeting: true });
+    await admin('update_event', { id: event.id, is_meeting: true, meeting_notes: 'Archive provenance', meeting_transcript: 'Test transcript' });
+    assert.equal((await reader('get_meeting', { id: event.id })).event.meeting_transcript, 'Test transcript');
+    await denied('upload_meeting_attachment', uploadInput);
+    const attachment = await admin('upload_meeting_attachment', uploadInput);
+    const attachmentPath = (await admin('get_meeting', { id: event.id })).attachments.find(item => item.id === attachment.id).storage_path;
+    cleanup.push(async () => {
+      const deleted = await fetch(`${apiUrl}/storage/v1/object/meeting-attachments`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prefixes: [attachmentPath] }),
+      });
+      assert.ok(deleted.ok, 'Remove the local test Storage object');
+    });
+    const downloadInput = { meeting_id: event.id, attachment_id: attachment.id };
+    const signed = await reader('get_meeting_attachment_url', downloadInput);
+    assert.equal(signed.expires_in, 60);
+    assert.equal(await (await fetch(signed.url)).text(), 'Archived test transcript.');
+    assert.equal((await reader('get_meeting_attachment_url', { ...downloadInput, attachment_id: crypto.randomUUID() })).status, 'missing');
+    await admin('update_event', { id: event.id, visibility: 'private' });
+    assert.equal((await reader('get_meeting', { id: event.id })).status, 'private');
+    assert.equal((await reader('get_meeting_attachment_url', downloadInput)).status, 'missing');
+    await admin('update_event', { id: event.id, visibility: 'public', meeting_notes: null });
+    const preserved = (await reader('get_meeting', { id: event.id })).event;
+    assert.equal(preserved.meeting_notes, null);
+    assert.equal(preserved.meeting_transcript, 'Test transcript');
     const person = await create('create_person', { slug: `${needle.toLowerCase()}-person`, full_name: `${needle} person`, visibility: 'private' });
     const secondPerson = await create('create_person', { slug: `${needle.toLowerCase()}-other`, full_name: `${needle} other`, visibility: 'unlisted' });
     await admin('update_person', { id: person.id, description: 'Partial person edit' });

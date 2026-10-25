@@ -6,6 +6,7 @@ Supabase backend.
 ```
 apps/web/     Astro frontend, built to static files
 apps/mcp/     Runtime-neutral MCP source (OIDC via Supabase Auth)
+apps/kb/      Separate public document publication/search Worker (initially disabled)
 supabase/     Postgres migrations, MCP Edge Function + local Supabase config
 scripts/      dev orchestration and local seed helpers
 docs/         architecture, backend, and development notes
@@ -150,6 +151,11 @@ in the web app — reads follow visibility and writes require an admin. The func
 never uses the service-role key. See [mcp.md](./mcp.md).
 
 ## Profile media
+
+Public meeting documents use a separate R2 publication archive and runtime search
+Worker, described in [public-documents.md](./public-documents.md). The archive is
+disabled until explicitly configured. It does not change the static Astro
+hosting model or automatically copy private meeting attachments.
 
 `apps/media` is a separate Cloudflare Worker at `media.civpulse.org`, bound to
 R2 bucket `civpulse-media` in the Kerry Personal account. The Astro site remains

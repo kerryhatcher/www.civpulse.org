@@ -1,0 +1,164 @@
+{
+  "meetings": [
+    {
+      "key": "school",
+      "id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "Bibb County Board of Education — February 19, 2026",
+      "starts_at": "2026-02-19T23:00:00Z",
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "video_url": "https://www.youtube.com/watch?v=wjYeLMR-3tE"
+    },
+    {
+      "key": "county",
+      "id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "Macon-Bibb County Board of Commissioners — March 18, 2026",
+      "starts_at": "2026-03-18T22:00:00Z",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files"
+    }
+  ],
+  "files": [
+    {
+      "path": "county/2026-03-18-agenda-packet-extracted.txt",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 agenda packet extracted",
+      "size_bytes": 3104858,
+      "sha256": "2c5bafaadf238395e5c4c4bd770f306b74ba6b735fe1bc30f10b783a78f0e574",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "packet",
+      "text_origin": "other",
+      "derived": true,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "county/2026-03-18-agenda-packet.pdf",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 agenda packet",
+      "size_bytes": 319246551,
+      "sha256": "364104e995d82ae71e519952f51c8f5cc261290c67410c86d4da537f902b7ff1",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "packet",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": false,
+      "index_eligible": false
+    },
+    {
+      "path": "county/2026-03-18-red-cross-agreement.pdf",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 red cross agreement",
+      "size_bytes": 6389623,
+      "sha256": "cc83ace9f9818f124b8dfea426a97ff3eaca1f18a9e091451581bf225641b23a",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "county/2026-03-18-roadway-stone-creek-extracted.txt",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 roadway stone creek extracted",
+      "size_bytes": 1272034,
+      "sha256": "7785f7d7b3a7dee28bcfcd5c4ca3ba6d9792351fbe71f6c27246b0950c515416",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "other",
+      "derived": true,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "county/2026-03-18-roadway-stone-creek.pdf",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 roadway stone creek",
+      "size_bytes": 71881354,
+      "sha256": "84755a46cabee613aebcca978f58ae50096a6e00def868616d767cdd589564c4",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": false,
+      "index_eligible": false
+    },
+    {
+      "path": "county/2026-03-18-splost-appropriations.pdf",
+      "meeting_id": "e4097542-b298-4f29-a0b7-8c82fe4d7397",
+      "title": "2026 03 18 splost appropriations",
+      "size_bytes": 216098,
+      "sha256": "bc0aa00ea8857fab01a6a51509b818caab38f41f115b84d6a9489c859df784e9",
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2401/files",
+      "document_kind": "other",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "school/2026-02-19-academic-update-extracted.txt",
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "2026 02 19 academic update extracted",
+      "size_bytes": 16370,
+      "sha256": "5db6843d07d56a70aeeae95db9e9439632710568a1c787b6ff7dce486cc0b4e1",
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "presentation",
+      "text_origin": "other",
+      "derived": true,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "school/2026-02-19-academic-update.pptx",
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "2026 02 19 academic update",
+      "size_bytes": 4004660,
+      "sha256": "0a04b5d4d08ad411f3e2c23d95c3d42c2e72706135cdf9a39bb51b91869f0839",
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "presentation",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": false
+    },
+    {
+      "path": "school/2026-02-19-agenda.pdf",
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "2026 02 19 agenda",
+      "size_bytes": 1172522,
+      "sha256": "8440ec1d880aed7a8f78d204d2c7f1f0508fa08fd89db988123e2a27f7535b29",
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "agenda",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "school/2026-02-19-investment-report.pdf",
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "2026 02 19 investment report",
+      "size_bytes": 222219,
+      "sha256": "d5e28c96d85a46fec6a64050fdf78d78309f3356ee05d7a657b6e44240e20d6b",
+      "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/SB_MeetingListing.aspx?S=4013",
+      "document_kind": "other",
+      "text_origin": "official",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": true
+    },
+    {
+      "path": "school/2026-02-19-transcript.txt",
+      "meeting_id": "dfaeff73-a52a-473f-bc88-242aeabfb713",
+      "title": "2026 02 19 transcript",
+      "size_bytes": 109446,
+      "sha256": "52a03ce04ddc77484b5a45465269ea8eae9d23e26388a1ec3ecb7cdc8f47c3db",
+      "source_url": "https://www.youtube.com/watch?v=wjYeLMR-3tE",
+      "document_kind": "transcript",
+      "text_origin": "automated_transcript",
+      "derived": false,
+      "accepted": true,
+      "index_eligible": true
+    }
+  ]
+}

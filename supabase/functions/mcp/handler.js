@@ -334,11 +334,147 @@ function registerExtendedTools(server, supabase, user) {
   }, { write: true, idempotent: true });
 }
 
+// apps/mcp/src/meeting-tools.ts
+import { z as z3 } from "zod";
+var BUCKET = "meeting-attachments";
+var MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
+var FILE_TYPES = {
+  pdf: "application/pdf",
+  txt: "text/plain",
+  csv: "text/csv",
+  doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  xls: "application/vnd.ms-excel",
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ppt: "application/vnd.ms-powerpoint",
+  pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  odt: "application/vnd.oasis.opendocument.text",
+  ods: "application/vnd.oasis.opendocument.spreadsheet",
+  odp: "application/vnd.oasis.opendocument.presentation"
+};
+function decodeMeetingDocument(fileName, base64) {
+  if (!fileName || fileName.length > 255 || /[\x00-\x1f\x7f/\\]/.test(fileName) || fileName.trim() !== fileName) {
+    throw new Error("Use a file name of 1–255 characters without paths or control characters");
+  }
+  const extension = fileName.split(".").pop()?.toLowerCase() ?? "";
+  const contentType = FILE_TYPES[extension];
+  if (!contentType)
+    throw new Error("Unsupported document type. Use PDF, Office, OpenDocument, TXT or CSV");
+  if (!base64 || base64.length > 4 * Math.ceil(MAX_DOCUMENT_BYTES / 3) || base64.length % 4 !== 0 || /[^A-Za-z0-9+/=]/.test(base64) || !/^[A-Za-z0-9+/]*={0,2}$/.test(base64)) {
+    throw new Error("Provide valid base64 without a data-URL prefix (maximum document size: 25 MB)");
+  }
+  const binary = atob(base64);
+  if (!binary.length || binary.length > MAX_DOCUMENT_BYTES)
+    throw new Error("Document size must be 1 byte–25 MB");
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0;index < binary.length; index++)
+    bytes[index] = binary.charCodeAt(index);
+  return { bytes, extension, contentType };
+}
+function registerMeetingTools(server, supabase) {
+  const { register, readRpc } = createToolkit(server, supabase);
+  const uuid = z3.string().uuid();
+  readRpc("get_meeting", "Get a meeting’s notes, transcript, attendance, votes and attachment metadata through its event/calendar visibility gate. Use this before uploading to avoid duplicates.", { id: uuid }, "get_meeting", ({ id }) => ({ p_id: id }));
+  register("upload_meeting_attachment", "Upload a document to an existing meeting (admin only, maximum 25 MB). Set is_meeting=true with create_event/update_event first. Supply file_name and base64 bytes without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV are supported. The file inherits meeting visibility; no public bucket is used. Uploads create new attachments: after an uncertain result, inspect get_meeting before retrying.", { meeting_id: uuid, file_name: z3.string().min(1).max(255), data_base64: z3.string().min(4).max(4 * Math.ceil(MAX_DOCUMENT_BYTES / 3)) }, async ({ meeting_id, file_name, data_base64 }) => {
+    const document = decodeMeetingDocument(file_name, data_base64);
+    const { data: meeting, error: meetingError } = await supabase.rpc("get_meeting", { p_id: meeting_id });
+    if (meetingError)
+      throw new Error(meetingError.message);
+    if (meeting?.status !== "ok")
+      throw new Error("Meeting not found or unavailable; mark the event is_meeting=true first");
+    const attachmentId = crypto.randomUUID();
+    const columns = "id,meeting_id,file_name,mime_type,size_bytes,created_at";
+    const storagePath = `${meeting_id}/${attachmentId}.${document.extension}`;
+    const bucket = supabase.storage.from(BUCKET);
+    const { error: uploadError } = await bucket.upload(storagePath, document.bytes, { contentType: document.contentType, upsert: false });
+    if (uploadError)
+      throw new Error(uploadError.message);
+    try {
+      const { data, error } = await supabase.from("meeting_attachments").insert({
+        id: attachmentId,
+        meeting_id,
+        file_name,
+        storage_path: storagePath,
+        mime_type: document.contentType,
+        size_bytes: document.bytes.length
+      }).select(columns).single();
+      if (error)
+        throw new Error(error.message);
+      return data;
+    } catch (error) {
+      const recovered = await supabase.from("meeting_attachments").select(columns).eq("id", attachmentId).maybeSingle();
+      if (recovered.error)
+        throw new Error(`Upload outcome uncertain for attachment ${attachmentId}; inspect get_meeting before retrying`);
+      if (recovered.data)
+        return recovered.data;
+      const { error: cleanupError } = await bucket.remove([storagePath]);
+      if (cleanupError)
+        throw new Error(`Attachment metadata was not saved and orphan cleanup failed for ${storagePath}: ${cleanupError.message}`);
+      throw error;
+    }
+  }, { write: true, destructive: false });
+  register("get_meeting_attachment_url", "Get a 60-second download URL for an attachment of a permitted meeting. Requires both meeting_id and attachment_id; visibility is checked before signing. Never persist the expiring URL as a source link.", { meeting_id: uuid, attachment_id: uuid }, async ({ meeting_id, attachment_id }) => {
+    const { data: meeting, error } = await supabase.rpc("get_meeting", { p_id: meeting_id });
+    if (error)
+      throw new Error(error.message);
+    const attachment = meeting?.status === "ok" ? meeting.attachments?.find((item) => item.id === attachment_id) : null;
+    if (!attachment)
+      return { status: "missing" };
+    const { data, error: signError } = await supabase.storage.from(BUCKET).createSignedUrl(attachment.storage_path, 60, { download: attachment.file_name });
+    if (signError)
+      throw new Error(signError.message);
+    return { status: "ok", attachment_id, file_name: attachment.file_name, url: data.signedUrl, expires_in: 60 };
+  });
+}
+
+// apps/mcp/src/document-tools.ts
+import { z as z4 } from "zod";
+function registerDocumentTools(server, supabase, context) {
+  const { register, readRpc } = createToolkit(server, supabase);
+  const uuid = z4.string().uuid();
+  async function api(path, body) {
+    if (!context.apiUrl)
+      throw new Error("The public document archive is not configured yet");
+    const base = new URL(context.apiUrl);
+    if (base.protocol !== "https:" && !(base.protocol === "http:" && ["localhost", "127.0.0.1"].includes(base.hostname)))
+      throw new Error("Invalid document API configuration");
+    if (body && !context.accessToken)
+      throw new Error("Authenticated publication context is required");
+    const response = await fetch(new URL(path, base.origin), { method: body ? "POST" : "GET", headers: body ? {
+      Authorization: `Bearer ${context.accessToken}`,
+      "Content-Type": "application/json"
+    } : undefined, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(60000), redirect: "error" });
+    const data = await response.json();
+    if (!response.ok)
+      throw new Error(data.error || "Document archive unavailable");
+    return data;
+  }
+  readRpc("get_public_document", "Get a published public document and its public meeting links. Admins can also inspect pending/withdrawn publication metadata.", { id: uuid }, "get_public_document", ({ id }) => ({ p_id: id }));
+  readRpc("list_public_documents", "Browse or search published document titles and file names. This does not search file contents. include_unpublished requires admin access.", { query: z4.string().max(500).optional(), meeting_id: uuid.optional(), include_unpublished: z4.boolean().optional(), limit: z4.number().int().min(1).max(50).optional(), offset: z4.number().int().min(0).max(1e4).optional() }, "list_public_documents", ({ query, meeting_id, include_unpublished, limit, offset }) => ({ p_query: query ?? "", p_meeting_id: meeting_id ?? null, p_admin: include_unpublished ?? false, p_limit: limit ?? 20, p_offset: offset ?? 0 }));
+  register("link_public_document_meeting", "Link an already published document to another public, listed meeting without uploading another copy (admin only). Useful for a combined committee/full-board transcript.", { document_id: uuid, meeting_id: uuid }, async ({ document_id, meeting_id }) => {
+    const { data, error } = await supabase.rpc("link_public_document_meeting", { p_document_id: document_id, p_meeting_id: meeting_id });
+    if (error)
+      throw new Error(error.message);
+    return data;
+  }, { write: true, destructive: false, idempotent: true });
+  register("search_document_contents", "Search published document contents using Cloudflare hybrid search. Returns matching passages and document/meeting citations; automated transcripts and OCR can contain errors.", { query: z4.string().trim().min(1).max(500) }, async ({ query }) => api(`/search?${new URLSearchParams({ q: query })}`));
+  register("publish_meeting_document", "Explicitly publish a public meeting attachment to the unrestricted public document archive (admin only). This creates an independently public copy; changing meeting visibility does not withdraw it. Never use for private research or confidential files. Publication must be enabled by the operator. Inspect the catalog after an uncertain response before retrying.", {
+    meeting_id: uuid,
+    attachment_id: uuid,
+    title: z4.string().trim().min(1).max(300),
+    source_url: z4.url(),
+    document_kind: z4.enum(["agenda", "minutes", "packet", "presentation", "spreadsheet", "transcript", "other"]),
+    text_origin: z4.enum(["official", "automated_transcript", "ocr", "other"]),
+    confirm_public: z4.literal(true)
+  }, async (input) => api("/publish", input), { write: true, destructive: false, idempotent: true });
+  register("withdraw_public_document", "Withdraw a published document from the catalog and delete its public R2 object (admin only). Affects all linked meetings. Search passages are blocked immediately; index cleanup follows R2 sync. Public downloads already copied elsewhere cannot be recalled. Pending publications must be resolved first.", { id: uuid }, async ({ id }) => api(`/documents/${id}/withdraw`, {}), { write: true, destructive: true, idempotent: true });
+}
+
 // apps/mcp/src/tools.ts
 import { McpServer } from "@modelcontextprotocol/server";
-import { z as z3 } from "zod";
-var VISIBILITY = z3.enum(["public", "unlisted", "private"]);
-var ELECTION_KIND = z3.enum([
+import { z as z5 } from "zod";
+var VISIBILITY = z5.enum(["public", "unlisted", "private"]);
+var ELECTION_KIND = z5.enum([
   "special",
   "special_runoff",
   "primary",
@@ -347,7 +483,7 @@ var ELECTION_KIND = z3.enum([
   "general_runoff",
   "other"
 ]);
-var ELECTION_DATE_KIND = z3.enum([
+var ELECTION_DATE_KIND = z5.enum([
   "election_day",
   "early_voting",
   "registration_deadline",
@@ -355,11 +491,11 @@ var ELECTION_DATE_KIND = z3.enum([
   "absentee_return_deadline",
   "other"
 ]);
-var PERSON_KIND = z3.enum(["elected_official", "appointed_official", "candidate", "other"]);
-function buildServer(supabase, user) {
-  const server = new McpServer({ name: "Civic Pulse", version: "1.2.0" });
+var PERSON_KIND = z5.enum(["elected_official", "appointed_official", "candidate", "other"]);
+function buildServer(supabase, user, documentContext = {}) {
+  const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
-  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z3.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
+  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z5.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
     try {
       const { data: isAdmin, error } = await supabase.rpc("is_admin");
       if (error)
@@ -370,8 +506,8 @@ function buildServer(supabase, user) {
     }
   });
   register("search_users", "Search registered accounts by email or display name (admin only). Returns up to 50 accounts with id, email, display_name, role and created_at. Empty query lists accounts; use offset increments of 50 to paginate. Civic people records are separate from login accounts.", {
-    query: z3.string().trim().max(200).default(""),
-    offset: z3.number().int().min(0).default(0)
+    query: z5.string().trim().max(200).default(""),
+    offset: z5.number().int().min(0).default(0)
   }, async ({ query, offset }) => {
     await ensureAdmin();
     const { data, error } = await supabase.rpc("admin_list_users", { p_query: query, p_offset: offset });
@@ -380,21 +516,21 @@ function buildServer(supabase, user) {
     return data;
   });
   register("promote_user_to_admin", "Promote an existing registered user to admin (admin only). Grants content editing, private-content access and permission to promote other users immediately. Resolve the exact account with search_users and act only on an explicit request to promote that person. Cannot promote yourself, create an account or demote an admin. Repeating a promotion of another existing admin is harmless.", {
-    user_id: z3.string().uuid()
+    user_id: z5.string().uuid()
   }, async ({ user_id }) => {
     const { error } = await supabase.rpc("promote_user_to_admin", { p_user_id: user_id });
     if (error)
       throw new Error(error.message);
     return { user_id, role: "admin" };
   }, { write: true, destructive: true, idempotent: true });
-  readRpc("search_organizations", "Full-text search of community organizations.", { query: z3.string().default(""), limit: z3.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_maps", "Full-text search of maps.", { query: z3.string().default(""), limit: z3.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_organizations", "Full-text search of community organizations.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_maps", "Full-text search of maps.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
   readRpc("search_events", "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.", {
-    query: z3.string().default(""),
-    organization_id: z3.string().uuid().nullish(),
-    calendar_id: z3.string().uuid().nullish(),
-    include_past: z3.boolean().default(false),
-    limit: z3.number().int().min(1).max(100).default(50)
+    query: z5.string().default(""),
+    organization_id: z5.string().uuid().nullish(),
+    calendar_id: z5.string().uuid().nullish(),
+    include_past: z5.boolean().default(false),
+    limit: z5.number().int().min(1).max(100).default(50)
   }, "search_events", ({ query, organization_id, calendar_id, include_past, limit }) => ({
     p_query: query,
     p_organization_id: organization_id ?? null,
@@ -402,10 +538,10 @@ function buildServer(supabase, user) {
     p_include_past: include_past,
     p_limit: limit
   }));
-  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z3.string().default(""), limit: z3.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_elections", "Full-text search of elections.", { query: z3.string().default(""), limit: z3.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z3.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
-  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z3.string().uuid() }, async ({ id }) => {
+  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z5.string().default(""), limit: z5.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_elections", "Full-text search of elections.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z5.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
+  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z5.string().uuid() }, async ({ id }) => {
     const result = await supabase.rpc("get_map", { p_id: id });
     if (result.error)
       throw new Error(result.error.message);
@@ -420,91 +556,96 @@ function buildServer(supabase, user) {
   getRpc("get_person", "Fetch one person (with affiliations) by id.", "get_person");
   getRpc("get_election", "Fetch one election (with contests and key dates) by id.", "get_election");
   const orgShape = {
-    slug: z3.string(),
-    name: z3.string(),
-    description: z3.string().nullish(),
-    email: z3.string().nullish(),
-    phone: z3.string().nullish(),
-    address_line: z3.string().nullish(),
-    website_url: z3.string().nullish(),
-    social_url: z3.string().nullish(),
-    logo_path: z3.string().nullish(),
-    sos_control_number: z3.string().nullish(),
-    sos_business_type: z3.string().nullish(),
-    sos_status: z3.string().nullish(),
-    sos_formation_date: z3.iso.date().nullish(),
-    sos_last_annual_registration: z3.string().nullish(),
-    sos_principal_office: z3.string().nullish(),
-    sos_registered_agent: z3.string().nullish(),
-    sos_county: z3.string().nullish(),
-    sos_naics_code: z3.string().nullish(),
-    sos_officers: z3.string().nullish(),
-    sos_record_url: z3.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
+    slug: z5.string(),
+    name: z5.string(),
+    description: z5.string().nullish(),
+    email: z5.string().nullish(),
+    phone: z5.string().nullish(),
+    address_line: z5.string().nullish(),
+    website_url: z5.string().nullish(),
+    social_url: z5.string().nullish(),
+    logo_path: z5.string().nullish(),
+    sos_control_number: z5.string().nullish(),
+    sos_business_type: z5.string().nullish(),
+    sos_status: z5.string().nullish(),
+    sos_formation_date: z5.iso.date().nullish(),
+    sos_last_annual_registration: z5.string().nullish(),
+    sos_principal_office: z5.string().nullish(),
+    sos_registered_agent: z5.string().nullish(),
+    sos_county: z5.string().nullish(),
+    sos_naics_code: z5.string().nullish(),
+    sos_officers: z5.string().nullish(),
+    sos_record_url: z5.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
   };
   create("organization", "organizations", "Create an organization (admin only).", orgShape, "id, slug, name");
   update("organization", "organizations", "Update an organization (admin only).", orgShape, "id, slug, name");
   remove("organization", "organizations", "Delete an organization (admin only).");
   const calendarShape = {
-    organization_id: z3.string().uuid(),
-    slug: z3.string(),
-    name: z3.string(),
-    description: z3.string().nullish(),
+    organization_id: z5.string().uuid(),
+    slug: z5.string(),
+    name: z5.string(),
+    description: z5.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("calendar", "calendars", "Create a calendar (admin only).", calendarShape, "id, slug, name");
   update("calendar", "calendars", "Update a calendar (admin only).", { ...calendarShape, organization_id: calendarShape.organization_id.optional() }, "id, slug, name");
   remove("calendar", "calendars", "Delete a calendar (admin only).");
   const eventShape = {
-    calendar_id: z3.string().uuid(),
-    title: z3.string(),
-    starts_at: z3.string().describe("ISO 8601 timestamp"),
-    ends_at: z3.string().nullish(),
-    all_day: z3.boolean().optional(),
-    location: z3.string().nullish(),
-    url: z3.string().nullish(),
-    description: z3.string().nullish(),
+    calendar_id: z5.string().uuid(),
+    title: z5.string(),
+    starts_at: z5.string().describe("ISO 8601 timestamp"),
+    ends_at: z5.string().nullish(),
+    all_day: z5.boolean().optional(),
+    is_meeting: z5.boolean().optional(),
+    meeting_notes: z5.string().nullish(),
+    meeting_transcript: z5.string().nullish(),
+    location: z5.string().nullish(),
+    url: z5.string().nullish(),
+    description: z5.string().nullish(),
     visibility: VISIBILITY.optional(),
-    election_id: z3.string().uuid().nullish(),
+    election_id: z5.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish()
   };
-  create("event", "events", "Create a calendar event (admin only).", eventShape, "id, title, starts_at");
-  update("event", "events", "Update a calendar event (admin only).", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
+  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
+  update("event", "events", "Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved.", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
   remove("event", "events", "Delete a calendar event (admin only).");
   const personShape = {
-    slug: z3.string(),
-    full_name: z3.string(),
+    slug: z5.string(),
+    full_name: z5.string(),
     kind: PERSON_KIND.optional(),
-    title: z3.string().nullish(),
-    description: z3.string().nullish(),
-    email: z3.string().nullish(),
-    phone: z3.string().nullish(),
-    fax: z3.string().nullish(),
-    website_url: z3.string().nullish(),
-    social_url: z3.string().nullish(),
-    address_line: z3.string().nullish(),
-    address_line2: z3.string().nullish(),
-    city: z3.string().nullish(),
-    state: z3.string().nullish(),
-    postal_code: z3.string().nullish(),
-    image_path: z3.string().nullish(),
+    title: z5.string().nullish(),
+    description: z5.string().nullish(),
+    email: z5.string().nullish(),
+    phone: z5.string().nullish(),
+    fax: z5.string().nullish(),
+    website_url: z5.string().nullish(),
+    social_url: z5.string().nullish(),
+    address_line: z5.string().nullish(),
+    address_line2: z5.string().nullish(),
+    city: z5.string().nullish(),
+    state: z5.string().nullish(),
+    postal_code: z5.string().nullish(),
+    image_path: z5.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("person", "people", "Create a person (admin only).", personShape, "id, slug, full_name");
   update("person", "people", "Update a person (admin only).", { ...personShape, slug: personShape.slug.optional(), full_name: personShape.full_name.optional() }, "id, slug, full_name");
   remove("person", "people", "Delete a person (admin only).");
   const electionShape = {
-    slug: z3.string(),
-    name: z3.string(),
-    election_date: z3.string().describe("YYYY-MM-DD"),
+    slug: z5.string(),
+    name: z5.string(),
+    election_date: z5.string().describe("YYYY-MM-DD"),
     kind: ELECTION_KIND.optional(),
-    description: z3.string().nullish(),
-    organization_id: z3.string().uuid().nullish(),
+    description: z5.string().nullish(),
+    organization_id: z5.string().uuid().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("election", "elections", "Create an election (admin only).", electionShape, "id, slug, name");
   update("election", "elections", "Update an election (admin only).", { ...electionShape, slug: electionShape.slug.optional(), name: electionShape.name.optional(), election_date: electionShape.election_date.optional() }, "id, slug, name");
   remove("election", "elections", "Delete an election (admin only).");
   registerExtendedTools(server, supabase, user);
+  registerMeetingTools(server, supabase);
+  registerDocumentTools(server, supabase, documentContext);
   return server;
 }
 
@@ -604,7 +745,7 @@ async function respond(request, env) {
     } catch {
       return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
     }
-    const handler = createMcpHandler(() => buildServer(supabase, user));
+    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }));
     return handler.fetch(request);
   }
   return new Response("Not found", { status: 404 });

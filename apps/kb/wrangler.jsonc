@@ -1,0 +1,22 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "civpulse-kb-api",
+  "account_id": "6d837580a4d0641139ecada9e74076b8",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "routes": [{ "pattern": "kb-api.civpulse.org", "custom_domain": true }],
+  "r2_buckets": [{ "binding": "DOCUMENTS", "bucket_name": "civpulse-public-documents" }],
+  "ai_search": [{ "binding": "SEARCH", "instance_name": "civpulse-public-documents" }],
+  "ratelimits": [{ "name": "SEARCH_LIMITER", "namespace_id": "2026102301", "simple": { "limit": 20, "period": 60 } }],
+  "vars": {
+    "SUPABASE_URL": "https://drzcrodqflzkzzbqsags.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_RaV0tnG5xJ2sBxFAarnxJg_TpPCL5fA",
+    "PUBLIC_DOCUMENT_ORIGIN": "https://kb.civpulse.org",
+    "ALLOWED_ORIGINS": "https://new.civpulse.org,https://www.civpulse.org",
+    "PUBLICATION_ENABLED": "false",
+    "SEARCH_ENABLED": "false"
+  },
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}

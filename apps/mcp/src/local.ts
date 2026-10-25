@@ -7,4 +7,5 @@ const env: Env = {
   AUTHORIZATION_SERVER: process.env.AUTHORIZATION_SERVER!,
 };
 if (Object.values(env).some(value => !value)) throw new Error('Set the MCP environment variables');
+env.KB_API_URL = process.env.KB_API_URL;
 Bun.serve({ port: 8789, fetch: request => handleRequest(request, env) });

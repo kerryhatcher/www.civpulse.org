@@ -4,6 +4,18 @@ title: Using Civic Pulse
 description: Find a meeting, explore a map, check an election, and understand what you can see.
 ---
 
+## Search public meeting documents
+
+Visit the [public document archive](/documents/) to browse published document
+titles and filenames. When content search is enabled, choose **Document
+contents** to find matching passages in agendas, minutes, packets and transcripts.
+Open the document, its original source, or a related meeting from each result.
+Automated transcripts and OCR may contain errors. Unsupported or oversized
+originals remain downloadable and show when a searchable derivative is needed.
+The archive displays a preparation message until configured; ordinary meeting
+attachments remain on their meeting pages.
+
+
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
 ## Find a meeting and read its notes

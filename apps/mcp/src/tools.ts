@@ -1,5 +1,7 @@
 import { createToolkit, ok, fail } from "./toolkit";
 import { registerExtendedTools } from "./extended-tools";
+import { registerMeetingTools } from "./meeting-tools";
+import { registerDocumentTools, type DocumentContext } from "./document-tools";
 import { McpServer } from "@modelcontextprotocol/server";
 import { type SupabaseClient, type User } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -24,8 +26,8 @@ const ELECTION_DATE_KIND = z.enum([
 ]);
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
-export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">): McpServer {
-  const server = new McpServer({ name: "Civic Pulse", version: "1.2.0" });
+export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}): McpServer {
+  const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
 
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
 
@@ -188,6 +190,9 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     starts_at: z.string().describe("ISO 8601 timestamp"),
     ends_at: z.string().nullish(),
     all_day: z.boolean().optional(),
+    is_meeting: z.boolean().optional(),
+    meeting_notes: z.string().nullish(),
+    meeting_transcript: z.string().nullish(),
     location: z.string().nullish(),
     url: z.string().nullish(),
     description: z.string().nullish(),
@@ -195,11 +200,11 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     election_id: z.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish(),
   };
-  create("event", "events", "Create a calendar event (admin only).", eventShape, "id, title, starts_at");
+  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
   update(
     "event",
     "events",
-    "Update a calendar event (admin only).",
+    "Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved.",
     { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() },
     "id, title, starts_at",
   );
@@ -258,5 +263,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   remove("election", "elections", "Delete an election (admin only).");
 
   registerExtendedTools(server, supabase, user);
+  registerMeetingTools(server, supabase);
+  registerDocumentTools(server, supabase, documentContext);
   return server;
 }

@@ -204,7 +204,7 @@ try {
   if (process.env.MCP_TOOL_CATALOG) {
     await Bun.write(process.env.MCP_TOOL_CATALOG, JSON.stringify({ server: 'Civic Pulse', tools: catalog.data.result.tools }, null, 2));
   }
-  await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool, apiUrl: env.API_URL });
+  await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool, apiUrl: env.API_URL, apiKey: env.ANON_KEY });
 
   // Use the existing disposable reader only after all non-admin CRUD checks.
   const adminToken = sessions[1].refreshed.data.access_token;

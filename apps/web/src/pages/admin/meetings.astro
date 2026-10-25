@@ -51,6 +51,11 @@ import AdminTabs from '../../components/AdminTabs.astro';
             <button class="button-link" type="submit">Upload files</button>
           </form>
           <div data-attachment-list class="org-list"></div>
+          <section data-publication-catalog hidden>
+            <h3>Public archive publications</h3>
+            <p>These copies are public independently of meeting visibility. Withdrawing a document affects every linked meeting.</p>
+            <div data-publication-list class="org-list"></div>
+          </section>
         </section>
       </div>
     </div>

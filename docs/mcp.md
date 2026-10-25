@@ -50,7 +50,7 @@ client gets the same supported read/write permissions as the user's account.
 
 ## Tools
 
-The server exposes **99 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
+The source exposes **108 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
 and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every operation.
 
 - **Search/read:** all ten civic types, unified search with type/limit/offset,
@@ -82,6 +82,46 @@ Tool annotations identify reads, writes and destructive actions, while the
 database remains the enforcement boundary. Images are limited to the existing
 public org-logos/person-images buckets and supported image formats, up to 2 MB.
 Content edits do not trigger a public website rebuild.
+
+### Meeting documents
+
+The public archive adds `list_public_documents`, `get_public_document`,
+`search_document_contents`, `publish_meeting_document`,
+`link_public_document_meeting` and `withdraw_public_document`. These require
+the archive migration and, for content search/publication/withdrawal, the separate
+document API configured through server-only `KB_API_URL`. Publishing requires
+explicit public-distribution confirmation and never follows an ordinary upload
+automatically. Identical bytes deduplicate; existing publications can link to
+multiple meetings. Source code and bundles include these tools, but activation
+is a separate deployment. See [public-documents.md](./public-documents.md).
+
+Use `create_event` or `update_event` with `is_meeting: true`. The same tools accept
+`meeting_notes` and `meeting_transcript`; omitted fields are preserved and null
+clears a nullable field. Existing database constraints prevent converting election
+dates into meetings or disabling a meeting while it has child records.
+
+`get_meeting` returns notes, transcript, attendance, votes and attachment metadata
+through the existing event/calendar visibility gate. Check it before uploading.
+`upload_meeting_attachment` accepts `meeting_id`, a plain `file_name`, and
+`data_base64` without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV
+files use the same 25 MB limit as the website. Unsupported extensions, paths,
+control characters, malformed base64, empty and oversized files are rejected.
+MIME types are derived from the extension, matching the existing uploader; this
+does not scan or certify document contents. There is no remote URL fetch.
+
+Uploads run with the caller's OAuth token, check admin access and the meeting,
+and use an immutable UUID object in the existing private `meeting-attachments`
+bucket. Metadata failure triggers object cleanup; cleanup failures are reported
+for admin repair. Uploads are not idempotent: after an uncertain result, inspect
+the meeting before retrying. There is no overwrite operation or schema change.
+
+`get_meeting_attachment_url` requires both the meeting and attachment UUIDs,
+checks their relationship through `get_meeting`, then signs a 60-second download.
+Files inherit event/calendar visibility; do not save expiring download URLs as
+permanent source links. A signed URL can remain usable until it expires after a
+visibility change. Refresh a client's cached tool catalog after deploying new
+tools. `bun run mcp:test` exercises real local uploads, byte-for-byte downloads,
+non-admin write denial and private-meeting download denial.
 
 ## Codex / ChatGPT plugin
 
