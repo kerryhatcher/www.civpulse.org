@@ -97,7 +97,10 @@ to `false`; `PUBLIC_KB_API_URL` is unset in frontend builds.
    public endpoint disabled. Set a deliberate sync interval and monitor indexing
    failures, including automatic sync pausing for inactive instances.
 4. Validate `apps/kb/wrangler.jsonc`, then deploy the separate API Worker. Set
-   `PUBLICATION_ENABLED=true` only when publication is authorized; enable search
+   `PUBLICATION_ENABLED=true` only when publication is authorized and set
+   `PUBLICATION_MEETING_IDS` to the comma-separated authorized event UUIDs. An
+   empty allowlist blocks every publication. The checked-in allowlist contains
+   only the two pilot events. Enable search
    after a known test document indexes. Neither flag initiates a bulk upload.
 5. Set `PUBLIC_KB_API_URL=https://kb-api.civpulse.org` in frontend build variables
    and rebuild the website. The deployed Supabase MCP wrapper defaults to this

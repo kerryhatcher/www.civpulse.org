@@ -16,6 +16,7 @@ function env(overrides:Partial<RuntimeEnv>={}):RuntimeEnv {
     SUPABASE_URL:'https://db.example.test',SUPABASE_ANON_KEY:'public-test-key',
     PUBLIC_DOCUMENT_ORIGIN:'https://kb.civpulse.org',ALLOWED_ORIGINS:'https://www.civpulse.org',
     PUBLICATION_ENABLED:'true',SEARCH_ENABLED:'true',
+    PUBLICATION_MEETING_IDS:meeting,
     DOCUMENTS:{put:async(k:string)=>{published.push(k);},delete:async(k:string)=>{deleted.push(k);}},
     SEARCH_LIMITER:{limit:async()=>({success:allowed})},
     SEARCH:{search:async()=>({search_query:'test',chunks:[
@@ -63,6 +64,11 @@ test('explicit confirmation and a credential-free HTTPS source are required',asy
 test('hidden meetings cannot be copied to the archive',async()=>{
   mock();ready=false;expect((await handle(publication(),env())).status).toBe(400);
   expect(calls.some(c=>c.includes('/storage/'))).toBe(false);expect(published).toHaveLength(0);
+});
+test('publication is limited to explicitly configured pilot meetings',async()=>{
+  mock();const response=await handle(publication(),env({PUBLICATION_MEETING_IDS:''}));
+  expect(response.status).toBe(403);expect(published).toHaveLength(0);
+  expect(calls.some(c=>c.endsWith('/get_meeting')||c.includes('/storage/'))).toBe(false);
 });
 test('publishes verified source bytes, then commits the catalog',async()=>{
   mock();const response=await handle(publication(),env());

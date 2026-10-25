@@ -76,6 +76,9 @@ async function publish(request: Request, env: RuntimeEnv, authorization: string)
       !kinds.includes(String(body.document_kind)) || !origins.includes(String(body.text_origin))) {
     throw new HttpError('Choose a meeting attachment, title, document type and text origin, and confirm public distribution.',400);
   }
+  if (!env.PUBLICATION_MEETING_IDS.split(',').map(id=>id.trim()).includes(body.meeting_id)) {
+    throw new HttpError('Publication is not enabled for this meeting.',403);
+  }
   let source: URL;
   try { source = new URL(String(body.source_url)); } catch { throw new HttpError('Provide the original HTTPS source URL.',400); }
   if (source.protocol !== 'https:' || source.username || source.password) throw new HttpError('Provide the original HTTPS source URL without credentials.',400);
