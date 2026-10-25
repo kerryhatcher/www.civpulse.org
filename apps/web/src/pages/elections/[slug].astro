@@ -3,6 +3,7 @@ import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import Layout from '../../layouts/Layout.astro';
 import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
+import { CALENDAR_ZONE } from '../../lib/calendar-display';
 import {
   fetchPublicElections,
   fetchElectionDetail,
@@ -86,6 +87,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       dateGroups.length > 0 && (
         <section class="election-dates" aria-labelledby="election-dates-title">
           <h2 id="election-dates-title">Dates &amp; deadlines</h2>
+          <p class="body-note">All times are Eastern Time (America/New_York).</p>
           <div class="election-date-groups">
             {dateGroups.map((group) => (
               <div class="election-date-group">
@@ -94,7 +96,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                   {group.dates.map((date) => (
                     <li class="election-date-item">
                       <a class="election-date-when" href={`/calendar/view/?id=${date.id}`}>
-                        {formatEventWhen(date)}
+                        {formatEventWhen(date, CALENDAR_ZONE)}
                       </a>
                       <span class="election-date-title">{date.title}</span>
                       {date.location && <span class="election-date-location">{date.location}</span>}

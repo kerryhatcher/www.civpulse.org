@@ -28,7 +28,7 @@ If you do not see meeting notes, they may not have been added yet. For an older 
 
 ## Keep up with the calendar
 
-Calendar times are shown in the America/New_York time zone. **Subscribe to calendar** adds an updating feed of public events to your calendar app. If that button does not open your app, expand **Use a subscription URL** and copy the address. **Download calendar** imports a one-time copy instead. Updates to a subscription depend on your calendar app's refresh schedule.
+Calendar times and election dates and deadlines are shown in Eastern Time (America/New_York), including daylight saving changes. Election-day hours show when local polls open and close. **Subscribe to calendar** adds an updating feed of public events to your calendar app. If that button does not open your app, expand **Use a subscription URL** and copy the address. **Download calendar** imports a one-time copy instead. Updates to a subscription depend on your calendar app's refresh schedule.
 
 ## Search and explore
 
