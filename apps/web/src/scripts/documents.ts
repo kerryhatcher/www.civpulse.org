@@ -1,3 +1,4 @@
+import { searchDocuments, mergeDocumentMatches, type DocumentMatch } from '../lib/document-search';
 import { documentApi, publicDocumentUrl, type PublicDocument } from '../lib/documents';
 
 function card(document: PublicDocument, passages: string[] = []): HTMLElement {
@@ -51,43 +52,34 @@ export async function initDocuments(): Promise<void> {
     return;
   }
   const input = form.elements.namedItem('q') as HTMLInputElement;
-  const mode = form.elements.namedItem('mode') as HTMLSelectElement;
   const button = form.querySelector<HTMLButtonElement>('button')!;
-  let offset = 0; let current = 0;
+  let offset = 0; let current = 0; let query = ''; let warning = '';
+  let matches: DocumentMatch[] = [];
   async function search(append=false): Promise<void> {
     const request = ++current; more!.hidden = true; button.disabled = true;
-    if (!append) { offset=0; results!.replaceChildren(); }
-    const content = mode.value === 'content';
-    if (content && !input.value.trim()) { status!.textContent='Enter a topic or phrase to search document contents.'; button.disabled=false; return; }
-    const params = new URLSearchParams({q:input.value.trim()});
-    if (!content) params.set('offset',String(offset));
-    history.replaceState(null,'',`/documents/?${new URLSearchParams({q:input.value.trim(),mode:mode.value})}`);
+    if (!append) {
+      offset=0; matches=[]; warning=''; query=input.value.trim(); results!.replaceChildren();
+    }
+    history.replaceState(null,'',`/documents/?${new URLSearchParams({q:query})}`);
     status!.textContent='Searching…'; results!.setAttribute('aria-busy','true');
     try {
-      const response = await fetch(`${api}/${content?'search':'documents'}?${params}`,{signal:AbortSignal.timeout(30000)});
-      const data = await response.json(); if (request!==current) return;
-      if (!response.ok) throw new Error(data.error || 'Could not search the archive.');
-      const rows: {document:PublicDocument;passages:string[]}[] = content ? data.results : data.documents.map((d:PublicDocument)=>({document:d,passages:[]}));
-      results!.append(...rows.map(row=>card(row.document,row.passages)));
-      more!.hidden=content || rows.length<20; offset+=rows.length;
-      status!.textContent=rows.length ? `${content?rows.length:offset} document${(content?rows.length:offset)===1?'':'s'} found.`
-        : append ? 'No more documents.' : 'No matching published documents.';
+      const page = await searchDocuments(api!,query,offset,append);
+      if (request!==current) return;
+      matches=mergeDocumentMatches(matches,page.rows);
+      results!.replaceChildren(...matches.map(row=>card(row.document,row.passages)));
+      more!.hidden=!page.hasMore; offset=page.nextOffset;
+      warning=page.warning || warning;
+      const count=matches.length;
+      status!.textContent=[count ? `${count} document${count===1?'':'s'} found.` : 'No matching published documents.',warning].filter(Boolean).join(' ');
     } catch (error) {
-      if (request===current) status!.textContent=error instanceof Error?error.message:'Could not load the archive.';
+      if (request===current) {
+        status!.textContent=error instanceof Error?error.message:'Could not load the archive.';
+        more!.hidden=!append;
+      }
     } finally { if (request===current) { button.disabled=false; results!.removeAttribute('aria-busy'); } }
   }
-  try {
-    const response = await fetch(`${api}/status`,{signal:AbortSignal.timeout(10000)});
-    if (!response.ok) throw new Error(); const capabilities = await response.json();
-    (mode.querySelector('option[value="content"]') as HTMLOptionElement).disabled=!capabilities.search_enabled;
-    const params = new URLSearchParams(location.search); input.value=(params.get('q')??'').slice(0,500);
-    mode.value=params.get('mode')==='content' && capabilities.search_enabled?'content':'catalog';
-    form.addEventListener('submit',event=>{event.preventDefault();void search();});
-    more.addEventListener('click',()=>void search(true));
-    mode.addEventListener('change',()=>{
-      ++current;more.hidden=true;button.disabled=false;results.replaceChildren();results.removeAttribute('aria-busy');
-      status.textContent='Select Search to apply the selected search mode.';
-    });
-    button.disabled=false; await search();
-  } catch { status.textContent='The document archive is temporarily unavailable. Please try again later.'; }
+  const params = new URLSearchParams(location.search); input.value=(params.get('q')??'').slice(0,500);
+  form.addEventListener('submit',event=>{event.preventDefault();void search();});
+  more.addEventListener('click',()=>void search(true));
+  button.disabled=false; await search();
 }

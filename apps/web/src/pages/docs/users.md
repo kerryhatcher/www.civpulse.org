@@ -9,8 +9,11 @@ You can browse public information without signing in. Start with the [community 
 ## Search public meeting documents
 
 Visit the [public document archive](/documents/) to browse published document
-titles and filenames. When content search is enabled, choose **Document
-contents** to find matching passages in agendas, minutes, packets and transcripts.
+titles and filenames. Enter a name, topic or phrase to search titles, filenames
+and document contents together. Each document appears once, with matching
+passages when available. Leave the search empty to browse, and select **Load
+more documents** for additional catalog matches. If content search is temporarily
+unavailable, a notice explains that only title and filename matches are shown.
 Open the document, its original source, or a related meeting from each result.
 Automated transcripts and OCR may contain errors. Unsupported or oversized
 originals remain downloadable and show when a searchable derivative is needed.
