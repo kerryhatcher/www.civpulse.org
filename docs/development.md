@@ -461,3 +461,11 @@ With local Supabase running, run
 to check profile voting permissions, paging, live edits and meeting visibility.
 The database test creates fixtures and applies the voting-history migration if
 needed inside a transaction that always rolls back, preserving shared local data.
+
+For legislative presentation changes, run
+`bun test scripts/tests/legislation-display.test.ts` plus the legislative database
+suite. Check an imported partial roll call on desktop and mobile: official totals,
+member choice, exact procedural question, readable action labels, person/chamber
+links, sources, timeline, session, sponsorships, and media. Exercise collapsed
+profile filters and reset, admin record search, edit/cancel/save, and source fields.
+Use local fixture copies only; never modify live imported records for UI tests.

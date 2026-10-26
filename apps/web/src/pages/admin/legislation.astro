@@ -33,26 +33,38 @@ import AdminTabs from "../../components/AdminTabs.astro";
         <span>Record type</span>
         <select data-resource></select>
       </label>
+      <section aria-labelledby="saved-records-title">
+        <h2 id="saved-records-title">Saved records</h2>
+        <form class="legislation-admin-search" data-record-search>
+          <label class="field"><span>Search this record type</span><input name="query" type="search" maxlength="500" /></label>
+          <button type="submit">Search</button>
+          <button type="reset">Clear</button>
+        </form>
+        <p data-message role="status" aria-live="polite"></p>
+        <div class="org-list" data-records></div>
+        <div class="org-form-actions">
+          <button data-previous>Previous</button>
+          <span data-page></span>
+          <button data-next>Next</button>
+        </div>
+      </section>
+      <details data-editor class="legislation-editor">
+      <summary>Add or edit a record</summary>
       <form class="org-form" data-legislation-form>
         <h2 data-form-heading>Add record</h2>
+        <p>Fields marked * are required. Use the source’s exact wording for the question being voted on.</p>
         <div data-fields></div>
+        <p data-form-message role="status" aria-live="polite"></p>
         <div class="org-form-actions">
           <button type="submit" class="button-link">
             Save record
           </button>
           <button type="button" data-cancel>
-            New record
+            Cancel
           </button>
         </div>
       </form>
-      <p data-message role="status" aria-live="polite"></p>
-      <h2>Saved records</h2>
-      <div class="org-list" data-records></div>
-      <div class="org-form-actions">
-        <button data-previous>Previous</button>
-        <span data-page></span>
-        <button data-next>Next</button>
-      </div>
+      </details>
     </div>
   </main>
 </Layout>

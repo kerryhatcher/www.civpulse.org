@@ -1201,9 +1201,12 @@ export interface LegislativeRow {
 }
 export const recordLabel = (row: LegislativeRow): string =>
   String(
-    row.title ??
+    (row.title && row.identifier
+      ? `${row.identifier} — ${row.title}`
+      : row.title) ??
       row.name ??
       row.question ??
+      row.description ??
       row.identifier ??
       row.labels?.organization_id ??
       (Object.values(row.labels ?? {}).join(" · ") || row.id),

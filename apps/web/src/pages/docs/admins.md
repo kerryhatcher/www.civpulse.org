@@ -65,7 +65,7 @@ Supply an HTTPS video URL, omit it to preserve the current value, or set it to
 recording URL while retaining separate meeting records. Supported YouTube links
 can include `t` or `start` to begin at that meeting's point in the recording.
 
-Recorded individual votes also appear in the member's profile **Voting record**.
+Recorded individual votes also appear in the member's profile **Meeting votes**.
 The profile links each choice back to the motion and full roll call on its meeting.
 Meeting attendance and roll-call names link to member profiles; recognized full
 and shortened participant names in meeting text do too. Ambiguous shortened names
@@ -216,7 +216,7 @@ offices and service records identify members. Create records in this order:
    bills and optional versions/amendments, then enter individual member choices.
 6. Media coverage links to existing articles and optional calendar-event links.
 
-Use Edit to update a record and New record to clear the form. Record withdrawn
+Use Edit to update a record and Cancel editing to clear the form. Record withdrawn
 sponsorship with an end date. Preserve official sponsorship and voting terminology
 in the source-role/source-choice fields. Never infer absence from a missing vote,
 or support from a procedural vote. Mark incomplete member lists as partial. Voice
@@ -235,3 +235,11 @@ Records appear live in the public viewers after saving; frontend code changes st
 require deployment. MCP tools support the same records and an atomic, repeatable
 normalized import keyed by source provider and ID. A provider-specific bulk import
 must resolve identities and coverage before marking records complete.
+
+Search **Saved records** within the selected record type, then choose **Edit**.
+The editor opens with the selected record's name. **Cancel editing** discards the
+unsaved form. To create a record, expand **Add or edit a record**; required fields
+are marked with *. Optional provider IDs, source URLs and retrieval dates are
+under **Source & import details**. Field guidance explains historical office
+service, visibility, official totals and partial coverage. Save returns to the
+record list and announces the result. Search and Clear affect only the list.

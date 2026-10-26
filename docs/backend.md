@@ -1223,3 +1223,10 @@ The migrations follow the repository's existing future-dated migration sequence;
 the original CLI-created timestamps were moved after their audit/schema dependencies
 before application. Subsequent local refinements are separate append-only migrations.
 Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-db.test.ts`.
+
+Legislative display metadata is resolved by the private `legislative_private.details`
+helper after the existing recursive visibility gate. It provides readable action
+and bill labels, person viewer links for historical office service, and organization
+slug links for chambers. It does not add a new public lookup endpoint or change
+visibility rules. The append-only `legislative_display_details` migration keeps
+execution revoked from public, anonymous and authenticated callers.

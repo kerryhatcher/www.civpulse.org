@@ -41,7 +41,7 @@ are searchable separately in the [public document archive](/documents/) when
 those files have been published there.
 
 Member names in meeting attendance, roll calls, notes, and vote details link to
-their profiles. Each profile has a **Voting record** with the member's choice,
+their profiles. Each profile has a **Meeting votes** with the member's choice,
 motion, outcome, meeting date, and motion details. Select the meeting title to
 open that exact vote and its full roll call. Use **Load more votes** for older
 records. A profile with no recorded choices says **No votes recorded**.
@@ -165,3 +165,17 @@ was absent. Voice votes may have an outcome without individual choices. Coverage
 labels describe the imported record; official totals can differ from partial or
 visibility-filtered member lists. Unlisted records require their direct links;
 private records are available only to administrators.
+
+Bill pages put the timeline and votes first, with section links to sponsorships,
+text versions, media coverage and other records. Dates use readable month names;
+exact vote times identify UTC. Member names link to profiles and chamber names
+link to organizations. **View source** and **View history** remain alongside each
+record.
+
+On a vote page, **Official result** shows the reported yes/no/other totals.
+**Partial member record** describes the imported choices available on Civic Pulse,
+not the size of the official roll call. A person's **Voted Yea** label and the
+vote's **Result: rejected** describe different things. Cloture is procedural and
+must not be read as final passage. On profiles, expand **Filter legislative votes**
+to narrow the record or use **Clear filters**. **Meeting votes** is a separate
+section for votes recorded in local meeting minutes.
