@@ -20,6 +20,7 @@ export default defineConfig({
           '/legislation/session/',
           '/maps/view/',
           '/map-data/',
+          '/profile-data/',
           '/calendar/view/',
           '/people/view/',
           '/elections/view/',

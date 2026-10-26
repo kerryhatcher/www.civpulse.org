@@ -1,4 +1,5 @@
 ---
+import { profileSectionUrl } from "../../lib/profile-section-assets";
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
@@ -87,7 +88,7 @@ const contact = [
 ---
 
 <Layout title={org.name} description={org.description ?? `Contact details for ${org.name}.`}>
-  <main id="main">
+  <main id="main" data-profile-snapshot={await profileSectionUrl("organizations",org.id)}>
     <div class="org-header">
       {
         logo ? (

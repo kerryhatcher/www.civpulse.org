@@ -1,3 +1,4 @@
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { getSupabase } from '../lib/supabase';
 
 export interface PersonVote {
@@ -32,7 +33,7 @@ function renderVote(vote: PersonVote): HTMLElement {
   return article;
 }
 
-/** Runtime only: never embed private or unlisted meetings in public profile HTML. */
+/** Published public data for anonymous profiles; live gated data for UUID/signed-in views. */
 export async function loadPersonVotes(personId: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-person-votes]');
   if (!root) return;
@@ -49,7 +50,8 @@ export async function loadPersonVotes(personId: string): Promise<void> {
     try {
       const supabase = getSupabase();
       await supabase.auth.getSession();
-      const { data, error } = await supabase.rpc('get_person_votes', {
+      const snapshot = await getPublicProfileSnapshot();
+      const { data, error } = snapshot ? {data: snapshot.votes.slice(offset, offset+21), error: null} : await supabase.rpc('get_person_votes', {
         p_person_id: personId, p_offset: offset, p_limit: 21,
       });
       if (error) throw error;

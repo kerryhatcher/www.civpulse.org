@@ -572,3 +572,18 @@ is denied anonymously and loads its gated geometry with an authorized account;
 unlisted UUID maps retain their existing access behavior. Use disposable local
 fixtures for access checks, and remove them after verification. Build against
 production only with public credentials and the configured public Turnstile key.
+
+### Verifying public profile snapshots
+
+Run `bun test scripts/tests/profile-sections.test.ts
+scripts/tests/profile-section-data.test.ts` and
+`PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/profile-sections-db.test.ts`. The database test rolls back
+its fixtures and compares public exports and client vote grouping with existing
+read RPCs, including hidden profiles and hidden election/calendar/legislative
+parents, more than 50 meeting votes, and paged exports. Then run `bun run check`
+and `bun run build`, inspect `dist/profile-data`, and exercise anonymous and
+signed-in person/organization/UUID profiles, meeting pagination, legislative
+pagination/filters and date groups. No restricted IDs or payloads should appear
+in exports. Initial public profiles should not download the full legislative
+filter dataset. No backend fallback should conceal failed publication assets.
