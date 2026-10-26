@@ -26,7 +26,7 @@
     "db:stop": "supabase stop",
     "db:migrate": "supabase migration up",
     "db:reset": "supabase db reset",
-    "db:push": "supabase db push",
+    "db:push": "bun run scripts/push-production-migrations.mjs",
     "db:status": "supabase status",
     "db:seed-user": "bun run scripts/seed-test-user.mjs",
     "secret:scan": "bun run scripts/secret-scan.mjs",
