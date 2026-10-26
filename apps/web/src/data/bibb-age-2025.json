@@ -1,0 +1,96 @@
+{
+  "total": 11302748,
+  "countyTotal": 157556,
+  "ages": [
+    {
+      "col": "AGE04_TOT",
+      "county": 9968,
+      "state": 640615
+    },
+    {
+      "col": "AGE59_TOT",
+      "county": 9986,
+      "state": 683503
+    },
+    {
+      "col": "AGE1014_TOT",
+      "county": 10291,
+      "state": 718489
+    },
+    {
+      "col": "AGE1519_TOT",
+      "county": 10530,
+      "state": 760988
+    },
+    {
+      "col": "AGE2024_TOT",
+      "county": 10372,
+      "state": 788659
+    },
+    {
+      "col": "AGE2529_TOT",
+      "county": 10929,
+      "state": 792230
+    },
+    {
+      "col": "AGE3034_TOT",
+      "county": 10507,
+      "state": 769307
+    },
+    {
+      "col": "AGE3539_TOT",
+      "county": 9960,
+      "state": 769700
+    },
+    {
+      "col": "AGE4044_TOT",
+      "county": 9516,
+      "state": 739768
+    },
+    {
+      "col": "AGE4549_TOT",
+      "county": 8924,
+      "state": 698997
+    },
+    {
+      "col": "AGE5054_TOT",
+      "county": 8681,
+      "state": 696496
+    },
+    {
+      "col": "AGE5559_TOT",
+      "county": 8946,
+      "state": 682913
+    },
+    {
+      "col": "AGE6064_TOT",
+      "county": 9378,
+      "state": 676943
+    },
+    {
+      "col": "AGE6569_TOT",
+      "county": 9393,
+      "state": 601306
+    },
+    {
+      "col": "AGE7074_TOT",
+      "county": 7820,
+      "state": 493370
+    },
+    {
+      "col": "AGE7579_TOT",
+      "county": 5836,
+      "state": 382924
+    },
+    {
+      "col": "AGE8084_TOT",
+      "county": 3426,
+      "state": 226590
+    },
+    {
+      "col": "AGE85PLUS_TOT",
+      "county": 3093,
+      "state": 179950
+    }
+  ]
+}

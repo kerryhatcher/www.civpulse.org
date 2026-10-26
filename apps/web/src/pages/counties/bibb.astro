@@ -1,0 +1,272 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import DemographicCharts from '../../components/counties/DemographicCharts.astro';
+import { bibbCounty as county, statisticSource } from '../../data/bibb-county';
+import { fetchOrganizations } from '../../lib/organizations';
+import { fetchPublicMaps } from '../../lib/maps';
+import { fetchPublicElections, formatElectionDate, electionHref } from '../../lib/elections';
+import { fetchPublicPeopleForOrganization } from '../../lib/people';
+import 'leaflet/dist/leaflet.css';
+
+const [organizations, publicMaps, elections] = await Promise.all([
+  fetchOrganizations(), fetchPublicMaps(), fetchPublicElections(),
+]);
+const localOrganizations = organizations.filter(org => county.organizationSlugs.includes(org.slug));
+const localIds = new Set(localOrganizations.map(org => org.id));
+const maps = county.mapSlugs.flatMap(slug => publicMaps.filter(map => map.slug === slug));
+const featuredMap = maps.find(map => map.slug === 'commissioners');
+const localElections = elections.filter(election => election.organization_id && localIds.has(election.organization_id))
+  .sort((a, b) => b.election_date.localeCompare(a.election_date));
+const organizationPeople = await Promise.all(localOrganizations.map(async org => ({
+  org, people: await fetchPublicPeopleForOrganization(org.id),
+})));
+const overviewStats = county.census.overviewCodes.map(code => county.census.statistics.find(stat => stat.code === code)!);
+---
+
+<Layout title="Bibb County, Georgia" description="Explore Bibb County: Census demographics, local government, elections, community events, and maps on Civic Pulse.">
+  <main id="main" class="county-page">
+    <div class="county-intro">
+      <div>
+        <h1>Bibb County, Georgia</h1>
+        <p class="county-lead">Your community, connected.</p>
+        <p>Get to know the people, places, and public decisions shaping life in Macon–Bibb. Start here to explore your county and find your next way to take part.</p>
+        <a class="button-link" href="#explore">Explore Bibb County <Icon /></a>
+      </div>
+      <aside class="county-start" aria-labelledby="start-title">
+        <h2 id="start-title">What brings you here?</h2>
+        <a href="#government">Find local government <Icon /></a>
+        <a href="#elections">Explore elections <Icon /></a>
+        <a href="#events">Find an event or meeting <Icon /></a>
+        <a href="#demographics">Get to know the county <Icon /></a>
+      </aside>
+    </div>
+
+    <nav class="county-sections" aria-label="Bibb County sections">
+      <a href="#explore">Maps & places</a><a href="#demographics">Demographics</a>
+      <a href="#government">Government & people</a><a href="#elections">Elections</a><a href="#events">Events & meetings</a>
+    </nav>
+
+    <section id="explore" class="county-section county-explore" aria-labelledby="explore-title">
+      <div>
+        <h2 id="explore-title">Find your place in Bibb County.</h2>
+        <p>Explore local districts, public services, and places in your community.</p>
+        <ul class="county-map-links">
+          {maps.map(map => <li><a href={`/maps/${map.slug}/`}>{map.name}<Icon /></a></li>)}
+        </ul>
+        {maps.length === 0 && <p class="status">Local maps have not been published yet.</p>}
+        <a href="/maps/">Browse all maps <Icon /></a>
+      </div>
+      {featuredMap && <a class="county-map-feature" href={`/maps/${featuredMap.slug}/`} aria-label="Explore the Bibb County commissioner district map">
+        <div data-map-carousel>
+          <div class="county-map-preview" data-map-preview data-map-id={featuredMap.id}></div>
+        </div>
+        <span>Who represents your neighborhood? <Icon /></span>
+        <span class="county-map-caption">Open the commissioner district map</span>
+      </a>}
+    </section>
+
+    <section id="demographics" class="county-section county-demographics" aria-labelledby="demographics-title">
+      <div class="county-section-heading">
+        <div><h2 id="demographics-title">Bibb County at a glance</h2><p>People, homes, and everyday life. Explore {county.census.statistics.length} official measures, with Georgia alongside for context.</p></div>
+        <a href="/counties/bibb/statistics.csv" download>Download the data <Icon name="download" /></a>
+      </div>
+      <dl class="county-stats">
+        {overviewStats.map(stat => <div>
+          <dt><a href={statisticSource(stat)}>{stat.label}</a></dt>
+          <dd>{stat.value}<span>{stat.period}</span></dd>
+        </div>)}
+      </dl>
+
+      <DemographicCharts />
+
+      <section class="county-comparisons" aria-labelledby="comparison-title">
+        <div class="county-comparison-heading">
+          <div><h3 id="comparison-title">How does Bibb compare?</h3><p>The same measure, the same period: 2020–2024 ACS.</p></div>
+          <p class="county-chart-key"><span><i class="county-key-bibb" aria-hidden="true"></i>Bibb County</span><span><i class="county-key-state" aria-hidden="true"></i>Georgia</span></p>
+        </div>
+        <div class="county-comparison-grid">
+          {county.census.comparisons.map(comparison => <figure class="county-comparison">
+            <figcaption>{comparison.label}<span>{comparison.note}</span></figcaption>
+            <div class="county-chart-row"><span>Bibb</span><div class="county-chart-track" aria-hidden="true"><span style={`width: ${comparison.county}%`}></span></div><strong>{comparison.county.toFixed(1)}%</strong></div>
+            <div class="county-chart-row county-chart-state"><span>Georgia</span><div class="county-chart-track" aria-hidden="true"><span style={`width: ${comparison.state}%`}></span></div><strong>{comparison.state.toFixed(1)}%</strong></div>
+          </figure>)}
+        </div>
+        <p class="county-chart-note">All bars use a 0–100% scale. These are estimates, not rankings; differences have not been tested for statistical significance.</p>
+      </section>
+
+      <div class="county-data-heading"><h3>Explore the county profile</h3><p>Open a topic to see the figures, reference periods, and statewide comparisons.</p></div>
+      <div class="county-data-groups">
+        {county.census.groups.map((group, index) => <details class="county-data-group" open={index === 0}>
+          <summary><span>{group.title}<small>{group.statistics.length} measures</small></span><Icon name="chevron-right" /></summary>
+          <div class="county-data-content">
+            <p class="county-data-note">{group.note}</p>
+            <table class="county-data-table">
+              <caption class="visually-hidden">{group.title}: Bibb County and Georgia Census statistics</caption>
+              <thead><tr><th scope="col">Measure & period</th><th scope="col">Bibb County</th><th scope="col">Georgia</th></tr></thead>
+              <tbody>{group.statistics.map(stat => <tr>
+                <th scope="row"><a href={statisticSource(stat)}>{stat.label}</a><span>{stat.period}</span></th>
+                <td>{stat.value}{stat.detail && <span>{stat.detail}</span>}</td><td>{stat.georgia}{stat.stateDetail && <span>{stat.stateDetail}</span>}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+        </details>)}
+      </div>
+      <details class="county-source"><summary>About these figures</summary>
+        <p>Sources: U.S. Census Bureau <a href={county.census.source}>Bibb County QuickFacts</a> (FIPS {county.fips}) and <a href={county.census.stateSource}>Georgia QuickFacts</a>. Population, age, sex, and housing-unit estimates use the 2025 Population Estimates Program. ACS figures are 2020–2024 American Community Survey five-year estimates, which describe a period rather than a single year. Other measures use the 2020 Census, 2023 County Business Patterns, or 2024 Nonemployer Statistics, as labeled.</p>
+        <p>Survey estimates have sampling uncertainty; consult Census for methodology and margins of error. Comparisons use matching measures and periods. State totals are shown for context and are not adjusted for population size. Different reference periods should not be treated as a single-year snapshot.</p>
+        <p>The detailed age bands use <a href={county.census.ageSource}>Census Vintage 2025 county age and sex estimates</a>. Each share is the age-band count divided by the total population for that geography; Georgia is the sum of its counties. Race and ethnicity use QuickFacts. Poverty rates and 90% confidence intervals use the <a href={county.census.povertySource}>2024 SAIPE state and county file</a> (Georgia state code 13, Bibb county code 021). The statewide poverty comparison uses SAIPE too, so it can differ from Georgia QuickFacts.</p>
+        <p>Source checked <time datetime={county.census.checked}>October 26, 2026</time>. Figures are a saved snapshot and do not update automatically.</p>
+      </details>
+      <p class="county-data-credit">U.S. Census Bureau · Source checked October 26, 2026 · <a href={county.census.source}>View Census QuickFacts <Icon size={16} /></a></p>
+    </section>
+
+    <section id="government" class="county-section" aria-labelledby="government-title">
+      <div class="county-section-heading"><div><h2 id="government-title">Local government & people</h2><p>Start with the local organizations and people recorded on Civic Pulse.</p></div><a href="/orgs/">All organizations <Icon /></a></div>
+      {organizationPeople.map(({ org, people }) => <article class="county-organization">
+        <div><h3><a href={`/orgs/${org.slug}/`}>{org.name}</a></h3>{org.description && <p>{org.description}</p>}<a href={`/calendar/?organization=${org.id}`}>Events & meetings <Icon /></a></div>
+        <div class="county-people">{people.length > 0 ? people.slice(0, 4).map(({person, role}) => <p><a href={`/people/${person.slug}/`}>{person.full_name}</a><span>{role}</span></p>) : <p class="body-note">People are listed on the organization profile as records become available.</p>}</div>
+      </article>)}
+      {localOrganizations.length === 0 && <p class="status">Local organization profiles have not been published yet.</p>}
+      <p class="body-note">This is a selection of local records, not a complete list of agencies or representatives.</p>
+    </section>
+
+    <div class="county-bottom">
+      <section id="elections" class="county-section" aria-labelledby="elections-title">
+        <h2 id="elections-title">Elections & voting</h2><p>Review recorded elections, candidates, and key dates.</p>
+        <ul class="county-records">{localElections.slice(0, 3).map(election => <li><time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time><h3><a href={electionHref(election)}>{election.name}</a></h3></li>)}</ul>
+        {localElections.length === 0 && <p class="status">No elections from the selected local organizations are published yet.</p>}
+        <p class="body-note">Elections are listed by date, newest first, and may include past elections. Open an election for its recorded races and voting information.</p>
+        <a href="/elections/">Browse all elections <Icon /></a>
+      </section>
+      <section id="events" class="county-section" aria-labelledby="events-title" data-county-events data-organization-ids={JSON.stringify([...localIds])}>
+        <h2 id="events-title">Events & meetings</h2><p>What’s next from the local organizations above.</p>
+        <p class="status" data-county-events-status role="status">Loading upcoming events…</p>
+        <ul class="county-records" data-county-events-list></ul>
+        <noscript><p>Enable JavaScript to load upcoming events, or <a href="/calendar/">open the community calendar</a>.</p></noscript>
+        <a href="/calendar/">Browse the community calendar <Icon /></a>
+      </section>
+    </div>
+    <p class="county-coverage">Growing our local coverage. This Bibb County hub brings together selected public records on Civic Pulse. The full directories and community calendar also include records beyond Bibb County.</p>
+    <script type="application/json" data-home-maps set:html={JSON.stringify(featuredMap ? [featuredMap] : [])} is:inline></script>
+  </main>
+</Layout>
+<script>
+  import { initHomeMaps } from '../../scripts/home-maps';
+  import { initCountyEvents } from '../../scripts/county-events';
+  initHomeMaps();
+  initCountyEvents();
+</script>
+<style>
+  .county-page { padding-block: 48px 24px; }
+  .county-intro { display: grid; grid-template-columns: 1.5fr 1fr; gap: 8%; align-items: center; padding-bottom: 44px; }
+  h1 { font-size: clamp(2.8rem, 4.7vw, 4.5rem); max-width: 14ch; }
+  .county-lead { font-family: var(--serif); font-size: 1.8rem; margin-block: 18px 10px; }
+  .county-intro p { max-width: 65ch; }
+  .county-intro .button-link { margin-top: 24px; }
+  .county-start { background: var(--ink); color: var(--paper); padding: 28px 32px; }
+  .county-start h2 { font-size: 1.8rem; margin-bottom: 18px; }
+  .county-start a { display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--sage); padding-block: 14px; text-decoration: none; }
+  .county-start a:hover { color: var(--sage); }
+  .county-start :focus-visible { outline-color: var(--paper); }
+  .county-sections { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-block: 18px; border-block: 1px solid var(--line); }
+  .county-sections a { padding-block: 6px; }
+  .county-section { padding-block: 42px; scroll-margin-top: 20px; }
+  .county-section h2 { font-size: clamp(2rem, 3vw, 2.7rem); margin-bottom: 12px; }
+  .county-section p { color: var(--muted); max-width: 70ch; }
+  .county-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+  .county-section-heading > a { flex-shrink: 0; }
+  .county-explore { display: grid; grid-template-columns: 1fr 1fr; gap: 6%; }
+  .county-map-links { padding: 0; margin-block: 24px; list-style: none; }
+  .county-map-links a { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .county-map-links a:hover { text-decoration: underline; }
+  .county-map-feature { background: var(--sage); display: block; align-self: stretch; text-decoration: none; padding: 20px; }
+  .county-map-preview { height: 310px; background: var(--paper); }
+  .county-map-feature > span { display: flex; justify-content: space-between; margin-top: 20px; font-size: 1.3rem; font-weight: 500; }
+  .county-map-feature .county-map-caption { display: block; margin-top: 6px; font-size: .9rem; font-weight: 400; }
+  .county-demographics { border-block: 1px solid var(--line); }
+  .county-stats { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; gap: 30px 40px; padding-bottom: 36px; }
+  .county-stats dt { font-weight: 500; }
+  .county-stats > div { border-top: 1px solid var(--line); padding-top: 18px; }
+  .county-stats dt a { text-decoration-thickness: 1px; }
+  .county-stats dd { font-family: var(--serif); font-size: 2.6rem; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+  .county-stats dd span { display: block; font-family: var(--sans); font-size: .85rem; line-height: 1.5; color: var(--muted); margin-top: 6px; }
+  .county-comparisons { background: var(--paper); padding: 28px; border-top: 1px solid var(--line); }
+  .county-comparison-heading { display: flex; justify-content: space-between; gap: 24px; align-items: baseline; }
+  .county-comparison-heading h3, .county-data-heading h3 { font-size: 1.8rem; margin-bottom: 8px; }
+  .county-comparison-heading p { font-size: .9rem; }
+  .county-chart-key { display: flex; gap: 18px; flex-wrap: wrap; }
+  .county-chart-key > span { display: inline-flex; align-items: center; gap: 8px; }
+  .county-chart-key i { display: inline-block; width: 12px; height: 12px; }
+  .county-key-bibb { background: var(--ink); }
+  .county-key-state { background: var(--rust); }
+  .county-comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; margin-block: 26px; }
+  .county-comparison { margin: 0; min-width: 0; }
+  .county-comparison figcaption { font-weight: 600; line-height: 1.4; margin-bottom: 16px; }
+  .county-comparison figcaption > span { display: block; color: var(--muted); font-size: .8rem; font-weight: 400; margin-top: 4px; }
+  .county-chart-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 48px; align-items: center; gap: 10px; font-size: .8rem; margin-top: 12px; }
+  .county-chart-row strong { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .county-chart-track { height: 9px; background: var(--canvas); }
+  .county-chart-track > span { display: block; height: 100%; background: var(--ink); }
+  .county-chart-state .county-chart-track > span { background: var(--rust); }
+  .county-section .county-chart-note { font-size: .8rem; max-width: none; }
+  .county-data-heading { padding-block: 36px 20px; }
+  .county-data-group { border-top: 1px solid var(--line); }
+  .county-data-group:last-child { border-bottom: 1px solid var(--line); }
+  .county-data-group summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 4px; cursor: pointer; font-family: var(--serif); font-size: 1.6rem; font-weight: 700; }
+  .county-data-group summary::-webkit-details-marker { display: none; }
+  .county-data-group summary:hover { color: var(--rust-dark); }
+  .county-data-group summary small { display: inline-block; font-family: var(--sans); font-size: .8rem; font-weight: 400; color: var(--muted); margin-left: 18px; white-space: nowrap; }
+  .county-data-group[open] summary :global(svg) { transform: rotate(90deg); }
+  .county-data-content { padding-bottom: 24px; }
+  .county-section .county-data-note { font-size: .9rem; margin-bottom: 20px; }
+  .county-data-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: .95rem; }
+  .county-data-table th, .county-data-table td { padding: 16px 12px; text-align: right; border-bottom: 1px solid var(--line); vertical-align: top; font-variant-numeric: tabular-nums; }
+  .county-data-table thead th { background: var(--paper); font-size: .8rem; font-weight: 600; }
+  .county-data-table th:first-child { width: 56%; text-align: left; padding-left: 4px; }
+  .county-data-table tbody th { font-weight: 500; }
+  .county-data-table th > span, .county-data-table td > span { display: block; color: var(--muted); font-size: .8rem; font-weight: 400; margin-top: 6px; line-height: 1.5; }
+  .county-data-table td:nth-child(2) { font-weight: 600; }
+  .county-data-table td:last-child { color: var(--muted); }
+  .county-data-table tbody tr:last-child > * { border-bottom: 0; }
+  .county-section .county-data-credit { margin-top: 18px; font-size: .8rem; max-width: none; }
+  .county-source { margin-top: 30px; color: var(--muted); }
+  .county-source summary { cursor: pointer; padding-block: 10px; width: fit-content; text-decoration: underline; text-underline-offset: 5px; }
+  .county-source p + p { margin-top: 12px; }
+  .county-organization { display: grid; grid-template-columns: 1fr 1fr; gap: 6%; padding-block: 24px; border-top: 1px solid var(--line); }
+  .county-organization h3 { font-size: 1.6rem; margin-bottom: 12px; }
+  .county-organization p { margin-bottom: 12px; }
+  .county-people span { display: block; font-size: .9rem; margin-top: 4px; }
+  .county-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 6%; border-top: 1px solid var(--line); }
+  .county-records { list-style: none; padding: 0; margin-block: 24px; }
+  .county-records :global(li) { padding-block: 18px; border-top: 1px solid var(--line); }
+  .county-records :global(h3) { font-size: 1.45rem; margin-block: 8px; }
+  .county-records :global(time), .county-records :global(p) { font-size: .9rem; color: var(--muted); }
+  .county-bottom .body-note, .county-bottom .status { margin-block: 20px; }
+  .county-coverage { border-top: 1px solid var(--line); padding-top: 24px; color: var(--muted); font-size: .9rem; max-width: 75ch; }
+  @media (max-width: 1050px) {
+    .county-comparison-grid { grid-template-columns: 1fr; gap: 24px; }
+    .county-comparison-heading { display: block; }
+    .county-chart-key { margin-top: 16px; }
+  }
+  @media (max-width: 760px) {
+    .county-page { padding-top: 28px; }
+    .county-intro, .county-explore, .county-bottom, .county-organization { grid-template-columns: 1fr; gap: 28px; }
+    .county-intro { padding-bottom: 28px; }
+    .county-start { padding: 24px; }
+    .county-stats { grid-template-columns: repeat(2, 1fr); gap: 28px 18px; }
+    .county-stats dd { font-size: 2.1rem; }
+    .county-comparisons { padding: 22px 18px; }
+    .county-data-group summary { font-size: 1.45rem; padding-block: 20px; }
+    .county-data-group summary small { display: block; margin: 6px 0 0; }
+    .county-data-table th:first-child { width: 48%; }
+    .county-data-table th, .county-data-table td { padding: 14px 6px; font-size: .85rem; overflow-wrap: anywhere; }
+    .county-data-table thead th { font-size: .75rem; }
+    .county-section-heading { display: block; }
+    .county-section-heading > a { display: inline-block; margin-top: 16px; }
+    .county-map-preview { height: 260px; }
+    .county-section { padding-block: 30px; }
+    .county-bottom { gap: 0; }
+    .county-bottom > section + section { border-top: 1px solid var(--line); }
+  }
+</style>
