@@ -42,7 +42,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('person bill groups page
         await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice) values (${vote.id},${service.id},'yes','Yea')`;
         if (linked) await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${vote.id},${bills[0]})`;
       }
-      await tx.unsafe(await Bun.file('supabase/migrations/20261123110000_profile_votes_exclude_attendance.sql').text());
+      await tx.unsafe(await Bun.file('supabase/migrations/20261123140000_profile_votes_exclude_attendance.sql').text());
       const read = async (offset = 0, limit = 100, category: string | null = null, query: string | null = null) =>
         (await tx`select get_person_legislative_bill_groups(${person.id},null,null,${category},${limit},${offset},${term.id},${query}) result`)[0].result;
       const checkAttendance = async () => {

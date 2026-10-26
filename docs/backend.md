@@ -1225,8 +1225,11 @@ per-vote RPC remains unchanged. Profile groups exclude votes classified as
 when a category filter explicitly requests attendance. Source vote/choice records,
 direct UUID viewers, and `get_person_legislative_record` remain unchanged for
 research and auditing. This applies to every person profile, including the UUID
-viewer. Release `20261123110000_profile_votes_exclude_attendance` through main
-before deploying the explanatory frontend copy. Release the append-only
+viewer. Release `20261123140000_profile_votes_exclude_attendance` through main
+before deploying the frontend. Public profile snapshots use the same attendance
+exclusion in `groupProfileVotes`, both when publishing initial/page assets and
+when filtering the published history in the browser. Raw snapshot vote rows are
+preserved for auditing. Release the append-only
 `20261123080000_person_legislative_bill_groups` migration through main before
 deploying the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-bill-groups-db.test.ts`;
 the test rolls back its migration and fixtures.

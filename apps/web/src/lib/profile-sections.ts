@@ -62,6 +62,7 @@ function matchesBill(text: string, query: string): boolean {
 export function groupProfileVotes(snapshot: PublicProfileSections, args: Record<string, unknown>) {
   const grouped = new Map<string, LegislativeRow>();
   for (const vote of snapshot.legislativeVotes) {
+    if (vote.category === 'attendance') continue;
     if (['term_id','session_id','body_id','category'].some(key => args[`p_${key}`] && args[`p_${key}`] !== vote[key])) continue;
     const bills = [...new Map((vote.bills as { id: string; identifier: string; title: string }[]).map(bill=>[bill.id,bill])).values()];
     for (const bill of bills.length ? bills : [null]) {
