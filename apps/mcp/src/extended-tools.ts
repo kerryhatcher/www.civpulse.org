@@ -9,7 +9,8 @@ const query = z.string().max(500).default('');
 const limit = z.number().int().min(1).max(100).default(20);
 const offset = z.number().int().min(0).default(0);
 const object = z.record(z.string(), z.unknown());
-const url = z.string().url().max(2000).regex(/^https?:\/\//i);
+// Export a complete, flag-free pattern for connector validators that full-match.
+const url = z.string().url().max(2000).regex(/^[hH][tT][tT][pP][sS]?:[/][/][^\s]+$/);
 const slug = z.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 const rowId = z.string().regex(/^[1-9][0-9]*$/).refine(value => BigInt(value) <= 9223372036854775807n, 'ID exceeds bigint range');
 const geometry = z.object({ type: z.enum(['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon']), coordinates: z.array(z.unknown()) });

@@ -1259,6 +1259,36 @@ preserved; no private helper is executable by API roles.
 
 The hosted compatibility migration runs only when the existing legislative
 endpoint is already installed. Fresh resets skip it; the dependency-ordered
-`20261123070000` migration installs the same definitions after the repository's
+`20261123080000` migration installs the same definitions after the repository's
 established future-dated legislative schema. Both are append-only. The database
 regression uses 3,500 choices with a three-second statement timeout and rolls back.
+
+## Query performance and foreign-key coverage
+
+The append-only `20261123070000_query_performance_indexes` migration adds covering
+indexes for the seven advisor-reported foreign keys on map layers, meeting
+attendance, meeting vote choices and records-request transfers. Existing indexes
+remain intact. It uses five-second lock and sixty-second statement timeouts so
+an unexpected blocker fails the migration instead of holding up live edits.
+
+`search_site` materializes text after selecting the requested entity type, then
+builds the combined search vector once before matching and ranking. Empty queries
+skip relationship-text and vector construction. Search results, rank/order,
+meeting-text matching and visibility gates remain unchanged; there is no stale
+search cache to invalidate. `get_layer_geojson_page` checks the requested map/layer
+membership directly instead of fetching/sorting the entire map's layer list.
+Public/unlisted/private semantics, paging, totals and geometry precision remain
+unchanged. Both RPCs retain security-definer/empty-search-path configuration and
+existing execute grants.
+
+Run `PERFORMANCE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/query-performance-db.test.ts` against local Supabase. It
+compares before/after results for anonymous, ordinary authenticated and admin
+callers, including hidden meetings and a map/layer visibility matrix, then rolls
+back its migration and fixtures. The CLI-created migration timestamp was moved
+after the existing future-dated dependency sequence before application.
+
+Release through the normal PR/main Supabase integration; never apply this SQL to
+production from a feature branch. Check advisors and compare representative RPC
+timings after release. Index storage fits within the existing disk allowance;
+there is no instance resize or new paid service.
