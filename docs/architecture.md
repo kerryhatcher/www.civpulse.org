@@ -14,6 +14,11 @@ docs/         architecture, backend, and development notes
 
 ## Hosting and rendering
 
+- `apps/web/public/llms.txt` is the curated AI-facing site overview, served at
+  `/llms.txt` as a static text asset. It follows the [llms.txt format](https://llmstxt.org/)
+  with public entry points, source/reuse guidance, and the AI connection guide.
+  Keep its links and descriptions aligned with public routes when features change;
+  it contains no database export or restricted record URLs.
 - The frontend deploys as **Cloudflare Workers static assets**
   (`apps/web/wrangler.jsonc`, `assets.directory = ./dist`). It is a **static
   build**: `output` stays the Astro default (`static`) and there is **no
