@@ -6,7 +6,7 @@ test.skipIf(!process.env.MEETINGS_TEST_DATABASE_URL)('optional video offsets pre
   try{await sql.begin(async tx=>{
     if(!(await tx`select 1 from information_schema.columns where table_schema='public' and table_name='events' and column_name='meeting_video_url'`).length)
       await tx.unsafe(await Bun.file('supabase/migrations/20261122000003_meeting_video_url.sql').text());
-    await tx.unsafe(await Bun.file('supabase/migrations/20261122000004_meeting_video_start_seconds.sql').text());
+    await tx.unsafe(await Bun.file('supabase/migrations/20261124000000_meeting_video_start_seconds.sql').text());
     const suffix=crypto.randomUUID(),admin=crypto.randomUUID(),user=crypto.randomUUID();
     await tx`insert into auth.users(id,email) values(${admin},${`start-admin-${suffix}@example.test`}),(${user},${`start-user-${suffix}@example.test`})`;
     await tx`insert into public.admins(user_id) values(${admin})`;
