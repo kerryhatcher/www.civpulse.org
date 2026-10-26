@@ -1331,3 +1331,22 @@ The test compares previous and optimized visibility results, exercises anonymous
 ordinary signed-in and admin callers with 4,000 bills/links under a five-second
 statement timeout, and rolls back its migrations and fixtures. Merge to main
 before applying through the guarded production migration workflow.
+
+The bill directory uses `browse_bills` for jurisdiction (federal/state/unclassified),
+state name, term, keyword and sort criteria before pagination, with exact filtered
+totals and deterministic date/title ordering. It retains recursive bill visibility;
+ordinary signed-in users have the same discovery access as anonymous visitors.
+Jurisdiction and optional state name belong to legislative terms. Existing terms
+are unclassified unless a recognized Congress/Georgia General Assembly slug matches;
+new imports and admin edits should supply this metadata explicitly. State terms
+require a state name; federal/unclassified terms must leave it empty. This does
+not enable a bulk data feed. Apply `legislation_directory` on main before deploying
+the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL` and
+`bun test scripts/tests/legislation-directory-db.test.ts` (fixtures roll back).
+
+The follow-up Georgia bill backfill imported 3,813 bills/resolutions and 4,890
+associations for 3,292 of Josh McLaurin's recorded votes. Fifty votes have no
+measure reference in the official source and remain unlinked. Anonymous API
+verification checked every imported field and confirmed all 3,342 original member
+choices were unchanged. See
+[the import audit](research/josh-mclaurin-bills-backfill-2026-10-26.json).

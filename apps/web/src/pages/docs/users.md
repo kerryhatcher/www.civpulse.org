@@ -162,7 +162,14 @@ your IP address, browser identity, or cookies.
 ## Legislation
 
 [Browse legislation](/legislation/) to search bills and resolutions by title or
-identifier and filter by legislative term. [Sessions](/legislation/sessions/) groups
+identifier. Filter by **Jurisdiction** (state, federal, or not yet classified),
+**State**, and **Legislative term**. State options reflect recorded coverage;
+choosing federal clears and disables the state selector. Sort by introduction
+date (newest or oldest) or title (A–Z or Z–A). Filters and sorting apply to the
+entire result set, including **Load more**. Controls update results immediately;
+use **Search** to submit keywords. Empty results do not mean a state has no bills:
+only records added to Civic Pulse appear here.
+[Sessions](/legislation/sessions/) groups
 regular and special sessions, with links to their bills, actions and votes.
 
 A bill record includes sponsorship history, documented positions, official text

@@ -17,10 +17,25 @@ import Layout from "../../layouts/Layout.astro";
     <p>
       <a href="/legislation/sessions/">Browse sessions</a>
     </p>
-    <form class="org-form" data-search>
+    <form class="org-form legislation-filters" data-search>
       <label class="field">
         <span>Search bills</span>
         <input name="query" type="search" maxlength="500" />
+      </label>
+      <label class="field">
+        <span>Jurisdiction</span>
+        <select name="jurisdiction">
+          <option value="">All jurisdictions</option>
+          <option value="federal">Federal</option>
+          <option value="state">State</option>
+          <option value="unspecified">Not yet classified</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>State</span>
+        <select name="state" disabled>
+          <option value="">All recorded states</option>
+        </select>
       </label>
       <label class="field">
         <span>Legislative term</span>
@@ -28,8 +43,19 @@ import Layout from "../../layouts/Layout.astro";
           <option value="">All terms</option>
         </select>
       </label>
+      <label class="field">
+        <span>Sort by</span>
+        <select name="sort">
+          <option value="newest">Introduced: newest first</option>
+          <option value="oldest">Introduced: oldest first</option>
+          <option value="title_asc">Title: A–Z</option>
+          <option value="title_desc">Title: Z–A</option>
+        </select>
+      </label>
       <button class="button-link">Search</button>
     </form>
+    <p>Coverage includes records added to Civic Pulse, not every bill introduced.
+      If a state has no results, its bills may not have been added yet.</p>
     <p role="status" aria-live="polite" data-status>
       Loading…
     </p>

@@ -121,6 +121,15 @@ var legislativeResources = {
     label: "Legislative terms",
     fields: [
       {
+        name: "jurisdiction",
+        label: "jurisdiction",
+        type: "text",
+        required: true,
+        choices: ["unspecified", "federal", "state"],
+        default: "unspecified"
+      },
+      { name: "state_name", label: "state name (required for state terms)", type: "text" },
+      {
         name: "organization_id",
         label: "organization",
         type: "uuid",
