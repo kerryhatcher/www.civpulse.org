@@ -1403,7 +1403,7 @@ imports, source conflicts, provenance, TUS originals, checksums and expiry/clean
 ### District offices in legislative history
 
 District-numbered offices may belong to a district organization rather than the
-chamber organization. The append-only `20261123130000_legislative_district_service`
+chamber organization. The append-only `20261124000000_legislative_district_service`
 migration recognizes a direct organization relationship whose label is exactly
 `Legislative district of`, whose source URL is present, and whose related
 organization is a chamber in the same legislature. The reverse display label is
@@ -1416,7 +1416,7 @@ name or district-number match. Merge the migration to main before applying it.
 
 Verify locally with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-district-service-db.test.ts scripts/tests/legislation-db.test.ts`.
 
-`20261123160000_legislative_import_column_cache` caches the permitted column names
+`20261124000100_legislative_import_column_cache` caches the permitted column names
 once per resource inside each normalized import request. It retains the 100-row /
 2 MB bounds, admin authorization, provider identity locks, managed-field rejection,
 atomic rollback, per-row validation/auditing, and reviewed attendance preservation.

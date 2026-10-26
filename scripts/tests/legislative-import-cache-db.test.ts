@@ -16,7 +16,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('batched import caches c
   await tx.unsafe(await Bun.file('supabase/migrations/20261123150000_preserve_import_attendance.sql').text());
   await tx.unsafe('savepoint baseline');const baseline=await run();await tx.unsafe('rollback to savepoint baseline');
   await tx.unsafe('reset role');
-  await tx.unsafe(await Bun.file('supabase/migrations/20261123160000_legislative_import_column_cache.sql').text());
+  await tx.unsafe(await Bun.file('supabase/migrations/20261124000100_legislative_import_column_cache.sql').text());
   const cached=await run();expect(cached.result).toHaveLength(100);
   expect(cached.result.map((r:any)=>r.table)).toEqual(baseline.result.map((r:any)=>r.table));
   console.log(`100-row import: baseline ${baseline.ms.toFixed(0)}ms; cached ${cached.ms.toFixed(0)}ms`);
