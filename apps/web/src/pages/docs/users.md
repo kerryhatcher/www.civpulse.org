@@ -173,7 +173,14 @@ are separate from voting choices.
 
 People profiles show legislative voting history with legislative-term, session, chamber/committee, bill-title/identifier and
 category filters, plus sponsorships. The office and district reflect recorded
-service at the time. Missing choices mean the record is unknown, not that the member
+service at the time. Votes are grouped by bill or resolution, showing only the
+latest matching vote and the number of other matching votes by that person.
+Counts and the latest vote follow the selected filters. Use **View bill details
+and vote history** to see the bill's full recorded vote history, or follow the
+latest vote question for its member choices. Bills with the same number in
+different terms or numbering contexts stay separate. Votes without a visible
+bill association are listed individually. **Load more** adds further groups.
+Missing choices mean the record is unknown, not that the member
 was absent. Voice votes may have an outcome without individual choices. Coverage
 labels describe the imported record; official totals can differ from partial or
 visibility-filtered member lists. Unlisted records require their direct links;
