@@ -3,6 +3,17 @@
 // Require its success for this exact checkout before building/deploying production.
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { readdirSync } from 'node:fs';
+
+export function assertUniqueMigrationVersions(files) {
+  const seen = new Map();
+  for (const file of files) {
+    const version = file.match(/^(\d+)_.*\.sql$/)?.[1];
+    if (!version) continue;
+    if (seen.has(version)) throw new Error(`Duplicate migration version ${version}: ${seen.get(version)} and ${file}. Deployment blocked.`);
+    seen.set(version, file);
+  }
+}
 
 const repository = 'kerryhatcher/www.civpulse.org';
 const supabaseAppId = 330661;
@@ -85,6 +96,7 @@ export async function waitForMigrations(sha, {
 if (import.meta.main) {
   try {
     const cwd = fileURLToPath(new URL('..', import.meta.url));
+    assertUniqueMigrationVersions(readdirSync(new URL('../supabase/migrations/', import.meta.url)));
     // Resolve the actual checkout, rather than trusting a branch name or stale CI variable.
     const sha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' }).trim();
     const dirtyMigrations = execFileSync('git', ['status', '--porcelain', '--', 'supabase/migrations'], { cwd, encoding: 'utf8' }).trim();

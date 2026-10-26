@@ -245,6 +245,10 @@ check never counts as success. Keep the Supabase production integration enabled
 for every push to `main`; after resolving a failure, rerun the Cloudflare build.
 Keep schema changes backward compatible with the currently deployed frontend.
 
+The guard and its CI tests also reject duplicate migration filename versions
+before deployment. Concurrent migration PRs must reserve distinct timestamps;
+never rename or remove an applied production migration to resolve a collision.
+
 The guard uses GitHub's public checks API, without database credentials. An optional
 read-only `GITHUB_TOKEN` raises API rate limits (set it as a
 build secret, never a `PUBLIC_*` value). Cloudflare build runners can share an

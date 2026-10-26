@@ -1270,10 +1270,13 @@ same helper. Private/unlisted parent gates and explicit UUID contexts are
 preserved; no private helper is executable by API roles.
 
 The hosted compatibility migration runs only when the existing legislative
-endpoint is already installed. Fresh resets skip it; the dependency-ordered
-`20261123090000` migration installs the same definitions after the repository's
-established future-dated legislative schema. Both are append-only. The database
-regression uses 3,500 choices with a three-second statement timeout and rolls back.
+endpoint is already installed. Fresh resets skip it; the applied bill-group
+(`20261123080000`) and bill-browsing (`20261123090000`) migrations supply the
+visibility helper and optimized profile/directory reads. The redundant,
+production-unapplied `legislative_history_read_performance` file was removed
+after a version collision; the applied files and migration history are retained.
+The database regression uses these current definitions with 3,500 choices and a
+three-second statement timeout, then rolls back.
 
 ## Query performance and foreign-key coverage
 
