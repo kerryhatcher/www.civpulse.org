@@ -1486,3 +1486,10 @@ Verify with `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54
 The transactional test compares old/new payloads across hidden parents and
 relationships, and exports all 16,001 fixture choices with a three-second
 statement timeout per page. All fixtures and function changes roll back.
+
+The hosted dataset still exceeded the limit with per-link recursive checks.
+`20261124010500_profile_vote_export_shared_gates` reuses permitted bill/action
+sets and public version/amendment parent joins across the page. The anonymous
+export's existing gate ensures these sets cannot inherit administrator access.
+The same regression now uses 16,001 distinct bills as well as choices and checks
+hidden linked actions. Apply through the main integration before rebuilding.
