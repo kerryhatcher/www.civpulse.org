@@ -1220,7 +1220,13 @@ bill. A vote affecting multiple bills contributes once to each bill; a vote with
 no visible bill association remains an individual entry. Ordering uses date,
 exact time when recorded, then vote UUID to break ties deterministically.
 Filters apply before counting and selecting the latest vote. The original
-per-vote RPC remains unchanged. Release the append-only
+per-vote RPC remains unchanged. Profile groups exclude votes classified as
+`attendance` before counting, choosing the latest vote, or paginating, including
+when a category filter explicitly requests attendance. Source vote/choice records,
+direct UUID viewers, and `get_person_legislative_record` remain unchanged for
+research and auditing. This applies to every person profile, including the UUID
+viewer. Release `20261123110000_profile_votes_exclude_attendance` through main
+before deploying the explanatory frontend copy. Release the append-only
 `20261123080000_person_legislative_bill_groups` migration through main before
 deploying the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-bill-groups-db.test.ts`;
 the test rolls back its migration and fixtures.

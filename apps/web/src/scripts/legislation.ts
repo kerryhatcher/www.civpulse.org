@@ -723,7 +723,7 @@ export async function loadPersonLegislation(personId: string) {
         offset = requestedOffset;
         displayedTotal = data.total;
         pageLoaded = true;
-        status.textContent = `${data.total} ${data.total === 1 ? "entry" : "entries"}, grouped by bill or resolution. Latest matching vote shown; counts follow the selected filters. Votes without a linked bill are listed separately. Missing records do not indicate absence or opposition.`;
+        status.textContent = `${data.total} ${data.total === 1 ? "entry" : "entries"}, grouped by bill or resolution. Latest matching vote shown; counts follow the selected filters. Attendance roll calls are excluded. Votes without a linked bill are listed separately. Missing records do not indicate absence or opposition.`;
         pageLabel.textContent = `Page ${Math.floor(offset / pageSize) + 1} of ${Math.max(1, Math.ceil(data.total / pageSize))}`;
         pagination.hidden = data.total <= pageSize;
         restoreNavigation();
