@@ -1501,3 +1501,12 @@ imports and turnout tracking. Admin-only imports validate identity, vote totals,
 source presence and predecessor IDs; public reads inherit election visibility.
 See [election results](election-results.md) for the RPC contract, deduplication,
 photo examples, validation and release sequence.
+
+`20261124010200_bill_child_browse_performance` applies the same bounded parent
+visibility calculation to imported bill actions and sponsorships, which also
+exceeded the three-second API timeout as imports grew. Referenced bills, bodies,
+sessions, events and office terms retain their existing recursive visibility gates.
+The helper is private; grants, RLS and query results are unchanged. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/bill-child-browse-db.test.ts`. The rollback test compares
+all caller/parent/context gates and exercises 20,000 rows per resource under the
+API timeout, including a last-page request. No paid resource is required.
