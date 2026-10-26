@@ -1,0 +1,25 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import { getPublicRecordSnapshot } from '../../../../lib/public-record-snapshot';
+import { recordArchivePages } from '../../../../lib/public-record-build-data';
+import { archiveHref, recordHref, recordKinds } from '../../../../lib/public-records';
+export async function getStaticPaths() {
+  return recordArchivePages(await getPublicRecordSnapshot()).map(archive => ({ params: { kind: archive.kind, page: String(archive.page) }, props: { archive } }));
+}
+interface Props { archive: ReturnType<typeof recordArchivePages>[number] }
+const { archive } = Astro.props;
+const title = `${recordKinds[archive.kind]} archive — page ${archive.page}`;
+---
+<Layout title={title} description={`Browse published ${recordKinds[archive.kind].toLowerCase()} in Civic Pulse. Page ${archive.page} of ${archive.total}.`}>
+  <main id="main">
+    <p><a href="/records/">Public record archive</a></p>
+    <div class="page-intro"><h1>{title}</h1><p>Published public records. Coverage may be incomplete.</p></div>
+    <ul>{archive.records.map(record => <li><a href={recordHref(record.kind, record.id)}>{record.title}</a></li>)}</ul>
+    {!archive.records.length && <p>No public records published in this category.</p>}
+    <nav aria-label="Archive pages">
+      {archive.page > 1 && <a href={archiveHref(archive.kind, archive.page - 1)}>Previous page</a>}
+      <span> Page {archive.page} of {archive.total} </span>
+      {archive.page < archive.total && <a href={archiveHref(archive.kind, archive.page + 1)}>Next page</a>}
+    </nav>
+  </main>
+</Layout>
