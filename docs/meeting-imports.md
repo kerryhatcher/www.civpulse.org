@@ -139,3 +139,7 @@ and 20,968,285-byte Monthly Report
 (`782c470ac434f651eb14ffd633513a2dd971058e152e0860c7bd1fd8f0e67b41`).
 Both original downloads matched their captured digests. This local verification
 created no production records and made no requests to the source provider.
+
+Release review also covers named source labels such as
+`Vote Not Recorded: Mr. Lester M. Miller`: the append-only wording guard rejects
+normalizing those rows to a cast ballot, just as it rejects the bare label.

@@ -79,6 +79,9 @@ test.skipIf(!enabled)('real local Auth/MCP/Postgres/Storage: atomic sourced ball
     expect((await call("import_meeting_records",{...args,records:rosterBallot,dry_run:false})).status).toBe("rejected");
     const misclassified=structuredClone(rosterBallot);misclassified[1].data.original_text="Vote Not Recorded";
     expect((await call("import_meeting_records",{...args,records:misclassified,dry_run:false})).errors[0].message).toContain("must remain unknown");
+    const namedUnknown=[{...records[5],source_key:"named-unknown-round"},{...records[6],source_key:"named-unknown-choice",data:{...records[6].data,vote_source_key:"named-unknown-round",choice:"yes",original_text:"Vote Not Recorded: Mr. Lester M. Miller"}}];
+    expect((await call("import_meeting_records",{...args,records:namedUnknown,dry_run:false})).errors[0].message).toContain("must remain unknown");
+    expect((await api.rpc("get_meeting",{p_id:meetings[0]})).data.votes).toHaveLength(1);
     // A second round under the same agenda item must remain independent.
     const round2=[{...records[5],source_key:'round-2',data:{...records[5].data,position:1}}, {...records[6],source_key:'round-2-choice',data:{...records[6].data,vote_source_key:'round-2'}}];
     expect((await call('import_meeting_records',{...args,records:round2,dry_run:false})).created).toBe(2);
