@@ -105,7 +105,10 @@ export async function initLegislationAdmin() {
       const request = ++generation;
       const table = resource.value;
       message.textContent = "Loading…";
-      if (reset) {
+      // A search can supersede the first load while reference pickers are still
+      // loading. The winning request must finish the form before offering Edit.
+      if (reset || fields.childElementCount === 0) {
+        list.replaceChildren();
         editing = null;
         formMessage.textContent = "";
         fields.replaceChildren();
