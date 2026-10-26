@@ -628,6 +628,19 @@ Signed-in discovery and UUID viewers must retain existing permissions. Test
 private/unlisted fixtures locally and clean them up; check browser console errors.
 A missing snapshot should report failure without falling back to a live search.
 
+### Verifying the public record archive
+
+Run `bun test scripts/tests/public-records.test.ts` and, with the shared local
+backend running, `PUBLIC_RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-records-db.test.ts`.
+The database test creates synthetic records inside a rollback-only transaction;
+it checks anonymous and ordinary authenticated publication, hidden parent gates
+and retained direct-unlisted viewer access without modifying production schema.
+Then run `bun run check` and `bun run build` and inspect `dist/records` and the
+sitemap. Exercise `/records/` → a category → a record → live viewer, archive
+pagination, two distinct canonicals and missing/deleted IDs in preview. Check
+anonymous and signed-in browser states and console errors. No signed download
+URLs, file storage paths, owners or transfer history may enter record HTML.
+
 ### Meeting import and resumable original QA
 
 See [meeting imports](meeting-imports.md#release-and-verification). Apply the new

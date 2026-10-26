@@ -1,0 +1,25 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getPublicRecordSnapshot } from '../../../lib/public-record-snapshot';
+import { archiveHref, recordKinds, type PublicRecord } from '../../../lib/public-records';
+export async function getStaticPaths() {
+  return (await getPublicRecordSnapshot()).map(record => ({ params: { kind: record.kind, id: record.id }, props: { record } }));
+}
+interface Props { record: PublicRecord }
+const { record } = Astro.props;
+---
+<Layout title={record.title} description={record.description}>
+  <main id="main">
+    <p><a href="/records/">Public record archive</a> / <a href={archiveHref(record.kind)}>{recordKinds[record.kind]}</a></p>
+    <div class="page-intro"><h1>{record.title}</h1></div>
+    <dl class="account-list">{record.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.href ? <a href={fact.href}>{fact.value}</a> : fact.value}</dd></div>)}</dl>
+    {record.sections.filter(section => section.text || section.items?.length).map((section, index) => <section class="prose" aria-labelledby={`section-${index}`}>
+      <h2 id={`section-${index}`}>{section.title}</h2>
+      {section.text && <p class="record-text">{section.text}</p>}
+      {section.items?.length && <ul>{section.items.map(item => <li>{item.href ? <a href={item.href}>{item.text}</a> : item.text}</li>)}</ul>}
+    </section>)}
+    <p>Published snapshot. Changes appear after the next publication. Coverage includes records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>
+    <p><a href={record.viewer}>Open live record and available files</a> · <a href="/about/#sources">Sources and credits</a></p>
+  </main>
+</Layout>
+<style>.record-text { white-space: pre-wrap; overflow-wrap: anywhere; }</style>

@@ -5290,6 +5290,72 @@
     }
   },
   {
+    "name": "import_legislation_bundle",
+    "description": "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. The existing import_legislation tool remains atomic for a single batch.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "maxItems": 1000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "table": {
+                "type": "string",
+                "enum": [
+                  "legislative_terms",
+                  "legislative_sessions",
+                  "legislative_bodies",
+                  "legislative_body_memberships",
+                  "bills",
+                  "bill_versions",
+                  "bill_amendments",
+                  "bill_actions",
+                  "bill_relationships",
+                  "bill_sponsorships",
+                  "bill_positions",
+                  "legislative_votes",
+                  "legislative_vote_bills",
+                  "legislative_vote_choices",
+                  "article_bills",
+                  "legislative_event_links"
+                ]
+              },
+              "data": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "table",
+              "data"
+            ]
+          }
+        },
+        "start_offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      },
+      "required": [
+        "records"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "describe_legislative_resource",
     "description": "Get fields, allowed choices, required values and foreign-key targets for a legislative resource before editing or importing.",
     "inputSchema": {

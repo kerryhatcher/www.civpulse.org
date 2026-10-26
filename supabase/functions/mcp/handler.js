@@ -1499,6 +1499,39 @@ function registerLegislativeTools(server, supabase, sourceReaderUrl) {
       throw new Error(error.message);
     return data;
   }, { write: true, idempotent: true });
+  register("import_legislation_bundle", "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. The existing import_legislation tool remains atomic for a single batch.", {
+    records: z2.array(z2.object({
+      table: z2.enum(Object.keys(legislativeResources)),
+      data: z2.record(z2.string(), z2.unknown())
+    })).max(1000),
+    start_offset: z2.number().int().min(0).max(1000).default(0)
+  }, async ({ records, start_offset }) => {
+    if (start_offset > records.length)
+      throw new Error("start_offset exceeds bundle length");
+    if (new TextEncoder().encode(JSON.stringify(records)).byteLength > 2000000) {
+      throw new Error("Provide at most 2 MB of normalized records");
+    }
+    let offset = start_offset;
+    while (offset < records.length) {
+      const batch = records.slice(offset, offset + 100);
+      try {
+        const { error } = await supabase.rpc("import_legislation", { p_records: batch });
+        if (error)
+          throw new Error(error.message);
+      } catch (error) {
+        return {
+          status: "partial",
+          imported_count: offset - start_offset,
+          next_offset: offset,
+          total: records.length,
+          error: error instanceof Error ? error.message : "Import batch failed",
+          retry_note: "Retry this bundle from next_offset. Provider keys make a retry safe if the last response was uncertain."
+        };
+      }
+      offset += batch.length;
+    }
+    return { status: "complete", imported_count: offset - start_offset, next_offset: offset, total: records.length };
+  }, { write: true, idempotent: true });
   const tableSchema = z2.enum(Object.keys(legislativeResources));
   register("describe_legislative_resource", "Get fields, allowed choices, required values and foreign-key targets for a legislative resource before editing or importing.", { table: tableSchema }, async ({ table }) => legislativeResources[table]);
   register("save_legislative_record", "Create or patch a legislative record (admin only). First use describe_legislative_resource. Supply id to patch an existing row; omit it to create. Context cannot be reassigned. For repeatable imports use import_legislation with provider IDs.", {

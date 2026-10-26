@@ -321,3 +321,29 @@ Unknown outcomes remain unrecorded; never infer individual ballots from unanimit
 Read back `get_meeting` and `get_person_meeting_votes`. UUID and signed-in profile
 views use live data; anonymous public slug profiles require a rebuild. Verify the
 actual public profile after publishing before reporting site visibility.
+
+### Backfilling district-based legislative service
+
+Keep historical offices attached to their recorded district organizations.
+Before importing sponsorships or chamber memberships, use the organization
+relationship tools to link each district to its verified chamber with the exact
+relationship **Legislative district of**, reverse label **Contains legislative
+district**, and an official roster source URL. The chamber must belong to the
+bill or membership's legislature. This requires the district-service validation
+migration to have reached production through main. Do not substitute a different
+office term or change an office's organization to bypass validation.
+
+When committee sources identify only a session and role, retain that session
+label in a sourced profile summary; do not invent appointment dates for dated
+membership records. Mark incomplete roll calls and archival coverage as partial,
+and preserve held source conflicts for review. Public profile descriptions and
+legislative sections require a rebuild/deploy;
+signed-in and UUID viewers continue to read live records.
+
+For larger normalized backfills, `import_legislation_bundle` accepts up to 1,000
+records (2 MB) and sends ordered 100-record batches through the existing import
+RPC using the caller's admin session. Each batch commits separately. Inspect
+`status` and `next_offset`; after a partial result, retry the same bundle from that
+offset. Later batches are not attempted after an error. Provider IDs make retries
+idempotent, including uncertain network responses. Use `import_legislation` when
+the entire request must be atomic. Neither tool needs ad hoc SQL or a service key.
