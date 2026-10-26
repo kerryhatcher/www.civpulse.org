@@ -1,7 +1,13 @@
 /** Read-only adapter for the same public data API used by legis.ga.gov. */
 export const GEORGIA_API = 'https://www.legis.ga.gov/api/';
-export function isGeorgiaAttendance(row: { isRollCall?: boolean; caption?: string }): boolean {
-  return row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? '');
+// Official 2023 Senate journal pp. 421–422 identifies vote 21003 as opening
+// attendance, despite its "SECOND READING" caption and false isRollCall flag.
+// https://www.legis.ga.gov/api/document/docs/default-source/senate-journal-document-library/2023-senate-journal.pdf
+function isReviewedGeorgiaAttendance(id?: number): boolean {
+  return id === 21003;
+}
+export function isGeorgiaAttendance(row: { id?: number; isRollCall?: boolean; caption?: string }): boolean {
+  return isReviewedGeorgiaAttendance(row.id) || row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? '');
 }
 export const georgiaChoices = [
   { choice: 'yes', source_choice: 'Yea' },
@@ -52,7 +58,8 @@ export async function readGeorgiaSource(input: GeorgiaSourceInput, fetcher: type
   if (input.resource === 'vote') {
     if (!data || !Array.isArray(data.votes)) throw new Error('Invalid Georgia vote detail');
     const votes = data.votes.filter((row: any) => input.member_id === undefined || row.member?.id === input.member_id);
-    return { ...provenance, session: data.session, legislation: data.legislation, total: votes.length,
+    return { ...provenance, ...(isReviewedGeorgiaAttendance(input.vote_id) ? { attendance: true } : {}),
+      session: data.session, legislation: data.legislation, total: votes.length,
       member_identity_conflict: input.member_id !== undefined && votes.length > 1,
       rows: votes.slice(input.offset, input.offset + input.limit).map((row: any) => ({ ...row,
         ...(georgiaChoices[row.memberVoted as number] ?? { choice: 'other', source_choice: String(row.memberVoted) }),
