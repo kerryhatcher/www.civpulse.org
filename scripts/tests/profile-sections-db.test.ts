@@ -65,7 +65,7 @@ test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('public export matches gated
   expect((await own('votes')).map(r=>r.vote_id)).toEqual(votes.map(r=>r.vote_id));expect(votes).toHaveLength(55);
   const snapshot=emptyProfileSections();snapshot.legislativeVotes=await own('legislative_votes');
   const keys=(rows:any[])=>rows.map(({group_id,vote_id,vote_count}:any)=>({group_id,vote_id,vote_count}));
-  for(const category of [null,'passage','amendment'])for(const query of [null,'HB','public','unlisted','missing']){
+  for(const category of [null,'passage','amendment'])for(const query of [null,'HB','public','unlisted','missing','HB _','QA %']){
    const expected=(await tx`select get_person_legislative_bill_groups(${people[0]},null,null,${category},100,0,${term.id},${query}) result`)[0].result;
    const actual=groupProfileVotes(snapshot,{p_term_id:term.id,p_category:category,p_bill_query:query,p_limit:100});
    expect(actual.total).toBe(expected.total);expect(keys(actual.rows)).toEqual(keys(expected.rows));

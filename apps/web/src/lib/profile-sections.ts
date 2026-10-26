@@ -37,9 +37,27 @@ export function browseProfileLegislation(snapshot: PublicProfileSections, table:
   return { total: rows.length, rows: rows.slice(offset, offset+limit) };
 }
 function matchesBill(text: string, query: string): boolean {
-  // Match existing ILIKE substring semantics, including % and _ wildcards.
-  const pattern = query.slice(0,500).split('').map(c => c === '%' ? '.*' : c === '_' ? '.' : c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('');
-  return new RegExp(pattern,'isu').test(text);
+  // ILIKE substring matching without compiling user input into a regex.
+  const tokens: { kind: 'many'|'one'|'literal'; value?: string }[] = [{kind:'many'}];
+  const pattern = Array.from(query.slice(0,500).toLocaleLowerCase());
+  for (let i=0;i<pattern.length;i++) {
+    const char=pattern[i];
+    if (char==='\\' && i+1<pattern.length) tokens.push({kind:'literal',value:pattern[++i]});
+    else if (char==='%') { if(tokens.at(-1)?.kind!=='many') tokens.push({kind:'many'}); }
+    else tokens.push(char==='_' ? {kind:'one'} : {kind:'literal',value:char});
+  }
+  if(tokens.at(-1)?.kind!=='many') tokens.push({kind:'many'});
+  const chars=Array.from(text.toLocaleLowerCase());
+  let position=0,token=0,lastMany=-1,retryFrom=0;
+  while(position<chars.length) {
+    const current=tokens[token];
+    if(current?.kind==='one' || (current?.kind==='literal' && current.value===chars[position])) {position++;token++;}
+    else if(current?.kind==='many') {lastMany=token++;retryFrom=position;}
+    else if(lastMany>=0) {token=lastMany+1;position=++retryFrom;}
+    else return false;
+  }
+  while(tokens[token]?.kind==='many') token++;
+  return token===tokens.length;
 }
 export function groupProfileVotes(snapshot: PublicProfileSections, args: Record<string, unknown>) {
   const grouped = new Map<string, LegislativeRow>();
