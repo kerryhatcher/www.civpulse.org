@@ -83,3 +83,19 @@ flag is sometimes false for attendance: check the caption too, including exact
 roll-call/attendance captions. Never derive outcomes just from Yea/Nay totals.
 If an operation requires ad-hoc SQL, add the missing supported app/API/MCP
 capability and verify it before continuing the content task.
+
+For a larger normalized import, import_legislation_bundle accepts up to 1,000
+records / 2 MB and preserves parent-first order through 100-record transactions.
+Each batch commits independently. Inspect status and next_offset; stop on a
+partial result and retry the same bundle from that offset. Keep provider IDs
+stable. The original import_legislation remains atomic for one batch. Neither
+content path needs raw SQL or a service-role key.
+
+District-based offices can be reconciled through an explicit, sourced
+organization relationship labeled `Legislative district of` to their chamber
+(reverse label `Contains legislative district`). Verify the chamber belongs to
+the same legislature and preserve the existing office/term. This requires the
+released district-service migration; do not relabel districts as legislative
+bodies to bypass validation. When committee sources provide session labels but
+no appointment dates, retain sourced session/role summaries without inventing
+dated membership intervals.
