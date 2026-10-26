@@ -3,6 +3,7 @@ import { createClient, type User } from "@supabase/supabase-js";
 import { buildServer } from "./tools";
 
 export interface Env {
+  GEORGIA_SOURCE_READER_URL?: string;
   KB_API_URL?: string;
   SUPABASE_URL: string;
   SUPABASE_ANON_KEY: string;
@@ -111,7 +112,7 @@ async function respond(request: Request, env: Env): Promise<Response> {
       return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
     }
 
-    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }));
+    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }, env.GEORGIA_SOURCE_READER_URL));
     return handler.fetch(request);
   }
 

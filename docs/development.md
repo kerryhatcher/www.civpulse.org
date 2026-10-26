@@ -430,6 +430,32 @@ No new deployment credential is required. `bun run mcp:deploy` is the manual
 CLI path and requires Supabase CLI authentication. The former Cloudflare MCP
 build trigger was removed; its Worker serves only compatibility redirects.
 
+### Georgia source reader
+
+Run `bun run georgia:check` and `bun run georgia:test` for the shared source
+adapter and its public reader. Deploy the reader first with
+`bun run georgia:deploy` (requires Cloudflare Wrangler authentication), then
+rebuild/deploy MCP. The reader is a separate Worker configured in
+`apps/georgia-source/wrangler.jsonc`; deployment is independent of the Astro site
+and Supabase integration. The function's `GEORGIA_SOURCE_READER_URL` override
+must be an owned HTTPS reader endpoint without credentials or a query string.
+Its default is `https://civpulse-georgia-source.kerryhatcher.workers.dev/`.
+
+On October 26, 2026, the same adapter completed locally in Bun and Deno in under
+half a second, but hosted Supabase requests stalled at the Georgia handshake.
+Root-page and unauthenticated API probes also timed out from Supabase in
+`us-east-2` and `us-east-1`; DNS resolved the same address as locally. Forcing
+HTTP/1.1 did not help. Cloudflare reached the origin and completed the shared
+adapter successfully. This isolates the failure to the hosted network path;
+it does not establish whether the upstream cause was routing or a firewall.
+The scoped reader avoids that path without retries or longer Georgia timeouts.
+
+After deployment, exercise all four resources through the authenticated hosted
+MCP tool. For vote `21003`, member `4942`, verify `attendance: true`, original
+`source_choice: Yea`, and the official source URL. Local success alone does not
+validate the hosted network path. Both transports reject redirects without
+following them; use `redirect: manual` because Workers does not support `error`.
+
 Run `bun run mcp:check`, `bun run scripts/build-mcp.mjs --check`,
 `bun test scripts/tests/mcp-handler.test.ts`, and `bun run mcp:test` (local DB)
 before release. The routing checks cover gateway path stripping, OAuth discovery
@@ -525,7 +551,7 @@ profile filters and reset, admin record search, edit/cancel/save, and source fie
 Use local fixture copies only; never modify live imported records for UI tests.
 
 For Georgia legislative source reads and MCP office lookup, run
-`bun test scripts/tests/georgia-source.test.ts scripts/tests/mcp-legislation.test.ts`
+`bun run georgia:test` and `bun test scripts/tests/mcp-legislation.test.ts`
 and `bun run mcp:check`. The adapter uses only Georgia's public website handshake,
 fixed official API origin, bounded tool pages and request timeouts. Its token is
 never returned. A live source check should compare member ID, district, choice,
