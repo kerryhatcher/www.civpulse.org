@@ -1,4 +1,5 @@
 ---
+import { directoryUrl } from '../../lib/directory-assets';
 import Layout from '../../layouts/Layout.astro';
 import {
   fetchPublicElections,
@@ -26,7 +27,7 @@ const elections = [...upcoming, ...past];
   title="Elections"
   description="Upcoming and past elections, with early voting windows, registration and mail-ballot deadlines, and the contests on the ballot."
 >
-  <main id="main">
+  <main id="main" data-directory-snapshot={await directoryUrl('elections')}>
     <div class="page-intro">
       <h1>Elections</h1>
       <p>
@@ -44,7 +45,7 @@ const elections = [...upcoming, ...past];
             id="election-search-input"
             type="search"
             placeholder="Search elections…"
-            data-election-search
+            data-election-search maxlength="500"
             autocomplete="off"
           />
           <p class="status" data-election-search-note hidden>

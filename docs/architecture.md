@@ -304,3 +304,34 @@ require Publish. Publish promptly after making previously public data restricted
 old downloads cannot be recalled, and open pages may need reloading after a
 publication removes their previous asset URLs. No new service/compute size or
 privileged build credentials are required.
+
+### Public directory snapshots
+
+Anonymous people, organization and election directory controls read one
+content-hashed JSON file per directory from `/directory-data/`. People retain
+24-card pagination, type filters and four name sorts; organization/election
+keyword results retain their 24/50-card caps. Public organization affiliations,
+election contests, public candidate names/parties/statuses and ballot questions
+remain searchable. Signed-in searches retain the existing live RPCs and their
+permission checks, including hidden relationship discovery where allowed.
+UUID viewers are unchanged. No restricted record or search-only relationship
+text is exported: the build uses the anon client, explicit public parent filters
+and public-person allowlists. Organizations have no visibility field.
+
+Search runs in the browser with English word stemming, quoted phrases, `OR`
+and `-excluded` terms, plus literal substring matching. Local relevance favors
+exact/substring titles then alphabetical ties; it is not PostgreSQL `ts_rank`,
+so ranking and some language tokenization differ from live signed-in searches.
+People still sort by the selected first/last name ordering. Election browsing
+recomputes upcoming/past ordering using today's America/New_York date.
+
+Build reads use stable 500-row pages and fail publication on backend errors,
+preventing a partial directory from replacing a good deployment. The three JSON
+assets have five-minute revalidation and are excluded from the sitemap. Failed
+asset loads show an error; they never silently fall back to backend searches.
+Publishing after imports/edits refreshes directories and profiles together.
+There is no new runtime service or paid resource. Builds add paged public
+affiliation reads and three static assets; election search reuses cached, gated
+election-detail reads instead of broadening ballot-question table permissions; measure bytes/build time as
+data grows. Static copies already downloaded cannot be recalled after hiding a
+record, so publish promptly when restricting visibility.

@@ -1,3 +1,5 @@
+import { readDirectory } from './directory-data';
+import { orderElections, searchDirectory } from '../lib/directories';
 import { historyLink } from '../lib/history';
 import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
 import { formatEventWhen } from '../lib/calendars';
@@ -72,8 +74,7 @@ function renderElectionCard(election: Election): HTMLElement {
   return card;
 }
 
-/** Public elections directory. Search uses `search_elections`, which widens to
- * unlisted/private elections for admins. */
+/** Public elections use static search; signed-in access stays with the existing RPC. */
 export function initElectionSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-election-search]');
   const initial = document.querySelector<HTMLElement>('[data-election-initial]');
@@ -90,80 +91,39 @@ export function initElectionSearch(): void {
   let timer: number | undefined;
   let requestId = 0;
 
-  async function listAccessible(): Promise<void> {
-    if (!signedIn) {
-      requestId += 1;
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.hidden = true;
-      if (empty) empty.hidden = true;
-      if (initial) initial.hidden = false;
-      return;
-    }
-
-    const id = ++requestId;
-    if (status) {
-      status.textContent = 'Loading elections…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_elections', { p_query: '', p_limit: 100 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.textContent = `Could not load elections: ${error.message}`;
-      return;
-    }
-
-    const elections = (data ?? []) as unknown as Election[];
-    resultsEl.replaceChildren(...elections.map(renderElectionCard));
-    resultsEl.hidden = elections.length === 0;
-    if (empty) empty.hidden = elections.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${elections.length} ${
-        elections.length === 1 ? 'election' : 'elections'
-      } available (includes unlisted and private)`;
-    }
-  }
-
   async function search(query: string): Promise<void> {
     const id = ++requestId;
-    if (status) {
-      status.textContent = 'Searching…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_elections', { p_query: query, p_limit: 50 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
+    if (status) { status.textContent = query ? 'Searching…' : 'Loading elections…'; status.hidden = false; }
+    if (empty) empty.hidden = true;
+    try {
+      const snapshot = await readDirectory('elections');
+      const {data,error} = snapshot
+        ? {data: query ? searchDirectory(snapshot,query).slice(0,50) : orderElections(snapshot.map(entry=>entry.record)), error:null}
+        : await supabase.rpc('search_elections',{p_query:query,p_limit:query ? 50 : 100});
+      if (id !== requestId) return;
+      if (error) throw error;
+      const elections = (data ?? []) as unknown as Election[];
+      resultsEl.replaceChildren(...elections.map(renderElectionCard));
+      resultsEl.hidden = elections.length === 0;
+      if (empty) empty.hidden = elections.length > 0;
+      if (initial) initial.hidden = true;
+      if (status) status.textContent = query
+        ? `${elections.length} result${elections.length === 1 ? '' : 's'}`
+        : `${elections.length} election${elections.length === 1 ? '' : 's'} available${signedIn ? ' (includes unlisted and private)' : ''}`;
+    } catch (error) {
+      if (id !== requestId) return;
       resultsEl.hidden = true;
-      if (status) status.textContent = `Search failed: ${error.message}`;
-      return;
-    }
-
-    const elections = (data ?? []) as unknown as Election[];
-    resultsEl.replaceChildren(...elections.map(renderElectionCard));
-    resultsEl.hidden = elections.length === 0;
-    if (empty) empty.hidden = elections.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${elections.length} result${elections.length === 1 ? '' : 's'}`;
+      if (status) status.textContent = `Could not load elections: ${error instanceof Error ? error.message : String(error)}`;
     }
   }
 
   inputEl.addEventListener('input', () => {
+    ++requestId;
     const query = inputEl.value.trim();
     window.clearTimeout(timer);
 
     if (!query) {
-      void listAccessible();
+      void search('');
       return;
     }
 
@@ -176,13 +136,14 @@ export function initElectionSearch(): void {
     window.clearTimeout(timer);
     const query = inputEl.value.trim();
     if (query) void search(query);
-    else void listAccessible();
+    else void search('');
   });
 
   void supabase.auth.getSession().then(({ data: { session } }) => {
     signedIn = Boolean(session);
     if (signedIn && note) note.hidden = false;
-    if (signedIn) void listAccessible();
+    if (inputEl.value.trim()) void search(inputEl.value.trim());
+    else void search('');
   });
 }
 

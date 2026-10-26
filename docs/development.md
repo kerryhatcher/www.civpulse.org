@@ -588,6 +588,20 @@ pagination/filters and date groups. No restricted IDs or payloads should appear
 in exports. Initial public profiles should not download the full legislative
 filter dataset. No backend fallback should conceal failed publication assets.
 
+### Verifying static public directories
+
+Run `bun test scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts`
+and `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/people-directory-db.test.ts`, then `bun run check` and
+`bun run build`. Inspect `dist/directory-data` for hidden IDs and search-only
+private relationship text. Anonymous directory search/paging/filter changes
+must use the static file without directory RPC calls. Exercise first/last name
+sorting, kind filtering, Next/Previous/Clear, organization member/role search,
+election candidate/contest/ballot search, empty results and rapid query changes.
+Signed-in discovery and UUID viewers must retain existing permissions. Test
+private/unlisted fixtures locally and clean them up; check browser console errors.
+A missing snapshot should report failure without falling back to a live search.
+
 ### Meeting import and resumable original QA
 
 See [meeting imports](meeting-imports.md#release-and-verification). Apply the new

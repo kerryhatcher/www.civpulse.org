@@ -1,4 +1,5 @@
 ---
+import { directoryUrl } from '../../lib/directory-assets';
 import Layout from '../../layouts/Layout.astro';
 import { fetchPublicPeople, personImageUrl, PERSON_KIND_LABELS } from '../../lib/people';
 
@@ -18,7 +19,7 @@ function initials(name: string): string {
   title="People"
   description="Officials, elected office holders, and candidates for office in one public directory."
 >
-  <main id="main">
+  <main id="main" data-directory-snapshot={await directoryUrl('people')}>
     <div class="page-intro">
       <h1>People</h1>
       <p>Officials, elected office holders, and candidates for office.</p>
