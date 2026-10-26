@@ -6,7 +6,7 @@ import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
 import PersonVotes from '../../components/PersonVotes.astro';
 import {
-  fetchPublicAffiliations,
+  fetchPublicAffiliationsByPerson,
   fetchPublicPeople,
   personImageUrl,
   PERSON_KIND_LABELS,
@@ -16,13 +16,11 @@ import {
 
 export async function getStaticPaths() {
   const people = await fetchPublicPeople();
-  const affiliations = await Promise.all(
-    people.map((person) => fetchPublicAffiliations(person.id)),
-  );
+  const affiliations = await fetchPublicAffiliationsByPerson(people.map(person => person.id));
 
-  return people.map((person, index) => ({
+  return people.map((person) => ({
     params: { slug: person.slug },
-    props: { person, affiliations: affiliations[index] ?? [] },
+    props: { person, affiliations: affiliations.get(person.id) ?? [] },
   }));
 }
 
