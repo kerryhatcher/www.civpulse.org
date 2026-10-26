@@ -221,3 +221,11 @@ section's cards and leaves the other sections in place. Meeting votes retain
 Profiles automatically retry brief connection failures. If votes or articles
 still fail to load, select **Retry legislative history** or **Retry articles**.
 A failed page request keeps the currently displayed votes until the retry succeeds.
+
+Public people, organization and election directories use published snapshots.
+Search and filters run in your browser; people still support type filters,
+first/last name sorting and Previous/Next pages. Organization searches include
+public members and roles; election searches include public candidates, contests
+and ballot questions. Use quotes for phrases, `OR` for alternatives and `-word`
+to exclude a word. Signed-in searches keep the existing permitted live view;
+results and relevance order can differ from the published public snapshot.

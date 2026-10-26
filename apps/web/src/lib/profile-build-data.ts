@@ -5,7 +5,7 @@ import { PERSON_COLUMNS } from './people';
 interface ProfileOrganization { id: string; slug: string; name: string }
 
 /** Sequential pages stay below the Data API row cap, with stable ordering. */
-async function readRows<T>(client: SupabaseClient, table: string, columns: string, order: string[], publicOnly = false): Promise<T[]> {
+export async function readRows<T>(client: SupabaseClient, table: string, columns: string, order: string[], publicOnly = false): Promise<T[]> {
   const rows: T[] = [];
   const pageSize = 500;
   for (let offset = 0; ; offset += pageSize) {

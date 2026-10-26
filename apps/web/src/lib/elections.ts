@@ -1,3 +1,4 @@
+import { readRows } from './profile-build-data';
 import { getBuildSupabase } from './supabase-build';
 
 export type ElectionVisibility = 'public' | 'unlisted' | 'private';
@@ -160,30 +161,23 @@ export function electionHref(election: {
 }
 
 /** Loads public elections at build time; returns an empty list without a database. */
+let directoryRows: Promise<Election[]> | undefined;
 export async function fetchPublicElections(): Promise<Election[]> {
-  const supabase = getBuildSupabase();
-  if (!supabase) {
-    console.warn('[elections] PUBLIC_SUPABASE_* not set; skipping election pages.');
-    return [];
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('elections')
-      .select(ELECTION_COLUMNS)
-      .eq('visibility', 'public')
-      .order('election_date', { ascending: false });
-
-    if (error) throw error;
-    return (data ?? []) as Election[];
-  } catch (error) {
-    console.warn(`[elections] Could not load elections: ${String(error)}`);
-    return [];
-  }
+  const client = getBuildSupabase();
+  if (!client) return [];
+  if (import.meta.env.DEV) return readRows<Election>(client, 'elections', ELECTION_COLUMNS, ['election_date', 'id'], true);
+  return directoryRows ??= readRows<Election>(client, 'elections', ELECTION_COLUMNS, ['election_date', 'id'], true);
 }
 
 /** Full detail (contests, candidates, key dates) for one election. */
-export async function fetchElectionDetail(id: string): Promise<ElectionDetail | null> {
+const detailCache = new Map<string,Promise<ElectionDetail | null>>();
+export function fetchElectionDetail(id: string): Promise<ElectionDetail | null> {
+  if (import.meta.env.DEV) return loadElectionDetail(id);
+  let detail = detailCache.get(id);
+  if (!detail) { detail=loadElectionDetail(id); detailCache.set(id,detail); }
+  return detail;
+}
+async function loadElectionDetail(id: string): Promise<ElectionDetail | null> {
   const supabase = getBuildSupabase();
   if (!supabase) return null;
 
@@ -210,8 +204,7 @@ export async function fetchElectionDetail(id: string): Promise<ElectionDetail | 
       dates: response.dates ?? [],
     };
   } catch (error) {
-    console.warn(`[elections] Could not load election ${id}: ${String(error)}`);
-    return null;
+    throw new Error(`Could not load election ${id}: ${String(error)}`);
   }
 }
 
