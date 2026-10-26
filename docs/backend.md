@@ -1350,3 +1350,22 @@ measure reference in the official source and remain unlinked. Anonymous API
 verification checked every imported field and confirmed all 3,342 original member
 choices were unchanged. See
 [the import audit](research/josh-mclaurin-bills-backfill-2026-10-26.json).
+
+## Public profile build export
+
+`export_public_profile_rows(p_section, p_offset=0, p_limit=500)` is a read-only,
+empty-search-path security-definer projection for public section snapshots. The
+allowlisted sections are offices, person/organization articles, candidacies,
+meeting votes and legislative choices with public bill associations. It permits
+only anonymous execution, rejects non-null `auth.uid()`, requires public people,
+and applies public election/calendar/meeting gates and legislative visibility
+helpers. Authenticated profile/UUID readers remain unchanged; no table RLS or
+write grants are widened. Ordered pages use owner UUID and per-owner ordinal.
+The build consumes pages sequentially with bounded concurrency, checks errors,
+and shares the export across every public profile.
+
+The runtime-only descriptions above still apply to signed-in and UUID viewers.
+Anonymous public profile sections use static JSON; no private or unlisted payload
+is embedded in those files. Release `20261123120000_public_profile_sections`
+through main before the frontend deploys. Test feature SQL only locally or in a
+preview branch. Build failure preserves the previous deployment.

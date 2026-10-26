@@ -274,3 +274,33 @@ revalidation cache rather than a year-long immutable cache: after a visibility
 change, publish again to remove the previous files. Previously downloaded public
 data cannot be recalled; private/unlisted data must never be made public as a
 workaround. Old open pages may need a reload following publication.
+
+### Public profile section snapshots
+
+Public person and organization pages reference content-hashed JSON under
+`/profile-data/`. Office terms, candidacies, article associations, meeting choices,
+and legislative voting/sponsorship data are exported once per build with three
+bounded request workers. The new anonymous-only `export_public_profile_rows` RPC
+returns ordered pages of at most 500 public projections. It sets an empty search
+path, rejects user JWTs and does not grant authenticated execution. Existing UUID
+and signed-in profile readers retain their original access checks and behavior.
+Only explicitly public people and public related records/parents enter exports;
+legislative metadata/sponsorships use the existing anonymous browse gates.
+
+The public renderer reuses its current cards, pagination and filters with static
+data. One shared snapshot request supplies all sections, including empty sections.
+Legislative initial results contain 20 grouped entries; later unfiltered pages
+are separate static files. Full raw choices download only when a visitor uses a
+legislative filter, so a long history does not inflate the initial page download.
+Bill UUIDs, vote counts, latest-vote ordering, source choice wording and coverage
+labels are preserved. Date grouping is recalculated in America/New_York in the
+browser, including year-precision service ends and current candidacy statuses.
+
+Configured export errors fail the build. Development snapshots expire after 30
+seconds. JSON files are excluded from the sitemap, served with nosniff and a
+five-minute revalidation cache, and never checked into Git. Public imports,
+article associations, office/election changes, vote edits and visibility changes
+require Publish. Publish promptly after making previously public data restricted;
+old downloads cannot be recalled, and open pages may need reloading after a
+publication removes their previous asset URLs. No new service/compute size or
+privileged build credentials are required.

@@ -1,3 +1,4 @@
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
 import { getSupabase } from '../lib/supabase';
@@ -35,7 +36,8 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
   try {
     const supabase = getSupabase();
     await supabase.auth.getSession();
-    const { data, error } = await supabase.rpc(kind === 'person' ? 'get_person_articles' : 'get_organization_articles',
+    const snapshot = await getPublicProfileSnapshot();
+    const { data, error } = snapshot ? {data: snapshot.articles, error: null} : await supabase.rpc(kind === 'person' ? 'get_person_articles' : 'get_organization_articles',
       kind === 'person' ? { p_person_id: id } : { p_organization_id: id });
     if (error) throw error;
     const articles = ((data ?? []) as ProfileArticle[]).filter(article => articleUrl(article.url));

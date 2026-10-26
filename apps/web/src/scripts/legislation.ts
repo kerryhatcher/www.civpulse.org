@@ -1,3 +1,5 @@
+import { getPublicProfileSnapshot, readProfileVoteGroups } from "../lib/profile-section-data";
+import { browseProfileLegislation } from "../lib/profile-sections";
 import { getSupabase } from "../lib/supabase";
 import {
   legislativeResources,
@@ -28,6 +30,8 @@ function link(text: string, url: string) {
   return a;
 }
 async function browse(table: string, args: Record<string, unknown> = {}) {
+  const snapshot = await getPublicProfileSnapshot();
+  if (snapshot) return browseProfileLegislation(snapshot, table, args);
   const { data, error } = await getSupabase().rpc("browse_legislation", {
     p_table: table,
     ...args,
@@ -642,9 +646,7 @@ export async function loadPersonLegislation(personId: string) {
       nextPage.disabled = true;
       retry.hidden = true;
       try {
-        const { data, error } = await getSupabase().rpc(
-          "get_person_legislative_bill_groups",
-          {
+        const args = {
             p_person_id: personId,
             p_term_id: selects.term_id.value || null,
             p_bill_query: billQuery.value.trim() || null,
@@ -653,8 +655,9 @@ export async function loadPersonLegislation(personId: string) {
             p_category: category.value.trim() || null,
             p_offset: requestedOffset,
             p_limit: pageSize,
-          },
-        );
+          };
+        const snapshot = await getPublicProfileSnapshot();
+        const { data, error } = snapshot ? {data: await readProfileVoteGroups(snapshot,args),error:null} : await getSupabase().rpc("get_person_legislative_bill_groups",args);
         if (error) throw error;
         if (request !== generation) return;
         list.replaceChildren();
@@ -747,7 +750,8 @@ export async function loadPersonLegislation(personId: string) {
     nextPage.onclick = () => void load(false, offset + pageSize);
     await load(true);
     // Service links are read through their existing visibility gate.
-    const { data: terms, error } = await getSupabase().rpc("get_office_terms", {
+    const snapshot = await getPublicProfileSnapshot();
+    const { data: terms, error } = snapshot ? {data:snapshot.officeTerms,error:null} : await getSupabase().rpc("get_office_terms", {
       p_person_id: personId,
     });
     if (error) throw error;

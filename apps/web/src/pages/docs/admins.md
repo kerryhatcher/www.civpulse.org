@@ -281,3 +281,15 @@ After making formerly public data restricted, publish promptly; cached public
 files can remain in browsers for five minutes, and downloaded copies cannot be
 recalled. External GeoJSON sources still follow their source host's update/cache
 behavior.
+
+### Publishing profile sections
+
+Public profile offices, candidacies, news/article links, meeting votes and
+legislative records now use published snapshots. After edits or imports, use
+**Admin → Publish** and wait for a successful build. Public visitors see the last
+successful snapshot; signed-in and UUID profile views continue to use live access
+checks. Private/unlisted profiles and their restricted related records are never
+exported. If formerly public data becomes restricted, publish promptly; browser
+caches can retain published files for five minutes and existing downloads cannot
+be recalled. Office/candidacy date groups update in the visitor's browser without
+a daily publication.

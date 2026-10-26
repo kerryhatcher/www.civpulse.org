@@ -1,3 +1,4 @@
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { CANDIDATE_STATUS_LABELS, electionHref, formatElectionDate } from '../lib/elections';
 import type { PersonCandidacy } from '../lib/people';
@@ -31,7 +32,7 @@ function renderCandidacy(race: PersonCandidacy, personId: string): HTMLLIElement
   return item;
 }
 
-/** Fetch at runtime so hidden elections never enter public HTML and date groups stay current. */
+/** Published public races use current browser dates; restricted views retain live access checks. */
 export async function loadPersonCandidacies(personId: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-person-candidacies]');
   if (!root) return;
@@ -44,7 +45,8 @@ export async function loadPersonCandidacies(personId: string): Promise<void> {
   try {
     const supabase = getSupabase();
     await supabase.auth.getSession();
-    const { data, error } = await supabase.rpc('get_person_candidacies', { p_person_id: personId });
+    const snapshot = await getPublicProfileSnapshot();
+    const { data, error } = snapshot ? {data: snapshot.candidacies, error: null} : await supabase.rpc('get_person_candidacies', { p_person_id: personId });
     if (error) throw error;
     const races = (data ?? []) as PersonCandidacy[];
     for (const [key, current] of [['current', true], ['past', false]] as const) {

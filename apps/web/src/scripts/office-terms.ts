@@ -1,3 +1,4 @@
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { loadPersonLegislation } from './legislation';
 import { historyLink } from '../lib/history';
 import { officeLabel, serviceDates, type ProfileOfficeTerm } from '../lib/offices';
@@ -17,7 +18,8 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
   try {
     const supabase = getSupabase();
     await supabase.auth.getSession();
-    const { data, error } = await supabase.rpc('get_office_terms', {
+    const snapshot = await getPublicProfileSnapshot();
+    const { data, error } = snapshot ? {data: snapshot.officeTerms, error: null} : await supabase.rpc('get_office_terms', {
       p_person_id: personId ?? null, p_organization_id: organizationId ?? null,
     });
     if (error) throw error;
