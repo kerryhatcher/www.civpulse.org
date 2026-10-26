@@ -1,5 +1,12 @@
 import { expect, test } from 'bun:test';
-import { migrationCheckState, waitForMigrations } from '../check-migrations.mjs';
+import { migrationCheckState, waitForMigrations, assertUniqueMigrationVersions } from '../check-migrations.mjs';
+import { readdirSync } from 'node:fs';
+
+test('checked-in migrations have unique versions; conflicting filenames fail before deployment', () => {
+  expect(() => assertUniqueMigrationVersions(readdirSync(new URL('../../supabase/migrations/', import.meta.url)))).not.toThrow();
+  expect(() => assertUniqueMigrationVersions(['20261123090000_first.sql', '20261123090000_second.sql'])).toThrow('Duplicate migration version 20261123090000');
+  expect(() => assertUniqueMigrationVersions(['README.md', '20261123090000_first.sql', '20261123090100_second.sql'])).not.toThrow();
+});
 
 const sha = 'a'.repeat(40);
 const run = (changes = {}) => ({ id: 1, name: 'Supabase Preview', app: { id: 330661 }, head_sha: sha, status: 'completed', conclusion: 'success', ...changes });

@@ -8,7 +8,9 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
     const rollback = Error("rollback");
     try {
       await sql.begin(async (tx) => {
-        await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261123090000_legislative_history_read_performance.sql', import.meta.url)).text());
+        for (const migration of ['20261123080000_person_legislative_bill_groups.sql', '20261123090000_legislation_bill_browse_performance.sql']) {
+          await tx.unsafe(await Bun.file(new URL(`../../supabase/migrations/${migration}`, import.meta.url)).text());
+        }
         const suffix = crypto.randomUUID();
         const [org] =
           await tx`insert into organizations(name,slug) values ('Legislative QA',${`legislative-${suffix}`}) returning id`;
