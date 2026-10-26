@@ -1104,3 +1104,25 @@ Meeting vote articles have stable `vote-<UUID>` anchors. Participant links use
 the visibility-aware UUID person viewer. Name linking only considers visible
 attendance and roll-call participants, uses text nodes rather than HTML, and
 leaves ambiguous shortened names unlinked.
+
+## People directory pagination
+
+`browse_people(p_query, p_kind, p_sort, p_limit, p_offset)` returns a JSON object
+with `people` (directory card fields only) and an exact `total` after visibility,
+keyword and type filtering. This security-definer RPC sets an empty search path;
+anonymous and ordinary authenticated accounts see public rows, while
+`is_admin()` permits hidden rows. Counts use the same visibility rule. Existing
+`search_people` callers remain unchanged. Directory search matches full-name
+substrings or the person's name/title/description full-text vector.
+
+Sorting accepts `first_asc`, `first_desc`, `last_asc`, and `last_desc`. Full names
+are stored as one field: first-name order uses the full name; last-name order
+uses its final word after removing common generational suffixes. Full name and
+UUID break ties deterministically before offset/limit. Limits clamp to 1–100
+(default 24), offsets to zero or higher; query length is bounded at 500.
+The browser resets pagination when criteria change and ignores stale responses.
+Apply the migration before deploying the frontend. No hidden rows enter static HTML.
+
+Run `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/people-directory-db.test.ts` for pagination, sorting,
+filtering, and visibility checks. Fixtures roll back.

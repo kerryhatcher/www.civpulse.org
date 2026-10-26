@@ -24,27 +24,31 @@ function initials(name: string): string {
       <p>Officials, elected office holders, and candidates for office.</p>
     </div>
 
-    {
-      people.length > 0 && (
-        <form class="map-search" data-person-search-form role="search">
-          <label class="visually-hidden" for="person-search-input">
-            Search people
-          </label>
-          <input
-            id="person-search-input"
-            type="search"
-            placeholder="Search people…"
-            data-person-search
-            autocomplete="off"
-          />
-          <p class="status" data-person-search-note hidden>
-            Signed in — search includes public, unlisted, and private people.
-          </p>
-        </form>
-      )
-    }
+    <form class="people-controls" data-person-search-form role="search">
+      <label for="person-search-input">Search people
+        <input id="person-search-input" type="search" placeholder="Name or keyword…"
+          data-person-search autocomplete="off" maxlength="500" />
+      </label>
+      <label for="person-kind">Type
+        <select id="person-kind" data-person-kind>
+          <option value="">All types</option>
+          {Object.entries(PERSON_KIND_LABELS).map(([value, label]) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+      <label for="person-sort">Sort by
+        <select id="person-sort" data-person-sort>
+          <option value="first_asc">First name: A–Z</option>
+          <option value="first_desc">First name: Z–A</option>
+          <option value="last_asc">Last name: A–Z</option>
+          <option value="last_desc">Last name: Z–A</option>
+        </select>
+      </label>
+      <button type="reset">Clear</button>
+    </form>
+    <p class="status" data-person-search-note hidden>Admin view includes unlisted and private people.</p>
+    <noscript><p>Enable JavaScript to paginate, sort, and filter the directory.</p></noscript>
 
-    <p class="status" data-person-search-status hidden></p>
+    <p class="status" data-person-search-status role="status" aria-live="polite" hidden></p>
 
     {
       people.length > 0 ? (
@@ -88,8 +92,13 @@ function initials(name: string): string {
       )
     }
 
-    <div class="org-grid" data-person-search-results hidden></div>
-    <p class="status" data-person-search-empty hidden>No people match that search.</p>
+    <div class="org-grid" id="people-results" data-person-search-results hidden></div>
+    <p class="status" data-person-search-empty hidden>No people match your search and filters.</p>
+    <nav class="site-search-pagination people-pagination" aria-label="People pages" data-person-pagination hidden>
+      <button type="button" data-person-previous aria-controls="people-results">Previous</button>
+      <span data-person-page></span>
+      <button type="button" data-person-next aria-controls="people-results">Next</button>
+    </nav>
   </main>
 </Layout>
 
