@@ -4,6 +4,7 @@ import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
+import PersonVotes from '../../components/PersonVotes.astro';
 import {
   fetchPublicAffiliations,
   fetchPublicPeople,
@@ -148,6 +149,7 @@ const contact = [
     }
 
     <OfficeTerms personId={person.id} />
+    <PersonVotes personId={person.id} />
     <PersonCandidacies personId={person.id} />
     <ProfileArticles personId={person.id} />
 
@@ -164,9 +166,11 @@ const contact = [
   import { initAdminEditLink } from '../../scripts/auth';
   import { initProfileArticles } from '../../scripts/profile-articles';
   import { initPersonCandidacies } from '../../scripts/person-candidacies';
+  import { initPersonVotes } from '../../scripts/person-votes';
 
   initProfileArticles();
   initPersonCandidacies();
+  initPersonVotes();
 
   void initAdminEditLink();
 </script>
