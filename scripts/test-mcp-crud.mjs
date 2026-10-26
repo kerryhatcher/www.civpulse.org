@@ -101,6 +101,39 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiK
     await admin('update_person', { id: person.id, visibility: 'public' });
     assert.equal((await reader('get_person', { id: person.id })).person.description, 'Partial person edit');
     assert.ok((await reader('search_people', { query: needle })).some(row => row.id === person.id));
+    const officeInput = { organization_id: org.id, name: `${needle} office`, district: 'District 4' };
+    await denied('create_office', officeInput);
+    const office = await admin('create_office', officeInput);
+    // Office deletion is intentionally outside MCP; local fixture cleanup uses
+    // the same authenticated Data API after all dependent terms are removed.
+    cleanup.push(async () => {
+      const result = await fetch(`${apiUrl}/rest/v1/offices?id=eq.${office.id}`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}` },
+      });
+      assert.ok(result.ok);
+    });
+    await denied('update_office', { id: office.id, description: 'Denied' });
+    await admin('update_office', { id: office.id, description: 'Documented seat' });
+    assert.ok((await reader('list_offices', { organization_id: org.id })).some(row => row.id === office.id));
+    const termInput = { office_id: office.id, person_id: person.id, selection_method: 'elected', starts_on: '2021-01-01', source_url: 'https://example.test/tenure' };
+    await denied('create_office_term', termInput);
+    const officeTerm = await admin('create_office_term', termInput);
+    cleanup.push(async () => {
+      const result = await fetch(`${apiUrl}/rest/v1/office_terms?id=eq.${officeTerm.id}`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}` },
+      });
+      assert.ok(result.ok);
+    });
+    assert.ok((await reader('get_office_terms', { person_id: person.id })).some(row => row.id === officeTerm.id));
+    await denied('update_office_term', { id: officeTerm.id, ends_on: '2024-12-31' });
+    await admin('update_office_term', { id: officeTerm.id, ends_on: '2024-12-31' });
+    assert.equal((await reader('get_office_terms', { person_id: person.id }))[0].ends_on, '2024-12-31');
+    assert.ok((await tool(adminToken, 'create_office_term', termInput)).isError, 'Duplicate service starts are rejected');
+    assert.ok((await tool(adminToken, 'update_office_term', { id: officeTerm.id, ends_on: '2020-12-31' })).isError, 'Invalid service ranges are rejected');
+    await admin('update_person', { id: person.id, visibility: 'private' });
+    assert.deepEqual(await reader('get_office_terms', { person_id: person.id }), []);
+    assert.ok((await admin('get_office_terms', { person_id: person.id })).some(row => row.id === officeTerm.id));
+    await admin('update_person', { id: person.id, visibility: 'public' });
     const affiliation = await link('person_organization', { person_id: person.id, organization_id: org.id, role: 'Candidate' }, { role: 'Member' });
     assert.ok((await reader('list_person_organizations', { person_id: person.id })).organizations.some(row => row.id === org.id && row.role === 'Member'));
 

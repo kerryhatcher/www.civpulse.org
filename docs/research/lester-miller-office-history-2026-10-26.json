@@ -1,0 +1,217 @@
+{
+  "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+  "person_slug": "lester-miller",
+  "researched_on": "2026-10-26",
+  "coverage": "Bibb County Board of Education District 4 and Macon-Bibb mayoral service; four winning elections. Not a complete inventory of unsuccessful candidacies or primary rounds.",
+  "service": [
+    {
+      "id": "8e0b34e9-a3fd-4361-a6e5-db8c30ac8d1f",
+      "office_id": "dda93a6e-497b-4053-b327-56f948808a28",
+      "office_name": "Mayor",
+      "district": "Macon-Bibb County, Georgia",
+      "seat": "",
+      "organization_id": "9ae31e8a-3d3a-464a-bb0c-f2dccca60ac3",
+      "organization_name": "Macon-Bibb County Government",
+      "organization_slug": "macon-bibb-county-government",
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "person_name": "Lester Miller",
+      "person_slug": "lester-miller",
+      "person_visibility": "public",
+      "selection_method": "elected",
+      "starts_on": "2025-01-01",
+      "ends_on": null,
+      "source_url": "https://www.maconbibb.us/mayor-commissioners-get-sworn-in/",
+      "service_status": "current",
+      "starts_on_precision": "day",
+      "ends_on_precision": "day"
+    },
+    {
+      "id": "a31c2ac9-8dce-48f1-bdb5-65ef856fb0f5",
+      "office_id": "dda93a6e-497b-4053-b327-56f948808a28",
+      "office_name": "Mayor",
+      "district": "Macon-Bibb County, Georgia",
+      "seat": "",
+      "organization_id": "9ae31e8a-3d3a-464a-bb0c-f2dccca60ac3",
+      "organization_name": "Macon-Bibb County Government",
+      "organization_slug": "macon-bibb-county-government",
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "person_name": "Lester Miller",
+      "person_slug": "lester-miller",
+      "person_visibility": "public",
+      "selection_method": "elected",
+      "starts_on": "2021-01-01",
+      "ends_on": "2024-12-31",
+      "source_url": "https://den.mercer.edu/mercer-to-confer-degrees-to-more-than-2300-graduates-at-five-commencements/",
+      "service_status": "former",
+      "starts_on_precision": "day",
+      "ends_on_precision": "day"
+    },
+    {
+      "id": "586a3923-f7ea-4540-844e-e48d4b2e6dbb",
+      "office_id": "2acf9d83-6d30-4d47-84d5-e0e8fe5b05f3",
+      "office_name": "Board Member",
+      "district": "District 4",
+      "seat": "",
+      "organization_id": "d95c03e9-48dd-4820-b31e-38a0653238e7",
+      "organization_name": "Bibb County Board of Education",
+      "organization_slug": "bibb-county-board-of-education",
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "person_name": "Lester Miller",
+      "person_slug": "lester-miller",
+      "person_visibility": "public",
+      "selection_method": "elected",
+      "starts_on": "2017-01-01",
+      "ends_on": "2020-12-31",
+      "source_url": "https://open.ga.gov/openga/report/downloadFile?rid=23548",
+      "service_status": "former",
+      "starts_on_precision": "day",
+      "ends_on_precision": "day"
+    },
+    {
+      "id": "363183a6-1503-45e8-b5e0-e996362eb062",
+      "office_id": "2acf9d83-6d30-4d47-84d5-e0e8fe5b05f3",
+      "office_name": "Board Member",
+      "district": "District 4",
+      "seat": "",
+      "organization_id": "d95c03e9-48dd-4820-b31e-38a0653238e7",
+      "organization_name": "Bibb County Board of Education",
+      "organization_slug": "bibb-county-board-of-education",
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "person_name": "Lester Miller",
+      "person_slug": "lester-miller",
+      "person_visibility": "public",
+      "selection_method": "elected",
+      "starts_on": "2013-01-01",
+      "ends_on": "2016-12-31",
+      "source_url": "https://ted.cviog.uga.edu/FINANCIAL-DOCUMENTS/sites/default/files/budgetdoc/financial-report/school-district-bibb-county-school-district-bibb-county-fy2013-financial-report.pdf",
+      "service_status": "former",
+      "starts_on_precision": "day",
+      "ends_on_precision": "day"
+    }
+  ],
+  "elections": [
+    {
+      "election": {
+        "id": "7d66b0bc-a778-4a63-b20b-a03fc5d10099",
+        "slug": "2012-11-06-general-election",
+        "name": "November 6, 2012 General Election"
+      },
+      "contest": {
+        "id": "23b28d76-5208-4a8c-93c8-7e19a2830bd9",
+        "election_id": "7d66b0bc-a778-4a63-b20b-a03fc5d10099",
+        "office": "Board of Education Member",
+        "district": "District 4",
+        "seat": null,
+        "description": "Historical coverage: Lester Miller's election to the Bibb County Board of Education, District 4, for service beginning January 1, 2013. Victory reported November 7, 2012: https://www.41nbc.com/lester-miller-wins-bibb-boe-district-four-seat/",
+        "partisan": true,
+        "position": 0
+      },
+      "candidate": {
+        "contest_id": "23b28d76-5208-4a8c-93c8-7e19a2830bd9",
+        "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+        "party": "Republican",
+        "status": "won",
+        "position": 0,
+        "created_at": "2026-10-26T18:20:41.369226+00:00",
+        "is_write_in": false
+      }
+    },
+    {
+      "election": {
+        "id": "797328b4-d3bc-4b62-ac25-fd257601dcbb",
+        "slug": "2016-05-24-macon-bibb-nonpartisan-general-election",
+        "name": "May 24, 2016 Macon-Bibb Nonpartisan General Election"
+      },
+      "contest": {
+        "id": "4b7e5e0c-6d54-4fc3-be45-fb99d534f008",
+        "election_id": "797328b4-d3bc-4b62-ac25-fd257601dcbb",
+        "office": "Board of Education Member",
+        "district": "District 4",
+        "seat": null,
+        "description": "Historical coverage: Lester Miller's reelection to the Bibb County Board of Education, District 4, for service beginning January 1, 2017. May 24 election date: https://www.41nbc.com/bibb-boe-president-seeking-re-election/ . District confirmation of reelection and January 2017 service: https://resources.finalsite.net/images/v1710468496/bibbk12gaus/cnw4hu0b9zbwcz9qoa3h/BB_1215161.pdf",
+        "partisan": false,
+        "position": 0
+      },
+      "candidate": {
+        "contest_id": "4b7e5e0c-6d54-4fc3-be45-fb99d534f008",
+        "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+        "party": null,
+        "status": "won",
+        "position": 0,
+        "created_at": "2026-10-26T18:20:45.630277+00:00",
+        "is_write_in": false
+      }
+    },
+    {
+      "election": {
+        "id": "e068ecae-9d0d-4a08-98a0-5f2a7dc44d7f",
+        "slug": "2020-08-11-macon-bibb-nonpartisan-general-election-runoff",
+        "name": "August 11, 2020 Macon-Bibb Nonpartisan General Election Runoff"
+      },
+      "contest": {
+        "id": "899249bb-baed-4ad2-a000-435bf01673db",
+        "election_id": "e068ecae-9d0d-4a08-98a0-5f2a7dc44d7f",
+        "office": "Mayor",
+        "district": null,
+        "seat": null,
+        "description": "Historical coverage: Lester Miller won the Macon-Bibb County mayoral runoff against Cliffard Whitby, for a term beginning January 1, 2021. Source: https://www.macon.com/news/politics-government/election/article244889962.html",
+        "partisan": false,
+        "position": 0
+      },
+      "candidate": {
+        "contest_id": "899249bb-baed-4ad2-a000-435bf01673db",
+        "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+        "party": null,
+        "status": "won",
+        "position": 0,
+        "created_at": "2026-10-26T18:20:50.158403+00:00",
+        "is_write_in": false
+      }
+    },
+    {
+      "election": {
+        "id": "1f7f45ec-e0d5-4f84-b712-2c4659147e4b",
+        "slug": "2024-05-21-macon-bibb-nonpartisan-general-election",
+        "name": "May 21, 2024 Macon-Bibb Nonpartisan General Election"
+      },
+      "contest": {
+        "id": "ced91cb3-84e1-4e36-9c83-97e9f656f62b",
+        "election_id": "1f7f45ec-e0d5-4f84-b712-2c4659147e4b",
+        "office": "Mayor",
+        "district": null,
+        "seat": null,
+        "description": "Historical coverage: incumbent Lester Miller won reelection as Macon-Bibb County mayor against Shekita Tikori Maxwell, for a second term beginning January 1, 2025. Sources: https://www.macon.com/news/politics-government/election/article288544865.html and https://www.maconbibb.us/mayor-commissioners-get-sworn-in/",
+        "partisan": false,
+        "position": 0
+      },
+      "candidate": {
+        "contest_id": "ced91cb3-84e1-4e36-9c83-97e9f656f62b",
+        "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+        "party": null,
+        "status": "won",
+        "position": 0,
+        "created_at": "2026-10-26T18:20:55.398645+00:00",
+        "is_write_in": false
+      }
+    }
+  ],
+  "notes": [
+    "November 7, 2012 is the news publication date; November 6 is Election Day.",
+    "The 2013 district financial report identifies a four-year term ending December 31, 2016 and January 1 commencement rules.",
+    "2016 election date comes from Miller's contemporaneous reelection announcement; reelection and January 2017 commencement are independently confirmed by the official December 15, 2016 Board Brief.",
+    "The December 2016 swearing-in preceded the January 1, 2017 term start; ceremony dates are not used as service start dates.",
+    "The 2019 official district financial report identifies the second term's December 31, 2020 expiration.",
+    "Mayoral ceremonies on December 30, 2020 and December 16, 2024 preceded January 1 service starts.",
+    "The 2024 first-term end is established by the documented January 1, 2025 second-term start. The current term has no forecast departure date.",
+    "Office/term content written with connected Supabase API after adding and verifying supported office CRUD MCP capability; the current chat's connector catalog is cached. Elections/candidacies/affiliation written with Civic Pulse MCP.",
+    "Public get_office_terms RPC read back exactly four sourced rows anonymously; Civic Pulse MCP get_person_candidacies read back all four wins.",
+    "MCP deployed as function version 37, preserving the already-deployed Georgia legislative source reader."
+  ],
+  "additional_sources": [
+    "https://www.41nbc.com/lester-miller-wins-bibb-boe-district-four-seat/",
+    "https://www.41nbc.com/bibb-boe-president-seeking-re-election/",
+    "https://resources.finalsite.net/images/v1710468496/bibbk12gaus/cnw4hu0b9zbwcz9qoa3h/BB_1215161.pdf",
+    "https://www.macon.com/news/politics-government/election/article244889962.html",
+    "https://www.macon.com/news/politics-government/election/article288544865.html"
+  ]
+}

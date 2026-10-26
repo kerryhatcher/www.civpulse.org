@@ -1300,9 +1300,82 @@ var legislativeResources = {
   }
 };
 
+// apps/mcp/src/georgia-source.ts
+var GEORGIA_API = "https://www.legis.ga.gov/api/";
+function isGeorgiaAttendance(row) {
+  return row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? "");
+}
+var georgiaChoices = [
+  { choice: "yes", source_choice: "Yea" },
+  { choice: "no", source_choice: "Nay" },
+  { choice: "excused", source_choice: "Excused" },
+  { choice: "not_voting", source_choice: "NotVoting" },
+  { choice: "other", source_choice: "Unknown" }
+];
+async function readGeorgiaSource(input, fetcher = fetch) {
+  let path;
+  if (input.resource === "sessions")
+    path = "sessions";
+  else if (input.resource === "vote") {
+    if (!input.vote_id)
+      throw new Error("Supply vote_id");
+    path = `Vote/detail/${input.vote_id}`;
+  } else {
+    if (!input.session_id || !input.chamber)
+      throw new Error("Supply session_id and chamber");
+    const chamber = input.chamber === "house" ? 1 : 2;
+    path = input.resource === "votes" ? `Vote/list/${chamber}/${input.session_id}` : `members/list/${input.session_id}?chamber=${chamber}`;
+  }
+  const ms = Date.now();
+  const bytes = new TextEncoder().encode("QFpCwKfd7fjVEXFFwSu36BwwcP83xYgxLAhLYmKkletvarconst" + ms);
+  const hash = await crypto.subtle.digest("SHA-512", bytes);
+  const key = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join("");
+  const request = async (url, headers) => {
+    const response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "error" });
+    if (!response.ok)
+      throw new Error(`Georgia source returned HTTP ${response.status}`);
+    return response.json();
+  };
+  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`);
+  if (typeof token !== "string" || !token)
+    throw new Error("Invalid Georgia source handshake");
+  const data = await request(GEORGIA_API + path, { Authorization: `Bearer ${token}` });
+  const provenance = { source_system: "legis.ga.gov", source_url: GEORGIA_API + path, retrieved_at: new Date().toISOString() };
+  if (input.resource === "vote") {
+    if (!data || !Array.isArray(data.votes))
+      throw new Error("Invalid Georgia vote detail");
+    const votes = data.votes.filter((row) => input.member_id === undefined || row.member?.id === input.member_id);
+    return {
+      ...provenance,
+      session: data.session,
+      legislation: data.legislation,
+      total: votes.length,
+      member_identity_conflict: input.member_id !== undefined && votes.length > 1,
+      rows: votes.slice(input.offset, input.offset + input.limit).map((row) => ({
+        ...row,
+        ...georgiaChoices[row.memberVoted] ?? { choice: "other", source_choice: String(row.memberVoted) }
+      })),
+      warning: "isRollCall means attendance in this source, not a recorded legislative vote. Missing members are unknown. This endpoint does not import data or reconcile Civic Pulse identities."
+    };
+  }
+  if (!Array.isArray(data))
+    throw new Error("Invalid Georgia source list");
+  const rows = input.member_id === undefined ? data : data.filter((row) => row.id === input.member_id);
+  return { ...provenance, total: rows.length, rows: rows.slice(input.offset, input.offset + input.limit).map((row) => input.resource === "votes" ? { ...row, attendance: isGeorgiaAttendance(row) } : row) };
+}
+
 // apps/mcp/src/legislative-tools.ts
 function registerLegislativeTools(server, supabase) {
   const { readRpc, register } = createToolkit(server, supabase);
+  register("get_georgia_legislative_source", "Read official Georgia General Assembly sessions, chamber rosters, vote lists or vote details with provenance and pagination. Use numeric official member IDs to reconcile an existing person and dated office term before import_legislation. isRollCall denotes attendance, not a legislative vote. This read-only tool never imports or guesses identities, outcomes or missing choices.", {
+    resource: z2.enum(["sessions", "members", "votes", "vote"]),
+    session_id: z2.number().int().positive().optional(),
+    chamber: z2.enum(["house", "senate"]).optional(),
+    vote_id: z2.number().int().positive().optional(),
+    member_id: z2.number().int().positive().optional(),
+    limit: z2.number().int().min(1).max(100).default(25),
+    offset: z2.number().int().min(0).default(0)
+  }, (input) => readGeorgiaSource(input));
   readRpc("browse_legislation", "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.", {
     table: z2.enum(Object.keys(legislativeResources)).default("bills"),
     id: z2.string().uuid().optional(),
@@ -1418,18 +1491,75 @@ function legislativeInputSchema(table, partial = false) {
   return partial ? schema.partial() : schema;
 }
 
-// apps/mcp/src/extended-tools.ts
+// apps/mcp/src/office-tools.ts
 import { z as z3 } from "zod";
-var uuid = z3.string().uuid();
-var visibility = z3.enum(["public", "unlisted", "private"]);
-var query = z3.string().max(500).default("");
-var limit = z3.number().int().min(1).max(100).default(20);
-var offset = z3.number().int().min(0).default(0);
-var object = z3.record(z3.string(), z3.unknown());
-var url = z3.string().url().max(2000).regex(/^https?:\/\//i);
-var slug = z3.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
-var rowId = z3.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
-var geometry = z3.object({ type: z3.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z3.array(z3.unknown()) });
+function registerOfficeTools(server, supabase) {
+  const { register, create, update } = createToolkit(server, supabase);
+  register("list_offices", "Find existing public offices before creating a seat. Filter by organization or exact office UUID; paginate with offset.", {
+    organization_id: z3.string().uuid().optional(),
+    id: z3.string().uuid().optional(),
+    limit: z3.number().int().min(1).max(100).default(50),
+    offset: z3.number().int().min(0).default(0)
+  }, async ({ organization_id, id, limit, offset }) => {
+    let query = supabase.from("offices").select("*").order("name").order("id");
+    if (organization_id)
+      query = query.eq("organization_id", organization_id);
+    if (id)
+      query = query.eq("id", id);
+    const { data, error } = await query.range(offset, offset + limit - 1);
+    if (error)
+      throw new Error(error.message);
+    return data;
+  });
+  register("get_office_terms", "Get dated actual service through the person/organization visibility gate. Provide person_id or organization_id. Election victories do not automatically create service records.", {
+    person_id: z3.string().uuid().optional(),
+    organization_id: z3.string().uuid().optional()
+  }, async ({ person_id, organization_id }) => {
+    if (!person_id && !organization_id)
+      throw new Error("Provide person_id or organization_id");
+    const { data, error } = await supabase.rpc("get_office_terms", {
+      p_person_id: person_id ?? null,
+      p_organization_id: organization_id ?? null
+    });
+    if (error)
+      throw new Error(error.message);
+    return data;
+  });
+  const office = {
+    organization_id: z3.string().uuid(),
+    name: z3.string().trim().min(1).max(160),
+    district: z3.string().max(160).optional(),
+    seat: z3.string().max(160).optional(),
+    description: z3.string().max(4000).nullish()
+  };
+  create("office", "offices", "Create a durable office or seat (admin only). Resolve an existing organization and list_offices first to avoid duplicates.", office);
+  update("office", "offices", "Partially update an office (admin only). Omitted fields are preserved.", office);
+  const term = {
+    office_id: z3.string().uuid(),
+    person_id: z3.string().uuid(),
+    selection_method: z3.enum(["elected", "appointed"]),
+    starts_on: z3.iso.date(),
+    ends_on: z3.iso.date().nullish().describe("Inclusive last day of actual service; null means ongoing. Do not forecast a departure."),
+    starts_on_precision: z3.enum(["day", "year"]).optional().describe("For year precision, store January 1 solely as a sorting bound."),
+    ends_on_precision: z3.enum(["day", "year"]).optional().describe("For a concluded year-only term, store December 31 solely as a sorting bound."),
+    source_url: z3.string().url().max(2000).regex(/^https?:\/\/[^\s]+$/i).nullish()
+  };
+  create("office_term", "office_terms", "Record one period of actual office service (admin only). Read get_office_terms first. Separate reelected terms when boundaries are documented; use election/contest/candidacy tools for election dates. Database validates date order, precision bounds and duplicate starts.", term);
+  update("office_term", "office_terms", "Partially correct a service record (admin only). Omitted fields are preserved; null ends_on records ongoing service. Database validates date order and precision bounds. Preserve historical service and its source.", term);
+}
+
+// apps/mcp/src/extended-tools.ts
+import { z as z4 } from "zod";
+var uuid = z4.string().uuid();
+var visibility = z4.enum(["public", "unlisted", "private"]);
+var query = z4.string().max(500).default("");
+var limit = z4.number().int().min(1).max(100).default(20);
+var offset = z4.number().int().min(0).default(0);
+var object = z4.record(z4.string(), z4.unknown());
+var url = z4.string().url().max(2000).regex(/^https?:\/\//i);
+var slug = z4.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+var rowId = z4.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
+var geometry = z4.object({ type: z4.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z4.array(z4.unknown()) });
 function registerExtendedTools(server, supabase, user) {
   const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase);
   async function rpc(name, args) {
@@ -1438,7 +1568,7 @@ function registerExtendedTools(server, supabase, user) {
       throw new Error(error.message);
     return data;
   }
-  readRpc("search_site", "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.", { query, type: z3.enum(["organization", "person", "election", "contest", "ballot_question", "article", "map", "layer", "calendar", "event"]).nullish(), limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
+  readRpc("search_site", "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.", { query, type: z4.enum(["organization", "person", "election", "contest", "ballot_question", "article", "map", "layer", "calendar", "event"]).nullish(), limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
   for (const [plural, type] of [["calendars", "calendar"], ["layers", "layer"], ["articles", "article"], ["contests", "contest"], ["ballot_questions", "ballot_question"]]) {
     readRpc(`search_${plural}`, `Search or browse ${plural.replaceAll("_", " ")} with pagination. Use the returned id with get_${type}.`, { query, limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: type, p_limit: input.limit, p_offset: input.offset }));
   }
@@ -1471,9 +1601,9 @@ function registerExtendedTools(server, supabase, user) {
   });
   const map = {
     slug,
-    name: z3.string().min(1).max(120),
-    description: z3.string().max(2000).nullish(),
-    base_map: z3.enum(["osm", "osm-humanitarian", "osm-topo"]).optional(),
+    name: z4.string().min(1).max(120),
+    description: z4.string().max(2000).nullish(),
+    base_map: z4.enum(["osm", "osm-humanitarian", "osm-topo"]).optional(),
     visibility: visibility.optional(),
     organization_id: uuid.nullish(),
     view_options: object.optional()
@@ -1482,8 +1612,8 @@ function registerExtendedTools(server, supabase, user) {
   update("map", "maps", "Partially update a map (admin only). Layer links are managed separately.", map, "id,slug,name,visibility,base_map,organization_id,view_options");
   remove("map", "maps", "Delete a map and its layer links, preserving reusable layers (admin only).");
   const layer = {
-    name: z3.string().min(1).max(120),
-    description: z3.string().max(2000).nullish(),
+    name: z4.string().min(1).max(120),
+    description: z4.string().max(2000).nullish(),
     source_url: url.max(1000),
     visibility: visibility.optional(),
     style: object.optional(),
@@ -1493,7 +1623,7 @@ function registerExtendedTools(server, supabase, user) {
   update("layer", "layers", "Partially update layer metadata (admin only). This does not replace stored geometry or change its source type.", { ...layer, source_url: layer.source_url.nullish() }, "id,name,source_type,source_url,visibility,style,presentation");
   remove("layer", "layers", "Delete a reusable layer, its stored features and all map links (admin only).");
   register("save_postgis_layer", "Create or update a stored PostGIS layer atomically (admin only). Creation requires name and a GeoJSON FeatureCollection. Use id to update; omitted metadata is preserved. Omit geojson on update to keep features; otherwise the entire dataset is replaced. Limit: 10 MB / 10,000 features.", { id: uuid.optional(), name: layer.name.optional(), description: layer.description, visibility: visibility.optional(), style: object.optional(), presentation: object.optional(), geojson: object.optional() }, async ({ geojson, ...metadata }) => ({ id: await rpc("mcp_save_postgis_layer", { p_layer: defined(metadata), p_geojson: geojson ?? null }) }), { write: true });
-  relationship("map_layer", "map_layers", ["map_id", "layer_id"], { position: z3.number().int().optional(), style: object.nullish(), visible_by_default: z3.boolean().optional() });
+  relationship("map_layer", "map_layers", ["map_id", "layer_id"], { position: z4.number().int().optional(), style: object.nullish(), visible_by_default: z4.boolean().optional() });
   register("list_map_layer_links", "Get editable positions and style overrides for map-layer links (admin only).", { map_id: uuid }, async ({ map_id }) => {
     await ensureAdmin();
     const { data, error } = await supabase.from("map_layers").select("map_id,layer_id,position,style,visible_by_default").eq("map_id", map_id).order("position").order("layer_id");
@@ -1503,69 +1633,69 @@ function registerExtendedTools(server, supabase, user) {
   });
   const contest = {
     election_id: uuid,
-    office: z3.string().min(1).max(160),
-    district: z3.string().max(160).nullish(),
-    seat: z3.string().max(160).nullish(),
-    description: z3.string().max(2000).nullish(),
-    partisan: z3.boolean().optional(),
-    position: z3.number().int().optional()
+    office: z4.string().min(1).max(160),
+    district: z4.string().max(160).nullish(),
+    seat: z4.string().max(160).nullish(),
+    description: z4.string().max(2000).nullish(),
+    partisan: z4.boolean().optional(),
+    position: z4.number().int().optional()
   };
   create("contest", "contests", "Create an office contest within an election (admin only).", contest, "id,election_id,office,district,seat,description,partisan,position");
   update("contest", "contests", "Partially update an election contest (admin only).", contest, "id,election_id,office,district,seat,description,partisan,position");
   remove("contest", "contests", "Delete a contest and its candidacy links, preserving people (admin only).");
   relationship("contest_candidate", "contest_candidates", ["contest_id", "person_id"], {
-    party: z3.string().max(120).nullish(),
-    status: z3.enum(["running", "withdrawn", "won", "lost", "runoff", "pending"]).optional(),
-    position: z3.number().int().optional(),
-    is_write_in: z3.boolean().optional()
+    party: z4.string().max(120).nullish(),
+    status: z4.enum(["running", "withdrawn", "won", "lost", "runoff", "pending"]).optional(),
+    position: z4.number().int().optional(),
+    is_write_in: z4.boolean().optional()
   });
   const question = {
     election_id: uuid,
-    title: z3.string().trim().min(1).max(200),
-    question_text: z3.string().trim().min(1).max(20000),
-    description: z3.string().max(4000).nullish(),
-    jurisdiction: z3.string().max(200).nullish(),
-    choices: z3.array(z3.string().min(1).max(4000)).min(2).max(20).optional(),
+    title: z4.string().trim().min(1).max(200),
+    question_text: z4.string().trim().min(1).max(20000),
+    description: z4.string().max(4000).nullish(),
+    jurisdiction: z4.string().max(200).nullish(),
+    choices: z4.array(z4.string().min(1).max(4000)).min(2).max(20).optional(),
     source_url: url.nullish(),
-    position: z3.number().int().optional()
+    position: z4.number().int().optional()
   };
   create("ballot_question", "ballot_questions", "Create a referendum/amendment/ballot question (admin only). Defaults to Yes/No choices.", question, "id,election_id,title,question_text,description,jurisdiction,choices,source_url,position");
   update("ballot_question", "ballot_questions", "Partially update a ballot question (admin only).", question, "id,election_id,title,question_text,description,jurisdiction,choices,source_url,position");
   remove("ballot_question", "ballot_questions", "Delete a ballot question (admin only).");
-  relationship("person_organization", "person_organizations", ["person_id", "organization_id"], { role: z3.string().min(1).max(60) });
+  relationship("person_organization", "person_organizations", ["person_id", "organization_id"], { role: z4.string().min(1).max(60) });
   readRpc("get_organization_relationships", "List related organizations, with labels normalized for the requested profile and source URLs.", { organization_id: uuid }, "get_organization_relationships", ({ organization_id }) => ({ p_organization_id: organization_id }));
   const organizationRelationship = {
     organization_id: uuid,
     related_organization_id: uuid,
-    relationship: z3.string().trim().min(1).max(160),
-    reverse_relationship: z3.string().trim().min(1).max(160),
+    relationship: z4.string().trim().min(1).max(160),
+    reverse_relationship: z4.string().trim().min(1).max(160),
     source_url: url.nullish()
   };
   create("organization_relationship", "organization_relationships", "Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.", organizationRelationship);
   update("organization_relationship", "organization_relationships", "Update an organization relationship by id (admin only). Omitted fields are preserved.", organizationRelationship);
   remove("organization_relationship", "organization_relationships", "Delete an organization relationship from both profiles, preserving both organizations (admin only).");
   const article = {
-    title: z3.string().trim().min(1).max(500),
+    title: z4.string().trim().min(1).max(500),
     url,
     visibility: visibility.optional(),
-    fetched_on: z3.iso.date().nullish(),
-    published_on: z3.iso.date().nullish(),
-    people: z3.array(z3.object({ person_id: uuid, role: z3.string().trim().min(1).max(80).optional() })).optional(),
-    organizations: z3.array(z3.object({ organization_id: uuid, role: z3.string().trim().min(1).max(80).optional() })).optional()
+    fetched_on: z4.iso.date().nullish(),
+    published_on: z4.iso.date().nullish(),
+    people: z4.array(z4.object({ person_id: uuid, role: z4.string().trim().min(1).max(80).optional() })).optional(),
+    organizations: z4.array(z4.object({ organization_id: uuid, role: z4.string().trim().min(1).max(80).optional() })).optional()
   };
   async function saveArticle(input) {
     const { people, organizations, ...metadata } = input;
     return { id: await rpc("mcp_save_article", { p_article: defined(metadata), p_people: people ?? null, p_organizations: organizations ?? null }) };
   }
   register("create_article", "Create an article and optional person/organization links atomically (admin only). Omit unknown dates; never infer publication dates from fetched dates.", article, (input) => saveArticle(input), { write: true, destructive: false });
-  register("update_article", "Partially update an article atomically (admin only). Omitted fields and association sets are preserved; null clears a date and [] clears that link set.", { id: uuid, ...z3.object(article).partial().shape }, async (input) => {
+  register("update_article", "Partially update an article atomically (admin only). Omitted fields and association sets are preserved; null clears a date and [] clears that link set.", { id: uuid, ...z4.object(article).partial().shape }, async (input) => {
     if (Object.keys(defined(input)).length === 1)
       throw new Error("Provide at least one field to update");
     return saveArticle(input);
   }, { write: true, idempotent: true });
   remove("article", "articles", "Delete an article and its association links, preserving people/organizations (admin only).");
-  relationship("article_person", "article_people", ["article_id", "person_id"], { role: z3.string().trim().min(1).max(80).optional() });
-  relationship("article_organization", "article_organizations", ["article_id", "organization_id"], { role: z3.string().trim().min(1).max(80).optional() });
+  relationship("article_person", "article_people", ["article_id", "person_id"], { role: z4.string().trim().min(1).max(80).optional() });
+  relationship("article_organization", "article_organizations", ["article_id", "organization_id"], { role: z4.string().trim().min(1).max(80).optional() });
   for (const [name, table, columns] of [["list_article_people", "article_people", "article_id,person_id,role"], ["list_article_organizations", "article_organizations", "article_id,organization_id,role"]]) {
     register(name, "List editable article association links (admin only). Profile reading lists remain available to other users.", { article_id: uuid }, async ({ article_id }) => {
       await ensureAdmin();
@@ -1575,7 +1705,7 @@ function registerExtendedTools(server, supabase, user) {
       return data;
     });
   }
-  const featureFields = { position: z3.number().int().optional(), feature_id: z3.union([z3.string(), z3.number()]).nullish(), properties: object.optional(), geometry };
+  const featureFields = { position: z4.number().int().optional(), feature_id: z4.union([z4.string(), z4.number()]).nullish(), properties: object.optional(), geometry };
   readRpc("search_layer_features", "Search or browse stored feature properties with pagination. IDs are bigint strings. Non-admins must supply a visible map containing the layer.", { layer_id: uuid, map_id: uuid.nullish(), query, limit, offset }, "mcp_layer_features", (input) => ({
     p_layer_id: input.layer_id,
     p_map_id: input.map_id ?? null,
@@ -1588,7 +1718,7 @@ function registerExtendedTools(server, supabase, user) {
     return data?.length ? { status: "ok", feature: data[0] } : { status: "missing" };
   });
   register("create_layer_feature", "Create a stored-layer feature atomically (admin only). Geometry must be WGS84 longitude/latitude. Position defaults to the next available position.", { layer_id: uuid, ...featureFields }, async ({ layer_id, ...feature }) => ({ id: await rpc("mcp_save_layer_feature", { p_layer_id: layer_id, p_feature: defined(feature) }), layer_id }), { write: true, destructive: false });
-  register("update_layer_feature", "Partially update a stored feature without replacing the dataset (admin only). null clears the source feature_id; internal id remains unchanged.", { layer_id: uuid, id: rowId, ...z3.object(featureFields).partial().shape }, async ({ layer_id, id, ...feature }) => {
+  register("update_layer_feature", "Partially update a stored feature without replacing the dataset (admin only). null clears the source feature_id; internal id remains unchanged.", { layer_id: uuid, id: rowId, ...z4.object(featureFields).partial().shape }, async ({ layer_id, id, ...feature }) => {
     if (!Object.keys(defined(feature)).length)
       throw new Error("Provide at least one field to update");
     return { id: await rpc("mcp_save_layer_feature", { p_layer_id: layer_id, p_id: id, p_feature: defined(feature) }), layer_id };
@@ -1605,22 +1735,22 @@ function registerExtendedTools(server, supabase, user) {
       throw new Error(error.message);
     return data;
   });
-  register("update_my_profile", "Update your own display name (admin only). This does not grant admin access or edit another user.", { display_name: z3.string().min(1).max(80).nullable() }, async ({ display_name }) => {
+  register("update_my_profile", "Update your own display name (admin only). This does not grant admin access or edit another user.", { display_name: z4.string().min(1).max(80).nullable() }, async ({ display_name }) => {
     const { data, error } = await supabase.from("profiles").update({ display_name }).eq("id", user.id).select("id,display_name").single();
     if (error)
       throw new Error(error.message);
     return data;
   }, { write: true, idempotent: true });
-  const bucket = z3.enum(["org-logos", "person-images"]);
-  const path = z3.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine((value) => !value.split("/").some((part) => !part || part === "." || part === ".."), "Use a relative object path without dot segments");
-  register("list_images", "Browse/search public organization logos or person images, with pagination.", { bucket, prefix: z3.string().max(512).default(""), search: z3.string().max(200).default(""), limit, offset }, async (input) => {
+  const bucket = z4.enum(["org-logos", "person-images"]);
+  const path = z4.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine((value) => !value.split("/").some((part) => !part || part === "." || part === ".."), "Use a relative object path without dot segments");
+  register("list_images", "Browse/search public organization logos or person images, with pagination.", { bucket, prefix: z4.string().max(512).default(""), search: z4.string().max(200).default(""), limit, offset }, async (input) => {
     const { data, error } = await supabase.storage.from(input.bucket).list(input.prefix, { search: input.search, limit: input.limit, offset: input.offset, sortBy: { column: "name", order: "asc" } });
     if (error)
       throw new Error(error.message);
     return data;
   });
   register("get_image_url", "Get the public URL for an organization logo or person image.", { bucket, path }, async (input) => ({ path: input.path, url: supabase.storage.from(input.bucket).getPublicUrl(input.path).data.publicUrl }));
-  register("upload_image", "Upload a user-supplied PNG/JPEG/WebP/SVG image (admin only, max 2 MB). Base64 must omit any data-URL prefix. Set overwrite only when replacing an existing image; use the returned path in logo_path or image_path.", { bucket, path, content_type: z3.enum(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]), data_base64: z3.string().min(4).max(2796204), overwrite: z3.boolean().default(false) }, async (input) => {
+  register("upload_image", "Upload a user-supplied PNG/JPEG/WebP/SVG image (admin only, max 2 MB). Base64 must omit any data-URL prefix. Set overwrite only when replacing an existing image; use the returned path in logo_path or image_path.", { bucket, path, content_type: z4.enum(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]), data_base64: z4.string().min(4).max(2796204), overwrite: z4.boolean().default(false) }, async (input) => {
     if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.data_base64))
       throw new Error("Invalid base64");
     const binary = atob(input.data_base64);
@@ -1641,7 +1771,7 @@ function registerExtendedTools(server, supabase, user) {
 }
 
 // apps/mcp/src/meeting-tools.ts
-import { z as z4 } from "zod";
+import { z as z5 } from "zod";
 var BUCKET = "meeting-attachments";
 var MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
 var FILE_TYPES = {
@@ -1679,9 +1809,9 @@ function decodeMeetingDocument(fileName, base64) {
 }
 function registerMeetingTools(server, supabase) {
   const { register, readRpc } = createToolkit(server, supabase);
-  const uuid = z4.string().uuid();
+  const uuid = z5.string().uuid();
   readRpc("get_meeting", "Get a meeting’s notes, transcript, attendance, votes and attachment metadata through its event/calendar visibility gate. Use this before uploading to avoid duplicates.", { id: uuid }, "get_meeting", ({ id }) => ({ p_id: id }));
-  register("upload_meeting_attachment", "Upload a document to an existing meeting (admin only, maximum 25 MB). Set is_meeting=true with create_event/update_event first. Supply file_name and base64 bytes without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV are supported. The file inherits meeting visibility; no public bucket is used. Uploads create new attachments: after an uncertain result, inspect get_meeting before retrying.", { meeting_id: uuid, file_name: z4.string().min(1).max(255), data_base64: z4.string().min(4).max(4 * Math.ceil(MAX_DOCUMENT_BYTES / 3)) }, async ({ meeting_id, file_name, data_base64 }) => {
+  register("upload_meeting_attachment", "Upload a document to an existing meeting (admin only, maximum 25 MB). Set is_meeting=true with create_event/update_event first. Supply file_name and base64 bytes without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV are supported. The file inherits meeting visibility; no public bucket is used. Uploads create new attachments: after an uncertain result, inspect get_meeting before retrying.", { meeting_id: uuid, file_name: z5.string().min(1).max(255), data_base64: z5.string().min(4).max(4 * Math.ceil(MAX_DOCUMENT_BYTES / 3)) }, async ({ meeting_id, file_name, data_base64 }) => {
     const document = decodeMeetingDocument(file_name, data_base64);
     const { data: meeting, error: meetingError } = await supabase.rpc("get_meeting", { p_id: meeting_id });
     if (meetingError)
@@ -1729,10 +1859,10 @@ function registerMeetingTools(server, supabase) {
 }
 
 // apps/mcp/src/document-tools.ts
-import { z as z5 } from "zod";
+import { z as z6 } from "zod";
 function registerDocumentTools(server, supabase, context) {
   const { register, readRpc } = createToolkit(server, supabase);
-  const uuid = z5.string().uuid();
+  const uuid = z6.string().uuid();
   async function api(path, body) {
     if (!context.apiUrl)
       throw new Error("The public document archive is not configured yet");
@@ -1751,31 +1881,31 @@ function registerDocumentTools(server, supabase, context) {
     return data;
   }
   readRpc("get_public_document", "Get a published public document and its public meeting links. Admins can also inspect pending/withdrawn publication metadata.", { id: uuid }, "get_public_document", ({ id }) => ({ p_id: id }));
-  readRpc("list_public_documents", "Browse or search published document titles and file names. This does not search file contents. include_unpublished requires admin access.", { query: z5.string().max(500).optional(), meeting_id: uuid.optional(), include_unpublished: z5.boolean().optional(), limit: z5.number().int().min(1).max(50).optional(), offset: z5.number().int().min(0).max(1e4).optional() }, "list_public_documents", ({ query, meeting_id, include_unpublished, limit, offset }) => ({ p_query: query ?? "", p_meeting_id: meeting_id ?? null, p_admin: include_unpublished ?? false, p_limit: limit ?? 20, p_offset: offset ?? 0 }));
+  readRpc("list_public_documents", "Browse or search published document titles and file names. This does not search file contents. include_unpublished requires admin access.", { query: z6.string().max(500).optional(), meeting_id: uuid.optional(), include_unpublished: z6.boolean().optional(), limit: z6.number().int().min(1).max(50).optional(), offset: z6.number().int().min(0).max(1e4).optional() }, "list_public_documents", ({ query, meeting_id, include_unpublished, limit, offset }) => ({ p_query: query ?? "", p_meeting_id: meeting_id ?? null, p_admin: include_unpublished ?? false, p_limit: limit ?? 20, p_offset: offset ?? 0 }));
   register("link_public_document_meeting", "Link an already published document to another public, listed meeting without uploading another copy (admin only). Useful for a combined committee/full-board transcript.", { document_id: uuid, meeting_id: uuid }, async ({ document_id, meeting_id }) => {
     const { data, error } = await supabase.rpc("link_public_document_meeting", { p_document_id: document_id, p_meeting_id: meeting_id });
     if (error)
       throw new Error(error.message);
     return data;
   }, { write: true, destructive: false, idempotent: true });
-  register("search_document_contents", "Search published document contents using Cloudflare hybrid search. Returns matching passages and document/meeting citations; automated transcripts and OCR can contain errors.", { query: z5.string().trim().min(1).max(500) }, async ({ query }) => api(`/search?${new URLSearchParams({ q: query })}`));
+  register("search_document_contents", "Search published document contents using Cloudflare hybrid search. Returns matching passages and document/meeting citations; automated transcripts and OCR can contain errors.", { query: z6.string().trim().min(1).max(500) }, async ({ query }) => api(`/search?${new URLSearchParams({ q: query })}`));
   register("publish_meeting_document", "Explicitly publish a public meeting attachment to the unrestricted public document archive (admin only). This creates an independently public copy; changing meeting visibility does not withdraw it. Never use for private research or confidential files. Publication must be enabled by the operator. Inspect the catalog after an uncertain response before retrying.", {
     meeting_id: uuid,
     attachment_id: uuid,
-    title: z5.string().trim().min(1).max(300),
-    source_url: z5.url(),
-    document_kind: z5.enum(["agenda", "minutes", "packet", "presentation", "spreadsheet", "transcript", "other"]),
-    text_origin: z5.enum(["official", "automated_transcript", "ocr", "other"]),
-    confirm_public: z5.literal(true)
+    title: z6.string().trim().min(1).max(300),
+    source_url: z6.url(),
+    document_kind: z6.enum(["agenda", "minutes", "packet", "presentation", "spreadsheet", "transcript", "other"]),
+    text_origin: z6.enum(["official", "automated_transcript", "ocr", "other"]),
+    confirm_public: z6.literal(true)
   }, async (input) => api("/publish", input), { write: true, destructive: false, idempotent: true });
   register("withdraw_public_document", "Withdraw a published document from the catalog and delete its public R2 object (admin only). Affects all linked meetings. Search passages are blocked immediately; index cleanup follows R2 sync. Public downloads already copied elsewhere cannot be recalled. Pending publications must be resolved first.", { id: uuid }, async ({ id }) => api(`/documents/${id}/withdraw`, {}), { write: true, destructive: true, idempotent: true });
 }
 
 // apps/mcp/src/tools.ts
 import { McpServer } from "@modelcontextprotocol/server";
-import { z as z6 } from "zod";
-var VISIBILITY = z6.enum(["public", "unlisted", "private"]);
-var ELECTION_KIND = z6.enum([
+import { z as z7 } from "zod";
+var VISIBILITY = z7.enum(["public", "unlisted", "private"]);
+var ELECTION_KIND = z7.enum([
   "special",
   "special_runoff",
   "primary",
@@ -1784,7 +1914,7 @@ var ELECTION_KIND = z6.enum([
   "general_runoff",
   "other"
 ]);
-var ELECTION_DATE_KIND = z6.enum([
+var ELECTION_DATE_KIND = z7.enum([
   "election_day",
   "early_voting",
   "registration_deadline",
@@ -1792,11 +1922,11 @@ var ELECTION_DATE_KIND = z6.enum([
   "absentee_return_deadline",
   "other"
 ]);
-var PERSON_KIND = z6.enum(["elected_official", "appointed_official", "candidate", "other"]);
+var PERSON_KIND = z7.enum(["elected_official", "appointed_official", "candidate", "other"]);
 function buildServer(supabase, user, documentContext = {}) {
   const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
-  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z6.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
+  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z7.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
     try {
       const { data: isAdmin, error } = await supabase.rpc("is_admin");
       if (error)
@@ -1807,8 +1937,8 @@ function buildServer(supabase, user, documentContext = {}) {
     }
   });
   register("search_users", "Search registered accounts by email or display name (admin only). Returns up to 50 accounts with id, email, display_name, role and created_at. Empty query lists accounts; use offset increments of 50 to paginate. Civic people records are separate from login accounts.", {
-    query: z6.string().trim().max(200).default(""),
-    offset: z6.number().int().min(0).default(0)
+    query: z7.string().trim().max(200).default(""),
+    offset: z7.number().int().min(0).default(0)
   }, async ({ query, offset }) => {
     await ensureAdmin();
     const { data, error } = await supabase.rpc("admin_list_users", { p_query: query, p_offset: offset });
@@ -1817,21 +1947,21 @@ function buildServer(supabase, user, documentContext = {}) {
     return data;
   });
   register("promote_user_to_admin", "Promote an existing registered user to admin (admin only). Grants content editing, private-content access and permission to promote other users immediately. Resolve the exact account with search_users and act only on an explicit request to promote that person. Cannot promote yourself, create an account or demote an admin. Repeating a promotion of another existing admin is harmless.", {
-    user_id: z6.string().uuid()
+    user_id: z7.string().uuid()
   }, async ({ user_id }) => {
     const { error } = await supabase.rpc("promote_user_to_admin", { p_user_id: user_id });
     if (error)
       throw new Error(error.message);
     return { user_id, role: "admin" };
   }, { write: true, destructive: true, idempotent: true });
-  readRpc("search_organizations", "Full-text search of community organizations.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_maps", "Full-text search of maps.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_organizations", "Full-text search of community organizations.", { query: z7.string().default(""), limit: z7.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_maps", "Full-text search of maps.", { query: z7.string().default(""), limit: z7.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
   readRpc("search_events", "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.", {
-    query: z6.string().default(""),
-    organization_id: z6.string().uuid().nullish(),
-    calendar_id: z6.string().uuid().nullish(),
-    include_past: z6.boolean().default(false),
-    limit: z6.number().int().min(1).max(100).default(50)
+    query: z7.string().default(""),
+    organization_id: z7.string().uuid().nullish(),
+    calendar_id: z7.string().uuid().nullish(),
+    include_past: z7.boolean().default(false),
+    limit: z7.number().int().min(1).max(100).default(50)
   }, "search_events", ({ query, organization_id, calendar_id, include_past, limit }) => ({
     p_query: query,
     p_organization_id: organization_id ?? null,
@@ -1839,10 +1969,10 @@ function buildServer(supabase, user, documentContext = {}) {
     p_include_past: include_past,
     p_limit: limit
   }));
-  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z6.string().default(""), limit: z6.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_elections", "Full-text search of elections.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z6.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
-  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z6.string().uuid() }, async ({ id }) => {
+  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z7.string().default(""), limit: z7.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_elections", "Full-text search of elections.", { query: z7.string().default(""), limit: z7.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z7.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
+  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z7.string().uuid() }, async ({ id }) => {
     const result = await supabase.rpc("get_map", { p_id: id });
     if (result.error)
       throw new Error(result.error.message);
@@ -1857,51 +1987,51 @@ function buildServer(supabase, user, documentContext = {}) {
   getRpc("get_person", "Fetch one person (with affiliations) by id.", "get_person");
   getRpc("get_election", "Fetch one election (with contests and key dates) by id.", "get_election");
   const orgShape = {
-    slug: z6.string(),
-    name: z6.string(),
-    description: z6.string().nullish(),
-    email: z6.string().nullish(),
-    phone: z6.string().nullish(),
-    address_line: z6.string().nullish(),
-    website_url: z6.string().nullish(),
-    social_url: z6.string().nullish(),
-    logo_path: z6.string().nullish(),
-    sos_control_number: z6.string().nullish(),
-    sos_business_type: z6.string().nullish(),
-    sos_status: z6.string().nullish(),
-    sos_formation_date: z6.iso.date().nullish(),
-    sos_last_annual_registration: z6.string().nullish(),
-    sos_principal_office: z6.string().nullish(),
-    sos_registered_agent: z6.string().nullish(),
-    sos_county: z6.string().nullish(),
-    sos_naics_code: z6.string().nullish(),
-    sos_officers: z6.string().nullish(),
-    sos_record_url: z6.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
+    slug: z7.string(),
+    name: z7.string(),
+    description: z7.string().nullish(),
+    email: z7.string().nullish(),
+    phone: z7.string().nullish(),
+    address_line: z7.string().nullish(),
+    website_url: z7.string().nullish(),
+    social_url: z7.string().nullish(),
+    logo_path: z7.string().nullish(),
+    sos_control_number: z7.string().nullish(),
+    sos_business_type: z7.string().nullish(),
+    sos_status: z7.string().nullish(),
+    sos_formation_date: z7.iso.date().nullish(),
+    sos_last_annual_registration: z7.string().nullish(),
+    sos_principal_office: z7.string().nullish(),
+    sos_registered_agent: z7.string().nullish(),
+    sos_county: z7.string().nullish(),
+    sos_naics_code: z7.string().nullish(),
+    sos_officers: z7.string().nullish(),
+    sos_record_url: z7.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
   };
   create("organization", "organizations", "Create an organization (admin only).", orgShape, "id, slug, name");
   update("organization", "organizations", "Update an organization (admin only).", orgShape, "id, slug, name");
   remove("organization", "organizations", "Delete an organization (admin only).");
   const calendarShape = {
-    organization_id: z6.string().uuid(),
-    slug: z6.string(),
-    name: z6.string(),
-    description: z6.string().nullish(),
+    organization_id: z7.string().uuid(),
+    slug: z7.string(),
+    name: z7.string(),
+    description: z7.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("calendar", "calendars", "Create a calendar (admin only).", calendarShape, "id, slug, name");
   update("calendar", "calendars", "Update a calendar (admin only).", { ...calendarShape, organization_id: calendarShape.organization_id.optional() }, "id, slug, name");
   remove("calendar", "calendars", "Delete a calendar (admin only).");
   const eventShape = {
-    meeting_video_start_seconds: z6.number().int().min(0).max(2147483647).nullish().describe("Optional recording start offset in whole seconds. Overrides URL timestamps. Null uses the URL/default start; zero starts at the beginning. Separate meetings can share a video URL with different offsets."),
-    calendar_id: z6.string().uuid(),
-    title: z6.string(),
-    starts_at: z6.string().describe("ISO 8601 timestamp"),
-    ends_at: z6.string().nullish(),
-    all_day: z6.boolean().optional(),
-    is_meeting: z6.boolean().optional(),
-    meeting_notes: z6.string().nullish(),
-    meeting_transcript: z6.string().nullish(),
-    meeting_video_url: z6.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, "Use an HTTPS video URL").nullish().refine((value) => {
+    meeting_video_start_seconds: z7.number().int().min(0).max(2147483647).nullish().describe("Optional recording start offset in whole seconds. Overrides URL timestamps. Null uses the URL/default start; zero starts at the beginning. Separate meetings can share a video URL with different offsets."),
+    calendar_id: z7.string().uuid(),
+    title: z7.string(),
+    starts_at: z7.string().describe("ISO 8601 timestamp"),
+    ends_at: z7.string().nullish(),
+    all_day: z7.boolean().optional(),
+    is_meeting: z7.boolean().optional(),
+    meeting_notes: z7.string().nullish(),
+    meeting_transcript: z7.string().nullish(),
+    meeting_video_url: z7.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, "Use an HTTPS video URL").nullish().refine((value) => {
       if (value == null)
         return true;
       try {
@@ -1911,45 +2041,45 @@ function buildServer(supabase, user, documentContext = {}) {
         return false;
       }
     }, "Use a video URL without credentials or a custom port").describe("Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear."),
-    location: z6.string().nullish(),
-    url: z6.string().nullish(),
-    description: z6.string().nullish(),
+    location: z7.string().nullish(),
+    url: z7.string().nullish(),
+    description: z7.string().nullish(),
     visibility: VISIBILITY.optional(),
-    election_id: z6.string().uuid().nullish(),
+    election_id: z7.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish()
   };
   create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
   update("event", "events", "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
   remove("event", "events", "Delete a calendar event (admin only).");
   const personShape = {
-    slug: z6.string(),
-    full_name: z6.string(),
+    slug: z7.string(),
+    full_name: z7.string(),
     kind: PERSON_KIND.optional(),
-    title: z6.string().nullish(),
-    description: z6.string().nullish(),
-    email: z6.string().nullish(),
-    phone: z6.string().nullish(),
-    fax: z6.string().nullish(),
-    website_url: z6.string().nullish(),
-    social_url: z6.string().nullish(),
-    address_line: z6.string().nullish(),
-    address_line2: z6.string().nullish(),
-    city: z6.string().nullish(),
-    state: z6.string().nullish(),
-    postal_code: z6.string().nullish(),
-    image_path: z6.string().nullish(),
+    title: z7.string().nullish(),
+    description: z7.string().nullish(),
+    email: z7.string().nullish(),
+    phone: z7.string().nullish(),
+    fax: z7.string().nullish(),
+    website_url: z7.string().nullish(),
+    social_url: z7.string().nullish(),
+    address_line: z7.string().nullish(),
+    address_line2: z7.string().nullish(),
+    city: z7.string().nullish(),
+    state: z7.string().nullish(),
+    postal_code: z7.string().nullish(),
+    image_path: z7.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("person", "people", "Create a person (admin only).", personShape, "id, slug, full_name");
   update("person", "people", "Update a person (admin only).", { ...personShape, slug: personShape.slug.optional(), full_name: personShape.full_name.optional() }, "id, slug, full_name");
   remove("person", "people", "Delete a person (admin only).");
   const electionShape = {
-    slug: z6.string(),
-    name: z6.string(),
-    election_date: z6.string().describe("YYYY-MM-DD"),
+    slug: z7.string(),
+    name: z7.string(),
+    election_date: z7.string().describe("YYYY-MM-DD"),
     kind: ELECTION_KIND.optional(),
-    description: z6.string().nullish(),
-    organization_id: z6.string().uuid().nullish(),
+    description: z7.string().nullish(),
+    organization_id: z7.string().uuid().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("election", "elections", "Create an election (admin only).", electionShape, "id, slug, name");
@@ -1958,6 +2088,7 @@ function buildServer(supabase, user, documentContext = {}) {
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
   registerLegislativeTools(server, supabase);
+  registerOfficeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;
 }
