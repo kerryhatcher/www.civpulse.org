@@ -415,3 +415,12 @@ including batched meeting records, instead of hydrating every meeting twice.
 Public archive event pages host the interactive event viewer and prerendered
 meeting text at one canonical URL. Detail JSON is packed by month to reduce
 static file counts; ordinary calendar month browsing never downloads transcripts.
+
+### Election results and turnout
+
+`/elections/results/` is a static shell using live `get_election_results` RPC data.
+This explicit runtime reporting surface makes saved snapshots available immediately;
+existing election/profile content still follows its normal rebuild behavior.
+Original result photographs/PDFs live in private Supabase Storage and never enter
+prerendered HTML. The AI agent transcribes originals, and admin-only MCP tools
+validate and save immutable cumulative reports. See [election results](election-results.md).

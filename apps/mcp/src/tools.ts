@@ -1,3 +1,4 @@
+import { registerElectionResultTools } from "./election-result-tools";
 import { registerLegislativeTools } from './legislative-tools';
 import { registerOfficeTools } from './office-tools';
 import { createToolkit, ok, fail } from "./toolkit";
@@ -273,6 +274,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   );
   remove("election", "elections", "Delete an election (admin only).");
 
+  registerElectionResultTools(server, supabase);
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
   registerLegislativeTools(server, supabase, sourceReaderUrl);

@@ -670,3 +670,22 @@ local fixtures, inspect exports for restricted IDs/text, remove fixtures, and
 check browser console errors. Missing published files must report failure rather
 than invoke live public readers. The calendar export migrations must be deployed
 before a hosted build; do not bypass the production migration gate.
+
+### Election result photo imports
+
+See [election results](election-results.md) for local database tests and the import
+contract. Run `ELECTION_RESULTS_INTEGRATION=1 bun test scripts/tests/election-results-integration.test.ts`
+against local Supabase with the seeded admin to exercise actual MCP serialization,
+Auth, private Storage, SHA-256 retries and concurrent report deduplication. Optional
+`ELECTION_PHOTO_ROOT` points to the supplied attachment folder containing
+`8-Photo-8.jpg` and `9-Photo-9.jpg`; those different byte streams must resolve to one
+April report. Originals remain private locally; disposable election/person/report
+fixtures are removed. No production connection is used.
+
+On October 26 the local backend contained unrelated migrations from other chats.
+Local verification used a temporary migration workdir containing the exact applied
+local history plus the new migration, then `migration up --db-url` pinned to
+127.0.0.1:54322. No history repairs, resets or production applications occurred.
+The 46-assertion database test, real two-photo MCP integration, anonymous/admin
+browser flow, MCP type check, plugin archive check, Astro check and static build
+passed. The build retains its existing profile-sections dynamic-import warning.

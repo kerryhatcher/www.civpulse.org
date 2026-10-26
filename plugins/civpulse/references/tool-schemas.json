@@ -1525,6 +1525,477 @@
     }
   },
   {
+    "name": "manage_election_results",
+    "description": "Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "upload"
+                },
+                "base64": {
+                  "type": "string",
+                  "minLength": 4,
+                  "maxLength": 13981016
+                },
+                "mime_type": {
+                  "type": "string",
+                  "enum": [
+                    "image/jpeg",
+                    "image/png",
+                    "application/pdf"
+                  ]
+                }
+              },
+              "required": [
+                "action",
+                "base64",
+                "mime_type"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "view"
+                },
+                "path": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}\\.(jpg|png|pdf)$"
+                }
+              },
+              "required": [
+                "action",
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "read"
+                },
+                "election_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "history": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "offset": {
+                  "default": 0,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "limit": {
+                  "default": 50,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "action",
+                "election_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "import"
+                },
+                "election_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "scope": {
+                  "type": "object",
+                  "properties": {
+                    "county": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "unit_type": {
+                      "type": "string",
+                      "enum": [
+                        "county",
+                        "precinct",
+                        "tabulator"
+                      ]
+                    },
+                    "unit": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "Canonical precinct code or tabulator ID; county reports use all. Never invent an ID for a cropped tape."
+                    },
+                    "counting_group": {
+                      "type": "string",
+                      "enum": [
+                        "all",
+                        "election_day",
+                        "advance",
+                        "absentee_mail",
+                        "provisional"
+                      ]
+                    },
+                    "ballot_style": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "Use all for combined ballots; preserve primary party/ballot style when separate."
+                    }
+                  },
+                  "required": [
+                    "county",
+                    "unit_type",
+                    "unit",
+                    "counting_group",
+                    "ballot_style"
+                  ],
+                  "additionalProperties": false
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                },
+                "snapshot": {
+                  "type": "object",
+                  "properties": {
+                    "election_date": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "unofficial",
+                        "official",
+                        "certified"
+                      ]
+                    },
+                    "note": {
+                      "type": "string",
+                      "maxLength": 2000
+                    },
+                    "turnout": {
+                      "type": "object",
+                      "properties": {
+                        "ballots": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2147483647
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "voters": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2147483647
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "registered": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2147483647
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "precincts_reported": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2147483647
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "precincts_total": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 2147483647
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "contests": {
+                      "maxItems": 100,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "contest_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "question_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "choices": {
+                            "minItems": 1,
+                            "maxItems": 100,
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "person_id": {
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                                },
+                                "label": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 200
+                                },
+                                "votes": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 2147483647
+                                }
+                              },
+                              "required": [
+                                "label",
+                                "votes"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "total_votes": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "unresolved_write_ins": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "ballots": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "registered": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "precincts_reported": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "precincts_total": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "undervotes": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "overvotes": {
+                            "anyOf": [
+                              {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 2147483647
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "choices"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "election_date",
+                    "status",
+                    "turnout",
+                    "contests"
+                  ],
+                  "additionalProperties": false
+                },
+                "sources": {
+                  "minItems": 1,
+                  "maxItems": 20,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}\\.(jpg|png|pdf)$"
+                      },
+                      "locator": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      },
+                      "transcription": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10000
+                      }
+                    },
+                    "required": [
+                      "path",
+                      "locator",
+                      "transcription"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "expected_report_id": {
+                  "default": null,
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "dry_run": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "action",
+                "election_id",
+                "scope",
+                "observed_at",
+                "snapshot",
+                "sources"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "search_site",
     "description": "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.",
     "inputSchema": {
@@ -5231,67 +5702,7 @@
   },
   {
     "name": "import_legislation",
-    "description": "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "records": {
-          "maxItems": 100,
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "table": {
-                "type": "string",
-                "enum": [
-                  "legislative_terms",
-                  "legislative_sessions",
-                  "legislative_bodies",
-                  "legislative_body_memberships",
-                  "bills",
-                  "bill_versions",
-                  "bill_amendments",
-                  "bill_actions",
-                  "bill_relationships",
-                  "bill_sponsorships",
-                  "bill_positions",
-                  "legislative_votes",
-                  "legislative_vote_bills",
-                  "legislative_vote_choices",
-                  "article_bills",
-                  "legislative_event_links"
-                ]
-              },
-              "data": {
-                "type": "object",
-                "propertyNames": {
-                  "type": "string"
-                },
-                "additionalProperties": {}
-              }
-            },
-            "required": [
-              "table",
-              "data"
-            ]
-          }
-        }
-      },
-      "required": [
-        "records"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "readOnlyHint": false,
-      "destructiveHint": true,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "import_legislation_bundle",
-    "description": "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. The existing import_legislation tool remains atomic for a single batch.",
+    "description": "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. Default mode=atomic preserves the original single-batch transaction and response (at most 100 rows). Explicit mode=batched enables resumable multi-batch imports. Preserve reviewed attendance classifications.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5335,6 +5746,14 @@
               "data"
             ]
           }
+        },
+        "mode": {
+          "default": "atomic",
+          "type": "string",
+          "enum": [
+            "atomic",
+            "batched"
+          ]
         },
         "start_offset": {
           "default": 0,

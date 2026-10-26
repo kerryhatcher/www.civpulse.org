@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Election results & turnout" description="Sourced election reports for Macon-Bibb, with turnout and reporting history.">
+ <main id="main">
+  <div class="page-intro"><p class="org-eyebrow">Macon-Bibb</p><h1>Election results &amp; turnout</h1>
+   <p>Reported votes, participation, and the history behind each update.</p></div>
+  <form id="result-form" class="map-search">
+   <label for="result-election">Election</label><select id="result-election" required><option value="">Choose an election</option></select>
+   <label><input id="result-history" type="checkbox" /> Show earlier reports</label>
+   <button type="submit">Load reports</button>
+  </form>
+  <p id="result-status" role="status" aria-live="polite">Loading elections…</p>
+  <p class="body-note">Each report covers its labeled area, counting group, and ballot style. County totals can include the same ballots as precinct and machine reports. Reports are displayed separately and are never added together here. “Not reported” is different from zero.</p>
+  <div id="result-reports"></div>
+  <button id="result-more" type="button" hidden>Load more reports</button>
+  <p><a href="/elections/">All elections</a> · <a href="/docs/admins/#election-results-and-turnout">Importing results with an AI agent</a></p>
+ </main>
+</Layout>
+<script>
+ import { initElectionResults } from '../../scripts/election-results';
+ void initElectionResults();
+</script>
+<style>
+ select { max-width:100%; padding:.65rem; }
+ #result-form { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; }
+ #result-reports :global(article) { border:1px solid var(--color-border, #ccc); border-radius:.5rem; padding:1.5rem; margin:1.5rem 0; }
+ #result-reports :global(table) { border-collapse:collapse; width:100%; margin:1rem 0; }
+ #result-reports :global(th), #result-reports :global(td) { text-align:left; padding:.5rem; border-bottom:1px solid #ddd; }
+</style>
