@@ -25,7 +25,7 @@ jobs:
       - name: Configure local public client
         run: |
           bun -e '
-            const result = Bun.spawnSync(["bun", "run", "db:status"], {stdout:"pipe", stderr:"pipe"});
+            const result = Bun.spawnSync(["bun", "run", "supabase", "status", "-o", "json"], {stdout:"pipe", stderr:"pipe"});
             if(result.exitCode) throw new Error("Local Supabase status failed");
             const status=JSON.parse(new TextDecoder().decode(result.stdout));
             if(status.API_URL!=="http://127.0.0.1:54321") throw new Error("Local API required");
