@@ -37,4 +37,17 @@ test('attendance detection handles mislabeled source flags without excluding pro
   expect(isGeorgiaAttendance({isRollCall:false,caption:'AFTERNOON ROLL CALL'})).toBe(true);
   expect(isGeorgiaAttendance({isRollCall:true,caption:'Other'})).toBe(true);
   expect(isGeorgiaAttendance({isRollCall:false,caption:'MOTION TO CONFIRM WITH ONE ROLL CALL'})).toBe(false);
+  expect(isGeorgiaAttendance({id:21003,isRollCall:false,caption:'SECOND READING OF BILLS AND RESOLUTIONS'})).toBe(true);
+  expect(isGeorgiaAttendance({id:21004,isRollCall:false,caption:'SECOND READING OF BILLS AND RESOLUTIONS'})).toBe(false);
+});
+
+test('reviewed attendance is exposed in both Georgia lists and detail without altering source choices', async () => {
+  const source={id:21003,isRollCall:false,caption:'SECOND READING OF BILLS AND RESOLUTIONS'};
+  const fetcher=(async(url:string)=>Response.json(url.includes('authentication/token')?'token':
+    url.includes('Vote/list')?[source]:{session:{id:1031},legislation:[],votes:[{member:{id:4942},memberVoted:0}]})) as typeof fetch;
+  const list=await readGeorgiaSource({resource:'votes',chamber:'senate',session_id:1031,limit:25,offset:0},fetcher);
+  expect(list.rows[0]).toEqual({...source,attendance:true});
+  const detail=await readGeorgiaSource({resource:'vote',vote_id:21003,limit:25,offset:0},fetcher);
+  expect(detail.attendance).toBe(true);
+  expect(detail.rows[0]).toMatchObject({memberVoted:0,choice:'yes',source_choice:'Yea'});
 });

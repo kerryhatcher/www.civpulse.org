@@ -106,7 +106,7 @@ export function registerLegislativeTools(
   );
   register(
     "import_legislation",
-    "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records. Never import guessed votes or infer identity from names.",
+    "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.",
     {
       records: z
         .array(

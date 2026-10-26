@@ -264,7 +264,12 @@ the file. Describe resource fields through MCP before preparing a file.
 Choose **Import records** to save batches of at most 100 records. Every batch is
 atomic; completed batches remain saved if a later batch fails. **Resume import**
 retries the stopped batch. After reloading the page, choose the same file again;
-provider IDs make repeated imports update existing records. Review the saved
+provider IDs make repeated imports update existing records.
+An existing vote category of **attendance** is preserved on reimport even if a
+stale file supplies another category; other supplied metadata still updates.
+Use an explicit record edit to correct an attendance classification after source
+review. Honor the Georgia source adapter's `attendance` indicator even when the
+original caption or `isRollCall` flag disagrees. Review the saved
 records and public profile afterward. A single-member backfill has partial roll
 call coverage even when the official chamber totals are available.
 
