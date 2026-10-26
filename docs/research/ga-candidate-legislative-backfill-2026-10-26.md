@@ -64,4 +64,4 @@ All content imports completed through the authenticated MCP import API. Read-bac
 
 The current checkout passed bun run check with zero diagnostics and bun run build with local test data (274 pages). Public anonymous Bishop and vote-detail pages rendered correctly with no console errors. PR #41 also passed its database and MCP regression tests.
 
-Publication: final rebuild pending after all content imports.
+Publication: the current-main rebuild is running after the imports completed. Earlier attempts hit an export-query timeout or were superseded by publication fixes. Build 3b0e290a-e0bb-441f-a115-c7947e2370f4 contains the bounded concurrent exports from PR #69. The existing automatic sitemap/publication follow-up monitors this build and verifies deployment. Authenticated API records are complete; anonymous profile snapshots still require the final deployment. Individual first/last recorded vote dates are included in the companion JSON.

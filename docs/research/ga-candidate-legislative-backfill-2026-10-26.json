@@ -30,7 +30,15 @@
       "prepared_sponsorships": 112,
       "verified_raw_choices": 1643,
       "verified_nonattendance_choices": 1643,
-      "verified_sponsorships": 112
+      "verified_sponsorships": 112,
+      "recorded_vote_dates": {
+        "first": "2023-01-09",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2023-02-01",
+        "last": "2026-06-17"
+      }
     },
     {
       "name": "Tanya Miller",
@@ -38,7 +46,15 @@
       "prepared_sponsorships": 203,
       "verified_raw_choices": 1643,
       "verified_nonattendance_choices": 1643,
-      "verified_sponsorships": 203
+      "verified_sponsorships": 203,
+      "recorded_vote_dates": {
+        "first": "2023-01-09",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2023-01-25",
+        "last": "2026-06-18"
+      }
     },
     {
       "name": "Miriam Paris",
@@ -46,7 +62,15 @@
       "prepared_sponsorships": 260,
       "verified_raw_choices": 4485,
       "verified_nonattendance_choices": 4485,
-      "verified_sponsorships": 260
+      "verified_sponsorships": 260,
+      "recorded_vote_dates": {
+        "first": "2011-08-23",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2011-08-25",
+        "last": "2026-03-27"
+      }
     },
     {
       "name": "Anissa M. Jones",
@@ -54,7 +78,15 @@
       "prepared_sponsorships": 86,
       "verified_raw_choices": 818,
       "verified_nonattendance_choices": 818,
-      "verified_sponsorships": 86
+      "verified_sponsorships": 86,
+      "recorded_vote_dates": {
+        "first": "2025-01-13",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2025-01-14",
+        "last": "2026-06-23"
+      }
     },
     {
       "name": "Dale Washburn",
@@ -62,7 +94,15 @@
       "prepared_sponsorships": 221,
       "verified_raw_choices": 3207,
       "verified_nonattendance_choices": 3207,
-      "verified_sponsorships": 221
+      "verified_sponsorships": 221,
+      "recorded_vote_dates": {
+        "first": "2019-01-14",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2019-02-05",
+        "last": "2026-06-23"
+      }
     },
     {
       "name": "Tangie Herring",
@@ -70,7 +110,15 @@
       "prepared_sponsorships": 113,
       "verified_raw_choices": 818,
       "verified_nonattendance_choices": 818,
-      "verified_sponsorships": 113
+      "verified_sponsorships": 113,
+      "recorded_vote_dates": {
+        "first": "2025-01-13",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2025-01-27",
+        "last": "2026-06-23"
+      }
     },
     {
       "name": "Floyd Griffin",
@@ -78,7 +126,15 @@
       "prepared_sponsorships": 67,
       "verified_raw_choices": 818,
       "verified_nonattendance_choices": 818,
-      "verified_sponsorships": 67
+      "verified_sponsorships": 67,
+      "recorded_vote_dates": {
+        "first": "2025-01-13",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2025-01-15",
+        "last": "2026-06-23"
+      }
     },
     {
       "name": "Greg Dolezal",
@@ -86,7 +142,15 @@
       "prepared_sponsorships": 673,
       "verified_raw_choices": 3345,
       "verified_nonattendance_choices": 3344,
-      "verified_sponsorships": 673
+      "verified_sponsorships": 673,
+      "recorded_vote_dates": {
+        "first": "2019-01-14",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2019-01-16",
+        "last": "2026-06-17"
+      }
     },
     {
       "name": "Brian Strickland",
@@ -94,7 +158,15 @@
       "prepared_sponsorships": 1094,
       "verified_raw_choices": 5790,
       "verified_nonattendance_choices": 5789,
-      "verified_sponsorships": 1094
+      "verified_sponsorships": 1094,
+      "recorded_vote_dates": {
+        "first": "2013-01-14",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2013-01-15",
+        "last": "2026-04-02"
+      }
     },
     {
       "name": "Steven McNeel",
@@ -102,7 +174,15 @@
       "prepared_sponsorships": 43,
       "verified_raw_choices": 429,
       "verified_nonattendance_choices": 429,
-      "verified_sponsorships": 43
+      "verified_sponsorships": 43,
+      "recorded_vote_dates": {
+        "first": "2026-02-24",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2026-01-13",
+        "last": "2026-06-17"
+      }
     },
     {
       "name": "Rick A. Williams",
@@ -110,7 +190,15 @@
       "prepared_sponsorships": 794,
       "verified_raw_choices": 4151,
       "verified_nonattendance_choices": 4150,
-      "verified_sponsorships": 794
+      "verified_sponsorships": 794,
+      "recorded_vote_dates": {
+        "first": "2017-01-09",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2017-01-12",
+        "last": "2026-06-23"
+      }
     },
     {
       "name": "David E. Lucas",
@@ -118,7 +206,15 @@
       "prepared_sponsorships": 1135,
       "verified_raw_choices": 9057,
       "verified_nonattendance_choices": 9056,
-      "verified_sponsorships": 1135
+      "verified_sponsorships": 1135,
+      "recorded_vote_dates": {
+        "first": "2005-01-10",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2001-01-24",
+        "last": "2026-03-31"
+      }
     },
     {
       "name": "Tyler Harper",
@@ -126,7 +222,15 @@
       "prepared_sponsorships": 1016,
       "verified_raw_choices": 3809,
       "verified_nonattendance_choices": 3809,
-      "verified_sponsorships": 1016
+      "verified_sponsorships": 1016,
+      "recorded_vote_dates": {
+        "first": "2013-01-14",
+        "last": "2022-04-05"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2013-01-17",
+        "last": "2022-04-01"
+      }
     },
     {
       "name": "Keisha Sean Waites",
@@ -134,7 +238,15 @@
       "prepared_sponsorships": 351,
       "verified_raw_choices": 2412,
       "verified_nonattendance_choices": 2412,
-      "verified_sponsorships": 351
+      "verified_sponsorships": 351,
+      "recorded_vote_dates": {
+        "first": "2012-02-15",
+        "last": "2017-03-31"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2012-02-16",
+        "last": "2017-03-30"
+      }
     },
     {
       "name": "Austin Scott",
@@ -142,7 +254,15 @@
       "prepared_sponsorships": 180,
       "verified_raw_choices": 3119,
       "verified_nonattendance_choices": 3119,
-      "verified_sponsorships": 180
+      "verified_sponsorships": 180,
+      "recorded_vote_dates": {
+        "first": "2005-01-10",
+        "last": "2010-04-29"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2001-02-02",
+        "last": "2010-04-13"
+      }
     },
     {
       "name": "Josh McLaurin",
@@ -150,7 +270,15 @@
       "prepared_sponsorships": 482,
       "verified_raw_choices": 3342,
       "verified_nonattendance_choices": 3341,
-      "verified_sponsorships": 482
+      "verified_sponsorships": 482,
+      "recorded_vote_dates": {
+        "first": "2019-01-14",
+        "last": "2026-06-23"
+      },
+      "bill_introduction_dates_for_sponsorships": {
+        "first": "2019-01-16",
+        "last": "2026-06-18"
+      }
     },
     {
       "name": "Sanford Bishop",
@@ -158,7 +286,11 @@
       "prepared_sponsorships": 0,
       "verified_raw_choices": 1,
       "verified_nonattendance_choices": 1,
-      "verified_sponsorships": 0
+      "verified_sponsorships": 0,
+      "recorded_vote_dates": {
+        "first": "1991-08-22",
+        "last": "1991-08-22"
+      }
     }
   ],
   "held_votes": [
@@ -1487,7 +1619,14 @@
     "tested_commit": "e0ad167",
     "initial_implementation_pr_tests": "81 database assertions and 28 MCP assertions passed; check/build/MCP checks passed",
     "browser": "Anonymous Bishop profile and vote detail rendered sourced history; no console errors",
-    "publication": "pending final rebuild after all imports"
+    "publication": "Pending static deployment; content imports and authenticated API read-back are complete.",
+    "anonymous_probes": {
+      "public_profile_offset": 48000,
+      "public_profile_rows": 500,
+      "public_link_offset": 22000,
+      "public_link_rows": 100,
+      "all_twelve_public_legislative_resources": "HTTP 200"
+    }
   },
   "provider_readback": {
     "legislative_votes": 15563,
@@ -1498,9 +1637,28 @@
   },
   "imported_vote_bill_links": 18133,
   "publication": {
-    "status": "queued",
-    "build_id": "100fad64-c3fc-4e32-a247-93f9302665bd",
+    "status": "running",
+    "build_id": "3b0e290a-e0bb-441f-a115-c7947e2370f4",
     "branch": "main",
-    "requested_at": "2026-10-26T22:26:22.460Z"
+    "commit": "e8f0f9feef5732311ea99b1286065357b479b139",
+    "started_at": "2026-10-26T23:11:36.145Z",
+    "failed_attempts": [
+      {
+        "build_id": "100fad64-c3fc-4e32-a247-93f9302665bd",
+        "error": "Public record export failed (browse_legislation): canceling statement due to statement timeout"
+      },
+      {
+        "build_id": "750ea396-273c-4887-bfe4-939c9a334029",
+        "status": "cancelled",
+        "note": "Replaced by current main containing the pagination fix"
+      },
+      {
+        "build_id": "7e2bbaba-0f7c-4c8c-b86c-23cd53220874",
+        "status": "cancelled",
+        "note": "Superseded by bounded parallel archive exports on main"
+      }
+    ],
+    "last_checked_at": "2026-10-26T23:15:35.887Z",
+    "follow_up": "Existing automatic sitemap/publication follow-up monitors the current main build and verifies deployment."
   }
 }
