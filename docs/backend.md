@@ -1278,3 +1278,27 @@ Release through the normal PR/main Supabase integration; never apply this SQL to
 production from a feature branch. Check advisors and compare representative RPC
 timings after release. Index storage fits within the existing disk allowance;
 there is no instance resize or new paid service.
+
+### Legislation directory capacity and prefiling
+
+`legislation_bill_browse_performance` resolves the visible legislative terms,
+sessions, chambers, bills and votes once per query. Bill and vote-to-bill listing
+and profile grouping reuse those sets instead of recursively walking the same
+parents for every row. Bill keyword search joins readable context labels directly;
+record details are generated for the result page. Public/unlisted/private rules,
+direct UUID/context behavior, totals, ordering and pagination are preserved.
+Private helpers remain uncallable by API roles and all public reads keep their
+empty-search-path security-definer configuration.
+
+Bills and resolutions may have sourced filing dates before the session opens.
+`legislative_prefiling` allows that date while retaining the session's upper bound,
+finite-date validation, immutable historical context and term/body agreement.
+Votes and actions still must occur within their session. Do not shift an official
+filing date or the session's start date to make an import pass validation.
+
+Verify both append-only migrations with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-browse-performance-db.test.ts`.
+The test compares previous and optimized visibility results, exercises anonymous,
+ordinary signed-in and admin callers with 4,000 bills/links under a five-second
+statement timeout, and rolls back its migrations and fixtures. Merge to main
+before applying through the guarded production migration workflow.
