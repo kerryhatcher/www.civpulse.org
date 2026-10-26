@@ -247,3 +247,30 @@ so saved records appear immediately without embedding hidden content in HTML.
 UUID viewer routes are excluded from the sitemap. Person profiles load historical
 votes and sponsorships alongside office terms. Existing local meeting/attendance
 records remain independent. See [backend.md](./backend.md#legislative-records).
+
+### Public map snapshots
+
+Public map pages, the explorer and homepage previews share build-generated
+`/map-data/maps/<id>-<sha256>.json` layer manifests and
+`/map-data/layers/<id>-<sha256>.json` GeoJSON files. The anon build client exports
+only explicitly public maps and layers through the existing RPC access gates.
+Geometry is paginated sequentially and exported once per layer, preserving full
+coordinate precision, feature IDs/properties, per-map styling and presentation.
+External public GeoJSON URLs remain direct HTTP sources. Only selected layers
+are downloaded; homepage previews use only public default-visible layers.
+
+A public anonymous map load needs no map/layer RPC unless its manifest indicates
+unlisted layers, which are never exported. Signed-in map views consult the live
+layer RPC to preserve private/unlisted access; only layers still returned as
+public can reuse published geometry. UUID map viewers retain the live map,
+layer and geometry gates. No auth, RLS, or backend schema changes are involved.
+
+Configured backend errors, invalid/truncated pages or changing feature totals
+fail publication. All public routes/endpoints share one snapshot per build.
+Development reuses the snapshot for 30 seconds to avoid re-exporting geometry
+for every asset request. No generated data is checked into Git. Static map JSON
+is omitted from the sitemap. Cloudflare serves JSON with nosniff and a five-minute
+revalidation cache rather than a year-long immutable cache: after a visibility
+change, publish again to remove the previous files. Previously downloaded public
+data cannot be recalled; private/unlisted data must never be made public as a
+workaround. Old open pages may need a reload following publication.

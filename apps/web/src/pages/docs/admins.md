@@ -245,3 +245,17 @@ service, visibility, official totals and partial coverage. Save returns to the
 record list and announces the result. Search and Clear affect only the list.
 
 Legislative saved-record search also matches displayed relationship names, such as a member in vote choices. Reference pickers refresh after deletions and can retry failed requests.
+
+### Publishing map changes
+
+Public map layers and stored geometry, including homepage previews, are published
+as static snapshots. After editing map settings, importing/replacing features,
+changing default layers or visibility, use **Admin → Publish** and wait for a
+successful build. Public visitors see the last successful publication until then.
+A failed map export stops publication and leaves the previous deployment in place.
+Signed-in map views and UUID links continue to check access to private/unlisted
+content against the backend. Private and unlisted layers are never exported.
+After making formerly public data restricted, publish promptly; cached public
+files can remain in browsers for five minutes, and downloaded copies cannot be
+recalled. External GeoJSON sources still follow their source host's update/cache
+behavior.
