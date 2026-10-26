@@ -1084,3 +1084,23 @@ basic usage indicators, not fraud-resistant analytics. No visitor PII is stored.
 Verification: `SHORT_LINKS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/short-links.test.ts scripts/tests/short-links-db.test.ts`.
 Permission fixtures roll back; the concurrent-count fixture is deleted afterward.
+
+## Person voting records
+
+`get_person_votes(p_person_id, p_offset = 0, p_limit = 21)` is a runtime,
+security-definer read RPC with an empty search path and explicit execute grants
+for anon/authenticated. It returns recorded choices with motion details and
+meeting metadata, newest meetings first, then meeting ID, motion position and
+vote ID. Limits are clamped to 1–50; negative offsets become zero. Profiles request
+21 rows and display 20, retaining one lookahead row to offer the next page.
+
+Public and unlisted people can be read by ID; private people require an admin.
+For non-admins, the event, calendar and linked election must all be public and
+the event must still be a meeting. Unlisted meetings stay out of profile discovery.
+Admins can see all three visibility levels. No vote rows are prerendered.
+An index on choices `(person_id, meeting_id, vote_id)` supports the person lookup.
+
+Meeting vote articles have stable `vote-<UUID>` anchors. Participant links use
+the visibility-aware UUID person viewer. Name linking only considers visible
+attendance and roll-call participants, uses text nodes rather than HTML, and
+leaves ambiguous shortened names unlinked.

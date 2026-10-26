@@ -9,6 +9,7 @@ import {
 import { getSupabase } from '../lib/supabase';
 import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
+import { linkMemberMentions, memberProfileHref } from '../lib/member-mentions';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
   public: 'Public',
@@ -416,7 +417,10 @@ async function fillMeetingView(id: string): Promise<void> {
     attendance.hidden = false;
     for (const person of meeting.attendance) {
       const item = document.createElement('li');
-      item.textContent = `${person.full_name} — ${person.status}${person.note ? ` (${person.note})` : ''}`;
+      const link = document.createElement('a');
+      link.href = memberProfileHref(person.person_id);
+      link.textContent = person.full_name;
+      item.append(link, ` — ${person.status}${person.note ? ` (${person.note})` : ''}`);
       attendanceList.append(item);
     }
   }
@@ -426,16 +430,34 @@ async function fillMeetingView(id: string): Promise<void> {
     votes.hidden = false;
     for (const vote of meeting.votes) {
       const article = document.createElement('article');
+      article.id = `vote-${vote.id}`;
+      article.style.scrollMarginTop = '6rem';
       const heading = document.createElement('h4'); heading.textContent = vote.subject; article.append(heading);
       if (vote.description) { const detail = document.createElement('p'); detail.textContent = vote.description; article.append(detail); }
       const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${vote.outcome ?? 'Not recorded'}`; article.append(outcome);
       const choices = document.createElement('ul');
       for (const choice of vote.choices) {
-        const item = document.createElement('li'); item.textContent = `${choice.full_name}: ${choice.choice}`; choices.append(item);
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = memberProfileHref(choice.person_id);
+        link.textContent = choice.full_name;
+        item.append(link, `: ${choice.choice}`); choices.append(item);
       }
       article.append(choices); voteList.append(article);
     }
   }
+  const members = [...(meeting.attendance ?? []), ...(meeting.votes ?? []).flatMap(vote => vote.choices)];
+  linkMemberMentions(root, members);
+  for (const selector of ['[data-event-description]', '[data-event-title]', '[data-event-location]']) {
+    const text = document.querySelector<HTMLElement>(selector);
+    if (text) linkMemberMentions(text, members);
+  }
+  const scrollToVote = () => {
+    const hash = window.location.hash;
+    if (/^#vote-[0-9a-f-]{36}$/i.test(hash)) root.querySelector<HTMLElement>(hash)?.scrollIntoView();
+  };
+  scrollToVote();
+  window.addEventListener('hashchange', scrollToVote);
   const attachments = document.querySelector<HTMLElement>('[data-meeting-attachments]');
   const attachmentList = document.querySelector<HTMLElement>('[data-meeting-attachment-list]');
   if (attachments && attachmentList && meeting.attachments?.length) {

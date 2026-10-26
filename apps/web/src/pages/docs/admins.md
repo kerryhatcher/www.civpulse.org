@@ -50,6 +50,14 @@ Check names, dates, and vote outcomes against the source record before saving. Y
 
 ### Add meeting files with an AI assistant
 
+Recorded individual votes also appear in the member's profile **Voting record**.
+The profile links each choice back to the motion and full roll call on its meeting.
+Meeting attendance and roll-call names link to member profiles; recognized full
+and shortened participant names in meeting text do too. Ambiguous shortened names
+remain plain text. Public visitors see public meetings in profile voting records;
+admins also see private and unlisted meetings. Recording or editing a choice
+updates the voting record immediately without a site rebuild.
+
 An administrator connected through [Civic Pulse MCP](/docs/ai/) can set
 `is_meeting: true` on an event, save meeting notes or a transcript, and upload
 the same supported document types with `upload_meeting_attachment`. The assistant

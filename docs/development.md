@@ -422,3 +422,12 @@ records and editor account IDs. Verify a visibility change hides old revisions
 from public access, and that private history never enters the static build.
 History is fetched live through an RPC; profile text still follows the normal
 static-build lifecycle. No historical revisions exist before tracking is enabled.
+
+## Testing member voting records
+
+Run `bun test scripts/tests/member-mentions.test.ts` for participant-name matching.
+With local Supabase running, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-votes-db.test.ts`
+to check profile voting permissions, paging, live edits and meeting visibility.
+The database test creates fixtures and applies the voting-history migration if
+needed inside a transaction that always rolls back, preserving shared local data.
