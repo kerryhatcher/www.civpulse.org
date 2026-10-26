@@ -1311,8 +1311,11 @@ var legislativeResources = {
 
 // apps/mcp/src/georgia-source.ts
 var GEORGIA_API = "https://www.legis.ga.gov/api/";
+function isReviewedGeorgiaAttendance(id) {
+  return id === 21003;
+}
 function isGeorgiaAttendance(row) {
-  return row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? "");
+  return isReviewedGeorgiaAttendance(row.id) || row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? "");
 }
 var georgiaChoices = [
   { choice: "yes", source_choice: "Yea" },
@@ -1356,6 +1359,7 @@ async function readGeorgiaSource(input, fetcher = fetch) {
     const votes = data.votes.filter((row) => input.member_id === undefined || row.member?.id === input.member_id);
     return {
       ...provenance,
+      ...isReviewedGeorgiaAttendance(input.vote_id) ? { attendance: true } : {},
       session: data.session,
       legislation: data.legislation,
       total: votes.length,
@@ -1445,7 +1449,7 @@ function registerLegislativeTools(server, supabase) {
     p_limit: limit,
     p_offset: offset
   }));
-  register("import_legislation", "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records. Never import guessed votes or infer identity from names.", {
+  register("import_legislation", "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.", {
     records: z2.array(z2.object({
       table: z2.enum(Object.keys(legislativeResources)),
       data: z2.record(z2.string(), z2.unknown())
