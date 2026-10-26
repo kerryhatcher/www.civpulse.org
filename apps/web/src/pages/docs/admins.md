@@ -75,12 +75,13 @@ updates the voting record immediately without a site rebuild.
 
 An administrator connected through [Civic Pulse MCP](/docs/ai/) can set
 `is_meeting: true` on an event, save meeting notes or a transcript, and upload
-the same supported document types with `upload_meeting_attachment`. The assistant
-must first inspect `get_meeting` to avoid duplicate files. Uploads accept base64
-file contents and a plain filename, up to 25 MB per file. Files inherit the
-meeting and calendar visibility. `get_meeting_attachment_url` supplies a download
-link valid for 60 seconds; share the meeting page for lasting access. If the new
-tools are missing after a server update, refresh the connection's tool list.
+meeting originals using resumable upload sessions. Use
+`begin_meeting_attachment_upload`, transfer original bytes directly through
+Storage TUS, then `finalize_meeting_attachment_upload`. The limit is 25 MiB;
+inline `upload_meeting_attachment` is limited to 3 MiB. Sessions retain source
+identity and SHA-256 so an interrupted response can be reconciled using
+`manage_meeting_attachment_upload`. JSON public-source projections are supported.
+Files inherit meeting visibility; public archive publication is separate.
 
 ## Visibility and publication
 
@@ -293,3 +294,18 @@ exported. If formerly public data becomes restricted, publish promptly; browser
 caches can retain published files for five minutes and existing downloads cannot
 be recalled. Office/candidacy date groups update in the visitor's browser without
 a daily publication.
+
+### Sourced meeting ballots
+
+AI tools can validate and import attendance, individual motion rounds and named
+choices with `import_meeting_records`. Resolve existing meeting/person UUIDs,
+validate first, and import attendance before rounds and choices. Stable source
+keys make exact replay safe; changed snapshots reject the entire batch for review.
+No omitted records or editorial notes are deleted. Preserve original wording,
+source URL/checksum and exact item/round locator. “Vote Not Recorded” remains
+unknown. “Observed” attendance means presence at a recorded ballot only; it does
+not claim attendance for the whole meeting. A roster does not establish attendance.
+Unknown outcomes remain unrecorded; never infer individual ballots from unanimity.
+Read back `get_meeting` and `get_person_meeting_votes`. UUID and signed-in profile
+views use live data; anonymous public slug profiles require a rebuild. Verify the
+actual public profile after publishing before reporting site visibility.

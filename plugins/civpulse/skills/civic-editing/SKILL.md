@@ -17,16 +17,46 @@ create_article / update_article save metadata and supplied association sets atom
 
 For user-supplied images, upload_image supports PNG/JPEG/WebP/SVG up to 2 MB. Provide base64 without a data-URL prefix, use an unambiguous relative path, and set overwrite only when replacement is intended. Save the returned path into the record’s logo_path or image_path. Deleting an image does not clear referencing records; update those separately.
 
-For meeting documents, set is_meeting=true with create_event/update_event, then
-inspect get_meeting before uploading. upload_meeting_attachment accepts the
-meeting UUID, plain file_name and data_base64 (no data-URL prefix), supporting
-PDF, Office, OpenDocument, TXT and CSV up to 25 MB. Files inherit the meeting's
-visibility. Uploads create new attachments; after an uncertain result, read back
-the meeting before retrying. Label automated transcripts and research notes with
-their provenance; do not present them as official minutes. Event updates also
-accept meeting_notes and meeting_transcript, preserving omitted fields.
-get_meeting_attachment_url returns a 60-second download link for a known meeting
-and attachment; share the meeting viewer URL for lasting access.
+For meeting imports, resolve existing meeting and person UUIDs first. Call
+import_meeting_records with dry_run=true, then dry_run=false after reviewing
+field errors and canonical links. Batches are atomic (100 rows / 2 MiB); order
+attendance, motion rounds, then choices. Use stable provider/source_key values,
+opaque official IDs where available, and explicit local round locators otherwise.
+Preserve original choice text, agenda context, exact motion text, HTTPS source,
+source-document SHA-256 and item/round locator. Unknown outcomes stay null.
+Use observed attendance for a named cast ballot at that moment; a Voting Members
+roster only supports unknown attendance. Vote Not Recorded stays choice unknown.
+Never infer ballots from aggregate results, unanimity, sponsorship or service dates.
+Exact replay returns unchanged canonical IDs. Changed source snapshots and drift
+in canonical fields reject the whole batch; inspect get_meeting and reconcile
+explicitly instead of generating new keys to bypass a conflict. Omission never
+deletes unrelated records or editorial notes. Coverage remains partial unless
+independently verified. get_person_meeting_votes supports organization/date filters,
+pagination and provenance; read back both it and get_meeting after import.
+
+For original meeting files, use begin_meeting_attachment_upload with a stable
+provider/source_key, exact size and SHA-256. The maximum is 26,214,400 bytes (25 MiB).
+PDF, Office, OpenDocument, TXT, CSV and JSON source projections are supported.
+Upload directly to the returned Storage TUS endpoint in 6 MiB chunks, using the
+scoped x-signature token plus the connected user's Bearer token and public API
+key where the gateway requires them. Persist the TUS Location; resume via HEAD
+Upload-Offset and PATCH, without x-upsert. These byte transfers bypass MCP JSON.
+Sessions last 24 hours; repeat begin to refresh the two-hour upload signature.
+Call finalize_meeting_attachment_upload to verify original bytes and create one
+canonical attachment. On interruption use manage_meeting_attachment_upload, then
+retry finalize with the same session ID; do not guess from filenames. Changed
+source metadata conflicts. Files remain private until normal meeting visibility
+permits their canonical attachment. No unrestricted archive copy is made.
+Cancel unfinished sessions with manage_meeting_attachment_upload (action=cancel). Terminate saved
+TUS uploads first; manage_meeting_attachment_upload (action=list_cleanup) lists expired/cancelled receipts.
+Repeat object cleanup after outstanding signed tokens and 24-hour TUS URLs expire,
+since cancellation cannot revoke already-issued Storage capabilities. Completed
+attachments are protected. Receipts remain for reconciliation. Never clean up the
+existing historical backfill or resume paused collection as part of this work.
+The legacy upload_meeting_attachment tool accepts inline base64 only up to 3 MiB
+and creates fresh records; prefer sessions for all repeatable uploads.
+get_meeting_attachment_url returns a 60-second download link; share the meeting
+viewer URL for lasting access. Label automated transcripts and research notes.
 
 Public archive publication is a separate, explicit action. Use
 publish_meeting_document only for unrestricted public distribution authorized by

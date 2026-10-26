@@ -2,7 +2,7 @@ import { historyLink } from '../lib/history';
 import { meetingVideoUrl, parseMeetingVideoStart, formatMeetingVideoStart } from '../lib/meeting-video';
 import { getSupabase } from '../lib/supabase';
 import { documentApi, publicDocumentUrl } from '../lib/documents';
-import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
+import { meetingAttendanceLabel, MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 
 type Person = { id: string; full_name: string };
 
@@ -147,7 +147,7 @@ export async function initMeetingAdmin(): Promise<void> {
     for (const attendee of record?.attendance ?? []) {
       const row = document.createElement('div'); row.className = 'org-row';
       const info = document.createElement('span');
-      info.textContent = `${attendee.full_name} · ${attendee.status}${attendee.note ? ` · ${attendee.note}` : ''}`;
+      info.textContent = `${attendee.full_name} · ${meetingAttendanceLabel(attendee.status)}${attendee.note ? ` · ${attendee.note}` : ''}`;
       const remove = action('Remove', () => void (async () => {
         if (!confirm(`Remove ${attendee.full_name} from this meeting? Their recorded votes will also be removed.`)) return;
         const { error } = await supabase.from('meeting_attendance').delete()
@@ -206,11 +206,11 @@ export async function initMeetingAdmin(): Promise<void> {
       const form = document.createElement('form'); form.className = 'meeting-inline-form';
       const person = document.createElement('select'); person.required = true;
       person.append(new Option('Present attendee…', ''));
-      for (const attendee of record?.attendance?.filter(item => item.status === 'present') ?? []) {
+      for (const attendee of record?.attendance?.filter(item => ['present', 'observed'].includes(item.status)) ?? []) {
         person.append(new Option(attendee.full_name, attendee.person_id));
       }
       const choice = document.createElement('select');
-      for (const value of ['yes', 'no', 'abstain', 'recused']) choice.append(new Option(value, value));
+      for (const value of ['yes', 'no', 'abstain', 'recused', 'unknown']) choice.append(new Option(value, value));
       const save = document.createElement('button'); save.type = 'submit'; save.textContent = 'Record choice';
       form.append(person, choice, save);
       form.addEventListener('submit', event => void (async () => {

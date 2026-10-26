@@ -12,7 +12,7 @@ export interface MeetingRecord {
     person_id: string;
     full_name: string;
     slug: string;
-    status: 'present' | 'absent' | 'excused';
+    status: 'present' | 'absent' | 'excused' | 'observed' | 'unknown';
     note: string | null;
   }[];
   votes?: {
@@ -58,3 +58,7 @@ export const MEETING_FILE_TYPES: Record<string, string> = {
   ods: 'application/vnd.oasis.opendocument.spreadsheet',
   odp: 'application/vnd.oasis.opendocument.presentation',
 };
+
+export function meetingAttendanceLabel(status: string): string {
+  return status === 'observed' ? 'Observed at a ballot only' : status === 'unknown' ? 'Attendance unknown' : status;
+}

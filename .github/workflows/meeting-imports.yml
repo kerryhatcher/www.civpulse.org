@@ -1,0 +1,41 @@
+name: Meeting imports and originals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - run: bun run db:start
+      - name: Configure local public client
+        run: |
+          bun -e '
+            const result = Bun.spawnSync(["bun", "run", "db:status"], {stdout:"pipe", stderr:"pipe"});
+            if(result.exitCode) throw new Error("Local Supabase status failed");
+            const status=JSON.parse(new TextDecoder().decode(result.stdout));
+            if(status.API_URL!=="http://127.0.0.1:54321") throw new Error("Local API required");
+            await Bun.write("apps/web/.env.local", `PUBLIC_SUPABASE_URL="${status.API_URL}"\nPUBLIC_SUPABASE_ANON_KEY="${status.ANON_KEY}"\n`);
+          '
+      - run: bun run db:seed-user
+      - run: bun run mcp:check
+      - run: bun test scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
+        env:
+          MEETING_IMPORT_INTEGRATION: '1'
+      - run: bun run mcp:build && bun run plugin:build
+      - if: always()
+        run: bun run db:stop

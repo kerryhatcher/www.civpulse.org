@@ -7,7 +7,7 @@ import {
   type EventRecord,
 } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
-import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
+import { meetingAttendanceLabel, MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
 import { linkMemberMentions, memberProfileHref } from '../lib/member-mentions';
 import { meetingVideoWatchUrl, meetingVideoEmbed, formatMeetingVideoStart } from '../lib/meeting-video';
@@ -444,7 +444,7 @@ async function fillMeetingView(id: string): Promise<void> {
       const link = document.createElement('a');
       link.href = memberProfileHref(person.person_id);
       link.textContent = person.full_name;
-      item.append(link, ` — ${person.status}${person.note ? ` (${person.note})` : ''}`);
+      item.append(link, ` — ${meetingAttendanceLabel(person.status)}${person.note ? ` (${person.note})` : ''}`);
       attendanceList.append(item);
     }
   }

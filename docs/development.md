@@ -587,3 +587,13 @@ signed-in person/organization/UUID profiles, meeting pagination, legislative
 pagination/filters and date groups. No restricted IDs or payloads should appear
 in exports. Initial public profiles should not download the full legislative
 filter dataset. No backend fallback should conceal failed publication assets.
+
+### Meeting import and resumable original QA
+
+See [meeting imports](meeting-imports.md#release-and-verification). Apply the new
+migrations locally using `bun run supabase migration up --local --include-all`;
+never apply feature SQL to production. Run the opt-in Auth/MCP/Storage integration
+suite with the local seeded admin and `.env.local` public key. The test uses the
+public Turnstile testing token from the existing local Auth configuration and
+removes its synthetic records/objects. Optional captured-original verification
+reads saved local PDFs; it does not resume source collection.

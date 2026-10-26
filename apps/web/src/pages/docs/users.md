@@ -218,3 +218,11 @@ section's cards and leaves the other sections in place. Meeting votes retain
 Profiles automatically retry brief connection failures. If votes or articles
 still fail to load, select **Retry legislative history** or **Retry articles**.
 A failed page request keeps the currently displayed votes until the retry succeeds.
+
+Meeting attendance may say **Observed at a ballot only** when a named vote is the
+available evidence; this does not establish attendance throughout the meeting.
+**Attendance unknown** and **unknown** vote choices mean the source does not
+support a stronger conclusion. “Vote Not Recorded” is never counted as No,
+abstention, or absence. Recorded ballots can appear before an official outcome
+is known. Anonymous public profile snapshots update after publication; meeting
+viewer records update live.

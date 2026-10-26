@@ -1369,3 +1369,11 @@ Anonymous public profile sections use static JSON; no private or unlisted payloa
 is embedded in those files. Release `20261123120000_public_profile_sections`
 through main before the frontend deploys. Test feature SQL only locally or in a
 preview branch. Build failure preserves the previous deployment.
+
+## Sourced meeting imports and upload sessions
+
+The append-only meeting import/session migrations add immutable source observations,
+unknown choices, moment-observed attendance, and private upload reconciliation
+receipts. They retain existing meeting/people visibility and admin-only writes.
+See [the API contract and verification workflow](meeting-imports.md) for atomic
+imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.
