@@ -426,6 +426,8 @@ static-build lifecycle. No historical revisions exist before tracking is enabled
 ## Testing member voting records
 
 Run `bun test scripts/tests/member-mentions.test.ts` for participant-name matching.
+The Meeting profiles CI workflow uses `bun run --bun check` to run Astro with
+Bun rather than the runner's preinstalled Node version.
 With local Supabase running, run
 `MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-votes-db.test.ts`
 to check profile voting permissions, paging, live edits and meeting visibility.

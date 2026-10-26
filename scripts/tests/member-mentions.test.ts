@@ -20,6 +20,7 @@ test('repeated participants do not duplicate links; partial names and ambiguous 
   expect(memberMentions('Henry C. Ficklin',ambiguous)).toHaveLength(1);
   expect(memberMentions('henry ficklin',[...members,{person_id:'other',full_name:'HENRY D. FICKLIN'}])).toEqual([]);
   expect(memberMentions('Lisa Garrett-Boyd',[...members,{person_id:'other',full_name:'Lisa Garrett-Boyd'}])).toEqual([]);
+  expect(memberMentions('Henry Ficklin',[...members,{person_id:'other',full_name:'Henry Ficklin'}])).toEqual([]);
 });
 test('UUID viewer links encode IDs and never interpret input as a URL', () => {
   expect(memberProfileHref('x&next=https://example.test')).toBe('/people/view/?id=x%26next%3Dhttps%3A%2F%2Fexample.test');

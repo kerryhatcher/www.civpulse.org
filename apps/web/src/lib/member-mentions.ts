@@ -24,9 +24,10 @@ export function memberMentions(text: string, members: MeetingMember[]): MemberMe
   }
   const matches: MemberMention[] = [];
   for (const [pattern, ids] of patterns) {
-    if (ids.size !== 1) continue;
     const regex = new RegExp(`(?<![\\p{L}\\p{N}_-])(?:${pattern})(?![\\p{L}\\p{N}_-])`, 'giu');
-    for (const match of text.matchAll(regex)) matches.push({ start: match.index!, end: match.index! + match[0].length, personId: [...ids][0] });
+    for (const match of text.matchAll(regex)) {
+      for (const id of ids) matches.push({ start: match.index!, end: match.index! + match[0].length, personId: id });
+    }
   }
   matches.sort((a, b) => a.start - b.start || b.end - a.end);
   const unique = matches.filter(match => !matches.some(other =>
