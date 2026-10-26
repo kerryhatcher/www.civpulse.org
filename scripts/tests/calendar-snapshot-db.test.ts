@@ -46,6 +46,7 @@ test.skipIf(!process.env.CALENDAR_TEST_DATABASE_URL)('public meeting export page
    expect(JSON.stringify(snapshot)).not.toContain(people.private);expect(JSON.stringify(snapshot)).not.toContain(people.unlisted);expect(JSON.stringify(snapshot)).not.toContain('signedUrl');
    expect((await tx`select has_function_privilege('authenticated','public.export_public_calendar_meetings(integer,integer)','execute') allowed`)[0].allowed).toBe(false);
    expect((await tx`select has_function_privilege('anon','public.export_public_calendar_meetings(integer,integer)','execute') allowed`)[0].allowed).toBe(true);
+   expect((await tx`select prosecdef from pg_proc where oid='public.export_public_calendar_meetings(integer,integer)'::regprocedure`)[0].prosecdef).toBe(false);
    throw rollback;
   });
  }catch(error){if(error!==rollback)throw error;}finally{await db.close();}
