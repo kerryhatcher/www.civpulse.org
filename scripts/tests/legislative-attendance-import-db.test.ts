@@ -5,6 +5,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('imports preserve attend
  const sql=new SQL(process.env.LEGISLATION_TEST_DATABASE_URL!);const rollback=Error('rollback attendance fixtures');
  try{await sql.begin(async tx=>{
   await tx.unsafe(await Bun.file('supabase/migrations/20261123150000_preserve_import_attendance.sql').text());
+  await tx.unsafe(await Bun.file('supabase/migrations/20261123160000_legislative_import_column_cache.sql').text());
   const suffix=crypto.randomUUID();
   const [org]=await tx`insert into organizations(name,slug) values ('Attendance import QA',${suffix}) returning id`;
   const [term]=await tx`insert into legislative_terms(organization_id,identifier,name,starts_on) values (${org.id},${suffix},'QA','2023-01-01') returning id`;

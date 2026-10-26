@@ -1415,3 +1415,10 @@ remain in force. The relationship is an explicit identity reconciliation, not a
 name or district-number match. Merge the migration to main before applying it.
 
 Verify locally with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-district-service-db.test.ts scripts/tests/legislation-db.test.ts`.
+
+`20261123160000_legislative_import_column_cache` caches the permitted column names
+once per resource inside each normalized import request. It retains the 100-row /
+2 MB bounds, admin authorization, provider identity locks, managed-field rejection,
+atomic rollback, per-row validation/auditing, and reviewed attendance preservation.
+There is no cross-request cache. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-import-cache-db.test.ts`.
