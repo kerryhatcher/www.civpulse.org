@@ -370,3 +370,11 @@ Inspect saved reports at [Election results and turnout](/elections/results/),
 including earlier reports. Saved results appear there immediately; other election
 and candidate edits still require Publish. Conflicting OCR at the same printed
 time is rejected for reconciliation, not silently overwritten.
+
+## Format a person’s profile description
+
+Person descriptions support Markdown links (`[Board name](/orgs/board-slug/)`),
+paragraphs separated by blank lines, emphasis and lists. These render on public
+person profiles and UUID profile viewers. Raw HTML displays as text, and unsafe
+link protocols are blocked. Save the description, then publish the site to update
+the public profile. Other description fields retain their existing formatting.
