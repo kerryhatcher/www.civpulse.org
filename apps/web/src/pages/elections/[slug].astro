@@ -1,5 +1,7 @@
 ---
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import ElectionScope from '../../components/ElectionScope.astro';
+import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
 import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
@@ -115,11 +117,12 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
     <section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot</h2>
+      <ElectionScope />
       {
         contests.length > 0 || ballot_questions.length > 0 ? (
           <div class="contest-list">
             {contests.map((contest) => (
-              <article class="contest-card">
+              <article class="contest-card" id={`contest-${contest.id}`} data-bibb-relevant={String(isBibbContest(contest))} hidden={!isBibbContest(contest)}>
                 <header class="contest-heading">
                   <h3>
                     {contest.office}
@@ -186,6 +189,8 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
 <script>
   import { initAdminEditLink } from '../../scripts/auth';
+  import { initElectionScope } from '../../scripts/elections';
 
   void initAdminEditLink();
+  initElectionScope();
 </script>
