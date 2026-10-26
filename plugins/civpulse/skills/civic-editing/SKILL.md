@@ -84,7 +84,7 @@ roll-call/attendance captions. Never derive outcomes just from Yea/Nay totals.
 If an operation requires ad-hoc SQL, add the missing supported app/API/MCP
 capability and verify it before continuing the content task.
 
-For a larger normalized import, import_legislation_bundle accepts up to 1,000
+For a larger normalized import, import_legislation with mode=batched accepts up to 1,000
 records / 2 MB and preserves parent-first order through 100-record transactions.
 Each batch commits independently. Inspect status and next_offset; stop on a
 partial result and retry the same bundle from that offset. Keep provider IDs

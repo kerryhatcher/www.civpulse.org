@@ -107,40 +107,22 @@ export function registerLegislativeTools(
   );
   register(
     "import_legislation",
-    "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.",
-    {
-      records: z
-        .array(
-          z.object({
-            table: z.enum(
-              Object.keys(legislativeResources) as [string, ...string[]],
-            ),
-            data: z.record(z.string(), z.unknown()),
-          }),
-        )
-        .max(100),
-    },
-    async ({ records }) => {
-      const { data, error } = await supabase.rpc("import_legislation", {
-        p_records: records,
-      });
-      if (error) throw new Error(error.message);
-      return data;
-    },
-    { write: true, idempotent: true },
-  );
-
-  register(
-    "import_legislation_bundle",
-    "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. The existing import_legislation tool remains atomic for a single batch.",
+    "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. Default mode=atomic preserves the original single-batch transaction and response (at most 100 rows). Explicit mode=batched enables resumable multi-batch imports. Preserve reviewed attendance classifications.",
     {
       records: z.array(z.object({
         table: z.enum(Object.keys(legislativeResources) as [string, ...string[]]),
         data: z.record(z.string(), z.unknown()),
       })).max(1000),
+      mode: z.enum(["atomic", "batched"]).default("atomic"),
       start_offset: z.number().int().min(0).max(1000).default(0),
     },
-    async ({ records, start_offset }) => {
+    async ({ records, start_offset, mode }) => {
+      if (mode === "atomic") {
+        if (records.length > 100 || start_offset !== 0) throw new Error("Atomic imports require at most 100 records and start_offset=0; use mode=batched explicitly for larger imports");
+        const { data, error } = await supabase.rpc("import_legislation", { p_records: records });
+        if (error) throw new Error(error.message);
+        return data;
+      }
       if (start_offset > records.length) throw new Error("start_offset exceeds bundle length");
       if (new TextEncoder().encode(JSON.stringify(records)).byteLength > 2_000_000) {
         throw new Error("Provide at most 2 MB of normalized records");

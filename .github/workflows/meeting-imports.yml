@@ -36,6 +36,11 @@ jobs:
       - run: bun test scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
         env:
           MEETING_IMPORT_INTEGRATION: '1'
+      - name: Verify election results and evidence
+        run: bun test scripts/tests/election-results-db.test.ts scripts/tests/election-results-integration.test.ts
+        env:
+          ELECTION_RESULTS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          ELECTION_RESULTS_INTEGRATION: '1'
       - run: bun run mcp:build && bun run plugin:build
       - if: always()
         run: bun run db:stop

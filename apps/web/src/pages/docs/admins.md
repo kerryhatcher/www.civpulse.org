@@ -340,10 +340,33 @@ and preserve held source conflicts for review. Public profile descriptions and
 legislative sections require a rebuild/deploy;
 signed-in and UUID viewers continue to read live records.
 
-For larger normalized backfills, `import_legislation_bundle` accepts up to 1,000
+For larger normalized backfills, `import_legislation` with `mode=batched` accepts up to 1,000
 records (2 MB) and sends ordered 100-record batches through the existing import
 RPC using the caller's admin session. Each batch commits separately. Inspect
 `status` and `next_offset`; after a partial result, retry the same bundle from that
 offset. Later batches are not attempted after an error. Provider IDs make retries
 idempotent, including uncertain network responses. Use `import_legislation` when
-the entire request must be atomic. Neither tool needs ad hoc SQL or a service key.
+the entire request must be atomic. Neither mode needs ad hoc SQL or a service key.
+
+## Election results and turnout
+
+Use the Civic Pulse **Election results and turnout** skill with an authenticated
+admin AI agent. Attach original tape photographs or printed summaries, including
+headers, and specify the election and reporting area. The agent uploads private
+originals, transcribes them, resolves candidate/contest records, checks duplicates
+and validates a complete report before saving. Readable evidence and your existing
+instruction to update totals authorize a save; missing dates, IDs or uncertain
+digits require clarification.
+
+Different photographs of the same report count once. New cumulative summaries
+replace earlier snapshots while retaining history. Never add county summaries to
+machine tapes, or sum successive summaries. Keep ballots, voters, candidate votes,
+unresolved write-ins and registration denominators separate. A printed zero is
+not the same as an unreadable value. Standard tape certification text does not
+make the county results certified. November 3, 2026 accepts turnout before election
+day, but no candidate votes. May 19 is a separate historical election.
+
+Inspect saved reports at [Election results and turnout](/elections/results/),
+including earlier reports. Saved results appear there immediately; other election
+and candidate edits still require Publish. Conflicting OCR at the same printed
+time is rejected for reconciliation, not silently overwritten.

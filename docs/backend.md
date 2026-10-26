@@ -1423,9 +1423,17 @@ atomic rollback, per-row validation/auditing, and reviewed attendance preservati
 There is no cross-request cache. Verify with
 `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-import-cache-db.test.ts`.
 
-The MCP `import_legislation_bundle` wrapper accepts at most 1,000 records / 2 MB,
+The MCP `import_legislation` with `mode=batched` wrapper accepts at most 1,000 records / 2 MB,
 uses the authenticated caller's existing `import_legislation` RPC in sequential
 100-record transactions, and returns `status`, `imported_count`, `next_offset` and
 `total`. Partial failures stop before later batches; retry from `next_offset`
 using the same provider IDs. No service-role credential, alternate write path or
 transaction-limit bypass is introduced. The single-batch tool remains atomic.
+
+## Election result snapshots
+
+Private evidence and immutable, scoped election reports support agent-assisted OCR
+imports and turnout tracking. Admin-only imports validate identity, vote totals,
+source presence and predecessor IDs; public reads inherit election visibility.
+See [election results](election-results.md) for the RPC contract, deduplication,
+photo examples, validation and release sequence.

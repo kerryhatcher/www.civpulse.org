@@ -373,3 +373,12 @@ to remove previously published pages, like public profiles and map exports. A
 previously downloaded public page cannot be recalled. The export validates paging
 and response gates but is not a transaction spanning concurrent editorial changes;
 rebuild after edits settle. Development caches the snapshot for thirty seconds.
+
+### Election results and turnout
+
+`/elections/results/` is a static shell using live `get_election_results` RPC data.
+This explicit runtime reporting surface makes saved snapshots available immediately;
+existing election/profile content still follows its normal rebuild behavior.
+Original result photographs/PDFs live in private Supabase Storage and never enter
+prerendered HTML. The AI agent transcribes originals, and admin-only MCP tools
+validate and save immutable cumulative reports. See [election results](election-results.md).
