@@ -1105,6 +1105,19 @@ the visibility-aware UUID person viewer. Name linking only considers visible
 attendance and roll-call participants, uses text nodes rather than HTML, and
 leaves ambiguous shortened names unlinked.
 
+### Meeting text in site search
+
+`search_site` includes meeting notes, transcripts, and each motion's subject,
+description and outcome in an event's related search text. Both English full-text
+matching/ranking and literal substring matching (including identifiers such as
+`FSS-2`) use that text. It is derived from live meeting records; edits and deleted
+motions require no reindex or rebuild. Only events still marked as meetings
+contribute meeting text. Existing event, calendar and linked-election visibility
+gates apply before matching: anonymous and ordinary signed-in users discover only
+public content; admins can also discover unlisted/private records. Search returns
+the meeting once with its existing event link, regardless of how many motions
+match. It does not publish or copy meeting files to the public archive.
+
 ## People directory pagination
 
 `browse_people(p_query, p_kind, p_sort, p_limit, p_offset)` returns a JSON object

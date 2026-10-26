@@ -23,6 +23,14 @@ attachments remain on their meeting pages.
 
 ## Find a meeting and read its notes
 
+Site [search](/search/) finds meetings by their recorded notes, transcripts,
+motion subjects, motion details, and outcomes as well as their event details.
+For example, search **FSS-2** to find the board meeting containing that motion.
+Choose **Events** to limit results to calendar events and meetings. Open the
+meeting result to read the notes and full voting record. Uploaded file contents
+are searchable separately in the [public document archive](/documents/) when
+those files have been published there.
+
 Member names in meeting attendance, roll calls, notes, and vote details link to
 their profiles. Each profile has a **Voting record** with the member's choice,
 motion, outcome, meeting date, and motion details. Select the meeting title to

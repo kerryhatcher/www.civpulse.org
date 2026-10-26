@@ -425,6 +425,12 @@ static-build lifecycle. No historical revisions exist before tracking is enabled
 
 ## Testing member voting records
 
+For site search of meeting notes, transcripts and motions, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-search-db.test.ts`.
+This transactional test applies the search migration and rolls back all changes;
+it verifies punctuation, full-text matching, deduplication, live edits and
+anonymous/non-admin/admin visibility.
+
 Run `bun test scripts/tests/member-mentions.test.ts` for participant-name matching.
 The Meeting profiles CI workflow uses `bun run --bun check` to run Astro with
 Bun rather than the runner's preinstalled Node version.
