@@ -72,7 +72,7 @@ test('anonymous static reads cache assets; signed-in and nonpublic UUID readers 
   if(fail) return new Response('missing',{status:404});
   if(url==='/calendar-index') return Response.json({calendars:[calendar],months:{'2026-10':'/month'}});
   if(url==='/event-index') return Response.json({event:'/event'});
-  if(url==='/event') return Response.json({detail:{status:'ok',event:event()}});
+  if(url==='/event') return Response.json({event:{detail:{status:'ok',event:event()}}});
   return Response.json([event()]);
  }) as typeof fetch;
  try {

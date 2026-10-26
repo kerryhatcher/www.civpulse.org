@@ -8,20 +8,24 @@ import { isPublicEvent, publicEvent, publicMeeting, type PublicCalendarSnapshot 
 export async function loadPublicCalendarData(client: SupabaseClient, publicPeople: Set<string>): Promise<PublicCalendarSnapshot> {
   const [calendars,pages]=await Promise.all([
     (async()=>{
-      const rows:CalendarRef[]=[];
+      const rows:CalendarRef[]=[],seen=new Set<string>();
       for(let offset=0;;offset+=500) {
         const {data,error}=await client.rpc('list_calendars',{p_organization_id:null}).order('id').range(offset,offset+499);
         if(error) throw new Error(`Calendar build failed: ${error.message}`);
-        const page=(data??[]) as CalendarRef[];rows.push(...page.filter(calendar=>calendar.visibility==='public'));
+        if(!Array.isArray(data)||data.length>500) throw new Error("Invalid calendar build page");
+        const page=data as CalendarRef[];
+        for(const row of page) {if(seen.has(row.id)) throw new Error("Repeated calendar in build");seen.add(row.id);if(row.visibility==='public')rows.push(row);}
         if(page.length<500) return rows;
       }
     })(),
     (async()=>{
-      const rows:{event:EventRecord;meeting:MeetingRecord|null}[]=[];
+      const rows:{event:EventRecord;meeting:MeetingRecord|null}[]=[],seen=new Set<string>();
       for(let offset=0;;offset+=500) {
         const {data,error}=await client.rpc('export_public_calendar_page',{p_offset:offset});
         if(error) throw new Error(`Calendar event build failed: ${error.message}`);
-        const page=(data??[]) as typeof rows;rows.push(...page);
+        if(!Array.isArray(data)||data.length>500) throw new Error("Invalid calendar event build page");
+        const page=data as typeof rows;
+        for(const row of page) {if(seen.has(row.event.id)) throw new Error("Repeated event in build");seen.add(row.event.id);rows.push(row);}
         if(page.length<500) return rows;
       }
     })(),

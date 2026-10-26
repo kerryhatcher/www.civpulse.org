@@ -6,6 +6,7 @@ Supabase backend.
 ```
 apps/web/     Astro frontend, built to static files
 apps/mcp/     Runtime-neutral MCP source (OIDC via Supabase Auth)
+apps/georgia-source/ Public read-only Georgia API reader on Cloudflare Workers
 apps/kb/      Separate public document publication/search Worker (initially disabled)
 supabase/     Postgres migrations, MCP Edge Function + local Supabase config
 scripts/      dev orchestration and local seed helpers
@@ -133,7 +134,7 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   organization can have many) and each event belongs to one calendar. An event
   is only visible when both it and its calendar are visible. Anonymous `/calendar/`
   browsing uses static month files; signed-in browsing uses `browse_calendar_events`.
-  Public event pages are `/calendar/events/<uuid>/`; unlisted/private links use
+  Public event pages are `/records/events/<uuid>/`; unlisted/private links use
   `/calendar/view/?id=<uuid>` gated by `get_event`.
 - Meetings are calendar events marked `is_meeting`. Admins add notes, transcripts,
   attendance, votes, and attachments at `/admin/meetings/`. The event viewer
@@ -196,6 +197,13 @@ with **OpenID Connect / OAuth 2.1** through the Supabase Auth OAuth 2.1 server
 forwards the user's access token to Supabase, so RLS applies exactly as it does
 in the web app — reads follow visibility and writes require an admin. The function
 never uses the service-role key. See [mcp.md](./mcp.md).
+
+Georgia source reads use the separate `apps/georgia-source` Cloudflare Worker.
+It runs the shared Georgia adapter against a fixed official API origin and exposes
+only validated session, member, vote-list and vote-detail reads. It has no database
+binding, Civic Pulse credentials, or import capability. The authenticated MCP
+function requests normalized public source data from it without forwarding the
+user's token. The frontend remains a static Astro build.
 
 ## Profile media
 
@@ -346,10 +354,11 @@ organization/calendar/category filters, multi-calendar selection, colors, keywor
 filtering and Month/Agenda views remain in the browser. Signed-in browsing uses
 the existing gated RPCs, with unchanged discovery permissions.
 
-Public event pages are prerendered at `/calendar/events/<uuid>/`, including title,
-time, description, location and public election link. Meeting records load from
-the event's static JSON, including notes, transcripts, visible participants and
-votes, video settings and attachment metadata. Anonymous legacy UUID viewers use
+Public event pages are prerendered at `/records/events/<uuid>/`, including title,
+time, description, location, public election link, and public meeting notes,
+transcripts, attendance and votes. Browser hydration and legacy viewers reuse
+a lazily loaded month detail file with the same public meeting content, video
+settings and attachment metadata. Anonymous legacy UUID viewers use
 a separate public event index; IDs absent from that index still use `get_event`
 and `get_meeting`, preserving unlisted direct links and private gates. A missing
 published file is an error, never a silent backend fallback. Signed-in viewers
@@ -403,5 +412,6 @@ rebuild after edits settle. Development caches the snapshot for thirty seconds.
 
 The calendar UI and public record archive share the same public calendar snapshot,
 including batched meeting records, instead of hydrating every meeting twice.
-Interactive public event pages use the full-text archive event URL as their
-canonical; both presentations remain static and preserve their existing links.
+Public archive event pages host the interactive event viewer and prerendered
+meeting text at one canonical URL. Detail JSON is packed by month to reduce
+static file counts; ordinary calendar month browsing never downloads transcripts.

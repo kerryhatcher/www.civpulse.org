@@ -9,12 +9,10 @@ import '@fontsource/dm-sans/600.css';
 interface Props {
   title: string;
   description?: string;
-  canonicalPath?: string;
 }
 
 const {
   title,
-  canonicalPath,
   description = 'Civic Pulse helps residents follow local decisions, find community events, and explore the places that shape where they live.',
 } = Astro.props;
 
@@ -31,7 +29,7 @@ const nav = [
   { url: '/docs/', label: 'Docs' },
 ];
 const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
-const canonical = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url);
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 
 <!doctype html>

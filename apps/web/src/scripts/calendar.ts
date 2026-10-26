@@ -411,9 +411,13 @@ async function fillMeetingView(id: string, snapshot?: MeetingRecord): Promise<vo
   const root = document.querySelector<HTMLElement>('[data-meeting-details]');
   if (!root) return;
   root.hidden = false;
+  for(const selector of ["[data-meeting-video]","[data-meeting-notes]","[data-meeting-transcript]","[data-meeting-attendance]","[data-meeting-votes]","[data-meeting-attachments]"]) root.querySelector<HTMLElement>(selector)!.hidden=true;
+  for(const selector of ["[data-meeting-video-player]","[data-meeting-attendance-list]","[data-meeting-vote-list]","[data-meeting-attachment-list]"]) root.querySelector(selector)?.replaceChildren();
+  const startLabel=root.querySelector<HTMLElement>("[data-meeting-video-start]"); if(startLabel) startLabel.hidden=true;
   const videoSection = root.querySelector<HTMLElement>('[data-meeting-video]');
   const videoPlayer = root.querySelector<HTMLElement>('[data-meeting-video-player]');
   const videoLink = root.querySelector<HTMLAnchorElement>('[data-meeting-video-link]');
+  if(videoPlayer) videoPlayer.hidden=true;
   const startAt = meeting.event?.meeting_video_start_seconds;
   const videoUrl = meetingVideoWatchUrl(meeting.event?.meeting_video_url, startAt);
   if (videoSection && videoPlayer && videoLink && videoUrl) {
@@ -533,12 +537,14 @@ export async function initEventViewFromUrl(): Promise<void> {
     const response = data as EventViewResponse | null;
 
     if (error || !response || response.status === 'missing') {
+      viewer.hidden=true;
       showViewerStatus(status, 'Event not found.');
       return;
     }
 
     if (response.status === 'private') {
-      showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
+      viewer.hidden=true;
+    showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
       return;
     }
 

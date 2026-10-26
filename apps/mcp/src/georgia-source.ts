@@ -28,6 +28,22 @@ export interface GeorgiaSourceInput {
   offset: number;
 }
 
+/** Hosted transport reads only the owned public Georgia reader; never forward Civic Pulse credentials. */
+export async function readGeorgiaSourceViaReader(input: GeorgiaSourceInput, reader: string, fetcher: typeof fetch = fetch) {
+  const url = new URL(reader);
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) throw new Error('Invalid Georgia reader configuration');
+  for (const [key,value] of Object.entries(input)) if (value !== undefined) url.searchParams.set(key,String(value));
+  let response: Response;
+  try { response = await fetcher(url, {signal:AbortSignal.timeout(45_000),redirect:'manual'}); }
+  catch { throw new Error('Georgia source reader unavailable'); }
+  if (!response.ok) throw new Error(`Georgia source reader returned HTTP ${response.status}`);
+  let data: any;
+  try { data = await response.json(); }
+  catch { throw new Error('Invalid Georgia source reader response'); }
+  if (data?.source_system !== 'legis.ga.gov' || !String(data.source_url).startsWith(GEORGIA_API) || !Array.isArray(data.rows) || !Number.isInteger(data.total)) throw new Error('Invalid Georgia source reader response');
+  return data;
+}
+
 export async function readGeorgiaSource(input: GeorgiaSourceInput, fetcher: typeof fetch = fetch) {
   let path: string;
   if (input.resource === 'sessions') path = 'sessions';
@@ -46,14 +62,23 @@ export async function readGeorgiaSource(input: GeorgiaSourceInput, fetcher: type
   const bytes = new TextEncoder().encode('QFpCwKfd7fjVEXFFwSu36BwwcP83xYgxLAhLYmKkletvarconst' + ms);
   const hash = await crypto.subtle.digest('SHA-512', bytes);
   const key = Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
-  const request = async (url: string, headers?: HeadersInit) => {
-    const response = await fetcher(url, { headers, signal: AbortSignal.timeout(20_000), redirect: 'error' });
+  const request = async (url: string, phase: 'handshake' | 'data', headers?: HeadersInit) => {
+    let response: Response;
+    try {
+      response = await fetcher(url, { headers, signal: AbortSignal.timeout(20_000), redirect: 'manual' });
+    } catch (error) {
+      if (error instanceof Error && ['TimeoutError', 'AbortError'].includes(error.name)) {
+        throw new Error(`Georgia ${phase} request timed out after 20 seconds`);
+      }
+      throw new Error(`Georgia ${phase} request failed`);
+    }
     if (!response.ok) throw new Error(`Georgia source returned HTTP ${response.status}`);
-    return response.json();
+    try { return await response.json(); }
+    catch { throw new Error(`Invalid Georgia ${phase} response`); }
   };
-  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`);
+  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`, 'handshake');
   if (typeof token !== 'string' || !token) throw new Error('Invalid Georgia source handshake');
-  const data = await request(GEORGIA_API + path, { Authorization: `Bearer ${token}` });
+  const data = await request(GEORGIA_API + path, 'data', { Authorization: `Bearer ${token}` });
   const provenance = { source_system: 'legis.ga.gov', source_url: GEORGIA_API + path, retrieved_at: new Date().toISOString() };
   if (input.resource === 'vote') {
     if (!data || !Array.isArray(data.votes)) throw new Error('Invalid Georgia vote detail');

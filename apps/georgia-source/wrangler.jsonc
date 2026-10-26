@@ -1,0 +1,9 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "civpulse-georgia-source",
+  "account_id": "6d837580a4d0641139ecada9e74076b8",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-26",
+  "workers_dev": true,
+  "observability": {"enabled":true}
+}

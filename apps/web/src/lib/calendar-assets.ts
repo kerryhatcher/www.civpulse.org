@@ -1,3 +1,4 @@
+import {dayKey} from './calendar-display';
 import { getPublicCalendarData } from './calendar-build-data';
 import { calendarMonths, eventResponse, upcomingEvents, type CalendarManifest, type PublicCalendarSnapshot, type PublicEventSnapshot } from './calendar-snapshot';
 
@@ -12,10 +13,16 @@ export async function buildCalendarAssets(snapshot: PublicCalendarSnapshot) {
   const months:Record<string,string>={};
   for(const [month,events] of [...calendarMonths(snapshot.events)].sort(([a],[b])=>a.localeCompare(b))) months[month]=await add(`months/${month}`,events);
   const eventIndex:Record<string,string>={};
+  const details=new Map<string,Record<string,PublicEventSnapshot>>();
   for(const event of snapshot.events) {
     const value:PublicEventSnapshot={detail:eventResponse(event)};
     if(event.is_meeting) value.meeting=snapshot.meetings.get(event.id)!;
-    eventIndex[event.id]=await add(`events/${event.id}`,value);
+    const month=dayKey(event.starts_at).slice(0,7);
+    const rows=details.get(month)??{};rows[event.id]=value;details.set(month,rows);
+  }
+  for(const [month,rows] of details) {
+    const url=await add(`details/${month}`,rows);
+    for(const id of Object.keys(rows)) { eventIndex[id]=url; assets.set(`events/${id}`,assets.get(`details/${month}`)!); }
   }
   await add('event-index',eventIndex);
   await add('calendar',{calendars:snapshot.calendars,months} satisfies CalendarManifest);

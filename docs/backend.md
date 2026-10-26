@@ -1420,3 +1420,51 @@ Run `CALENDAR_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/pos
 bun test scripts/tests/calendar-snapshot-db.test.ts scripts/tests/calendar-db.test.ts`
 for rollback-only pagination, parent/participant visibility, live/export parity
 and execute-grant tests.
+
+### District offices in legislative history
+
+District-numbered offices may belong to a district organization rather than the
+chamber organization. The append-only `20261124000000_legislative_district_service`
+migration recognizes a direct organization relationship whose label is exactly
+`Legislative district of`, whose source URL is present, and whose related
+organization is a chamber in the same legislature. The reverse display label is
+`Contains legislative district`. This permits sourced bill sponsorships and
+body memberships without moving historical offices between organizations.
+Unrelated labels, unsourced links, and chambers in another legislature remain
+invalid. Existing date, immutable-context, visibility, and admin-write checks
+remain in force. The relationship is an explicit identity reconciliation, not a
+name or district-number match. Merge the migration to main before applying it.
+
+Verify locally with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-district-service-db.test.ts scripts/tests/legislation-db.test.ts`.
+
+`20261124000100_legislative_import_column_cache` caches the permitted column names
+once per resource inside each normalized import request. It retains the 100-row /
+2 MB bounds, admin authorization, provider identity locks, managed-field rejection,
+atomic rollback, per-row validation/auditing, and reviewed attendance preservation.
+There is no cross-request cache. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-import-cache-db.test.ts`.
+
+The MCP `import_legislation_bundle` wrapper accepts at most 1,000 records / 2 MB,
+uses the authenticated caller's existing `import_legislation` RPC in sequential
+100-record transactions, and returns `status`, `imported_count`, `next_offset` and
+`total`. Partial failures stop before later batches; retry from `next_offset`
+using the same provider IDs. No service-role credential, alternate write path or
+transaction-limit bypass is introduced. The single-batch tool remains atomic.
+
+## Vote-choice browse capacity
+
+`vote_choice_browse_performance` resolves permitted vote IDs and office-term IDs
+once per directory request. The existing `browse_legislation` RPC uses that set
+for choices instead of recursively checking the same parents for every row.
+Anonymous/ordinary/admin discovery, explicit unlisted contexts, filters, keyword
+search, exact totals, ordering and projections are unchanged. The helper stays
+in the private schema with no API-role execute grant; public grants and table
+RLS do not change. This fixes the 36,000-row choice scan that timed out during
+public archive builds. No new index, paid service or instance resize is required.
+
+Run `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/vote-choice-browse-db.test.ts`. The rollback test compares
+old/new results across caller/context combinations, then exercises 35,000 choices
+under a three-second statement timeout. Synthetic capacity rows skip audit/import
+triggers only on the test connection; normal trigger behavior is restored before
+reads and the whole transaction rolls back.

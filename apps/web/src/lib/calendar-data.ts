@@ -32,9 +32,10 @@ export async function readPublicEvent(id:string,urls:{event?:string;index?:strin
   if(error) throw error;
   if(session) return null;
   let url=urls.event;
-  if(!url && urls.index) url=(await readCalendarAsset<Record<string,string>>(urls.index))[id];
+  if(!url && urls.index) { const index=await readCalendarAsset<Record<string,string>>(urls.index); if(Object.hasOwn(index,id)) url=index[id]; }
   if(!url) return null;
-  const snapshot=await readCalendarAsset<PublicEventSnapshot>(url);
-  if(snapshot.detail.event?.id!==id || snapshot.detail.status!=='ok') throw new Error('Invalid published event');
+  const records=await readCalendarAsset<Record<string,PublicEventSnapshot>>(url);
+  const snapshot=Object.hasOwn(records,id) ? records[id] : undefined;
+  if(!snapshot || snapshot.detail.event?.id!==id || snapshot.detail.status!=='ok') throw new Error('Invalid published event');
   return snapshot;
 }

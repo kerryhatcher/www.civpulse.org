@@ -74,7 +74,7 @@ export const EVENT_COLUMNS =
 
 /** The shared event viewer shell. Unlisted and private events are uuid-only. */
 export function eventViewHref(id: string, publicPage = false): string {
-  return publicPage ? `/calendar/events/${id}/` : `/calendar/view/?id=${id}`;
+  return publicPage ? `/records/events/${id}/` : `/calendar/view/?id=${id}`;
 }
 
 const DATE_FORMAT: Intl.DateTimeFormatOptions = {

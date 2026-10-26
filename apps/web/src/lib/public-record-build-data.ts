@@ -12,7 +12,7 @@ export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<
   const records: PublicRecord[] = [];
   async function rpc(name: string, args: Record<string, unknown>) {
     const { data, error } = await client.rpc(name, args);
-    if (error) throw new Error(`Public record export failed (${name}): ${error.message}`);
+    if (error) throw new Error(`Public record export failed (${name}${args.p_table ? `:${args.p_table}` : ''}, offset ${args.p_offset ?? 0}): ${error.message}`);
     if (data == null) throw new Error(`Missing public record export (${name})`);
     return data;
   }
