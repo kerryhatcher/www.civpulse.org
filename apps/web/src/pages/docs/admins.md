@@ -246,6 +246,12 @@ record list and announces the result. Search and Clear affect only the list.
 
 Legislative saved-record search also matches displayed relationship names, such as a member in vote choices. Reference pickers refresh after deletions and can retry failed requests.
 
+For legislative terms, set **jurisdiction** to federal or state; state terms also
+require **state name** (use a consistent full name, such as Georgia). Leave state
+name blank for federal or unspecified terms. Unclassified terms remain browsable
+under all jurisdictions and **Not yet classified** until their metadata is set.
+Adding jurisdiction metadata does not import any bills automatically.
+
 ### Import legislative records
 
 In **Admin → Legislation**, expand **Import legislative records** and choose a

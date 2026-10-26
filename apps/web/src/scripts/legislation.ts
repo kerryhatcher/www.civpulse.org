@@ -89,6 +89,10 @@ export function legislativeCard(
   card.append(title);
   const states = node("div");
   states.className = "legislation-states";
+  if (table === "bills" && row.jurisdiction) {
+    states.append(badge(row.jurisdiction === "state" ? `${row.state_name} · State` :
+      row.jurisdiction === "federal" ? "Federal" : "Jurisdiction not yet classified"));
+  }
   for (const field of ["status", "outcome", "role", "position", "choice"]) {
     if (!row[field]) continue;
     const text =
@@ -285,42 +289,77 @@ export async function initLegislationBrowse() {
   try {
     await getSupabase().auth.getSession();
     const select = form.elements.namedItem("term_id") as HTMLSelectElement;
+    const jurisdiction = form.elements.namedItem("jurisdiction") as HTMLSelectElement | null;
+    const state = form.elements.namedItem("state") as HTMLSelectElement | null;
+    const sort = form.elements.namedItem("sort") as HTMLSelectElement | null;
+    const allTerms: LegislativeRow[] = [];
     for (let offset = 0; ; offset += 100) {
       const terms = await browse("legislative_terms", {
         p_limit: 100,
         p_offset: offset,
       });
-      for (const row of terms.rows)
-        select.add(new Option(recordLabel(row), row.id));
+      allTerms.push(...terms.rows);
       if (offset + 100 >= terms.total) break;
     }
+    for (const name of [...new Set(allTerms.filter((term) => term.jurisdiction === "state")
+      .map((term) => String(term.state_name)))].sort()) state?.add(new Option(name, name));
+    function updateTerms() {
+      const previous = select.value;
+      select.replaceChildren(new Option("All terms", ""));
+      for (const term of allTerms) {
+        if (jurisdiction?.value && term.jurisdiction !== jurisdiction.value) continue;
+        if (state?.value && term.state_name !== state.value) continue;
+        select.add(new Option(recordLabel(term), term.id));
+      }
+      if ([...select.options].some((option) => option.value === previous)) select.value = previous;
+      if (state) state.disabled = jurisdiction?.value === "federal" || jurisdiction?.value === "unspecified";
+    }
+    updateTerms();
     async function load(reset = false) {
       const request = ++generation;
       if (reset) {
         offset = 0;
         list.replaceChildren();
+        more.hidden = true;
       }
       status.textContent = "Loading…";
       more.disabled = true;
       try {
-        const data = await browse(table, {
+        const args = {
           p_query: (form.elements.namedItem("query") as HTMLInputElement).value,
           p_filters: select.value ? { term_id: select.value } : {},
           p_offset: offset,
-        });
+        };
+        const data = table === "bills" ? await (async () => {
+          const { data, error } = await getSupabase().rpc("browse_bills", {
+            p_query: args.p_query, p_term_id: select.value || null,
+            p_jurisdiction: jurisdiction?.value || "", p_state: state?.value || "",
+            p_sort: sort?.value || "newest", p_offset: offset,
+          });
+          if (error) throw error;
+          return data as { rows: LegislativeRow[]; total: number };
+        })() : await browse(table, args);
         if (request !== generation) return;
         list.append(...data.rows.map((row) => legislativeCard(table, row)));
         offset += data.rows.length;
         more.hidden = offset >= data.total;
-        status.textContent = `${data.total} ${table === "bills" ? "bills and resolutions" : "sessions"}.`;
+        status.textContent = data.total === 0 ? "No records match these filters. Try another jurisdiction or term." :
+          `${data.total} ${table === "bills" ? "bills and resolutions" : "sessions"}.`;
       } catch (error) {
+        if (request !== generation) return;
         status.textContent = `Could not load records: ${(error as Error).message}`;
       } finally {
-        more.disabled = false;
+        if (request === generation) more.disabled = false;
       }
     }
     form.onsubmit = (event) => {
       event.preventDefault();
+      void load(true);
+    };
+    form.onchange = (event) => {
+      if (!(event.target instanceof HTMLSelectElement)) return;
+      if (event.target === jurisdiction && state) state.value = "";
+      updateTerms();
       void load(true);
     };
     more.onclick = () => void load();

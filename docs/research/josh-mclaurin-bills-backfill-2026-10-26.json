@@ -1,0 +1,435 @@
+{
+  "person_id": "8514c662-f904-439a-b740-99ce53e4c68b",
+  "official_member_id": 4942,
+  "retrieved_at": "2026-10-26T19:26:30.444Z",
+  "state": "complete",
+  "bills": 3813,
+  "links": 4890,
+  "linked_votes": 3292,
+  "held": [],
+  "unlinked": [
+    {
+      "vote_id": "71732ac7-24bd-5de1-adc2-c42b243525a8",
+      "source_vote_id": 26688,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "baeed21e-29fd-5c60-90af-0c780032f15a",
+      "source_vote_id": 26038,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "00ef21d6-0aac-53f7-b83e-00147c208ec0",
+      "source_vote_id": 25954,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO ADJOURN"
+    },
+    {
+      "vote_id": "3f86ec4a-0e3d-5684-9ca9-8cb1f1316e92",
+      "source_vote_id": 25771,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JQC APPOINTMENTS"
+    },
+    {
+      "vote_id": "8e050a5e-17a2-55a8-af33-4ad71f16134b",
+      "source_vote_id": 25734,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JQC APPOINTMENTS"
+    },
+    {
+      "vote_id": "9fced6e6-b634-5320-b47a-8e989b822ae0",
+      "source_vote_id": 25670,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO SUSPEND SENATE RULES 3-1-2 & 4-2-1(A)"
+    },
+    {
+      "vote_id": "caa10fee-d779-598a-b4cd-5058ce4a50e0",
+      "source_vote_id": 25564,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO ADJOURN"
+    },
+    {
+      "vote_id": "ce455a7b-324e-5061-90a8-50cdeedeb989",
+      "source_vote_id": 25551,
+      "reason": "Official vote has no legislation reference",
+      "question": "ADOPTION OF AMENDMENT #1 BY THE SENATOR FROM THE 13TH"
+    },
+    {
+      "vote_id": "760a4789-acd1-583d-8659-f5d667a6f494",
+      "source_vote_id": 25546,
+      "reason": "Official vote has no legislation reference",
+      "question": "ADOPTION OF AMEND #1A BY SEN FROM THE 6TH TO AMEND #1 BY SEN FROM THE 32ND"
+    },
+    {
+      "vote_id": "1fc2bc26-688d-51f2-a365-c71b34a0acc8",
+      "source_vote_id": 25510,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JLDFC APPOINTMENTS"
+    },
+    {
+      "vote_id": "73e27f17-00d8-5186-83f9-67bfe3a1e9d3",
+      "source_vote_id": 25211,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO RECONSIDER FAILURE TO SUSPEND SENATE RULES 3-1-2 & 4-2-1(A)"
+    },
+    {
+      "vote_id": "7cc0f2bf-d10c-5e0f-8348-d67d2ec6e06f",
+      "source_vote_id": 25210,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO SUSPEND SENATE RULES 3-1-2 & 4-2-1(a)"
+    },
+    {
+      "vote_id": "2278990f-c343-5910-b392-3d73fc5ac37b",
+      "source_vote_id": 24770,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO IMMEDIATELY TRANSMIT"
+    },
+    {
+      "vote_id": "f673c9b7-66fa-5d7d-afc8-ae073d5a1053",
+      "source_vote_id": 24763,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JLDFC APPOINTMENTS"
+    },
+    {
+      "vote_id": "ca4cabd9-ee2e-5c68-a103-3eeeec70a307",
+      "source_vote_id": 24764,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "fec2af58-134f-59cc-be44-838bfba8c4c0",
+      "source_vote_id": 24762,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JQC APPOINTMENTS"
+    },
+    {
+      "vote_id": "2aa547de-b68d-5ba9-9434-82fc3c16ee4f",
+      "source_vote_id": 24761,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO CONFIRM WITH ONE ROLL CALL"
+    },
+    {
+      "vote_id": "889d992b-1273-525e-9df9-a5df7131813d",
+      "source_vote_id": 24655,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO DECLARE 7PM THE WALKER POWER HOUR"
+    },
+    {
+      "vote_id": "b040ee94-32c3-5c25-93c2-89d504a50a04",
+      "source_vote_id": 24617,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF APPOINTMENTS TO THE JUDICIAL LEGAL DEFENSE FUND COMMISSION"
+    },
+    {
+      "vote_id": "b5461425-57f5-5645-95c6-9d3bb076332c",
+      "source_vote_id": 24524,
+      "reason": "Official vote has no legislation reference",
+      "question": "PASSAGE BY SUBSTITUTE"
+    },
+    {
+      "vote_id": "e5dba832-fd42-5c75-a4d9-8ce621de410e",
+      "source_vote_id": 24487,
+      "reason": "Official vote has no legislation reference",
+      "question": "SHALL THE RULING OF THE CHAIR BE SUSTAINED"
+    },
+    {
+      "vote_id": "94777c11-424d-5ad3-817f-6dbf1f673007",
+      "source_vote_id": 24253,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "57db6711-d749-5163-b72c-9f5559a7fa5b",
+      "source_vote_id": 24252,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO VOTE ON THE CONFIRMATION OF THE GOVERNOR'S APPOINTMENTS BY ONE ROLL CALL"
+    },
+    {
+      "vote_id": "f2ba503c-3a6f-5e6c-a888-796ab28c10b3",
+      "source_vote_id": 22963,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "a066609e-a2d1-56f0-a76a-b0bd491296aa",
+      "source_vote_id": 22876,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO SUSPEND SENATE RULES"
+    },
+    {
+      "vote_id": "a1bbc197-e473-5b03-8a6f-40e7eb8a6443",
+      "source_vote_id": 21776,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF MR FERVIER"
+    },
+    {
+      "vote_id": "a7b60498-776f-59bc-8440-5510b4233ccf",
+      "source_vote_id": 21774,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF MR BARR"
+    },
+    {
+      "vote_id": "778f1b2a-289d-5d29-85c7-93c6e6c2d0c5",
+      "source_vote_id": 21773,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF MR GREEN & MS DARRISAW"
+    },
+    {
+      "vote_id": "2f619a45-96b0-5d9d-8147-cb6ab677f5c0",
+      "source_vote_id": 21698,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO SUSPEND SENATE RULES"
+    },
+    {
+      "vote_id": "d3b3fce4-44bf-58e3-aeb9-7f3422603021",
+      "source_vote_id": 21695,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO SUSPEND SENATE RULES"
+    },
+    {
+      "vote_id": "810c670a-705e-5e50-ac76-8971ce3bf1b3",
+      "source_vote_id": 21545,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF ELECTION OF WILLIAM S DUFFEY    AS CHAIRMAN OF THE STATE ELECTION BOARD"
+    },
+    {
+      "vote_id": "655e9b12-72e5-5733-b17a-96c800ae7a70",
+      "source_vote_id": 21429,
+      "reason": "Official vote has no legislation reference",
+      "question": "MOTION TO ADJOURN"
+    },
+    {
+      "vote_id": "195dbaae-55a2-5c10-842e-59641cc9e896",
+      "source_vote_id": 21340,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "d2722df5-2bef-5bc3-9a61-30b8e57a3392",
+      "source_vote_id": 21003,
+      "reason": "Official vote has no legislation reference",
+      "question": "SECOND READING OF BILLS AND RESOLUTIONS"
+    },
+    {
+      "vote_id": "0f363ca0-8bc5-597b-9231-326e6cd74f50",
+      "source_vote_id": 20946,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF JQC APPOINTMENTS"
+    },
+    {
+      "vote_id": "8cfd876a-e409-54ff-bcc7-bc828912cfda",
+      "source_vote_id": 21729,
+      "reason": "Official vote has no legislation reference",
+      "question": "CONFIRMATION OF GOVERNOR'S APPOINTMENTS"
+    },
+    {
+      "vote_id": "41aec010-cd7b-545f-b29d-08e229d2cedb",
+      "source_vote_id": 19665,
+      "reason": "Official vote has no legislation reference",
+      "question": "Insist & Appt CC"
+    },
+    {
+      "vote_id": "4e758aef-41eb-5ace-8017-a4b7fc32602a",
+      "source_vote_id": 19447,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "19b488fc-e4bc-525f-a47a-7fb1d62f4940",
+      "source_vote_id": 19287,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "a4ed7701-dcd2-5930-8f89-c1121f3b5097",
+      "source_vote_id": 19284,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "c9dcc575-a873-506e-9b03-fafa293de73c",
+      "source_vote_id": 19061,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "6cd7f45f-8687-56f0-9271-5042ae683b95",
+      "source_vote_id": 18949,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "5a99b411-b68e-5139-ab24-3c8cf21be588",
+      "source_vote_id": 18771,
+      "reason": "Official vote has no legislation reference",
+      "question": "Adhere & Appt CC"
+    },
+    {
+      "vote_id": "0e10e7a4-fc30-5215-990e-817ac1e38dfe",
+      "source_vote_id": 18848,
+      "reason": "Official vote has no legislation reference",
+      "question": "Rules Suspend"
+    },
+    {
+      "vote_id": "4b7f65b8-7002-543b-9972-e5f980dd9622",
+      "source_vote_id": 18065,
+      "reason": "Official vote has no legislation reference",
+      "question": "Election of Speaker Pro-Tem"
+    },
+    {
+      "vote_id": "f4ef9bf3-7d13-50e5-b229-533d3fc60ac3",
+      "source_vote_id": 18064,
+      "reason": "Official vote has no legislation reference",
+      "question": "Election of Speaker of the House"
+    },
+    {
+      "vote_id": "4bfd292d-3762-5072-8315-493aa35cb8f7",
+      "source_vote_id": 17098,
+      "reason": "Official vote has no legislation reference",
+      "question": "Confirmation of Journal"
+    },
+    {
+      "vote_id": "1c132927-111a-5ff7-be19-6147099357de",
+      "source_vote_id": 16804,
+      "reason": "Official vote has no legislation reference",
+      "question": "Motion to Adjourn"
+    },
+    {
+      "vote_id": "854022fa-7732-5104-b121-397c65d55ef9",
+      "source_vote_id": 16461,
+      "reason": "Official vote has no legislation reference",
+      "question": "Election of Speaker Pro Tem"
+    },
+    {
+      "vote_id": "ff7257ac-8c5c-574b-852f-eff3ab8a9bc7",
+      "source_vote_id": 16460,
+      "reason": "Official vote has no legislation reference",
+      "question": "Election of Speaker of the House"
+    }
+  ],
+  "introduced_date_policy": "Use the documented originating-chamber first reading/read-and-referred date where recorded, otherwise a documented Hopper filing date. Four pre-session Hopper filings were imported after the main-branch prefiling validation correction. No dates are inferred from vote dates; session dates are unchanged.",
+  "prefiled_resolutions_imported": [
+    {
+      "id": 63481,
+      "identifier": "SR 3",
+      "reason": "Official Hopper filing predates session; imported with original filing date after the prefiling migration.",
+      "actions": [
+        {
+          "date": "2023-01-11T12:03:59",
+          "name": "Senate Reconsidered Passed/Adopted"
+        },
+        {
+          "date": "2023-01-11T11:44:39",
+          "name": "Senate Taken from Table"
+        },
+        {
+          "date": "2023-01-09T11:51:30",
+          "name": "Senate Tabled"
+        },
+        {
+          "date": "2023-01-09T11:49:39",
+          "name": "Senate Reconsidered"
+        },
+        {
+          "date": "2023-01-09T11:45:37",
+          "name": "Senate Lost"
+        },
+        {
+          "date": "2023-01-06T17:14:45",
+          "name": "Senate Hopper"
+        }
+      ]
+    },
+    {
+      "id": 63482,
+      "identifier": "SR 4",
+      "reason": "Official Hopper filing predates session; imported with original filing date after the prefiling migration.",
+      "actions": [
+        {
+          "date": "2023-01-09T11:55:20",
+          "name": "Senate Passed/Adopted"
+        },
+        {
+          "date": "2023-01-06T17:15:17",
+          "name": "Senate Hopper"
+        }
+      ]
+    },
+    {
+      "id": 63484,
+      "identifier": "SR 6",
+      "reason": "Official Hopper filing predates session; imported with original filing date after the prefiling migration.",
+      "actions": [
+        {
+          "date": "2023-01-09T15:37:24",
+          "name": "House Read and Adopted"
+        },
+        {
+          "date": "2023-01-09T15:37:22",
+          "name": "House First Readers"
+        },
+        {
+          "date": "2023-01-09T11:23:19",
+          "name": "Senate Transmitted House"
+        },
+        {
+          "date": "2023-01-09T11:23:05",
+          "name": "Senate Passed/Adopted"
+        },
+        {
+          "date": "2023-01-06T17:50:43",
+          "name": "Senate Hopper"
+        }
+      ]
+    },
+    {
+      "id": 65846,
+      "identifier": "SR 1EX",
+      "reason": "Official Hopper filing predates session; imported with original filing date after the prefiling migration.",
+      "actions": [
+        {
+          "date": "2023-11-29T10:54:59",
+          "name": "Senate Passed/Adopted"
+        },
+        {
+          "date": "2023-11-29T10:45:59",
+          "name": "Senate Engrossed"
+        },
+        {
+          "date": "2023-11-28T16:39:37",
+          "name": "Senate Hopper"
+        }
+      ]
+    }
+  ],
+  "migration_release": {
+    "pull_request": "https://github.com/kerryhatcher/www.civpulse.org/pull/36",
+    "commit": "e95d6b7e966945032201b720c93404e10c00fd05",
+    "production_migrations_verified": true
+  },
+  "verified_bills": 3813,
+  "verified_legislative_vote_bills": 4890,
+  "verified_original_choices": 3342,
+  "verified_profile_votes_with_bills": 3292,
+  "verified_profile_links": 4890,
+  "verified_at": "2026-10-26T19:46:07.416Z",
+  "measure_counts": {
+    "bill": 3549,
+    "resolution": 264
+  },
+  "production_directory_total": 3814,
+  "verification": {
+    "every_imported_field_read_back_anonymously": true,
+    "original_vote_choices_unchanged": 3342,
+    "linked_votes": 3292,
+    "vote_bill_links": 4890,
+    "source_votes_without_measure_reference": 50,
+    "production_migrations": "success",
+    "production_site_build": "success",
+    "repair_pr": "https://github.com/kerryhatcher/www.civpulse.org/pull/36"
+  },
+  "introduction_evidence_count": 3813,
+  "provenance": "Each imported bill retains its official numeric provider ID and source URL. Introduction dates were checked against the official API statusHistory; the full local evidence report is retained separately from this summary."
+}

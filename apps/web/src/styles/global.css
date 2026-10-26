@@ -2587,6 +2587,10 @@ textarea::placeholder {
 .legislation-filters form { margin-top: .5rem; }
 [data-legislation-browser] [data-search] { max-width: none; grid-template-columns: 2fr 1fr auto; align-items: end; margin-block: 1.5rem; }
 [data-legislation-browser] [data-search] button { min-height: 44px; }
+[data-legislation-browser] .legislation-filters[data-search] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 700px) {
+  [data-legislation-browser] .legislation-filters[data-search] { grid-template-columns: minmax(0, 1fr); }
+}
 [data-legislation-view] button, .legislation-profile button { padding: .65rem 1rem; min-height: 44px; }
 @media (max-width: 640px) {
   .legislation-heading h1 { font-size: 2rem; }
