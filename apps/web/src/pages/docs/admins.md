@@ -293,3 +293,10 @@ exported. If formerly public data becomes restricted, publish promptly; browser
 caches can retain published files for five minutes and existing downloads cannot
 be recalled. Office/candidacy date groups update in the visitor's browser without
 a daily publication.
+
+The public people, organization and election directories now publish with the
+site, including search data and filters. Choose **Publish** after imports,
+record edits or visibility changes. Signed-in searches still use live access
+checks; seeing an edit there does not mean the public directory is published.
+When hiding a record, publish promptly and allow up to five minutes for old
+cached assets to expire. Previously downloaded public copies cannot be recalled.

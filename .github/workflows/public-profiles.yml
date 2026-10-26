@@ -19,4 +19,4 @@ jobs:
         with:
           bun-version: '1.4.3'
       - run: bun install --frozen-lockfile
-      - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts
+      - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts

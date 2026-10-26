@@ -1,3 +1,5 @@
+import { readDirectory } from './directory-data';
+import { browsePeople, type DirectoryPerson } from '../lib/directories';
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
@@ -32,7 +34,7 @@ function visibilityLabel(visibility: PersonVisibility): string {
   return PERSON_VISIBILITY_LABELS[visibility] ?? 'Public';
 }
 
-function renderCard(person: Person): HTMLElement {
+function renderCard(person: DirectoryPerson): HTMLElement {
   const card = document.createElement('a');
   card.className = 'org-card person-card';
   card.href = personHref(person);
@@ -80,7 +82,7 @@ function renderCard(person: Person): HTMLElement {
   return card;
 }
 
-/** Paginated discovery uses an RPC so hidden records never enter static HTML. */
+/** Public discovery uses static data; signed-in discovery stays permission-checked. */
 export function initPeopleSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-person-search]');
   const kind = document.querySelector<HTMLSelectElement>('[data-person-kind]');
@@ -109,7 +111,8 @@ export function initPeopleSearch(): void {
     ui.status.hidden = false;
     ui.status.textContent = 'Loading people…';
     try {
-      const { data, error } = await supabase.rpc('browse_people', {
+      const snapshot = await readDirectory('people');
+      const { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : await supabase.rpc('browse_people', {
         p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
         p_sort: ui.sort.value, p_limit: pageSize, p_offset: page * pageSize,
       });
