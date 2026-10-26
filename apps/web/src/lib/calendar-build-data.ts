@@ -26,6 +26,7 @@ export async function loadPublicCalendarData(client: SupabaseClient, publicPeopl
       }
     })(),
   ]);
+  calendars.sort((a,b)=>a.organization_name.localeCompare(b.organization_name)||a.name.localeCompare(b.name)||a.id.localeCompare(b.id));
   const publicRows=pages.filter(row=>isPublicEvent(row.event));
   const events=publicRows.map(row=>publicEvent(row.event));
   const calendarIds=new Set(calendars.map(calendar=>calendar.id));
