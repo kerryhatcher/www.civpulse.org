@@ -594,6 +594,16 @@ function buildServer(supabase, user, documentContext = {}) {
     is_meeting: z5.boolean().optional(),
     meeting_notes: z5.string().nullish(),
     meeting_transcript: z5.string().nullish(),
+    meeting_video_url: z5.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, "Use an HTTPS video URL").nullish().refine((value) => {
+      if (value == null)
+        return true;
+      try {
+        const url = new URL(value);
+        return !url.username && !url.password && !url.port;
+      } catch {
+        return false;
+      }
+    }, "Use a video URL without credentials or a custom port").describe("Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear."),
     location: z5.string().nullish(),
     url: z5.string().nullish(),
     description: z5.string().nullish(),
@@ -601,8 +611,8 @@ function buildServer(supabase, user, documentContext = {}) {
     election_id: z5.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish()
   };
-  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
-  update("event", "events", "Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved.", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
+  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
+  update("event", "events", "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
   remove("event", "events", "Delete a calendar event (admin only).");
   const personShape = {
     slug: z5.string(),

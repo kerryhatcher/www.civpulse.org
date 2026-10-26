@@ -5,6 +5,7 @@ export interface MeetingRecord {
     title: string;
     meeting_notes: string | null;
     meeting_transcript: string | null;
+    meeting_video_url: string | null;
   };
   attendance?: {
     person_id: string;

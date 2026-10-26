@@ -35,7 +35,7 @@ Admin tools require an account with admin access. [Sign in to the Meetings admin
 
 1. Open [Meetings](/admin/meetings/) and choose the board meeting from the **Meeting** list. The newest meetings appear first.
 2. Enter your notes in **Meeting notes or minutes**. Include the meeting date, the main topics, decisions, and any next steps you can verify. Notes are plain text; use line breaks to keep them readable.
-3. Select **Save text** and look for **Text saved.** The **Transcript** field is separate. Leave any existing transcript in place when editing notes because **Save text** updates both fields.
+3. Add an optional **Video URL** for the recording. YouTube and Vimeo show an embedded player; other HTTPS hosts show a watch link. Leave existing notes, transcript and video fields in place when editing another field: **Save meeting details** saves all three. Look for **Meeting details saved.** Clear the video field and save to remove a recording.
 4. Select **View meeting** to check the meeting page. The **Meeting record** section shows the notes to readers who can access that event.
 
 If the meeting is missing from the list, open [Calendars](/admin/calendars/). Create a calendar for its organization if needed. In **Add an event**, choose the calendar, enter the meeting title and start time, check **This is a meeting**, choose its visibility, and select **Create event**. For an existing event, edit it and check **This is a meeting**. Then return to [Meetings](/admin/meetings/).
@@ -49,6 +49,12 @@ If the meeting is missing from the list, open [Calendars](/admin/calendars/). Cr
 Check names, dates, and vote outcomes against the source record before saving. You can return to a meeting later to revise its records.
 
 ### Add meeting files with an AI assistant
+
+`create_event` and `update_event` also accept `meeting_video_url` for meetings.
+Supply an HTTPS video URL, omit it to preserve the current value, or set it to
+`null` to clear it. Back-to-back committee and board meetings can use the same
+recording URL while retaining separate meeting records. Supported YouTube links
+can include `t` or `start` to begin at that meeting's point in the recording.
 
 Recorded individual votes also appear in the member's profile **Voting record**.
 The profile links each choice back to the motion and full roll call on its meeting.

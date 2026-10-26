@@ -1,4 +1,5 @@
 import { historyLink } from '../lib/history';
+import { meetingVideoUrl } from '../lib/meeting-video';
 import { getSupabase } from '../lib/supabase';
 import { documentApi, publicDocumentUrl } from '../lib/documents';
 import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
@@ -62,6 +63,7 @@ export async function initMeetingAdmin(): Promise<void> {
     const transcript = notesForm.elements.namedItem('meeting_transcript') as HTMLTextAreaElement;
     notes.value = record.event?.meeting_notes ?? '';
     transcript.value = record.event?.meeting_transcript ?? '';
+    (notesForm.elements.namedItem('meeting_video_url') as HTMLInputElement).value = record.event?.meeting_video_url ?? '';
     const view = document.querySelector<HTMLAnchorElement>('[data-meeting-view]');
     if (view) {
       view.href = `/calendar/view/?id=${id}`;
@@ -124,11 +126,14 @@ export async function initMeetingAdmin(): Promise<void> {
   notesForm.addEventListener('submit', event => void (async () => {
     event.preventDefault(); if (!select.value) return;
     const values = new FormData(notesForm);
+    const video = String(values.get('meeting_video_url') ?? '').trim();
+    if (video && !meetingVideoUrl(video)) { message('Enter a valid HTTPS video URL without credentials or a custom port.', true); return; }
     const { error } = await supabase.from('events').update({
+      meeting_video_url: video || null,
       meeting_notes: String(values.get('meeting_notes') ?? '').trim() || null,
       meeting_transcript: String(values.get('meeting_transcript') ?? '').trim() || null,
     }).eq('id', select.value);
-    if (error) message(error.message, true); else { message('Text saved.'); await refresh(); }
+    if (error) message(error.message, true); else { message('Meeting details saved.'); await refresh(); }
   })());
 
   function renderAttendance(): void {

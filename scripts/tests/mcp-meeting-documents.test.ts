@@ -1,5 +1,29 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test, spyOn } from 'bun:test';
+import { buildServer } from '../../apps/mcp/src/tools';
 import { decodeMeetingDocument, MAX_DOCUMENT_BYTES, registerMeetingTools } from '../../apps/mcp/src/meeting-tools';
+
+test('MCP meeting video writes validate URLs, preserve omitted fields and allow clearing',async()=>{
+  const registrations=new Map<string,{schema:any;handler:any}>();
+  const server=buildServer({} as never,{id:'00000000-0000-4000-8000-000000000002'});
+  const register=spyOn(Object.getPrototypeOf(server),'registerTool').mockImplementation((name,config,handler)=>{
+    registrations.set(name,{schema:config.inputSchema,handler});return {} as never;
+  });
+  let patch:Record<string,unknown>={};
+  try{
+    buildServer({rpc:async()=>({data:true,error:null}),from:()=>({update:(value:Record<string,unknown>)=>{
+      patch=value;return {eq:()=>({select:()=>({single:async()=>({data:{id:'00000000-0000-4000-8000-000000000001'},error:null})})})};
+    }})} as never,{id:'00000000-0000-4000-8000-000000000002'});
+    const tool=registrations.get('update_event')!;
+    const id='00000000-0000-4000-8000-000000000001';
+    const url='https://vimeo.com/76979871/abc123';
+    expect(tool.schema.safeParse({id,meeting_video_url:url}).success).toBe(true);
+    for(const value of ['javascript:alert(1)','http://example.test/video',('https://' + 'user:pass@' + 'youtube.com/watch?v=wjYeLMR-3tE')])
+      expect(tool.schema.safeParse({id,meeting_video_url:value}).success).toBe(false);
+    await tool.handler({id,meeting_video_url:url});expect(patch).toEqual({meeting_video_url:url});
+    await tool.handler({id,meeting_notes:'Notes'});expect(patch).toEqual({meeting_notes:'Notes'});
+    await tool.handler({id,meeting_video_url:null});expect(patch).toEqual({meeting_video_url:null});
+  }finally{register.mockRestore();}
+});
 
 describe('MCP meeting document validation', () => {
   test('preserves document bytes and derives MIME type from the supported extension', () => {

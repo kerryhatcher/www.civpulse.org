@@ -10,6 +10,7 @@ import { getSupabase } from '../lib/supabase';
 import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
 import { linkMemberMentions, memberProfileHref } from '../lib/member-mentions';
+import { meetingVideoUrl, meetingVideoEmbed } from '../lib/meeting-video';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
   public: 'Public',
@@ -337,6 +338,7 @@ function showViewerStatus(root: HTMLElement, text: string, signIn = false): void
   }
 
   root.hidden = false;
+
 }
 
 function fillEventView(response: EventViewResponse): void {
@@ -403,6 +405,24 @@ async function fillMeetingView(id: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-meeting-details]');
   if (!root) return;
   root.hidden = false;
+  const videoSection = root.querySelector<HTMLElement>('[data-meeting-video]');
+  const videoPlayer = root.querySelector<HTMLElement>('[data-meeting-video-player]');
+  const videoLink = root.querySelector<HTMLAnchorElement>('[data-meeting-video-link]');
+  const videoUrl = meetingVideoUrl(meeting.event?.meeting_video_url);
+  if (videoSection && videoPlayer && videoLink && videoUrl) {
+    videoSection.hidden = false; videoLink.href = videoUrl;
+    const embed = meetingVideoEmbed(videoUrl);
+    if (embed) {
+      const player = document.createElement('iframe');
+      player.src = embed.src;
+      player.title = `${meeting.event?.title ?? 'Meeting'} — ${embed.provider} video`;
+      player.loading = 'lazy';
+      player.allow = 'encrypted-media; fullscreen; picture-in-picture';
+      player.allowFullscreen = true;
+      player.referrerPolicy = 'strict-origin-when-cross-origin';
+      videoPlayer.replaceChildren(player); videoPlayer.hidden = false;
+    }
+  }
   const textSection = (sectionSelector: string, textSelector: string, value: string | null | undefined) => {
     const section = document.querySelector<HTMLElement>(sectionSelector);
     const text = document.querySelector<HTMLElement>(textSelector);
