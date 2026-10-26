@@ -7,7 +7,7 @@ import { fetchPublicElections, fetchElectionDetail, formatElectionDate, election
 import { civicDate, electionCalloutStart } from '../lib/election-callout';
 
 const maps = await fetchPublicMaps();
-const elections = await fetchPublicElections();
+const elections = (await fetchPublicElections()).sort((a, b) => a.election_date.localeCompare(b.election_date) || a.name.localeCompare(b.name));
 const electionCallouts = (await Promise.all(elections.map(async (election) => {
   const detail = await fetchElectionDetail(election.id);
   const earlyVoting = detail?.dates
@@ -25,6 +25,14 @@ const electionCallouts = (await Promise.all(elections.map(async (election) => {
     <section class="home-intro" aria-labelledby="home-title">
       <h1 id="home-title">A closer look at your community.</h1>
       <p>Follow the decisions, places, and gatherings that shape where you live.</p>
+      <form class="home-search" action="/search/" method="get" role="search" aria-label="Search Civic Pulse">
+        <label for="home-query">What would you like to find?</label>
+        <div class="home-search-controls">
+          <input id="home-query" type="search" name="q" maxlength="500" placeholder="A person, organization, place, or topic…" />
+          <button class="button-link" type="submit">Search <Icon /></button>
+        </div>
+      </form>
+      <p class="home-search-hint">Search people, elections, maps, events, and meeting notes.</p>
     </section>
 
     {electionCallouts.map(({ election, earlyVoting, startsOn }) => (
@@ -45,11 +53,36 @@ const electionCallouts = (await Promise.all(elections.map(async (election) => {
       </section>
     ))}
 
+    <section class="home-overview" aria-labelledby="overview-title">
+      <div class="home-election-overview">
+        <h2 id="overview-title">Elections at a glance</h2>
+        <ul class="home-election-list">
+          {elections.map((election) => (
+            <li data-upcoming-election data-election-day={election.election_date} hidden>
+              <time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time>
+              <a href={electionHref(election)}>{election.name}</a>
+            </li>
+          ))}
+        </ul>
+        <p data-home-elections-empty hidden>No upcoming elections are published yet.</p>
+        <noscript><p>Open the election directory for published dates and races.</p></noscript>
+        <a class="home-more-link" href="/elections/">All elections & races <Icon /></a>
+      </div>
+      <div class="home-starting-points">
+        <h2>Follow your community</h2>
+        <dl>
+          <div><dt><a href="/people/">People & representatives</a></dt><dd>Officials, candidates, and their recorded votes.</dd></div>
+          <div><dt><a href="/orgs/">Organizations</a></dt><dd>Local groups, public bodies, and their calendars.</dd></div>
+          <div><dt><a href="/records/">Public records</a></dt><dd>Browse civic records, or <a href="/requests/">track a records request</a>.</dd></div>
+        </dl>
+      </div>
+    </section>
+
     <div class="home-destinations">
       <section class="destination maps-destination" aria-labelledby="maps-title">
         <header class="destination-heading">
           <h2 id="maps-title">Explore maps</h2>
-          <p>Places, precincts, and layers worth knowing.</p>
+          <p>{maps.length} public {maps.length === 1 ? 'map' : 'maps'} of places, precincts, and districts.</p>
         </header>
         <div class="destination-body">
           {

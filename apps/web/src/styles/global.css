@@ -2632,3 +2632,79 @@ textarea::placeholder {
   [data-legislation-view="legislative_votes"] .legislation-meta { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
   [data-legislation-view="legislative_votes"] .legislation-meta > div:first-child { grid-column: 1/-1; }
 }
+
+/* Compact navigation and a search-first home. */
+.site-header { position: relative; }
+.site-header nav { gap: 4px 24px; }
+.browse-menu summary {
+  min-height: 44px;
+  padding-block: 10px;
+  font-size: 18px;
+}
+.browse-menu[open] summary { margin-bottom: 0; }
+.browse-panel {
+  position: absolute;
+  inset: 100% 0 auto;
+  z-index: 1100;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  padding: 28px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.browse-panel h2 { font-size: 26px; margin-bottom: 12px; }
+.site-header .browse-panel a {
+  justify-content: flex-start;
+  white-space: normal;
+  font-size: 16px;
+  width: fit-content;
+}
+.site-footer nav { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.site-footer nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.home-intro { text-align: left; padding-block: 40px 32px; }
+.home-intro h1 { font-size: clamp(40px, 4.5vw, 64px); max-width: 24ch; }
+.home-intro > p { font-size: 19px; margin: 12px 0 0; max-width: 65ch; }
+.home-search { margin-top: 24px; max-width: 780px; }
+.home-search label { display: block; font-weight: 600; margin-bottom: 8px; }
+.home-search-controls { display: flex; gap: 8px; }
+.home-search-controls input { flex: 1; min-width: 0; min-height: 52px; }
+.home-search-controls button { flex: none; }
+.home-intro .home-search-hint { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.home-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  border-block: 1px solid var(--line);
+  padding-block: 28px;
+  margin-bottom: 32px;
+}
+.home-overview h2 { font-size: 32px; margin-bottom: 16px; }
+.home-election-list { list-style: none; padding: 0; margin: 0; }
+.home-election-list li { margin-bottom: 18px; }
+.home-election-list time { display: block; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+.home-election-list a { font-weight: 600; line-height: 1.5; }
+.home-more-link { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 4px; }
+.home-starting-points dl { margin: 0; }
+.home-starting-points dl > div + div { margin-top: 16px; }
+.home-starting-points dt { font-weight: 600; line-height: 1.5; }
+.home-starting-points dd { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+@media (max-width: 1000px) {
+  .site-header { justify-content: space-between; gap: 8px 16px; }
+  .site-header nav { width: auto; gap: 4px 18px; }
+  .browse-menu summary { font-size: 15px; }
+}
+@media (max-width: 650px) {
+  .site-header { justify-content: center; }
+  .site-header nav { width: 100%; gap: 4px 16px; }
+  .browse-menu summary { font-size: 13px; }
+  .browse-panel { grid-template-columns: 1fr; gap: 24px; padding: 24px; max-height: 70vh; overflow-y: auto; }
+  .browse-panel h2 { margin-bottom: 4px; }
+  .home-intro { padding-block: 28px; }
+  .home-intro > p { font-size: 17px; }
+  .home-overview { grid-template-columns: 1fr; gap: 28px; }
+  .home-overview h2 { font-size: 28px; }
+  .home-search-controls { flex-wrap: wrap; }
+  .home-search-controls input { flex-basis: 200px; }
+  .home-search-controls button { flex-grow: 1; justify-content: center; }
+}
