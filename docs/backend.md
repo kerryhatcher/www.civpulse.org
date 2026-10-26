@@ -1230,3 +1230,5 @@ and bill labels, person viewer links for historical office service, and organiza
 slug links for chambers. It does not add a new public lookup endpoint or change
 visibility rules. The append-only `legislative_display_details` migration keeps
 execution revoked from public, anonymous and authenticated callers.
+
+Legislative browsing searches related display labels (including members, bills, and articles) after materializing visibility-approved rows, preserving hidden-record protections.

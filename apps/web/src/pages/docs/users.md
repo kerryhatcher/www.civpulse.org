@@ -41,10 +41,10 @@ are searchable separately in the [public document archive](/documents/) when
 those files have been published there.
 
 Member names in meeting attendance, roll calls, notes, and vote details link to
-their profiles. Each profile has a **Meeting votes** with the member's choice,
+their profiles. Each profile has a **Meeting votes** section with the member's choice,
 motion, outcome, meeting date, and motion details. Select the meeting title to
 open that exact vote and its full roll call. Use **Load more votes** for older
-records. A profile with no recorded choices says **No votes recorded**.
+records. A profile with no recorded choices says **No meeting votes recorded here.**.
 Public profiles list public meetings; unlisted meetings remain accessible from
 their direct links. Admins can also see restricted meetings in voting records.
 

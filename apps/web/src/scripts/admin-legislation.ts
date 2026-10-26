@@ -62,7 +62,11 @@ export async function initLegislationAdmin() {
     function references(table: string): Promise<LegislativeRow[]> {
       if (!referenceCache.has(table))
         referenceCache.set(table, fetchReferences(table));
-      return referenceCache.get(table)!;
+      const request = referenceCache.get(table)!;
+      void request.catch(() => {
+        if (referenceCache.get(table) === request) referenceCache.delete(table);
+      });
+      return request;
     }
     async function fetchReferences(table: string): Promise<LegislativeRow[]> {
       const rows: LegislativeRow[] = [];
@@ -273,6 +277,7 @@ export async function initLegislationAdmin() {
             message.textContent = error.message;
             return;
           }
+          referenceCache.clear();
           await load(false);
         };
         const actions = document.createElement("div");

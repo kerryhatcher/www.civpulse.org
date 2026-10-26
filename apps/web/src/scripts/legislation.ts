@@ -229,7 +229,7 @@ export function legislativeCard(
   if (
     row.source_url &&
     row.source_url !== row.text_url &&
-    row.source_url !== row.links?.[titleField]
+    row.source_url !== (titleField ? row.links?.[titleField] : undefined)
   )
     footer.append(link("View source", String(row.source_url)));
   footer.append(historyLink(table, row.id));

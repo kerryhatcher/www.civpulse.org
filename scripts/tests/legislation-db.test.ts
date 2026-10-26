@@ -285,6 +285,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
           "23514",
         );
         await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice,membership_review_note) values (${anotherVote.id},${unverified.id},'yes','Yea','Official roll call identifies this member; exact service start remains uncertain.')`;
+        expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb,'Legislative Member') result`)[0].result.total).toBe(1);
         await tx`update people set visibility='private' where id=${person.id}`;
         await tx.unsafe("set local role anon");
         expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb) result`)[0].result.rows).toEqual([]);
@@ -298,6 +299,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
             await tx`select browse_legislation('bill_sponsorships',null,${{ bill_id: bill.id }}::jsonb) result`
           )[0].result.total,
         ).toBe(0);
+        expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb,'Legislative Member') result`)[0].result.total).toBe(0);
         throw rollback;
       });
     } catch (e) {

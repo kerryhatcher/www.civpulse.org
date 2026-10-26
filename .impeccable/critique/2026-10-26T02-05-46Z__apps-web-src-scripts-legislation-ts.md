@@ -5,9 +5,9 @@ max_score: 40
 na_heuristics: 
 p0_count: 0
 p1_count: 2
-target_identity: "file:/home/kwhatcher/.codex/worktrees/d6e3/www.civpulse.org/apps/web/src/scripts/legislation.ts"
+target_identity: "file:apps/web/src/scripts/legislation.ts"
 target_fingerprint: "sha256:96cd73e18bb59d66fb2a055c53c2b8df53a4c3c6d70a92172f0c4def759fdde9"
-target_path: /home/kwhatcher/.codex/worktrees/d6e3/www.civpulse.org/apps/web/src/scripts/legislation.ts
+target_path: apps/web/src/scripts/legislation.ts
 timestamp: 2026-10-26T02-05-46Z
 slug: apps-web-src-scripts-legislation-ts
 ---

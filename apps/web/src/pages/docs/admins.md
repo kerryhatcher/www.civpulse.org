@@ -243,3 +243,5 @@ are marked with *. Optional provider IDs, source URLs and retrieval dates are
 under **Source & import details**. Field guidance explains historical office
 service, visibility, official totals and partial coverage. Save returns to the
 record list and announces the result. Search and Clear affect only the list.
+
+Legislative saved-record search also matches displayed relationship names, such as a member in vote choices. Reference pickers refresh after deletions and can retry failed requests.
