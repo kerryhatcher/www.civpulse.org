@@ -17,6 +17,8 @@ test('static legislative grouping counts distinct votes per bill and filters bef
  const snapshot=emptyProfileSections();
  const bill={id:'bill',identifier:'HB 1',title:'Public safety'};
  snapshot.legislativeVotes=[
+  {id:'attendance-linked',vote_id:'attendance-linked',occurred_on:'2026-02-03',category:'attendance',term_id:'term',bills:[bill]},
+  {id:'attendance-unlinked',vote_id:'attendance-unlinked',occurred_on:'2026-02-03',category:'attendance',term_id:'term',bills:[]},
   {id:'a',vote_id:'vote-new',occurred_on:'2026-02-02',category:'passage',term_id:'term',bills:[bill,bill]},
   {id:'b',vote_id:'vote-old',occurred_on:'2026-02-01',category:'amendment',term_id:'term',bills:[bill]},
   {id:'c',vote_id:'unlinked',occurred_on:'2026-01-01',category:'passage',term_id:'other',bills:[]},
@@ -26,6 +28,8 @@ test('static legislative grouping counts distinct votes per bill and filters bef
  expect(groupProfileVotes(snapshot,{p_bill_query:'public%'}).total).toBe(1);
  expect(groupProfileVotes(snapshot,{p_term_id:'missing'}).total).toBe(0);
  expect(groupProfileVotes(snapshot,{p_offset:1,p_limit:1}).rows[0].vote_id).toBe('unlinked');
+ expect(groupProfileVotes(snapshot,{p_category:'attendance'})).toEqual({total:0,rows:[]});
+ expect(snapshot.legislativeVotes.filter(v=>v.category==='attendance')).toHaveLength(2);
 });
 
 test('profile exports page sequentially, bound concurrency and share office terms with organizations',async()=>{

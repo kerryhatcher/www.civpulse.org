@@ -32,9 +32,29 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('person bill groups page
         if (i < 30) await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${vote.id},${bills[0]})`;
         if (i === 0) await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${vote.id},${bills[1]}),(${vote.id},${bills[2]})`;
       }
+      // Attendance must affect neither standalone entries nor the latest vote/count
+      // of an associated bill, even when it is newer than all legislative votes.
+      const attendanceIds: string[] = [];
+      for (const linked of [false, true]) {
+        const [vote] = await tx`insert into legislative_votes(session_id,body_id,identifier,occurred_on,question,category,method,outcome)
+          values (${session.id},${body.id},${`attendance-${linked}`},'2026-02-02','Attendance roll call','attendance','roll_call','not_reported') returning id`;
+        attendanceIds.push(vote.id);
+        await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice) values (${vote.id},${service.id},'yes','Yea')`;
+        if (linked) await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${vote.id},${bills[0]})`;
+      }
+      await tx.unsafe(await Bun.file('supabase/migrations/20261123140000_profile_votes_exclude_attendance.sql').text());
       const read = async (offset = 0, limit = 100, category: string | null = null, query: string | null = null) =>
         (await tx`select get_person_legislative_bill_groups(${person.id},null,null,${category},${limit},${offset},${term.id},${query}) result`)[0].result;
+      const checkAttendance = async () => {
+        expect((await read(0,100,'attendance')).total).toBe(0);
+        const raw = (await tx`select get_person_legislative_record(${person.id},null,null,'attendance',100,0) result`)[0].result;
+        expect(raw.total).toBe(2);
+        expect(raw.rows.map((r: any) => r.vote_id).sort()).toEqual([...attendanceIds].sort());
+        const direct = (await tx`select browse_legislation('legislative_votes',${attendanceIds[0]}) result`)[0].result;
+        expect(direct.rows[0].category).toBe('attendance');
+      };
       await tx.unsafe('set local role anon');
+      await checkAttendance();
       let result = await read();
       expect(result.total).toBe(4); // two bills and two unlinked votes
       const regular = result.rows.find((r: any) => r.bill_id === bills[0]);
@@ -65,6 +85,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('person bill groups page
       await tx.unsafe('set local role authenticated');
       await tx`select set_config('request.jwt.claim.sub',${crypto.randomUUID()},true)`;
       expect(await read()).toEqual(result);
+      await checkAttendance();
       await tx.unsafe('reset role');
       const admin = crypto.randomUUID();
       await tx`insert into auth.users(id,email) values (${admin},${`${suffix}@example.test`})`;
@@ -72,6 +93,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('person bill groups page
       await tx.unsafe('set local role authenticated');
       await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
       result = await read();
+      await checkAttendance();
       expect(result.total).toBe(5);
       expect(result.rows.find((r: any) => r.bill_id === bills[0]).vote_count).toBe(30);
       expect(result.rows.find((r: any) => r.bill_id === bills[0]).vote_id).toBe(voteIds[23]);

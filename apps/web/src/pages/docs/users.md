@@ -182,7 +182,10 @@ People profiles show legislative voting history with legislative-term, session, 
 category filters, plus sponsorships. The office and district reflect recorded
 service at the time. Votes are grouped by bill or resolution, showing only the
 latest matching vote and the number of other matching votes by that person.
-Counts and the latest vote follow the selected filters. Use **View bill details
+Counts and the latest vote follow the selected filters. Attendance roll calls are
+excluded from profile history, entry totals, and per-bill vote counts. Their
+underlying source records remain available through direct vote links.
+Use **View bill details
 and vote history** to see the bill's full recorded vote history, or follow the
 latest vote question for its member choices. Bills with the same number in
 different terms or numbering contexts stay separate. Votes without a visible

@@ -46,6 +46,13 @@ test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('public export matches gated
    await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice) values (${v.id},${services[0]},'yes','Yea')`;
    if(i<30)for(const bill of bills)await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${v.id},${bill})`;
   }
+  for(const linked of [false,true]){
+   const [v]=await tx`insert into legislative_votes(session_id,body_id,identifier,occurred_on,question,category,method,outcome)
+    values (${session.id},${body.id},${`attendance-${linked}`},'2026-02-02','Attendance','attendance','roll_call','not_reported') returning id`;
+   await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice) values (${v.id},${services[0]},'yes','Yea')`;
+   if(linked)await tx`insert into legislative_vote_bills(vote_id,bill_id) values (${v.id},${bills[0]})`;
+  }
+  await tx.unsafe(await Bun.file('supabase/migrations/20261123140000_profile_votes_exclude_attendance.sql').text());
   const role=async(name:string,id='')=>{await tx.unsafe(`set local role ${name}`);await tx`select set_config('request.jwt.claim.sub',${id},true)`;};
   await role('anon');
   const exported=async(section:string)=>{
@@ -65,7 +72,8 @@ test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('public export matches gated
   expect((await own('votes')).map(r=>r.vote_id)).toEqual(votes.map(r=>r.vote_id));expect(votes).toHaveLength(55);
   const snapshot=emptyProfileSections();snapshot.legislativeVotes=await own('legislative_votes');
   const keys=(rows:any[])=>rows.map(({group_id,vote_id,vote_count}:any)=>({group_id,vote_id,vote_count}));
-  for(const category of [null,'passage','amendment'])for(const query of [null,'HB','public','unlisted','missing','HB _','QA %']){
+  expect(snapshot.legislativeVotes.filter(v=>v.category==='attendance')).toHaveLength(2);
+  for(const category of [null,'passage','amendment','attendance'])for(const query of [null,'HB','public','unlisted','missing','HB _','QA %']){
    const expected=(await tx`select get_person_legislative_bill_groups(${people[0]},null,null,${category},100,0,${term.id},${query}) result`)[0].result;
    const actual=groupProfileVotes(snapshot,{p_term_id:term.id,p_category:category,p_bill_query:query,p_limit:100});
    expect(actual.total).toBe(expected.total);expect(keys(actual.rows)).toEqual(keys(expected.rows));
