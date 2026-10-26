@@ -1,0 +1,32 @@
+# Civic Pulse
+
+> Civic Pulse helps residents follow local decisions, find community events, and explore the people, organizations, elections, legislation, and places that shape their community, including Macon-Bibb County, Georgia.
+
+Public information can be browsed without an account. Some directories, search results, meeting records, and map layers load in the browser with JavaScript. Public profile pages are static snapshots updated when the site is rebuilt; use the authenticated MCP connection for live searches and supported tools.
+
+Follow source links on individual records for original documents and publishers. Summaries and transcripts may contain errors or omit context; confirm current details with the original source. Calendar times and election dates are shown in America/New_York.
+
+Original Civic Pulse content is licensed under CC BY 4.0 unless otherwise noted. Credit Civic Pulse and named contributors, link to the original page and license, and indicate changes. Third-party material retains its own rights and terms; see the reuse notice below.
+
+## Guides
+
+- [About Civic Pulse](https://www.civpulse.org/about/): Project background, official-source credits, and content reuse terms.
+- [Visitor guide](https://www.civpulse.org/docs/users/): Browse public records, read meeting notes and votes, use maps, and understand visibility.
+- [AI plugins, MCP, and skills](https://www.civpulse.org/docs/ai/): Connect an AI assistant to https://api.civpulse.org/functions/v1/mcp using OAuth, or install civic plugins and skills. Regular accounts can read permitted content; admin tools require admin access.
+
+## Civic information
+
+- [Search Civic Pulse](https://www.civpulse.org/search/): Search public people, organizations, elections, articles, maps, events, and meeting records.
+- [People](https://www.civpulse.org/people/): Officials, candidates, affiliations, office service, and recorded votes.
+- [Organizations](https://www.civpulse.org/orgs/): Organizations and their related people, calendars, and records.
+- [Elections](https://www.civpulse.org/elections/): Contests, candidates, ballot questions, and voting dates and deadlines.
+- [Community calendar](https://www.civpulse.org/calendar/): Events, public meetings, and available meeting notes, transcripts, attendance, votes, and attachments.
+- [Maps](https://www.civpulse.org/maps/): Public maps of places, precincts, and geographic layers.
+- [Legislation](https://www.civpulse.org/legislation/): Bills, legislative sessions, sponsorships, and recorded votes.
+- [Records requests](https://www.civpulse.org/requests/): Public records requests, timelines, fees, outcomes, and supporting material.
+- [Public document archive](https://www.civpulse.org/documents/): Published meeting documents and content search when the archive is configured; otherwise displays a preparation notice.
+
+## Optional
+
+- [Public calendar feed](https://www.civpulse.org/events.ics): iCalendar feed for subscribing to public events.
+- [Sitemap](https://www.civpulse.org/sitemap-index.xml): Discover public pages, including individual profiles.

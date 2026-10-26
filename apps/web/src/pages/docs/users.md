@@ -86,6 +86,9 @@ rights and terms; check its source before reusing it.
 
 ## Connect an AI agent
 
+The [llms.txt overview](/llms.txt) provides AI assistants with a concise guide to
+the site's public information, source and reuse guidance, and key links.
+
 Follow [AI plugins, MCP, and skills](/docs/ai/) for ChatGPT and Codex setup,
 other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflows.
 Each assistant connects through your own Civic Pulse account. Admin tools require
