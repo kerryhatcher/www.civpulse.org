@@ -271,6 +271,18 @@ checks with “Remote migration versions not found in local migrations directory
 If this happens, restore the exact applied file from its source branch after
 comparing it with `supabase_migrations.schema_migrations`; do not delete history
 entries or rerun applied SQL to make the check pass.
+
+The October 26 llms.txt deployment hit this condition for
+`20261026182152_legislative_history_performance_compat.sql`, applied from the
+legislative vote-history branch before PR #25 merged. The recovery restores that
+exact file from commit `1da2477`; its MD5 is
+`19f7659880d9319ea6322d3079aa74ba`, matching production's stored SQL. This is a
+history reconciliation only: do not reapply it or mark it reverted. Its guard
+skips fresh databases until the later legislative schema exists; the originating
+feature branch includes the dependency-ordered follow-up for fresh installations.
+After merging the restored file, require a successful Supabase check for the new
+`main` commit and a successful Cloudflare build before verifying `/llms.txt`.
+
 Redeploy the web Worker after editing prerendered public content in the admin.
 
 ### Manual publishing setup
