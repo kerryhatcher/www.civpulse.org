@@ -1,0 +1,15 @@
+{
+  "source_url": "https://simbli.eboardsolutions.com/SB_Meetings/ViewMeeting.aspx?S=4013&MID=35355",
+  "document_sha256": "d7bcc37ce12bafe704c3b6e52ddf7b882ca54b1aa853e7031479475677ebd4f7",
+  "locator": "LstItemMinutes[1].ChildMinutesLst[0]",
+  "source_item_id": "YphplusBPTIr6anygm63ZhOMA==",
+  "round_locator": "MeetingOnlineVotings[0] (array index, not an official voting ID)",
+  "title": "i. Board Meeting - November 21, 2013",
+  "voting_html": [
+    "<span class='latoBold'>Motion made by:</span>&nbsp;Mr. Thomas Hudson ",
+    "<span class='latoBold'>Motion seconded by:</span>&nbsp;Mrs. Susan K Sipe ",
+    "<li class='d-block w-100 font15'>Yes: Dr. Wanda West </li><li class='d-block w-100 font15'>Yes: Mrs. Susan K Sipe </li><li class='d-block w-100 font15'>Yes: Mrs. Ella S. Carter </li><li class='d-block w-100 font15'>Yes: Mr. Jason E. Downey </li><li class='d-block w-100 font15'>Yes: Mrs. Lynn Farmer </li><li class='d-block w-100 font15'>Yes: Mr. Thomas Hudson </li><li class='d-block w-100 font15'>Yes: Mr. Lester M. Miller </li><li class='d-block w-100 font15'>Yes: Dr. Thelma D. Dillard </li>"
+  ],
+  "original_choice": "Yes: Mr. Lester M. Miller",
+  "outcome": null
+}

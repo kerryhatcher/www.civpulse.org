@@ -601,3 +601,17 @@ election candidate/contest/ballot search, empty results and rapid query changes.
 Signed-in discovery and UUID viewers must retain existing permissions. Test
 private/unlisted fixtures locally and clean them up; check browser console errors.
 A missing snapshot should report failure without falling back to a live search.
+
+### Meeting import and resumable original QA
+
+See [meeting imports](meeting-imports.md#release-and-verification). Apply the new
+migrations locally using `bun run supabase migration up --local --include-all`;
+never apply feature SQL to production. Run the opt-in Auth/MCP/Storage integration
+suite with the local seeded admin and `.env.local` public key. The test uses the
+public Turnstile testing token from the existing local Auth configuration and
+removes its synthetic records/objects. Optional captured-original verification
+reads saved local PDFs; it does not resume source collection.
+
+Meeting-import CI requests `supabase status -o json` explicitly. Supabase's
+auto-detected default output differs between interactive agent sessions and CI;
+do not parse the default `db:status` output as JSON.

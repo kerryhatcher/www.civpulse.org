@@ -229,3 +229,11 @@ public members and roles; election searches include public candidates, contests
 and ballot questions. Use quotes for phrases, `OR` for alternatives and `-word`
 to exclude a word. Signed-in searches keep the existing permitted live view;
 results and relevance order can differ from the published public snapshot.
+
+Meeting attendance may say **Observed at a ballot only** when a named vote is the
+available evidence; this does not establish attendance throughout the meeting.
+**Attendance unknown** and **unknown** vote choices mean the source does not
+support a stronger conclusion. “Vote Not Recorded” is never counted as No,
+abstention, or absence. Recorded ballots can appear before an official outcome
+is known. Anonymous public profile snapshots update after publication; meeting
+viewer records update live.
