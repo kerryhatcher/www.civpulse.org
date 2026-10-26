@@ -3,12 +3,12 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="About this project"
-  description="Civic Pulse is a community-first way to follow local decisions, maps, and events."
+  title="About Civic Pulse"
+  description="Learn about Civic Pulse, its official sources, and how to reuse Civic Pulse content under CC BY 4.0."
 >
   <main id="main">
     <div class="page-intro">
-      <h1>A place to explore. A reason to connect.</h1>
+      <h1>About Civic Pulse</h1>
       <p>Civic Pulse is civic infrastructure for the people who show up.</p>
     </div>
     <div class="prose">
@@ -22,17 +22,75 @@ import Layout from '../layouts/Layout.astro';
       <h2>What you'll find here</h2>
       <p>
         <a href="/maps/">Explore maps</a> to see the places, precincts, and
-        layers that make up a community. Visit the
+        layers that make up a community. Visit the{' '}
         <a href="/calendar/">community calendar</a> to find public meetings,
-        gatherings, and deadlines. Both sections are being built in the open;
-        data will arrive in a later release.
+        gatherings, and deadlines. Browse <a href="/people/">people</a>,{' '}
+        <a href="/orgs/">organizations</a>, <a href="/elections/">elections</a>,{' '}
+        and <a href="/legislation/">legislation</a> to follow the people and
+        decisions that shape your community. No account is required to browse
+        public information.
       </p>
 
-      <h2>Built to stay simple</h2>
+      <h2 id="sources">Official sources and credits</h2>
       <p>
-        This is a static Astro site served from Cloudflare Workers. The backend
-        — accounts, published content, and data — will run on Supabase. No
-        resident account is required to browse.
+        Civic Pulse credits the public agencies and staff who publish the
+        original records that make civic research possible. These official
+        sources provide local government, election, and legislative information:
+      </p>
+      <ul>
+        <li>
+          <a href="https://www.maconbibb.us/">Macon-Bibb County Government</a>{' '}
+          — county departments, commissioners, public notices, and meeting information.
+        </li>
+        <li>
+          <a href="https://www.maconbibb.us/board-of-elections/">Macon-Bibb County Board of Elections</a>{' '}
+          — local election notices, ballots, and voting information.
+        </li>
+        <li>
+          <a href="https://sos.ga.gov/">Georgia Secretary of State</a>{' '}
+          — statewide election information and official business records.
+        </li>
+        <li>
+          <a href="https://www.legis.ga.gov/">Georgia General Assembly</a>{' '}
+          — state legislators, bills, and legislative proceedings.
+        </li>
+        <li>
+          <a href="https://www.congress.gov/">Congress.gov, Library of Congress</a>{' '}
+          — federal legislation, members, and congressional records.
+        </li>
+      </ul>
+      <p>
+        Follow the source links on individual records for the specific documents,
+        recordings, and publishers behind them. This list is a starting point;
+        individual records may credit additional agencies and publishers.
+        Civic Pulse summaries and transcripts may contain errors or omit context.
+        Check the original source for the latest details and the full record.
+      </p>
+
+      <h2 id="license">Share and reuse: CC BY 4.0</h2>
+      <p>
+        Except where otherwise noted, original content created by Civic Pulse is
+        shared under the{' '}
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International (CC BY 4.0) license</a>.
+        You may copy, redistribute, and adapt this content, including for
+        commercial purposes, under the license terms.
+      </p>
+      <p>
+        When reusing content, credit Civic Pulse and any named contributors,
+        link to the original page and the license, and indicate any changes.
+        Retain supplied attribution notices and do not imply endorsement.
+        Do not impose additional legal or technological restrictions on the
+        freedoms the license grants.
+      </p>
+      <p>
+        Example credit: “Source: Civic Pulse, [original page title and URL],
+        licensed under CC BY 4.0. Changes: [describe your changes, if any].”
+      </p>
+      <p>
+        Third-party documents, photographs, logos, recordings, maps, and linked
+        articles remain subject to their own rights and license terms; they are
+        not automatically covered by Civic Pulse’s license. Material already in
+        the public domain remains in the public domain.
       </p>
 
       <h2>Communities first</h2>

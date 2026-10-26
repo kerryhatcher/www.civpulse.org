@@ -75,7 +75,19 @@ You do not need an account to browse public information. To create one, [create 
 
 Information may change. Confirm important meeting, voting, or service details with the organization that published them.
 
+## Sources and reusing content
+
+Open [About this project](/about/) from the footer for official-source credits
+and links. Follow source links on individual records to check the original
+publication. The [reuse notice](/about/#license) explains Civic Pulse’s CC BY 4.0
+license: credit Civic Pulse and named contributors, link to the original page
+and license, and describe your changes. Third-party material retains its own
+rights and terms; check its source before reusing it.
+
 ## Connect an AI agent
+
+The [llms.txt overview](/llms.txt) provides AI assistants with a concise guide to
+the site's public information, source and reuse guidance, and key links.
 
 Follow [AI plugins, MCP, and skills](/docs/ai/) for ChatGPT and Codex setup,
 other MCP clients, OpenAI and Pi plugin repositories, and reusable civic workflows.
@@ -186,3 +198,7 @@ clearing filters returns to page 1. **News & articles** shows 10 articles per pa
 with its own previous/next buttons. Changing either section's page replaces that
 section's cards and leaves the other sections in place. Meeting votes retain
 **Load more votes** for earlier meeting records.
+
+Profiles automatically retry brief connection failures. If votes or articles
+still fail to load, select **Retry legislative history** or **Retry articles**.
+A failed page request keeps the currently displayed votes until the retry succeeds.

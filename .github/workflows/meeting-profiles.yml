@@ -20,4 +20,4 @@ jobs:
           bun-version: '1.4.3'
       - run: bun install --frozen-lockfile
       - run: bun run --bun check
-      - run: bun test scripts/tests/member-mentions.test.ts scripts/tests/meeting-video.test.ts scripts/tests/legislation-display.test.ts
+      - run: bun test scripts/tests/member-mentions.test.ts scripts/tests/meeting-video.test.ts scripts/tests/legislation-display.test.ts scripts/tests/people-build.test.ts scripts/tests/profile-fetch.test.ts

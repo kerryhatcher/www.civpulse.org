@@ -29,6 +29,7 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
   const status = root.querySelector<HTMLElement>('[data-articles-status]')!;
   const list = root.querySelector<HTMLElement>('[data-profile-article-list]')!;
   root.querySelector('[data-article-pagination]')?.remove();
+  root.querySelector('[data-article-retry]')?.remove();
   list.replaceChildren();
   root.hidden = false; status.hidden = false; status.textContent = 'Loading articles…';
   try {
@@ -61,7 +62,11 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
     status.textContent = `${articles.length} articles`;
     status.hidden = articles.length <= pageSize; root.hidden = articles.length === 0;
   } catch {
-    status.textContent = 'Could not load articles. Please reload to try again.';
+    status.textContent = 'Could not load articles. Please try again.';
+    const retry = document.createElement('button');
+    retry.textContent = 'Retry articles'; retry.dataset.articleRetry = '';
+    retry.onclick = () => void loadProfileArticles(kind, id);
+    root.append(retry);
   }
 }
 

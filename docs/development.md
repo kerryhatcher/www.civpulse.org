@@ -52,6 +52,14 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+Profile generation fetches affiliations in sequential groups of 100 people,
+with stable pagination and joined organization details. This avoids hundreds
+of simultaneous Data API requests as the people directory grows. The build
+uses the public client and existing RLS; an affiliation read error stops the
+build instead of silently publishing a profile with missing affiliations.
+Run `bun test scripts/tests/people-build.test.ts` for batching, pagination,
+and error propagation checks.
+
 For the public document archive Worker, local tests and activation sequence, see
 [public-documents.md](./public-documents.md). Publication and content search ship
 disabled; builds do not upload or backfill any meeting files.
@@ -271,6 +279,48 @@ checks with “Remote migration versions not found in local migrations directory
 If this happens, restore the exact applied file from its source branch after
 comparing it with `supabase_migrations.schema_migrations`; do not delete history
 entries or rerun applied SQL to make the check pass.
+
+### Guarding production migration pushes
+
+Develop and test new migrations locally with `bun run db:migrate` or in a
+Supabase preview branch. Merge the migration PR to `main` before production
+application; the existing Supabase GitHub integration remains the normal release
+path. Never apply feature-branch schema SQL to production through MCP, the SQL
+editor, a direct CLI command, or migration-history repair.
+
+For a manual production push, use `bun run db:push --dry-run`, then
+`bun run db:push` from a clean, current `main` checkout. The wrapper
+`scripts/push-production-migrations.mjs` rejects feature branches, unpublished or
+stale commits, and changed/staged/untracked/ignored migration files or config.
+It queries the canonical GitHub repository for the current `main` SHA on every
+invocation; a cached `origin/main`, a CI branch variable, or failed network request
+cannot authorize a push. Detached checkouts must also match current `main`.
+
+The CLI target is pinned to production project `drzcrodqflzkzzbqsags`. Only
+`--dry-run` and `--include-all` are accepted; target/workdir overrides, seed data,
+and custom roles are not supported by this production command. Authentication
+uses the existing local Supabase credentials, never a committed key. Dry runs
+perform the same checks. This wrapper guards the repository command; it cannot
+intercept someone using separate database credentials, MCP, or the dashboard.
+The agent instructions prohibit those bypasses. Keep production credentials out
+of feature-branch automation and retain Supabase's `main` integration.
+
+`bun test scripts/tests/push-production-migrations.test.ts` uses disposable Git
+repositories and a fake CLI callback to prove rejected pushes never reach
+Supabase. The Migration deployment gate workflow runs these tests alongside the
+existing checks that block frontend deployment after failed migration validation.
+
+The October 26 llms.txt deployment hit this condition for
+`20261026182152_legislative_history_performance_compat.sql`, applied from the
+legislative vote-history branch before PR #25 merged. The recovery restores that
+exact file from commit `1da2477`; its MD5 is
+`19f7659880d9319ea6322d3079aa74ba`, matching production's stored SQL. This is a
+history reconciliation only: do not reapply it or mark it reverted. Its guard
+skips fresh databases until the later legislative schema exists; the originating
+feature branch includes the dependency-ordered follow-up for fresh installations.
+After merging the restored file, require a successful Supabase check for the new
+`main` commit and a successful Cloudflare build before verifying `/llms.txt`.
+
 Redeploy the web Worker after editing prerendered public content in the admin.
 
 ### Manual publishing setup
@@ -486,7 +536,20 @@ and applying/clearing vote filters must reset only the vote page. Verify both
 public slug and UUID person viewers, anonymous and signed-in, without console
 errors. Small office/candidacy groups remain visible together.
 
+Profile RPC reads retry transport failures and HTTP 502/503/504 up to twice
+with short delays, preserving the caller's authorization and request body.
+The explicit read allowlist excludes Auth and mutations; permission errors are
+never retried or downgraded to anonymous access. Votes and articles also expose
+Retry buttons after persistent failure. Verify recovery from a failed first
+page and a failed Next request, keeping the current page intact until success.
+Run `bun test scripts/tests/profile-fetch.test.ts` for transport regressions.
+
 The build-time Supabase client limits concurrent requests to six. Static profile
 and organization pages can request many affiliations in parallel; bounding the
 shared client's requests avoids exhausting the hosted PostgREST connection pool.
 This limit applies only to prerendering, not browser data requests.
+## Legislative admin timing checks
+
+When testing a record-type switch, immediately submit a search before reference
+pickers finish loading, then edit a result. The winning request must populate
+the editor before exposing editable results; search must not cancel form setup.

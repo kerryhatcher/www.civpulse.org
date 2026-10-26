@@ -184,6 +184,21 @@ Clients that only support local (stdio) servers can use `mcp-remote`:
 
 ## Deploying
 
+Office history is available without a website session: use `list_offices` to
+resolve the durable seat and `get_office_terms` with a person or organization
+UUID to inspect actual service. Admins use `create_office`, `update_office`,
+`create_office_term` and `update_office_term`; writes use the caller's OAuth
+identity and existing RLS. Record election and reelection dates separately with
+election/contest/candidacy tools. Service dates describe actual tenure, preserve
+source URLs and day/year precision, and must not forecast a departure. Refresh
+the connector's tool catalog after deploying these tools.
+
+The Lester Miller backfill and source/date reconciliation are recorded in
+[`research/lester-miller-office-history-2026-10-26.json`](./research/lester-miller-office-history-2026-10-26.json).
+It records two District 4 school board terms and two mayoral terms, with four
+winning election candidacies. Office terms load live through the public RPC;
+new election slug pages and changed static affiliations require a site rebuild.
+
 ```bash
 bun run mcp:check
 bun run mcp:build

@@ -563,6 +563,8 @@ export async function loadPersonLegislation(personId: string) {
   const list = node("div");
   list.className = "org-list";
   const previousPage = node("button", "Previous votes");
+  const retry = node("button", "Retry legislative history");
+  retry.hidden = true;
   const nextPage = node("button", "Next votes");
   const pageLabel = node("span");
   const pagination = node("nav");
@@ -570,7 +572,7 @@ export async function loadPersonLegislation(personId: string) {
   pagination.setAttribute("aria-label", "Legislative vote pages");
   pagination.append(previousPage, pageLabel, nextPage);
   pagination.hidden = true;
-  root.append(status, list, pagination);
+  root.append(status, retry, list, pagination);
   const pageSize = 20;
   let offset = 0;
   let generation = 0;
@@ -591,8 +593,11 @@ export async function loadPersonLegislation(personId: string) {
       if (reset) {
         requestedOffset = 0;
       }
+      const previousDisabled = previousPage.disabled;
+      const nextDisabled = nextPage.disabled;
       previousPage.disabled = true;
       nextPage.disabled = true;
+      retry.hidden = true;
       try {
         const { data, error } = await getSupabase().rpc(
           "get_person_legislative_record",
@@ -658,9 +663,11 @@ export async function loadPersonLegislation(personId: string) {
         nextPage.disabled = offset + data.rows.length >= data.total;
       } catch (error) {
         if (request !== generation) return;
-        status.textContent = `Could not load votes: ${(error as Error).message}`;
-        previousPage.disabled = offset === 0;
-        nextPage.disabled = false;
+        status.textContent = "Could not load votes. Please try again.";
+        previousPage.disabled = previousDisabled;
+        nextPage.disabled = nextDisabled;
+        retry.hidden = false;
+        retry.onclick = () => void load(reset, requestedOffset);
       }
     }
     controls.onreset = (event) => {
@@ -690,6 +697,8 @@ export async function loadPersonLegislation(personId: string) {
         { p_person_id: personId },
       );
   } catch (error) {
-    status.textContent = `Could not load legislative history: ${(error as Error).message}`;
+    status.textContent = "Could not load legislative history. Please try again.";
+    retry.hidden = false;
+    retry.onclick = () => void loadPersonLegislation(personId);
   }
 }

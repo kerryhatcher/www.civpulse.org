@@ -25,16 +25,6 @@ export function registerLegislativeTools(
     input => readGeorgiaSource(input),
   );
   readRpc(
-    "get_office_terms",
-    "Get dated office service for a person or organization, including office-term UUIDs needed to attribute legislative votes. Reads follow person visibility. Supply at least one context ID; never match historical service by name alone.",
-    { person_id: z.string().uuid().optional(), organization_id: z.string().uuid().optional() },
-    "get_office_terms",
-    ({ person_id, organization_id }) => {
-      if (!person_id && !organization_id) throw new Error("Supply person_id or organization_id");
-      return { p_person_id: person_id ?? null, p_organization_id: organization_id ?? null };
-    },
-  );
-  readRpc(
     "browse_legislation",
     "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.",
     {

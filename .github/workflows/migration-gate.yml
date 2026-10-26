@@ -19,4 +19,4 @@ jobs:
       - name: Set up Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - name: Test deployment blocking
-        run: bun test scripts/tests/check-migrations.test.ts
+        run: bun test scripts/tests/check-migrations.test.ts scripts/tests/push-production-migrations.test.ts
