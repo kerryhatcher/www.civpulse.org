@@ -1105,6 +1105,25 @@ the visibility-aware UUID person viewer. Name linking only considers visible
 attendance and roll-call participants, uses text nodes rather than HTML, and
 leaves ambiguous shortened names unlinked.
 
+### Meeting video URLs
+
+`events.meeting_video_url` is nullable HTTPS text (maximum 2,048 characters),
+allowed only when `is_meeting` is true. It inherits existing event/calendar
+visibility and admin write policies. `get_event`/`get_meeting` return it at
+runtime; no private URL is embedded in static HTML. The meeting editor and MCP
+event writes can set or clear it. The migration copies explicitly labeled
+YouTube/Vimeo "Meeting recording:" URLs from existing descriptions, preserving
+the descriptions and allowing multiple meetings to share one URL.
+
+The browser parses URLs and reconstructs iframe URLs only for exact YouTube and
+Vimeo hosts with valid video IDs. Other valid HTTPS URLs get an external link.
+It never accepts iframe HTML. Players have descriptive titles, fullscreen,
+responsive 16:9 sizing, lazy loading, and no autoplay parameter. YouTube uses its
+[privacy-enhanced embed host](https://support.google.com/youtube/answer/171780)
+and supported start times; Vimeo preserves unlisted-video
+[privacy hashes](https://developer.vimeo.com/player/sdk/basics). A visible original
+link remains available when providers restrict embedding.
+
 ### Meeting text in site search
 
 `search_site` includes meeting notes, transcripts, and each motion's subject,

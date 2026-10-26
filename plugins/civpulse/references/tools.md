@@ -28,8 +28,8 @@ Auth account provisioning/deletion, demotion, password resets, RLS changes and w
 | `create_calendar` | Admin write | Create a calendar (admin only). |
 | `update_calendar` | Admin write | Update a calendar (admin only). |
 | `delete_calendar` | Admin write | Delete a calendar (admin only). |
-| `create_event` | Admin write | Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments. |
-| `update_event` | Admin write | Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved. |
+| `create_event` | Admin write | Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments. |
+| `update_event` | Admin write | Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved. |
 | `delete_event` | Admin write | Delete a calendar event (admin only). |
 | `create_person` | Admin write | Create a person (admin only). |
 | `update_person` | Admin write | Update a person (admin only). |
