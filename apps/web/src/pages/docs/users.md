@@ -179,3 +179,10 @@ vote's **Result: rejected** describe different things. Cloture is procedural and
 must not be read as final passage. On profiles, expand **Filter legislative votes**
 to narrow the record or use **Clear filters**. **Meeting votes** is a separate
 section for votes recorded in local meeting minutes.
+
+Long profile sections have independent page controls. **Legislative record**
+shows 20 choices per page with **Previous votes** and **Next votes**; applying or
+clearing filters returns to page 1. **News & articles** shows 10 articles per page
+with its own previous/next buttons. Changing either section's page replaces that
+section's cards and leaves the other sections in place. Meeting votes retain
+**Load more votes** for earlier meeting records.

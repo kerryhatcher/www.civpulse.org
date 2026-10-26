@@ -28,6 +28,7 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
   if (!root) return;
   const status = root.querySelector<HTMLElement>('[data-articles-status]')!;
   const list = root.querySelector<HTMLElement>('[data-profile-article-list]')!;
+  root.querySelector('[data-article-pagination]')?.remove();
   list.replaceChildren();
   root.hidden = false; status.hidden = false; status.textContent = 'Loading articles…';
   try {
@@ -37,8 +38,28 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
       kind === 'person' ? { p_person_id: id } : { p_organization_id: id });
     if (error) throw error;
     const articles = ((data ?? []) as ProfileArticle[]).filter(article => articleUrl(article.url));
-    list.replaceChildren(...articles.map(renderArticle));
-    status.hidden = true; root.hidden = articles.length === 0;
+    const pages = document.createElement('nav');
+    pages.dataset.articlePagination = '';
+    pages.className = 'org-form-actions';
+    pages.setAttribute('aria-label', 'Article pages');
+    const previous = document.createElement('button'); previous.textContent = 'Previous articles';
+    const next = document.createElement('button'); next.textContent = 'Next articles';
+    const label = document.createElement('span');
+    pages.append(previous, label, next); root.append(pages);
+    let page = 0;
+    const pageSize = 10;
+    const render = () => {
+      list.replaceChildren(...articles.slice(page * pageSize, (page + 1) * pageSize).map(renderArticle));
+      previous.disabled = page === 0;
+      next.disabled = (page + 1) * pageSize >= articles.length;
+      label.textContent = `Page ${page + 1} of ${Math.max(1, Math.ceil(articles.length / pageSize))}`;
+      pages.hidden = articles.length <= pageSize;
+    };
+    previous.onclick = () => { page--; render(); };
+    next.onclick = () => { page++; render(); };
+    render();
+    status.textContent = `${articles.length} articles`;
+    status.hidden = articles.length <= pageSize; root.hidden = articles.length === 0;
   } catch {
     status.textContent = 'Could not load articles. Please reload to try again.';
   }

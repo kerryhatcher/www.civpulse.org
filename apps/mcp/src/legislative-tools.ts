@@ -3,12 +3,37 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { createToolkit } from "./toolkit";
 import { legislativeResources } from "../../web/src/lib/legislation";
+import { readGeorgiaSource } from "./georgia-source";
 
 export function registerLegislativeTools(
   server: McpServer,
   supabase: SupabaseClient,
 ) {
   const { readRpc, register } = createToolkit(server, supabase);
+  register(
+    "get_georgia_legislative_source",
+    "Read official Georgia General Assembly sessions, chamber rosters, vote lists or vote details with provenance and pagination. Use numeric official member IDs to reconcile an existing person and dated office term before import_legislation. isRollCall denotes attendance, not a legislative vote. This read-only tool never imports or guesses identities, outcomes or missing choices.",
+    {
+      resource: z.enum(['sessions', 'members', 'votes', 'vote']),
+      session_id: z.number().int().positive().optional(),
+      chamber: z.enum(['house', 'senate']).optional(),
+      vote_id: z.number().int().positive().optional(),
+      member_id: z.number().int().positive().optional(),
+      limit: z.number().int().min(1).max(100).default(25),
+      offset: z.number().int().min(0).default(0),
+    },
+    input => readGeorgiaSource(input),
+  );
+  readRpc(
+    "get_office_terms",
+    "Get dated office service for a person or organization, including office-term UUIDs needed to attribute legislative votes. Reads follow person visibility. Supply at least one context ID; never match historical service by name alone.",
+    { person_id: z.string().uuid().optional(), organization_id: z.string().uuid().optional() },
+    "get_office_terms",
+    ({ person_id, organization_id }) => {
+      if (!person_id && !organization_id) throw new Error("Supply person_id or organization_id");
+      return { p_person_id: person_id ?? null, p_organization_id: organization_id ?? null };
+    },
+  );
   readRpc(
     "browse_legislation",
     "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.",

@@ -62,3 +62,15 @@ test("legislative tools forward filters and require admin for normalized imports
     true,
   );
 });
+
+test('office lookup requires explicit context and forwards visibility-aware RPC parameters', async () => {
+  const handlers = new Map<string, any>();
+  const calls: any[] = [];
+  registerLegislativeTools({ registerTool: (name: string, _schema: unknown, handler: any) => handlers.set(name, handler) } as never,
+    { rpc: async (name: string, args: unknown) => { calls.push({name,args}); return {data: [], error: null}; } } as never);
+  expect((await handlers.get('get_office_terms')({})).isError).toBe(true);
+  expect(calls).toEqual([]);
+  const id = '00000000-0000-4000-8000-000000000001';
+  await handlers.get('get_office_terms')({ person_id: id });
+  expect(calls).toEqual([{ name: 'get_office_terms', args: { p_person_id: id, p_organization_id: null } }]);
+});

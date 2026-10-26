@@ -9,6 +9,7 @@ import {
   legislativeDate,
 } from "../lib/legislation-display";
 import { getSupabase } from "../lib/supabase";
+import { initLegislativeImport } from "./legislative-import";
 
 export async function initLegislationAdmin() {
   const panel = document.querySelector<HTMLElement>("[data-admin-panel]")!;
@@ -59,6 +60,10 @@ export async function initLegislationAdmin() {
       new URLSearchParams(location.search).get("type") ?? "bills";
     if (!legislativeResources[resource.value]) resource.value = "bills";
     const referenceCache = new Map<string, Promise<LegislativeRow[]>>();
+    initLegislativeImport(async () => {
+      referenceCache.clear();
+      await load();
+    });
     function references(table: string): Promise<LegislativeRow[]> {
       if (!referenceCache.has(table))
         referenceCache.set(table, fetchReferences(table));

@@ -469,3 +469,19 @@ member choice, exact procedural question, readable action labels, person/chamber
 links, sources, timeline, session, sponsorships, and media. Exercise collapsed
 profile filters and reset, admin record search, edit/cancel/save, and source fields.
 Use local fixture copies only; never modify live imported records for UI tests.
+
+For Georgia legislative source reads and MCP office lookup, run
+`bun test scripts/tests/georgia-source.test.ts scripts/tests/mcp-legislation.test.ts`
+and `bun run mcp:check`. The adapter uses only Georgia's public website handshake,
+fixed official API origin, bounded tool pages and request timeouts. Its token is
+never returned. A live source check should compare member ID, district, choice,
+source totals and attendance flag against the official page. Rebuild both the MCP
+bundle (`bun run mcp:build`) and plugin tool references (`bun run plugin:build`)
+after changing tool schemas. Refresh connected-host discovery after deployment.
+
+Profile pagination QA: on a person with more than 20 legislative choices and
+10 linked articles, move forward/back independently in both sections. The card
+count must remain bounded, first-page Previous and last-page Next must disable,
+and applying/clearing vote filters must reset only the vote page. Verify both
+public slug and UUID person viewers, anonymous and signed-in, without console
+errors. Small office/candidacy groups remain visible together.

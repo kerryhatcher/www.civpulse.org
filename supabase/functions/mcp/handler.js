@@ -1300,9 +1300,87 @@ var legislativeResources = {
   }
 };
 
+// apps/mcp/src/georgia-source.ts
+var GEORGIA_API = "https://www.legis.ga.gov/api/";
+function isGeorgiaAttendance(row) {
+  return row.isRollCall === true || /^(?:(?:morning|afternoon|evening)\s+)?(?:roll call|attendance)\s*$/i.test(row.caption?.trim() ?? "");
+}
+var georgiaChoices = [
+  { choice: "yes", source_choice: "Yea" },
+  { choice: "no", source_choice: "Nay" },
+  { choice: "excused", source_choice: "Excused" },
+  { choice: "not_voting", source_choice: "NotVoting" },
+  { choice: "other", source_choice: "Unknown" }
+];
+async function readGeorgiaSource(input, fetcher = fetch) {
+  let path;
+  if (input.resource === "sessions")
+    path = "sessions";
+  else if (input.resource === "vote") {
+    if (!input.vote_id)
+      throw new Error("Supply vote_id");
+    path = `Vote/detail/${input.vote_id}`;
+  } else {
+    if (!input.session_id || !input.chamber)
+      throw new Error("Supply session_id and chamber");
+    const chamber = input.chamber === "house" ? 1 : 2;
+    path = input.resource === "votes" ? `Vote/list/${chamber}/${input.session_id}` : `members/list/${input.session_id}?chamber=${chamber}`;
+  }
+  const ms = Date.now();
+  const bytes = new TextEncoder().encode("QFpCwKfd7fjVEXFFwSu36BwwcP83xYgxLAhLYmKkletvarconst" + ms);
+  const hash = await crypto.subtle.digest("SHA-512", bytes);
+  const key = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join("");
+  const request = async (url, headers) => {
+    const response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "error" });
+    if (!response.ok)
+      throw new Error(`Georgia source returned HTTP ${response.status}`);
+    return response.json();
+  };
+  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`);
+  if (typeof token !== "string" || !token)
+    throw new Error("Invalid Georgia source handshake");
+  const data = await request(GEORGIA_API + path, { Authorization: `Bearer ${token}` });
+  const provenance = { source_system: "legis.ga.gov", source_url: GEORGIA_API + path, retrieved_at: new Date().toISOString() };
+  if (input.resource === "vote") {
+    if (!data || !Array.isArray(data.votes))
+      throw new Error("Invalid Georgia vote detail");
+    const votes = data.votes.filter((row) => input.member_id === undefined || row.member?.id === input.member_id);
+    return {
+      ...provenance,
+      session: data.session,
+      legislation: data.legislation,
+      total: votes.length,
+      member_identity_conflict: input.member_id !== undefined && votes.length > 1,
+      rows: votes.slice(input.offset, input.offset + input.limit).map((row) => ({
+        ...row,
+        ...georgiaChoices[row.memberVoted] ?? { choice: "other", source_choice: String(row.memberVoted) }
+      })),
+      warning: "isRollCall means attendance in this source, not a recorded legislative vote. Missing members are unknown. This endpoint does not import data or reconcile Civic Pulse identities."
+    };
+  }
+  if (!Array.isArray(data))
+    throw new Error("Invalid Georgia source list");
+  const rows = input.member_id === undefined ? data : data.filter((row) => row.id === input.member_id);
+  return { ...provenance, total: rows.length, rows: rows.slice(input.offset, input.offset + input.limit).map((row) => input.resource === "votes" ? { ...row, attendance: isGeorgiaAttendance(row) } : row) };
+}
+
 // apps/mcp/src/legislative-tools.ts
 function registerLegislativeTools(server, supabase) {
   const { readRpc, register } = createToolkit(server, supabase);
+  register("get_georgia_legislative_source", "Read official Georgia General Assembly sessions, chamber rosters, vote lists or vote details with provenance and pagination. Use numeric official member IDs to reconcile an existing person and dated office term before import_legislation. isRollCall denotes attendance, not a legislative vote. This read-only tool never imports or guesses identities, outcomes or missing choices.", {
+    resource: z2.enum(["sessions", "members", "votes", "vote"]),
+    session_id: z2.number().int().positive().optional(),
+    chamber: z2.enum(["house", "senate"]).optional(),
+    vote_id: z2.number().int().positive().optional(),
+    member_id: z2.number().int().positive().optional(),
+    limit: z2.number().int().min(1).max(100).default(25),
+    offset: z2.number().int().min(0).default(0)
+  }, (input) => readGeorgiaSource(input));
+  readRpc("get_office_terms", "Get dated office service for a person or organization, including office-term UUIDs needed to attribute legislative votes. Reads follow person visibility. Supply at least one context ID; never match historical service by name alone.", { person_id: z2.string().uuid().optional(), organization_id: z2.string().uuid().optional() }, "get_office_terms", ({ person_id, organization_id }) => {
+    if (!person_id && !organization_id)
+      throw new Error("Supply person_id or organization_id");
+    return { p_person_id: person_id ?? null, p_organization_id: organization_id ?? null };
+  });
   readRpc("browse_legislation", "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.", {
     table: z2.enum(Object.keys(legislativeResources)).default("bills"),
     id: z2.string().uuid().optional(),
