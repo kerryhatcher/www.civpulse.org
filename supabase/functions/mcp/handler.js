@@ -1432,6 +1432,31 @@ var georgiaChoices = [
   { choice: "not_voting", source_choice: "NotVoting" },
   { choice: "other", source_choice: "Unknown" }
 ];
+async function readGeorgiaSourceViaReader(input, reader, fetcher = fetch) {
+  const url = new URL(reader);
+  if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash)
+    throw new Error("Invalid Georgia reader configuration");
+  for (const [key, value] of Object.entries(input))
+    if (value !== undefined)
+      url.searchParams.set(key, String(value));
+  let response;
+  try {
+    response = await fetcher(url, { signal: AbortSignal.timeout(45000), redirect: "manual" });
+  } catch {
+    throw new Error("Georgia source reader unavailable");
+  }
+  if (!response.ok)
+    throw new Error(`Georgia source reader returned HTTP ${response.status}`);
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Invalid Georgia source reader response");
+  }
+  if (data?.source_system !== "legis.ga.gov" || !String(data.source_url).startsWith(GEORGIA_API) || !Array.isArray(data.rows) || !Number.isInteger(data.total))
+    throw new Error("Invalid Georgia source reader response");
+  return data;
+}
 async function readGeorgiaSource(input, fetcher = fetch) {
   let path;
   if (input.resource === "sessions")
@@ -1450,16 +1475,28 @@ async function readGeorgiaSource(input, fetcher = fetch) {
   const bytes = new TextEncoder().encode("QFpCwKfd7fjVEXFFwSu36BwwcP83xYgxLAhLYmKkletvarconst" + ms);
   const hash = await crypto.subtle.digest("SHA-512", bytes);
   const key = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join("");
-  const request = async (url, headers) => {
-    const response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "error" });
+  const request = async (url, phase, headers) => {
+    let response;
+    try {
+      response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "manual" });
+    } catch (error) {
+      if (error instanceof Error && ["TimeoutError", "AbortError"].includes(error.name)) {
+        throw new Error(`Georgia ${phase} request timed out after 20 seconds`);
+      }
+      throw new Error(`Georgia ${phase} request failed`);
+    }
     if (!response.ok)
       throw new Error(`Georgia source returned HTTP ${response.status}`);
-    return response.json();
+    try {
+      return await response.json();
+    } catch {
+      throw new Error(`Invalid Georgia ${phase} response`);
+    }
   };
-  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`);
+  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`, "handshake");
   if (typeof token !== "string" || !token)
     throw new Error("Invalid Georgia source handshake");
-  const data = await request(GEORGIA_API + path, { Authorization: `Bearer ${token}` });
+  const data = await request(GEORGIA_API + path, "data", { Authorization: `Bearer ${token}` });
   const provenance = { source_system: "legis.ga.gov", source_url: GEORGIA_API + path, retrieved_at: new Date().toISOString() };
   if (input.resource === "vote") {
     if (!data || !Array.isArray(data.votes))
@@ -1486,7 +1523,7 @@ async function readGeorgiaSource(input, fetcher = fetch) {
 }
 
 // apps/mcp/src/legislative-tools.ts
-function registerLegislativeTools(server, supabase) {
+function registerLegislativeTools(server, supabase, sourceReaderUrl) {
   const { readRpc, register } = createToolkit(server, supabase);
   register("get_georgia_legislative_source", "Read official Georgia General Assembly sessions, chamber rosters, vote lists or vote details with provenance and pagination. Use numeric official member IDs to reconcile an existing person and dated office term before import_legislation. isRollCall denotes attendance, not a legislative vote. This read-only tool never imports or guesses identities, outcomes or missing choices.", {
     resource: z3.enum(["sessions", "members", "votes", "vote"]),
@@ -1496,7 +1533,7 @@ function registerLegislativeTools(server, supabase) {
     member_id: z3.number().int().positive().optional(),
     limit: z3.number().int().min(1).max(100).default(25),
     offset: z3.number().int().min(0).default(0)
-  }, (input) => readGeorgiaSource(input));
+  }, (input) => sourceReaderUrl ? readGeorgiaSourceViaReader(input, sourceReaderUrl) : readGeorgiaSource(input));
   readRpc("browse_legislation", "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.", {
     table: z3.enum(Object.keys(legislativeResources)).default("bills"),
     id: z3.string().uuid().optional(),
@@ -1557,18 +1594,47 @@ function registerLegislativeTools(server, supabase) {
     p_limit: limit,
     p_offset: offset
   }));
-  register("import_legislation", "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.", {
+  register("import_legislation", "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. Default mode=atomic preserves the original single-batch transaction and response (at most 100 rows). Explicit mode=batched enables resumable multi-batch imports. Preserve reviewed attendance classifications.", {
     records: z3.array(z3.object({
       table: z3.enum(Object.keys(legislativeResources)),
       data: z3.record(z3.string(), z3.unknown())
-    })).max(100)
-  }, async ({ records }) => {
-    const { data, error } = await supabase.rpc("import_legislation", {
-      p_records: records
-    });
-    if (error)
-      throw new Error(error.message);
-    return data;
+    })).max(1000),
+    mode: z3.enum(["atomic", "batched"]).default("atomic"),
+    start_offset: z3.number().int().min(0).max(1000).default(0)
+  }, async ({ records, start_offset, mode }) => {
+    if (mode === "atomic") {
+      if (records.length > 100 || start_offset !== 0)
+        throw new Error("Atomic imports require at most 100 records and start_offset=0; use mode=batched explicitly for larger imports");
+      const { data, error } = await supabase.rpc("import_legislation", { p_records: records });
+      if (error)
+        throw new Error(error.message);
+      return data;
+    }
+    if (start_offset > records.length)
+      throw new Error("start_offset exceeds bundle length");
+    if (new TextEncoder().encode(JSON.stringify(records)).byteLength > 2000000) {
+      throw new Error("Provide at most 2 MB of normalized records");
+    }
+    let offset = start_offset;
+    while (offset < records.length) {
+      const batch = records.slice(offset, offset + 100);
+      try {
+        const { error } = await supabase.rpc("import_legislation", { p_records: batch });
+        if (error)
+          throw new Error(error.message);
+      } catch (error) {
+        return {
+          status: "partial",
+          imported_count: offset - start_offset,
+          next_offset: offset,
+          total: records.length,
+          error: error instanceof Error ? error.message : "Import batch failed",
+          retry_note: "Retry this bundle from next_offset. Provider keys make a retry safe if the last response was uncertain."
+        };
+      }
+      offset += batch.length;
+    }
+    return { status: "complete", imported_count: offset - start_offset, next_offset: offset, total: records.length };
   }, { write: true, idempotent: true });
   const tableSchema = z3.enum(Object.keys(legislativeResources));
   register("describe_legislative_resource", "Get fields, allowed choices, required values and foreign-key targets for a legislative resource before editing or importing.", { table: tableSchema }, async ({ table }) => legislativeResources[table]);
@@ -2238,7 +2304,7 @@ var ELECTION_DATE_KIND = z10.enum([
   "other"
 ]);
 var PERSON_KIND = z10.enum(["elected_official", "appointed_official", "candidate", "other"]);
-function buildServer(supabase, user, documentContext = {}) {
+function buildServer(supabase, user, documentContext = {}, sourceReaderUrl) {
   const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
   server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z10.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
@@ -2403,7 +2469,7 @@ function buildServer(supabase, user, documentContext = {}) {
   registerElectionResultTools(server, supabase);
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
-  registerLegislativeTools(server, supabase);
+  registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;
@@ -2505,7 +2571,7 @@ async function respond(request, env) {
     } catch {
       return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
     }
-    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }));
+    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }, env.GEORGIA_SOURCE_READER_URL));
     return handler.fetch(request);
   }
   return new Response("Not found", { status: 404 });

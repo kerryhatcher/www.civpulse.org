@@ -5702,12 +5702,12 @@
   },
   {
     "name": "import_legislation",
-    "description": "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records, but preserves an existing attendance vote category. Honor the Georgia adapter's attendance classification even when the source caption or isRollCall flag disagrees. Never import guessed votes or infer identity from names.",
+    "description": "Import up to 1,000 normalized legislative records in ordered, atomic batches of at most 100 (admin only). Each batch commits separately. On a failed batch, returns partial status and next_offset for an idempotent retry; later batches are not attempted. Parents must precede children. Preserve original source IDs, choices and provenance; never guess identities. Default mode=atomic preserves the original single-batch transaction and response (at most 100 rows). Explicit mode=batched enables resumable multi-batch imports. Preserve reviewed attendance classifications.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "records": {
-          "maxItems": 100,
+          "maxItems": 1000,
           "type": "array",
           "items": {
             "type": "object",
@@ -5746,6 +5746,20 @@
               "data"
             ]
           }
+        },
+        "mode": {
+          "default": "atomic",
+          "type": "string",
+          "enum": [
+            "atomic",
+            "batched"
+          ]
+        },
+        "start_offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
         }
       },
       "required": [

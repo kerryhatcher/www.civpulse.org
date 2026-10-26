@@ -83,3 +83,13 @@ rounded to 28%; ballots/registration is approximately 27.67%. Preserve `official
 as distinct from `certified`. The source labels the numerator ballots, not voters.
 The results UI uses voters when reported, otherwise ballots, and labels the basis.
 [Bibb source](https://results.sos.ga.gov/results/public/bibb-county-ga/elections/GeneralPrimary51926).
+
+### CI integration
+
+The MCP workflow runs election tool-schema tests. The existing local-Supabase
+integration job also runs election database and Auth/MCP/Storage tests using a
+synthetic evidence file; it needs no chat attachments or production credentials.
+After integrating current main, legislative batch imports use `import_legislation`
+with explicit `mode=batched` instead of `import_legislation_bundle`. The original
+atomic mode remains the default and preserves its response and 100-record limit.
+This consolidation keeps both workflows within the 128-tool catalog budget.

@@ -230,6 +230,22 @@ and ballot questions. Use quotes for phrases, `OR` for alternatives and `-word`
 to exclude a word. Signed-in searches keep the existing permitted live view;
 results and relevance order can differ from the published public snapshot.
 
+## Read the published public record archive
+
+Open [Public record archive](/records/) from the footer, or follow the published
+archive link from Legislation, Legislative sessions, Community calendar or Records
+requests. Choose a category and use **Next page** / **Previous page** to browse.
+Individual bills, legislative votes, sessions, events/meetings and public requests
+have stable links and readable content without JavaScript. A meeting page includes
+available notes, transcripts, recorded attendance and choices; missing choices
+are unknown, not absences. Coverage includes only records added to Civic Pulse.
+
+Use **Open live record and available files** for the existing interactive viewer,
+file downloads and authorized editing. Unlisted and private records do not appear
+in the archive; existing shared viewer links keep their access rules. Published
+pages change only after a rebuild, including removals and visibility changes.
+Confirm current details with the original source.
+
 Meeting attendance may say **Observed at a ballot only** when a named vote is the
 available evidence; this does not establish attendance throughout the meeting.
 **Attendance unknown** and **unknown** vote choices mean the source does not

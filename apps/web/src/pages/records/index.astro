@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { recordKinds, archiveHref, type RecordKind } from '../../lib/public-records';
+---
+<Layout title="Public record archive" description="Browse published bills, legislative votes and sessions, events, meetings, and public records requests.">
+  <main id="main"><div class="page-intro"><h1>Public record archive</h1><p>Read public civic records with sources and links to the live viewers. These pages are publication snapshots; coverage may be incomplete.</p></div>
+    <ul>{(Object.entries(recordKinds) as [RecordKind, string][]).map(([kind, label]) => <li><a href={archiveHref(kind)}>{label}</a></li>)}</ul>
+    <p>Restricted and unlisted records are not published in this archive. Use an existing shared viewer link for permitted access.</p>
+  </main>
+</Layout>

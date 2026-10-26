@@ -322,6 +322,16 @@ existing normalized importer. Georgia's `isRollCall` flag denotes attendance and
 must not be treated as a legislative vote. Missing choices remain unknown;
 reported totals do not establish an outcome or a complete imported roll call.
 
+The hosted function uses `GEORGIA_SOURCE_READER_URL`, defaulting to
+`https://civpulse-georgia-source.kerryhatcher.workers.dev/`, to run the shared
+adapter through Cloudflare. Direct requests from Supabase to the official Georgia
+origin timed out during the public handshake, even though local Bun/Deno and
+Cloudflare reads succeeded. The reader accepts only bounded, validated Georgia
+resource parameters; it does not accept arbitrary URLs or perform imports.
+Civic Pulse access tokens never leave the MCP function for this read. Without a
+reader URL, runtime-neutral/local MCP uses the direct adapter. Direct errors name
+the handshake or data stage without exposing the handshake key or source token.
+
 If a connected host lacks a documented tool, check the deployed MCP tool list and
 refresh the connection's tool discovery. Extend and deploy the supported app/MCP
 API when a capability is missing; do not substitute ad-hoc database SQL for a

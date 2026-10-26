@@ -6,6 +6,7 @@ Supabase backend.
 ```
 apps/web/     Astro frontend, built to static files
 apps/mcp/     Runtime-neutral MCP source (OIDC via Supabase Auth)
+apps/georgia-source/ Public read-only Georgia API reader on Cloudflare Workers
 apps/kb/      Separate public document publication/search Worker (initially disabled)
 supabase/     Postgres migrations, MCP Edge Function + local Supabase config
 scripts/      dev orchestration and local seed helpers
@@ -197,6 +198,13 @@ forwards the user's access token to Supabase, so RLS applies exactly as it does
 in the web app — reads follow visibility and writes require an admin. The function
 never uses the service-role key. See [mcp.md](./mcp.md).
 
+Georgia source reads use the separate `apps/georgia-source` Cloudflare Worker.
+It runs the shared Georgia adapter against a fixed official API origin and exposes
+only validated session, member, vote-list and vote-detail reads. It has no database
+binding, Civic Pulse credentials, or import capability. The authenticated MCP
+function requests normalized public source data from it without forwarding the
+user's token. The frontend remains a static Astro build.
+
 ## Profile media
 
 Public meeting documents use a separate R2 publication archive and runtime search
@@ -335,6 +343,36 @@ affiliation reads and three static assets; election search reuses cached, gated
 election-detail reads instead of broadening ballot-question table permissions; measure bytes/build time as
 data grows. Static copies already downloaded cannot be recalled after hiding a
 record, so publish promptly when restricting visibility.
+
+### Indexable public record archive
+
+`/records/` links to paginated (50 records per page) archives under
+`/records/{bills,votes,sessions,events,requests}/page/<number>/`. Record pages
+use `/records/<kind>/<uuid>/`: the category is readable and the UUID keeps the
+URL stable when a title changes. Each record and archive page has its own title,
+description and self-canonical and is included by the existing sitemap integration.
+The corresponding live directories and the footer link to these archives.
+
+One shared build snapshot uses the anonymous public client. Legislative records
+and relationships come from paginated `browse_legislation` discovery calls with
+no direct-ID, bill, person or vote context (those contexts can admit unlisted
+records). Calendar export uses `p_public_only`; only discovered public requests
+are hydrated. Public event/calendar/election and request visibility is checked
+again before projection. Backend errors, malformed/duplicate/truncated pages and
+changing counted totals fail the build. Detail hydration uses three workers.
+
+Astro escapes source text; source links permit HTTP(S) only. Pages project public
+facts, notes, transcripts, recorded choices and source links. They never serialize
+request owners/transfers, file storage paths or expiring signed URLs. Files and
+editing remain in the existing live viewers, which retain their current RPC/auth
+rules. No RLS changes, migration, service key or server adapter is introduced.
+Unknown/deleted IDs have no generated page and return the existing static 404.
+
+Publication remains a snapshot: visibility changes and deletions require a rebuild
+to remove previously published pages, like public profiles and map exports. A
+previously downloaded public page cannot be recalled. The export validates paging
+and response gates but is not a transaction spanning concurrent editorial changes;
+rebuild after edits settle. Development caches the snapshot for thirty seconds.
 
 ### Election results and turnout
 
