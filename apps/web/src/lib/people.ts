@@ -1,4 +1,5 @@
 import type { CandidateStatus, ElectionVisibility } from './elections';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { getBuildSupabase, personImageUrl } from './supabase-build';
 
 export type PersonVisibility = 'public' | 'unlisted' | 'private';
@@ -121,47 +122,36 @@ export async function fetchPublicPeople(): Promise<Person[]> {
   }
 }
 
-/** Affiliations for a person, joined with the public organization details. */
-export async function fetchPublicAffiliations(
-  personId: string,
-): Promise<OrganizationAffiliation[]> {
-  const supabase = getBuildSupabase();
-  if (!supabase) return [];
-
-  try {
-    const { data: links, error } = await supabase
-      .from('person_organizations')
-      .select('organization_id, role')
-      .eq('person_id', personId);
-
-    if (error) throw error;
-
-    const organizations = (links ?? []) as { organization_id: string; role: string }[];
-    const ids = organizations.map((link) => link.organization_id);
-    if (ids.length === 0) return [];
-
-    const { data: orgs, error: orgError } = await supabase
-      .from('organizations')
-      .select('id, slug, name')
-      .in('id', ids);
-
-    if (orgError) throw orgError;
-
-    const byId = new Map(
-      ((orgs ?? []) as { id: string; slug: string; name: string }[]).map((org) => [org.id, org]),
-    );
-
-    return organizations
-      .map((link) => {
-        const org = byId.get(link.organization_id);
-        return org ? { ...org, role: link.role } : null;
-      })
-      .filter((value): value is OrganizationAffiliation => value !== null)
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-  } catch (error) {
-    console.warn(`[people] Could not load affiliations: ${String(error)}`);
-    return [];
+/** Batch public profile affiliations without opening one request per person. */
+export async function fetchPublicAffiliationsByPerson(
+  personIds: string[],
+  supabase: SupabaseClient | null = getBuildSupabase(),
+): Promise<Map<string, OrganizationAffiliation[]>> {
+  const grouped = new Map<string, OrganizationAffiliation[]>(personIds.map(id => [id, []]));
+  if (!supabase) return grouped;
+  const ids = [...grouped.keys()];
+  for (let start = 0; start < ids.length; start += 100) {
+    for (let offset = 0; ; offset += 1000) {
+      // The anon client's existing affiliation RLS excludes hidden people.
+      const { data, error } = await supabase.from('person_organizations')
+        .select('person_id, role, organization:organizations(id, slug, name)')
+        .in('person_id', ids.slice(start, start + 100))
+        .order('person_id').order('organization_id').range(offset, offset + 999);
+      if (error) throw new Error(`Could not build profile affiliations: ${error.message}`);
+      const rows = (data ?? []) as unknown as {
+        person_id: string; role: string;
+        organization: { id: string; slug: string; name: string } | null;
+      }[];
+      for (const row of rows) {
+        if (row.organization) grouped.get(row.person_id)?.push({ ...row.organization, role: row.role });
+      }
+      if (rows.length < 1000) break;
+    }
   }
+  for (const affiliations of grouped.values()) {
+    affiliations.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  }
+  return grouped;
 }
 
 /** Public people linked to an organization, with their role, for org pages. */

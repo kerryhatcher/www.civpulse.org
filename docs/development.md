@@ -52,6 +52,14 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+Profile generation fetches affiliations in sequential groups of 100 people,
+with stable pagination and joined organization details. This avoids hundreds
+of simultaneous Data API requests as the people directory grows. The build
+uses the public client and existing RLS; an affiliation read error stops the
+build instead of silently publishing a profile with missing affiliations.
+Run `bun test scripts/tests/people-build.test.ts` for batching, pagination,
+and error propagation checks.
+
 For the public document archive Worker, local tests and activation sequence, see
 [public-documents.md](./public-documents.md). Publication and content search ship
 disabled; builds do not upload or backfill any meeting files.
