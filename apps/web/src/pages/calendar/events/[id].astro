@@ -8,6 +8,6 @@ export async function getStaticPaths() {
 }
 const {event}=Astro.props;
 ---
-<Layout title={event.title} description={event.description ?? 'A public Civic Pulse calendar event.'}>
+<Layout canonicalPath={`/records/events/${event.id}/`} title={event.title} description={event.description ?? 'A public Civic Pulse calendar event.'}>
   <EventView event={event} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} />
 </Layout>
