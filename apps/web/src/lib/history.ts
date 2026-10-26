@@ -1,4 +1,6 @@
+import { legislativeResources } from './legislation';
 export const HISTORY_TYPES: Record<string, string> = {
+  ...Object.fromEntries(Object.entries(legislativeResources).map(([key,value])=>[key,value.label])),
   organizations: 'Organizations', people: 'People', elections: 'Elections',
   offices: 'Offices', office_terms: 'Office service', contests: 'Contests',
   contest_candidates: 'Candidates', ballot_questions: 'Ballot questions',

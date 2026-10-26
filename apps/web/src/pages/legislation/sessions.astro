@@ -1,0 +1,42 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Legislative sessions"
+  description="Regular and special legislative sessions."
+>
+  <main id="main" data-legislation-browser="legislative_sessions">
+    <div class="page-intro">
+      <h1>Legislative sessions</h1>
+      <p>Regular and special sessions within each legislative term.</p>
+    </div>
+    <p>
+      <a href="/legislation/">Browse bills</a>
+    </p>
+    <form class="org-form" data-search>
+      <label class="field">
+        <span>Search sessions</span>
+        <input name="query" type="search" maxlength="500" />
+      </label>
+      <label class="field">
+        <span>Legislative term</span>
+        <select name="term_id">
+          <option value="">All terms</option>
+        </select>
+      </label>
+      <button class="button-link">Search</button>
+    </form>
+    <p data-status role="status">
+      Loading…
+    </p>
+    <div class="org-list" data-results></div>
+    <button data-more hidden>
+      Load more
+    </button>
+  </main>
+</Layout>
+<script>
+  import { initLegislationBrowse } from "../../scripts/legislation";
+  void initLegislationBrowse();
+</script>

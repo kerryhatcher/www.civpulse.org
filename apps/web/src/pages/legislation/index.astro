@@ -1,0 +1,45 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Legislation"
+  description="Follow bills, legislative sessions and recorded votes."
+>
+  <main id="main" data-legislation-browser>
+    <div class="page-intro">
+      <h1>Legislation</h1>
+      <p>
+        Follow bills across legislative sessions, with sponsorships, committee
+        and floor votes, and media coverage.
+      </p>
+    </div>
+    <p>
+      <a href="/legislation/sessions/">Browse sessions</a>
+    </p>
+    <form class="org-form" data-search>
+      <label class="field">
+        <span>Search bills</span>
+        <input name="query" type="search" maxlength="500" />
+      </label>
+      <label class="field">
+        <span>Legislative term</span>
+        <select name="term_id">
+          <option value="">All terms</option>
+        </select>
+      </label>
+      <button class="button-link">Search</button>
+    </form>
+    <p role="status" aria-live="polite" data-status>
+      Loading…
+    </p>
+    <div class="org-list" data-results></div>
+    <button data-more hidden>
+      Load more
+    </button>
+  </main>
+</Layout>
+<script>
+  import { initLegislationBrowse } from "../../scripts/legislation";
+  void initLegislationBrowse();
+</script>

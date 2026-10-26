@@ -1,3 +1,4 @@
+import { loadPersonLegislation } from './legislation';
 import { historyLink } from '../lib/history';
 import { officeLabel, serviceDates, type ProfileOfficeTerm } from '../lib/offices';
 import { personHref } from '../lib/people';
@@ -6,6 +7,7 @@ import { getSupabase } from '../lib/supabase';
 export async function loadOfficeTerms(personId?: string, organizationId?: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-office-terms]');
   if (!root) return;
+  if (personId) void loadPersonLegislation(personId);
   const status = root.querySelector<HTMLElement>('[data-office-status]')!;
   const groups = root.querySelector<HTMLElement>('[data-office-groups]')!;
   root.hidden = false;

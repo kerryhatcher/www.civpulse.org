@@ -145,3 +145,23 @@ A paused or unknown link displays a not-found message. A temporary service error
 asks you to try again. Link owners can see aggregate redirect counts and the last
 visit time, including repeated visits and bots; these statistics do not store
 your IP address, browser identity, or cookies.
+
+## Legislation
+
+[Browse legislation](/legislation/) to search bills and resolutions by title or
+identifier and filter by legislative term. [Sessions](/legislation/sessions/) groups
+regular and special sessions, with links to their bills, actions and votes.
+
+A bill record includes sponsorship history, documented positions, official text
+versions, amendments, a timeline, votes and media coverage. Follow a vote to read
+the exact question and each recorded member choice. A vote on an amendment or
+procedure is different from a vote on final passage. Sponsorship and public support
+are separate from voting choices.
+
+People profiles show legislative voting history with legislative-term, session, chamber/committee, bill-title/identifier and
+category filters, plus sponsorships. The office and district reflect recorded
+service at the time. Missing choices mean the record is unknown, not that the member
+was absent. Voice votes may have an outcome without individual choices. Coverage
+labels describe the imported record; official totals can differ from partial or
+visibility-filtered member lists. Unlisted records require their direct links;
+private records are available only to administrators.

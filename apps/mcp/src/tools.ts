@@ -1,3 +1,4 @@
+import { registerLegislativeTools } from './legislative-tools';
 import { createToolkit, ok, fail } from "./toolkit";
 import { registerExtendedTools } from "./extended-tools";
 import { registerMeetingTools } from "./meeting-tools";
@@ -273,6 +274,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
 
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
+  registerLegislativeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;
 }
