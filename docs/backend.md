@@ -1469,6 +1469,31 @@ under a three-second statement timeout. Synthetic capacity rows skip audit/impor
 triggers only on the test connection; normal trigger behavior is restored before
 reads and the whole transaction rolls back.
 
+The later `20261124010100` migration below supersedes the intermediate
+`20261124000200` wrapper and uses the private `visible_choice_ids` helper.
+Both applied migration files remain in append-only history.
+
+### Public record export and vote-choice browsing
+
+The public archive build reads every discovered vote choice through
+`browse_legislation`. After large legislative imports, recursively checking the
+same vote and office-term parents for every choice exceeded the anonymous
+statement timeout and blocked the entire static deployment (including the sitemap).
+`20261124010100_legislative_choice_browse_performance` resolves visible votes and
+referenced office terms once per query, then joins choices to those permitted IDs.
+The row visibility rule, direct-ID/person/vote contexts, counts, ordering, filters,
+search and detail projections remain unchanged. The helper stays private and the
+public RPC retains its empty search path and existing grants.
+
+Merge this append-only migration to main before applying it through the Supabase
+integration, then rerun the normal Cloudflare production build. Do not increase
+anonymous timeouts or omit choices to make publication pass. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/legislative-choice-browse-db.test.ts`. The test compares
+old/new access results and checks 16,001 choices under a three-second statement
+timeout; its migration and fixtures roll back. After deployment, confirm
+`/records/` returns 200 and the sitemap contains its detail and archive pages.
+
 ## Election result snapshots
 
 Private evidence and immutable, scoped election reports support agent-assisted OCR
