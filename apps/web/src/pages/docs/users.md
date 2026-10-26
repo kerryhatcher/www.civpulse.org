@@ -179,7 +179,8 @@ Counts and the latest vote follow the selected filters. Use **View bill details
 and vote history** to see the bill's full recorded vote history, or follow the
 latest vote question for its member choices. Bills with the same number in
 different terms or numbering contexts stay separate. Votes without a visible
-bill association are listed individually. **Load more** adds further groups.
+bill association are listed individually. Use **Previous votes** and **Next votes**
+to move between groups.
 Missing choices mean the record is unknown, not that the member
 was absent. Voice votes may have an outcome without individual choices. Coverage
 labels describe the imported record; official totals can differ from partial or
@@ -199,3 +200,14 @@ vote's **Result: rejected** describe different things. Cloture is procedural and
 must not be read as final passage. On profiles, expand **Filter legislative votes**
 to narrow the record or use **Clear filters**. **Meeting votes** is a separate
 section for votes recorded in local meeting minutes.
+
+Long profile sections have independent page controls. **Legislative record**
+shows 20 entries per page with **Previous votes** and **Next votes**; applying or
+clearing filters returns to page 1. **News & articles** shows 10 articles per page
+with its own previous/next buttons. Changing either section's page replaces that
+section's cards and leaves the other sections in place. Meeting votes retain
+**Load more votes** for earlier meeting records.
+
+Profiles automatically retry brief connection failures. If votes or articles
+still fail to load, select **Retry legislative history** or **Retry articles**.
+A failed page request keeps the currently displayed votes until the retry succeeds.

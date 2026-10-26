@@ -562,10 +562,26 @@ export async function loadPersonLegislation(personId: string) {
   status.setAttribute("role", "status");
   const list = node("div");
   list.className = "org-list";
-  const more = node("button", "Load more");
-  root.append(status, list, more);
+  const previousPage = node("button", "Previous votes");
+  const retry = node("button", "Retry legislative history");
+  retry.hidden = true;
+  const nextPage = node("button", "Next votes");
+  const pageLabel = node("span");
+  const pagination = node("nav");
+  pagination.className = "org-form-actions";
+  pagination.setAttribute("aria-label", "Legislative vote pages");
+  pagination.append(previousPage, pageLabel, nextPage);
+  pagination.hidden = true;
+  root.append(status, retry, list, pagination);
+  const pageSize = 20;
   let offset = 0;
   let generation = 0;
+  let displayedTotal = 0;
+  let pageLoaded = false;
+  const restoreNavigation = () => {
+    previousPage.disabled = !pageLoaded || offset === 0;
+    nextPage.disabled = !pageLoaded || offset + pageSize >= displayedTotal;
+  };
   try {
     for (const [name, table] of [
       ["term_id", "legislative_terms"],
@@ -578,13 +594,14 @@ export async function loadPersonLegislation(personId: string) {
           selects[name].add(new Option(recordLabel(row), row.id));
         if (start + 100 >= data.total) break;
       }
-    async function load(reset = false) {
+    async function load(reset = false, requestedOffset = offset) {
       const request = ++generation;
       if (reset) {
-        offset = 0;
-        list.replaceChildren();
+        requestedOffset = 0;
       }
-      more.disabled = true;
+      previousPage.disabled = true;
+      nextPage.disabled = true;
+      retry.hidden = true;
       try {
         const { data, error } = await getSupabase().rpc(
           "get_person_legislative_bill_groups",
@@ -595,11 +612,13 @@ export async function loadPersonLegislation(personId: string) {
             p_session_id: selects.session_id.value || null,
             p_body_id: selects.body_id.value || null,
             p_category: category.value.trim() || null,
-            p_offset: offset,
+            p_offset: requestedOffset,
+            p_limit: pageSize,
           },
         );
         if (error) throw error;
         if (request !== generation) return;
+        list.replaceChildren();
         for (const row of data.rows) {
           const card = node("article");
           card.className = "org-card legislation-record";
@@ -659,13 +678,19 @@ export async function loadPersonLegislation(personId: string) {
           }
           list.append(card);
         }
-        offset += data.rows.length;
+        offset = requestedOffset;
+        displayedTotal = data.total;
+        pageLoaded = true;
         status.textContent = `${data.total} ${data.total === 1 ? "entry" : "entries"}, grouped by bill or resolution. Latest matching vote shown; counts follow the selected filters. Votes without a linked bill are listed separately. Missing records do not indicate absence or opposition.`;
-        more.hidden = offset >= data.total;
+        pageLabel.textContent = `Page ${Math.floor(offset / pageSize) + 1} of ${Math.max(1, Math.ceil(data.total / pageSize))}`;
+        pagination.hidden = data.total <= pageSize;
+        restoreNavigation();
       } catch (error) {
-        status.textContent = `Could not load votes: ${(error as Error).message}`;
-      } finally {
-        more.disabled = false;
+        if (request !== generation) return;
+        status.textContent = "Could not load votes. Please try again.";
+        restoreNavigation();
+        retry.hidden = false;
+        retry.onclick = () => void load(reset, requestedOffset);
       }
     }
     controls.onreset = (event) => {
@@ -679,7 +704,8 @@ export async function loadPersonLegislation(personId: string) {
       event.preventDefault();
       void load(true);
     };
-    more.onclick = () => void load();
+    previousPage.onclick = () => void load(false, Math.max(0, offset - pageSize));
+    nextPage.onclick = () => void load(false, offset + pageSize);
     await load(true);
     // Service links are read through their existing visibility gate.
     const { data: terms, error } = await getSupabase().rpc("get_office_terms", {
@@ -694,6 +720,8 @@ export async function loadPersonLegislation(personId: string) {
         { p_person_id: personId },
       );
   } catch (error) {
-    status.textContent = `Could not load legislative history: ${(error as Error).message}`;
+    status.textContent = "Could not load legislative history. Please try again.";
+    retry.hidden = false;
+    retry.onclick = () => void loadPersonLegislation(personId);
   }
 }

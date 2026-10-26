@@ -311,3 +311,22 @@ sponsorships, positions, votes, choices, article links and calendar links. Write
 require admin access. `import_legislation` atomically upserts a parent-first normalized
 bundle using stable source provider/ID pairs (maximum 100 entries). See
 [backend.md](./backend.md#legislative-records) for identity and provenance rules.
+
+`get_office_terms` exposes the site's existing visibility-aware office-history RPC
+for person/organization IDs. Use its dated office-term UUIDs before attributing
+historical legislative choices; no database inspection or name-only join is needed.
+
+`get_georgia_legislative_source` reads the official legis.ga.gov public API. Select
+`sessions`, `members`, `votes`, or `vote`; list calls accept pagination (up to 100
+rows). Rosters/vote lists require a numeric `session_id` and `chamber`; detail
+requires `vote_id` and can filter by numeric `member_id`. Responses retain original
+codes and include source URLs/retrieval timestamps. This is read-only harvesting:
+reconcile the official member and dated Civic Pulse office term before using the
+existing normalized importer. Georgia's `isRollCall` flag denotes attendance and
+must not be treated as a legislative vote. Missing choices remain unknown;
+reported totals do not establish an outcome or a complete imported roll call.
+
+If a connected host lacks a documented tool, check the deployed MCP tool list and
+refresh the connection's tool discovery. Extend and deploy the supported app/MCP
+API when a capability is missing; do not substitute ad-hoc database SQL for a
+content operation.

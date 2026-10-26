@@ -8,6 +8,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
     const rollback = Error("rollback");
     try {
       await sql.begin(async (tx) => {
+        await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261123090000_legislative_history_read_performance.sql', import.meta.url)).text());
         const suffix = crypto.randomUUID();
         const [org] =
           await tx`insert into organizations(name,slug) values ('Legislative QA',${`legislative-${suffix}`}) returning id`;
@@ -300,6 +301,23 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
           )[0].result.total,
         ).toBe(0);
         expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb,'Legislative Member') result`)[0].result.total).toBe(0);
+        // Large histories must remain usable under the public API's statement timeout.
+        await tx.unsafe('reset role');
+        await tx`update people set visibility='public' where id=${person.id}`;
+        await tx`with added as (
+          insert into legislative_votes(session_id,body_id,identifier,occurred_on,question,category,method,outcome)
+          select ${second.id},${body.id},'large-'||n,'2026-02-02','Large history test','procedure','roll_call','not_reported'
+          from generate_series(1,3500) n returning id
+        ) insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice)
+          select id,${service.id},'yes','Yea' from added`;
+        await tx.unsafe('set local role anon');
+        await tx`select set_config('request.jwt.claim.sub','',true)`;
+        await tx.unsafe("set local statement_timeout='3s'");
+        const large = (await tx`select get_person_legislative_record(${person.id},null,null,null,25) result`)[0].result;
+        expect(large.total).toBe(3502);
+        expect(large.rows).toHaveLength(25);
+        expect((await tx`select browse_legislation('legislative_votes',null,${{body_id:body.id}}::jsonb) result`)[0].result.total).toBe(3503);
+        await reject(() => tx`select legislative_private.visible_vote_ids()`, '42501');
         throw rollback;
       });
     } catch (e) {

@@ -1249,6 +1249,32 @@ execution revoked from public, anonymous and authenticated callers.
 
 Legislative browsing searches related display labels (including members, bills, and articles) after materializing visibility-approved rows, preserving hidden-record protections.
 
+The October 26, 2026 Josh McLaurin backfill uses official Georgia member ID 4942
+and existing dated House District 51 / Senate District 14 office terms. Its
+normalized import and audit report live under `docs/research/josh-mclaurin-legislative-*`.
+It covers eight published regular/special session datasets, with 3,342 member
+choices and partial roll-call coverage. Published official totals are retained;
+`not_reported` outcomes avoid inferring a disposition from Yea/Nay counts. Bill
+identifiers remain in question labels; bill introduction dates and bill rows are
+not fabricated. Two 2021 House source records with contradictory duplicate member
+choices are excluded pending source correction, along with attendance records.
+The source adapter adds an `attendance` indicator for attendance captions even
+when Georgia's `isRollCall` flag is false, and flags multiple choices for an explicit
+member ID as `member_identity_conflict`.
+
+Large person histories use a private `visible_vote_ids` helper to resolve shared
+session, body and optional event visibility once. The profile endpoint resolves
+dated service once, counts only permitted choices, pages those choices, and
+hydrates bill labels only for the returned page. The vote directory shares the
+same helper. Private/unlisted parent gates and explicit UUID contexts are
+preserved; no private helper is executable by API roles.
+
+The hosted compatibility migration runs only when the existing legislative
+endpoint is already installed. Fresh resets skip it; the dependency-ordered
+`20261123090000` migration installs the same definitions after the repository's
+established future-dated legislative schema. Both are append-only. The database
+regression uses 3,500 choices with a three-second statement timeout and rolls back.
+
 ## Query performance and foreign-key coverage
 
 The append-only `20261123070000_query_performance_indexes` migration adds covering

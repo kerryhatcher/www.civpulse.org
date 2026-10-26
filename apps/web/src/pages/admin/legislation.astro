@@ -29,6 +29,15 @@ import AdminTabs from "../../components/AdminTabs.astro";
         </a>{" "}
         · <a href="/legislation/">Browse legislation</a>
       </p>
+      <details class="legislation-editor">
+        <summary>Import legislative records</summary>
+        <form class="org-form" data-legislative-import>
+          <p>Choose a normalized JSON array of table and data records, with parents before children. Every record needs source_system and source_id. Existing provider IDs update saved records. Each batch saves atomically; earlier batches remain saved if a later batch stops.</p>
+          <label class="field"><span>Legislative import file</span><input type="file" accept="application/json,.json" required /></label>
+          <p data-import-status role="status" aria-live="polite">Choose a normalized JSON import file.</p>
+          <button type="submit" disabled>Import records</button>
+        </form>
+      </details>
       <label class="field">
         <span>Record type</span>
         <select data-resource></select>

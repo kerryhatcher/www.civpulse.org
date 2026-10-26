@@ -246,6 +246,22 @@ record list and announces the result. Search and Clear affect only the list.
 
 Legislative saved-record search also matches displayed relationship names, such as a member in vote choices. Reference pickers refresh after deletions and can retry failed requests.
 
+### Import legislative records
+
+In **Admin → Legislation**, expand **Import legislative records** and choose a
+normalized JSON file (up to 20 MB / 20,000 records). The preview shows record
+counts and batches before saving. Files contain an array of `{ "table": "…",
+"data": { … } }` records, with `source_system` and `source_id` in every data
+object. Order parents before children and use stable UUIDs for references within
+the file. Describe resource fields through MCP before preparing a file.
+
+Choose **Import records** to save batches of at most 100 records. Every batch is
+atomic; completed batches remain saved if a later batch fails. **Resume import**
+retries the stopped batch. After reloading the page, choose the same file again;
+provider IDs make repeated imports update existing records. Review the saved
+records and public profile afterward. A single-member backfill has partial roll
+call coverage even when the official chamber totals are available.
+
 ### Publishing map changes
 
 Public map layers and stored geometry, including homepage previews, are published
