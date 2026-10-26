@@ -17,11 +17,15 @@ test('MCP meeting video writes validate URLs, preserve omitted fields and allow 
     const id='00000000-0000-4000-8000-000000000001';
     const url='https://vimeo.com/76979871/abc123';
     expect(tool.schema.safeParse({id,meeting_video_url:url}).success).toBe(true);
+    expect(tool.schema.safeParse({id,meeting_video_start_seconds:9491}).success).toBe(true);
+    for(const offset of [-1,1.5,2147483648])expect(tool.schema.safeParse({id,meeting_video_start_seconds:offset}).success).toBe(false);
     for(const value of ['javascript:alert(1)','http://example.test/video',('https://' + 'user:pass@' + 'youtube.com/watch?v=wjYeLMR-3tE')])
       expect(tool.schema.safeParse({id,meeting_video_url:value}).success).toBe(false);
     await tool.handler({id,meeting_video_url:url});expect(patch).toEqual({meeting_video_url:url});
     await tool.handler({id,meeting_notes:'Notes'});expect(patch).toEqual({meeting_notes:'Notes'});
     await tool.handler({id,meeting_video_url:null});expect(patch).toEqual({meeting_video_url:null});
+    await tool.handler({id,meeting_video_start_seconds:0});expect(patch).toEqual({meeting_video_start_seconds:0});
+    await tool.handler({id,meeting_video_start_seconds:null});expect(patch).toEqual({meeting_video_start_seconds:null});
   }finally{register.mockRestore();}
 });
 

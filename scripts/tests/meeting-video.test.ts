@@ -1,5 +1,27 @@
 import {expect,test} from 'bun:test';
-import {meetingVideoUrl,meetingVideoEmbed} from '../../apps/web/src/lib/meeting-video';
+import {meetingVideoUrl,meetingVideoEmbed,meetingVideoWatchUrl,parseMeetingVideoStart,formatMeetingVideoStart} from '../../apps/web/src/lib/meeting-video';
+
+test('optional offsets override URL timestamps, including an explicit zero',()=>{
+  const url='https://www.youtube.com/watch?v=wjYeLMR-3tE&t=30s';
+  expect(meetingVideoEmbed(url,9491)?.src).toEndWith('?start=9491');
+  expect(meetingVideoEmbed(url,0)?.src).toEndWith('?start=0');
+  expect(meetingVideoEmbed(url,null)?.src).toEndWith('?start=30');
+  expect(meetingVideoWatchUrl(url,9491)).toBe('https://www.youtube.com/watch?v=wjYeLMR-3tE&t=9491s');
+  expect(meetingVideoEmbed('https://vimeo.com/76979871/abc123',9491)?.src).toBe('https://player.vimeo.com/video/76979871?h=abc123#t=9491s');
+  expect(meetingVideoWatchUrl('https://vimeo.com/76979871/abc123',0)).toBe('https://vimeo.com/76979871/abc123#t=0s');
+  expect(meetingVideoWatchUrl('https://example.test/video',30)).toBe('https://example.test/video');
+});
+test('editor parses readable times and distinguishes blank from zero',()=>{
+  expect(parseMeetingVideoStart('02:38:11')).toBe(9491);
+  expect(parseMeetingVideoStart('04:35')).toBe(275);
+  expect(parseMeetingVideoStart('275')).toBe(275);
+  expect(parseMeetingVideoStart('0')).toBe(0);
+  expect(parseMeetingVideoStart('')).toBeNull();
+  expect(formatMeetingVideoStart(9491)).toBe('02:38:11');
+  expect(formatMeetingVideoStart(0)).toBe('00:00:00');
+  expect(formatMeetingVideoStart(null)).toBe('');
+  for(const bad of ['-1','1.5','1:60','1:02:60','1:2:3','2147483648'])expect(()=>parseMeetingVideoStart(bad)).toThrow();
+});
 
 test('YouTube watch, short, live, shorts and embed URLs use a canonical player',()=>{
   for(const url of [

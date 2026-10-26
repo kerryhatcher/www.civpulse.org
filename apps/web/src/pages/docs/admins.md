@@ -35,7 +35,14 @@ Admin tools require an account with admin access. [Sign in to the Meetings admin
 
 1. Open [Meetings](/admin/meetings/) and choose the board meeting from the **Meeting** list. The newest meetings appear first.
 2. Enter your notes in **Meeting notes or minutes**. Include the meeting date, the main topics, decisions, and any next steps you can verify. Notes are plain text; use line breaks to keep them readable.
-3. Add an optional **Video URL** for the recording. YouTube and Vimeo show an embedded player; other HTTPS hosts show a watch link. Leave existing notes, transcript and video fields in place when editing another field: **Save meeting details** saves all three. Look for **Meeting details saved.** Clear the video field and save to remove a recording.
+3. Add an optional **Video URL** for the recording. YouTube and Vimeo show an embedded player; other HTTPS hosts show a watch link. Leave existing notes, transcript and video fields in place when editing another field: **Save meeting details** saves these fields together. Look for **Meeting details saved.** Clear the video field and save to remove a recording.
+
+Set **Video start time (optional)** to seconds, `MM:SS`, or `HH:MM:SS` to open
+the recording at that meeting's beginning. It controls the player and the watch
+link without changing the saved URL, so committee and full board meetings can
+share one URL with different start times. Blank uses the URL's/default start;
+`0` explicitly starts at the beginning. Clearing a recording also clears its
+start time in the editor. Save meeting details to apply the change immediately.
 4. Select **View meeting** to check the meeting page. The **Meeting record** section shows the notes to readers who can access that event.
 
 If the meeting is missing from the list, open [Calendars](/admin/calendars/). Create a calendar for its organization if needed. In **Add an event**, choose the calendar, enter the meeting title and start time, check **This is a meeting**, choose its visibility, and select **Create event**. For an existing event, edit it and check **This is a meeting**. Then return to [Meetings](/admin/meetings/).
@@ -51,6 +58,8 @@ Check names, dates, and vote outcomes against the source record before saving. Y
 ### Add meeting files with an AI assistant
 
 `create_event` and `update_event` also accept `meeting_video_url` for meetings.
+Their optional `meeting_video_start_seconds` field accepts a nonnegative whole
+number of seconds. Omit it to preserve the value, or use `null` to clear it.
 Supply an HTTPS video URL, omit it to preserve the current value, or set it to
 `null` to clear it. Back-to-back committee and board meetings can use the same
 recording URL while retaining separate meeting records. Supported YouTube links

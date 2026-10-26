@@ -1107,6 +1107,16 @@ leaves ambiguous shortened names unlinked.
 
 ### Meeting video URLs
 
+`events.meeting_video_start_seconds` is an optional nonnegative integer offset
+(0–2,147,483,647). It is meeting-only metadata with the same visibility and admin
+writes as the URL. Null preserves the URL/default start; an explicit zero overrides
+a URL timestamp. The admin editor accepts seconds, MM:SS or HH:MM:SS and saves
+seconds. MCP event writes expose the nullable integer and preserve it when omitted.
+YouTube iframe `start` parameters and Vimeo `#t=<seconds>s` fragments, plus the
+external watch links, use the explicit offset without modifying the stored URL.
+Unsupported providers retain their original link and display the selected time
+for manual seeking. No start times are inferred from scheduled event times.
+
 `events.meeting_video_url` is nullable HTTPS text (maximum 2,048 characters),
 allowed only when `is_meeting` is true. It inherits existing event/calendar
 visibility and admin write policies. `get_event`/`get_meeting` return it at

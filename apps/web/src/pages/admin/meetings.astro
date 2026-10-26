@@ -21,6 +21,8 @@ import AdminTabs from '../../components/AdminTabs.astro';
           <h2>Recording, notes and transcript</h2>
           <label class="field"><span>Video URL</span><input name="meeting_video_url" type="url" maxlength="2048" placeholder="https://www.youtube.com/watch?v=…" aria-describedby="meeting-video-help" /></label>
           <p id="meeting-video-help">YouTube and Vimeo links show an embedded player. Other HTTPS video links open on the host's site. Meetings can share the same recording URL.</p>
+          <label class="field"><span>Video start time (optional)</span><input name="meeting_video_start_seconds" type="text" placeholder="HH:MM:SS or seconds" aria-describedby="meeting-start-help" /></label>
+          <p id="meeting-start-help">Enter seconds, MM:SS or HH:MM:SS. Leave blank for the video's normal start; use 0 to start at the beginning. Each meeting can start at a different point in a shared recording.</p>
           <label class="field"><span>Meeting notes or minutes</span><textarea name="meeting_notes" rows="8"></textarea></label>
           <label class="field"><span>Transcript</span><textarea name="meeting_transcript" rows="10"></textarea></label>
           <button class="button-link" type="submit">Save meeting details</button>

@@ -16,7 +16,28 @@ function startSeconds(value: string | null): number | null {
   return Number.isSafeInteger(seconds) && seconds > 0 && seconds <= 2147483647 ? seconds : null;
 }
 
-export function meetingVideoEmbed(value: string | null | undefined): { src: string; provider: string } | null {
+function validStart(value: number | null | undefined): number | null {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 2147483647 ? value : null;
+}
+
+/** Empty clears the offset; accept seconds, MM:SS or HH:MM:SS. */
+export function parseMeetingVideoStart(value: string): number | null {
+  const text = value.trim();
+  if (!text) return null;
+  if (!/^\d+(?::[0-5]\d){0,2}$/.test(text)) throw new Error('Enter seconds, MM:SS or HH:MM:SS.');
+  const seconds = text.split(':').reduce((total, part) => total * 60 + Number(part), 0);
+  if (validStart(seconds) === null) throw new Error('Video start must be between 0 and 2147483647 seconds.');
+  return seconds;
+}
+
+export function formatMeetingVideoStart(value: number | null | undefined): string {
+  const seconds = validStart(value);
+  if (seconds === null) return '';
+  return [Math.floor(seconds / 3600), Math.floor(seconds / 60) % 60, seconds % 60]
+    .map(part => String(part).padStart(2, '0')).join(':');
+}
+
+export function meetingVideoEmbed(value: string | null | undefined, startAt?: number | null): { src: string; provider: string } | null {
   const safe = meetingVideoUrl(value);
   if (!safe) return null;
   const url = new URL(safe);
@@ -30,8 +51,8 @@ export function meetingVideoEmbed(value: string | null | undefined): { src: stri
   }
   if (id && /^[\w-]{11}$/.test(id)) {
     const embed = new URL(`https://www.youtube-nocookie.com/embed/${id}`);
-    const start = startSeconds(url.searchParams.get('start') ?? url.searchParams.get('t'));
-    if (start) embed.searchParams.set('start', String(start));
+    const start = validStart(startAt) ?? startSeconds(url.searchParams.get('start') ?? url.searchParams.get('t'));
+    if (start !== null) embed.searchParams.set('start', String(start));
     return {src: embed.href, provider: 'YouTube'};
   }
   if (['vimeo.com', 'www.vimeo.com', 'player.vimeo.com'].includes(host)) {
@@ -40,7 +61,23 @@ export function meetingVideoEmbed(value: string | null | undefined): { src: stri
     const embed = new URL(`https://player.vimeo.com/video/${match[1]}`);
     const hash = url.searchParams.get('h') ?? match[2];
     if (hash && /^[a-zA-Z0-9]{1,128}$/.test(hash)) embed.searchParams.set('h', hash);
+    const start = validStart(startAt);
+    if (start !== null) embed.hash = `t=${start}s`;
     return {src: embed.href, provider: 'Vimeo'};
   }
   return null;
+}
+
+/** Mirror explicit offsets in external links without altering the stored URL. */
+export function meetingVideoWatchUrl(value: string | null | undefined, startAt?: number | null): string | null {
+  const safe = meetingVideoUrl(value);
+  if (!safe) return null;
+  const start = validStart(startAt);
+  if (start === null) return safe;
+  const embed = meetingVideoEmbed(safe, start);
+  const url = new URL(safe);
+  if (embed?.provider === 'YouTube') {
+    url.searchParams.delete('start'); url.searchParams.set('t', `${start}s`); url.hash = '';
+  } else if (embed?.provider === 'Vimeo') url.hash = `t=${start}s`;
+  return url.href;
 }

@@ -1892,6 +1892,7 @@ function buildServer(supabase, user, documentContext = {}) {
   update("calendar", "calendars", "Update a calendar (admin only).", { ...calendarShape, organization_id: calendarShape.organization_id.optional() }, "id, slug, name");
   remove("calendar", "calendars", "Delete a calendar (admin only).");
   const eventShape = {
+    meeting_video_start_seconds: z6.number().int().min(0).max(2147483647).nullish().describe("Optional recording start offset in whole seconds. Overrides URL timestamps. Null uses the URL/default start; zero starts at the beginning. Separate meetings can share a video URL with different offsets."),
     calendar_id: z6.string().uuid(),
     title: z6.string(),
     starts_at: z6.string().describe("ISO 8601 timestamp"),
