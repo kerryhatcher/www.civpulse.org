@@ -48,6 +48,8 @@ get_georgia_legislative_source for official Georgia sessions, rosters and votes.
 Reconcile official numeric member IDs, then describe_legislative_resource and
 import_legislation in parent-first batches. Preserve original choices and source
 provenance. Mark a single-person import as partial coverage; exclude attendance
-records (Georgia isRollCall=true). Never derive outcomes just from Yea/Nay totals.
+records using the adapter's `attendance` classification. Georgia's `isRollCall`
+flag is sometimes false for attendance: check the caption too, including exact
+roll-call/attendance captions. Never derive outcomes just from Yea/Nay totals.
 If an operation requires ad-hoc SQL, add the missing supported app/API/MCP
 capability and verify it before continuing the content task.

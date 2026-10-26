@@ -576,6 +576,12 @@ export async function loadPersonLegislation(personId: string) {
   const pageSize = 20;
   let offset = 0;
   let generation = 0;
+  let displayedTotal = 0;
+  let pageLoaded = false;
+  const restoreNavigation = () => {
+    previousPage.disabled = !pageLoaded || offset === 0;
+    nextPage.disabled = !pageLoaded || offset + pageSize >= displayedTotal;
+  };
   try {
     for (const [name, table] of [
       ["term_id", "legislative_terms"],
@@ -593,8 +599,6 @@ export async function loadPersonLegislation(personId: string) {
       if (reset) {
         requestedOffset = 0;
       }
-      const previousDisabled = previousPage.disabled;
-      const nextDisabled = nextPage.disabled;
       previousPage.disabled = true;
       nextPage.disabled = true;
       retry.hidden = true;
@@ -656,16 +660,16 @@ export async function loadPersonLegislation(personId: string) {
           list.append(card);
         }
         offset = requestedOffset;
+        displayedTotal = data.total;
+        pageLoaded = true;
         status.textContent = `${data.total} recorded ${data.total === 1 ? "choice" : "choices"}. Missing records do not indicate absence or opposition.`;
         pageLabel.textContent = `Page ${Math.floor(offset / pageSize) + 1} of ${Math.max(1, Math.ceil(data.total / pageSize))}`;
         pagination.hidden = data.total <= pageSize;
-        previousPage.disabled = offset === 0;
-        nextPage.disabled = offset + data.rows.length >= data.total;
+        restoreNavigation();
       } catch (error) {
         if (request !== generation) return;
         status.textContent = "Could not load votes. Please try again.";
-        previousPage.disabled = previousDisabled;
-        nextPage.disabled = nextDisabled;
+        restoreNavigation();
         retry.hidden = false;
         retry.onclick = () => void load(reset, requestedOffset);
       }

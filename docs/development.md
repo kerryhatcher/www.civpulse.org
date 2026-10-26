@@ -542,6 +542,8 @@ The explicit read allowlist excludes Auth and mutations; permission errors are
 never retried or downgraded to anonymous access. Votes and articles also expose
 Retry buttons after persistent failure. Verify recovery from a failed first
 page and a failed Next request, keeping the current page intact until success.
+Also submit a filter while Next is pending, fail the newest request, and confirm
+the retained page's navigation is restored rather than left disabled.
 Run `bun test scripts/tests/profile-fetch.test.ts` for transport regressions.
 
 The build-time Supabase client limits concurrent requests to six. Static profile
