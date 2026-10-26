@@ -6,7 +6,7 @@ import { fetchPublicPeople } from './people';
 import { isPublicEvent, publicEvent, publicMeeting, type PublicCalendarSnapshot } from './calendar-snapshot';
 
 export async function loadPublicCalendarData(client: SupabaseClient, publicPeople: Set<string>): Promise<PublicCalendarSnapshot> {
-  const [calendars,events,meetingRows]=await Promise.all([
+  const [calendars,pages]=await Promise.all([
     (async()=>{
       const rows:CalendarRef[]=[];
       for(let offset=0;;offset+=500) {
@@ -17,31 +17,25 @@ export async function loadPublicCalendarData(client: SupabaseClient, publicPeopl
       }
     })(),
     (async()=>{
-      const rows:EventRecord[]=[];
+      const rows:{event:EventRecord;meeting:MeetingRecord|null}[]=[];
       for(let offset=0;;offset+=500) {
-        const {data,error}=await client.rpc('browse_calendar_events',{p_public_only:true,p_offset:offset});
-        if(error) throw new Error(`Event build failed: ${error.message}`);
-        const page=(data??[]) as EventRecord[];rows.push(...page.filter(isPublicEvent).map(publicEvent));
+        const {data,error}=await client.rpc('export_public_calendar_page',{p_offset:offset});
+        if(error) throw new Error(`Calendar event build failed: ${error.message}`);
+        const page=(data??[]) as typeof rows;rows.push(...page);
         if(page.length<500) return rows;
       }
     })(),
-    (async()=>{
-      const rows:{id:string;meeting:MeetingRecord}[]=[];
-      for(let offset=0;;offset+=100) {
-        const {data,error}=await client.rpc('export_public_calendar_meetings',{p_offset:offset,p_limit:100});
-        if(error) throw new Error(`Meeting build failed: ${error.message}`);
-        const page=(data??[]) as typeof rows;rows.push(...page);
-        if(page.length<100) return rows;
-      }
-    })(),
   ]);
+  const publicRows=pages.filter(row=>isPublicEvent(row.event));
+  const events=publicRows.map(row=>publicEvent(row.event));
   const calendarIds=new Set(calendars.map(calendar=>calendar.id));
   const eventIds=new Set(events.map(event=>event.id));
   if(events.some(event=>!calendarIds.has(event.calendar_id))) throw new Error('Missing public event calendar');
   const meetings=new Map<string,MeetingRecord>();
-  for(const row of meetingRows) {
-    if(!eventIds.has(row.id) || row.meeting.event?.id!==row.id) throw new Error('Meeting export parent does not match public events');
-    meetings.set(row.id,publicMeeting(row.meeting,publicPeople));
+  for(const row of publicRows) {
+    if(!row.meeting) continue;
+    if(!eventIds.has(row.event.id) || row.meeting.event?.id!==row.event.id) throw new Error('Meeting export parent does not match public events');
+    meetings.set(row.event.id,publicMeeting(row.meeting,publicPeople));
   }
   if(events.some(event=>event.is_meeting && !meetings.has(event.id))) throw new Error('Missing public meeting export');
   return {calendars,events,meetings};

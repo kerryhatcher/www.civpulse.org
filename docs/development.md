@@ -629,5 +629,5 @@ anchors, video offsets and permission-checked downloads. Test private/unlisted
 event/calendar/election parents and hidden meeting participants with disposable
 local fixtures, inspect exports for restricted IDs/text, remove fixtures, and
 check browser console errors. Missing published files must report failure rather
-than invoke live public readers. The new batch-export migration must be deployed
+than invoke live public readers. The calendar export migrations must be deployed
 before a hosted build; do not bypass the production migration gate.

@@ -131,10 +131,10 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   silently omitted for anonymous visitors.
 - Calendars and events: each calendar belongs to one organization (an
   organization can have many) and each event belongs to one calendar. An event
-  is only visible when both it and its calendar are visible. `/calendar/` browses
-  and filters events by organization/calendar through `search_events`; unlisted
-  and private events use the `/calendar/view/?id=<uuid>` shell gated by
-  `get_event`.
+  is only visible when both it and its calendar are visible. Anonymous `/calendar/`
+  browsing uses static month files; signed-in browsing uses `browse_calendar_events`.
+  Public event pages are `/calendar/events/<uuid>/`; unlisted/private links use
+  `/calendar/view/?id=<uuid>` gated by `get_event`.
 - Meetings are calendar events marked `is_meeting`. Admins add notes, transcripts,
   attendance, votes, and attachments at `/admin/meetings/`. The event viewer
   loads these records through `get_meeting`; private meeting files are served

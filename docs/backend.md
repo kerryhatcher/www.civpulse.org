@@ -1402,16 +1402,19 @@ imports, source conflicts, provenance, TUS originals, checksums and expiry/clean
 
 ## Public calendar meeting export
 
-`export_public_calendar_meetings(p_offset=0,p_limit=100)` batches the existing
-`get_meeting` projection for static publication. It is read-only, security invoker
-with empty search path, requires an anonymous caller, and is granted only to
-`anon`. Public event and calendar parents and any public election parent qualify;
-`get_meeting` still filters attendance/vote participants. The build additionally
-allowlists public people and projects displayed fields explicitly. No table RLS,
-write permissions or Storage policies change. Attachment metadata is public only
-where the existing public meeting reader permits it; signed URLs are generated
-at download time. The follow-up invoker migration uses existing table RLS instead
-of privileged selection. Release both append-only migrations through main before building.
+`export_public_calendar_page(p_offset=0)` composes the existing
+`browse_calendar_events(public_only=true)` and `get_meeting` readers for static
+publication. It is read-only, security invoker with empty search path, rejects
+signed-in callers, and is granted only to `anon`. Each output row has an event
+and optional meeting record; deterministic pages contain up to 500 events,
+including non-meetings so pagination cannot stop early. Public event/calendar/
+election gates and participant filtering remain in the existing readers. The
+build additionally allowlists public people and projects displayed fields.
+No table RLS, write permissions or Storage policies change. Attachment metadata
+follows the existing public meeting reader; signed URLs remain click-time reads.
+The append-only follow-ups retire the initial table-based export: events
+intentionally have no anonymous row policy. Release all migrations through main
+before building.
 
 Run `CALENDAR_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/calendar-snapshot-db.test.ts scripts/tests/calendar-db.test.ts`

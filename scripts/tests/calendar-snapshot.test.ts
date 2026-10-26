@@ -32,7 +32,7 @@ test('public projections exclude hidden parents/participants and unexpected data
  expect(JSON.stringify(snapshot)).not.toContain('Secret');expect(JSON.stringify(snapshot)).not.toContain('hidden');
 });
 
-test('build export pages calendars/events/meetings with three bounded streams and aborts failed pages',async()=>{
+test('build export pages calendars/events/meetings with two bounded streams and aborts failed pages',async()=>{
  const calls:{name:string;offset:number}[]=[];let active=0,max=0,fail=false;
  const client={rpc:(name:string,args:Record<string,unknown>)=>{
    const run=async(offset:number,size:number)=>{
@@ -40,16 +40,16 @@ test('build export pages calendars/events/meetings with three bounded streams an
     const total=name==='list_calendars'?501:1001;
     const data=Array.from({length:Math.min(size,Math.max(0,total-offset))},(_,i)=>{
      const id=String(offset+i);
-     return name==='list_calendars'?{...calendar,id}:name==='browse_calendar_events'?{...event(id),calendar_id:'0',is_meeting:true}:{id,meeting:{...meeting,event:{...meeting.event,id}}};
+     return name==='list_calendars'?{...calendar,id}:{event:{...event(id),calendar_id:'0',is_meeting:true},meeting:{...meeting,event:{...meeting.event,id}}};
     });
     return {data,error:fail&&offset>=500?{message:'offline'}:null};
    };
    if(name==='list_calendars') return {order:()=>({range:(start:number,end:number)=>run(start,end-start+1)})};
-   return run(Number(args.p_offset),name==='export_public_calendar_meetings'?100:500);
+   return run(Number(args.p_offset),500);
  }} as unknown as Parameters<typeof loadPublicCalendarData>[0];
  const data=await loadPublicCalendarData(client,new Set(['public']));
- expect(data.events).toHaveLength(1001);expect(data.calendars).toHaveLength(501);expect(data.meetings.size).toBe(1001);expect(max).toBeLessThanOrEqual(3);
- expect(calls.filter(call=>call.name==='browse_calendar_events').map(call=>call.offset)).toEqual([0,500,1000]);
+ expect(data.events).toHaveLength(1001);expect(data.calendars).toHaveLength(501);expect(data.meetings.size).toBe(1001);expect(max).toBeLessThanOrEqual(2);
+ expect(calls.filter(call=>call.name==='export_public_calendar_page').map(call=>call.offset)).toEqual([0,500,1000]);
  expect(JSON.stringify([...data.meetings.values()])).not.toContain('Secret');
  fail=true;await expect(loadPublicCalendarData(client,new Set())).rejects.toThrow('offline');
 });

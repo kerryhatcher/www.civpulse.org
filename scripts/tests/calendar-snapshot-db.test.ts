@@ -18,7 +18,7 @@ test.skipIf(!process.env.CALENDAR_TEST_DATABASE_URL)('public meeting export page
     people[visibility]=person.id;
    }
    const rows=await tx`insert into events(calendar_id,title,starts_at,is_meeting,meeting_notes,meeting_transcript)
-    select ${calendars.public}::uuid,${tag}||n,'2026-10-31 18:00Z'::timestamptz,true,'Public minutes','Public transcript' from generate_series(1,205) n returning id`;
+    select ${calendars.public}::uuid,${tag}||n,'2026-10-31 18:00Z'::timestamptz,true,'Public minutes','Public transcript' from generate_series(1,505) n returning id`;
    const meetingId=rows[0].id;
    await tx`update events set meeting_video_url='https://www.youtube.com/watch?v=wjYeLMR-3tE',meeting_video_start_seconds=0 where id=${meetingId}`;
    for(const visibility of ['unlisted','private']) {
@@ -31,22 +31,22 @@ test.skipIf(!process.env.CALENDAR_TEST_DATABASE_URL)('public meeting export page
    await tx`insert into meeting_attachments(meeting_id,file_name,storage_path,mime_type,size_bytes) values(${meetingId},'public.txt',${`${meetingId}/public.txt`},'text/plain',6)`;
    await tx.unsafe('set local role anon');
    const all:any[]=[];
-   for(let offset=0;;offset+=100) {
-    const page=await tx`select payload from public.export_public_calendar_meetings(${offset},100) payload`;
-    all.push(...page.map(row=>row.payload));if(page.length<100) break;
+   for(let offset=0;;offset+=500) {
+    const page=await tx`select payload from public.export_public_calendar_page(${offset}) payload`;
+    all.push(...page.map(row=>({id:row.payload.event.id,meeting:row.payload.meeting})));if(page.length<500) break;
    }
    const fixture=all.filter(row=>rows.some(event=>event.id===row.id));
-   expect(fixture).toHaveLength(205);expect(new Set(fixture.map(row=>row.id)).size).toBe(205);
-   expect(all.some(row=>row.meeting.event.title.startsWith('Hidden'))).toBe(false);
+   expect(fixture).toHaveLength(505);expect(new Set(fixture.map(row=>row.id)).size).toBe(505);
+   expect(all.some(row=>row.meeting?.event.title.startsWith('Hidden'))).toBe(false);
    const snapshot=fixture.find(row=>row.id===meetingId).meeting;
    const live=(await tx`select get_meeting(${meetingId}) payload`)[0].payload;
    expect(snapshot.attendance).toEqual(live.attendance);expect(snapshot.votes).toEqual(live.votes);expect(snapshot.attachments).toEqual(live.attachments);
    expect(snapshot.attendance.map(row=>row.person_id)).toEqual([people.public]);expect(snapshot.votes[0].choices).toHaveLength(1);
    expect(snapshot.event.meeting_transcript).toBe('Public transcript');expect(snapshot.event.meeting_video_start_seconds).toBe(0);expect(snapshot.event.meeting_video_url).toContain('wjYeLMR-3tE');expect(snapshot.event).not.toHaveProperty('created_at');
    expect(JSON.stringify(snapshot)).not.toContain(people.private);expect(JSON.stringify(snapshot)).not.toContain(people.unlisted);expect(JSON.stringify(snapshot)).not.toContain('signedUrl');
-   expect((await tx`select has_function_privilege('authenticated','public.export_public_calendar_meetings(integer,integer)','execute') allowed`)[0].allowed).toBe(false);
-   expect((await tx`select has_function_privilege('anon','public.export_public_calendar_meetings(integer,integer)','execute') allowed`)[0].allowed).toBe(true);
-   expect((await tx`select prosecdef from pg_proc where oid='public.export_public_calendar_meetings(integer,integer)'::regprocedure`)[0].prosecdef).toBe(false);
+   expect((await tx`select has_function_privilege('authenticated','public.export_public_calendar_page(integer)','execute') allowed`)[0].allowed).toBe(false);
+   expect((await tx`select has_function_privilege('anon','public.export_public_calendar_page(integer)','execute') allowed`)[0].allowed).toBe(true);
+   expect((await tx`select prosecdef from pg_proc where oid='public.export_public_calendar_page(integer)'::regprocedure`)[0].prosecdef).toBe(false);
    throw rollback;
   });
  }catch(error){if(error!==rollback)throw error;}finally{await db.close();}
