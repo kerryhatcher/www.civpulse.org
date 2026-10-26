@@ -1085,6 +1085,39 @@ Verification: `SHORT_LINKS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.
 bun test scripts/tests/short-links.test.ts scripts/tests/short-links-db.test.ts`.
 Permission fixtures roll back; the concurrent-count fixture is deleted afterward.
 
+## Person voting records
+
+`get_person_votes(p_person_id, p_offset = 0, p_limit = 21)` is a runtime,
+security-definer read RPC with an empty search path and explicit execute grants
+for anon/authenticated. It returns recorded choices with motion details and
+meeting metadata, newest meetings first, then meeting ID, motion position and
+vote ID. Limits are clamped to 1–50; negative offsets become zero. Profiles request
+21 rows and display 20, retaining one lookahead row to offer the next page.
+
+Public and unlisted people can be read by ID; private people require an admin.
+For non-admins, the event, calendar and linked election must all be public and
+the event must still be a meeting. Unlisted meetings stay out of profile discovery.
+Admins can see all three visibility levels. No vote rows are prerendered.
+An index on choices `(person_id, meeting_id, vote_id)` supports the person lookup.
+
+Meeting vote articles have stable `vote-<UUID>` anchors. Participant links use
+the visibility-aware UUID person viewer. Name linking only considers visible
+attendance and roll-call participants, uses text nodes rather than HTML, and
+leaves ambiguous shortened names unlinked.
+
+### Meeting text in site search
+
+`search_site` includes meeting notes, transcripts, and each motion's subject,
+description and outcome in an event's related search text. Both English full-text
+matching/ranking and literal substring matching (including identifiers such as
+`FSS-2`) use that text. It is derived from live meeting records; edits and deleted
+motions require no reindex or rebuild. Only events still marked as meetings
+contribute meeting text. Existing event, calendar and linked-election visibility
+gates apply before matching: anonymous and ordinary signed-in users discover only
+public content; admins can also discover unlisted/private records. Search returns
+the meeting once with its existing event link, regardless of how many motions
+match. It does not publish or copy meeting files to the public archive.
+
 ## People directory pagination
 
 `browse_people(p_query, p_kind, p_sort, p_limit, p_offset)` returns a JSON object

@@ -4,6 +4,7 @@ import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
+import PersonVotes from '../../components/PersonVotes.astro';
 ---
 
 <Layout title="Person" description="View a shared Civic Pulse person record.">
@@ -40,6 +41,8 @@ import PersonCandidacies from '../../components/PersonCandidacies.astro';
 
       <OfficeTerms viewer />
     <section data-person-legislation hidden aria-label="Legislative record"></section>
+
+      <PersonVotes />
       <PersonCandidacies />
       <ProfileArticles />
 

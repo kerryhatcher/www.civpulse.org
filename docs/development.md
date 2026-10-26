@@ -436,3 +436,20 @@ as an ordinary user and as an admin. Verify media links, filters, session carryo
 voice-vote restrictions, private/unlisted references, mobile layout and browser
 console health. Fictional manual browser fixtures must remain local and be cleaned
 up in reverse dependency order. Do not label a partial import as complete coverage.
+
+## Testing member voting records
+
+For site search of meeting notes, transcripts and motions, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-search-db.test.ts`.
+This transactional test applies the search migration and rolls back all changes;
+it verifies punctuation, full-text matching, deduplication, live edits and
+anonymous/non-admin/admin visibility.
+
+Run `bun test scripts/tests/member-mentions.test.ts` for participant-name matching.
+The Meeting profiles CI workflow uses `bun run --bun check` to run Astro with
+Bun rather than the runner's preinstalled Node version.
+With local Supabase running, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-votes-db.test.ts`
+to check profile voting permissions, paging, live edits and meeting visibility.
+The database test creates fixtures and applies the voting-history migration if
+needed inside a transaction that always rolls back, preserving shared local data.

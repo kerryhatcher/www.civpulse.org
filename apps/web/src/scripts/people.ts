@@ -1,6 +1,7 @@
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
+import { loadPersonVotes } from './person-votes';
 import {
   personHref,
   personImageUrl,
@@ -352,6 +353,7 @@ export async function initPersonViewFromUrl(): Promise<void> {
   if (response.person) {
     void loadOfficeTerms(response.person.id);
     void loadPersonCandidacies(response.person.id);
+  void loadPersonVotes(response.person.id);
     void loadProfileArticles('person', response.person.id);
   }
 

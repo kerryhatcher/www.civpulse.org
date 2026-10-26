@@ -23,6 +23,22 @@ attachments remain on their meeting pages.
 
 ## Find a meeting and read its notes
 
+Site [search](/search/) finds meetings by their recorded notes, transcripts,
+motion subjects, motion details, and outcomes as well as their event details.
+For example, search **FSS-2** to find the board meeting containing that motion.
+Choose **Events** to limit results to calendar events and meetings. Open the
+meeting result to read the notes and full voting record. Uploaded file contents
+are searchable separately in the [public document archive](/documents/) when
+those files have been published there.
+
+Member names in meeting attendance, roll calls, notes, and vote details link to
+their profiles. Each profile has a **Voting record** with the member's choice,
+motion, outcome, meeting date, and motion details. Select the meeting title to
+open that exact vote and its full roll call. Use **Load more votes** for older
+records. A profile with no recorded choices says **No votes recorded**.
+Public profiles list public meetings; unlisted meetings remain accessible from
+their direct links. Admins can also see restricted meetings in voting records.
+
 1. Open the [community calendar](/calendar/). Use the month arrows to find a date. Select a day to show its events, or switch to **Agenda** for a list of upcoming events.
 2. Use **Organization**, **Calendar**, **Category**, or **Search events** to narrow the list. Meetings are labeled **Meeting**.
 3. Select the event title to open its page. If records have been added, the **Meeting record** section shows notes or minutes, a transcript, attendance, votes, and downloadable files.
