@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AdminTabs from "../../components/AdminTabs.astro";
+---
+
+<Layout
+  title="Legislation admin"
+  description="Manage sessions, bills, sponsorship and voting records."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Legislative records</h1>
+      <p>
+        Record legislation across sessions, from introduction to committee and
+        floor votes.
+      </p>
+    </div>
+    <AdminTabs />
+    <p data-admin-gate role="status">
+      Checking access…
+    </p>
+    <div data-admin-denied hidden>
+      <p>Admin access is required.</p>
+    </div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <p>
+        <a href="/docs/admins/#legislative-records">
+          Setup and recording guide
+        </a>{" "}
+        · <a href="/legislation/">Browse legislation</a>
+      </p>
+      <label class="field">
+        <span>Record type</span>
+        <select data-resource></select>
+      </label>
+      <form class="org-form" data-legislation-form>
+        <h2 data-form-heading>Add record</h2>
+        <div data-fields></div>
+        <div class="org-form-actions">
+          <button type="submit" class="button-link">
+            Save record
+          </button>
+          <button type="button" data-cancel>
+            New record
+          </button>
+        </div>
+      </form>
+      <p data-message role="status" aria-live="polite"></p>
+      <h2>Saved records</h2>
+      <div class="org-list" data-records></div>
+      <div class="org-form-actions">
+        <button data-previous>Previous</button>
+        <span data-page></span>
+        <button data-next>Next</button>
+      </div>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initLegislationAdmin } from "../../scripts/admin-legislation";
+  void initLegislationAdmin();
+</script>

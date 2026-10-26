@@ -3,6 +3,9 @@
 import { createMcpHandler } from "@modelcontextprotocol/server";
 import { createClient } from "@supabase/supabase-js";
 
+// apps/mcp/src/legislative-tools.ts
+import { z as z2 } from "zod";
+
 // apps/mcp/src/toolkit.ts
 import { z } from "zod";
 function ok(data) {
@@ -112,18 +115,1321 @@ function createToolkit(server, supabase) {
   return { register, readRpc, getRpc, create, update, remove, relationship, ensureAdmin };
 }
 
+// apps/web/src/lib/legislation.ts
+var legislativeResources = {
+  legislative_terms: {
+    label: "Legislative terms",
+    fields: [
+      {
+        name: "organization_id",
+        label: "organization",
+        type: "uuid",
+        required: true,
+        reference: "organizations"
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "name",
+        label: "name",
+        type: "text",
+        required: true
+      },
+      {
+        name: "starts_on",
+        label: "starts on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "ends_on",
+        label: "ends on",
+        type: "date",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_sessions: {
+    label: "Sessions",
+    fields: [
+      {
+        name: "term_id",
+        label: "legislative term",
+        type: "uuid",
+        required: true,
+        reference: "legislative_terms"
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "name",
+        label: "name",
+        type: "text",
+        required: true
+      },
+      {
+        name: "kind",
+        label: "kind",
+        type: "text",
+        required: true,
+        default: "regular",
+        choices: ["regular", "special", "extraordinary"]
+      },
+      {
+        name: "starts_on",
+        label: "starts on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "ends_on",
+        label: "ends on",
+        type: "date",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_bodies: {
+    label: "Chambers & committees",
+    fields: [
+      {
+        name: "organization_id",
+        label: "organization",
+        type: "uuid",
+        required: true,
+        reference: "organizations"
+      },
+      {
+        name: "legislature_id",
+        label: "legislature",
+        type: "uuid",
+        required: true,
+        reference: "organizations"
+      },
+      {
+        name: "kind",
+        label: "kind",
+        type: "text",
+        required: true,
+        choices: ["legislature", "chamber", "committee", "subcommittee"]
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_body_memberships: {
+    label: "Memberships",
+    fields: [
+      {
+        name: "body_id",
+        label: "chamber or committee",
+        type: "uuid",
+        required: true,
+        reference: "legislative_bodies"
+      },
+      {
+        name: "office_term_id",
+        label: "member service",
+        type: "uuid",
+        required: true,
+        reference: "office_terms"
+      },
+      {
+        name: "role",
+        label: "role",
+        type: "text",
+        required: true,
+        default: "member"
+      },
+      {
+        name: "starts_on",
+        label: "starts on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "ends_on",
+        label: "ends on",
+        type: "date",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bills: {
+    label: "Bills & resolutions",
+    fields: [
+      {
+        name: "term_id",
+        label: "legislative term",
+        type: "uuid",
+        required: true,
+        reference: "legislative_terms"
+      },
+      {
+        name: "session_id",
+        label: "session",
+        type: "uuid",
+        required: true,
+        reference: "legislative_sessions"
+      },
+      {
+        name: "body_id",
+        label: "chamber or committee",
+        type: "uuid",
+        required: true,
+        reference: "legislative_bodies"
+      },
+      {
+        name: "numbering_context",
+        label: "numbering context",
+        type: "text",
+        required: true
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "measure_type",
+        label: "measure type",
+        type: "text",
+        required: true,
+        default: "bill"
+      },
+      {
+        name: "title",
+        label: "title",
+        type: "text",
+        required: true
+      },
+      {
+        name: "summary",
+        label: "summary",
+        type: "text",
+        required: false
+      },
+      {
+        name: "introduced_on",
+        label: "introduced on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "status",
+        label: "status",
+        type: "text",
+        required: true,
+        default: "introduced"
+      },
+      {
+        name: "source_status",
+        label: "source status",
+        type: "text",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_versions: {
+    label: "Bill text versions",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "title",
+        label: "title",
+        type: "text",
+        required: true
+      },
+      {
+        name: "published_on",
+        label: "published on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "text_url",
+        label: "text url",
+        type: "text",
+        required: true
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_amendments: {
+    label: "Amendments",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "version_id",
+        label: "version",
+        type: "uuid",
+        required: false,
+        reference: "bill_versions"
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "title",
+        label: "title",
+        type: "text",
+        required: true
+      },
+      {
+        name: "offered_on",
+        label: "offered on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "text_url",
+        label: "text url",
+        type: "text",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_actions: {
+    label: "Bill timeline",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "session_id",
+        label: "session",
+        type: "uuid",
+        required: true,
+        reference: "legislative_sessions"
+      },
+      {
+        name: "body_id",
+        label: "chamber or committee",
+        type: "uuid",
+        required: true,
+        reference: "legislative_bodies"
+      },
+      {
+        name: "occurred_on",
+        label: "occurred on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "sequence",
+        label: "sequence",
+        type: "integer",
+        default: "0",
+        required: true
+      },
+      {
+        name: "kind",
+        label: "kind",
+        type: "text",
+        required: true
+      },
+      {
+        name: "description",
+        label: "description",
+        type: "text",
+        required: true
+      },
+      {
+        name: "event_id",
+        label: "event",
+        type: "uuid",
+        required: false,
+        reference: "events"
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_relationships: {
+    label: "Related bills",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "related_bill_id",
+        label: "related bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "kind",
+        label: "kind",
+        type: "text",
+        required: true,
+        choices: ["companion", "reintroduction", "substitute", "related"]
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_sponsorships: {
+    label: "Sponsorships",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "office_term_id",
+        label: "member service",
+        type: "uuid",
+        required: true,
+        reference: "office_terms"
+      },
+      {
+        name: "role",
+        label: "role",
+        type: "text",
+        required: true,
+        choices: [
+          "introducer",
+          "joint_introducer",
+          "primary_sponsor",
+          "cosponsor",
+          "floor_sponsor",
+          "other"
+        ]
+      },
+      {
+        name: "source_role",
+        label: "source role",
+        type: "text",
+        required: true
+      },
+      {
+        name: "starts_on",
+        label: "starts on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "ends_on",
+        label: "ends on",
+        type: "date",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  bill_positions: {
+    label: "Documented positions",
+    fields: [
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "person_id",
+        label: "person",
+        type: "uuid",
+        required: true,
+        reference: "people"
+      },
+      {
+        name: "position",
+        label: "position",
+        type: "text",
+        required: true,
+        choices: ["support", "oppose", "neutral"]
+      },
+      {
+        name: "stated_on",
+        label: "stated on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "ends_on",
+        label: "ends on",
+        type: "date",
+        required: false
+      },
+      {
+        name: "description",
+        label: "description",
+        type: "text",
+        required: true
+      },
+      {
+        name: "article_id",
+        label: "article",
+        type: "uuid",
+        required: false,
+        reference: "articles"
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_votes: {
+    label: "Votes",
+    fields: [
+      {
+        name: "session_id",
+        label: "session",
+        type: "uuid",
+        required: true,
+        reference: "legislative_sessions"
+      },
+      {
+        name: "body_id",
+        label: "chamber or committee",
+        type: "uuid",
+        required: true,
+        reference: "legislative_bodies"
+      },
+      {
+        name: "identifier",
+        label: "identifier",
+        type: "text",
+        required: true
+      },
+      {
+        name: "occurred_on",
+        label: "occurred on",
+        type: "date",
+        required: true
+      },
+      {
+        name: "occurred_at",
+        label: "occurred at",
+        type: "timestamptz",
+        required: false
+      },
+      {
+        name: "question",
+        label: "question",
+        type: "text",
+        required: true
+      },
+      {
+        name: "category",
+        label: "category",
+        type: "text",
+        required: true
+      },
+      {
+        name: "method",
+        label: "method",
+        type: "text",
+        required: true,
+        choices: [
+          "roll_call",
+          "voice",
+          "division",
+          "unanimous_consent",
+          "other"
+        ]
+      },
+      {
+        name: "outcome",
+        label: "outcome",
+        type: "text",
+        required: true
+      },
+      {
+        name: "threshold",
+        label: "threshold",
+        type: "text",
+        required: false
+      },
+      {
+        name: "reported_yes",
+        label: "reported yes",
+        type: "integer",
+        required: false
+      },
+      {
+        name: "reported_no",
+        label: "reported no",
+        type: "integer",
+        required: false
+      },
+      {
+        name: "reported_other",
+        label: "reported other",
+        type: "integer",
+        required: false
+      },
+      {
+        name: "coverage",
+        label: "coverage",
+        type: "text",
+        required: true,
+        default: "partial",
+        choices: ["complete", "partial", "no_individual_record"]
+      },
+      {
+        name: "event_id",
+        label: "event",
+        type: "uuid",
+        required: false,
+        reference: "events"
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_vote_bills: {
+    label: "Bills affected by votes",
+    fields: [
+      {
+        name: "vote_id",
+        label: "vote",
+        type: "uuid",
+        required: true,
+        reference: "legislative_votes"
+      },
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "action_id",
+        label: "action",
+        type: "uuid",
+        required: false,
+        reference: "bill_actions"
+      },
+      {
+        name: "version_id",
+        label: "version",
+        type: "uuid",
+        required: false,
+        reference: "bill_versions"
+      },
+      {
+        name: "amendment_id",
+        label: "amendment",
+        type: "uuid",
+        required: false,
+        reference: "bill_amendments"
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_vote_choices: {
+    label: "Member votes",
+    fields: [
+      {
+        name: "vote_id",
+        label: "vote",
+        type: "uuid",
+        required: true,
+        reference: "legislative_votes"
+      },
+      {
+        name: "office_term_id",
+        label: "member service",
+        type: "uuid",
+        required: true,
+        reference: "office_terms"
+      },
+      {
+        name: "choice",
+        label: "choice",
+        type: "text",
+        required: true,
+        choices: [
+          "yes",
+          "no",
+          "present",
+          "abstain",
+          "absent",
+          "excused",
+          "not_voting",
+          "paired",
+          "other"
+        ]
+      },
+      {
+        name: "source_choice",
+        label: "source choice",
+        type: "text",
+        required: true
+      },
+      {
+        name: "membership_review_note",
+        label: "membership review note",
+        type: "text",
+        required: false
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  article_bills: {
+    label: "Media coverage",
+    fields: [
+      {
+        name: "article_id",
+        label: "article",
+        type: "uuid",
+        required: true,
+        reference: "articles"
+      },
+      {
+        name: "bill_id",
+        label: "bill",
+        type: "uuid",
+        required: true,
+        reference: "bills"
+      },
+      {
+        name: "role",
+        label: "role",
+        type: "text",
+        required: true,
+        default: "coverage",
+        choices: ["coverage", "analysis", "editorial", "mention"]
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  },
+  legislative_event_links: {
+    label: "Calendar links",
+    fields: [
+      {
+        name: "event_id",
+        label: "event",
+        type: "uuid",
+        required: true,
+        reference: "events"
+      },
+      {
+        name: "session_id",
+        label: "session",
+        type: "uuid",
+        required: true,
+        reference: "legislative_sessions"
+      },
+      {
+        name: "body_id",
+        label: "chamber or committee",
+        type: "uuid",
+        required: true,
+        reference: "legislative_bodies"
+      },
+      {
+        name: "visibility",
+        label: "visibility",
+        type: "text",
+        required: true,
+        choices: ["public", "unlisted", "private"],
+        default: "public"
+      },
+      {
+        name: "source_url",
+        label: "source URL",
+        type: "text"
+      },
+      {
+        name: "source_system",
+        label: "source provider",
+        type: "text"
+      },
+      {
+        name: "source_id",
+        label: "provider record ID",
+        type: "text"
+      },
+      {
+        name: "retrieved_at",
+        label: "retrieved at",
+        type: "timestamptz"
+      }
+    ]
+  }
+};
+
+// apps/mcp/src/legislative-tools.ts
+function registerLegislativeTools(server, supabase) {
+  const { readRpc, register } = createToolkit(server, supabase);
+  readRpc("browse_legislation", "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.", {
+    table: z2.enum(Object.keys(legislativeResources)).default("bills"),
+    id: z2.string().uuid().optional(),
+    filters: z2.record(z2.string(), z2.unknown()).default({}),
+    query: z2.string().max(500).default(""),
+    limit: z2.number().int().min(1).max(100).default(25),
+    offset: z2.number().int().min(0).default(0),
+    bill_id: z2.string().uuid().optional(),
+    person_id: z2.string().uuid().optional(),
+    vote_id: z2.string().uuid().optional()
+  }, "browse_legislation", ({
+    table,
+    id,
+    filters,
+    query,
+    limit,
+    offset,
+    bill_id,
+    person_id,
+    vote_id
+  }) => ({
+    p_table: table,
+    p_id: id ?? null,
+    p_filters: filters,
+    p_query: query,
+    p_limit: limit,
+    p_offset: offset,
+    p_bill_id: bill_id ?? null,
+    p_person_id: person_id ?? null,
+    p_vote_id: vote_id ?? null
+  }));
+  readRpc("get_legislative_vote_totals", "Compare visible member choices against official reported totals; null comparison means incomplete coverage or unspecified totals.", { vote_id: z2.string().uuid() }, "get_legislative_vote_totals", ({ vote_id }) => ({ p_vote_id: vote_id }));
+  readRpc("get_person_legislative_record", "Get historical member vote choices linked to the office held at the time. Missing choices are unknown, never inferred absences. Procedural choices are not endorsements.", {
+    person_id: z2.string().uuid(),
+    session_id: z2.string().uuid().optional(),
+    body_id: z2.string().uuid().optional(),
+    category: z2.string().optional(),
+    term_id: z2.string().uuid().optional(),
+    bill_query: z2.string().max(500).optional(),
+    limit: z2.number().int().min(1).max(100).default(25),
+    offset: z2.number().int().min(0).default(0)
+  }, "get_person_legislative_record", ({
+    person_id,
+    session_id,
+    body_id,
+    category,
+    limit,
+    offset,
+    term_id,
+    bill_query
+  }) => ({
+    p_person_id: person_id,
+    p_session_id: session_id ?? null,
+    p_body_id: body_id ?? null,
+    p_category: category ?? null,
+    p_term_id: term_id ?? null,
+    p_bill_query: bill_query ?? null,
+    p_limit: limit,
+    p_offset: offset
+  }));
+  register("import_legislation", "Atomically import up to 100 normalized legislative records. Each item has table and data with source_system/source_id. Order parents before children; explicit UUIDs connect records. Repeating provider keys updates those records. Never import guessed votes or infer identity from names.", {
+    records: z2.array(z2.object({
+      table: z2.enum(Object.keys(legislativeResources)),
+      data: z2.record(z2.string(), z2.unknown())
+    })).max(100)
+  }, async ({ records }) => {
+    const { data, error } = await supabase.rpc("import_legislation", {
+      p_records: records
+    });
+    if (error)
+      throw new Error(error.message);
+    return data;
+  }, { write: true, idempotent: true });
+  const tableSchema = z2.enum(Object.keys(legislativeResources));
+  register("describe_legislative_resource", "Get fields, allowed choices, required values and foreign-key targets for a legislative resource before editing or importing.", { table: tableSchema }, async ({ table }) => legislativeResources[table]);
+  register("save_legislative_record", "Create or patch a legislative record (admin only). First use describe_legislative_resource. Supply id to patch an existing row; omit it to create. Context cannot be reassigned. For repeatable imports use import_legislation with provider IDs.", {
+    table: tableSchema,
+    id: z2.string().uuid().optional(),
+    data: z2.record(z2.string(), z2.unknown())
+  }, async ({ table, id, data }) => {
+    const values = legislativeInputSchema(table, Boolean(id)).parse(data);
+    if (!Object.keys(values).length)
+      throw new Error("Provide at least one field");
+    const query = id ? supabase.from(table).update(values).eq("id", id) : supabase.from(table).insert(values);
+    const result = await query.select("*").single();
+    if (result.error)
+      throw new Error(result.error.message);
+    return result.data;
+  }, { write: true });
+  register("delete_legislative_record", "Delete a legislative record (admin only). Referenced records must be reconciled first; audit history remains.", { table: tableSchema, id: z2.string().uuid() }, async ({ table, id }) => {
+    const { data, error } = await supabase.from(table).delete().eq("id", id).select("id");
+    if (error)
+      throw new Error(error.message);
+    return { id, deleted: data?.length ?? 0 };
+  }, { write: true, idempotent: true });
+}
+function legislativeInputSchema(table, partial = false) {
+  const config = legislativeResources[table];
+  if (!config)
+    throw new Error("Unknown resource");
+  const shape = {};
+  for (const field of config.fields) {
+    let schema = field.reference ? z2.string().uuid() : field.type === "integer" ? z2.number().int() : z2.string();
+    if (field.choices)
+      schema = z2.enum(field.choices);
+    if (!field.required)
+      schema = schema.nullable().optional();
+    else if (field.default)
+      schema = schema.optional();
+    shape[field.name] = schema;
+  }
+  const schema = z2.strictObject(shape);
+  return partial ? schema.partial() : schema;
+}
+
 // apps/mcp/src/extended-tools.ts
-import { z as z2 } from "zod";
-var uuid = z2.string().uuid();
-var visibility = z2.enum(["public", "unlisted", "private"]);
-var query = z2.string().max(500).default("");
-var limit = z2.number().int().min(1).max(100).default(20);
-var offset = z2.number().int().min(0).default(0);
-var object = z2.record(z2.string(), z2.unknown());
-var url = z2.string().url().max(2000).regex(/^https?:\/\//i);
-var slug = z2.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
-var rowId = z2.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
-var geometry = z2.object({ type: z2.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z2.array(z2.unknown()) });
+import { z as z3 } from "zod";
+var uuid = z3.string().uuid();
+var visibility = z3.enum(["public", "unlisted", "private"]);
+var query = z3.string().max(500).default("");
+var limit = z3.number().int().min(1).max(100).default(20);
+var offset = z3.number().int().min(0).default(0);
+var object = z3.record(z3.string(), z3.unknown());
+var url = z3.string().url().max(2000).regex(/^https?:\/\//i);
+var slug = z3.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+var rowId = z3.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
+var geometry = z3.object({ type: z3.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z3.array(z3.unknown()) });
 function registerExtendedTools(server, supabase, user) {
   const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase);
   async function rpc(name, args) {
@@ -132,7 +1438,7 @@ function registerExtendedTools(server, supabase, user) {
       throw new Error(error.message);
     return data;
   }
-  readRpc("search_site", "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.", { query, type: z2.enum(["organization", "person", "election", "contest", "ballot_question", "article", "map", "layer", "calendar", "event"]).nullish(), limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
+  readRpc("search_site", "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.", { query, type: z3.enum(["organization", "person", "election", "contest", "ballot_question", "article", "map", "layer", "calendar", "event"]).nullish(), limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
   for (const [plural, type] of [["calendars", "calendar"], ["layers", "layer"], ["articles", "article"], ["contests", "contest"], ["ballot_questions", "ballot_question"]]) {
     readRpc(`search_${plural}`, `Search or browse ${plural.replaceAll("_", " ")} with pagination. Use the returned id with get_${type}.`, { query, limit, offset }, "search_site", (input) => ({ p_query: input.query, p_type: type, p_limit: input.limit, p_offset: input.offset }));
   }
@@ -165,9 +1471,9 @@ function registerExtendedTools(server, supabase, user) {
   });
   const map = {
     slug,
-    name: z2.string().min(1).max(120),
-    description: z2.string().max(2000).nullish(),
-    base_map: z2.enum(["osm", "osm-humanitarian", "osm-topo"]).optional(),
+    name: z3.string().min(1).max(120),
+    description: z3.string().max(2000).nullish(),
+    base_map: z3.enum(["osm", "osm-humanitarian", "osm-topo"]).optional(),
     visibility: visibility.optional(),
     organization_id: uuid.nullish(),
     view_options: object.optional()
@@ -176,8 +1482,8 @@ function registerExtendedTools(server, supabase, user) {
   update("map", "maps", "Partially update a map (admin only). Layer links are managed separately.", map, "id,slug,name,visibility,base_map,organization_id,view_options");
   remove("map", "maps", "Delete a map and its layer links, preserving reusable layers (admin only).");
   const layer = {
-    name: z2.string().min(1).max(120),
-    description: z2.string().max(2000).nullish(),
+    name: z3.string().min(1).max(120),
+    description: z3.string().max(2000).nullish(),
     source_url: url.max(1000),
     visibility: visibility.optional(),
     style: object.optional(),
@@ -187,7 +1493,7 @@ function registerExtendedTools(server, supabase, user) {
   update("layer", "layers", "Partially update layer metadata (admin only). This does not replace stored geometry or change its source type.", { ...layer, source_url: layer.source_url.nullish() }, "id,name,source_type,source_url,visibility,style,presentation");
   remove("layer", "layers", "Delete a reusable layer, its stored features and all map links (admin only).");
   register("save_postgis_layer", "Create or update a stored PostGIS layer atomically (admin only). Creation requires name and a GeoJSON FeatureCollection. Use id to update; omitted metadata is preserved. Omit geojson on update to keep features; otherwise the entire dataset is replaced. Limit: 10 MB / 10,000 features.", { id: uuid.optional(), name: layer.name.optional(), description: layer.description, visibility: visibility.optional(), style: object.optional(), presentation: object.optional(), geojson: object.optional() }, async ({ geojson, ...metadata }) => ({ id: await rpc("mcp_save_postgis_layer", { p_layer: defined(metadata), p_geojson: geojson ?? null }) }), { write: true });
-  relationship("map_layer", "map_layers", ["map_id", "layer_id"], { position: z2.number().int().optional(), style: object.nullish(), visible_by_default: z2.boolean().optional() });
+  relationship("map_layer", "map_layers", ["map_id", "layer_id"], { position: z3.number().int().optional(), style: object.nullish(), visible_by_default: z3.boolean().optional() });
   register("list_map_layer_links", "Get editable positions and style overrides for map-layer links (admin only).", { map_id: uuid }, async ({ map_id }) => {
     await ensureAdmin();
     const { data, error } = await supabase.from("map_layers").select("map_id,layer_id,position,style,visible_by_default").eq("map_id", map_id).order("position").order("layer_id");
@@ -197,69 +1503,69 @@ function registerExtendedTools(server, supabase, user) {
   });
   const contest = {
     election_id: uuid,
-    office: z2.string().min(1).max(160),
-    district: z2.string().max(160).nullish(),
-    seat: z2.string().max(160).nullish(),
-    description: z2.string().max(2000).nullish(),
-    partisan: z2.boolean().optional(),
-    position: z2.number().int().optional()
+    office: z3.string().min(1).max(160),
+    district: z3.string().max(160).nullish(),
+    seat: z3.string().max(160).nullish(),
+    description: z3.string().max(2000).nullish(),
+    partisan: z3.boolean().optional(),
+    position: z3.number().int().optional()
   };
   create("contest", "contests", "Create an office contest within an election (admin only).", contest, "id,election_id,office,district,seat,description,partisan,position");
   update("contest", "contests", "Partially update an election contest (admin only).", contest, "id,election_id,office,district,seat,description,partisan,position");
   remove("contest", "contests", "Delete a contest and its candidacy links, preserving people (admin only).");
   relationship("contest_candidate", "contest_candidates", ["contest_id", "person_id"], {
-    party: z2.string().max(120).nullish(),
-    status: z2.enum(["running", "withdrawn", "won", "lost", "runoff", "pending"]).optional(),
-    position: z2.number().int().optional(),
-    is_write_in: z2.boolean().optional()
+    party: z3.string().max(120).nullish(),
+    status: z3.enum(["running", "withdrawn", "won", "lost", "runoff", "pending"]).optional(),
+    position: z3.number().int().optional(),
+    is_write_in: z3.boolean().optional()
   });
   const question = {
     election_id: uuid,
-    title: z2.string().trim().min(1).max(200),
-    question_text: z2.string().trim().min(1).max(20000),
-    description: z2.string().max(4000).nullish(),
-    jurisdiction: z2.string().max(200).nullish(),
-    choices: z2.array(z2.string().min(1).max(4000)).min(2).max(20).optional(),
+    title: z3.string().trim().min(1).max(200),
+    question_text: z3.string().trim().min(1).max(20000),
+    description: z3.string().max(4000).nullish(),
+    jurisdiction: z3.string().max(200).nullish(),
+    choices: z3.array(z3.string().min(1).max(4000)).min(2).max(20).optional(),
     source_url: url.nullish(),
-    position: z2.number().int().optional()
+    position: z3.number().int().optional()
   };
   create("ballot_question", "ballot_questions", "Create a referendum/amendment/ballot question (admin only). Defaults to Yes/No choices.", question, "id,election_id,title,question_text,description,jurisdiction,choices,source_url,position");
   update("ballot_question", "ballot_questions", "Partially update a ballot question (admin only).", question, "id,election_id,title,question_text,description,jurisdiction,choices,source_url,position");
   remove("ballot_question", "ballot_questions", "Delete a ballot question (admin only).");
-  relationship("person_organization", "person_organizations", ["person_id", "organization_id"], { role: z2.string().min(1).max(60) });
+  relationship("person_organization", "person_organizations", ["person_id", "organization_id"], { role: z3.string().min(1).max(60) });
   readRpc("get_organization_relationships", "List related organizations, with labels normalized for the requested profile and source URLs.", { organization_id: uuid }, "get_organization_relationships", ({ organization_id }) => ({ p_organization_id: organization_id }));
   const organizationRelationship = {
     organization_id: uuid,
     related_organization_id: uuid,
-    relationship: z2.string().trim().min(1).max(160),
-    reverse_relationship: z2.string().trim().min(1).max(160),
+    relationship: z3.string().trim().min(1).max(160),
+    reverse_relationship: z3.string().trim().min(1).max(160),
     source_url: url.nullish()
   };
   create("organization_relationship", "organization_relationships", "Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.", organizationRelationship);
   update("organization_relationship", "organization_relationships", "Update an organization relationship by id (admin only). Omitted fields are preserved.", organizationRelationship);
   remove("organization_relationship", "organization_relationships", "Delete an organization relationship from both profiles, preserving both organizations (admin only).");
   const article = {
-    title: z2.string().trim().min(1).max(500),
+    title: z3.string().trim().min(1).max(500),
     url,
     visibility: visibility.optional(),
-    fetched_on: z2.iso.date().nullish(),
-    published_on: z2.iso.date().nullish(),
-    people: z2.array(z2.object({ person_id: uuid, role: z2.string().trim().min(1).max(80).optional() })).optional(),
-    organizations: z2.array(z2.object({ organization_id: uuid, role: z2.string().trim().min(1).max(80).optional() })).optional()
+    fetched_on: z3.iso.date().nullish(),
+    published_on: z3.iso.date().nullish(),
+    people: z3.array(z3.object({ person_id: uuid, role: z3.string().trim().min(1).max(80).optional() })).optional(),
+    organizations: z3.array(z3.object({ organization_id: uuid, role: z3.string().trim().min(1).max(80).optional() })).optional()
   };
   async function saveArticle(input) {
     const { people, organizations, ...metadata } = input;
     return { id: await rpc("mcp_save_article", { p_article: defined(metadata), p_people: people ?? null, p_organizations: organizations ?? null }) };
   }
   register("create_article", "Create an article and optional person/organization links atomically (admin only). Omit unknown dates; never infer publication dates from fetched dates.", article, (input) => saveArticle(input), { write: true, destructive: false });
-  register("update_article", "Partially update an article atomically (admin only). Omitted fields and association sets are preserved; null clears a date and [] clears that link set.", { id: uuid, ...z2.object(article).partial().shape }, async (input) => {
+  register("update_article", "Partially update an article atomically (admin only). Omitted fields and association sets are preserved; null clears a date and [] clears that link set.", { id: uuid, ...z3.object(article).partial().shape }, async (input) => {
     if (Object.keys(defined(input)).length === 1)
       throw new Error("Provide at least one field to update");
     return saveArticle(input);
   }, { write: true, idempotent: true });
   remove("article", "articles", "Delete an article and its association links, preserving people/organizations (admin only).");
-  relationship("article_person", "article_people", ["article_id", "person_id"], { role: z2.string().trim().min(1).max(80).optional() });
-  relationship("article_organization", "article_organizations", ["article_id", "organization_id"], { role: z2.string().trim().min(1).max(80).optional() });
+  relationship("article_person", "article_people", ["article_id", "person_id"], { role: z3.string().trim().min(1).max(80).optional() });
+  relationship("article_organization", "article_organizations", ["article_id", "organization_id"], { role: z3.string().trim().min(1).max(80).optional() });
   for (const [name, table, columns] of [["list_article_people", "article_people", "article_id,person_id,role"], ["list_article_organizations", "article_organizations", "article_id,organization_id,role"]]) {
     register(name, "List editable article association links (admin only). Profile reading lists remain available to other users.", { article_id: uuid }, async ({ article_id }) => {
       await ensureAdmin();
@@ -269,7 +1575,7 @@ function registerExtendedTools(server, supabase, user) {
       return data;
     });
   }
-  const featureFields = { position: z2.number().int().optional(), feature_id: z2.union([z2.string(), z2.number()]).nullish(), properties: object.optional(), geometry };
+  const featureFields = { position: z3.number().int().optional(), feature_id: z3.union([z3.string(), z3.number()]).nullish(), properties: object.optional(), geometry };
   readRpc("search_layer_features", "Search or browse stored feature properties with pagination. IDs are bigint strings. Non-admins must supply a visible map containing the layer.", { layer_id: uuid, map_id: uuid.nullish(), query, limit, offset }, "mcp_layer_features", (input) => ({
     p_layer_id: input.layer_id,
     p_map_id: input.map_id ?? null,
@@ -282,7 +1588,7 @@ function registerExtendedTools(server, supabase, user) {
     return data?.length ? { status: "ok", feature: data[0] } : { status: "missing" };
   });
   register("create_layer_feature", "Create a stored-layer feature atomically (admin only). Geometry must be WGS84 longitude/latitude. Position defaults to the next available position.", { layer_id: uuid, ...featureFields }, async ({ layer_id, ...feature }) => ({ id: await rpc("mcp_save_layer_feature", { p_layer_id: layer_id, p_feature: defined(feature) }), layer_id }), { write: true, destructive: false });
-  register("update_layer_feature", "Partially update a stored feature without replacing the dataset (admin only). null clears the source feature_id; internal id remains unchanged.", { layer_id: uuid, id: rowId, ...z2.object(featureFields).partial().shape }, async ({ layer_id, id, ...feature }) => {
+  register("update_layer_feature", "Partially update a stored feature without replacing the dataset (admin only). null clears the source feature_id; internal id remains unchanged.", { layer_id: uuid, id: rowId, ...z3.object(featureFields).partial().shape }, async ({ layer_id, id, ...feature }) => {
     if (!Object.keys(defined(feature)).length)
       throw new Error("Provide at least one field to update");
     return { id: await rpc("mcp_save_layer_feature", { p_layer_id: layer_id, p_id: id, p_feature: defined(feature) }), layer_id };
@@ -299,22 +1605,22 @@ function registerExtendedTools(server, supabase, user) {
       throw new Error(error.message);
     return data;
   });
-  register("update_my_profile", "Update your own display name (admin only). This does not grant admin access or edit another user.", { display_name: z2.string().min(1).max(80).nullable() }, async ({ display_name }) => {
+  register("update_my_profile", "Update your own display name (admin only). This does not grant admin access or edit another user.", { display_name: z3.string().min(1).max(80).nullable() }, async ({ display_name }) => {
     const { data, error } = await supabase.from("profiles").update({ display_name }).eq("id", user.id).select("id,display_name").single();
     if (error)
       throw new Error(error.message);
     return data;
   }, { write: true, idempotent: true });
-  const bucket = z2.enum(["org-logos", "person-images"]);
-  const path = z2.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine((value) => !value.split("/").some((part) => !part || part === "." || part === ".."), "Use a relative object path without dot segments");
-  register("list_images", "Browse/search public organization logos or person images, with pagination.", { bucket, prefix: z2.string().max(512).default(""), search: z2.string().max(200).default(""), limit, offset }, async (input) => {
+  const bucket = z3.enum(["org-logos", "person-images"]);
+  const path = z3.string().min(1).max(512).regex(/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/).refine((value) => !value.split("/").some((part) => !part || part === "." || part === ".."), "Use a relative object path without dot segments");
+  register("list_images", "Browse/search public organization logos or person images, with pagination.", { bucket, prefix: z3.string().max(512).default(""), search: z3.string().max(200).default(""), limit, offset }, async (input) => {
     const { data, error } = await supabase.storage.from(input.bucket).list(input.prefix, { search: input.search, limit: input.limit, offset: input.offset, sortBy: { column: "name", order: "asc" } });
     if (error)
       throw new Error(error.message);
     return data;
   });
   register("get_image_url", "Get the public URL for an organization logo or person image.", { bucket, path }, async (input) => ({ path: input.path, url: supabase.storage.from(input.bucket).getPublicUrl(input.path).data.publicUrl }));
-  register("upload_image", "Upload a user-supplied PNG/JPEG/WebP/SVG image (admin only, max 2 MB). Base64 must omit any data-URL prefix. Set overwrite only when replacing an existing image; use the returned path in logo_path or image_path.", { bucket, path, content_type: z2.enum(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]), data_base64: z2.string().min(4).max(2796204), overwrite: z2.boolean().default(false) }, async (input) => {
+  register("upload_image", "Upload a user-supplied PNG/JPEG/WebP/SVG image (admin only, max 2 MB). Base64 must omit any data-URL prefix. Set overwrite only when replacing an existing image; use the returned path in logo_path or image_path.", { bucket, path, content_type: z3.enum(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]), data_base64: z3.string().min(4).max(2796204), overwrite: z3.boolean().default(false) }, async (input) => {
     if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.data_base64))
       throw new Error("Invalid base64");
     const binary = atob(input.data_base64);
@@ -335,7 +1641,7 @@ function registerExtendedTools(server, supabase, user) {
 }
 
 // apps/mcp/src/meeting-tools.ts
-import { z as z3 } from "zod";
+import { z as z4 } from "zod";
 var BUCKET = "meeting-attachments";
 var MAX_DOCUMENT_BYTES = 25 * 1024 * 1024;
 var FILE_TYPES = {
@@ -373,9 +1679,9 @@ function decodeMeetingDocument(fileName, base64) {
 }
 function registerMeetingTools(server, supabase) {
   const { register, readRpc } = createToolkit(server, supabase);
-  const uuid = z3.string().uuid();
+  const uuid = z4.string().uuid();
   readRpc("get_meeting", "Get a meeting’s notes, transcript, attendance, votes and attachment metadata through its event/calendar visibility gate. Use this before uploading to avoid duplicates.", { id: uuid }, "get_meeting", ({ id }) => ({ p_id: id }));
-  register("upload_meeting_attachment", "Upload a document to an existing meeting (admin only, maximum 25 MB). Set is_meeting=true with create_event/update_event first. Supply file_name and base64 bytes without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV are supported. The file inherits meeting visibility; no public bucket is used. Uploads create new attachments: after an uncertain result, inspect get_meeting before retrying.", { meeting_id: uuid, file_name: z3.string().min(1).max(255), data_base64: z3.string().min(4).max(4 * Math.ceil(MAX_DOCUMENT_BYTES / 3)) }, async ({ meeting_id, file_name, data_base64 }) => {
+  register("upload_meeting_attachment", "Upload a document to an existing meeting (admin only, maximum 25 MB). Set is_meeting=true with create_event/update_event first. Supply file_name and base64 bytes without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV are supported. The file inherits meeting visibility; no public bucket is used. Uploads create new attachments: after an uncertain result, inspect get_meeting before retrying.", { meeting_id: uuid, file_name: z4.string().min(1).max(255), data_base64: z4.string().min(4).max(4 * Math.ceil(MAX_DOCUMENT_BYTES / 3)) }, async ({ meeting_id, file_name, data_base64 }) => {
     const document = decodeMeetingDocument(file_name, data_base64);
     const { data: meeting, error: meetingError } = await supabase.rpc("get_meeting", { p_id: meeting_id });
     if (meetingError)
@@ -423,10 +1729,10 @@ function registerMeetingTools(server, supabase) {
 }
 
 // apps/mcp/src/document-tools.ts
-import { z as z4 } from "zod";
+import { z as z5 } from "zod";
 function registerDocumentTools(server, supabase, context) {
   const { register, readRpc } = createToolkit(server, supabase);
-  const uuid = z4.string().uuid();
+  const uuid = z5.string().uuid();
   async function api(path, body) {
     if (!context.apiUrl)
       throw new Error("The public document archive is not configured yet");
@@ -445,31 +1751,31 @@ function registerDocumentTools(server, supabase, context) {
     return data;
   }
   readRpc("get_public_document", "Get a published public document and its public meeting links. Admins can also inspect pending/withdrawn publication metadata.", { id: uuid }, "get_public_document", ({ id }) => ({ p_id: id }));
-  readRpc("list_public_documents", "Browse or search published document titles and file names. This does not search file contents. include_unpublished requires admin access.", { query: z4.string().max(500).optional(), meeting_id: uuid.optional(), include_unpublished: z4.boolean().optional(), limit: z4.number().int().min(1).max(50).optional(), offset: z4.number().int().min(0).max(1e4).optional() }, "list_public_documents", ({ query, meeting_id, include_unpublished, limit, offset }) => ({ p_query: query ?? "", p_meeting_id: meeting_id ?? null, p_admin: include_unpublished ?? false, p_limit: limit ?? 20, p_offset: offset ?? 0 }));
+  readRpc("list_public_documents", "Browse or search published document titles and file names. This does not search file contents. include_unpublished requires admin access.", { query: z5.string().max(500).optional(), meeting_id: uuid.optional(), include_unpublished: z5.boolean().optional(), limit: z5.number().int().min(1).max(50).optional(), offset: z5.number().int().min(0).max(1e4).optional() }, "list_public_documents", ({ query, meeting_id, include_unpublished, limit, offset }) => ({ p_query: query ?? "", p_meeting_id: meeting_id ?? null, p_admin: include_unpublished ?? false, p_limit: limit ?? 20, p_offset: offset ?? 0 }));
   register("link_public_document_meeting", "Link an already published document to another public, listed meeting without uploading another copy (admin only). Useful for a combined committee/full-board transcript.", { document_id: uuid, meeting_id: uuid }, async ({ document_id, meeting_id }) => {
     const { data, error } = await supabase.rpc("link_public_document_meeting", { p_document_id: document_id, p_meeting_id: meeting_id });
     if (error)
       throw new Error(error.message);
     return data;
   }, { write: true, destructive: false, idempotent: true });
-  register("search_document_contents", "Search published document contents using Cloudflare hybrid search. Returns matching passages and document/meeting citations; automated transcripts and OCR can contain errors.", { query: z4.string().trim().min(1).max(500) }, async ({ query }) => api(`/search?${new URLSearchParams({ q: query })}`));
+  register("search_document_contents", "Search published document contents using Cloudflare hybrid search. Returns matching passages and document/meeting citations; automated transcripts and OCR can contain errors.", { query: z5.string().trim().min(1).max(500) }, async ({ query }) => api(`/search?${new URLSearchParams({ q: query })}`));
   register("publish_meeting_document", "Explicitly publish a public meeting attachment to the unrestricted public document archive (admin only). This creates an independently public copy; changing meeting visibility does not withdraw it. Never use for private research or confidential files. Publication must be enabled by the operator. Inspect the catalog after an uncertain response before retrying.", {
     meeting_id: uuid,
     attachment_id: uuid,
-    title: z4.string().trim().min(1).max(300),
-    source_url: z4.url(),
-    document_kind: z4.enum(["agenda", "minutes", "packet", "presentation", "spreadsheet", "transcript", "other"]),
-    text_origin: z4.enum(["official", "automated_transcript", "ocr", "other"]),
-    confirm_public: z4.literal(true)
+    title: z5.string().trim().min(1).max(300),
+    source_url: z5.url(),
+    document_kind: z5.enum(["agenda", "minutes", "packet", "presentation", "spreadsheet", "transcript", "other"]),
+    text_origin: z5.enum(["official", "automated_transcript", "ocr", "other"]),
+    confirm_public: z5.literal(true)
   }, async (input) => api("/publish", input), { write: true, destructive: false, idempotent: true });
   register("withdraw_public_document", "Withdraw a published document from the catalog and delete its public R2 object (admin only). Affects all linked meetings. Search passages are blocked immediately; index cleanup follows R2 sync. Public downloads already copied elsewhere cannot be recalled. Pending publications must be resolved first.", { id: uuid }, async ({ id }) => api(`/documents/${id}/withdraw`, {}), { write: true, destructive: true, idempotent: true });
 }
 
 // apps/mcp/src/tools.ts
 import { McpServer } from "@modelcontextprotocol/server";
-import { z as z5 } from "zod";
-var VISIBILITY = z5.enum(["public", "unlisted", "private"]);
-var ELECTION_KIND = z5.enum([
+import { z as z6 } from "zod";
+var VISIBILITY = z6.enum(["public", "unlisted", "private"]);
+var ELECTION_KIND = z6.enum([
   "special",
   "special_runoff",
   "primary",
@@ -478,7 +1784,7 @@ var ELECTION_KIND = z5.enum([
   "general_runoff",
   "other"
 ]);
-var ELECTION_DATE_KIND = z5.enum([
+var ELECTION_DATE_KIND = z6.enum([
   "election_day",
   "early_voting",
   "registration_deadline",
@@ -486,11 +1792,11 @@ var ELECTION_DATE_KIND = z5.enum([
   "absentee_return_deadline",
   "other"
 ]);
-var PERSON_KIND = z5.enum(["elected_official", "appointed_official", "candidate", "other"]);
+var PERSON_KIND = z6.enum(["elected_official", "appointed_official", "candidate", "other"]);
 function buildServer(supabase, user, documentContext = {}) {
   const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
-  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z5.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
+  server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z6.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
     try {
       const { data: isAdmin, error } = await supabase.rpc("is_admin");
       if (error)
@@ -501,8 +1807,8 @@ function buildServer(supabase, user, documentContext = {}) {
     }
   });
   register("search_users", "Search registered accounts by email or display name (admin only). Returns up to 50 accounts with id, email, display_name, role and created_at. Empty query lists accounts; use offset increments of 50 to paginate. Civic people records are separate from login accounts.", {
-    query: z5.string().trim().max(200).default(""),
-    offset: z5.number().int().min(0).default(0)
+    query: z6.string().trim().max(200).default(""),
+    offset: z6.number().int().min(0).default(0)
   }, async ({ query, offset }) => {
     await ensureAdmin();
     const { data, error } = await supabase.rpc("admin_list_users", { p_query: query, p_offset: offset });
@@ -511,21 +1817,21 @@ function buildServer(supabase, user, documentContext = {}) {
     return data;
   });
   register("promote_user_to_admin", "Promote an existing registered user to admin (admin only). Grants content editing, private-content access and permission to promote other users immediately. Resolve the exact account with search_users and act only on an explicit request to promote that person. Cannot promote yourself, create an account or demote an admin. Repeating a promotion of another existing admin is harmless.", {
-    user_id: z5.string().uuid()
+    user_id: z6.string().uuid()
   }, async ({ user_id }) => {
     const { error } = await supabase.rpc("promote_user_to_admin", { p_user_id: user_id });
     if (error)
       throw new Error(error.message);
     return { user_id, role: "admin" };
   }, { write: true, destructive: true, idempotent: true });
-  readRpc("search_organizations", "Full-text search of community organizations.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_maps", "Full-text search of maps.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_organizations", "Full-text search of community organizations.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(50).default(20) }, "search_organizations", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_maps", "Full-text search of maps.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(100).default(20) }, "search_maps", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
   readRpc("search_events", "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.", {
-    query: z5.string().default(""),
-    organization_id: z5.string().uuid().nullish(),
-    calendar_id: z5.string().uuid().nullish(),
-    include_past: z5.boolean().default(false),
-    limit: z5.number().int().min(1).max(100).default(50)
+    query: z6.string().default(""),
+    organization_id: z6.string().uuid().nullish(),
+    calendar_id: z6.string().uuid().nullish(),
+    include_past: z6.boolean().default(false),
+    limit: z6.number().int().min(1).max(100).default(50)
   }, "search_events", ({ query, organization_id, calendar_id, include_past, limit }) => ({
     p_query: query,
     p_organization_id: organization_id ?? null,
@@ -533,10 +1839,10 @@ function buildServer(supabase, user, documentContext = {}) {
     p_include_past: include_past,
     p_limit: limit
   }));
-  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z5.string().default(""), limit: z5.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("search_elections", "Full-text search of elections.", { query: z5.string().default(""), limit: z5.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
-  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z5.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
-  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z5.string().uuid() }, async ({ id }) => {
+  readRpc("search_people", "Full-text search of people (officials, candidates).", { query: z6.string().default(""), limit: z6.number().int().min(1).max(50).default(20) }, "search_people", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("search_elections", "Full-text search of elections.", { query: z6.string().default(""), limit: z6.number().int().min(1).max(100).default(50) }, "search_elections", ({ query, limit }) => ({ p_query: query, p_limit: limit }));
+  readRpc("list_calendars", "List calendars the caller can see, optionally for one organization.", { organization_id: z6.string().uuid().nullish() }, "list_calendars", ({ organization_id }) => ({ p_organization_id: organization_id ?? null }));
+  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z6.string().uuid() }, async ({ id }) => {
     const result = await supabase.rpc("get_map", { p_id: id });
     if (result.error)
       throw new Error(result.error.message);
@@ -551,50 +1857,50 @@ function buildServer(supabase, user, documentContext = {}) {
   getRpc("get_person", "Fetch one person (with affiliations) by id.", "get_person");
   getRpc("get_election", "Fetch one election (with contests and key dates) by id.", "get_election");
   const orgShape = {
-    slug: z5.string(),
-    name: z5.string(),
-    description: z5.string().nullish(),
-    email: z5.string().nullish(),
-    phone: z5.string().nullish(),
-    address_line: z5.string().nullish(),
-    website_url: z5.string().nullish(),
-    social_url: z5.string().nullish(),
-    logo_path: z5.string().nullish(),
-    sos_control_number: z5.string().nullish(),
-    sos_business_type: z5.string().nullish(),
-    sos_status: z5.string().nullish(),
-    sos_formation_date: z5.iso.date().nullish(),
-    sos_last_annual_registration: z5.string().nullish(),
-    sos_principal_office: z5.string().nullish(),
-    sos_registered_agent: z5.string().nullish(),
-    sos_county: z5.string().nullish(),
-    sos_naics_code: z5.string().nullish(),
-    sos_officers: z5.string().nullish(),
-    sos_record_url: z5.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
+    slug: z6.string(),
+    name: z6.string(),
+    description: z6.string().nullish(),
+    email: z6.string().nullish(),
+    phone: z6.string().nullish(),
+    address_line: z6.string().nullish(),
+    website_url: z6.string().nullish(),
+    social_url: z6.string().nullish(),
+    logo_path: z6.string().nullish(),
+    sos_control_number: z6.string().nullish(),
+    sos_business_type: z6.string().nullish(),
+    sos_status: z6.string().nullish(),
+    sos_formation_date: z6.iso.date().nullish(),
+    sos_last_annual_registration: z6.string().nullish(),
+    sos_principal_office: z6.string().nullish(),
+    sos_registered_agent: z6.string().nullish(),
+    sos_county: z6.string().nullish(),
+    sos_naics_code: z6.string().nullish(),
+    sos_officers: z6.string().nullish(),
+    sos_record_url: z6.string().regex(/^https:\/\/ecorp\.sos\.ga\.gov\/[^\s]+$/).nullish()
   };
   create("organization", "organizations", "Create an organization (admin only).", orgShape, "id, slug, name");
   update("organization", "organizations", "Update an organization (admin only).", orgShape, "id, slug, name");
   remove("organization", "organizations", "Delete an organization (admin only).");
   const calendarShape = {
-    organization_id: z5.string().uuid(),
-    slug: z5.string(),
-    name: z5.string(),
-    description: z5.string().nullish(),
+    organization_id: z6.string().uuid(),
+    slug: z6.string(),
+    name: z6.string(),
+    description: z6.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("calendar", "calendars", "Create a calendar (admin only).", calendarShape, "id, slug, name");
   update("calendar", "calendars", "Update a calendar (admin only).", { ...calendarShape, organization_id: calendarShape.organization_id.optional() }, "id, slug, name");
   remove("calendar", "calendars", "Delete a calendar (admin only).");
   const eventShape = {
-    calendar_id: z5.string().uuid(),
-    title: z5.string(),
-    starts_at: z5.string().describe("ISO 8601 timestamp"),
-    ends_at: z5.string().nullish(),
-    all_day: z5.boolean().optional(),
-    is_meeting: z5.boolean().optional(),
-    meeting_notes: z5.string().nullish(),
-    meeting_transcript: z5.string().nullish(),
-    meeting_video_url: z5.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, "Use an HTTPS video URL").nullish().refine((value) => {
+    calendar_id: z6.string().uuid(),
+    title: z6.string(),
+    starts_at: z6.string().describe("ISO 8601 timestamp"),
+    ends_at: z6.string().nullish(),
+    all_day: z6.boolean().optional(),
+    is_meeting: z6.boolean().optional(),
+    meeting_notes: z6.string().nullish(),
+    meeting_transcript: z6.string().nullish(),
+    meeting_video_url: z6.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, "Use an HTTPS video URL").nullish().refine((value) => {
       if (value == null)
         return true;
       try {
@@ -604,45 +1910,45 @@ function buildServer(supabase, user, documentContext = {}) {
         return false;
       }
     }, "Use a video URL without credentials or a custom port").describe("Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear."),
-    location: z5.string().nullish(),
-    url: z5.string().nullish(),
-    description: z5.string().nullish(),
+    location: z6.string().nullish(),
+    url: z6.string().nullish(),
+    description: z6.string().nullish(),
     visibility: VISIBILITY.optional(),
-    election_id: z5.string().uuid().nullish(),
+    election_id: z6.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish()
   };
   create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
   update("event", "events", "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.", { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() }, "id, title, starts_at");
   remove("event", "events", "Delete a calendar event (admin only).");
   const personShape = {
-    slug: z5.string(),
-    full_name: z5.string(),
+    slug: z6.string(),
+    full_name: z6.string(),
     kind: PERSON_KIND.optional(),
-    title: z5.string().nullish(),
-    description: z5.string().nullish(),
-    email: z5.string().nullish(),
-    phone: z5.string().nullish(),
-    fax: z5.string().nullish(),
-    website_url: z5.string().nullish(),
-    social_url: z5.string().nullish(),
-    address_line: z5.string().nullish(),
-    address_line2: z5.string().nullish(),
-    city: z5.string().nullish(),
-    state: z5.string().nullish(),
-    postal_code: z5.string().nullish(),
-    image_path: z5.string().nullish(),
+    title: z6.string().nullish(),
+    description: z6.string().nullish(),
+    email: z6.string().nullish(),
+    phone: z6.string().nullish(),
+    fax: z6.string().nullish(),
+    website_url: z6.string().nullish(),
+    social_url: z6.string().nullish(),
+    address_line: z6.string().nullish(),
+    address_line2: z6.string().nullish(),
+    city: z6.string().nullish(),
+    state: z6.string().nullish(),
+    postal_code: z6.string().nullish(),
+    image_path: z6.string().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("person", "people", "Create a person (admin only).", personShape, "id, slug, full_name");
   update("person", "people", "Update a person (admin only).", { ...personShape, slug: personShape.slug.optional(), full_name: personShape.full_name.optional() }, "id, slug, full_name");
   remove("person", "people", "Delete a person (admin only).");
   const electionShape = {
-    slug: z5.string(),
-    name: z5.string(),
-    election_date: z5.string().describe("YYYY-MM-DD"),
+    slug: z6.string(),
+    name: z6.string(),
+    election_date: z6.string().describe("YYYY-MM-DD"),
     kind: ELECTION_KIND.optional(),
-    description: z5.string().nullish(),
-    organization_id: z5.string().uuid().nullish(),
+    description: z6.string().nullish(),
+    organization_id: z6.string().uuid().nullish(),
     visibility: VISIBILITY.optional()
   };
   create("election", "elections", "Create an election (admin only).", electionShape, "id, slug, name");
@@ -650,6 +1956,7 @@ function buildServer(supabase, user, documentContext = {}) {
   remove("election", "elections", "Delete an election (admin only).");
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
+  registerLegislativeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;
 }

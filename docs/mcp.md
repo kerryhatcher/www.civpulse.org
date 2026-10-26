@@ -276,3 +276,15 @@ The full local OAuth/CRUD suite, TypeScript check, routing/origin tests, static
 Astro check/build and plugin package validation passed. Existing clients using
 the old host should update the URL and reconnect; OAuth credentials are scoped
 to each connection. The original Supabase project domain remains valid.
+
+### Legislative records
+
+`browse_legislation` reads paginated legislative resources with recursive visibility
+checks; `get_person_legislative_record` returns historical member choices filtered
+by session/body/category. `describe_legislative_resource`, `save_legislative_record`, and
+`delete_legislative_record` cover terms,
+sessions, bodies, memberships, bills, versions, amendments, actions, relationships,
+sponsorships, positions, votes, choices, article links and calendar links. Writes
+require admin access. `import_legislation` atomically upserts a parent-first normalized
+bundle using stable source provider/ID pairs (maximum 100 entries). See
+[backend.md](./backend.md#legislative-records) for identity and provenance rules.

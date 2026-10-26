@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Legislative vote"
+  description="The question, result and individual recorded choices for a legislative vote."
+>
+  <main id="main" data-legislation-view="legislative_votes">
+    <p>
+      <a href="/legislation/">All legislation</a>
+    </p>
+    <p role="status" data-status>
+      Loading vote…
+    </p>
+    <div data-detail></div>
+  </main>
+</Layout>
+<script>
+  import { initLegislationView } from "../../scripts/legislation";
+  void initLegislationView();
+</script>
