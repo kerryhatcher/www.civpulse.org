@@ -1,4 +1,5 @@
 import { historyLink } from '../lib/history';
+import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
 import { formatEventWhen } from '../lib/calendars';
 import {
   electionHref,
@@ -275,6 +276,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card';
   card.id = `contest-${contest.id}`;
+  card.dataset.bibbRelevant = String(isBibbContest(contest));
 
   const header = document.createElement('header');
   header.className = 'contest-heading';
@@ -318,6 +320,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card ballot-question';
   card.id = `question-${question.id}`;
+  card.dataset.bibbRelevant = String(isBibbJurisdiction(question.jurisdiction));
   const header = document.createElement('header'); header.className = 'contest-heading';
   const title = document.createElement('h3'); title.textContent = question.title;
   const meta = document.createElement('span'); meta.className = 'contest-meta';
@@ -456,9 +459,36 @@ function fillElectionView(response: ElectionViewResponse): void {
   }
 
   viewer.hidden = false;
+  initElectionScope();
   if (/^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)) {
     document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }
+}
+
+/** Scope only the rendered ballot; RPCs, admin editing and search keep all data. */
+export function initElectionScope(): void {
+  const select = document.querySelector<HTMLSelectElement>('[data-election-scope]');
+  if (!select) return;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-bibb-relevant]')];
+  const empty = document.querySelector<HTMLElement>('[data-election-scope-empty]');
+  function apply() {
+    for (const card of cards) {
+      card.hidden = select!.value !== 'all' && card.dataset.bibbRelevant !== 'true';
+    }
+    if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
+  }
+  function revealLinkedRace() {
+    if (!/^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)) return;
+    const target = cards.find(card => `#${card.id}` === window.location.hash);
+    if (!target) return;
+    if (target.dataset.bibbRelevant !== 'true') select!.value = 'all';
+    apply();
+    target.scrollIntoView();
+  }
+  select.onchange = apply;
+  apply();
+  revealLinkedRace();
+  window.addEventListener('hashchange', revealLinkedRace);
 }
 
 /** Viewer for any election uuid (public, unlisted, or private). */

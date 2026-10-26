@@ -142,6 +142,13 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   so hidden elections never leak into prerendered HTML. Early-voting days and
   deadlines are calendar events tagged with the election, so they appear on the
   community calendar and link back to the election.
+  Store contests for the same election together, including races outside Bibb
+  County. The static detail page and UUID viewer default to a Bibb County display
+  filter, with an all-recorded-races option. Search, person candidacies, admin
+  editing, and `get_election` retain every visibility-permitted contest. A direct
+  contest/question anchor reveals an out-of-area race. The frontend geographic
+  policy in `election-scope.ts` uses the 2026 Macon-Bibb composite ballot's district
+  list; review it when district boundaries change. This is presentation, not RLS.
 - Articles: external URLs with titles and many-to-many links to people and
   organizations. Runtime “News & articles” lists on profiles distinguish subjects,
   authors, publishers, and mentions. Hidden associations never enter static HTML;

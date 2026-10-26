@@ -1,10 +1,11 @@
 ---
 import ObjectHistoryLink from './ObjectHistoryLink.astro';
+import { isBibbJurisdiction } from '../lib/election-scope';
 import type { BallotQuestion } from '../lib/elections';
 interface Props { question: BallotQuestion }
 const { question } = Astro.props;
 ---
-<article class="contest-card ballot-question">
+<article class="contest-card ballot-question" id={`question-${question.id}`} data-bibb-relevant={String(isBibbJurisdiction(question.jurisdiction))} hidden={!isBibbJurisdiction(question.jurisdiction)}>
   <header class="contest-heading">
     <h3>{question.title}</h3>
     <span class="contest-meta">Ballot question{question.jurisdiction ? ` · ${question.jurisdiction}` : ''}</span>
