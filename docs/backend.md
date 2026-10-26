@@ -577,7 +577,11 @@ A repeatable shape, used for organizations, maps, and layers:
 
 1. Create a Supabase project.
 2. Link this repo: `supabase link --project-ref <ref>`.
-3. Push migrations: `bun run db:push`.
+3. Merge migrations to GitHub `main`. Production normally applies them through
+   the Supabase GitHub integration. For a manual production push, use the guarded
+   `bun run db:push --dry-run`, then `bun run db:push` from a clean, current
+   `main` checkout; this command is pinned to the Civic Pulse production project.
+   See [production migration guards](./development.md#guarding-production-migration-pushes).
 4. In the Supabase dashboard, set the Auth site URL to `https://www.civpulse.org`
    and add the production redirect URLs.
 5. Add `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` to the Cloudflare

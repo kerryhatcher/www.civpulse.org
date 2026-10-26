@@ -280,6 +280,36 @@ If this happens, restore the exact applied file from its source branch after
 comparing it with `supabase_migrations.schema_migrations`; do not delete history
 entries or rerun applied SQL to make the check pass.
 
+### Guarding production migration pushes
+
+Develop and test new migrations locally with `bun run db:migrate` or in a
+Supabase preview branch. Merge the migration PR to `main` before production
+application; the existing Supabase GitHub integration remains the normal release
+path. Never apply feature-branch schema SQL to production through MCP, the SQL
+editor, a direct CLI command, or migration-history repair.
+
+For a manual production push, use `bun run db:push --dry-run`, then
+`bun run db:push` from a clean, current `main` checkout. The wrapper
+`scripts/push-production-migrations.mjs` rejects feature branches, unpublished or
+stale commits, and changed/staged/untracked/ignored migration files or config.
+It queries the canonical GitHub repository for the current `main` SHA on every
+invocation; a cached `origin/main`, a CI branch variable, or failed network request
+cannot authorize a push. Detached checkouts must also match current `main`.
+
+The CLI target is pinned to production project `drzcrodqflzkzzbqsags`. Only
+`--dry-run` and `--include-all` are accepted; target/workdir overrides, seed data,
+and custom roles are not supported by this production command. Authentication
+uses the existing local Supabase credentials, never a committed key. Dry runs
+perform the same checks. This wrapper guards the repository command; it cannot
+intercept someone using separate database credentials, MCP, or the dashboard.
+The agent instructions prohibit those bypasses. Keep production credentials out
+of feature-branch automation and retain Supabase's `main` integration.
+
+`bun test scripts/tests/push-production-migrations.test.ts` uses disposable Git
+repositories and a fake CLI callback to prove rejected pushes never reach
+Supabase. The Migration deployment gate workflow runs these tests alongside the
+existing checks that block frontend deployment after failed migration validation.
+
 The October 26 llms.txt deployment hit this condition for
 `20261026182152_legislative_history_performance_compat.sql`, applied from the
 legislative vote-history branch before PR #25 merged. The recovery restores that
