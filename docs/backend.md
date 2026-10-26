@@ -1459,6 +1459,12 @@ visibility/context comparisons and 16,001-row timeout regression with
 `scripts/tests/legislative-sponsorship-browse-db.test.ts` and the same local database
 variable. Both helpers remain uncallable by API roles.
 
+`20261124010300_legislative_action_browse_performance` similarly resolves bill,
+session, body and optional event parents once for bill actions. Its regression,
+`scripts/tests/legislative-action-browse-db.test.ts`, compares row and parent
+visibility (including events and calendars), contextual access and 16,001 actions
+under the same timeout. This keeps action imports from blocking archive builds.
+
 ## Election result snapshots
 
 Private evidence and immutable, scoped election reports support agent-assisted OCR
