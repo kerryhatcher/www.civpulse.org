@@ -40,6 +40,30 @@ docs/         architecture, backend, and development notes
 
 ## Backend
 
+### Profile build requests
+
+People and organization profiles share one in-flight public profile snapshot per
+production build. People, organizations and affiliations load in three parallel
+streams, each fetching stable, ordered pages of 500 rows sequentially. Profiles
+join the snapshot in memory instead of sending requests for each person or
+organization. The anon client and explicit public-person filter remain in use;
+unlisted/private people never enter the snapshot. A configured backend failure
+fails the build instead of publishing profiles with missing affiliations. Dev
+requests reload the snapshot so edits remain visible.
+
+### Production transport and capacity
+
+Cloudflare's zone-level `always_use_https` setting is enabled for `civpulse.org`
+(October 26, 2026). HTTP URLs redirect to the same HTTPS hostname, path and query
+before reaching static assets or Workers. This is managed Cloudflare state, not
+an Astro redirect; local development continues to use HTTP. Verify with
+`curl -I 'http://www.civpulse.org/people/?q=test'` and follow the redirect to check
+the HTTPS response. HSTS/preloading and minimum TLS changes are separate work.
+
+The hosted CivicPulse database was resized from Nano to Micro on October 26,
+2026: memory increases from 0.5 GB to 1 GB at the same $0.01344/hour rate. Resizing
+restarts the project; verify project health and a public Data API query afterward.
+
 ### Runtime short-link exception
 
 The web Worker now has a small `apps/web/worker/index.ts` entrypoint for `/l/*`.
