@@ -28,7 +28,7 @@ const ELECTION_DATE_KIND = z.enum([
 ]);
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
-export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}): McpServer {
+export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}, sourceReaderUrl?: string): McpServer {
   const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
 
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
@@ -275,7 +275,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
 
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
-  registerLegislativeTools(server, supabase);
+  registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;

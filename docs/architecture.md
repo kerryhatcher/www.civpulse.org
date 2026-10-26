@@ -6,6 +6,7 @@ Supabase backend.
 ```
 apps/web/     Astro frontend, built to static files
 apps/mcp/     Runtime-neutral MCP source (OIDC via Supabase Auth)
+apps/georgia-source/ Public read-only Georgia API reader on Cloudflare Workers
 apps/kb/      Separate public document publication/search Worker (initially disabled)
 supabase/     Postgres migrations, MCP Edge Function + local Supabase config
 scripts/      dev orchestration and local seed helpers
@@ -196,6 +197,13 @@ with **OpenID Connect / OAuth 2.1** through the Supabase Auth OAuth 2.1 server
 forwards the user's access token to Supabase, so RLS applies exactly as it does
 in the web app — reads follow visibility and writes require an admin. The function
 never uses the service-role key. See [mcp.md](./mcp.md).
+
+Georgia source reads use the separate `apps/georgia-source` Cloudflare Worker.
+It runs the shared Georgia adapter against a fixed official API origin and exposes
+only validated session, member, vote-list and vote-detail reads. It has no database
+binding, Civic Pulse credentials, or import capability. The authenticated MCP
+function requests normalized public source data from it without forwarding the
+user's token. The frontend remains a static Astro build.
 
 ## Profile media
 

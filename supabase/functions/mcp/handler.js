@@ -1324,6 +1324,31 @@ var georgiaChoices = [
   { choice: "not_voting", source_choice: "NotVoting" },
   { choice: "other", source_choice: "Unknown" }
 ];
+async function readGeorgiaSourceViaReader(input, reader, fetcher = fetch) {
+  const url = new URL(reader);
+  if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash)
+    throw new Error("Invalid Georgia reader configuration");
+  for (const [key, value] of Object.entries(input))
+    if (value !== undefined)
+      url.searchParams.set(key, String(value));
+  let response;
+  try {
+    response = await fetcher(url, { signal: AbortSignal.timeout(45000), redirect: "manual" });
+  } catch {
+    throw new Error("Georgia source reader unavailable");
+  }
+  if (!response.ok)
+    throw new Error(`Georgia source reader returned HTTP ${response.status}`);
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Invalid Georgia source reader response");
+  }
+  if (data?.source_system !== "legis.ga.gov" || !String(data.source_url).startsWith(GEORGIA_API) || !Array.isArray(data.rows) || !Number.isInteger(data.total))
+    throw new Error("Invalid Georgia source reader response");
+  return data;
+}
 async function readGeorgiaSource(input, fetcher = fetch) {
   let path;
   if (input.resource === "sessions")
@@ -1342,16 +1367,24 @@ async function readGeorgiaSource(input, fetcher = fetch) {
   const bytes = new TextEncoder().encode("QFpCwKfd7fjVEXFFwSu36BwwcP83xYgxLAhLYmKkletvarconst" + ms);
   const hash = await crypto.subtle.digest("SHA-512", bytes);
   const key = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join("");
-  const request = async (url, headers) => {
-    const response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "error" });
+  const request = async (url, phase, headers) => {
+    let response;
+    try {
+      response = await fetcher(url, { headers, signal: AbortSignal.timeout(20000), redirect: "manual" });
+    } catch (error) {
+      if (error instanceof Error && ["TimeoutError", "AbortError"].includes(error.name)) {
+        throw new Error(`Georgia ${phase} request timed out after 20 seconds`);
+      }
+      throw new Error(`Georgia ${phase} request failed`);
+    }
     if (!response.ok)
       throw new Error(`Georgia source returned HTTP ${response.status}`);
     return response.json();
   };
-  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`);
+  const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`, "handshake");
   if (typeof token !== "string" || !token)
     throw new Error("Invalid Georgia source handshake");
-  const data = await request(GEORGIA_API + path, { Authorization: `Bearer ${token}` });
+  const data = await request(GEORGIA_API + path, "data", { Authorization: `Bearer ${token}` });
   const provenance = { source_system: "legis.ga.gov", source_url: GEORGIA_API + path, retrieved_at: new Date().toISOString() };
   if (input.resource === "vote") {
     if (!data || !Array.isArray(data.votes))
@@ -1378,7 +1411,7 @@ async function readGeorgiaSource(input, fetcher = fetch) {
 }
 
 // apps/mcp/src/legislative-tools.ts
-function registerLegislativeTools(server, supabase) {
+function registerLegislativeTools(server, supabase, sourceReaderUrl) {
   const { readRpc, register } = createToolkit(server, supabase);
   register("get_georgia_legislative_source", "Read official Georgia General Assembly sessions, chamber rosters, vote lists or vote details with provenance and pagination. Use numeric official member IDs to reconcile an existing person and dated office term before import_legislation. isRollCall denotes attendance, not a legislative vote. This read-only tool never imports or guesses identities, outcomes or missing choices.", {
     resource: z2.enum(["sessions", "members", "votes", "vote"]),
@@ -1388,7 +1421,7 @@ function registerLegislativeTools(server, supabase) {
     member_id: z2.number().int().positive().optional(),
     limit: z2.number().int().min(1).max(100).default(25),
     offset: z2.number().int().min(0).default(0)
-  }, (input) => readGeorgiaSource(input));
+  }, (input) => sourceReaderUrl ? readGeorgiaSourceViaReader(input, sourceReaderUrl) : readGeorgiaSource(input));
   readRpc("browse_legislation", "Browse legislative terms, sessions, bills, sponsorships, actions, votes and media links. Visibility is enforced for every referenced object. Use id for a known unlisted record; bill_id/person_id provide direct unlisted context. Results include total and bounded rows with reference labels.", {
     table: z2.enum(Object.keys(legislativeResources)).default("bills"),
     id: z2.string().uuid().optional(),
@@ -2130,7 +2163,7 @@ var ELECTION_DATE_KIND = z9.enum([
   "other"
 ]);
 var PERSON_KIND = z9.enum(["elected_official", "appointed_official", "candidate", "other"]);
-function buildServer(supabase, user, documentContext = {}) {
+function buildServer(supabase, user, documentContext = {}, sourceReaderUrl) {
   const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
   const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
   server.registerTool("whoami", { description: "Return the authenticated user's id, email, role (user or admin), and admin status.", inputSchema: z9.object({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, async () => {
@@ -2294,7 +2327,7 @@ function buildServer(supabase, user, documentContext = {}) {
   remove("election", "elections", "Delete an election (admin only).");
   registerExtendedTools(server, supabase, user);
   registerMeetingTools(server, supabase);
-  registerLegislativeTools(server, supabase);
+  registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase);
   registerDocumentTools(server, supabase, documentContext);
   return server;
@@ -2396,7 +2429,7 @@ async function respond(request, env) {
     } catch {
       return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
     }
-    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }));
+    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }, env.GEORGIA_SOURCE_READER_URL));
     return handler.fetch(request);
   }
   return new Response("Not found", { status: 404 });

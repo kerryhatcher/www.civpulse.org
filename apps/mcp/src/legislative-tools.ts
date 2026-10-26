@@ -3,11 +3,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { createToolkit } from "./toolkit";
 import { legislativeResources } from "../../web/src/lib/legislation";
-import { readGeorgiaSource } from "./georgia-source";
+import { readGeorgiaSource, readGeorgiaSourceViaReader } from "./georgia-source";
 
 export function registerLegislativeTools(
   server: McpServer,
   supabase: SupabaseClient,
+  sourceReaderUrl?: string,
 ) {
   const { readRpc, register } = createToolkit(server, supabase);
   register(
@@ -22,7 +23,7 @@ export function registerLegislativeTools(
       limit: z.number().int().min(1).max(100).default(25),
       offset: z.number().int().min(0).default(0),
     },
-    input => readGeorgiaSource(input),
+    input => sourceReaderUrl ? readGeorgiaSourceViaReader(input,sourceReaderUrl) : readGeorgiaSource(input),
   );
   readRpc(
     "browse_legislation",
