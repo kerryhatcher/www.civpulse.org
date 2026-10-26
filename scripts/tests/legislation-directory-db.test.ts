@@ -49,12 +49,39 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)("bill directory filters,
         expect((await run("state", "Georgia", "newest", 0, terms[0])).total).toBe(0);
         await tx.unsafe("reset role");
       }
+      const admin = crypto.randomUUID();
+      await tx`insert into auth.users(id,email) values (${admin},${`${admin}@example.test`})`;
+      await tx`insert into admins(user_id) values (${admin})`;
+      await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
+      await tx.unsafe('set local role authenticated');
+      expect((await run()).total).toBe(108);
+      expect((await run('state','Georgia')).total).toBe(27);
+      await tx.unsafe('reset role');
+      await tx`select set_config('request.jwt.claim.sub','',true)`;
+      const [contextSearch] = await tx`select public.browse_bills(p_query=>'QA Georgia') as data`;
+      expect(contextSearch.data.total).toBe(26);
       // Hiding a legislature hides all its bills, including from totals.
       await tx`update legislative_terms set visibility='private' where id=${terms[1]}`;
       await tx.unsafe("set local role anon");
       expect((await run("state", "Georgia")).total).toBe(0);
       await tx.unsafe("reset role");
       await tx`update legislative_terms set visibility='public' where id=${terms[1]}`;
+      await tx`insert into bills(term_id,session_id,body_id,numbering_context,identifier,title,introduced_on)
+        select b.term_id,b.session_id,b.body_id,'scale','SCALE '||n,'Scale fixture '||n,'2025-02-01'::date
+        from (select * from bills where term_id=${terms[1]} limit 1) b cross join generate_series(1,4000) n`;
+      await tx.unsafe("set local statement_timeout='5s'");
+      for (const id of ['',user,admin]) {
+        await tx`select set_config('request.jwt.claim.sub',${id},true)`;
+        await tx.unsafe(`set local role ${id?'authenticated':'anon'}`);
+        for (const sort of ['newest','oldest','title_asc','title_desc']) {
+          const [r]=await tx`select public.browse_bills(p_term_id=>${terms[1]}::uuid,p_jurisdiction=>'state',p_state=>'Georgia',p_query=>'Scale fixture',p_sort=>${sort}) as data`;
+          expect(r.data.total).toBe(4000);
+          expect(r.data.rows).toHaveLength(25);
+        }
+        await tx.unsafe('reset role');
+      }
+      await tx`select set_config('request.jwt.claim.sub','',true)`;
+      await tx.unsafe("set local statement_timeout='60s'");
       // BROWSER_HOOK
       throw rollback;
     });
