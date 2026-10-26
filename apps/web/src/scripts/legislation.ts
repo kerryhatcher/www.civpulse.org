@@ -4,6 +4,13 @@ import {
   recordLabel,
   type LegislativeRow,
 } from "../lib/legislation";
+import {
+  humanize,
+  legislativeDate,
+  legislativeTitle,
+  relationLabel,
+  coverageLabel,
+} from "../lib/legislation-display";
 import { historyLink } from "../lib/history";
 const paths: Record<string, string> = {
   bills: "view",
@@ -28,72 +35,242 @@ async function browse(table: string, args: Record<string, unknown> = {}) {
   if (error) throw error;
   return data as { rows: LegislativeRow[]; total: number };
 }
+function reference(row: LegislativeRow, field: string, text?: string) {
+  const definition = Object.values(legislativeResources)
+    .flatMap((resource) => resource.fields)
+    .find((item) => item.name === field && item.reference);
+  const path = definition?.reference && paths[definition.reference];
+  const url =
+    row.links?.[field] ??
+    (path
+      ? `/legislation/${path}/?id=${row[field]}`
+      : field === "event_id"
+        ? `/calendar/view/?id=${row[field]}`
+        : undefined);
+  const label = text ?? relationLabel(row, field);
+  return url ? link(label, url) : document.createTextNode(label);
+}
+function badge(value: unknown, className = "") {
+  const span = node("span", humanize(value));
+  span.className = `legislation-badge ${className}`;
+  return span;
+}
 export function legislativeCard(
   table: string,
   row: LegislativeRow,
   heading: "h1" | "h3" = "h3",
+  omit: string[] = [],
 ) {
   const card = node("article");
-  card.className = "org-card";
+  card.className =
+    heading === "h1" ? "legislation-heading" : "org-card legislation-record";
+  const label = legislativeTitle(table, row, omit);
   const title = node(heading);
-  const label = recordLabel(row);
+  const primary: Record<string, string> = {
+    bill_sponsorships: omit.includes("office_term_id")
+      ? "bill_id"
+      : "office_term_id",
+    legislative_vote_choices: "office_term_id",
+    bill_positions: "person_id",
+    article_bills: "article_id",
+    legislative_vote_bills: omit.includes("vote_id") ? "bill_id" : "vote_id",
+    bill_relationships: "related_bill_id",
+    legislative_body_memberships: "office_term_id",
+    legislative_event_links: "event_id",
+  };
+  const titleField = primary[table];
   title.append(
     paths[table] && heading !== "h1"
       ? link(label, `/legislation/${paths[table]}/?id=${row.id}`)
-      : document.createTextNode(label),
+      : titleField
+        ? reference(row, titleField, label)
+        : document.createTextNode(label),
   );
   card.append(title);
+  const states = node("div");
+  states.className = "legislation-states";
+  for (const field of ["status", "outcome", "role", "position", "choice"]) {
+    if (!row[field]) continue;
+    const text =
+      field === "choice"
+        ? `Voted ${row.source_choice || humanize(row.choice)}`
+        : field === "outcome"
+          ? `Result: ${humanize(row.outcome).toLowerCase()}`
+          : humanize(row[field]);
+    const state = badge(text, field === "choice" ? "legislation-choice" : "");
+    states.append(state);
+  }
+  if (states.childElementCount) card.append(states);
+  if (row.summary) card.append(node("p", String(row.summary)));
+  if (row.source_status) {
+    const status = node("p", String(row.source_status));
+    status.className = "legislation-status";
+    card.append(status);
+  }
+  if (row.description && table !== "bill_actions")
+    card.append(node("p", String(row.description)));
+  if (table === "legislative_votes" && row.category === "cloture") {
+    card.append(
+      node(
+        "p",
+        "Cloture is a vote to limit debate on the stated question. It is not final passage of the bill.",
+      ),
+    );
+  }
+  const metadata = node("dl");
+  metadata.className = "legislation-meta";
+  const secondary = node("dl");
+  secondary.className = "legislation-meta";
+  const hidden = new Set([
+    ...omit,
+    titleField,
+    "title",
+    "name",
+    "question",
+    "summary",
+    "description",
+    "source_status",
+    "source_url",
+    "text_url",
+    "source_id",
+    "source_system",
+    "retrieved_at",
+    "visibility",
+    "numbering_context",
+    "sequence",
+    "status",
+    "outcome",
+    "role",
+    "position",
+    "choice",
+    "coverage",
+    "reported_yes",
+    "reported_no",
+    "reported_other",
+    "membership_review_note",
+    ...(row.occurred_at ? ["occurred_on"] : []),
+    ...(table === "legislative_votes" ? ["threshold"] : []),
+    ...(table === "bills" ||
+    table === "bill_versions" ||
+    table === "legislative_sessions"
+      ? ["identifier"]
+      : []),
+    ...(row.choice ? ["source_choice"] : []),
+  ]);
+  const labels: Record<string, string> = {
+    occurred_on: "Date",
+    occurred_at: "Date & time",
+    introduced_on: "Introduced",
+    published_on: "Published",
+    starts_on: "From",
+    ends_on: "Through",
+    body_id: "Chamber or committee",
+    term_id: "Legislative term",
+    office_term_id: "Office service",
+    source_role: "Role in source",
+    threshold: "Required to pass",
+    identifier: table === "legislative_votes" ? "Vote number" : "Identifier",
+  };
   for (const field of legislativeResources[table].fields) {
     const value = row[field.name];
-    if (
-      value == null ||
-      value === "" ||
-      [
-        "title",
-        "name",
-        "question",
-        "source_system",
-        "source_id",
-        "retrieved_at",
-        "visibility",
-        "numbering_context",
-      ].includes(field.name)
+    if (hidden.has(field.name) || value == null || value === "") continue;
+    if (field.reference && !relationLabel(row, field.name)) continue;
+    const pair = node("div");
+    pair.append(node("dt", labels[field.name] ?? humanize(field.label)));
+    const dd = node("dd");
+    dd.append(
+      field.reference
+        ? reference(row, field.name)
+        : document.createTextNode(
+            field.type === "date" || field.type === "timestamptz"
+              ? legislativeDate(value, field.type === "timestamptz")
+              : humanize(value),
+          ),
+    );
+    pair.append(dd);
+    (table === "legislative_votes" &&
+    heading === "h1" &&
+    !["body_id", "identifier", "occurred_on", "occurred_at"].includes(
+      field.name,
     )
-      continue;
-    const p = node("p");
-    if (field.reference) {
-      const label = row.labels?.[field.name];
-      if (!label) continue;
-      const path = paths[field.reference];
-      const url =
-        row.links?.[field.name] ??
-        (field.reference === "events"
-          ? `/calendar/view/?id=${value}`
-          : field.reference === "people"
-            ? `/people/view/?id=${value}`
-            : undefined);
-      p.append(
-        node("strong", `${field.label}: `),
-        path
-          ? link(label, `/legislation/${path}/?id=${value}`)
-          : url
-            ? link(label, url)
-            : document.createTextNode(label),
-      );
-    } else if (field.name.endsWith("url")) {
-      p.append(
-        link(
-          field.name === "text_url" ? "Read official text" : "Official source",
-          String(value),
-        ),
-      );
-    } else
-      p.textContent = `${field.label}: ${String(value).replaceAll("_", " ")}`;
-    card.append(p);
+      ? secondary
+      : metadata
+    ).append(pair);
   }
-  card.append(historyLink(table, row.id));
+  // A member heading uses only the name; retain the exact historical office service below it.
+  if (titleField === "office_term_id") {
+    const service = relationLabel(row, "office_term_id")
+      .split(" · ")
+      .slice(1)
+      .map((part) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(part)
+          ? "From " + legislativeDate(part)
+          : part,
+      )
+      .join(" · ");
+    if (service) {
+      const pair = node("div");
+      pair.append(node("dt", "Office service"), node("dd", service));
+      metadata.prepend(pair);
+    }
+  }
+  if (metadata.childElementCount) card.append(metadata);
+  if (secondary.childElementCount) {
+    const details = node("details");
+    details.className = "legislation-extra";
+    details.append(node("summary", "More vote details"), secondary);
+    card.append(details);
+  }
+  if (row.coverage && heading !== "h1")
+    card.append(node("p", coverageLabel(row.coverage)));
+  const footer = node("div");
+  footer.className = "legislation-links";
+  if (row.text_url) footer.append(link("Read bill text", String(row.text_url)));
+  if (
+    row.source_url &&
+    row.source_url !== row.text_url &&
+    row.source_url !== (titleField ? row.links?.[titleField] : undefined)
+  )
+    footer.append(link("View source", String(row.source_url)));
+  footer.append(historyLink(table, row.id));
+  card.append(footer);
   return card;
 }
+
+function voteSummary(row: LegislativeRow) {
+  const summary = node("section");
+  summary.className = "legislation-tally";
+  summary.append(node("h2", "Official result"));
+  const totals = node("dl");
+  totals.className = "legislation-totals";
+  for (const [field, label] of [
+    ["reported_yes", "Yes"],
+    ["reported_no", "No"],
+    ["reported_other", "Other"],
+  ]) {
+    const pair = node("div");
+    pair.append(
+      node("dt", label),
+      node("dd", row[field] == null ? "Not reported" : String(row[field])),
+    );
+    totals.append(pair);
+  }
+  summary.append(totals);
+  if (row.threshold)
+    summary.append(node("p", `Required to pass: ${row.threshold}`));
+  const coverage = node("div");
+  coverage.className = "legislation-coverage";
+  coverage.append(
+    node("strong", coverageLabel(row.coverage)),
+    node(
+      "p",
+      "Official totals describe the full vote. The member records below show only the choices available here. Missing choices are unknown, not absences.",
+    ),
+  );
+  summary.append(coverage);
+  return summary;
+}
+
 export async function initLegislationBrowse() {
   const root = document.querySelector<HTMLElement>(
     "[data-legislation-browser]",
@@ -159,12 +336,23 @@ async function section(
   context: Record<string, unknown> = {},
 ) {
   const group = node("section");
-  group.append(node("h2", legislativeResources[table].label));
+  group.className = "legislation-section";
+  group.id = filters.office_term_id
+    ? `${table}-${filters.office_term_id}`
+    : table;
+  const heading = node(
+    "h2",
+    table === "legislative_vote_bills" && filters.bill_id
+      ? "Votes on this bill"
+      : legislativeResources[table].label,
+  );
+  group.append(heading);
   const status = node("p", "Loading…");
   status.setAttribute("role", "status");
   const list = node("div");
   list.className = "org-list";
   const more = node("button", "Load more");
+  more.hidden = true;
   group.append(status, list, more);
   root.append(group);
   let offset = 0;
@@ -176,14 +364,27 @@ async function section(
         p_offset: offset,
         ...context,
       });
-      list.append(...data.rows.map((row) => legislativeCard(table, row)));
+      list.append(
+        ...data.rows.map((row) =>
+          legislativeCard(table, row, "h3", Object.keys(filters)),
+        ),
+      );
       offset += data.rows.length;
       status.textContent = data.total
-        ? `${data.total} records`
-        : "None recorded.";
+        ? ""
+        : "No records added here yet. This does not establish that none exist.";
+      group.classList.toggle("legislation-empty", data.total === 0);
+      heading.textContent =
+        (table === "legislative_vote_bills" && filters.bill_id
+          ? "Votes on this bill"
+          : legislativeResources[table].label) +
+        (data.total ? " (" + data.total + ")" : "");
       more.hidden = offset >= data.total;
+      more.textContent = "Load more";
     } catch (error) {
-      status.textContent = `Could not load records: ${(error as Error).message}`;
+      status.textContent = "These records could not be loaded. Try again.";
+      more.textContent = "Try again";
+      more.hidden = false;
     } finally {
       more.disabled = false;
     }
@@ -210,63 +411,101 @@ export async function initLegislationView() {
       return;
     }
     status.textContent = "";
+    document.title = legislativeTitle(table, row) + " · Civic Pulse";
     detail.append(legislativeCard(table, row, "h1"));
-    if (table === "bills") {
-      for (const child of [
-        "bill_sponsorships",
-        "bill_positions",
-        "bill_versions",
-        "bill_amendments",
-        "bill_actions",
-        "legislative_vote_bills",
-        "article_bills",
-        "bill_relationships",
-      ])
-        await section(detail, child, { bill_id: id }, { p_bill_id: id });
-    } else if (table === "legislative_votes") {
-      detail.append(
-        node(
-          "p",
-          "Choices describe the exact question above. Missing choices are unknown, not absences. Official totals may differ from the visible or imported member records.",
-        ),
-      );
-      const { data: totals, error } = await getSupabase().rpc(
-        "get_legislative_vote_totals",
-        { p_vote_id: id },
-      );
-      if (error) throw error;
-      if (totals) {
-        detail.append(
-          node(
-            "p",
-            `Visible recorded choices: ${totals.recorded.yes} yes, ${totals.recorded.no} no, ${totals.recorded.other} other.`,
+    const navigation = node("nav");
+    navigation.className = "legislation-navigation";
+    navigation.setAttribute("aria-label", "On this record");
+    const addSections = async (
+      children: string[],
+      filters: Record<string, string>,
+      context: Record<string, unknown> = {},
+    ) => {
+      for (const child of children)
+        navigation.append(
+          link(
+            child === "legislative_vote_bills" && table === "bills"
+              ? "Votes"
+              : legislativeResources[child].label,
+            "#" + child,
           ),
         );
+      detail.append(navigation);
+      await Promise.all(
+        children.map((child) => section(detail, child, filters, context)),
+      );
+    };
+    if (table === "bills") {
+      await addSections(
+        [
+          "bill_actions",
+          "legislative_vote_bills",
+          "bill_sponsorships",
+          "bill_versions",
+          "article_bills",
+          "bill_positions",
+          "bill_amendments",
+          "bill_relationships",
+        ],
+        { bill_id: id },
+        { p_bill_id: id },
+      );
+    } else if (table === "legislative_votes") {
+      const summary = voteSummary(row);
+      detail.append(summary);
+      const imported = node("p", "Loading member record count…");
+      imported.setAttribute("role", "status");
+      summary.querySelector(".legislation-coverage")!.append(imported);
+      const totalsTask = async () => {
+        const { data: totals, error } = await getSupabase().rpc(
+          "get_legislative_vote_totals",
+          { p_vote_id: id },
+        );
+        if (error) {
+          imported.textContent =
+            "Member totals unavailable. Reload to try again.";
+          return;
+        }
+        if (!totals) {
+          imported.textContent = "Member totals unavailable.";
+          return;
+        }
+        imported.textContent =
+          totals.recorded.total +
+          " member " +
+          (totals.recorded.total === 1 ? "choice" : "choices") +
+          " available: " +
+          totals.recorded.yes +
+          " yes, " +
+          totals.recorded.no +
+          " no, " +
+          totals.recorded.other +
+          " other.";
         if (totals.matches_reported === false)
-          detail.append(
-            node(
-              "p",
-              "Recorded choices differ from official totals. The import may be incomplete or some member records may not be public.",
+          imported.append(
+            document.createTextNode(
+              " These records differ from the official totals; some records may be missing or not public.",
             ),
           );
-      }
-      await section(
-        detail,
-        "legislative_vote_bills",
-        { vote_id: id },
-        { p_vote_id: id },
-      );
-      await section(
-        detail,
-        "legislative_vote_choices",
-        { vote_id: id },
-        { p_vote_id: id },
-      );
+      };
+      await Promise.all([
+        totalsTask(),
+        addSections(
+          ["legislative_vote_choices", "legislative_vote_bills"],
+          { vote_id: id },
+          { p_vote_id: id },
+        ),
+      ]);
     } else {
-      await section(detail, "bills", { session_id: id });
-      await section(detail, "legislative_votes", { session_id: id });
-      await section(detail, "bill_actions", { session_id: id });
-      await section(detail, "legislative_event_links", { session_id: id });
+      await addSections(
+        [
+          "bills",
+          "legislative_votes",
+          "bill_actions",
+          "legislative_event_links",
+        ],
+        { session_id: id },
+      );
     }
   } catch (error) {
     status.textContent = `Could not load record: ${(error as Error).message}`;
@@ -276,7 +515,14 @@ export async function loadPersonLegislation(personId: string) {
   const root = document.querySelector<HTMLElement>("[data-person-legislation]");
   if (!root) return;
   root.hidden = false;
+  root.classList.add("legislation-profile");
   root.replaceChildren(node("h2", "Legislative record"));
+  root.append(
+    node(
+      "p",
+      "Recorded legislative votes and sponsorships during this person’s service in office.",
+    ),
+  );
   const controls = node("form");
   controls.className = "org-form";
   const selects: Record<string, HTMLSelectElement> = {};
@@ -305,7 +551,13 @@ export async function loadPersonLegislation(personId: string) {
   categoryLabel.className = "field";
   categoryLabel.append(node("span", "Vote category"), category);
   controls.append(categoryLabel, node("button", "Filter votes"));
-  root.append(controls);
+  const filters = node("details");
+  filters.className = "legislation-filters";
+  filters.append(node("summary", "Filter legislative votes"), controls);
+  const reset = node("button", "Clear filters");
+  reset.type = "reset";
+  controls.append(reset);
+  root.append(filters);
   const status = node("p", "Loading…");
   status.setAttribute("role", "status");
   const list = node("div");
@@ -350,14 +602,34 @@ export async function loadPersonLegislation(personId: string) {
         if (request !== generation) return;
         for (const row of data.rows) {
           const card = node("article");
-          card.className = "org-card";
+          card.className = "org-card legislation-record";
+          const title = node("h3");
+          title.append(
+            link(row.question, "/legislation/vote/?id=" + row.vote_id),
+          );
           card.append(
-            link(row.question, `/legislation/vote/?id=${row.vote_id}`),
+            title,
+            badge(
+              "Voted " + (row.source_choice || humanize(row.choice)),
+              "legislation-choice",
+            ),
+          );
+          card.append(
             node(
               "p",
-              `${row.occurred_on} · ${row.office_name} ${row.district} · ${row.choice} (${row.source_choice}) · ${row.outcome}`,
+              [legislativeDate(row.occurred_on), row.office_name, row.district]
+                .filter(Boolean)
+                .join(" · "),
             ),
-            node("p", `Record coverage: ${row.coverage}`),
+          );
+          card.append(
+            node(
+              "p",
+              "Vote result: " +
+                humanize(row.outcome).toLowerCase() +
+                " · " +
+                coverageLabel(row.coverage),
+            ),
           );
           for (const bill of row.bills)
             card.append(
@@ -369,7 +641,7 @@ export async function loadPersonLegislation(personId: string) {
           list.append(card);
         }
         offset += data.rows.length;
-        status.textContent = `${data.total} recorded choices. Missing records do not indicate absence or opposition.`;
+        status.textContent = `${data.total} recorded ${data.total === 1 ? "choice" : "choices"}. Missing records do not indicate absence or opposition.`;
         more.hidden = offset >= data.total;
       } catch (error) {
         status.textContent = `Could not load votes: ${(error as Error).message}`;
@@ -377,6 +649,13 @@ export async function loadPersonLegislation(personId: string) {
         more.disabled = false;
       }
     }
+    controls.onreset = (event) => {
+      event.preventDefault();
+      for (const select of Object.values(selects)) select.value = "";
+      billQuery.value = "";
+      category.value = "";
+      void load(true);
+    };
     controls.onsubmit = (event) => {
       event.preventDefault();
       void load(true);

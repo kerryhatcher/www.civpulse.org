@@ -45,7 +45,7 @@ export async function loadPersonVotes(personId: string): Promise<void> {
   const load = async () => {
     if (loading) return;
     loading = true; more.disabled = true; status.hidden = false;
-    status.textContent = 'Loading voting record…';
+    status.textContent = 'Loading meeting votes…';
     try {
       const supabase = getSupabase();
       await supabase.auth.getSession();
@@ -57,7 +57,7 @@ export async function loadPersonVotes(personId: string): Promise<void> {
       const page = votes.slice(0, 20);
       list.append(...page.map(renderVote)); offset += page.length;
       more.hidden = votes.length <= 20;
-      status.textContent = offset ? '' : 'No votes recorded.';
+      status.textContent = offset ? '' : 'No meeting votes recorded here.';
       status.hidden = offset > 0;
     } catch {
       status.textContent = 'Could not load votes. Select Retry to try again.';

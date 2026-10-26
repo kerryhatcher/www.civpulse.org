@@ -117,6 +117,26 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
             await tx`select browse_legislation('legislative_vote_choices',null,${{ vote_id: vote.id }}::jsonb) result`
           )[0].result.rows[0].labels.office_term_id,
         ).toContain("Legislative Member");
+        const choiceDetails = (
+          await tx`select browse_legislation('legislative_vote_choices',null,${{ vote_id: vote.id }}::jsonb) result`
+        )[0].result.rows[0];
+        expect(choiceDetails.links.office_term_id).toBe(
+          `/people/view/?id=${person.id}`,
+        );
+        expect(choiceDetails.labels.office_term_id).not.toContain(" ·  · ");
+        const billDetails = (
+          await tx`select browse_legislation('bills',${bill.id}) result`
+        )[0].result.rows[0];
+        expect(billDetails.links.body_id).toBe(`/orgs/legislative-${suffix}/`);
+        const action = (
+          await tx`select browse_legislation('bill_actions',null,${{ bill_id: bill.id }}::jsonb) result`
+        )[0].result.rows[0];
+        expect(action.labels.bill_id).toBe('HB 1 — Public bill');
+        await reject(
+          () =>
+            tx`select legislative_private.details('bills',${{ id: bill.id }}::jsonb)`,
+          "42501",
+        );
         await reject(() => tx`select * from bills`, "42501");
         await reject(() => tx`select browse_legislation('admins')`, "22023");
         await tx.unsafe("set local role authenticated");
@@ -265,8 +285,10 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
           "23514",
         );
         await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice,membership_review_note) values (${anotherVote.id},${unverified.id},'yes','Yea','Official roll call identifies this member; exact service start remains uncertain.')`;
+        expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb,'Legislative Member') result`)[0].result.total).toBe(1);
         await tx`update people set visibility='private' where id=${person.id}`;
         await tx.unsafe("set local role anon");
+        expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb) result`)[0].result.rows).toEqual([]);
         expect(
           (
             await tx`select get_person_legislative_record(${person.id}) result`
@@ -277,6 +299,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)(
             await tx`select browse_legislation('bill_sponsorships',null,${{ bill_id: bill.id }}::jsonb) result`
           )[0].result.total,
         ).toBe(0);
+        expect((await tx`select browse_legislation('legislative_vote_choices',null,${{vote_id: vote.id}}::jsonb,'Legislative Member') result`)[0].result.total).toBe(0);
         throw rollback;
       });
     } catch (e) {

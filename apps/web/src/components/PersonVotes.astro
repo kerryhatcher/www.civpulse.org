@@ -3,8 +3,8 @@ interface Props { personId?: string }
 const { personId } = Astro.props;
 ---
 <section data-person-votes data-person-id={personId} hidden={!personId} aria-labelledby="person-votes-title">
-  <h2 id="person-votes-title">Voting record</h2>
-  <p data-person-votes-status role="status" aria-live="polite">Loading voting record…</p>
+  <h2 id="person-votes-title">Meeting votes</h2>
+  <p data-person-votes-status role="status" aria-live="polite">Loading meeting votes…</p>
   <div data-person-votes-list></div>
   <button type="button" data-person-votes-more hidden>Load more votes</button>
 </section>
