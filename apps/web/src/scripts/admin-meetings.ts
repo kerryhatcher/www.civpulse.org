@@ -1,5 +1,5 @@
 import { historyLink } from '../lib/history';
-import { meetingVideoUrl } from '../lib/meeting-video';
+import { meetingVideoUrl, parseMeetingVideoStart, formatMeetingVideoStart } from '../lib/meeting-video';
 import { getSupabase } from '../lib/supabase';
 import { documentApi, publicDocumentUrl } from '../lib/documents';
 import { MEETING_BUCKET, MEETING_FILE_TYPES, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
@@ -64,6 +64,7 @@ export async function initMeetingAdmin(): Promise<void> {
     notes.value = record.event?.meeting_notes ?? '';
     transcript.value = record.event?.meeting_transcript ?? '';
     (notesForm.elements.namedItem('meeting_video_url') as HTMLInputElement).value = record.event?.meeting_video_url ?? '';
+    (notesForm.elements.namedItem('meeting_video_start_seconds') as HTMLInputElement).value = formatMeetingVideoStart(record.event?.meeting_video_start_seconds);
     const view = document.querySelector<HTMLAnchorElement>('[data-meeting-view]');
     if (view) {
       view.href = `/calendar/view/?id=${id}`;
@@ -128,7 +129,11 @@ export async function initMeetingAdmin(): Promise<void> {
     const values = new FormData(notesForm);
     const video = String(values.get('meeting_video_url') ?? '').trim();
     if (video && !meetingVideoUrl(video)) { message('Enter a valid HTTPS video URL without credentials or a custom port.', true); return; }
+    let start: number | null;
+    try { start = video ? parseMeetingVideoStart(String(values.get('meeting_video_start_seconds') ?? '')) : null; }
+    catch (error) { message(error instanceof Error ? error.message : 'Invalid video start time.', true); return; }
     const { error } = await supabase.from('events').update({
+      meeting_video_start_seconds: start,
       meeting_video_url: video || null,
       meeting_notes: String(values.get('meeting_notes') ?? '').trim() || null,
       meeting_transcript: String(values.get('meeting_transcript') ?? '').trim() || null,

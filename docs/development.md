@@ -430,6 +430,8 @@ For video URL parsing and safe embed construction, run
 `MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-video-db.test.ts`
 for the migration/backfill, URL and meeting constraints, visibility, admin edits
 and clearing a video. Database fixtures and schema changes always roll back.
+Run `scripts/tests/meeting-video-start-db.test.ts` with the same database variable
+for optional start-time defaults, zero/null behavior, constraints and visibility.
 
 For site search of meeting notes, transcripts and motions, run
 `MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-search-db.test.ts`.

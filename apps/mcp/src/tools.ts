@@ -185,6 +185,8 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   // --- Write: events -----------------------------------------------------
 
   const eventShape = {
+    meeting_video_start_seconds: z.number().int().min(0).max(2147483647).nullish()
+      .describe('Optional recording start offset in whole seconds. Overrides URL timestamps. Null uses the URL/default start; zero starts at the beginning. Separate meetings can share a video URL with different offsets.'),
     calendar_id: z.string().uuid(),
     title: z.string(),
     starts_at: z.string().describe("ISO 8601 timestamp"),

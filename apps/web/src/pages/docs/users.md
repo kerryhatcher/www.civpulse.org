@@ -28,6 +28,9 @@ play in the page, with fullscreen available. **Watch video on the host's site**
 opens the original recording if embedding is restricted or the host is not
 supported. Playback depends on the video's availability and host permissions.
 Separate committee and board meetings may share one continuous recording.
+When a meeting has a start time, **Starts at HH:MM:SS** shows the selected point.
+The player and its watch link open there automatically; you can still rewind
+or seek elsewhere in the recording.
 
 Site [search](/search/) finds meetings by their recorded notes, transcripts,
 motion subjects, motion details, and outcomes as well as their event details.

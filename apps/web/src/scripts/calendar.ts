@@ -10,7 +10,7 @@ import { getSupabase } from '../lib/supabase';
 import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
 import { linkMemberMentions, memberProfileHref } from '../lib/member-mentions';
-import { meetingVideoUrl, meetingVideoEmbed } from '../lib/meeting-video';
+import { meetingVideoWatchUrl, meetingVideoEmbed, formatMeetingVideoStart } from '../lib/meeting-video';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
   public: 'Public',
@@ -408,10 +408,14 @@ async function fillMeetingView(id: string): Promise<void> {
   const videoSection = root.querySelector<HTMLElement>('[data-meeting-video]');
   const videoPlayer = root.querySelector<HTMLElement>('[data-meeting-video-player]');
   const videoLink = root.querySelector<HTMLAnchorElement>('[data-meeting-video-link]');
-  const videoUrl = meetingVideoUrl(meeting.event?.meeting_video_url);
+  const startAt = meeting.event?.meeting_video_start_seconds;
+  const videoUrl = meetingVideoWatchUrl(meeting.event?.meeting_video_url, startAt);
   if (videoSection && videoPlayer && videoLink && videoUrl) {
     videoSection.hidden = false; videoLink.href = videoUrl;
-    const embed = meetingVideoEmbed(videoUrl);
+    const startText = videoSection.querySelector<HTMLElement>('[data-meeting-video-start]');
+    const formattedStart = formatMeetingVideoStart(startAt);
+    if (startText && formattedStart) { startText.textContent = `Starts at ${formattedStart}`; startText.hidden = false; }
+    const embed = meetingVideoEmbed(meeting.event?.meeting_video_url, startAt);
     if (embed) {
       const player = document.createElement('iframe');
       player.src = embed.src;
