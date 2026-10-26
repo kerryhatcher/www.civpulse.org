@@ -469,3 +469,9 @@ member choice, exact procedural question, readable action labels, person/chamber
 links, sources, timeline, session, sponsorships, and media. Exercise collapsed
 profile filters and reset, admin record search, edit/cancel/save, and source fields.
 Use local fixture copies only; never modify live imported records for UI tests.
+
+## Legislative admin timing checks
+
+When testing a record-type switch, immediately submit a search before reference
+pickers finish loading, then edit a result. The winning request must populate
+the editor before exposing editable results; search must not cancel form setup.
