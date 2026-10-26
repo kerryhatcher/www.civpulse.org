@@ -587,7 +587,7 @@ export async function loadPersonLegislation(personId: string) {
       more.disabled = true;
       try {
         const { data, error } = await getSupabase().rpc(
-          "get_person_legislative_record",
+          "get_person_legislative_bill_groups",
           {
             p_person_id: personId,
             p_term_id: selects.term_id.value || null,
@@ -605,10 +605,23 @@ export async function loadPersonLegislation(personId: string) {
           card.className = "org-card legislation-record";
           const title = node("h3");
           title.append(
-            link(row.question, "/legislation/vote/?id=" + row.vote_id),
+            link(
+              row.bill_id
+                ? `${row.bill_identifier} — ${row.bill_title}`
+                : row.question,
+              row.bill_id
+                ? `/legislation/view/?id=${row.bill_id}`
+                : `/legislation/vote/?id=${row.vote_id}`,
+            ),
+          );
+          const question = node("p");
+          question.append(
+            "Latest matching vote: ",
+            link(row.question, `/legislation/vote/?id=${row.vote_id}`),
           );
           card.append(
             title,
+            ...(row.bill_id ? [question] : []),
             badge(
               "Voted " + (row.source_choice || humanize(row.choice)),
               "legislation-choice",
@@ -631,17 +644,23 @@ export async function loadPersonLegislation(personId: string) {
                 coverageLabel(row.coverage),
             ),
           );
-          for (const bill of row.bills)
+          if (row.bill_id) {
+            const additional = row.vote_count - 1;
             card.append(
+              node(
+                "p",
+                `${additional} other matching ${additional === 1 ? "vote" : "votes"} on this bill or resolution.`,
+              ),
               link(
-                `${bill.identifier} — ${bill.title}`,
-                `/legislation/view/?id=${bill.id}`,
+                "View bill details and vote history",
+                `/legislation/view/?id=${row.bill_id}#legislative_vote_bills`,
               ),
             );
+          }
           list.append(card);
         }
         offset += data.rows.length;
-        status.textContent = `${data.total} recorded ${data.total === 1 ? "choice" : "choices"}. Missing records do not indicate absence or opposition.`;
+        status.textContent = `${data.total} ${data.total === 1 ? "entry" : "entries"}, grouped by bill or resolution. Latest matching vote shown; counts follow the selected filters. Votes without a linked bill are listed separately. Missing records do not indicate absence or opposition.`;
         more.hidden = offset >= data.total;
       } catch (error) {
         status.textContent = `Could not load votes: ${(error as Error).message}`;

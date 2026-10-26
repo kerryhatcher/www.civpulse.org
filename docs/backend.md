@@ -1213,6 +1213,18 @@ Ordinary authenticated accounts have the same public visibility as anonymous use
 `get_person_legislative_record` filters by session, body and vote category and returns
 historical office labels, choices and visible bill associations.
 
+Profile vote cards use `get_person_legislative_bill_groups` with the same service,
+vote and choice visibility gates. It groups by visible bill UUID before paging,
+counts the person's matching choices, and returns the latest matching vote per
+bill. A vote affecting multiple bills contributes once to each bill; a vote with
+no visible bill association remains an individual entry. Ordering uses date,
+exact time when recorded, then vote UUID to break ties deterministically.
+Filters apply before counting and selecting the latest vote. The original
+per-vote RPC remains unchanged. Release the append-only
+`20261123080000_person_legislative_bill_groups` migration through main before
+deploying the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-bill-groups-db.test.ts`;
+the test rolls back its migration and fixtures.
+
 `import_legislation` is an admin-only, atomic normalized import (at most 100 rows or
 2 MB). Supply `{table, data}` entries in parent-first order. Every `data` needs
 `source_system` and `source_id`; repeated keys patch the existing record. Explicit
