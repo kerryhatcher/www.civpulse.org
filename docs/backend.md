@@ -1493,3 +1493,12 @@ sets and public version/amendment parent joins across the page. The anonymous
 export's existing gate ensures these sets cannot inherit administrator access.
 The same regression now uses 16,001 distinct bills as well as choices and checks
 hidden linked actions. Apply through the main integration before rebuilding.
+
+`20261124010600_choice_browse_page_projection` fixes the remaining public-record
+archive timeout when browsing choices with an empty search query. It counts and
+sorts permitted IDs/timestamps before projecting provenance text and reference
+labels for the selected page. The visibility helper, filters, direct-ID/person/
+vote contexts, nonempty search path, ordering and payload remain unchanged.
+The choice-browse regression now uses 50,001 choices with long source notes and
+the same three-second anonymous timeout. Merge and apply through the main
+integration before rebuilding the frontend; do not omit archive records.
