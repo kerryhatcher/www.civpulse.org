@@ -1472,3 +1472,17 @@ imports and turnout tracking. Admin-only imports validate identity, vote totals,
 source presence and predecessor IDs; public reads inherit election visibility.
 See [election results](election-results.md) for the RPC contract, deduplication,
 photo examples, validation and release sequence.
+
+### Public profile legislative vote export performance
+
+`20261124010400_profile_vote_export_performance` pages visibility-approved
+choices before building their bill associations. Each 500-row page resolves
+associations only for its selected votes, preserving the existing anonymous-only
+export, ordering, fields and related-record visibility checks. It does not raise
+query timeouts or omit votes. Merge the append-only migration to `main` before
+production application, then rebuild the static frontend.
+
+Verify with `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-vote-export-db.test.ts`.
+The transactional test compares old/new payloads across hidden parents and
+relationships, and exports all 16,001 fixture choices with a three-second
+statement timeout per page. All fixtures and function changes roll back.
