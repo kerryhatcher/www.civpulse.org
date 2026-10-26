@@ -485,3 +485,8 @@ count must remain bounded, first-page Previous and last-page Next must disable,
 and applying/clearing vote filters must reset only the vote page. Verify both
 public slug and UUID person viewers, anonymous and signed-in, without console
 errors. Small office/candidacy groups remain visible together.
+
+The build-time Supabase client limits concurrent requests to six. Static profile
+and organization pages can request many affiliations in parallel; bounding the
+shared client's requests avoids exhausting the hosted PostgREST connection pool.
+This limit applies only to prerendering, not browser data requests.

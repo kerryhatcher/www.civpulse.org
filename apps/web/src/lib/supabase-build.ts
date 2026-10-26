@@ -1,6 +1,21 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 let client: SupabaseClient | undefined;
+let activeRequests = 0;
+const waitingRequests: Array<() => void> = [];
+
+// Static profiles fan out many related reads; avoid exhausting PostgREST's pool.
+async function buildFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  if (activeRequests >= 6) await new Promise<void>(resolve => waitingRequests.push(resolve));
+  else activeRequests++;
+  try {
+    return await fetch(input, init);
+  } finally {
+    const next = waitingRequests.shift();
+    if (next) next();
+    else activeRequests--;
+  }
+}
 
 /**
  * Read-only Supabase client for build-time data fetching (getStaticPaths).
@@ -14,6 +29,7 @@ export function getBuildSupabase(): SupabaseClient | null {
 
   client ??= createClient(url, anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: buildFetch },
   });
 
   return client;
