@@ -193,6 +193,13 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     is_meeting: z.boolean().optional(),
     meeting_notes: z.string().nullish(),
     meeting_transcript: z.string().nullish(),
+    meeting_video_url: z.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, 'Use an HTTPS video URL').nullish()
+      .refine(value => {
+        if (value == null) return true;
+        try { const url = new URL(value); return !url.username && !url.password && !url.port; }
+        catch { return false; }
+      }, 'Use a video URL without credentials or a custom port')
+      .describe('Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear.'),
     location: z.string().nullish(),
     url: z.string().nullish(),
     description: z.string().nullish(),
@@ -200,11 +207,11 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     election_id: z.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish(),
   };
-  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
+  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
   update(
     "event",
     "events",
-    "Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved.",
+    "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.",
     { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() },
     "id, title, starts_at",
   );

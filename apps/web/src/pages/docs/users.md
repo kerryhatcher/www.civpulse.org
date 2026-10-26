@@ -23,6 +23,12 @@ attachments remain on their meeting pages.
 
 ## Find a meeting and read its notes
 
+Meetings with a recording show a **Meeting video** section. YouTube and Vimeo
+play in the page, with fullscreen available. **Watch video on the host's site**
+opens the original recording if embedding is restricted or the host is not
+supported. Playback depends on the video's availability and host permissions.
+Separate committee and board meetings may share one continuous recording.
+
 Site [search](/search/) finds meetings by their recorded notes, transcripts,
 motion subjects, motion details, and outcomes as well as their event details.
 For example, search **FSS-2** to find the board meeting containing that motion.

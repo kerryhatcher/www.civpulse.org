@@ -786,7 +786,7 @@
   },
   {
     "name": "create_event",
-    "description": "Create a calendar event (admin only). Set is_meeting=true to add notes, a transcript or document attachments.",
+    "description": "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -824,6 +824,19 @@
           "type": [
             "string",
             "null"
+          ]
+        },
+        "meeting_video_url": {
+          "description": "Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear.",
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 2048,
+              "pattern": "^https:\\/\\/[^\\s]+$"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "location": {
@@ -899,7 +912,7 @@
   },
   {
     "name": "update_event",
-    "description": "Update a calendar event (admin only). Set is_meeting=true to enable meeting records and document attachments. Omitted fields are preserved.",
+    "description": "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -942,6 +955,19 @@
           "type": [
             "string",
             "null"
+          ]
+        },
+        "meeting_video_url": {
+          "description": "Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear.",
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 2048,
+              "pattern": "^https:\\/\\/[^\\s]+$"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "location": {

@@ -425,6 +425,12 @@ static-build lifecycle. No historical revisions exist before tracking is enabled
 
 ## Testing member voting records
 
+For video URL parsing and safe embed construction, run
+`bun test scripts/tests/meeting-video.test.ts`. With local Supabase running, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-video-db.test.ts`
+for the migration/backfill, URL and meeting constraints, visibility, admin edits
+and clearing a video. Database fixtures and schema changes always roll back.
+
 For site search of meeting notes, transcripts and motions, run
 `MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-search-db.test.ts`.
 This transactional test applies the search migration and rolls back all changes;

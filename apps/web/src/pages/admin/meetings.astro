@@ -18,10 +18,12 @@ import AdminTabs from '../../components/AdminTabs.astro';
       <div data-meeting-editor hidden>
         <p><a data-meeting-view href="/calendar/">View meeting</a></p>
         <form class="org-form" data-meeting-notes-form>
-          <h2>Notes and transcript</h2>
+          <h2>Recording, notes and transcript</h2>
+          <label class="field"><span>Video URL</span><input name="meeting_video_url" type="url" maxlength="2048" placeholder="https://www.youtube.com/watch?v=…" aria-describedby="meeting-video-help" /></label>
+          <p id="meeting-video-help">YouTube and Vimeo links show an embedded player. Other HTTPS video links open on the host's site. Meetings can share the same recording URL.</p>
           <label class="field"><span>Meeting notes or minutes</span><textarea name="meeting_notes" rows="8"></textarea></label>
           <label class="field"><span>Transcript</span><textarea name="meeting_transcript" rows="10"></textarea></label>
-          <button class="button-link" type="submit">Save text</button>
+          <button class="button-link" type="submit">Save meeting details</button>
         </form>
         <section class="org-form">
           <h2>Attendance</h2>
