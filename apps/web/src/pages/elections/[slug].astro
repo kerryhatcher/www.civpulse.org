@@ -62,6 +62,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
   }
 >
   <main id="main">
+    <p><a href={`/elections/results/?id=${election.id}`}>Results &amp; turnout →</a></p>
     <div class="org-header">
       <div class="org-header-text">
         <p class="org-eyebrow">{ELECTION_KIND_LABELS[election.kind]}</p>

@@ -38,7 +38,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('choice browsing preserv
       }
     }
     await tx`select set_config('request.jwt.claim.sub','',true)`;
-    await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261124000200_legislative_choice_browse_performance.sql',import.meta.url)).text());
+    await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261124010100_legislative_choice_browse_performance.sql',import.meta.url)).text());
     for (const sample of snapshots) {
       await tx`select set_config('request.jwt.claim.sub',${sample.id},true)`;
       await tx.unsafe(`update public.${sample.target} set visibility=$1 where id=$2`, [sample.visibility,sample.targetId]);
