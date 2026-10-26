@@ -1,5 +1,8 @@
-import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, shiftDay, type CalendarEvent } from '../lib/calendar-display';
+import {readPublicCalendar, readCalendarMonth, readPublicEvent} from '../lib/calendar-data';
+import {eventsForMonth, isPublicEvent, type CalendarManifest, type EventViewResponse} from '../lib/calendar-snapshot';
+import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, type CalendarEvent } from '../lib/calendar-display';
 import {
+  eventSourceUrl,
   eventViewHref,
   formatEventWhen,
   type CalendarRef,
@@ -29,7 +32,7 @@ function renderEventCard(event: EventRecord): HTMLElement {
 
   const heading = document.createElement('h2');
   const link = document.createElement('a');
-  link.href = eventViewHref(event.id);
+  link.href = eventViewHref(event.id, isPublicEvent(event));
   link.textContent = event.title;
   heading.append(link);
   card.append(heading);
@@ -115,10 +118,12 @@ export function initCalendar(): void {
   let view = params.get('view') === 'agenda' ? 'agenda' : 'month';
   let selectedDay: string | null = null;
   let calendars: CalendarRef[] = [];
+  let published: CalendarManifest | null = null;
   let events: CalendarEvent[] = [];
   let selected = new Set<string>();
   let requestId = 0;
   let timer: number | undefined;
+  let initialized = false;
   let loading = true;
   let failed = false;
   query.value = params.get('q') ?? '';
@@ -228,25 +233,31 @@ export function initCalendar(): void {
     syncUrl();
   }
   async function loadEvents(): Promise<void> {
+    if (!initialized) return;
     const id = ++requestId;
     loading = true; failed = false; events = []; render();
     const range = monthWindow(month);
     const rows: EventRecord[] = [];
     try {
-      for (let offset = 0; ; offset += 500) {
-        const { data, error } = await supabase.rpc('browse_calendar_events', { p_start: dayBoundary(range.start), p_end: dayBoundary(range.end), p_offset: offset });
-        if (id !== requestId) return;
-        if (error) throw error;
-        const page = data as EventRecord[]; rows.push(...page);
-        if (page.length < 500) break;
+      if (published) {
+        rows.push(...await readCalendarMonth(published,month));
+      } else {
+        for (let offset = 0; ; offset += 500) {
+          const { data, error } = await supabase.rpc('browse_calendar_events', { p_start: dayBoundary(range.start), p_end: dayBoundary(range.end), p_offset: offset });
+          if (id !== requestId) return;
+          if (error) throw error;
+          const page = data as EventRecord[]; rows.push(...page);
+          if (page.length < 500) break;
+        }
       }
-      events = groupEvents(rows).filter(event => Array.from({length: range.days}, (_, index) => shiftDay(range.start, index)).some(day => occursOn(event, day)));
+      if (id !== requestId) return;
+      events = groupEvents(eventsForMonth(rows,month));
       const previous = category.value;
       category.replaceChildren(new Option('All categories', ''));
       for (const name of [...new Set(events.flatMap(event => event.categories))].sort()) category.append(new Option(name, name));
       if (previous && ![...category.options].some(option => option.value === previous)) category.append(new Option(previous, previous));
       category.value = previous;
-    } catch { failed = true; }
+    } catch { if (id === requestId) failed = true; }
     if (id === requestId) { loading = false; render(); }
   }
   function changeMonth(amount: number): void {
@@ -278,9 +289,15 @@ export function initCalendar(): void {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       find('[data-calendar-signed-in]').hidden = !session;
-      const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
-      if (error) throw error;
-      calendars = data as CalendarRef[];
+      const snapshotUrl = document.querySelector<HTMLElement>('[data-calendar-snapshot]')?.dataset.calendarSnapshot;
+      if (!snapshotUrl) throw new Error('Missing calendar snapshot');
+      published = await readPublicCalendar(snapshotUrl,supabase);
+      if (published) calendars = published.calendars;
+      else {
+        const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
+        if (error) throw error;
+        calendars = data as CalendarRef[];
+      }
       selected = new Set(calendars.map(item => item.id));
       const ids = params.has('calendars') ? params.get('calendars')!.split(',') : params.get('calendar') ? [params.get('calendar')!] : null;
       if (ids) selected = new Set(ids.filter(id => calendars.some(item => item.id === id)));
@@ -290,6 +307,7 @@ export function initCalendar(): void {
       calendarOptions();
       if (params.get('calendar')) calendar.value = params.get('calendar')!;
       if (params.get('category')) { const name = params.get('category')!; category.append(new Option(name, name)); category.value = name; }
+      initialized = true;
       await loadEvents();
     } catch { loading = false; failed = true; render(); }
   })();
@@ -297,23 +315,6 @@ export function initCalendar(): void {
 
 // --- Shared event viewer ------------------------------------------------
 
-interface EventViewResponse {
-  status?: string;
-  event?: {
-    id: string;
-    title: string;
-    description: string | null;
-    starts_at: string;
-    ends_at: string | null;
-    all_day: boolean;
-    location: string | null;
-    url: string | null;
-    is_meeting: boolean;
-  };
-  calendar?: { id: string; name: string };
-  organization?: { id: string; name: string; slug: string };
-  election?: { id: string; slug: string; name: string; visibility: string };
-}
 
 function eventIdFromPath(pathname: string): string | null {
   const match = pathname.match(/^\/calendar\/e\/([0-9a-f-]{36})\/?$/i);
@@ -352,7 +353,7 @@ function fillEventView(response: EventViewResponse): void {
   };
 
   setText('[data-event-title]', event.title);
-  setText('[data-event-when]', formatEventWhen(event));
+  setText('[data-event-when]', formatEventWhen(event, 'America/New_York'));
   setText(
     '[data-event-meta]',
     [response.organization?.name, response.calendar?.name].filter(Boolean).join(' · '),
@@ -372,9 +373,11 @@ function fillEventView(response: EventViewResponse): void {
 
   const link = document.querySelector<HTMLElement>('[data-event-link]');
   const url = document.querySelector<HTMLAnchorElement>('[data-event-url]');
-  if (link && url && event.url) {
-    url.href = event.url;
-    link.hidden = false;
+  const sourceUrl=eventSourceUrl(event.url);
+  if (link && url) {
+    if (sourceUrl) url.href = sourceUrl;
+    else url.removeAttribute("href");
+    link.hidden = !sourceUrl;
   }
 
   const election = document.querySelector<HTMLElement>('[data-event-election]');
@@ -398,10 +401,13 @@ function fillEventView(response: EventViewResponse): void {
   viewer.hidden = false;
 }
 
-async function fillMeetingView(id: string): Promise<void> {
-  const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
-  if (error || !data || data.status !== 'ok') return;
-  const meeting = data as MeetingRecord;
+async function fillMeetingView(id: string, snapshot?: MeetingRecord): Promise<void> {
+  let meeting = snapshot;
+  if (!meeting) {
+    const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
+    if (error || !data || data.status !== 'ok') return;
+    meeting = data as MeetingRecord;
+  }
   const root = document.querySelector<HTMLElement>('[data-meeting-details]');
   if (!root) return;
   root.hidden = false;
@@ -512,7 +518,8 @@ export async function initEventViewFromUrl(): Promise<void> {
   const status = document.querySelector<HTMLElement>('[data-event-viewer-status]');
   if (!viewer || !status) return;
 
-  const id =
+  const root = document.querySelector<HTMLElement>('[data-event-id], [data-event-index]');
+  const id = root?.dataset.eventId ??
     eventIdFromPath(window.location.pathname) ?? new URLSearchParams(window.location.search).get('id');
 
   if (!id) {
@@ -520,28 +527,36 @@ export async function initEventViewFromUrl(): Promise<void> {
     return;
   }
 
-  const { data, error } = await getSupabase().rpc('get_event', { p_id: id });
-  const response = data as EventViewResponse | null;
+  try {
+    const snapshot = await readPublicEvent(id,{event:root?.dataset.eventSnapshot,index:root?.dataset.eventIndex},getSupabase());
+    const { data, error } = snapshot ? {data:snapshot.detail,error:null} : await getSupabase().rpc('get_event', { p_id: id });
+    const response = data as EventViewResponse | null;
 
-  if (error || !response || response.status === 'missing') {
-    showViewerStatus(status, 'Event not found.');
-    return;
-  }
-
-  if (response.status === 'private') {
-    showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
-    return;
-  }
-
-  status.hidden = true;
-  fillEventView(response);
-  if (response.event?.is_meeting) await fillMeetingView(response.event.id);
-
-  if (response.event && (await isCurrentUserAdmin())) {
-    const edit = document.querySelector<HTMLAnchorElement>('[data-event-edit-link]');
-    if (edit) {
-      edit.href = `/admin/calendars/?editEvent=${response.event.id}`;
-      edit.hidden = false;
+    if (error || !response || response.status === 'missing') {
+      showViewerStatus(status, 'Event not found.');
+      return;
     }
+
+    if (response.status === 'private') {
+      showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
+      return;
+    }
+
+    status.hidden = true;
+    fillEventView(response);
+    if (response.event?.is_meeting) {
+      if (snapshot && !snapshot.meeting) throw new Error('Missing published meeting record');
+      await fillMeetingView(response.event.id,snapshot?.meeting);
+    }
+
+    if (response.event && (await isCurrentUserAdmin())) {
+      const edit = document.querySelector<HTMLAnchorElement>('[data-event-edit-link]');
+      if (edit) {
+        edit.href = `/admin/calendars/?editEvent=${response.event.id}`;
+        edit.hidden = false;
+      }
+    }
+  } catch (error) {
+    showViewerStatus(status, error instanceof Error ? error.message : 'Could not load this event. Please reload to try again.');
   }
 }

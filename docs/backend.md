@@ -1399,3 +1399,20 @@ unknown choices, moment-observed attendance, and private upload reconciliation
 receipts. They retain existing meeting/people visibility and admin-only writes.
 See [the API contract and verification workflow](meeting-imports.md) for atomic
 imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.
+
+## Public calendar meeting export
+
+`export_public_calendar_meetings(p_offset=0,p_limit=100)` batches the existing
+`get_meeting` projection for static publication. It is read-only, security definer
+with empty search path, requires an anonymous caller, and is granted only to
+`anon`. Public event and calendar parents and any public election parent qualify;
+`get_meeting` still filters attendance/vote participants. The build additionally
+allowlists public people and projects displayed fields explicitly. No table RLS,
+write permissions or Storage policies change. Attachment metadata is public only
+where the existing public meeting reader permits it; signed URLs are generated
+at download time. Release the append-only migration through main before building.
+
+Run `CALENDAR_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/calendar-snapshot-db.test.ts scripts/tests/calendar-db.test.ts`
+for rollback-only pagination, parent/participant visibility, live/export parity
+and execute-grant tests.

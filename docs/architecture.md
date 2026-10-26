@@ -335,3 +335,38 @@ affiliation reads and three static assets; election search reuses cached, gated
 election-detail reads instead of broadening ballot-question table permissions; measure bytes/build time as
 data grows. Static copies already downloaded cannot be recalled after hiding a
 record, so publish promptly when restricting visibility.
+
+### Static public calendar and event pages
+
+The anonymous calendar reads `/calendar-data/` files: a small calendar/month
+manifest and one content-hashed file per occupied month. Spanning events appear
+in every occupied month; New York dates, DST and exclusive midnight ends use the
+same helpers as the live calendar. Empty months need no request. Date navigation,
+organization/calendar/category filters, multi-calendar selection, colors, keyword
+filtering and Month/Agenda views remain in the browser. Signed-in browsing uses
+the existing gated RPCs, with unchanged discovery permissions.
+
+Public event pages are prerendered at `/calendar/events/<uuid>/`, including title,
+time, description, location and public election link. Meeting records load from
+the event's static JSON, including notes, transcripts, visible participants and
+votes, video settings and attachment metadata. Anonymous legacy UUID viewers use
+a separate public event index; IDs absent from that index still use `get_event`
+and `get_meeting`, preserving unlisted direct links and private gates. A missing
+published file is an error, never a silent backend fallback. Signed-in viewers
+retain live RPCs and admin edit links. Attachment bytes and signed download URLs
+are never embedded; Storage checks access when the download button is clicked.
+
+The homepage reads published future events and selects today's next four at
+runtime, so dates advance without a daily rebuild. The ICS feed reuses the same
+public build snapshot, retaining UIDs and subscription URLs. Events need public
+event, calendar and optional election parents; hidden calendar names, event text,
+participant IDs and relationship facts never enter public snapshots. Build reads
+are paged, bounded and shared; any configured backend failure stops publication.
+Assets revalidate after five minutes and are excluded from the sitemap; public
+event HTML is included. Publish after imports/edits and promptly after restricting
+visibility. Previously downloaded public copies cannot be recalled.
+
+There is no new hosting service, bucket or instance resize. Public visits replace
+calendar/event/meeting RPCs with static asset reads. Builds add public meeting
+export pages and event HTML/JSON assets; monitor build minutes and static file
+counts as imports grow. Signed downloads retain their existing Storage costs.

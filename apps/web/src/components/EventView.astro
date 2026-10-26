@@ -1,0 +1,56 @@
+---
+import ObjectHistoryLink from './ObjectHistoryLink.astro';
+import {eventSourceUrl, formatEventWhen, type EventRecord} from '../lib/calendars';
+interface Props { event?:EventRecord; snapshotUrl?:string; indexUrl?:string }
+const {event,snapshotUrl,indexUrl}=Astro.props;
+const sourceUrl=eventSourceUrl(event?.url);
+---
+  <main id="main" data-event-id={event?.id} data-event-snapshot={snapshotUrl} data-event-index={indexUrl}>
+    <div class="page-intro">
+      <p class="org-eyebrow">Event</p>
+    </div>
+
+    <div class="event-viewer-status empty-state" data-event-viewer-status hidden></div>
+
+    <article class="event-detail" data-event-viewer hidden={!event}>
+      <h1 data-event-title>{event?.title ?? "Event"}</h1>
+      <p class="event-detail-when" data-event-when>{event && formatEventWhen(event, "America/New_York")}</p>
+      <p class="event-detail-meta" data-event-meta>{event && `${event.organization_name} · ${event.calendar_name}`}</p>
+      <p class="event-detail-location" data-event-location hidden={!event?.location}>{event?.location}</p>
+      <p class="event-detail-election" data-event-election hidden={!event?.election_id}>{event?.election_id && <>Part of <a href={`/elections/${event.election_slug}/`}>{event.election_name}</a></>}</p>
+      <div class="prose event-detail-description" data-event-description hidden={!event?.description}>{event?.description}</div>
+      <p data-event-link hidden={!sourceUrl}>
+        <a class="button-link" data-event-url href={sourceUrl ?? undefined} target="_blank" rel="noopener">Event details</a>
+      </p>
+      <section data-meeting-details hidden class="meeting-details">
+        <h2>Meeting record</h2>
+        <section data-meeting-video hidden>
+          <h3>Meeting video</h3>
+          <p data-meeting-video-start hidden></p>
+          <div data-meeting-video-player class="meeting-video-player" hidden></div>
+          <p><a data-meeting-video-link target="_blank" rel="noopener noreferrer">Watch video on the host's site</a></p>
+        </section>
+        <section data-meeting-notes hidden><h3>Notes and minutes</h3><p data-meeting-notes-text class="meeting-text"></p></section>
+        <section data-meeting-transcript hidden><h3>Transcript</h3><p data-meeting-transcript-text class="meeting-text"></p></section>
+        <section data-meeting-attendance hidden><h3>Attendance</h3><ul data-meeting-attendance-list></ul></section>
+        <section data-meeting-votes hidden><h3>Votes</h3><div data-meeting-vote-list></div></section>
+        <section data-meeting-attachments hidden><h3>Attachments</h3><ul data-meeting-attachment-list></ul></section>
+      </section>
+      <p class="event-detail-actions">
+        <a class="button-link event-edit" data-event-edit-link hidden>Edit event</a>
+        <a class="event-back" data-event-calendar-link href="/calendar/">← Back to the calendar</a>
+      </p>
+    </article>
+  <ObjectHistoryLink table="events" id={event?.id} />
+  </main>
+
+<style>
+  .meeting-video-player { width: 100%; aspect-ratio: 16 / 9; }
+  .meeting-video-player :global(iframe) { width: 100%; height: 100%; border: 0; }
+</style>
+
+<script>
+  import { initEventViewFromUrl } from '../scripts/calendar';
+
+  void initEventViewFromUrl();
+</script>

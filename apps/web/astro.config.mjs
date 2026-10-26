@@ -22,6 +22,7 @@ export default defineConfig({
           '/map-data/',
           '/profile-data/',
           '/directory-data/',
+          '/calendar-data/',
           '/calendar/view/',
           '/people/view/',
           '/elections/view/',

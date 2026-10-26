@@ -1,0 +1,13 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import EventView from '../../../components/EventView.astro';
+import {getPublicCalendarData} from '../../../lib/calendar-build-data';
+import {calendarAssetUrl} from '../../../lib/calendar-assets';
+export async function getStaticPaths() {
+  return (await getPublicCalendarData()).events.map(event=>({params:{id:event.id},props:{event}}));
+}
+const {event}=Astro.props;
+---
+<Layout title={event.title} description={event.description ?? 'A public Civic Pulse calendar event.'}>
+  <EventView event={event} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} />
+</Layout>

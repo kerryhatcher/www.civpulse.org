@@ -615,3 +615,19 @@ reads saved local PDFs; it does not resume source collection.
 Meeting-import CI requests `supabase status -o json` explicitly. Supabase's
 auto-detected default output differs between interactive agent sessions and CI;
 do not parse the default `db:status` output as JSON.
+
+### Verifying public calendar snapshots
+
+Run `bun test scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts`
+and the rollback calendar database suites in backend.md, then `bun run check`
+and `bun run build`. Check month rollover, DST, spanning/all-day events, day
+selection, Today, Month/Agenda, organization/calendar/category/text filters,
+Show all/Hide all, colors and shared calendar labels. Anonymous interactions
+read month files; signed-in views retain live gates. Public event pages and old
+UUID links must show the same public event and meeting details, including vote
+anchors, video offsets and permission-checked downloads. Test private/unlisted
+event/calendar/election parents and hidden meeting participants with disposable
+local fixtures, inspect exports for restricted IDs/text, remove fixtures, and
+check browser console errors. Missing published files must report failure rather
+than invoke live public readers. The new batch-export migration must be deployed
+before a hosted build; do not bypass the production migration gate.

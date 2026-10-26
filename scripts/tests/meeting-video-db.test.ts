@@ -16,7 +16,11 @@ test.skipIf(!process.env.MEETINGS_TEST_DATABASE_URL)('meeting videos migrate, en
         values(${calendar.id},'Video QA','2026-02-19 23:30Z',true,${visibility},${description}) returning id`;
       ids.push(event.id);
     }
-    await tx.unsafe(await Bun.file('supabase/migrations/20261122000003_meeting_video_url.sql').text());
+    const migration=await Bun.file('supabase/migrations/20261122000003_meeting_video_url.sql').text();
+    const installed=(await tx`select 1 from information_schema.columns where table_schema='public' and table_name='events' and column_name='meeting_video_url'`).length>0;
+    // Current shared databases already have the DDL; rerun the backfill in this
+    // rollback transaction so both old and migrated schemas verify the fixture.
+    await tx.unsafe(installed ? migration.slice(migration.indexOf('-- Carry forward')) : migration);
     expect((await tx`select meeting_video_url,description from public.events where id=${ids[0]}`)[0]).toMatchObject({meeting_video_url:'https://www.youtube.com/watch?v=wjYeLMR-3tE',description});
     const read=async(id=ids[0])=>(await tx`select public.get_meeting(${id}::uuid) result`)[0].result;
     await tx.unsafe('set local role anon');
