@@ -1451,6 +1451,14 @@ old/new access results and checks 16,001 choices under a three-second statement
 timeout; its migration and fixtures roll back. After deployment, confirm
 `/records/` returns 200 and the sitemap contains its detail and archive pages.
 
+The follow-up `20261124010200_legislative_sponsorship_browse_performance` applies
+the same shared-parent resolution to bill sponsorships, using visible bills and
+referenced office terms. Larger imports can otherwise block both the record
+archive and public profile snapshots at the sponsorship read. Verify the identical
+visibility/context comparisons and 16,001-row timeout regression with
+`scripts/tests/legislative-sponsorship-browse-db.test.ts` and the same local database
+variable. Both helpers remain uncallable by API roles.
+
 ## Election result snapshots
 
 Private evidence and immutable, scoped election reports support agent-assisted OCR
