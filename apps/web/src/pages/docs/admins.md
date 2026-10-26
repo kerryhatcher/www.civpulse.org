@@ -339,3 +339,11 @@ membership records. Mark incomplete roll calls and archival coverage as partial,
 and preserve held source conflicts for review. Public profile descriptions and
 legislative sections require a rebuild/deploy;
 signed-in and UUID viewers continue to read live records.
+
+For larger normalized backfills, `import_legislation_bundle` accepts up to 1,000
+records (2 MB) and sends ordered 100-record batches through the existing import
+RPC using the caller's admin session. Each batch commits separately. Inspect
+`status` and `next_offset`; after a partial result, retry the same bundle from that
+offset. Later batches are not attempted after an error. Provider IDs make retries
+idempotent, including uncertain network responses. Use `import_legislation` when
+the entire request must be atomic. Neither tool needs ad hoc SQL or a service key.
