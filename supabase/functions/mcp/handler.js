@@ -1556,7 +1556,7 @@ var query = z4.string().max(500).default("");
 var limit = z4.number().int().min(1).max(100).default(20);
 var offset = z4.number().int().min(0).default(0);
 var object = z4.record(z4.string(), z4.unknown());
-var url = z4.string().url().max(2000).regex(/^https?:\/\//i);
+var url = z4.string().url().max(2000).regex(/^[hH][tT][tT][pP][sS]?:[/][/][^\s]+$/);
 var slug = z4.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 var rowId = z4.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
 var geometry = z4.object({ type: z4.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z4.array(z4.unknown()) });
