@@ -6,6 +6,45 @@ description: Find a meeting, explore a map, check an election, and understand wh
 
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
+## Explore your county
+
+The [Bibb County community hub](/counties/bibb/) brings together selected local
+maps, organizations, people, elections, and upcoming events. Use the section links
+to move around the page, open a district map, or follow an organization to its
+profile and calendar. Elections appear newest first and may include past elections.
+The full directories and calendar include records outside Bibb County; the hub is
+a curated starting point, not a complete county directory.
+
+**Bibb County at a glance** shows 59 U.S. Census Bureau measures covering people,
+households and housing, income and work, education and connectivity, health, and
+geography. **See the story in the numbers** adds Age, Race & ethnicity, and Poverty
+chart tabs. Age bars use a shared 0–10% scale for 18 five-year bands. Race bars
+use a 0–100% scale, with Hispanic origin shown separately. Poverty dots show
+estimates and lines show their 90% confidence intervals on a 0–50% scale. Exact
+values and source links accompany each chart. Arrow keys, Home, and End switch
+tabs; without JavaScript, all three charts remain visible.
+Six headline figures also lead into three percentage comparisons with
+Georgia. The comparison bars share a 0–100% scale and matching 2020–2024 ACS
+periods; they are not rankings or tests of statistical significance. Open a topic
+under **Explore the county profile** to see Bibb and Georgia figures side by side.
+Each measure links to its official Census source and includes its reference
+period. **Age breakdown** has 18 non-overlapping five-year bands, from ages 0–4
+through 85+, with resident counts and shares. **Race & ethnicity** distinguishes
+race from Hispanic origin: Hispanic residents may be of any race, and the White
+non-Hispanic row is a subset, so all eight rows must not be added together.
+**Poverty** shows 2024 SAIPE rates for all ages, children under 18, and related
+children ages 5–17 in families, with 90% confidence intervals. Each rate uses its
+own eligible population; the child groups overlap. Georgia comparisons use
+the same SAIPE series rather than mixing it with state QuickFacts poverty data.
+**Download the data** saves a CSV of all measures, both geographies,
+reference periods, source URLs, counts, confidence intervals, definition notes,
+and the source-check date. Expand
+**About these figures** for methodology and the source-check date. Population
+estimates, Census counts, business statistics, and ACS five-year survey figures cover different periods; survey
+figures have sampling uncertainty. These are saved figures, not live statistics.
+Upcoming public events load when you open the page. More county hubs will follow
+after the Bibb County pilot is reviewed.
+
 ## Search public meeting documents
 
 Visit the [public document archive](/documents/) to browse published document
