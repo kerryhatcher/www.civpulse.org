@@ -1,8 +1,8 @@
 import L from 'leaflet';
-import { fetchLayerGeoJSON, type LayerConfig } from '../lib/layers';
+import { fetchLayerGeoJSON } from '../lib/layers';
 import { createGeoJSONLayer } from '../lib/map-rendering';
 import type { MapConfig } from '../lib/maps';
-import { getSupabase } from '../lib/supabase';
+import { fetchMapLayers } from '../lib/map-data';
 
 const HOME_CENTER: L.LatLngExpression = [32.8407, -83.6324];
 const HOME_ZOOM = 8;
@@ -33,10 +33,9 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
   map.on('resize', fitPreview);
   setTimeout(() => map.invalidateSize(), 0);
 
-  void getSupabase()
-    .rpc('get_map_layers', { p_map_id: config.id })
-    .then(async ({ data }) => {
-      const layers = ((data ?? []) as unknown as LayerConfig[])
+  void fetchMapLayers(config, true)
+    .then(async (data) => {
+      const layers = data
         .filter((layer) => layer.visible_by_default !== false);
       // Assign panes before downloading so stacking follows the map's order.
       await Promise.all(layers.map(async (layer, index) => {
@@ -56,7 +55,7 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
           });
       }));
       fitPreview();
-    });
+    }).catch(() => { container.textContent = 'Preview unavailable. Open the map to try again.'; });
 }
 
 export function initHomeMaps(): void {

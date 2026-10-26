@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { fetchMapLayers } from '../lib/map-data';
 import { BASE_MAPS, isBaseMapKey } from '../lib/basemaps';
 import { fetchLayerGeoJSON, normalizePresentation, resolveLayerStyle, safeMapUrl, type LayerConfig } from '../lib/layers';
 import { createGeoJSONLayer, featureTitle } from '../lib/map-rendering';
@@ -240,12 +241,6 @@ export function renderMap(container: HTMLElement, config: MapConfig, layers: Lay
   return map;
 }
 
-async function fetchLayers(mapId: string): Promise<LayerConfig[]> {
-  const { data, error } = await getSupabase().rpc('get_map_layers', { p_map_id: mapId });
-  if (error) throw new Error(error.message);
-  return (data ?? []) as LayerConfig[];
-}
-
 async function revealEditLink(mapId: string): Promise<void> {
   const link = document.querySelector<HTMLAnchorElement>('[data-map-edit-link]');
   if (link && await isCurrentUserAdmin()) { link.href = `/admin/maps/?edit=${mapId}`; link.hidden = false; }
@@ -262,7 +257,7 @@ export function initMapViewFromPage(): void {
   const script = document.querySelector<HTMLScriptElement>('[data-map-config]');
   if (!container || !script) return;
   void (async () => {
-    try { const config = JSON.parse(script.textContent ?? '') as MapConfig; const layers = await fetchLayers(config.id); container.hidden = false; renderMap(container, config, layers); void revealEditLink(config.id); }
+    try { const config = JSON.parse(script.textContent ?? '') as MapConfig; const layers = await fetchMapLayers(config); container.hidden = false; renderMap(container, config, layers); void revealEditLink(config.id); }
     catch { showStatus(container, 'Could not load this map. Reload the page to try again.'); }
   })();
 }
@@ -277,7 +272,7 @@ export async function initMapViewFromUrl(): Promise<void> {
   const result = data as { status?: string; map?: MapConfig } | null;
   if (error || !result?.map) { showStatus(status, result?.status === 'private' ? 'This map is private. An admin account is required to view it.' : 'Map not found.', result?.status === 'private'); return; }
   try {
-    const layers = await fetchLayers(result.map.id); status.hidden = true; container.hidden = false;
+    const layers = await fetchMapLayers(result.map); status.hidden = true; container.hidden = false;
     const heading = document.querySelector('h1'); if (heading) heading.textContent = result.map.name;
     renderMap(container, result.map, layers); void revealEditLink(result.map.id);
   } catch { showStatus(status, 'Could not load this map. Reload the page to try again.'); }
@@ -299,7 +294,7 @@ export function initMapExplorer(): void {
     if (description) description.textContent = config.description ?? '';
     const url = new URL(location.href);
     if (url.searchParams.get('map') !== config.slug) { url.searchParams.set('map', config.slug); url.searchParams.delete('layers'); url.searchParams.delete('event'); history.replaceState(null, '', url); }
-    try { const layers = await fetchLayers(config.id); if (current !== revision) return; instance = renderMap(root!, config, layers); }
+    try { const layers = await fetchMapLayers(config); if (current !== revision) return; instance = renderMap(root!, config, layers); }
     catch { if (current === revision) { showStatus(root!, 'Could not load map layers.'); const retry = element('button', 'Try again'); retry.addEventListener('click', () => void choose()); root!.append(retry); } }
   }
   const slug = new URLSearchParams(location.search).get('map') ?? 'voting';
