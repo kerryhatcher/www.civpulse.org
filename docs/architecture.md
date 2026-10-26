@@ -58,7 +58,18 @@ Cloudflare's zone-level `always_use_https` setting is enabled for `civpulse.org`
 before reaching static assets or Workers. This is managed Cloudflare state, not
 an Astro redirect; local development continues to use HTTP. Verify with
 `curl -I 'http://www.civpulse.org/people/?q=test'` and follow the redirect to check
-the HTTPS response. HSTS/preloading and minimum TLS changes are separate work.
+the HTTPS response.
+
+The minimum edge TLS version is 1.2; TLS 1.3 remains enabled. R2 custom domains
+also require TLS 1.2 (including the previously older overrides on
+`data.civpulse.org` and `cdn-dev.civpulse.org`). Cloudflare sends
+`Strict-Transport-Security: max-age=2592000` on HTTPS responses, including static
+assets and R2. The policy applies to each responding hostname: `includeSubDomains`
+and preload remain off because the zone includes external mail-tracking hosts
+and wildcard routes. Do not enable either without checking every affected host.
+The unproxied Supabase `api.civpulse.org` endpoint manages its own TLS/HSTS.
+These settings do not require a paid Cloudflare plan. Check TLS 1.2/1.3 access,
+rejection of TLS 1.0/1.1, HTTP redirects and the HSTS header after changes.
 
 The hosted CivicPulse database was resized from Nano to Micro on October 26,
 2026: memory increases from 0.5 GB to 1 GB at the same $0.01344/hour rate. Resizing
