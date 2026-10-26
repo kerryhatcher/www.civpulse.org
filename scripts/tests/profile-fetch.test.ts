@@ -5,6 +5,16 @@ const api = 'https://api.example.test';
 const read = `${api}/rest/v1/rpc/get_person_legislative_record`;
 const noDelay = async () => {};
 
+test('grouped profile history recovers from a temporary gateway failure anonymously', async () => {
+  let calls = 0;
+  const transport = createProfileFetch(api, (async () => {
+    calls++;
+    return new Response(null, { status: calls === 1 ? 503 : 200 });
+  }) as typeof fetch, noDelay);
+  expect((await transport(`${api}/rest/v1/rpc/get_person_legislative_bill_groups`, { method: 'POST' })).status).toBe(200);
+  expect(calls).toBe(2);
+});
+
 test('profile transport retries transient reads with the same body and caller credentials', async () => {
   const calls: Request[] = [];
   const request = new Request(read, { method: 'POST', headers: { authorization: 'Bearer signed-in-test' }, body: '{"p_offset":20}' });

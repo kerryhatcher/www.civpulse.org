@@ -261,3 +261,17 @@ retries the stopped batch. After reloading the page, choose the same file again;
 provider IDs make repeated imports update existing records. Review the saved
 records and public profile afterward. A single-member backfill has partial roll
 call coverage even when the official chamber totals are available.
+
+### Publishing map changes
+
+Public map layers and stored geometry, including homepage previews, are published
+as static snapshots. After editing map settings, importing/replacing features,
+changing default layers or visibility, use **Admin → Publish** and wait for a
+successful build. Public visitors see the last successful publication until then.
+A failed map export stops publication and leaves the previous deployment in place.
+Signed-in map views and UUID links continue to check access to private/unlisted
+content against the backend. Private and unlisted layers are never exported.
+After making formerly public data restricted, publish promptly; cached public
+files can remain in browsers for five minutes, and downloaded copies cannot be
+recalled. External GeoJSON sources still follow their source host's update/cache
+behavior.

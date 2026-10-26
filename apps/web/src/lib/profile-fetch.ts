@@ -1,6 +1,6 @@
 // Only these visibility-aware reads are safe to repeat after a transport failure.
 const profileReads = new Set([
-  'browse_legislation', 'get_person_legislative_record', 'get_office_terms',
+  'browse_legislation', 'get_person_legislative_record', 'get_person_legislative_bill_groups', 'get_office_terms',
   'get_person_articles', 'get_organization_articles', 'get_person_votes',
   'get_person_candidacies', 'get_person',
 ]);

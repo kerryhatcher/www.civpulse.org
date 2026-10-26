@@ -1,4 +1,3 @@
-import { getBuildSupabase } from './supabase-build';
 
 export type MapVisibility = 'public' | 'unlisted' | 'private';
 
@@ -19,6 +18,8 @@ export interface MapViewOptions {
 
 export interface MapConfig {
   id: string;
+  /** Build-generated public layer manifest; absent on live UUID viewers. */
+  public_layers_url?: string;
   view_options?: MapViewOptions;
   slug: string;
   name: string;
@@ -32,30 +33,10 @@ export interface MapConfig {
 export const MAP_COLUMNS =
   'id, slug, name, description, base_map, visibility, organization_id, view_options, organizations(id, name, slug)';
 
-/**
- * Loads publicly listed maps at build time. A build without Supabase env vars,
- * or with an unreachable database, produces an empty directory rather than failing.
- */
+/** Public maps and their shared geometry are one fail-closed build snapshot. */
 export async function fetchPublicMaps(): Promise<MapConfig[]> {
-  const supabase = getBuildSupabase();
-  if (!supabase) {
-    console.warn('[maps] PUBLIC_SUPABASE_* not set; skipping public map pages.');
-    return [];
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('maps')
-      .select(MAP_COLUMNS)
-      .eq('visibility', 'public')
-      .order('name');
-
-    if (error) throw error;
-    return (data ?? []) as unknown as MapConfig[];
-  } catch (error) {
-    console.warn(`[maps] Could not load maps: ${String(error)}`);
-    return [];
-  }
+  const { getMapBuildData } = await import("./map-build-data");
+  return (await getMapBuildData()).maps;
 }
 
 /** Bound view settings before handing persisted JSON to the browser renderer. */

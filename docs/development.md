@@ -555,3 +555,16 @@ This limit applies only to prerendering, not browser data requests.
 When testing a record-type switch, immediately submit a search before reference
 pickers finish loading, then edit a result. The winning request must populate
 the editor before exposing editable results; search must not cancel form setup.
+
+### Verifying public map exports
+
+Run `bun test scripts/tests/map-build-data.test.ts scripts/tests/map-data.test.ts`,
+`bun run check` and `bun run build`. Inspect `apps/web/dist/map-data/`: each public
+stored layer should have one geometry file even when linked to many maps, and
+no private/unlisted IDs or payloads should appear. Public anonymous map views and
+homepage previews fetch those files rather than geometry RPCs. Verify explorer
+selection, layer toggles, place search and popups. Also verify a private UUID map
+is denied anonymously and loads its gated geometry with an authorized account;
+unlisted UUID maps retain their existing access behavior. Use disposable local
+fixtures for access checks, and remove them after verification. Build against
+production only with public credentials and the configured public Turnstile key.
