@@ -31,7 +31,7 @@ import AdminTabs from '../../components/AdminTabs.astro';
           <h2>Attendance</h2>
           <form data-attendance-form class="meeting-inline-form">
             <label class="field"><span>Person</span><select name="person_id" required></select></label>
-            <label class="field"><span>Status</span><select name="status"><option value="present">Present</option><option value="absent">Absent</option><option value="excused">Excused</option></select></label>
+            <label class="field"><span>Status</span><select name="status"><option value="present">Present</option><option value="absent">Absent</option><option value="excused">Excused</option><option value="observed">Observed at a ballot only</option><option value="unknown">Attendance unknown</option></select></label>
             <label class="field"><span>Note</span><input name="note" maxlength="500" placeholder="Optional" /></label>
             <button class="button-link" type="submit">Add or update</button>
           </form>

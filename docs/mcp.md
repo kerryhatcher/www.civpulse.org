@@ -110,18 +110,14 @@ dates into meetings or disabling a meeting while it has child records.
 
 `get_meeting` returns notes, transcript, attendance, votes and attachment metadata
 through the existing event/calendar visibility gate. Check it before uploading.
-`upload_meeting_attachment` accepts `meeting_id`, a plain `file_name`, and
-`data_base64` without a data-URL prefix. PDF, Office, OpenDocument, TXT and CSV
-files use the same 25 MB limit as the website. Unsupported extensions, paths,
-control characters, malformed base64, empty and oversized files are rejected.
-MIME types are derived from the extension, matching the existing uploader; this
-does not scan or certify document contents. There is no remote URL fetch.
-
-Uploads run with the caller's OAuth token, check admin access and the meeting,
-and use an immutable UUID object in the existing private `meeting-attachments`
-bucket. Metadata failure triggers object cleanup; cleanup failures are reported
-for admin repair. Uploads are not idempotent: after an uncertain result, inspect
-the meeting before retrying. There is no overwrite operation or schema change.
+`upload_meeting_attachment` accepts inline base64 files up to 3 MiB. For reliable,
+repeatable originals up to 25 MiB use `begin_meeting_attachment_upload`, direct
+Storage TUS chunks, `manage_meeting_attachment_upload` and
+`finalize_meeting_attachment_upload`. See [meeting imports](meeting-imports.md)
+for the full contract, authentication, source identity, checksums, conflict rules,
+resumption, expiry and deliberate cleanup. JSON source projections are supported.
+The legacy inline operation creates fresh records and retains uncertain uploads
+for reconciliation; never blindly retry it. No operation publishes to R2.
 
 `get_meeting_attachment_url` requires both the meeting and attachment UUIDs,
 checks their relationship through `get_meeting`, then signs a 60-second download.

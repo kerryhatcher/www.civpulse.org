@@ -245,3 +245,11 @@ file downloads and authorized editing. Unlisted and private records do not appea
 in the archive; existing shared viewer links keep their access rules. Published
 pages change only after a rebuild, including removals and visibility changes.
 Confirm current details with the original source.
+
+Meeting attendance may say **Observed at a ballot only** when a named vote is the
+available evidence; this does not establish attendance throughout the meeting.
+**Attendance unknown** and **unknown** vote choices mean the source does not
+support a stronger conclusion. “Vote Not Recorded” is never counted as No,
+abstention, or absence. Recorded ballots can appear before an official outcome
+is known. Anonymous public profile snapshots update after publication; meeting
+viewer records update live.

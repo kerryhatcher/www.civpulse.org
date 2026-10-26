@@ -2,7 +2,7 @@ import { legislativeResources, type LegislativeRow } from './legislation';
 import { legislativeTitle, humanize, relationLabel, legislativeDate, coverageLabel } from './legislation-display';
 import type { EventRecord } from './calendars';
 import { formatEventWhen } from './calendars';
-import type { MeetingRecord } from './meetings';
+import { meetingAttendanceLabel, type MeetingRecord } from './meetings';
 import type { RequestDetail } from './records-requests';
 import { REQUEST_STAGES, REQUEST_OUTCOMES, UPDATE_KINDS } from './records-requests';
 
@@ -46,7 +46,7 @@ export function eventRecord(event: EventRecord, meeting?: MeetingRecord): Public
   if (event.description) sections.push({ title: 'Description', text: event.description });
   if (meeting?.event?.meeting_notes) sections.push({ title: 'Meeting notes', text: meeting.event.meeting_notes });
   if (meeting?.event?.meeting_transcript) sections.push({ title: 'Transcript', text: meeting.event.meeting_transcript });
-  if (meeting?.attendance?.length) sections.push({ title: 'Recorded attendance', items: meeting.attendance.map(p => ({ text: `${p.full_name}: ${p.status}${p.note ? ` — ${p.note}` : ''}`, href: `/people/${encodeURIComponent(p.slug)}/` })) });
+  if (meeting?.attendance?.length) sections.push({ title: 'Recorded attendance', items: meeting.attendance.map(p => ({ text: `${p.full_name}: ${meetingAttendanceLabel(p.status)}${p.note ? ` — ${p.note}` : ''}`, href: `/people/${encodeURIComponent(p.slug)}/` })) });
   for (const vote of meeting?.votes ?? []) sections.push({ title: vote.subject, text: [vote.description, vote.outcome].filter(Boolean).join('\n'), items: vote.choices.map(c => ({ text: `${c.full_name}: ${c.choice}` })) });
   const sources = [{ text: 'Organizer website', href: webHref(event.url) }, { text: 'Meeting recording', href: webHref(meeting?.event?.meeting_video_url) }].filter(item => item.href);
   if (sources.length) sections.push({ title: 'Sources', items: sources });

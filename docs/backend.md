@@ -1239,7 +1239,20 @@ the test rolls back its migration and fixtures.
 `source_system` and `source_id`; repeated keys patch the existing record. Explicit
 UUIDs may connect new records in the same bundle; mismatched UUID/provider mappings
 are rejected. Omitted fields retain defaults on insert and existing values on update.
-Imports use the caller's JWT/RLS and never a browser service key. Provider-specific
+Imports use the caller's JWT/RLS and never a browser service key.
+Repeated imports preserve an existing `attendance` vote category even when a stale
+payload supplies a legislative category; other supplied metadata still updates.
+This protection runs in the normalized database importer, covering UI, MCP, and
+direct RPC imports. Explicit admin edits can still correct an erroneous attendance
+classification. The Georgia adapter recognizes reviewed vote ID 21003 as attendance
+in list and detail results despite its misleading source caption/flag; the review
+is documented in the 2023 Senate journal, pp. 421–422. Other second-reading records
+are not classified by that caption alone. Release
+`20261123150000_preserve_import_attendance` through main before deploying the
+updated MCP adapter. Verify with the attendance import database regression test
+and `scripts/tests/georgia-source.test.ts`.
+
+Provider-specific
 harvesting and identity reconciliation are deliberately separate from this normalized
 endpoint; name-only person matching is not supported. No live federal/state bulk
 feed is enabled by these migrations.
@@ -1378,3 +1391,11 @@ Anonymous public profile sections use static JSON; no private or unlisted payloa
 is embedded in those files. Release `20261123120000_public_profile_sections`
 through main before the frontend deploys. Test feature SQL only locally or in a
 preview branch. Build failure preserves the previous deployment.
+
+## Sourced meeting imports and upload sessions
+
+The append-only meeting import/session migrations add immutable source observations,
+unknown choices, moment-observed attendance, and private upload reconciliation
+receipts. They retain existing meeting/people visibility and admin-only writes.
+See [the API contract and verification workflow](meeting-imports.md) for atomic
+imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.

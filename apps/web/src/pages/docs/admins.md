@@ -75,12 +75,13 @@ updates the voting record immediately without a site rebuild.
 
 An administrator connected through [Civic Pulse MCP](/docs/ai/) can set
 `is_meeting: true` on an event, save meeting notes or a transcript, and upload
-the same supported document types with `upload_meeting_attachment`. The assistant
-must first inspect `get_meeting` to avoid duplicate files. Uploads accept base64
-file contents and a plain filename, up to 25 MB per file. Files inherit the
-meeting and calendar visibility. `get_meeting_attachment_url` supplies a download
-link valid for 60 seconds; share the meeting page for lasting access. If the new
-tools are missing after a server update, refresh the connection's tool list.
+meeting originals using resumable upload sessions. Use
+`begin_meeting_attachment_upload`, transfer original bytes directly through
+Storage TUS, then `finalize_meeting_attachment_upload`. The limit is 25 MiB;
+inline `upload_meeting_attachment` is limited to 3 MiB. Sessions retain source
+identity and SHA-256 so an interrupted response can be reconciled using
+`manage_meeting_attachment_upload`. JSON public-source projections are supported.
+Files inherit meeting visibility; public archive publication is separate.
 
 ## Visibility and publication
 
@@ -264,7 +265,12 @@ the file. Describe resource fields through MCP before preparing a file.
 Choose **Import records** to save batches of at most 100 records. Every batch is
 atomic; completed batches remain saved if a later batch fails. **Resume import**
 retries the stopped batch. After reloading the page, choose the same file again;
-provider IDs make repeated imports update existing records. Review the saved
+provider IDs make repeated imports update existing records.
+An existing vote category of **attendance** is preserved on reimport even if a
+stale file supplies another category; other supplied metadata still updates.
+Use an explicit record edit to correct an attendance classification after source
+review. Honor the Georgia source adapter's `attendance` indicator even when the
+original caption or `isRollCall` flag disagrees. Review the saved
 records and public profile afterward. A single-member backfill has partial roll
 call coverage even when the official chamber totals are available.
 
@@ -300,3 +306,18 @@ record edits or visibility changes. Signed-in searches still use live access
 checks; seeing an edit there does not mean the public directory is published.
 When hiding a record, publish promptly and allow up to five minutes for old
 cached assets to expire. Previously downloaded public copies cannot be recalled.
+
+### Sourced meeting ballots
+
+AI tools can validate and import attendance, individual motion rounds and named
+choices with `import_meeting_records`. Resolve existing meeting/person UUIDs,
+validate first, and import attendance before rounds and choices. Stable source
+keys make exact replay safe; changed snapshots reject the entire batch for review.
+No omitted records or editorial notes are deleted. Preserve original wording,
+source URL/checksum and exact item/round locator. “Vote Not Recorded” remains
+unknown. “Observed” attendance means presence at a recorded ballot only; it does
+not claim attendance for the whole meeting. A roster does not establish attendance.
+Unknown outcomes remain unrecorded; never infer individual ballots from unanimity.
+Read back `get_meeting` and `get_person_meeting_votes`. UUID and signed-in profile
+views use live data; anonymous public slug profiles require a rebuild. Verify the
+actual public profile after publishing before reporting site visibility.
