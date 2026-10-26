@@ -73,7 +73,8 @@ export async function readGeorgiaSource(input: GeorgiaSourceInput, fetcher: type
       throw new Error(`Georgia ${phase} request failed`);
     }
     if (!response.ok) throw new Error(`Georgia source returned HTTP ${response.status}`);
-    return response.json();
+    try { return await response.json(); }
+    catch { throw new Error(`Invalid Georgia ${phase} response`); }
   };
   const token = await request(`${GEORGIA_API}authentication/token?key=${key}&ms=${ms}`, 'handshake');
   if (typeof token !== 'string' || !token) throw new Error('Invalid Georgia source handshake');

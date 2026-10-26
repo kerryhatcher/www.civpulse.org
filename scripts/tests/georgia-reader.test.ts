@@ -39,4 +39,6 @@ test('redirects are rejected without forwarding tokens; timeout messages identif
  let n=0;const dataTimeout=(async()=>{if(!n++)return Response.json('token');throw new DOMException('secret token','TimeoutError');}) as typeof fetch;
  await expect(readGeorgiaSource(input,dataTimeout)).rejects.toThrow('Georgia data request timed out');
  const response=await handleSourceRequest(new Request('https://reader.test/?resource=vote&vote_id=21003'),timeout);expect(response.status).toBe(502);expect(JSON.stringify(await response.json())).not.toContain('secret');
+ const invalid=(async()=>new Response('secret upstream content')) as typeof fetch;
+ await expect(readGeorgiaSource(input,invalid)).rejects.toThrow('Invalid Georgia handshake response');
 });
