@@ -1,5 +1,13 @@
 # MCP server
 
+HTTP(S) fields shared by article, layer, ballot-question and organization-link
+tools export a complete, case-insensitive, flag-free URL pattern. Some connector
+validators require a full-string match; a protocol-prefix-only pattern can reject
+valid article URLs before they reach the server. Server URL parsing, length limits
+and admin checks still apply. Run `bun test scripts/tests/mcp-urls.test.ts` to
+verify exported schemas and atomic article/organization writes. Refresh a client's
+tool catalog after deploying schema changes if it retains the previous pattern.
+
 For account setup and everyday use, see the site's
 [AI plugins, MCP, and skills guide](https://www.civpulse.org/docs/ai/).
 It covers ChatGPT, Codex, generic MCP clients, plugin availability and skills.
