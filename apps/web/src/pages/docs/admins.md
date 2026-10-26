@@ -176,3 +176,39 @@ GET resolution requests, including repeats, scanners, and bots; they are not
 unique people or proof the destination finished loading. HEAD requests do not
 increment the count. QR generation and downloads do not visit the short URL.
 No visitor IP addresses, user agents, or cookies are stored in these statistics.
+
+## Legislative records
+
+Use [Legislation admin](/admin/legislation/) and choose a record type. Existing
+organizations represent legislatures, chambers and committees; existing people,
+offices and service records identify members. Create records in this order:
+
+1. Legislative term, then regular/special session and chamber/committee.
+2. Dated body memberships linked to each member's office term.
+3. Bill or resolution, with an official identifier and numbering context. Keep the
+   same context across annual sessions when bills carry over; use a separate context
+   when special sessions restart numbering.
+4. Sponsorships, positions, official text versions, amendments and dated actions.
+5. Vote with its exact question, category, method, outcome and coverage; link affected
+   bills and optional versions/amendments, then enter individual member choices.
+6. Media coverage links to existing articles and optional calendar-event links.
+
+Use Edit to update a record and New record to clear the form. Record withdrawn
+sponsorship with an end date. Preserve official sponsorship and voting terminology
+in the source-role/source-choice fields. Never infer absence from a missing vote,
+or support from a procedural vote. Mark incomplete member lists as partial. Voice
+votes use “no individual record” coverage and cannot contain member choices.
+
+Supply an official source URL when available. Provider record IDs must be paired
+with a provider name. Uncertain service dates or missing body memberships require a
+review note before saving a vote choice. Historical references cannot be reassigned;
+delete/recreate dependent records explicitly when correcting context. Referenced
+records cannot be deleted until their dependencies are reconciled. Audit history
+preserves corrections.
+
+Visibility applies to each record and its references: a hidden person, article or
+bill association never becomes public merely because another parent is public.
+Records appear live in the public viewers after saving; frontend code changes still
+require deployment. MCP tools support the same records and an atomic, repeatable
+normalized import keyed by source provider and ID. A provider-specific bulk import
+must resolve identities and coverage before marking records complete.

@@ -422,3 +422,17 @@ records and editor account IDs. Verify a visibility change hides old revisions
 from public access, and that private history never enters the static build.
 History is fetched live through an RPC; profile text still follows the normal
 static-build lifecycle. No historical revisions exist before tracking is enabled.
+
+### Legislative records verification
+
+Apply pending append-only migrations to the local backend without resetting shared
+data. Run `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-db.test.ts`, `bun run mcp:check`,
+`bun run check` and `bun run build`. Database fixtures roll back.
+
+In `/admin/legislation/`, create a term, session and body for existing organizations,
+then a bill, sponsorship, vote and member choice linked to an existing office term.
+Check `/legislation/`, the bill/vote viewers and the person's profile anonymously,
+as an ordinary user and as an admin. Verify media links, filters, session carryover,
+voice-vote restrictions, private/unlisted references, mobile layout and browser
+console health. Fictional manual browser fixtures must remain local and be cleaned
+up in reverse dependency order. Do not label a partial import as complete coverage.

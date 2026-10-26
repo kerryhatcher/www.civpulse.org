@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Legislative session"
+  description="Bills, votes and calendar events associated with this session."
+>
+  <main id="main" data-legislation-view="legislative_sessions">
+    <p>
+      <a href="/legislation/sessions/">All sessions</a>
+    </p>
+    <p role="status" data-status>
+      Loading session…
+    </p>
+    <div data-detail></div>
+  </main>
+</Layout>
+<script>
+  import { initLegislationView } from "../../scripts/legislation";
+  void initLegislationView();
+</script>

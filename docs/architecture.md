@@ -191,3 +191,12 @@ deploy. Organization profiles link to a filtered request directory; the Account
 page links to managed requests. Viewer routes are excluded from the sitemap.
 No request identity, private file metadata or ownership history enters HTML at
 build time. Creation is admin-only; owners and admins manage existing requests.
+
+## Legislative records
+
+`/legislation/`, its session directory, bill/session/vote UUID viewers, and
+`/admin/legislation/` are static Astro shells. Browser RPCs fetch legislative data,
+so saved records appear immediately without embedding hidden content in HTML.
+UUID viewer routes are excluded from the sitemap. Person profiles load historical
+votes and sponsorships alongside office terms. Existing local meeting/attendance
+records remain independent. See [backend.md](./backend.md#legislative-records).

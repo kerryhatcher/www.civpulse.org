@@ -1106,3 +1106,58 @@ Apply the migration before deploying the frontend. No hidden rows enter static H
 Run `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/people-directory-db.test.ts` for pagination, sorting,
 filtering, and visibility checks. Fixtures roll back.
+
+## Legislative records
+
+Legislative history is independent of calendar meeting attendance. `legislative_terms`
+represents a Congress or state legislative cycle; `legislative_sessions` represents
+regular/special/extraordinary sessions within it. `legislative_bodies` types existing
+organizations as legislatures, chambers, committees or subcommittees and identifies
+their legislature. Dated `legislative_body_memberships` references existing office
+terms. The term is not an individual's period of office.
+
+`bills` covers bills and resolutions, with unique `(term_id, numbering_context,
+identifier)`. Use a shared numbering context for carryover between annual sessions;
+use a separate context when a special session restarts numbering. The introducing
+session remains unchanged when later sessions record actions. Versions, amendments,
+actions, companion/reintroduction relationships, sponsorship intervals, documented
+positions and article associations are independent child records. Withdraw a sponsor
+by setting `ends_on`; a position is sourced independently of formal sponsorship.
+
+`legislative_votes` stores the exact question, body/session, date, method, category,
+reported result/totals and coverage (`complete`, `partial`, `no_individual_record`).
+`legislative_vote_bills` connects a vote to one or several bills and optional versions,
+amendments/actions. Individual choices reference the office term held at the time;
+a person cannot receive two choices in the same vote. Missing records are unknown,
+not absences. Voice votes cannot have individual choices. Unknown membership or
+year-only service boundaries require an explicit review note. The normalized choice
+and original source wording are both retained. Do not infer endorsements from
+procedural votes, or calculate participation rates from an incomplete denominator.
+
+All new tables have RLS, admin-only direct access, source provider/ID uniqueness,
+source URLs, retrieval timestamps and civic audit triggers. Foreign keys restrict
+deletion of referenced history. Identity/context/start dates cannot be reassigned;
+reconcile dependent records explicitly to correct them. Service end dates can be
+recorded without deleting prior votes, but cannot precede recorded participation.
+`browse_legislation` returns bounded, paginated rows and exact totals after recursive
+visibility checks on all referenced objects. Its resource list is fixed; private
+helpers are inaccessible to API roles. Known unlisted objects can be fetched by UUID;
+explicit bill/person context permits their child records, not unrelated discovery.
+Ordinary authenticated accounts have the same public visibility as anonymous users.
+`get_person_legislative_record` filters by session, body and vote category and returns
+historical office labels, choices and visible bill associations.
+
+`import_legislation` is an admin-only, atomic normalized import (at most 100 rows or
+2 MB). Supply `{table, data}` entries in parent-first order. Every `data` needs
+`source_system` and `source_id`; repeated keys patch the existing record. Explicit
+UUIDs may connect new records in the same bundle; mismatched UUID/provider mappings
+are rejected. Omitted fields retain defaults on insert and existing values on update.
+Imports use the caller's JWT/RLS and never a browser service key. Provider-specific
+harvesting and identity reconciliation are deliberately separate from this normalized
+endpoint; name-only person matching is not supported. No live federal/state bulk
+feed is enabled by these migrations.
+
+The migrations follow the repository's existing future-dated migration sequence;
+the original CLI-created timestamps were moved after their audit/schema dependencies
+before application. Subsequent local refinements are separate append-only migrations.
+Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-db.test.ts`.
