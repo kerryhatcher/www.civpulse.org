@@ -28,6 +28,7 @@ into chat or into this package.
 - `civic-research`: search civic records, election detail and article reading lists.
 - `civic-editing`: maintain content, associations, profile display names and images.
 - `civic-mapping`: manage maps, reusable layers, stored GeoJSON and individual features.
+- `civic-results`: transcribe result photos, reconcile duplicates and save scoped vote/turnout reports.
 - `civic-user-admin`: find registered accounts and promote an existing user (admin only).
 
 [Tool guide](references/tools.md) and [full schemas](references/tool-schemas.json)
@@ -45,7 +46,7 @@ bun run mcp:check
 bun run mcp:test  # requires the running local Supabase stack
 ```
 
-The archive is written outside this folder to `dist/plugins/civpulse-1.2.0.zip`.
+The archive is written outside this folder to `dist/plugins/civpulse-1.4.0.zip`.
 The builder validates manifests, compatibility metadata, skill YAML and contained
 references, regenerates the catalog, excludes symlinks/credentials, and inspects
 the ZIP. Keep both manifests and the registered app mapping synchronized on edits.

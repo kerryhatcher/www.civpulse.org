@@ -335,3 +335,12 @@ affiliation reads and three static assets; election search reuses cached, gated
 election-detail reads instead of broadening ballot-question table permissions; measure bytes/build time as
 data grows. Static copies already downloaded cannot be recalled after hiding a
 record, so publish promptly when restricting visibility.
+
+### Election results and turnout
+
+`/elections/results/` is a static shell using live `get_election_results` RPC data.
+This explicit runtime reporting surface makes saved snapshots available immediately;
+existing election/profile content still follows its normal rebuild behavior.
+Original result photographs/PDFs live in private Supabase Storage and never enter
+prerendered HTML. The AI agent transcribes originals, and admin-only MCP tools
+validate and save immutable cumulative reports. See [election results](election-results.md).

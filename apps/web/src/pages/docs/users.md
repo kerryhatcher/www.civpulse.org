@@ -237,3 +237,19 @@ support a stronger conclusion. “Vote Not Recorded” is never counted as No,
 abstention, or absence. Recorded ballots can appear before an official outcome
 is known. Anonymous public profile snapshots update after publication; meeting
 viewer records update live.
+
+## Election results and turnout
+
+Open [Election results and turnout](/elections/results/) from the Elections page,
+choose an election and load its reports. **Show earlier reports** reveals how
+reported totals changed. Each report identifies its area, counting group, ballot
+style, time and unofficial/certified status. Reports can overlap: county summaries
+already include precinct or machine ballots, so do not add them together.
+
+Turnout uses reported voters, or ballots when voters are unavailable, divided by
+the matching registered-voter count. The page labels which numerator it uses.
+Contest participation can use a different denominator. Missing data says “Not
+reported”; no reports does not mean zero votes. The November 3, 2026 election can
+have turnout reports before election day, while May 19, 2026 is historical. These
+are reported counts, not winner projections. Original photographs remain private
+for admin review.

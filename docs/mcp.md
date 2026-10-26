@@ -326,3 +326,15 @@ If a connected host lacks a documented tool, check the deployed MCP tool list an
 refresh the connection's tool discovery. Extend and deploy the supported app/MCP
 API when a capability is missing; do not substitute ad-hoc database SQL for a
 content operation.
+
+### Election result workflow
+
+`manage_election_results` is one admin-only tool with a discriminated `operation`
+argument: `upload`, `view`, `read`, or `import`. This groups the workflow within the
+128-tool catalog limit; the builder rejects larger catalogs. The `civic-results`
+skill guides visual OCR, source identity, report deduplication and validation.
+See [election results](election-results.md) for the database contract and examples.
+Images are private evidence, not image-generation inputs. No OCR service is called
+by the server. The agent transcribes the supplied original and saves structured
+counts only after validation. The plugin package is version 1.4.0; deployment and
+account plugin release are separate from local packaging.

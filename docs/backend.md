@@ -1399,3 +1399,11 @@ unknown choices, moment-observed attendance, and private upload reconciliation
 receipts. They retain existing meeting/people visibility and admin-only writes.
 See [the API contract and verification workflow](meeting-imports.md) for atomic
 imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.
+
+## Election result snapshots
+
+Private evidence and immutable, scoped election reports support agent-assisted OCR
+imports and turnout tracking. Admin-only imports validate identity, vote totals,
+source presence and predecessor IDs; public reads inherit election visibility.
+See [election results](election-results.md) for the RPC contract, deduplication,
+photo examples, validation and release sequence.

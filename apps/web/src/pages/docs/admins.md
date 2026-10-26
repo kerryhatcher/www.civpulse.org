@@ -321,3 +321,26 @@ Unknown outcomes remain unrecorded; never infer individual ballots from unanimit
 Read back `get_meeting` and `get_person_meeting_votes`. UUID and signed-in profile
 views use live data; anonymous public slug profiles require a rebuild. Verify the
 actual public profile after publishing before reporting site visibility.
+
+## Election results and turnout
+
+Use the Civic Pulse **Election results and turnout** skill with an authenticated
+admin AI agent. Attach original tape photographs or printed summaries, including
+headers, and specify the election and reporting area. The agent uploads private
+originals, transcribes them, resolves candidate/contest records, checks duplicates
+and validates a complete report before saving. Readable evidence and your existing
+instruction to update totals authorize a save; missing dates, IDs or uncertain
+digits require clarification.
+
+Different photographs of the same report count once. New cumulative summaries
+replace earlier snapshots while retaining history. Never add county summaries to
+machine tapes, or sum successive summaries. Keep ballots, voters, candidate votes,
+unresolved write-ins and registration denominators separate. A printed zero is
+not the same as an unreadable value. Standard tape certification text does not
+make the county results certified. November 3, 2026 accepts turnout before election
+day, but no candidate votes. May 19 is a separate historical election.
+
+Inspect saved reports at [Election results and turnout](/elections/results/),
+including earlier reports. Saved results appear there immediately; other election
+and candidate edits still require Publish. Conflicting OCR at the same printed
+time is rejected for reconciliation, not silently overwritten.
