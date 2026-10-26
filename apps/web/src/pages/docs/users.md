@@ -269,3 +269,24 @@ reported”; no reports does not mean zero votes. The November 3, 2026 election 
 have turnout reports before election day, while May 19, 2026 is historical. These
 are reported counts, not winner projections. Original photographs remain private
 for admin review.
+
+## Start from the homepage
+
+Use **What would you like to find?** on the [homepage](/) to search by name,
+organization, place, or topic. Select **Search** or press Enter to open the
+search results, then narrow them by content type. An empty search opens the
+search page so you can choose a type to browse.
+
+**Elections at a glance** shows up to three upcoming published elections in date
+order, including Election Day itself. Dates roll forward in Eastern Time; new
+or edited election records appear after the next site publish. The homepage
+also links to people, organizations, and public records, shows the public map
+count, and lists upcoming community events.
+
+The header's **Browse** menu groups all destinations under **Community**,
+**Government**, and **Research & help**. Open it by click, tap, or keyboard;
+press Escape to close it. **Calendar**, **Search**, and **Sign in** remain directly
+available. Signed-in visitors see **Account**, and admins also see **Admin**.
+Select the Civic Pulse logo to return home. The shorter footer contains
+**About**, **Guides & help**, and **Search**; archive and directory links are
+available in **Browse** on every page.
