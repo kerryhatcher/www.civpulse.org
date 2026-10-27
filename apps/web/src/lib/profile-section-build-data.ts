@@ -1,3 +1,4 @@
+import {readPublicProfileBuildPage} from './build-read';
 import { readPublicLegislationTable } from './legislation-build-data';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getBuildSupabase } from './supabase-build';
@@ -12,8 +13,8 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
     const started = performance.now();
     let exported = 0;
     for (let offset=0;;offset+=500) {
-      const { data,error } = await client.rpc('export_public_profile_rows',{p_section:section,p_offset:offset,p_limit:500});
-      if (error) throw new Error(`Public profile export failed (${section}): ${error.message}`);
+      const { data,error } = await readPublicProfileBuildPage(client,section,offset);
+      if (error) throw new Error(`Public profile export failed (${section}, offset ${offset}): ${error.message}`);
       const rows = data as {owner_id:string;position:number;data:unknown}[];
       if (!Array.isArray(rows)) throw new Error(`Invalid public profile export (${section})`);
       exported += rows.length;

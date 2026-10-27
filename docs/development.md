@@ -718,3 +718,9 @@ recording dataset/page counts and the `Public legislation build:` timings.
 Use only public production credentials for a local hosted-data benchmark.
 Keep the six-request HTTP ceiling and three-request legislative ceiling; do not
 raise timeouts, omit records or reuse a snapshot across builds to improve timing.
+
+Run `bun test scripts/tests/build-read.test.ts` for timeout-only retries and
+profile subpage equivalence, final short pages, authorization failure, and
+malformed/failed subpages. Per-section logs include export row counts and timing;
+confirmed timeout retries/splits are visible in build logs and do not bypass
+validation or change credentials.

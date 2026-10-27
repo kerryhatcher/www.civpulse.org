@@ -478,3 +478,10 @@ with short backoff and identical credentials/parameters; permission and validati
 errors never retry. Persistent timeouts still fail publication. Development
 expires the in-memory cache after thirty seconds. Table logs show rows, pages
 and elapsed time to identify future build regressions.
+
+Profile section exports retain 500-row pages normally. A confirmed statement
+timeout splits only that range into sequential 100-row reads through the same
+anonymous-only export RPC; short pages preserve end-of-data behavior. Smaller
+reads have the same two-retry timeout bound. A denied or malformed subpage stops
+the entire export rather than publishing its successful prefix. No timeout,
+permission, result ordering or response-size cap is increased.

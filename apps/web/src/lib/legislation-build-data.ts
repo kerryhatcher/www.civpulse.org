@@ -1,3 +1,4 @@
+import {readBuildRpc} from './build-read';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { LegislativeRow } from './legislation';
 
@@ -44,18 +45,8 @@ export function readPublicLegislationTable(client: SupabaseClient, table: string
 }
 async function loadTable(client: SupabaseClient, reads: BuildReads, table: string): Promise<LegislativeRow[]> {
   const started = performance.now();
-  async function fetchPage(offset: number) {
-    for (let attempt = 0; ; attempt++) {
-      const result = await bounded(reads, () => client.rpc('browse_legislation', {
-        p_table: table, p_offset: offset, p_limit: PAGE_SIZE,
-      }));
-      if (result.error?.code !== '57014' || !/statement timeout/i.test(result.error.message) || attempt >= 2) return result;
-      console.warn(`Public legislation build retry: ${table}, offset ${offset}, statement timeout (${attempt + 1}/2)`);
-      await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
-    }
-  }
   async function page(offset: number, expected?: number) {
-    const { data, error } = await fetchPage(offset);
+    const { data, error } = await bounded(reads, () => readBuildRpc(client, 'browse_legislation', {p_table:table,p_offset:offset,p_limit:PAGE_SIZE}));
     if (error) throw new Error(`Public legislation build failed (${table}, offset ${offset}): ${error.message}`);
     if (!data || !Array.isArray(data.rows) || !Number.isSafeInteger(data.total) || data.total < 0 || data.total > MAX_ROWS) throw new Error(`Invalid public legislation page (${table})`);
     if (expected !== undefined && data.total !== expected) throw new Error(`Public legislation totals changed (${table})`);
