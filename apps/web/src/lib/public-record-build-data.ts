@@ -1,3 +1,4 @@
+import type { PublicCalendarSnapshot } from './calendar-snapshot';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { legislativeResources, type LegislativeRow } from './legislation';
 import type { EventRecord } from './calendars';
@@ -7,11 +8,11 @@ import { legislativeTitle } from './legislation-display';
 import { recordKinds, recordHref, webHref, legislativeRecord, eventRecord, requestRecord, type PublicRecord, type RecordKind } from './public-records';
 
 /** No direct-ID legislative context: it deliberately admits some unlisted records. */
-export async function loadPublicRecords(client: SupabaseClient): Promise<PublicRecord[]> {
+export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<PublicCalendarSnapshot,'events'|'meetings'>): Promise<PublicRecord[]> {
   const records: PublicRecord[] = [];
   async function rpc(name: string, args: Record<string, unknown>) {
     const { data, error } = await client.rpc(name, args);
-    if (error) throw new Error(`Public record export failed (${name}${args.p_table ? `: ${args.p_table}` : ''}): ${error.message}`);
+    if (error) throw new Error(`Public record export failed (${name}${args.p_table ? `:${args.p_table}` : ''}, offset ${args.p_offset ?? 0}): ${error.message}`);
     if (data == null) throw new Error(`Missing public record export (${name})`);
     return data;
   }
@@ -78,13 +79,13 @@ export async function loadPublicRecords(client: SupabaseClient): Promise<PublicR
     const target = id && published.get(id);
     if (target) fact.href = recordHref(target.kind, target.id);
   }
-  const events = await pages<EventRecord>('browse_calendar_events', 500, { p_public_only: true });
+  const events = calendar?.events ?? await pages<EventRecord>('browse_calendar_events', 500, { p_public_only: true });
   const requests = await pages<{ id: string; visibility: string }>('search_records_requests', 25, { p_managed: false });
   const tasks: (() => Promise<void>)[] = [];
   for (const event of events) tasks.push(async () => {
     if (event.visibility !== 'public' || event.calendar_visibility !== 'public' || (event.election_id && event.election_visibility !== 'public')) throw new Error('Non-public event parent in export');
-    const meeting: (MeetingRecord & { event?: MeetingRecord['event'] & { visibility: string; election_id: string | null }; calendar?: { visibility: string }; election?: { visibility: string } | null }) | undefined = event.is_meeting ? await rpc('get_meeting', { p_id: event.id }) : undefined;
-    if (meeting && (meeting.status !== 'ok' || meeting.event?.id !== event.id || meeting.event.visibility !== 'public' || meeting.calendar?.visibility !== 'public' || (meeting.event.election_id && meeting.election?.visibility !== 'public'))) throw new Error('Public meeting became unavailable during export');
+    const meeting: (MeetingRecord & { event?: MeetingRecord['event'] & { visibility: string; election_id: string | null }; calendar?: { visibility: string }; election?: { visibility: string } | null }) | undefined = event.is_meeting ? calendar ? calendar.meetings.get(event.id) : await rpc('get_meeting', { p_id: event.id }) : undefined;
+    if (event.is_meeting && (!meeting || meeting.status !== 'ok' || meeting.event?.id !== event.id || (!calendar && (meeting.event.visibility !== 'public' || meeting.calendar?.visibility !== 'public' || (meeting.event.election_id && meeting.election?.visibility !== 'public'))))) throw new Error('Public meeting became unavailable during export');
     records.push(eventRecord(event, meeting));
   });
   for (const request of requests) tasks.push(async () => {

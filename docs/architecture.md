@@ -160,10 +160,10 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   silently omitted for anonymous visitors.
 - Calendars and events: each calendar belongs to one organization (an
   organization can have many) and each event belongs to one calendar. An event
-  is only visible when both it and its calendar are visible. `/calendar/` browses
-  and filters events by organization/calendar through `search_events`; unlisted
-  and private events use the `/calendar/view/?id=<uuid>` shell gated by
-  `get_event`.
+  is only visible when both it and its calendar are visible. Anonymous `/calendar/`
+  browsing uses static month files; signed-in browsing uses `browse_calendar_events`.
+  Public event pages are `/records/events/<uuid>/`; unlisted/private links use
+  `/calendar/view/?id=<uuid>` gated by `get_event`.
 - Meetings are calendar events marked `is_meeting`. Admins add notes, transcripts,
   attendance, votes, and attachments at `/admin/meetings/`. The event viewer
   loads these records through `get_meeting`; private meeting files are served
@@ -372,6 +372,42 @@ election-detail reads instead of broadening ballot-question table permissions; m
 data grows. Static copies already downloaded cannot be recalled after hiding a
 record, so publish promptly when restricting visibility.
 
+### Static public calendar and event pages
+
+The anonymous calendar reads `/calendar-data/` files: a small calendar/month
+manifest and one content-hashed file per occupied month. Spanning events appear
+in every occupied month; New York dates, DST and exclusive midnight ends use the
+same helpers as the live calendar. Empty months need no request. Date navigation,
+organization/calendar/category filters, multi-calendar selection, colors, keyword
+filtering and Month/Agenda views remain in the browser. Signed-in browsing uses
+the existing gated RPCs, with unchanged discovery permissions.
+
+Public event pages are prerendered at `/records/events/<uuid>/`, including title,
+time, description, location, public election link, and public meeting notes,
+transcripts, attendance and votes. Browser hydration and legacy viewers reuse
+a lazily loaded month detail file with the same public meeting content, video
+settings and attachment metadata. Anonymous legacy UUID viewers use
+a separate public event index; IDs absent from that index still use `get_event`
+and `get_meeting`, preserving unlisted direct links and private gates. A missing
+published file is an error, never a silent backend fallback. Signed-in viewers
+retain live RPCs and admin edit links. Attachment bytes and signed download URLs
+are never embedded; Storage checks access when the download button is clicked.
+
+The homepage reads published future events and selects today's next four at
+runtime, so dates advance without a daily rebuild. The ICS feed reuses the same
+public build snapshot, retaining UIDs and subscription URLs. Events need public
+event, calendar and optional election parents; hidden calendar names, event text,
+participant IDs and relationship facts never enter public snapshots. Build reads
+are paged, bounded and shared; any configured backend failure stops publication.
+Assets revalidate after five minutes and are excluded from the sitemap; public
+event HTML is included. Publish after imports/edits and promptly after restricting
+visibility. Previously downloaded public copies cannot be recalled.
+
+There is no new hosting service, bucket or instance resize. Public visits replace
+calendar/event/meeting RPCs with static asset reads. Builds add public meeting
+export pages and event HTML/JSON assets; monitor build minutes and static file
+counts as imports grow. Signed downloads retain their existing Storage costs.
+
 ### Indexable public record archive
 
 `/records/` links to paginated (50 records per page) archives under
@@ -401,6 +437,12 @@ to remove previously published pages, like public profiles and map exports. A
 previously downloaded public page cannot be recalled. The export validates paging
 and response gates but is not a transaction spanning concurrent editorial changes;
 rebuild after edits settle. Development caches the snapshot for thirty seconds.
+
+The calendar UI and public record archive share the same public calendar snapshot,
+including batched meeting records, instead of hydrating every meeting twice.
+Public archive event pages host the interactive event viewer and prerendered
+meeting text at one canonical URL. Detail JSON is packed by month to reduce
+static file counts; ordinary calendar month browsing never downloads transcripts.
 
 ### Election results and turnout
 

@@ -73,8 +73,8 @@ export const EVENT_COLUMNS =
   'id, calendar_id, title, description, starts_at, ends_at, all_day, location, url, visibility, election_id, election_date_kind, category, is_meeting';
 
 /** The shared event viewer shell. Unlisted and private events are uuid-only. */
-export function eventViewHref(id: string): string {
-  return `/calendar/view/?id=${id}`;
+export function eventViewHref(id: string, publicPage = false): string {
+  return publicPage ? `/records/events/${id}/` : `/calendar/view/?id=${id}`;
 }
 
 const DATE_FORMAT: Intl.DateTimeFormatOptions = {
@@ -126,4 +126,10 @@ export function toDatetimeLocal(value: string | null): string {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
     date.getHours(),
   )}:${pad(date.getMinutes())}`;
+}
+
+/** Event source links accept ordinary web URLs only. */
+export function eventSourceUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try { const url=new URL(value); return ["http:","https:"].includes(url.protocol) ? url.href : null; } catch { return null; }
 }

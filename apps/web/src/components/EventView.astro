@@ -1,0 +1,43 @@
+---
+import MeetingDetails from './MeetingDetails.astro';
+import type {MeetingRecord} from '../lib/meetings';
+import ObjectHistoryLink from './ObjectHistoryLink.astro';
+import {eventSourceUrl, formatEventWhen, type EventRecord} from '../lib/calendars';
+interface Props { event?:EventRecord; meeting?:MeetingRecord; snapshotUrl?:string; indexUrl?:string }
+const {event,meeting,snapshotUrl,indexUrl}=Astro.props;
+const sourceUrl=eventSourceUrl(event?.url);
+---
+  <main id="main" data-event-id={event?.id} data-event-snapshot={snapshotUrl} data-event-index={indexUrl}>
+    {event && <p><a href="/records/">Public record archive</a> / <a href="/records/events/page/1/">Events and meetings</a></p>}
+    <div class="page-intro">
+      <p class="org-eyebrow">Event</p>
+    </div>
+
+    <div class="event-viewer-status empty-state" data-event-viewer-status hidden></div>
+
+    <article class="event-detail" data-event-viewer hidden={!event}>
+      <h1 data-event-title>{event?.title ?? "Event"}</h1>
+      <p class="event-detail-when" data-event-when>{event && formatEventWhen(event, "America/New_York")}</p>
+      <p class="event-detail-meta" data-event-meta>{event && `${event.organization_name} · ${event.calendar_name}`}</p>
+      <p class="event-detail-location" data-event-location hidden={!event?.location}>{event?.location}</p>
+      <p class="event-detail-election" data-event-election hidden={!event?.election_id}>{event?.election_id && <>Part of <a href={`/elections/${event.election_slug}/`}>{event.election_name}</a></>}</p>
+      <div class="prose event-detail-description" data-event-description hidden={!event?.description}>{event?.description}</div>
+      <p data-event-link hidden={!sourceUrl}>
+        <a class="button-link" data-event-url href={sourceUrl ?? undefined} target="_blank" rel="noopener">Event details</a>
+      </p>
+      <MeetingDetails meeting={meeting} />
+      <p class="event-detail-actions">
+        <a class="button-link event-edit" data-event-edit-link hidden>Edit event</a>
+        <a class="event-back" data-event-calendar-link href="/calendar/">← Back to the calendar</a>
+      </p>
+    </article>
+    {event && <p class="status">Published snapshot. Changes appear after the next publication. Coverage includes records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>}
+  <ObjectHistoryLink table="events" id={event?.id} />
+  </main>
+
+
+<script>
+  import { initEventViewFromUrl } from '../scripts/calendar';
+
+  void initEventViewFromUrl();
+</script>

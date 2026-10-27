@@ -1,15 +1,22 @@
 ---
+import EventView from '../../../components/EventView.astro';
+import {getPublicCalendarData} from '../../../lib/calendar-build-data';
+import {calendarAssetUrl} from '../../../lib/calendar-assets';
+import type {EventRecord} from '../../../lib/calendars';
+import type {MeetingRecord} from '../../../lib/meetings';
 import Layout from '../../../layouts/Layout.astro';
 import { getPublicRecordSnapshot } from '../../../lib/public-record-snapshot';
 import { archiveHref, recordKinds, type PublicRecord } from '../../../lib/public-records';
 export async function getStaticPaths() {
-  return (await getPublicRecordSnapshot()).map(record => ({ params: { kind: record.kind, id: record.id }, props: { record } }));
+  const calendar=await getPublicCalendarData();
+  const events=new Map(calendar.events.map(event=>[event.id,event]));
+  return (await getPublicRecordSnapshot()).map(record => ({ params: { kind: record.kind, id: record.id }, props: { record,event:record.kind==='events'?events.get(record.id):undefined,meeting:record.kind==='events'?calendar.meetings.get(record.id):undefined } }));
 }
-interface Props { record: PublicRecord }
-const { record } = Astro.props;
+interface Props { record: PublicRecord; event?:EventRecord; meeting?:MeetingRecord }
+const { record,event,meeting } = Astro.props;
 ---
 <Layout title={record.title} description={record.description}>
-  <main id="main">
+  {event ? <EventView event={event} meeting={meeting} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} /> : (<main id="main">
     <p><a href="/records/">Public record archive</a> / <a href={archiveHref(record.kind)}>{recordKinds[record.kind]}</a></p>
     <div class="page-intro"><h1>{record.title}</h1></div>
     <dl class="account-list">{record.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.href ? <a href={fact.href}>{fact.value}</a> : fact.value}</dd></div>)}</dl>
@@ -20,6 +27,6 @@ const { record } = Astro.props;
     </section>)}
     <p>Published snapshot. Changes appear after the next publication. Coverage includes records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>
     <p><a href={record.viewer}>Open live record and available files</a> · <a href="/about/#sources">Sources and credits</a></p>
-  </main>
+  </main>)}
 </Layout>
 <style>.record-text { white-space: pre-wrap; overflow-wrap: anywhere; }</style>

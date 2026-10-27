@@ -50,6 +50,17 @@ test('stops publication when a meeting becomes unlisted after discovery', async 
   }))).rejects.toThrow('became unavailable');
 });
 
+test('archive reuses the gated calendar snapshot without per-meeting or duplicate event reads',async()=>{
+ const calls:string[]=[];
+ const event={id:id(300),title:'Public meeting',description:null,starts_at:'2026-10-26T18:00:00Z',ends_at:null,all_day:false,location:null,url:null,visibility:'public',calendar_id:id(301),calendar_name:'Council',calendar_slug:'council',calendar_visibility:'public',organization_id:id(302),organization_name:'Council',organization_slug:'council',election_id:null,election_date_kind:null,election_name:null,election_slug:null,election_visibility:null,is_meeting:true} as const;
+ const meeting={status:'ok',event:{id:event.id,title:event.title,meeting_notes:'Public minutes',meeting_transcript:null,meeting_video_url:null,meeting_video_start_seconds:null}} as const;
+ const shared={events:[event],meetings:new Map([[event.id,meeting]])};
+ const records=await loadPublicRecords(client(name=>{calls.push(name);return empty(name);}),shared);
+ expect(records.filter(record=>record.kind==='events')).toHaveLength(1);
+ expect(JSON.stringify(records)).toContain('Public minutes');
+ expect(calls).not.toContain('get_meeting');expect(calls).not.toContain('browse_calendar_events');
+});
+
 test('archive export bounds concurrent streams and keeps relation section order', async () => {
   let active = 0, peak = 0;
   const recordId = id(900);

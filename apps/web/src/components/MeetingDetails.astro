@@ -1,0 +1,31 @@
+---
+import {meetingAttendanceLabel,type MeetingRecord} from '../lib/meetings';
+import {memberProfileHref} from '../lib/member-mentions';
+import {meetingVideoWatchUrl,meetingVideoEmbed,formatMeetingVideoStart} from '../lib/meeting-video';
+interface Props { meeting?:MeetingRecord }
+const {meeting}=Astro.props;
+const videoUrl=meetingVideoWatchUrl(meeting?.event?.meeting_video_url,meeting?.event?.meeting_video_start_seconds);
+const embed=meetingVideoEmbed(meeting?.event?.meeting_video_url,meeting?.event?.meeting_video_start_seconds);
+const start=formatMeetingVideoStart(meeting?.event?.meeting_video_start_seconds);
+---
+<section data-meeting-details hidden={!meeting} class="meeting-details">
+  <h2>Meeting record</h2>
+  <section data-meeting-video hidden={!videoUrl}>
+    <h3>Meeting video</h3>
+    <p data-meeting-video-start hidden={!start}>{start && `Starts at ${start}`}</p>
+    <div data-meeting-video-player class="meeting-video-player" hidden={!embed}>
+      {embed && <iframe src={embed.src} title={`${meeting?.event?.title ?? 'Meeting'} — ${embed.provider} video`} loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}
+    </div>
+    <p><a data-meeting-video-link href={videoUrl ?? undefined} target="_blank" rel="noopener noreferrer">Watch video on the host's site</a></p>
+  </section>
+  <section data-meeting-notes hidden={!meeting?.event?.meeting_notes}><h3>Notes and minutes</h3><p data-meeting-notes-text class="meeting-text">{meeting?.event?.meeting_notes}</p></section>
+  <section data-meeting-transcript hidden={!meeting?.event?.meeting_transcript}><h3>Transcript</h3><p data-meeting-transcript-text class="meeting-text">{meeting?.event?.meeting_transcript}</p></section>
+  <section data-meeting-attendance hidden={!meeting?.attendance?.length}><h3>Attendance</h3><ul data-meeting-attendance-list>{meeting?.attendance?.map(person=><li><a href={memberProfileHref(person.person_id)}>{person.full_name}</a> — {meetingAttendanceLabel(person.status)}{person.note && ` (${person.note})`}</li>)}</ul></section>
+  <section data-meeting-votes hidden={!meeting?.votes?.length}><h3>Votes</h3><div data-meeting-vote-list>{meeting?.votes?.map(vote=><article id={`vote-${vote.id}`}><h4>{vote.subject}</h4>{vote.description && <p>{vote.description}</p>}<p>Outcome: {vote.outcome ?? 'Not recorded'}</p><ul>{vote.choices.map(choice=><li><a href={memberProfileHref(choice.person_id)}>{choice.full_name}</a>: {choice.choice}</li>)}</ul></article>)}</div></section>
+  <section data-meeting-attachments hidden={!meeting?.attachments?.length}><h3>Attachments</h3><ul data-meeting-attachment-list>{meeting?.attachments?.map(file=><li><button type="button" disabled>{file.file_name}</button></li>)}</ul><noscript><p>Enable JavaScript to download attachments with access checks.</p></noscript></section>
+</section>
+<style>
+.meeting-video-player { width:100%; aspect-ratio:16 / 9; }
+.meeting-video-player :global(iframe) { width:100%; height:100%; border:0; }
+[data-meeting-vote-list] :global(article) { scroll-margin-top:6rem; }
+</style>

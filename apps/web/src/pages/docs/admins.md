@@ -322,6 +322,14 @@ Read back `get_meeting` and `get_person_meeting_votes`. UUID and signed-in profi
 views use live data; anonymous public slug profiles require a rebuild. Verify the
 actual public profile after publishing before reporting site visibility.
 
+Choose **Publish** after calendar/event imports, meeting record edits, or visibility
+changes to refresh public calendar months, event pages, meeting details, homepage
+upcoming events and the subscription feed together. Signed-in views remain live;
+seeing an edit there does not mean it is published. Hidden events/calendars and
+hidden meeting participants are excluded from public snapshots. Restricting
+visibility requires prompt publication; allow up to five minutes for cached data
+to expire. Attachment download permissions remain checked at click time.
+
 ### Backfilling district-based legislative service
 
 Keep historical offices attached to their recorded district organizations.

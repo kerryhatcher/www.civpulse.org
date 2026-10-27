@@ -1,3 +1,5 @@
+import {readCalendarAsset} from '../lib/calendar-data';
+import {isPublicEvent,upcomingEvents} from '../lib/calendar-snapshot';
 import { eventViewHref, formatEventWhen, type EventRecord } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
 
@@ -13,12 +15,12 @@ function renderHomeEvent(event: EventRecord): HTMLElement {
 
   const when = document.createElement('p');
   when.className = 'home-event-when';
-  when.textContent = formatEventWhen(event);
+  when.textContent = formatEventWhen(event,'America/New_York');
   item.append(when);
 
   const heading = document.createElement('h3');
   const link = document.createElement('a');
-  link.href = eventViewHref(event.id);
+  link.href = eventViewHref(event.id,isPublicEvent(event));
   link.textContent = event.title;
   heading.append(link);
   item.append(heading);
@@ -47,23 +49,27 @@ export function initHomeEvents(): void {
   const empty = document.querySelector<HTMLElement>('[data-home-events-empty]');
   if (!list) return;
 
-  void getSupabase()
-    .rpc('search_events', { p_query: '', p_limit: 4 })
-    .then(({ data, error }) => {
-      if (error) {
-        if (status) status.textContent = 'Could not load upcoming events.';
-        return;
+  void (async()=>{
+    try {
+      const client=getSupabase();
+      const {data:{session},error:authError}=await client.auth.getSession();
+      if(authError) throw authError;
+      let events:EventRecord[];
+      if(session) {
+        const {data,error}=await client.rpc('search_events',{p_query:'',p_limit:4});
+        if(error) throw error;
+        events=(data??[]) as unknown as EventRecord[];
+      } else {
+        const url=list.dataset.homeEventsSnapshot;
+        if(!url) throw new Error('Missing published upcoming events');
+        events=upcomingEvents(await readCalendarAsset<EventRecord[]>(url));
       }
-
-      const events = (data ?? []) as unknown as EventRecord[];
-      if (events.length === 0) {
-        if (status) status.hidden = true;
-        if (empty) empty.hidden = false;
-        return;
-      }
-
       list.replaceChildren(...events.map(renderHomeEvent));
-      list.hidden = false;
-      if (status) status.hidden = true;
-    });
+      list.hidden=events.length===0;
+      if(status) status.hidden=true;
+      if(empty) empty.hidden=events.length>0;
+    } catch {
+      if(status) status.textContent='Could not load upcoming events. Please reload to try again.';
+    }
+  })();
 }

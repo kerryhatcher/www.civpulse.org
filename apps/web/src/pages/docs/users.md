@@ -290,8 +290,20 @@ available evidence; this does not establish attendance throughout the meeting.
 **Attendance unknown** and **unknown** vote choices mean the source does not
 support a stronger conclusion. “Vote Not Recorded” is never counted as No,
 abstention, or absence. Recorded ballots can appear before an official outcome
-is known. Anonymous public profile snapshots update after publication; meeting
-viewer records update live.
+is known. Anonymous public profile and event snapshots update after publication; signed-in
+meeting viewers update live.
+
+Public calendar browsing and event pages use published snapshots. Month navigation,
+day selection, Today, Month/Agenda views, organization/calendar/category filters,
+calendar checkboxes, colors and keyword filtering still work in your browser.
+Public meeting notes, transcripts, attendance, votes and video settings publish
+with the event. Attachment downloads still check access when clicked. Existing
+shared event links continue to work; unlisted events stay accessible by their
+shared links, and private events require an admin. Signed-in views retain live
+access checks. Public calendar subscriptions update after publication and your
+calendar app's next refresh.
+Shared event cards link to the calendar copy carrying a meeting record when one
+is available, so combining calendars does not hide the meeting details.
 
 ## Election results and turnout
 

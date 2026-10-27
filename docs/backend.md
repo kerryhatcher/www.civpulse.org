@@ -1400,6 +1400,27 @@ receipts. They retain existing meeting/people visibility and admin-only writes.
 See [the API contract and verification workflow](meeting-imports.md) for atomic
 imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.
 
+## Public calendar meeting export
+
+`export_public_calendar_page(p_offset=0)` composes the existing
+`browse_calendar_events(public_only=true)` and `get_meeting` readers for static
+publication. It is read-only, security invoker with empty search path, rejects
+signed-in callers, and is granted only to `anon`. Each output row has an event
+and optional meeting record; deterministic pages contain up to 500 events,
+including non-meetings so pagination cannot stop early. Public event/calendar/
+election gates and participant filtering remain in the existing readers. The
+build additionally allowlists public people and projects displayed fields.
+No table RLS, write permissions or Storage policies change. Attachment metadata
+follows the existing public meeting reader; signed URLs remain click-time reads.
+The append-only follow-ups retire the initial table-based export: events
+intentionally have no anonymous row policy. Release all migrations through main
+before building.
+
+Run `CALENDAR_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/calendar-snapshot-db.test.ts scripts/tests/calendar-db.test.ts`
+for rollback-only pagination, parent/participant visibility, live/export parity
+and execute-grant tests.
+
 ### District offices in legislative history
 
 District-numbered offices may belong to a district organization rather than the
@@ -1429,6 +1450,28 @@ uses the authenticated caller's existing `import_legislation` RPC in sequential
 `total`. Partial failures stop before later batches; retry from `next_offset`
 using the same provider IDs. No service-role credential, alternate write path or
 transaction-limit bypass is introduced. The single-batch tool remains atomic.
+
+## Vote-choice browse capacity
+
+`vote_choice_browse_performance` resolves permitted vote IDs and office-term IDs
+once per directory request. The existing `browse_legislation` RPC uses that set
+for choices instead of recursively checking the same parents for every row.
+Anonymous/ordinary/admin discovery, explicit unlisted contexts, filters, keyword
+search, exact totals, ordering and projections are unchanged. The helper stays
+in the private schema with no API-role execute grant; public grants and table
+RLS do not change. This fixes the 36,000-row choice scan that timed out during
+public archive builds. No new index, paid service or instance resize is required.
+
+Run `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/vote-choice-browse-db.test.ts`. The rollback test compares
+old/new results across caller/context combinations, then exercises 35,000 choices
+under a three-second statement timeout. Synthetic capacity rows skip audit/import
+triggers only on the test connection; normal trigger behavior is restored before
+reads and the whole transaction rolls back.
+
+The later `20261124010100` migration below supersedes the intermediate
+`20261124000200` wrapper and uses the private `visible_choice_ids` helper.
+Both applied migration files remain in append-only history.
 
 ### Public record export and vote-choice browsing
 
@@ -1473,6 +1516,21 @@ source presence and predecessor IDs; public reads inherit election visibility.
 See [election results](election-results.md) for the RPC contract, deduplication,
 photo examples, validation and release sequence.
 
+`20261124010700_calendar_bill_child_capacity` applies the same bounded parent
+visibility calculation to imported bill actions and sponsorships, which also
+exceeded the three-second API timeout as imports grew. Referenced bills, bodies,
+sessions, events and office terms retain their existing recursive visibility gates.
+The helper is private; grants, RLS and query results are unchanged. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/bill-child-browse-db.test.ts`. The rollback test compares
+all caller/parent/context gates and exercises 20,000 rows per resource under the
+API timeout, including a last-page request. No paid resource is required.
+
+Calendar capacity migration uses version `20261124010700` after the concurrent
+main sponsorship release claimed `20261124010200`. The user approved moving the
+feature migration with unchanged SQL after local/preview verification. Production
+history remains intact; the final migration reasserts the tested wrapper in all
+environments. No production migration-history repair is required.
+
 ### Public profile legislative vote export performance
 
 `20261124010400_profile_vote_export_performance` pages visibility-approved
@@ -1502,3 +1560,9 @@ vote contexts, nonempty search path, ordering and payload remain unchanged.
 The choice-browse regression now uses 50,001 choices with long source notes and
 the same three-second anonymous timeout. Merge and apply through the main
 integration before rebuilding the frontend; do not omit archive records.
+
+The user approved versions `20261124010700` and `20261124010800` after
+concurrent main releases occupied versions through `20261124010600`. Calendar
+capacity SQL remains unchanged at `10700`; `10800` exactly reasserts main’s
+current browse wrapper, including lightweight choice pagination and main’s
+action/sponsorship helpers. Production history remains intact.

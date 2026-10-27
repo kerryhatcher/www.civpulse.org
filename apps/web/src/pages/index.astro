@@ -1,4 +1,5 @@
 ---
+import {calendarAssetUrl} from '../lib/calendar-assets';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import 'leaflet/dist/leaflet.css';
@@ -144,7 +145,7 @@ const electionCallouts = (await Promise.all(elections.map(async (election) => {
         </header>
         <div class="destination-body">
           <p class="status" data-home-events-status>Loading upcoming events…</p>
-          <ul class="home-event-list" data-home-events-list hidden></ul>
+          <ul class="home-event-list" data-home-events-list data-home-events-snapshot={await calendarAssetUrl('home')} hidden></ul>
           <p class="status" data-home-events-empty hidden>No upcoming events yet.</p>
           <p class="body-note">The next events from every organization and calendar.</p>
         </div>

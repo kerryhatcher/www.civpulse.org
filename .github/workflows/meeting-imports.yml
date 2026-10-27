@@ -36,6 +36,13 @@ jobs:
       - run: bun test scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
         env:
           MEETING_IMPORT_INTEGRATION: '1'
+      - name: Verify calendar exports and public record access
+        run: bun test scripts/tests/calendar-db.test.ts scripts/tests/calendar-snapshot-db.test.ts scripts/tests/public-records-db.test.ts scripts/tests/vote-choice-browse-db.test.ts scripts/tests/bill-child-browse-db.test.ts
+        env:
+          LEGISLATION_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          CALENDAR_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          PUBLIC_RECORDS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+
       - name: Verify election results and evidence
         run: bun test scripts/tests/election-results-db.test.ts scripts/tests/election-results-integration.test.ts
         env:

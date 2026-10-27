@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { dayBoundary, dayKey, groupEvents, monthWindow, occursOn } from '../../apps/web/src/lib/calendar-display';
 import { calendarIcs } from '../../apps/web/src/lib/calendar-ics';
-import { formatEventWhen, type EventRecord } from '../../apps/web/src/lib/calendars';
+import { eventSourceUrl, formatEventWhen, type EventRecord } from '../../apps/web/src/lib/calendars';
 
 const event: EventRecord = {
   id: '11111111-1111-4111-8111-111111111111', title: 'Community meeting', description: null,
@@ -71,4 +71,19 @@ test('displayed date ranges use the same timezone as the calendar grid', () => {
   const allDay = formatEventWhen({ ...event, starts_at: '2026-10-22T04:00:00Z', ends_at: '2026-10-24T04:00:00Z', all_day: true }, 'America/New_York');
   expect(allDay).toContain('Oct 23');
   expect(allDay).not.toContain('Oct 24');
+});
+
+test('shared occurrences link to the copy carrying the meeting record', () => {
+  const grouped = groupEvents([event, {...event,id:'meeting-copy',calendar_id:'second',calendar_name:'Council',is_meeting:true}]);
+  expect(grouped).toHaveLength(1);
+  expect(grouped[0].id).toBe('meeting-copy');
+  expect(grouped[0].is_meeting).toBe(true);
+  expect(grouped[0].memberships.map(item=>item.id)).toEqual(['a','second']);
+});
+
+test("event sources reject executable and malformed URLs",()=>{
+ expect(eventSourceUrl("javascript:alert(1)")).toBeNull();
+ expect(eventSourceUrl("data:text/html,unsafe")).toBeNull();
+ expect(eventSourceUrl("not a URL")).toBeNull();
+ expect(eventSourceUrl("https://example.org/event")).toBe("https://example.org/event");
 });

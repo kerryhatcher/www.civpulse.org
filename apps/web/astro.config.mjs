@@ -19,6 +19,7 @@ export function includeInSitemap(page) {
     '/map-data/',
     '/profile-data/',
     '/directory-data/',
+    '/calendar-data/',
     '/calendar/view/',
     '/people/view/',
     '/elections/view/',

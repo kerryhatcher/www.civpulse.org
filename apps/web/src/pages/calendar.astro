@@ -1,4 +1,5 @@
 ---
+import {calendarAssetUrl} from '../lib/calendar-assets';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -6,7 +7,7 @@ import Layout from '../layouts/Layout.astro';
   title="Community calendar"
   description="Find public meetings, community gatherings, and civic deadlines by organization or calendar."
 >
-  <main id="main">
+  <main id="main" data-calendar-snapshot={await calendarAssetUrl('calendar')}>
     <div class="page-intro">
       <h1>Find something to be part of.</h1>
       <p><a href="/records/events/page/1/">Published event and meeting archive</a></p>
