@@ -1,5 +1,7 @@
 import { getSupabase } from '../lib/supabase';
 import { personImageUrl } from '../lib/people';
+import { countySearchPage, readCountyIndex, selectedCounty } from './county-filter';
+import { matchesCounty } from '../lib/county-scope';
 
 interface SearchResult {
   entity_type: string; id: string; title: string; description: string | null;
@@ -89,11 +91,19 @@ export async function initSiteSearch(): Promise<void> {
     status.textContent = 'Searching…';
     results.setAttribute('aria-busy', 'true');
     try {
-      const { data, error } = await supabase.rpc('search_site', {
-        p_query: input.value.trim(), p_type: type.value || null, p_limit: pageSize + 1, p_offset: offset,
-      });
+      const index = await readCountyIndex();
+      const query = input.value.trim(), chosenType = type.value || null;
+      const data = await countySearchPage(async cursor => {
+        if (token !== request) return [];
+        const { data, error } = await supabase.rpc('search_site', {
+          p_query: query, p_type: chosenType, p_limit: 100, p_offset: cursor,
+        });
+        if (error) throw error;
+        // Keep the raw page length for scanning; each result supplies its own kind.
+        return (data ?? []) as SearchResult[];
+      }, 'search', offset, pageSize + 1, 100,
+      row => matchesCounty(index, row.entity_type, row.id, selectedCounty()));
       if (token !== request) return;
-      if (error) throw error;
       const rows = (data ?? []) as SearchResult[];
       const visible = rows.slice(0, pageSize);
       const cards = visible.map(renderResult);
@@ -131,6 +141,7 @@ export async function initSiteSearch(): Promise<void> {
   restoreUrl();
   form.addEventListener('submit', event => { event.preventDefault(); window.clearTimeout(timer); offset = 0; void search(); });
   input.addEventListener('input', update); type.addEventListener('change', update);
+  window.addEventListener('countychange', update);
   previous.addEventListener('click', () => { offset = Math.max(0, offset - pageSize); void search(); });
   next.addEventListener('click', () => { offset += pageSize; void search(); });
   window.addEventListener('popstate', () => { restoreUrl(); void search(); });

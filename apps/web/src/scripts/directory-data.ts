@@ -1,12 +1,17 @@
 import type { DirectoryKind, DirectorySnapshot } from '../lib/directories';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getSupabase } from '../lib/supabase';
+import { filterCounty } from './county-filter';
 
 /** Signed-in callers retain live RPC discovery and its existing access rules. */
 export async function readDirectory<K extends DirectoryKind>(kind: K): Promise<DirectorySnapshot<K> | null> {
   const url = document.querySelector<HTMLElement>('[data-directory-snapshot]')?.dataset.directorySnapshot;
   if (url && !url.startsWith(`/directory-data/${kind}-`)) throw new Error('Incorrect directory snapshot');
-  return loadPublicDirectorySnapshot<K>(url, getSupabase());
+  const snapshot = await loadPublicDirectorySnapshot<K>(url, getSupabase());
+  if (!snapshot) return null;
+  const kindName = { people: 'person', organizations: 'organization', elections: 'election' }[kind];
+  const allowed = new Set((await filterCounty(snapshot.map(entry => entry.record), kindName)).map(row => row.id));
+  return snapshot.filter(entry => allowed.has(entry.record.id));
 }
 export async function loadPublicDirectorySnapshot<K extends DirectoryKind>(url: string | undefined, client: SupabaseClient): Promise<DirectorySnapshot<K> | null> {
   const {data:{session},error} = await client.auth.getSession();

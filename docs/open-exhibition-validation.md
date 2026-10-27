@@ -40,9 +40,14 @@ The homepage's earlier comp fidelity gate passed at 86.25% at the approved
 
 - `bun run check`: no errors, warnings, or hints.
 - `bun run build`: 275 static pages generated against the local dataset.
-- `bun test scripts`: 302 passed, 47 environment-dependent tests skipped, 0 failed.
+- `bun test scripts`: 311 passed, 47 environment-dependent tests skipped, 0 failed.
 
 For future palette edits, repeat browser checks for selected lime surfaces,
 inverted panels, chart tracks, map controls/attribution, form states, and links in
 both color schemes. Keep page overflow separate from intentional internal table
 scrolling, and verify the browser preference changes the theme without reloading.
+
+After integrating main’s county filter, rechecked the shared header, homepage,
+election detail, and people directory in both themes and viewport sizes. County
+selection persists across navigation, and Bibb remains the default. The picker
+and status use canvas foreground colors to retain contrast.

@@ -1,5 +1,6 @@
 import { renderProfileDescription } from '../lib/profile-description';
 import { readDirectory } from './directory-data';
+import { filterCounty, selectedCounty } from './county-filter';
 import { browsePeople, type DirectoryPerson } from '../lib/directories';
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
@@ -113,10 +114,26 @@ export function initPeopleSearch(): void {
     ui.status.textContent = 'Loading people…';
     try {
       const snapshot = await readDirectory('people');
-      const { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : await supabase.rpc('browse_people', {
+      let { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : selectedCounty() !== 'all' ? {data:null,error:null} : await supabase.rpc('browse_people', {
         p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
         p_sort: ui.sort.value, p_limit: pageSize, p_offset: page * pageSize,
       });
+      if (!snapshot && selectedCounty() !== 'all' && !error) {
+        const all: Person[] = [];
+        for (let offset = 0; ; offset += 100) {
+          const result = await supabase.rpc('browse_people', {
+            p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
+            p_sort: ui.sort.value, p_limit: 100, p_offset: offset,
+          });
+          if (id !== requestId) return;
+          if (result.error) throw result.error;
+          const response = result.data as { people: Person[]; total: number };
+          all.push(...response.people);
+          if (all.length >= response.total || !response.people.length) break;
+        }
+        const scoped = await filterCounty(all, 'person');
+        data = { people: scoped.slice(page * pageSize, (page + 1) * pageSize), total: scoped.length };
+      }
       if (id !== requestId) return;
       if (error) throw error;
       const response = data as { people: Person[]; total: number };
@@ -155,6 +172,7 @@ export function initPeopleSearch(): void {
   }
   ui.input.addEventListener('input', () => update(200));
   ui.kind.addEventListener('change', () => update());
+  window.addEventListener('countychange', () => update());
   ui.sort.addEventListener('change', () => update());
   ui.input.closest('form')?.addEventListener('submit', event => { event.preventDefault(); update(); });
   ui.input.closest('form')?.addEventListener('reset', () => update());

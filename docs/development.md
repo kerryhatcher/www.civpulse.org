@@ -809,6 +809,35 @@ fields. Check console errors, build timing and total/maximum JSON sizes after a
 production-data build. No paid service is added; compare Cloudflare build duration
 and Supabase read load if import volume grows.
 
+### Verifying the session county filter
+
+County-jurisdiction matching uses case-insensitive literal county names with
+word-boundary checks and fixed regexes for the statewide and Macon-Bibb aliases.
+Keep punctuation, multiword names, repeated matches, and misleading prefixes or
+suffixes covered in the county tests; do not build regexes from county names.
+
+Run `bun test scripts/tests/county-filter.test.ts scripts/tests/directories.test.ts
+scripts/tests/calendar-snapshot.test.ts`, then `bun run check` and `bun run build`.
+In a fresh browser session, verify Bibb is selected. Change to Jones and All
+counties on organizations, people, maps, calendar and site search; verify matching
+records, pagination, no-result states, navigation/reload persistence, and a new
+session's Bibb default. Repeat signed in and signed out, including admin navigation.
+Check mobile header wrapping, keyboard selection and console health. Verify
+header county changes on ballots and direct race anchors; turnout should scan past source
+pages containing other counties and retain its pinned report. County coverage
+comes from the explicit registry, not address/name heuristics. Regional library
+and statewide maps remain available in every county. The public geography JSON
+must contain only public IDs; restricted records keep their existing live gates.
+
+Election ballots and turnout charts use only the header county selector. Verify
+there is no ballot-area or chart county dropdown on static and signed-in UUID
+pages. Changing the header must rerender turnout from the already loaded pinned
+snapshot, keep All counties in separate labeled groups, and show a no-data message
+without a fallback when the chosen county is missing. A direct race anchor
+reveals only its target and does not change the saved county or reveal other
+out-of-area races. Run `bun test scripts/tests/election-turnout.test.ts` for county
+grouping, preservation of overlapping source views, and missing/zero values.
+
 ### Verifying public legislation details
 
 Run `bun test scripts/tests/legislation-details.test.ts` and

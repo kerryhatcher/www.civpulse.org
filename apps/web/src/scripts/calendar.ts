@@ -251,7 +251,9 @@ export function initCalendar(): void {
         }
       }
       if (id !== requestId) return;
-      events = groupEvents(eventsForMonth(rows,month));
+      const scopedRows = await filterCounty(rows, 'event');
+      if (id !== requestId) return;
+      events = groupEvents(eventsForMonth(scopedRows,month));
       const previous = category.value;
       category.replaceChildren(new Option('All categories', ''));
       for (const name of [...new Set(events.flatMap(event => event.categories))].sort()) category.append(new Option(name, name));
@@ -260,6 +262,7 @@ export function initCalendar(): void {
     } catch { if (id === requestId) failed = true; }
     if (id === requestId) { loading = false; render(); }
   }
+  window.addEventListener('countychange', () => location.reload());
   function changeMonth(amount: number): void {
     const date = new Date(`${month}-01T12:00:00Z`); date.setUTCMonth(date.getUTCMonth() + amount);
     month = date.toISOString().slice(0, 7); selectedDay = null; void loadEvents();
@@ -298,6 +301,7 @@ export function initCalendar(): void {
         if (error) throw error;
         calendars = data as CalendarRef[];
       }
+      calendars = await filterCounty(calendars, 'calendar');
       selected = new Set(calendars.map(item => item.id));
       const ids = params.has('calendars') ? params.get('calendars')!.split(',') : params.get('calendar') ? [params.get('calendar')!] : null;
       if (ids) selected = new Set(ids.filter(id => calendars.some(item => item.id === id)));
@@ -566,3 +570,4 @@ export async function initEventViewFromUrl(): Promise<void> {
     showViewerStatus(status, error instanceof Error ? error.message : 'Could not load this event. Please reload to try again.');
   }
 }
+import { filterCounty } from './county-filter';

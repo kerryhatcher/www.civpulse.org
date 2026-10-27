@@ -7,6 +7,7 @@ import '@fontsource/barlow/400.css';
 import '@fontsource/barlow/500.css';
 import '@fontsource/barlow/600.css';
 import '@fontsource/barlow/700.css';
+import { GEORGIA_COUNTIES, DEFAULT_COUNTY } from '../lib/county-scope';
 
 interface Props {
   title: string;
@@ -66,6 +67,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
         {isHome ? <a class="site-location" href="/counties/bibb/">Bibb County, Georgia <Icon size={16} /></a> : <a href="/" class="brand" aria-label="Civic Pulse home">Civic Pulse<span aria-hidden="true">.</span></a>}
         <nav aria-label="Main navigation">
           <a href="/about/" aria-current={isCurrent('/about/') ? 'page' : undefined}>About</a>
+          <label class="county-picker">
+            <span class="visually-hidden">County</span>
+            <svg class="county-picker-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+            <select data-county-filter aria-describedby="county-help">
+              <option value="all">All counties</option>
+              {GEORGIA_COUNTIES.map(county => <option value={county.fips} selected={county.fips === DEFAULT_COUNTY}>{county.name} County</option>)}
+            </select>
+            <svg class="county-picker-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+          </label>
+          <span id="county-help" class="visually-hidden">Filters civic browsing. Saved for this tab’s session. Statewide and unclassified records are included.</span>
           <details class="browse-menu" data-browse-menu>
             <summary>Browse</summary>
             <div class="browse-panel">
@@ -85,6 +96,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
           <a data-nav-auth href="/signin/">Sign in</a>
         </nav>
       </header>
+      <p class="county-status" data-county-status role="status"></p>
       <slot />
       <footer class="site-footer">
         {!isHome && <p>Civic Pulse <span aria-hidden="true">/</span> Public information. Open to everyone.</p>}
@@ -102,6 +114,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
 <script>
   import { initAuthNav } from '../scripts/auth';
+  import { initCountyFilter } from '../scripts/county-filter';
+  initCountyFilter();
   void initAuthNav();
   const menu = document.querySelector<HTMLDetailsElement>('[data-browse-menu]');
   document.addEventListener('keydown', (event) => {

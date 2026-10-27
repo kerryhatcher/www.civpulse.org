@@ -32,12 +32,37 @@ their original appearance.
 
 ## Explore your county
 
+Open the county name in the header (for example, **Bibb County**, beside the
+location icon) to choose a Georgia county or **All counties**.
+Bibb is the default. Your choice stays with this tab’s session across navigation,
+reloads, sign-in, and sign-out; it is not saved to your account or synced to other
+devices. A fresh session starts with Bibb. If browser storage is disabled, the
+choice lasts only until you leave the current page.
+
+County selection filters people, organizations, maps, calendar events, search,
+records requests, election reports, and structured turnout where county coverage
+is recorded. Statewide information and records without known county coverage stay
+available. The current county coverage is limited: verified local organizations
+and maps supply local links to people and events; explicit race/question county
+jurisdictions and report counties supply election geography. A county selection
+is not a complete list of that county’s services or a personalized ballot.
+County hubs and individual record/profile links keep their named subject.
+Admin editing continues to show all permitted records. Public archive pages keep
+their stable page numbering across counties; a filtered page may be empty, so
+use the calendar or records-request directory for filtered browsing.
+
+Election pages start with your header county. Bibb uses the recorded local
+district list; other counties use explicit county jurisdictions and include
+unclassified races. Choose **All counties** in the header to see the full ballot.
+A direct link to a race reveals that race even when it is outside the selected
+county, without changing your county preference or revealing other out-of-area races.
+
 The [Bibb County community hub](/counties/bibb/) brings together selected local
 maps, organizations, people, elections, and upcoming events. Use the section links
 to move around the page, open a district map, or follow an organization to its
 profile and calendar. Elections appear newest first and may include past elections.
-The full directories and calendar include records outside Bibb County; the hub is
-a curated starting point, not a complete county directory.
+The hub is a curated starting point, not a complete county directory. Choose
+**All counties** in the header to browse without the county default.
 
 **Bibb County at a glance** shows 59 U.S. Census Bureau measures covering people,
 households and housing, income and work, education and connectivity, health, and
@@ -127,7 +152,7 @@ Calendar times and election dates and deadlines are shown in Eastern Time (Ameri
 - [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. **Copy map link** shares the current layer selection.
 - Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). Sort by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and first-name A–Z order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
-  Election details default to **Bibb County races**, including statewide offices and districts covering part of the county. Choose **All recorded races** to see other races in the same election. Candidates outside Bibb County remain searchable; a search link to their race opens that race automatically. Your own ballot depends on your address.
+  Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header to see every race in the same election. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 
 If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. Some records have not been added yet.
 
@@ -384,8 +409,12 @@ provide the same directory access, while the footer links to guides and the
 Bibb County hub. Maps remain available through the Maps topic and directory.
 
 Election detail pages show **Voter turnout** charts when Georgia SOS structured
-turnout is available. Choose a **County** (Bibb is selected when available) to
-compare reported ballot styles and inspect early-voting and absentee measures.
+turnout is available. The charts use the **county in the site header**, just like
+the ballot and election reports. Change the header county to compare reported
+ballot styles and inspect early-voting and absentee measures. **All counties**
+shows separate, labeled county groups; counts are never combined across counties.
+If your county has no reported turnout, the charts say so instead of switching
+to another county. There are no separate county dropdowns within the page.
 The early-voting chart remains visible alongside reported turnout when both
 source tables are available; their overlapping counts are never combined. Exact counts, source
 as-of labels and the separate collection time accompany the charts. Each chart
