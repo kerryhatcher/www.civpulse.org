@@ -803,3 +803,22 @@ fallback reads. Measure total assets, largest file and full production-data buil
 duration; no static file may approach Cloudflare's file-size limit. New detail
 JSON uses the existing directory-data revalidation/nosniff headers and is excluded
 from the sitemap. Existing canonical public detail URLs stay indexable.
+
+### Verifying static records requests
+
+Run `bun test scripts/tests/request-snapshot.test.ts scripts/tests/directories.test.ts`
+and `RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/request-snapshot-db.test.ts scripts/tests/records-requests-db.test.ts`,
+then check/build. Use disposable local public/unlisted/private requests, an
+ordinary owner and public/private files. Verify search words/stemming, quotes, OR,
+exclusions, English stop words, stage/organization filters, Next/Previous and URL
+criteria. Request matching reuses directory search with PostgreSQL English stop
+words and literal fallback disabled; existing directory defaults are unchanged.
+
+Check published request facts, timeline, fee categories, links, legacy redirects,
+private denial, owner/admin live management, managed scope and owner transfers.
+Normal anonymous discovery/details must make no request RPCs. Download must
+re-read permissions and sign only the current allowed file, including after a
+file/request becomes private. Scan generated HTML/JSON for fixture owner IDs,
+transfer text, private file names, storage paths and signed URLs. Missing assets
+fail visibly without runtime discovery fallback. Clean up owned files/users/rows
+and the preview server. Compare full build duration and asset sizes before release.
