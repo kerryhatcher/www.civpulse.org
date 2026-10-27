@@ -1595,3 +1595,15 @@ projects public source rows under election visibility; raw bytes/editors stay
 admin-only. No Storage policies or photo/PDF rules change. See
 [election results](election-results.md#structured-georgia-sos-aggregates-schema-v1)
 for contracts, bounds, correction semantics and main-before-production release.
+
+### Public legislative detail projection
+
+Full static bill/vote/session details reuse `export_public_legislation_page`
+without direct-ID, bill, person or vote contexts. The only additional resource,
+`legislative_event_links`, is paged through existing anonymous
+`browse_legislation` discovery with public-row validation. Recursive parent and
+participant visibility gates remain in SQL; no schema, grant, RLS or privileged
+credential changes are needed. Vote totals count only exported public choices,
+not context-permitted unlisted choices. The explicit live viewer retains its
+existing context-aware totals and relationships. Public-ID indexes list only
+records admitted to the snapshot; unknown IDs still use the live access gate.

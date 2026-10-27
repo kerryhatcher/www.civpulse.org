@@ -1,0 +1,40 @@
+---
+import LegislativeCard from './LegislativeCard.astro';
+import {legislativeResources} from '../lib/legislation';
+import {coverageLabel} from '../lib/legislation-display';
+import type {LegislationDetail} from '../lib/legislation-details';
+interface Props {detail:LegislationDetail}
+const {detail}=Astro.props;
+const {table,row,sections,totals}=detail;
+const viewer=`/legislation/${table==='bills'?'view':table==='legislative_votes'?'vote':'session'}/?id=${row.id}&live=1`;
+const sectionLabel=(child:string)=>child==='legislative_vote_bills'&&table==='bills'?'Votes on this bill':legislativeResources[child].label;
+---
+<main id="main" data-public-legislation-detail data-live-viewer={viewer}>
+  <p><a href="/legislation/">All legislation</a> · <a href="/legislation/sessions/">All sessions</a> · <a href="/records/">Public record archive</a></p>
+  <LegislativeCard table={table} row={row} heading="h1" />
+  <nav class="legislation-navigation" aria-label="On this record">{sections.map(section=><a href={`#${section.table}`}>{sectionLabel(section.table)}</a>)}</nav>
+  {totals&&<section class="legislation-tally">
+    <h2>Official result</h2>
+    <dl class="legislation-totals">{[['reported_yes','Yes'],['reported_no','No'],['reported_other','Other']].map(([key,label])=><div><dt>{label}</dt><dd>{row[key]==null?'Not reported':String(row[key])}</dd></div>)}</dl>
+    {row.threshold&&<p>Required to pass: {String(row.threshold)}</p>}
+    <div class="legislation-coverage">
+      <strong>{coverageLabel(row.coverage)}</strong>
+      <p>Official totals describe the full vote. The member records below show only the public choices available here. Missing choices are unknown, not absences.</p>
+      <p>{totals.recorded.total} member {totals.recorded.total===1?'choice':'choices'} available: {totals.recorded.yes} yes, {totals.recorded.no} no, {totals.recorded.other} other.
+        {totals.matchesReported===false&&' These records differ from the official totals; some records may be missing or not public.'}
+      </p>
+    </div>
+  </section>}
+  {sections.map(section=><section id={section.table} class:list={['legislation-section',{'legislation-empty':!section.total}]} data-static-legislation-section data-table={section.table} data-omit={JSON.stringify(section.omit)} data-total={section.total} data-pages={JSON.stringify(section.pages)}>
+    <h2>{sectionLabel(section.table)}{section.total?` (${section.total})`:''}</h2>
+    <p role="status" data-section-status>{section.total?'':'No records added here yet. This does not establish that none exist.'}</p>
+    <div class="org-list" data-section-results>{section.rows.map(child=><LegislativeCard table={section.table} row={child} omit={section.omit} />)}</div>
+    {section.total>25&&<><button data-section-more hidden>Load more</button><noscript><p>Enable JavaScript to load additional published records in this section.</p></noscript></>}
+  </section>)}
+  <p>Published snapshot. Changes appear after the next publication. Coverage includes public records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>
+  <p><a href={viewer}>Open live record with access checks</a> · <a href="/about/#sources">Sources and credits</a></p>
+</main>
+<script>
+  import {initPublicLegislationDetail} from '../scripts/legislation-detail';
+  void initPublicLegislationDetail();
+</script>

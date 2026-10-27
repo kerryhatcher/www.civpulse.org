@@ -19,4 +19,4 @@ jobs:
         with:
           bun-version: '1.4.3'
       - run: bun install --frozen-lockfile
-      - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts scripts/tests/public-records.test.ts scripts/tests/legislation-build-data.test.ts scripts/tests/build-read.test.ts scripts/tests/legislation-directory-static.test.ts
+      - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts scripts/tests/public-records.test.ts scripts/tests/legislation-build-data.test.ts scripts/tests/build-read.test.ts scripts/tests/legislation-directory-static.test.ts scripts/tests/legislation-details.test.ts

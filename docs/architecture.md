@@ -526,3 +526,27 @@ discovery gates exclude unlisted/private records and hidden parents before expor
 Signed-in browsing and all UUID viewers retain their existing live RPC gates.
 Missing assets fail visibly without a live anonymous fallback. Each deployment
 publishes a fresh snapshot; admin edits need a rebuild.
+
+### Static public bill, vote and session details
+
+Published legislation details use the existing `/records/bills/<uuid>/`,
+`/records/votes/<uuid>/` and `/records/sessions/<uuid>/` URLs with full
+prerendered headings, metadata, sources, section navigation and first 25 rows per
+section. Additional rows are hashed static JSON, loaded 25 at a time. The build
+reuses the anonymous discovery exports shared with profiles, directories and the
+archive. Calendar-to-session links use the existing anonymous
+`browse_legislation` discovery gate with no direct context. No per-record query,
+service credential, new migration or runtime rendering is introduced.
+
+Only discovery-approved public rows and parents enter these files. Raw import
+payloads, membership review notes and unlisted/private children are excluded.
+Vote counts are computed from published choices; official counts and coverage
+remain separate, with a mismatch warning when applicable. Relations link to
+published details only when their target was admitted to the same snapshot.
+
+Legacy UUID viewers check a hashed per-kind public-ID index and redirect anonymous
+callers to published details, preserving section anchors. Unknown/unpublished IDs
+retain the live RPC gate, including direct unlisted access and admin-only private
+access. Signed-in readers use the live viewer. The explicit `live=1` link offers
+the existing context-gated reader without a redirect loop. A missing index or
+section file fails visibly without silently querying the backend.

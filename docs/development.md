@@ -800,3 +800,21 @@ pages containing other counties and retain its pinned report. County coverage
 comes from the explicit registry, not address/name heuristics. Regional library
 and statewide maps remain available in every county. The public geography JSON
 must contain only public IDs; restricted records keep their existing live gates.
+
+### Verifying public legislation details
+
+Run `bun test scripts/tests/legislation-details.test.ts` and
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-details-db.test.ts`, followed by check/build.
+Test anonymous bill, vote and session details, section anchors, sources, official
+and recorded vote totals and Load more beyond 25/50 records without legislation
+RPCs. Verify public legacy UUID redirects (including hashes), explicit live links,
+unlisted UUID readers, anonymous private rejection and signed-in private access
+for all three kinds. Signed-in static pages should reach the live viewer.
+
+Use disposable local fixtures and scan generated detail HTML/JSON and public-ID
+indexes for restricted IDs, private participants, unlisted child text and import
+payloads. Missing indexes/pages must report failure and allow retry without
+fallback reads. Measure total assets, largest file and full production-data build
+duration; no static file may approach Cloudflare's file-size limit. New detail
+JSON uses the existing directory-data revalidation/nosniff headers and is excluded
+from the sitemap. Existing canonical public detail URLs stay indexable.

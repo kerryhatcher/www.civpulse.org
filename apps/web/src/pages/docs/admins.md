@@ -203,11 +203,15 @@ No visitor IP addresses, user agents, or cookies are stored in these statistics.
 
 ## Legislative records
 
-Public bills and session directories are published snapshots. After legislation
+Public bill, vote and session details, as well as bill/session directories, are
+published snapshots. After legislation
 imports or edits, use [Publish](/admin/publish/) to rebuild them. Signed-in
 directory browsing continues to use live permissions, so your admin view can show
 new or restricted records before the public snapshot. Private and unlisted rows
-and rows with hidden parents are excluded from the published directory files.
+and rows with hidden parents are excluded from published directory and detail
+files. Public details omit restricted children and count only public vote choices.
+Signed-in detail readers use the live viewer; use **Open live record with access
+checks** to inspect context-permitted data explicitly.
 
 Use [Legislation admin](/admin/legislation/) and choose a record type. Existing
 organizations represent legislatures, chambers and committees; existing people,

@@ -1,4 +1,7 @@
 ---
+import LegislationDetail from '../../../components/LegislationDetail.astro';
+import type {LegislationDetail as Detail} from '../../../lib/legislation-details';
+import {getLegislationDetailAssets} from '../../../lib/legislation-detail-assets';
 import EventView from '../../../components/EventView.astro';
 import {getPublicCalendarData} from '../../../lib/calendar-build-data';
 import {calendarAssetUrl} from '../../../lib/calendar-assets';
@@ -8,15 +11,15 @@ import Layout from '../../../layouts/Layout.astro';
 import { getPublicRecordSnapshot } from '../../../lib/public-record-snapshot';
 import { archiveHref, recordKinds, type PublicRecord } from '../../../lib/public-records';
 export async function getStaticPaths() {
-  const calendar=await getPublicCalendarData();
+  const [calendar,details,records]=await Promise.all([getPublicCalendarData(),getLegislationDetailAssets(),getPublicRecordSnapshot()]);
   const events=new Map(calendar.events.map(event=>[event.id,event]));
-  return (await getPublicRecordSnapshot()).map(record => ({ params: { kind: record.kind, id: record.id }, props: { record,event:record.kind==='events'?events.get(record.id):undefined,meeting:record.kind==='events'?calendar.meetings.get(record.id):undefined } }));
+  return records.map(record => ({ params: { kind: record.kind, id: record.id }, props: { record,legislation:details.pages.get(`${record.kind==='bills'?'bills':record.kind==='votes'?'legislative_votes':record.kind==='sessions'?'legislative_sessions':''}/${record.id}`),event:record.kind==='events'?events.get(record.id):undefined,meeting:record.kind==='events'?calendar.meetings.get(record.id):undefined } }));
 }
-interface Props { record: PublicRecord; event?:EventRecord; meeting?:MeetingRecord }
-const { record,event,meeting } = Astro.props;
+interface Props { record: PublicRecord; event?:EventRecord; meeting?:MeetingRecord; legislation?:Detail }
+const { record,event,meeting,legislation } = Astro.props;
 ---
 <Layout title={record.title} description={record.description}>
-  {event ? <EventView event={event} meeting={meeting} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} /> : (<main id="main">
+  {legislation ? <LegislationDetail detail={legislation} /> : event ? <EventView event={event} meeting={meeting} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} /> : (<main id="main">
     <p><a href="/records/">Public record archive</a> / <a href={archiveHref(record.kind)}>{recordKinds[record.kind]}</a></p>
     <div class="page-intro"><h1>{record.title}</h1></div>
     <dl class="account-list">{record.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.href ? <a href={fact.href}>{fact.value}</a> : fact.value}</dd></div>)}</dl>
