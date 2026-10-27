@@ -19,8 +19,22 @@ export function turnoutRate(report?: ResultReport): number | null {
     || !Number.isSafeInteger(registered) || numerator < 0 || registered <= 0 || numerator > registered) return null;
   return 100 * numerator / registered;
 }
-/** A fixed scale across elections; missing data has a separate gray fill. */
+/** Fixed percentage bands keep the legend comparable as new reports arrive. */
+export const TURNOUT_BANDS = [
+  { min: 0, label: 'Under 10%', color: '#fff3bd' },
+  { min: 10, label: '10–<15%', color: '#c8df8a' },
+  { min: 15, label: '15–<20%', color: '#82bd69' },
+  { min: 20, label: '20–<25%', color: '#36935b' },
+  { min: 25, label: '25–<30%', color: '#116340' },
+  { min: 30, label: '30%+', color: '#083b2b' },
+] as const;
+export const TURNOUT_MISSING_COLOR = '#b8bcb0';
+
+/** Opaque colors preserve separation between bands on any map background. */
 export function turnoutFill(rate: number | null): { fillColor: string; fillOpacity: number } {
-  return rate === null ? { fillColor: '#b8bcb0', fillOpacity: 0.6 }
-    : { fillColor: '#173e34', fillOpacity: 0.08 + 0.92 * Math.min(100, Math.max(0, rate)) / 100 };
+  if (rate === null || !Number.isFinite(rate) || rate < 0 || rate > 100) {
+    return { fillColor: TURNOUT_MISSING_COLOR, fillOpacity: 1 };
+  }
+  const band = [...TURNOUT_BANDS].reverse().find(band => rate >= band.min)!;
+  return { fillColor: band.color, fillOpacity: 1 };
 }
