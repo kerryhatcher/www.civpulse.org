@@ -504,7 +504,7 @@ content operation.
 ### Election result workflow
 
 `manage_election_results` is one admin-only tool with a discriminated `operation`
-argument: `upload`, `view`, `read`, or `import`. This groups the workflow within the
+argument: `upload`, `view`, `read`, `import`, `read_turnout`, or `import_turnout`. This groups the workflow within the
 128-tool catalog limit; the builder rejects larger catalogs. The `civic-results`
 skill guides visual OCR, source identity, report deduplication and validation.
 See [election results](election-results.md) for the database contract and examples.
@@ -512,3 +512,49 @@ Images are private evidence, not image-generation inputs. No OCR service is call
 by the server. The agent transcribes the supplied original and saves structured
 counts only after validation. The plugin package is version 1.4.0; deployment and
 account plugin release are separate from local packaging.
+
+#### Structured turnout connector refresh (issue #103)
+
+On October 26, 2026, the connected custom app still validated the four original
+actions even though production MCP function version 83 contained both structured
+turnout handlers. The connection settings confirmed the expected app ID
+`asdk_app_6adb7102fd988191a89f556db8116075` and compatibility endpoint
+`https://api.civpulse.org/functions/v1/mcp`. Updating the plugin package alone
+does not refresh that app's tool definitions.
+
+In ChatGPT, open that connection's settings and select **Refresh tools**. Open its
+plugin details → app action list and confirm `manage_election_results` now starts
+with “Structured Georgia SOS JSON”. In this investigation the refreshed action
+list showed the new description, but a call in the already-running Codex turn
+still failed connector enum validation. After the user's next reply,
+`read_turnout` succeeded through the same connected tool. No redeployment,
+endpoint switch, database change, or account reauthorization was needed.
+This establishes a stale connection/session contract in this reproduction;
+it does not establish why the earlier user-reported rescan did not refresh it.
+No held-update finding was observed in the custom connection's settings.
+
+Retry on a new turn after refresh; if the host retains the old schema, start a
+new chat with the connection enabled and verify the read before importing.
+Restarting the desktop app was not needed or tested. For published MCP plugins,
+inspect **MCPs → Issues → Live definition / Held update** after rescan rather
+than assuming a scan made every update live. See OpenAI's
+[custom connection refresh procedure](https://developers.openai.com/plugins/deploy/connect-chatgpt#refresh-metadata)
+and [published MCP scan procedure](https://developers.openai.com/plugins/deploy/submission#update-to-your-mcp-server).
+
+The authorized November 3 import then passed validation with `expected_report_id`
+null and saved report `2050012c-714f-4047-bf8a-fdf09241c4cd`. Evidence was 200,879
+UTF-8 bytes, SHA-256
+`bf868815531d758b8a454c10da4b475abb40ed8499e04d025e06c8e6fac20d71`.
+All seven readback pages were pinned to that report and matched every source row,
+measure and provenance field: 159 absentee, 159 early, and 318 turnout rows across
+159 counties. Exact replay returned `duplicate` with the same report ID. The
+report remains unofficial; overlapping tables were not added together.
+The production results page also displayed the evidence hash and source rows
+for anonymous visitors and the signed-in admin, with no console errors;
+anonymous pagination advanced from 100 to 200 of 636 rows.
+
+Run `bun test scripts/tests/election-results-mcp.test.ts` to verify both legacy
+and compact MCP discovery expose all six actions, match the packaged schemas,
+retain strict branch inputs and defaults, and dispatch authenticated turnout
+reads through the existing admin guard. These are protocol tests, not a claim
+that a separate production `/mcp/v2` connection was exercised.

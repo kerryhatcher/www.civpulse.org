@@ -1,5 +1,8 @@
 import {expect,test} from 'bun:test';
 import {registerElectionResultTools} from '../../apps/mcp/src/election-result-tools';
+import {buildServer} from '../../apps/mcp/src/tools';
+import {Client} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.js';
+import {InMemoryTransport} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/inMemory.js';
 function setup(admin=true){let handler:any,schema:any;const calls:any[]=[];registerElectionResultTools({registerTool(_n:string,s:any,h:any){schema=s;handler=h;}} as never,{rpc:async(name:string,args:any)=>{calls.push([name,args]);return {data:name==='is_admin'?admin:{status:'validated'},error:null};}} as never);return {calls,schema,call:(operation:any)=>handler(schema.inputSchema.parse({operation}))};}
 const id='10000000-0000-4000-8000-000000000001';
 const operation={action:'import',election_id:id,scope:{county:'Bibb',unit_type:'county',unit:'all',counting_group:'all',ballot_style:'all'},observed_at:'2026-04-14T19:27:28-04:00',snapshot:{election_date:'2026-04-14',status:'unofficial',turnout:{ballots:300},contests:[]},sources:[{path:'a'.repeat(64)+'.jpg',locator:'page 1',transcription:'300 ballots'}]};
@@ -17,3 +20,38 @@ test('structured JSON import and read share the admin tool without widening phot
  expect((await setup(false).call({action:'import_turnout',document:doc,sha256:sha})).isError).toBe(true);
  expect(()=>s.call({action:'upload',mime_type:'application/json',base64:'e30='})).toThrow();
 });
+
+// Exercise tools/list rather than only the internal Zod schema: connectors cache
+// this exported contract independently of the plugin's bundled references.
+for (const catalog of ['legacy', 'compact'] as const) {
+ test(`${catalog} discovery exports all six result actions and matches the packaged contract`, async()=>{
+  const calls:string[]=[];
+  const server=buildServer({rpc:async(name:string)=>{calls.push(name);return {data:name==='is_admin'?true:{status:'empty',rows:[]},error:null};}} as never,{id},{},undefined,catalog);
+  const client=new Client({name:'result-catalog-test',version:'1'});
+  const [a,b]=InMemoryTransport.createLinkedPair();
+  try {
+   await server.connect(a);await client.connect(b);
+   const tool=(await client.listTools()).tools.find(t=>t.name==='manage_election_results')!;
+   const schema=tool.inputSchema as any;
+   const branches=schema.properties.operation.oneOf;
+   expect(branches.map((b:any)=>b.properties.action.const).sort()).toEqual(['import','import_turnout','read','read_turnout','upload','view']);
+   const read=branches.find((b:any)=>b.properties.action.const==='read_turnout');
+   expect(read.required).toEqual(['action','election_id']);
+   expect(read.properties.report_id).toMatchObject({default:null});
+   expect(read.properties.limit).toMatchObject({minimum:1,maximum:100,default:100});
+   const write=branches.find((b:any)=>b.properties.action.const==='import_turnout');
+   expect(write.required).toEqual(['action','document','sha256']);
+   expect(write.properties.document).toMatchObject({minLength:2,maxLength:2097152});
+   expect(write.properties.sha256.pattern).toBe('^[a-f0-9]{64}$');
+   expect(write.properties.expected_report_id).toMatchObject({default:null});
+   expect(write.properties.dry_run.default).toBe(true);
+   expect(branches.every((b:any)=>b.additionalProperties===false)).toBe(true);
+   const file=catalog==='legacy'?'tool-schemas.json':'compact-tool-schemas.json';
+   const packaged=await Bun.file(new URL(`../../plugins/civpulse/references/${file}`,import.meta.url)).json();
+   expect(tool).toEqual(packaged.find((t:any)=>t.name===tool.name));
+   const result=await client.callTool({name:tool.name,arguments:{operation:{action:'read_turnout',election_id:id,report_id:id,offset:100,limit:100}}});
+   expect(result.isError).not.toBe(true);
+   expect(calls).toEqual(['is_admin','get_structured_turnout']);
+  } finally {await client.close();await server.close();}
+ });
+}
