@@ -14,11 +14,12 @@ const title = `${recordKinds[archive.kind]} archive — page ${archive.page}`;
   <main id="main">
     <p><a href="/records/">Public record archive</a></p>
     <div class="page-intro"><h1>{title}</h1><p>Published public records. Coverage may be incomplete.</p></div>
-    <ul>{archive.records.map(record => <li><a href={recordHref(record.kind, record.id)}>{record.title}</a></li>)}</ul>
+    <ul data-county-list>{archive.records.map(record => <li data-county-kind={record.kind === 'events' ? 'event' : record.kind === 'requests' ? 'request' : record.kind} data-county-id={record.id}><a href={recordHref(record.kind, record.id)}>{record.title}</a></li>)}</ul>
+    <p data-county-list-empty hidden>No records on this archive page match your county. Try another page, or choose All counties.</p>
     {!archive.records.length && <p>No public records published in this category.</p>}
     <nav aria-label="Archive pages">
       {archive.page > 1 && <a href={archiveHref(archive.kind, archive.page - 1)}>Previous page</a>}
-      <span> Page {archive.page} of {archive.total} </span>
+      <span> Archive page {archive.page} of {archive.total} (all counties) </span>
       {archive.page < archive.total && <a href={archiveHref(archive.kind, archive.page + 1)}>Next page</a>}
     </nav>
   </main>

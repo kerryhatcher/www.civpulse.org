@@ -278,13 +278,17 @@ export async function initMapViewFromUrl(): Promise<void> {
   } catch { showStatus(status, 'Could not load this map. Reload the page to try again.'); }
 }
 
-export function initMapExplorer(): void {
+export async function initMapExplorer(): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-map-explorer]');
   const select = document.querySelector<HTMLSelectElement>('[data-map-choice]');
   const data = document.querySelector<HTMLScriptElement>('[data-map-catalog]');
   const description = document.querySelector<HTMLElement>('[data-map-description]');
   if (!root || !select || !data) return;
-  const maps = JSON.parse(data.textContent ?? '[]') as MapConfig[];
+  const catalog = JSON.parse(data.textContent ?? '[]') as MapConfig[];
+  let maps: MapConfig[];
+  try { maps = await filterCounty(catalog, 'map'); }
+  catch { root.textContent = 'County filters could not load. Please reload to try again.'; return; }
+  select.replaceChildren(...maps.map(map => new Option(map.name, map.id)));
   let instance: L.Map | undefined;
   let revision = 0;
   async function choose(): Promise<void> {
@@ -300,6 +304,17 @@ export function initMapExplorer(): void {
   const slug = new URLSearchParams(location.search).get('map') ?? 'voting';
   select.value = (maps.find(m => m.slug === slug) ?? maps[0])?.id ?? '';
   select.addEventListener('change', () => void choose());
+  window.addEventListener('countychange', () => {
+    void filterCounty(catalog, 'map').then(scoped => {
+      maps = scoped;
+      const previous = select.value;
+      select.replaceChildren(...maps.map(map => new Option(map.name, map.id)));
+      select.value = maps.find(map => map.id === previous)?.id ?? maps[0]?.id ?? '';
+      if (maps.length) void choose();
+      else { revision++; instance?.remove(); instance = undefined; root.textContent = 'No maps match this county.'; if (description) description.textContent = ''; }
+    });
+  });
   window.addEventListener('popstate', () => { select.value = maps.find(m => m.slug === new URLSearchParams(location.search).get('map'))?.id ?? maps[0]?.id ?? ''; void choose(); });
-  if (maps.length) void choose(); else root.textContent = 'No public maps are published yet.';
+  if (maps.length) void choose(); else root.textContent = 'No maps match this county.';
 }
+import { filterCounty } from './county-filter';

@@ -785,3 +785,18 @@ unlisted records/parents, signed-in live discovery and UUID access locally. Scan
 fields. Check console errors, build timing and total/maximum JSON sizes after a
 production-data build. No paid service is added; compare Cloudflare build duration
 and Supabase read load if import volume grows.
+
+### Verifying the session county filter
+
+Run `bun test scripts/tests/county-filter.test.ts scripts/tests/directories.test.ts
+scripts/tests/calendar-snapshot.test.ts`, then `bun run check` and `bun run build`.
+In a fresh browser session, verify Bibb is selected. Change to Jones and All
+counties on organizations, people, maps, calendar and site search; verify matching
+records, pagination, no-result states, navigation/reload persistence, and a new
+session's Bibb default. Repeat signed in and signed out, including admin navigation.
+Check mobile header wrapping, keyboard selection and console health. Verify
+ballot-area overrides and direct race anchors; turnout should scan past source
+pages containing other counties and retain its pinned report. County coverage
+comes from the explicit registry, not address/name heuristics. Regional library
+and statewide maps remain available in every county. The public geography JSON
+must contain only public IDs; restricted records keep their existing live gates.

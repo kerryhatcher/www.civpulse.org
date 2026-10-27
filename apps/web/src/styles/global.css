@@ -200,8 +200,52 @@ details[open] summary {
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-  gap: 4px 44px;
+  gap: 4px 24px;
 }
+
+.county-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.county-picker select {
+  appearance: none;
+  field-sizing: content;
+  min-height: 44px;
+  max-width: 240px;
+  padding: 0 20px 0 24px;
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.county-picker select option { color: var(--ink); background: var(--paper); }
+.county-picker-location, .county-picker-chevron { position: absolute; pointer-events: none; }
+.county-picker-location { left: 0; width: 16px; height: 20px; color: var(--muted); }
+.county-picker-chevron { right: 0; width: 14px; height: 14px; }
+.county-picker::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 24px;
+  right: 20px;
+  height: 2px;
+  background: var(--rust);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.county-picker:hover::after, .county-picker:focus-within::after { transform: scaleX(1); }
+@media (max-width: 1000px) { .county-picker { font-size: 15px; } }
+@media (max-width: 650px) { .county-picker { font-size: 13px; } }
+.county-status { margin-block: 8px; font-size: 12px; color: var(--muted); }
+.county-status:empty { display: none; }
 
 .site-header nav a {
   min-height: 44px;

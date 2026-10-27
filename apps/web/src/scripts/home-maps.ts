@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { filterCounty } from './county-filter';
 import { fetchLayerGeoJSON } from '../lib/layers';
 import { createGeoJSONLayer } from '../lib/map-rendering';
 import type { MapConfig } from '../lib/maps';
@@ -58,7 +59,7 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
     }).catch(() => { container.textContent = 'Preview unavailable. Open the map to try again.'; });
 }
 
-export function initHomeMaps(): void {
+export async function initHomeMaps(): Promise<void> {
   const carousel = document.querySelector<HTMLElement>('[data-map-carousel]');
   const script = document.querySelector<HTMLScriptElement>('[data-home-maps]');
   if (!carousel || !script) return;
@@ -70,8 +71,17 @@ export function initHomeMaps(): void {
     return;
   }
   if (maps.length === 0) return;
-
   const byId = new Map(maps.map((map) => [map.id, map]));
+  const catalog = maps;
+  try { maps = await filterCounty(catalog, 'map'); } catch { return; }
+  function applyScope() {
+    const ids = new Set(maps.map(map => map.id));
+    for (const preview of carousel!.querySelectorAll<HTMLElement>('[data-map-preview]')) {
+      const slide = preview.closest<HTMLElement>('.map-slide');
+      if (slide) slide.hidden = !ids.has(preview.dataset.mapId ?? '');
+    }
+  }
+  applyScope();
   const viewport = carousel.querySelector<HTMLElement>('[data-carousel-viewport]');
   const previews = [...carousel.querySelectorAll<HTMLElement>('[data-map-preview]')];
 
@@ -96,13 +106,6 @@ export function initHomeMaps(): void {
   const count = carousel.querySelector<HTMLElement>('[data-carousel-count]');
   const scroller = viewport ?? carousel;
 
-  if (maps.length <= 1) {
-    prev?.remove();
-    next?.remove();
-    if (count) count.textContent = '';
-    return;
-  }
-
   const AUTOPLAY_MS = 5000;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let autoplay: number | undefined;
@@ -117,6 +120,7 @@ export function initHomeMaps(): void {
   }
 
   function goTo(index: number): void {
+    if (!maps.length) return;
     const wrapped = ((index % maps.length) + maps.length) % maps.length;
     scroller.scrollTo({
       left: wrapped * slideWidth(),
@@ -129,11 +133,11 @@ export function initHomeMaps(): void {
     const index = currentIndex() + 1;
     if (prev) prev.disabled = scroller.scrollLeft <= 2;
     if (next) next.disabled = scroller.scrollLeft >= max - 2;
-    if (count) count.textContent = `${Math.min(index, maps.length)} / ${maps.length}`;
+    if (count) count.textContent = maps.length ? `${Math.min(index, maps.length)} / ${maps.length}` : 'No maps match this county.';
   }
 
   function startAutoplay(): void {
-    if (reduceMotion || autoplay !== undefined || document.hidden || !inView) return;
+    if (maps.length < 2 || reduceMotion || autoplay !== undefined || document.hidden || !inView) return;
     autoplay = window.setInterval(() => goTo(currentIndex() + 1), AUTOPLAY_MS);
   }
 
@@ -157,6 +161,11 @@ export function initHomeMaps(): void {
     restartAutoplay();
   });
   scroller.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('countychange', () => {
+    void filterCounty(catalog, 'map').then(scoped => {
+      maps = scoped; applyScope(); scroller.scrollLeft = 0; update(); restartAutoplay();
+    });
+  });
   window.addEventListener('resize', update);
 
   // Pause while the visitor is interacting, then resume when they leave.
