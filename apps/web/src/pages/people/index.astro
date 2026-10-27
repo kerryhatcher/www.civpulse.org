@@ -1,9 +1,10 @@
 ---
 import { directoryUrl } from '../../lib/directory-assets';
+import { orderPeople } from '../../lib/directories';
 import Layout from '../../layouts/Layout.astro';
 import { fetchPublicPeople, personImageUrl, PERSON_KIND_LABELS } from '../../lib/people';
 
-const people = await fetchPublicPeople();
+const people = orderPeople(await fetchPublicPeople(), 'civic_first');
 
 function initials(name: string): string {
   return name
@@ -17,12 +18,12 @@ function initials(name: string): string {
 
 <Layout
   title="People"
-  description="Officials, elected office holders, and candidates for office in one public directory."
+  description="Find officials and candidates first, alongside other people in civic records."
 >
   <main id="main" data-directory-snapshot={await directoryUrl('people')}>
     <div class="page-intro">
       <h1>People</h1>
-      <p>Officials, elected office holders, and candidates for office.</p>
+      <p>Find officials and candidates first, alongside other people in civic records.</p>
     </div>
 
     <form class="people-controls" data-person-search-form role="search">
@@ -38,6 +39,7 @@ function initials(name: string): string {
       </label>
       <label for="person-sort">Sort by
         <select id="person-sort" data-person-sort>
+          <option value="civic_first">Officials and candidates first</option>
           <option value="first_asc">First name: A–Z</option>
           <option value="first_desc">First name: Z–A</option>
           <option value="last_asc">Last name: A–Z</option>

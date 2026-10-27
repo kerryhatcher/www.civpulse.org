@@ -57,3 +57,22 @@ test('build reads every stable page beyond the Data API cap and fails on partial
  expect(await readRows(client,'organizations','id',['id'])).toHaveLength(1201);expect(offsets).toEqual([0,500,1000]);
  fail=true;await expect(readRows(client,'organizations','id',['id'])).rejects.toThrow('offline');
 });
+
+test('civic-first people ordering ranks officials and candidates across the full result set before pagination',()=>{
+ const others=Array.from({length:30},(_,i)=>({...person(`author-${i}`,'public',`A Author ${i}`),kind:'other' as const}));
+ const elected={...person('elected','public','Z Elected'),kind:'elected_official' as const};
+ const appointed={...person('appointed','public','Y Appointed'),kind:'appointed_official' as const};
+ const candidate=person('candidate','public','X Candidate');
+ const entries=[...others,candidate,elected,appointed].map(record=>({record,search:`${record.full_name} education`}));
+ const first=browsePeople(entries,'','','civic_first',0,24);
+ expect(first.people.slice(0,3).map(row=>row.id)).toEqual(['appointed','elected','candidate']);
+ const second=browsePeople(entries,'','','civic_first',24,24);
+ expect(first.total).toBe(33);
+ expect(new Set([...first.people,...second.people].map(row=>row.id)).size).toBe(33);
+ expect(second.people.every(row=>row.kind==='other')).toBe(true);
+ expect(browsePeople(entries,'','other','civic_first').total).toBe(30);
+ expect(browsePeople(entries,'candidate','','civic_first').people.map(row=>row.id)).toEqual(['candidate']);
+ expect(browsePeople(entries,'','','first_asc').people[0].kind).toBe('other');
+ expect(browsePeople(entries,'','','first_desc').people[0].id).toBe('elected');
+ expect(entries[0].record.id).toBe('author-0'); // Sorting must not mutate the cached snapshot.
+});

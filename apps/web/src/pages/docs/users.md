@@ -144,17 +144,19 @@ If you do not see meeting notes, they may not have been added yet. For an older 
 
 ## Keep up with the calendar
 
+The month/agenda and event list appear first. Expand **Filter events and calendars** to search or choose organizations, categories, calendars, and calendar colors. Below the events, expand **Subscribe or download the calendar** for feed and download options.
+
 Calendar times and election dates and deadlines are shown in Eastern Time (America/New_York), including daylight saving changes. Election-day hours show when local polls open and close. **Subscribe to calendar** adds an updating feed of public events to your calendar app. If that button does not open your app, expand **Use a subscription URL** and copy the address. **Download calendar** imports a one-time copy instead. Updates to a subscription depend on your calendar app's refresh schedule.
 
 ## Search and explore
 
 - [Search Civic Pulse](/search/) by name or topic, or choose a **Content type** to browse without entering a search term. Results can include people, organizations, elections, articles, maps, and events.
-- [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. **Copy map link** shares the current layer selection.
-- Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). Sort by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and first-name A–Z order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
+- [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. Selecting **Show on map** in the directory moves keyboard focus into the details; Tab reaches its actions, and Escape or the close button returns focus to the directory entry. **Copy map link** shares the current layer selection.
+- Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). The default **Officials and candidates first** order shows elected and appointed officials, then candidates, then other people, alphabetically within each group. You can also sort all matches by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and officials/candidates-first order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
   Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header to see every race in the same election. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 
-If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. Some records have not been added yet.
+If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. On Search Civic Pulse, **Clear search** removes the query and content-type filter and returns focus to the search field; it keeps your header county selection. Some records have not been added yet.
 
 ## Accounts and access
 
@@ -447,6 +449,8 @@ and an absent source time is labeled separately from collection time. Registrati
 and precinct denominators are not inferred. Reports update live after an import.
 
 ### Share an election section
+
+Use **Dates**, **Ballot**, and **Results** near the top of a published election page to jump directly to that section. Ballot information appears before turnout, including when no turnout has been reported yet.
 
 Use **Link** beside a section heading, then copy the browser address (or use
 **Copy link address** on that link). Election detail pages support

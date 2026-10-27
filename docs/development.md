@@ -75,6 +75,15 @@ plus selected calendar buttons, fields, focus states, and map popups. Check a di
 fonts, colors, header, and footer are shared. Keep election timing tests and
 anonymous/signed-in event checks intact.
 
+Accessibility regression checks for this visual system:
+
+- Keep `--control-line` separate from decorative `--line`; empty input and textarea boundaries must contrast at least 3:1 against their surfaces in both themes.
+- Inspect map attribution after Leaflet CSS loads on `/maps/`, a standalone map, and an election page. The shared dark override must win the cascade.
+- At 320px check element overflow as well as document width, particularly the masthead and topic labels.
+- Activate a map directory entry using Enter, Tab through its detail actions, and close using Escape and the close button. Focus should return to the originating entry without a trap.
+- Check People ranking before pagination anonymously and signed in; officials and candidates must precede Other while alphabetical sorts remain available.
+- Verify search reset clears query/type/page but preserves county, and that calendar disclosures and election jump links remain keyboard operable.
+
 MCP consolidation has two catalogs: the original `/mcp` and opt-in
 `/mcp/v2`. Run `bun test scripts/tests/mcp-common-reads.test.ts
 scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts

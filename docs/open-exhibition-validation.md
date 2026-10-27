@@ -51,3 +51,25 @@ After integrating main’s county filter, rechecked the shared header, homepage,
 election detail, and people directory in both themes and viewport sizes. County
 selection persists across navigation, and Bibb remains the default. The picker
 and status use canvas foreground colors to retain contrast.
+
+## Audit remediation — October 27, 2026
+
+Resolved all eight follow-up findings: stronger input boundaries (3.64:1 light,
+4.27:1 dark against their fill), dark map attribution on all three map surfaces,
+keyboard focus into and back from map popups, collapsed calendar filters and
+subscriptions, ballot content before turnout, officials then candidates before
+other People records and pagination, actionable empty search with a reset, and
+a masthead that fits at 320px.
+
+Browser validation covered map Enter/Tab/Escape focus handoff, calendar filters,
+agenda and subscription disclosure, search reset and input focus, alphabetical
+People sorting and default reset, and civic-first People ordering both anonymous
+and signed in with the local test account. Calendar fits 320px in both themes;
+the mobile masthead has no internal overflow. Browser error logs were empty.
+The local test account was signed out and browser theme emulation reset afterward.
+
+`bun run check` passed without diagnostics; `bun run build` generated 275 pages;
+`bun test scripts` passed 312 tests with 47 environment-dependent skips and no
+failures. An independent scoped code and visual review returned **ship**, with
+no material fixes outstanding. This verifies the eight reported findings, not
+a certification of complete WCAG conformance.

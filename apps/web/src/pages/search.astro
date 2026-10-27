@@ -19,8 +19,9 @@ import Layout from '../layouts/Layout.astro';
         <option value="calendar">Calendars</option><option value="event">Events</option>
       </select></label>
       <button class="button-link" type="submit">Search</button>
+      <button type="reset">Clear search</button>
     </form>
-    <p class="body-note" data-site-search-access>Search shows public content. Admins can also search unlisted and private content.</p>
+    <p class="body-note" data-site-search-access>Search public civic information. Your county selection also applies.</p>
     <p class="status" role="status" aria-live="polite" data-site-search-status>Enter a search or choose a content type to browse.</p>
     <div class="org-grid site-search-results" data-site-search-results></div>
     <div class="site-search-pagination" aria-label="Search result pages">

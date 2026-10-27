@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-27T04:22:18.170Z",
+  "generatedAt": "2026-10-27T05:22:12.880Z",
   "title": "Design System: Civic Pulse",
   "extensions": {
     "colorMeta": {
@@ -437,12 +437,20 @@
           "oklch(83.57% 0.0681 126.63)",
           "oklch(95.00% 0.0681 126.63)"
         ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control boundary"
+      },
+      "dark-control-line": {
+        "role": "neutral",
+        "displayName": "Dark control boundary"
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Monumental identity",
-        "purpose": "Homepage masthead; responsive overrides apply."
+        "purpose": "Homepage masthead; at 800px and below uses clamp(48px,21vw,176px), no horizontal transform, and 1.05 line height."
       },
       "headline": {
         "displayName": "Exhibition headline",
@@ -454,7 +462,7 @@
       },
       "topic": {
         "displayName": "Topic label",
-        "purpose": "Desktop numbered civic index."
+        "purpose": "Desktop numbered civic index; at 800px and below uses Barlow Condensed 600, with clamp(22px,6.9vw,27px) below 480px."
       },
       "body": {
         "displayName": "Reading text",
@@ -547,7 +555,8 @@
         "surface-hover": "dark-surface-hover",
         "map-caption": "dark-map-caption",
         "panel": "dark-panel",
-        "panel-rule": "dark-panel-rule"
+        "panel-rule": "dark-panel-rule",
+        "control-line": "dark-control-line"
       }
     },
     "paletteRampPolicy": "Eight-step synthesized OKLCH strips for palette inspection only. The frontmatter and actual CSS semantic assignments are normative; ramp steps are not shipped CSS tokens."
