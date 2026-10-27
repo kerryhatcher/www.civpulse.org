@@ -483,3 +483,17 @@ never retry. Profile exports keep 500-row pages normally; a confirmed timeout
 splits only that range into sequential 100-row reads through the same anonymous
 export RPC. Short pages preserve EOF, and any denied/malformed/failed subpage
 stops the whole export. Timeouts are never increased and records are never omitted.
+
+### Static public legislation directory
+
+Anonymous bill and session browsing uses hashed JSON under
+`/directory-data/legislation/`. The manifest carries public terms, sessions and
+the first 25 bills; further searches, sorting, filters and Load more read public
+bill shards of at most 500 rows, grouped by term. Term filters download only their matching shards.
+The build reuses the existing anonymous legislation export and per-build table
+cache shared by archives and profiles; it adds no database migration or privileged
+credential. Projected rows omit raw import/provenance payloads. Existing recursive
+discovery gates exclude unlisted/private records and hidden parents before export.
+Signed-in browsing and all UUID viewers retain their existing live RPC gates.
+Missing assets fail visibly without a live anonymous fallback. Each deployment
+publishes a fresh snapshot; admin edits need a rebuild.

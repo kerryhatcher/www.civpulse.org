@@ -203,6 +203,12 @@ No visitor IP addresses, user agents, or cookies are stored in these statistics.
 
 ## Legislative records
 
+Public bills and session directories are published snapshots. After legislation
+imports or edits, use [Publish](/admin/publish/) to rebuild them. Signed-in
+directory browsing continues to use live permissions, so your admin view can show
+new or restricted records before the public snapshot. Private and unlisted rows
+and rows with hidden parents are excluded from the published directory files.
+
 Use [Legislation admin](/admin/legislation/) and choose a record type. Existing
 organizations represent legislatures, chambers and committees; existing people,
 offices and service records identify members. Create records in this order:

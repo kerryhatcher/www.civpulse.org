@@ -208,6 +208,11 @@ date (newest or oldest) or title (A–Z or Z–A). Filters and sorting apply to 
 entire result set, including **Load more**. Controls update results immediately;
 use **Search** to submit keywords. Empty results do not mean a state has no bills:
 only records added to Civic Pulse appear here.
+Anonymous bill and session browsing uses the latest published snapshot; search,
+filters, sorting and Load more work within that snapshot. New imports and edits
+appear after publication. Signed-in browsing uses live access checks. Unlisted
+records remain available only through their permitted direct links; private
+records require administrator access.
 [Sessions](/legislation/sessions/) groups
 regular and special sessions, with links to their bills, actions and votes.
 

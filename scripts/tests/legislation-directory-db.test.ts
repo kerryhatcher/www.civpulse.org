@@ -1,3 +1,4 @@
+import {browseStaticBills,directoryRow} from '../../apps/web/src/lib/legislation-directory';
 import { expect, test } from "bun:test";
 import { SQL } from "bun";
 
@@ -22,6 +23,25 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)("bill directory filters,
           await tx`insert into bills(term_id,session_id,body_id,numbering_context,identifier,title,introduced_on,visibility) values (${term.id},${session.id},${body.id},'regular',${`HB ${i}`},${`${suffix} Bill ${String(i).padStart(2,'0')}`},${`2025-02-${String(i+1).padStart(2,'0')}`},${i===26 ? 'private' : 'public'})`;
         }
       }
+      // Both exporters must admit the same public discovery set and contexts.
+      await tx.unsafe('set local role anon');
+      const [termsExport]=await tx`select public.export_public_legislation_page('legislative_terms') as data`;
+      const [billExport]=await tx`select public.export_public_legislation_page('bills') as data`;
+      const termMap=new Map(termsExport.data.rows.map((r:any)=>[r.id,r]));
+      const snapshot=billExport.data.rows.map((r:any)=>{const t:any=termMap.get(r.term_id);return directoryRow({...r,jurisdiction:t.jurisdiction,state_name:t.state_name});});
+      for(const sort of ['newest','oldest','title_asc','title_desc']) {
+        for(const query of [suffix,'QA Georgia','HB 1','QA % Bill _1']) {
+          for(const offset of [0,25,100]) {
+            const [live]=await tx`select public.browse_bills(${query},null,'','',${sort},25,${offset}) as data`;
+            const published=browseStaticBills(snapshot,{query,sort,offset});
+            expect(published.total).toBe(live.data.total);
+            expect(published.rows.map(r=>r.id)).toEqual(live.data.rows.map((r:any)=>r.id));
+          }
+        }
+        const [live]=await tx`select public.browse_bills(${suffix},null,'state','Georgia',${sort},25,0) as data`;
+        expect(browseStaticBills(snapshot,{query:suffix,jurisdiction:'state',state:'Georgia',sort}).rows).toEqual(live.data.rows.map(directoryRow));
+      }
+      await tx.unsafe('reset role');
       const user = crypto.randomUUID();
       await tx`insert into auth.users(id,email) values (${user},${`${user}@example.test`})`;
       const run = async (jurisdiction = "", state = "", sort = "newest", offset = 0, term: string | null = null) => {
