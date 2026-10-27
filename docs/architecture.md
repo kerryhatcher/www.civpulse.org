@@ -459,3 +459,19 @@ validate and save immutable cumulative reports. See [election results](election-
 that same Census snapshot. `county-charts.ts` progressively adds keyboard-accessible
 topic tabs; without JavaScript all chart sections remain visible. No charting
 dependency or runtime data request is needed. Tables and CSV retain all measures.
+
+### Build-time legislative page scheduling
+
+The archive and profile exporters share public legislative tables in memory for
+one anonymous build client. Counted discovery pages still use the existing
+`browse_legislation` RPC with its 100-row cap and no direct-ID or contextual
+parameters. After the first page establishes the total, up to three pages run
+concurrently across all tables. This keeps all three slots useful when only a
+large table remains; the shared build HTTP ceiling remains six. Pages are
+assembled in offset order, preserving record/section ordering.
+
+Changing totals, incomplete/oversized pages, invalid/repeated IDs, hidden rows
+or backend errors fail publication. There is no disk or cross-build cache,
+credential change, RLS change, larger response cap or timeout increase. Development
+expires the in-memory cache after thirty seconds. Table logs show rows, pages
+and elapsed time to identify future build regressions.

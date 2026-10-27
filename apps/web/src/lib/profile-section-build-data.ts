@@ -1,3 +1,4 @@
+import { readPublicLegislationTable } from './legislation-build-data';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getBuildSupabase } from './supabase-build';
 import { emptyProfileSections, type PublicProfileSections } from './profile-sections';
@@ -28,15 +29,7 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
     }
   });
   for (const table of ['legislative_terms','legislative_sessions','legislative_bodies','bill_sponsorships']) tasks.push(async () => {
-    const rows: LegislativeRow[] = [];
-    for (let offset=0;;offset+=100) {
-      const {data,error} = await client.rpc('browse_legislation',{p_table:table,p_offset:offset,p_limit:100});
-      if (error) throw new Error(`Public profile legislation export failed (${table}): ${error.message}`);
-      if (!data || !Array.isArray(data.rows) || !Number.isInteger(data.total) || (!data.rows.length && offset<data.total)) throw new Error(`Incomplete profile legislation export (${table})`);
-      rows.push(...data.rows);
-      if (rows.length===data.total) break;
-      if (rows.length>data.total) throw new Error(`Profile legislation changed during export (${table})`);
-    }
+    const rows = await readPublicLegislationTable(client, table);
     resources[table]=rows;
   });
   // Bounded workers prevent per-profile HTTP fan-out during imports/builds.

@@ -42,7 +42,8 @@ test.skipIf(!process.env.PUBLIC_RECORDS_TEST_DATABASE_URL)('public publication f
     for (const role of ['anon', 'authenticated']) {
       await tx.unsafe(`set local role ${role}`);
       await tx`select set_config('request.jwt.claim.sub',${role === 'anon' ? '' : ordinary},true)`;
-      const records = await loadPublicRecords(client);
+      // A fresh build client per role forces each caller through the SQL gates.
+      const records = await loadPublicRecords({rpc: client.rpc} as SupabaseClient);
       const ids = records.map(r => r.id);
       expect(publicIds.every(id => ids.includes(id))).toBe(true);
       expect(hiddenIds.some(id => ids.includes(id))).toBe(false);
