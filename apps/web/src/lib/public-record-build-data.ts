@@ -1,10 +1,10 @@
+import {readPublicRequests} from './request-build-data';
 import { readPublicLegislationTable } from './legislation-build-data';
 import type { PublicCalendarSnapshot } from './calendar-snapshot';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { legislativeResources } from './legislation';
 import type { EventRecord } from './calendars';
 import type { MeetingRecord } from './meetings';
-import type { RequestDetail } from './records-requests';
 import { legislativeTitle } from './legislation-display';
 import { recordKinds, recordHref, webHref, legislativeRecord, eventRecord, requestRecord, type PublicRecord, type RecordKind } from './public-records';
 
@@ -72,7 +72,7 @@ export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<
     if (target) fact.href = recordHref(target.kind, target.id);
   }
   const events = calendar?.events ?? await pages<EventRecord>('browse_calendar_events', 500, { p_public_only: true });
-  const requests = await pages<{ id: string; visibility: string }>('search_records_requests', 25, { p_managed: false });
+  const requests = await readPublicRequests(client);
   const tasks: (() => Promise<void>)[] = [];
   for (const event of events) tasks.push(async () => {
     if (event.visibility !== 'public' || event.calendar_visibility !== 'public' || (event.election_id && event.election_visibility !== 'public')) throw new Error('Non-public event parent in export');
@@ -80,13 +80,7 @@ export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<
     if (event.is_meeting && (!meeting || meeting.status !== 'ok' || meeting.event?.id !== event.id || (!calendar && (meeting.event.visibility !== 'public' || meeting.calendar?.visibility !== 'public' || (meeting.event.election_id && meeting.election?.visibility !== 'public'))))) throw new Error('Public meeting became unavailable during export');
     records.push(eventRecord(event, meeting));
   });
-  for (const request of requests) tasks.push(async () => {
-    if (request.visibility !== 'public') throw new Error('Non-public request in discovery export');
-    const detail = await rpc('get_records_request', { p_id: request.id }) as RequestDetail;
-    if (detail.status !== 'ok' || detail.request?.visibility !== 'public' || detail.request.id !== request.id || detail.can_manage) throw new Error('Public request became unavailable during export');
-    // Project explicitly: never publish owners, transfers, file paths or signing URLs.
-    records.push(requestRecord(detail));
-  });
+  for (const request of requests) records.push(requestRecord(request));
   let next = 0;
   await Promise.all(Array.from({ length: 3 }, async () => { while (next < tasks.length) await tasks[next++](); }));
   // Sessions link to their published bills/votes without contextual unlisted reads.

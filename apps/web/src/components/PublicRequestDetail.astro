@@ -1,0 +1,40 @@
+---
+import {REQUEST_STAGES,REQUEST_OUTCOMES,UPDATE_KINDS} from '../lib/records-requests';
+import {requestFeeTotals,type PublicRequestDetail} from '../lib/request-snapshot';
+interface Props {detail:PublicRequestDetail}
+const {detail}=Astro.props;const r=detail.request,totals=requestFeeTotals(detail.fees);
+const date=(value:string)=>new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(value.length===10?value+'T12:00:00Z':value));
+const money=(n:number)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+const viewer=`/requests/view/?id=${r.id}&live=1`;
+---
+<main id="main" data-public-request={r.id} data-request-live={viewer}>
+ <p><a href="/requests/">All records requests</a> · <a href="/records/requests/page/1/">Published request archive</a></p>
+ <div class="page-intro"><h1>{r.title}</h1><p>{r.request_type.toUpperCase()} · {REQUEST_STAGES[r.stage]} · {r.outcome?REQUEST_OUTCOMES[r.outcome]:'Outcome not assessed'} · Public</p>
+ {(['target_organization_id','source_organization_id'] as const).map((key,index)=>{const org=detail.organizations.find(o=>o.id===r[key]);return org&&<p>{index?'From':'To'}: <a href={`/orgs/${encodeURIComponent(org.slug)}/`}>{org.name}</a></p>;})}</div>
+ <dl class="account-list">{[['Reference',r.reference_number],['Submitted',r.submitted_on?date(r.submitted_on):null],['Next follow-up',r.next_follow_up_on?date(r.next_follow_up_on):null]].filter(([,v])=>v).map(([label,value])=><div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+ <p class="request-prose">{r.description}</p>
+ <nav class="legislation-navigation" aria-label="On this request"><a href="#timeline">Request timeline</a><a href="#fees">Fees and payments</a><a href="#files">Files and related coverage</a></nav>
+ <div class="request-columns">
+  <section class="request-section" id="timeline"><h2>Request timeline</h2><ol class="request-timeline">{detail.updates.length?detail.updates.map(u=><li><strong>{date(u.occurred_on)} · {UPDATE_KINDS[u.kind]}</strong><p>{u.body}</p></li>):<li>No updates recorded yet.</li>}</ol></section>
+  <aside><section class="request-section" id="fees"><h2>Fees and payments</h2><p>USD · estimates, bills and payments are tracked separately.</p><dl class="account-list">{Object.entries(totals).map(([kind,sum])=><div><dt>{kind[0].toUpperCase()+kind.slice(1)}</dt><dd>{money(sum)}</dd></div>)}</dl><ul class="request-items">{detail.fees.length?detail.fees.map(f=><li>{date(f.occurred_on)} · {f.kind} {money(Number(f.amount))}{f.note&&<p>{f.note}</p>}</li>):<li>No fees recorded.</li>}</ul></section>
+  <section class="request-section" id="files"><h2>Files and related coverage</h2><ul class="request-items">{detail.files.length?detail.files.map(f=><li>{f.file_name} · {(f.size_bytes/1048576).toFixed(2)} MB <button type="button" data-request-download={f.id}>Download</button><p role="status" data-download-status></p></li>):<li>No shared files available.</li>}</ul><ul class="request-items">{detail.links.length?detail.links.map(l=><li><a href={l.url} rel="noopener noreferrer">{l.title}</a></li>):<li>No related links added.</li>}</ul></section></aside>
+ </div>
+ <p>Published snapshot. Changes appear after the next publication. Follow-up dates are manually recorded, not legal deadlines. File downloads recheck current access and use short-lived links.</p>
+ <p><a href={viewer}>Open live request with access checks</a></p>
+</main>
+<script>
+ import {getSupabase} from '../lib/supabase';
+ import {requestAnchor} from '../lib/request-snapshot';
+ import {requestFileDownload} from '../scripts/request-data';
+ const root=document.querySelector<HTMLElement>('[data-public-request]');
+ if(root) {
+  const client=getSupabase();
+  void client.auth.getSession().then(({data:{session},error})=>{if(!error&&session&&root.dataset.requestLive){const path=root.dataset.requestLive.slice('/requests/'.length)+requestAnchor(location.hash);location.replace('/requests/'+path);}});
+  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-request-download]'))button.onclick=async()=>{
+   const status=button.parentElement!.querySelector<HTMLElement>('[data-download-status]')!;button.disabled=true;status.textContent='Checking file access…';
+   try{const download=await requestFileDownload(client,root.dataset.publicRequest!,button.dataset.requestDownload!,import.meta.env.PUBLIC_SUPABASE_URL);const link=document.createElement('a');link.href=download.url;link.download=download.name;link.click();status.textContent='';}
+   catch(error){status.textContent=error instanceof Error?error.message:'File could not be downloaded. Try again.';}
+   finally{button.disabled=false;}
+  };
+ }
+</script>

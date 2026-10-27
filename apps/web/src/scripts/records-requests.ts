@@ -1,5 +1,7 @@
+import {readPublicRequestDirectory,publicRequestTarget} from './request-data';
+import {browsePublicRequests,requestAnchor} from '../lib/request-snapshot';
 import { getSupabase } from '../lib/supabase';
-import { countySearchPage } from './county-filter';
+import { countySearchPage, filterCounty } from './county-filter';
 type RequestSearchRow = Pick<RequestDetail['request'], 'id'|'title'|'stage'|'outcome'|'visibility'|'updated_at'> & { target_name: string|null; source_name: string|null };
 import { REQUEST_STAGES, REQUEST_OUTCOMES, UPDATE_KINDS, REQUEST_BUCKET, REQUEST_FILE_TYPES, type RequestDetail } from '../lib/records-requests';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string) => document.querySelector<T>(selector)!;
@@ -33,22 +35,25 @@ export async function initRequestDirectory() {
   const supabase=getSupabase(), form=$<HTMLFormElement>('[data-request-search]');
   const {data:{session}}=await supabase.auth.getSession();
   if(session) { $('[data-request-scope]').hidden=false; const admin=await rpc('is_admin',{}); $('[data-request-create]').hidden=!admin; }
-  await organizations([form.elements.namedItem('organization') as HTMLSelectElement]);
+  const snapshot=await readPublicRequestDirectory(supabase,document.querySelector<HTMLElement>('[data-request-directory]')?.dataset.requestDirectory);
+  if(snapshot)for(const org of snapshot.organizations)(form.elements.namedItem('organization') as HTMLSelectElement).add(new Option(org.name,org.id));
+  else await organizations([form.elements.namedItem('organization') as HTMLSelectElement]);
   const params=new URLSearchParams(location.search);
   for(const name of ['query','stage','organization','scope']) {const input=form.elements.namedItem(name) as HTMLInputElement|HTMLSelectElement; if(params.has(name)) input.value=params.get(name)!;}
   let offset=0;
   const load=async()=>{
    message('Loading requests…'); const v=values(form);
-   const rows=await countySearchPage<RequestSearchRow>(async cursor=>rpc('search_records_requests',{p_query:v.query,p_stage:v.stage||null,p_organization_id:v.organization||null,p_managed:!!session&&v.scope==='managed',p_offset:cursor}), 'request', offset, 26, 25);
+   const published=snapshot?browsePublicRequests(await filterCounty(snapshot.requests,'request'),String(v.query),String(v.stage),String(v.organization),offset):null;
+   const rows=published?published.rows:await countySearchPage<RequestSearchRow>(async cursor=>rpc('search_records_requests',{p_query:v.query,p_stage:v.stage||null,p_organization_id:v.organization||null,p_managed:!!session&&v.scope==='managed',p_offset:cursor}), 'request', offset, 26, 25);
    const visible=rows.slice(0,25);
    const list=$('[data-request-results]'); list.replaceChildren();
    for(const row of visible) {
-    const article=el('article','');article.className='request-result'; const h=el('h2',''), a=el('a',row.title);a.href=`/requests/view/?id=${row.id}`;h.append(a);
+    const article=el('article','');article.className='request-result'; const h=el('h2',''), a=el('a',row.title);a.href=snapshot?`/records/requests/${row.id}/`:`/requests/view/?id=${row.id}`;h.append(a);
     article.append(h,el('p',`${REQUEST_STAGES[row.stage as keyof typeof REQUEST_STAGES]} · ${row.outcome?REQUEST_OUTCOMES[row.outcome as keyof typeof REQUEST_OUTCOMES]:'Outcome not assessed'} · ${row.visibility}`));
     article.append(el('p',[row.target_name?`To: ${row.target_name}`:'',row.source_name?`From: ${row.source_name}`:''].filter(Boolean).join(' · ')),el('p',`Updated ${date(row.updated_at)}`)); list.append(article);
    }
    message(visible.length?`Showing ${offset+1}–${offset+visible.length}.`:'No requests match these filters. Try another topic, stage or organization.');
-   $('[data-request-prev]').hidden=offset===0; $('[data-request-next]').hidden=rows.length<=25;
+   $('[data-request-prev]').hidden=offset===0; $('[data-request-next]').hidden=published?offset+visible.length>=published.total:rows.length<=25;
   };
   bind(form,async()=>{offset=0;await load();});
   window.addEventListener('countychange', () => location.reload());
@@ -151,6 +156,8 @@ export async function initRequestView() {
   if(isNew) {const admin=await rpc('is_admin',{});if(!admin){message('Only admins can create requests. Sign in with an admin account.',true);return;}await initializeEditor();$('[data-request-editor]').hidden=false;message('New requests start private.');}
   else {
    if(!id||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){message('This request link is invalid. Browse all records requests to find one.',true);return;}
+   const target=await publicRequestTarget(supabase,document.querySelector<HTMLElement>('[data-request-index]')?.dataset.requestIndex,id,new URLSearchParams(location.search).get('live')==='1');
+   if(target){const path=target.slice('/records/requests/'.length)+requestAnchor(location.hash);location.replace('/records/requests/'+path);return;}
    $('[data-request-retry]').addEventListener('click',()=>void busy($<HTMLButtonElement>('[data-request-retry]'),async()=>{await refresh();$('[data-request-retry]').hidden=true;}));
    message('');await refresh();
   }

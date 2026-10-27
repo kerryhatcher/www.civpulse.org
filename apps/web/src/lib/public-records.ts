@@ -57,7 +57,7 @@ export function eventRecord(event: EventRecord, meeting?: MeetingRecord): Public
     ...(event.location ? [{ label: 'Location', value: event.location }] : []),
   ], sections };
 }
-export function requestRecord(detail: RequestDetail): PublicRecord {
+export function requestRecord(detail: Pick<RequestDetail,'request'|'organizations'|'updates'|'fees'|'links'>): PublicRecord {
   const r = detail.request;
   return { id: r.id, kind: 'requests', title: r.title, description: r.description || `${r.title}. ${REQUEST_STAGES[r.stage]}.`, viewer: `/requests/view/?id=${r.id}`, facts: [
     { label: 'Stage', value: REQUEST_STAGES[r.stage] },

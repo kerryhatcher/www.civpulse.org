@@ -175,10 +175,17 @@ Fees are recorded in USD as separate estimated, billed and paid entries. Totals
 sum each category independently; estimates are not added to bills or payments.
 No fees recorded does not establish that a request is free.
 
+Public request listings and details use the latest published snapshot. Search,
+stage/organization filters and Next/Previous work within that snapshot. Imports,
+edits and visibility changes appear after publication. Signed-in readers and
+**Requests I manage** use live access checks. Public detail links open the
+published page; **Open live request with access checks** opens the live viewer.
+
 Public requests appear in the directory. Unlisted requests require their direct
 link. Private requests are visible only to their assigned owner and admins.
 Account ownership and transfer history are always private. Files can be private
-even when a request is public; downloads use short-lived links.
+even when a request is public. Download rechecks current file access and uses a
+short-lived link; a file may become unavailable after a page was published.
 
 Only admins create requests. If one is assigned to you, use **Account → Manage
 your records requests**, then **Manage this request** to update it. You can add
@@ -378,13 +385,53 @@ Select the Civic Pulse logo to return home. The shorter footer contains
 **About**, **Guides & help**, and **Search**; archive and directory links are
 available in **Browse** on every page.
 
-Georgia SOS structured turnout appears separately on the election results page.
+Election detail pages show **Voter turnout** charts when Georgia SOS structured
+turnout is available. Choose a **County** (Bibb is selected when available) to
+compare reported ballot styles and inspect early-voting and absentee measures.
+The early-voting chart remains visible alongside reported turnout when both
+source tables are available; their overlapping counts are never combined. Exact counts, source
+as-of labels and the separate collection time accompany the charts. Each chart
+has its own zero-based ballot scale. Missing counts say “Not reported”; overlapping
+measures are not added, and no registered-voter denominator is inferred. Use
+**All reports, source details & earlier snapshots** to inspect reporting history.
+The charts load live and follow the election’s existing visibility rules.
+
+The **Bibb County precinct turnout** map uses distinct, opaque percentage bands:
+under 10%, 10–<15%, 15–<20%, 20–<25%, 25–<30%, and 30%+. Colors progress from
+pale yellow to dark green, making differences at lower turnout easier to see.
+The darkest band includes all rates at or above 30%; exact percentages remain in
+the popup and table. Gray means “Not reported,” while a reported zero uses the
+lightest color. Select a precinct for counts and report
+time/status, or expand **Precinct counts and percentages** for a keyboard-accessible
+table. Choose a ballot style when separate reports are available; only all-method
+precinct reports are used, never sums of overlapping reports or contest counts.
+Rates need that precinct’s voters (or ballots) and registered-voter counts in
+the same report. Imported precinct registration counts enable percentages as soon
+as the report is available; missing denominators remain gray. County turnout is
+never distributed across precincts. The map reuses the public Bibb boundary
+snapshot; check boundary vintages before comparing historical elections.
+
+Georgia SOS structured turnout also appears separately on the election results page.
 Choose a turnout snapshot or load more county rows to inspect all available
 measures and source locators. These are unofficial cumulative observations;
 overlapping early, absentee and turnout tables must never be added together.
 Display text and numeric values are preserved, unavailable values stay unavailable,
 and an absent source time is labeled separately from collection time. Registration
 and precinct denominators are not inferred. Reports update live after an import.
+
+### Share an election section
+
+Use **Link** beside a section heading, then copy the browser address (or use
+**Copy link address** on that link). Election detail pages support
+`#dates-and-deadlines`, `#voter-turnout`, `#precinct-turnout`, and `#ballot`.
+For example, [November 3 precinct turnout](/elections/2026-11-03-general-election/#precinct-turnout)
+opens directly at the map. Shared UUID viewer links use the same anchors and
+retain their existing access rules.
+
+On the [reports page](/elections/results/), share `#result-filters`, `#reports`,
+or `#structured-turnout`. Keep the election `?id=…` and any reporting filters in
+the URL; clicking **Link** preserves them. Direct links settle on the section
+after its data loads, unless the visitor has started navigating the page.
 
 ### Exploring election reports
 

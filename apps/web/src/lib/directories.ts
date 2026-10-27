@@ -24,22 +24,25 @@ function document(entry: DirectoryEntry<unknown>) {
 
 /** Literal input is never interpolated into a regexp. Supports words, phrases,
  * OR and exclusions; stemming also matches common English word endings. */
-export function searchDirectory<T>(entries: DirectoryEntry<T>[], query: string): T[] {
+export function searchDirectory<T>(entries: DirectoryEntry<T>[], query: string, options: {literalFallback?:boolean;stopWords?:ReadonlySet<string>} = {}): T[] {
   if (query.length > 500) throw new Error('Search query must be 500 characters or fewer');
   const needle = query.trim().toLowerCase();
   if (!needle) return entries.map(entry => entry.record);
-  const groups: { negative: boolean; phrase: boolean; terms: string[] }[][] = [[]];
+  const groups: { negative: boolean; phrase: boolean; terms: (string|null)[] }[][] = [[]];
   for (const match of needle.matchAll(/(-?)(?:"([^"]*)"|([^\s"]+))/g)) {
     if (match[3] === 'or' && !match[1]) { if (groups.at(-1)!.length) groups.push([]); continue; }
-    const terms = words(match[2] ?? match[3] ?? '').map(word => stemmer(word));
+    const phrase=match[2] !== undefined;
+    let terms=words(match[2] ?? match[3] ?? '').map(word => options.stopWords?.has(word)?null:stemmer(word));
+    if(phrase){while(terms[0]===null)terms.shift();while(terms.at(-1)===null)terms.pop();}
+    else terms=terms.filter(word=>word!==null);
     if (terms.length) groups.at(-1)!.push({ negative: !!match[1], phrase: match[2] !== undefined, terms });
   }
   const ranked = entries.map(entry => {
     const doc = document(entry);
-    const matches = doc.text.includes(needle) || groups.some(group => group.length > 0 && group.every(term => {
+    const matches = options.literalFallback !== false && doc.text.includes(needle) || groups.some(group => group.length > 0 && group.every(term => {
       const found = term.phrase
-        ? doc.stems.some((_, start) => term.terms.every((word, offset) => doc.stems[start + offset] === word))
-        : term.terms.every(word => doc.terms.has(word));
+        ? doc.stems.some((_, start) => term.terms.every((word, offset) => word === null ? start + offset < doc.stems.length : doc.stems[start + offset] === word))
+        : term.terms.every(word => word === null || doc.terms.has(word));
       return term.negative ? !found : found;
     }));
     const title = String((entry.record as {full_name?:string;name?:string}).full_name ?? (entry.record as {name?:string}).name ?? '').toLowerCase();

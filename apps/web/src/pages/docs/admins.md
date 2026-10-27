@@ -421,3 +421,12 @@ If the connector rejects `read_turnout` or `import_turnout` as an unknown action
 follow the [tool refresh instructions](/docs/ai/#if-setup-does-not-work), then
 verify a read succeeds before retrying the import. Updating bundled skills alone
 does not refresh the connected app's schema.
+
+### Publishing records requests
+
+Public request directories and detail pages are snapshots. After imports, edits
+or visibility changes, [Publish](/admin/publish/) to refresh them. Signed-in
+requests, ownership/transfer history, management controls and private files remain
+live behind their existing permissions. Public files recheck current access when
+downloaded; private file names, storage paths and signed URLs are excluded from
+published files. Refresh publication when changing public file metadata as well.

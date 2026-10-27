@@ -190,3 +190,53 @@ Senate District 25 Republican is 2 in the official workbook, but 0 in the separa
 media export. The workbook value reconciles to the county total and is used;
 the HO1 report records the discrepancy. No county total or historical candidacy
 outcome was changed by this import.
+
+## Election detail turnout charts and precinct map
+
+Public election detail pages and the gated UUID viewer load turnout at runtime
+through the existing visibility-aware RPCs. Structured county charts page the
+latest report and pin subsequent pages to that report ID, default to Bibb, and
+keep overlapping source tables separate. Counts have no inferred registration
+percentage; source as-of labels and collection times remain distinct.
+
+The Bibb precinct map reuses the build-exported public voting-precinct layer.
+Only exact Bibb/precinct/all-method/ballot-style result scopes join to the
+boundary `precinctid`; no names, county totals, contest totals or overlapping
+method reports are combined. The latest observed report per scope supplies
+voters (otherwise ballots) and the same report's registered count. Missing,
+invalid or zero denominators remain unreported; a true zero numerator is 0%.
+`TURNOUT_BANDS` defines shared, fixed percentage bins for map fills and legend:
+under 10%, 10–<15%, 15–<20%, 20–<25%, 25–<30%, and 30%+. Opaque yellow-to-green
+colors distinguish lower-turnout precincts without blending into the background.
+The final band is open-ended; popups and tables retain the actual percentage.
+Gray identifies unavailable rates and stays distinct from a reported zero.
+Popups and an accessible table retain exact counts, report times and status.
+Structured county aggregates cannot populate precinct percentages. Precinct
+reports with both participation and registration counts enable the map’s rates;
+contest-only reports or missing denominators leave those precincts unreported. Boundary snapshots may differ from
+historical election boundaries and require review before interpreting comparisons.
+
+Run `bun test scripts/tests/election-turnout.test.ts
+scripts/tests/precinct-turnout.test.ts`, then the standard check/build/browser
+flow. Include empty reports, missing versus zero values, county and ballot-style
+selection, mobile layout, retry, snapshot paging and the gated UUID viewer.
+The Public map snapshots CI workflow also runs the turnout and scoped-results
+unit tests on pull requests and pushes to main.
+
+### Shareable section links
+
+Election detail sections expose `dates-and-deadlines`, `voter-turnout`,
+`precinct-turnout`, and `ballot` IDs with native heading permalinks. Public and
+gated UUID detail pages use the same IDs. The reports page exposes
+`result-filters`, `reports`, and `structured-turnout`; hash links preserve its
+existing election and reporting query parameters.
+
+`restoreSectionAnchorAfter` re-aligns an initial hash after the page’s initial
+runtime reads finish, including turnout charts above the map. It respects hidden
+or unavailable sections, malformed fragments, changed hashes and visitor input;
+it does not override someone who has started scrolling or navigating. Existing
+contest/question links still reveal their linked races through election scope.
+
+The UUID viewer’s optional admin-edit lookup runs independently of turnout and
+anchor readiness. A delayed or failed role lookup cannot postpone the shared
+section’s alignment; the edit link stays hidden unless admin access is confirmed.

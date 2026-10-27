@@ -2,7 +2,8 @@ import {getSupabase} from '../lib/supabase';
 import {selectedCounty} from './county-filter';
 const labels:Record<string,string>={accepted:'Accepted ballots',requested:'Requested ballots',issued:'Issued ballots',returned:'Returned ballots',rejected:'Rejected ballots',spoiled_canceled:'Spoiled / canceled',outstanding:'Outstanding ballots',acceptance_ratio:'Accepted / returned ratio',turnout:'Turnout'};
 function el(tag:string,text:string){const e=document.createElement(tag);e.textContent=text;return e;}
-export function initStructuredTurnout(){
+/** Wire report controls and resolve after the first structured snapshot is rendered. */
+export async function initStructuredTurnout(): Promise<void>{
  const election=document.querySelector<HTMLSelectElement>('#result-election')!;
  const status=document.querySelector<HTMLElement>('#turnout-status')!;
  const content=document.querySelector<HTMLElement>('#turnout-rows')!;
@@ -50,5 +51,5 @@ export function initStructuredTurnout(){
  window.addEventListener('countychange',()=>void load());
  document.querySelector('#result-form')!.addEventListener('submit',()=>void load());
  history.addEventListener('change',()=>void load());more.addEventListener('click',()=>void load(true));
- void load();
+ await load();
 }

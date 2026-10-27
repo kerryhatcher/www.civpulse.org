@@ -2752,3 +2752,6 @@ textarea::placeholder {
   .home-search-controls input { flex-basis: 200px; }
   .home-search-controls button { flex-grow: 1; justify-content: center; }
 }
+
+/* Leave breathing room above shared election section links. */
+[data-shareable-section] { scroll-margin-top: 1.5rem; }
