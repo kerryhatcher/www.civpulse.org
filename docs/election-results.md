@@ -93,3 +93,29 @@ After integrating current main, legislative batch imports use `import_legislatio
 with explicit `mode=batched` instead of `import_legislation_bundle`. The original
 atomic mode remains the default and preserves its response and 100-record limit.
 This consolidation keeps both workflows within the 128-tool catalog budget.
+
+## Scoped browsing and May 19 breakdowns
+
+The browser loads all paginated reports through the existing visibility-aware
+RPC, then selects an exact county/unit-type/unit, counting group, and ballot
+style. It defaults to a county overview when present. Search matches contest and
+candidate labels; native disclosures keep long ballots manageable. URL filters
+preserve the selected scope, search, and history mode. No cross-report sum is
+computed. Older reports remain independent snapshots. Public access rules and
+private evidence storage are unchanged.
+
+The May 19, 2026 Bibb import adds 31 precinct reports (official precinct codes)
+and four county voting-method reports to the existing county/all snapshot.
+Both partitions independently reconcile to the county choice totals. Source:
+Georgia SOS county Excel export, last updated June 5 at 08:33:45 EDT. PDF evidence
+is a faithful conversion of that workbook, with one worksheet per page; the
+original workbook SHA-256 is recorded in source transcriptions. Contest ballot
+counts are preserved where printed; election-wide precinct/method turnout stays
+unknown where the workbook does not supply it. No precinct-by-method totals are
+inferred from the partially unreported media-feed cells.
+
+One source discrepancy is retained explicitly: Howard 1 / Rick A. Williams / State
+Senate District 25 Republican is 2 in the official workbook, but 0 in the separate
+media export. The workbook value reconciles to the county total and is used;
+the HO1 report records the discrepancy. No county total or historical candidacy
+outcome was changed by this import.
