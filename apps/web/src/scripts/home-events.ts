@@ -45,7 +45,7 @@ function renderHomeDay(events: EventRecord[]): HTMLElement {
 
   const meta = document.createElement('p');
   meta.className = 'home-event-meta';
-  meta.textContent = [event.organization_name, event.calendar_name, event.location]
+  meta.textContent = [formatEventWhen(event, 'America/New_York'), event.all_day ? 'All day' : 'Eastern Time', event.organization_name, event.calendar_name, event.location]
     .filter(Boolean)
     .join(' · ');
   entries.append(meta);

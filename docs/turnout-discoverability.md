@@ -1,0 +1,9 @@
+# Turnout and recent-feature discoverability
+
+Follow-up to Open Exhibition: restore election turnout charts and the precinct map before the ballot list. A highlighted summary directly below the election section links uses the same loaded snapshot and selected county as the charts. It keeps ballot styles separate, reports missing counts honestly, includes collection time, and never sums overlapping early/absentee/turnout views. All counties shows a report-coverage count instead of a misleading total. Loading, unavailable, and error states retain links to reports.
+
+The comparison against pre-redesign main also found and repaired two regressions: calendar subscription/download controls are now before the event list, and homepage upcoming events show visible time, time zone, organization/calendar and venue context. County filtering, section anchors, precinct shading, public request routes, and legislation routes/data remain intact. Homepage map previews were deliberately replaced by the approved Maps topic, which still links to the explorer.
+
+Validation: run the turnout snapshot/summary tests, full scripts suite, Astro/Worker check, static build, and browser checks for summary placement, county switching, jump links, calendar subscription access, homepage metadata, both themes and 320px overflow. Local election data has no structured turnout; populated, zero, missing and overlapping counts are covered by deterministic tests rather than invented displayed totals.
+
+Completed validation: `bun run check` returned no errors, warnings or hints; `bun run build` generated 275 local pages; `bun test scripts` passed 313 tests with 47 environment-dependent skips. Browser checks confirmed section order, summary link target, mobile dark-theme contrast and no overflow, working subscription disclosure before events, visible homepage event details, and no console errors. Independent review found no code blockers.

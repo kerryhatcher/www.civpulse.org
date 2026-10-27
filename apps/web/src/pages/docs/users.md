@@ -144,7 +144,7 @@ If you do not see meeting notes, they may not have been added yet. For an older 
 
 ## Keep up with the calendar
 
-The month/agenda and event list appear first. Expand **Filter events and calendars** to search or choose organizations, categories, calendars, and calendar colors. Below the events, expand **Subscribe or download the calendar** for feed and download options.
+The month/agenda appears before the event list. Expand **Filter events and calendars** to search or choose organizations, categories, calendars, and calendar colors. After the month/agenda controls and before the event list, expand **Subscribe or download the calendar** for feed and download options.
 
 Calendar times and election dates and deadlines are shown in Eastern Time (America/New_York), including daylight saving changes. Election-day hours show when local polls open and close. **Subscribe to calendar** adds an updating feed of public events to your calendar app. If that button does not open your app, expand **Use a subscription URL** and copy the address. **Download calendar** imports a one-time copy instead. Updates to a subscription depend on your calendar app's refresh schedule.
 
@@ -450,7 +450,7 @@ and precinct denominators are not inferred. Reports update live after an import.
 
 ### Share an election section
 
-Use **Dates**, **Ballot**, and **Results** near the top of a published election page to jump directly to that section. Ballot information appears before turnout, including when no turnout has been reported yet.
+Use **Dates**, **Results & turnout**, and **What’s on the ballot** near the top of a published election page to jump directly to that section. A highlighted **Turnout at a glance** summary follows the county selected in the header and shows reported ballot counts with a collection timestamp. These are unofficial cumulative counts, not candidate results. The full turnout charts and precinct map appear before the long ballot list. Missing turnout is stated explicitly; overlapping source views are never added together.
 
 Use **Link** beside a section heading, then copy the browser address (or use
 **Copy link address** on that link). Election detail pages support

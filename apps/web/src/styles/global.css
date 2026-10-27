@@ -2894,7 +2894,7 @@ input, textarea { caret-color: var(--blue); }
 /* Compact date index keeps the full event list close to the selected topic. */
 .exhibition-dates .home-event { grid-template-columns: 76px 1fr; padding-block: 14px; align-items: start; }
 .exhibition-dates .home-event-when { font: 600 28px/1.15 var(--serif); }
-.exhibition-dates .home-event-meta { display: none; }
+.exhibition-dates .home-event-meta { display: block; color: inherit; font-size: 13px; line-height: 1.4; margin-block: 4px 12px; overflow-wrap: anywhere; }
 @media (max-width: 480px) {
   .exhibition-dates .home-event { grid-template-columns: 62px 1fr; gap: 12px; }
   .exhibition-dates .home-event-when { font-size: 25px; }

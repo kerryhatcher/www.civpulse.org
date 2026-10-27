@@ -42,3 +42,19 @@ test('site county selection keeps source views separate and never falls back to 
   expect(all[1].rows[0].measures.accepted.value).toBeNull();
   expect(all[0].rows[0].measures.accepted.value).toBe(0);
 });
+
+test('summary preserves zero/missing counts and does not combine overlapping source tables', async () => {
+  const { turnoutSummary } = await import('../../apps/web/src/lib/election-turnout');
+  const row = (table: string, value: number | null): TurnoutRow => ({
+    county_fips: '13021', county_label: 'BIBB', table, ballot_style: 'Early In-Person',
+    source_title: 'Source', as_of_label: null, measures: { turnout: { value, display: String(value) } },
+  });
+  const snapshot: TurnoutPage = { status: 'ok', total: 2, report: { id: 'x', captured_at: '2026-10-27T00:00:00Z', source_url: 'https://example.org' }, rows: [row('turnout', 0), row('early', 500)] };
+  expect(turnoutSummary(snapshot, '13021')).toContain('Early In-Person: 0 ballots');
+  expect(turnoutSummary(snapshot, '13021')).not.toContain('500');
+  snapshot.rows[0].measures.turnout.value = null;
+  expect(turnoutSummary(snapshot, '13021')).toContain('Not reported');
+  expect(turnoutSummary(snapshot, '13169')).toContain('No turnout is reported');
+  expect(turnoutSummary(snapshot, 'all')).toContain('1 county');
+  expect(turnoutSummary({ ...snapshot, rows: [] }, '13021')).toContain('No structured turnout');
+});

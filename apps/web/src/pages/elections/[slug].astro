@@ -88,9 +88,16 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
     <nav class="election-section-nav" aria-label="Election sections">
       {dateGroups.length > 0 && <a href="#dates-and-deadlines">Dates &amp; deadlines</a>}
-      <a href="#ballot">What's on the ballot</a>
       <a href="#results-and-turnout">Results &amp; turnout</a>
+      <a href="#ballot">What's on the ballot</a>
     </nav>
+
+    <aside class="turnout-summary" aria-labelledby="turnout-summary-title">
+      <h2 id="turnout-summary-title">Turnout at a glance</h2>
+      <p data-turnout-summary role="status">Loading reported turnout…</p>
+      <p><a href="#voter-turnout">View turnout charts</a> · <a href="#precinct-turnout">Bibb precinct map</a> · <a href={`/elections/results/?id=${election.id}`}>All results &amp; source reports</a></p>
+      <noscript><p>Open all results and source reports to browse turnout.</p></noscript>
+    </aside>
 
     {election.description && <div class="prose election-description"><p>{election.description}</p></div>}
 
@@ -123,6 +130,12 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
         </section>
       )
     }
+
+    <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
+      <p><a href={`/elections/results/?id=${election.id}`}>Election results, turnout reports &amp; source details →</a></p>
+      <ElectionTurnout electionId={election.id} />
+      <ElectionPrecinctTurnout electionId={election.id} />
+    </section>
 
     <section id="ballot" data-shareable-section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
@@ -189,12 +202,6 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       }
     </section>
 
-    <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
-      <p><a href={`/elections/results/?id=${election.id}`}>Election results, turnout reports &amp; source details →</a></p>
-      <ElectionTurnout electionId={election.id} />
-      <ElectionPrecinctTurnout electionId={election.id} />
-    </section>
-
     <p class="org-back">
       <a href="/elections/">← All elections</a>
     </p>
@@ -222,6 +229,10 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 </script>
 
 <style>
+  .turnout-summary { padding: clamp(1rem, 3vw, 1.5rem); margin-block: 1.5rem; background: var(--sage); color: var(--selected-ink); }
+  .turnout-summary h2 { color: inherit; margin-top: 0; font-size: 2rem; }
+  .turnout-summary p { margin-bottom: .5rem; }
+  .turnout-summary a { color: inherit; }
   .election-section-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: 1rem; }
   .election-section-nav a { display: inline-flex; align-items: center; min-height: 44px; }
 </style>
