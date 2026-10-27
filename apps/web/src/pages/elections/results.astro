@@ -2,25 +2,34 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 <Layout title="Election results & turnout" description="Sourced election reports and Georgia turnout, with reporting history.">
- <main id="main">
-  <div class="page-intro"><p class="org-eyebrow">Election reports</p><h1>Election results &amp; turnout</h1>
-   <p>Reported votes, participation, and the history behind each update.</p></div>
-  <form id="result-form" class="map-search">
-   <label for="result-election">Election</label><select id="result-election" required><option value="">Choose an election</option></select>
-   <label><input id="result-history" type="checkbox" /> Show earlier reports</label>
-   <button type="submit">Load reports</button>
+ <main id="main" class="results-page">
+  <div class="page-intro"><h1>Election results &amp; turnout</h1><p>Explore Macon-Bibb votes and participation, countywide or in your precinct.</p></div>
+  <form id="result-form" class="result-election-form">
+   <label for="result-election">Election</label>
+   <div class="result-election-controls"><select id="result-election" required><option value="">Choose an election</option></select><button type="submit">Refresh reports</button></div>
   </form>
+  <fieldset id="result-filters" disabled>
+   <legend>Explore a report</legend>
+   <div class="result-filter-grid">
+    <div><label for="result-area">Reporting area</label><select id="result-area"><option value="">County overview</option></select></div>
+    <div><label for="result-method">Voting method</label><select id="result-method"><option value="all">All voting methods</option></select></div>
+    <div id="result-style-field"><label for="result-style">Ballot style</label><select id="result-style"><option value="all">All ballot styles</option></select></div>
+    <label for="result-search" class="result-search-label">Find a contest or candidate<input id="result-search" type="search" placeholder="e.g. Governor or a candidate’s name" /></label>
+   </div>
+  </fieldset>
+  <label class="result-history-label"><input id="result-history" type="checkbox" /> Include earlier reports for this selection</label>
   <p id="result-status" role="status" aria-live="polite">Loading elections…</p>
-  <p class="body-note">Each report covers its labeled area, counting group, and ballot style. County totals can include the same ballots as precinct and machine reports. Reports are displayed separately and are never added together here. “Not reported” is different from zero.</p>
+  <button id="result-retry" type="button" hidden>Try loading reports again</button>
+  <p class="result-explainer">Each view stands on its own. County totals already include precinct and voting-method results; these reports are never added together. “Not reported” is different from zero.</p>
   <div id="result-reports"></div>
-  <button id="result-more" type="button" hidden>Load more reports</button>
   <section aria-labelledby="turnout-heading">
    <h2 id="turnout-heading">Georgia SOS structured turnout</h2>
    <label for="turnout-history">Turnout snapshot</label><select id="turnout-history"><option value="">Latest snapshot</option></select>
    <p id="turnout-status" role="status" aria-live="polite">Loading structured turnout…</p>
    <div id="turnout-rows"></div><button id="turnout-more" type="button" hidden>Load more turnout rows</button>
   </section>
-  <p><a href="/elections/">All elections</a> · <a href="/docs/admins/#election-results-and-turnout">Importing results with an AI agent</a></p>
+  <noscript><p>JavaScript is needed to load the latest election reports. Enable it and reload this page.</p></noscript>
+  <p class="result-footer"><a href="/elections/">All elections</a> · <a href="/docs/admins/#election-results-and-turnout">Import results with an AI agent</a></p>
  </main>
 </Layout>
 <script>
@@ -30,9 +39,54 @@ import Layout from '../../layouts/Layout.astro';
 </script>
 <style>
  #turnout-rows { overflow-wrap:anywhere; }
- select { max-width:100%; padding:.65rem; }
- #result-form { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; }
- #turnout-rows :global(article), #result-reports :global(article) { border:1px solid var(--color-border, #ccc); border-radius:.5rem; padding:1.5rem; margin:1.5rem 0; }
- #result-reports :global(table) { border-collapse:collapse; width:100%; margin:1rem 0; }
- #result-reports :global(th), #result-reports :global(td) { text-align:left; padding:.5rem; border-bottom:1px solid #ddd; }
+ #turnout-rows :global(article) { border-top:1px solid var(--line); padding-block:1.5rem; margin-block:1.5rem; }
+
+ .results-page { max-width: 1120px; }
+ .page-intro { margin-bottom:1rem; }
+ .page-intro h1 { font-size:clamp(2rem,4vw,3rem); }
+ .result-election-form { margin-block: 1rem; }
+ label, legend { font-weight: 600; }
+ .result-election-controls { display:flex; gap: .75rem; margin-top: .5rem; }
+ .result-election-controls select { flex: 1; min-width: 0; }
+ select, input[type="search"] { width:100%; min-width:0; min-height:48px; padding:.7rem; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); color:var(--ink); font-weight:400; }
+ button { min-height:48px; padding:.7rem 1rem; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); }
+ fieldset { margin:0; padding:1.25rem 0; border:0; border-block:1px solid var(--line); }
+ legend { padding:0 .5rem 0 0; }
+ .result-filter-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; }
+ .result-filter-grid > div, .result-filter-grid label { min-width:0; }
+ .result-filter-grid select, .result-filter-grid input { margin-top:.5rem; }
+ #result-style-field[hidden] { display:none; }
+ .result-search-label { grid-column:1 / -1; }
+ .result-history-label { display:flex; align-items:center; gap:.65rem; min-height:48px; margin-top:.75rem; font-weight:400; }
+ .result-history-label input { width:1.15rem; height:1.15rem; accent-color:var(--ink); }
+ #result-status { margin-block:.75rem; color:var(--muted); }
+ .result-explainer { max-width:75ch; font-size:.9rem; color:var(--muted); }
+ .result-footer { margin-top:2rem; }
+ #result-reports :global(.result-report) { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--line); }
+ #result-reports :global(h2) { font-size:2rem; }
+ #result-reports :global(.result-report-label) { margin-top:.65rem; font-weight:600; }
+ #result-reports :global(.result-time) { color:var(--muted); margin-top:.25rem; }
+ #result-reports :global(.result-metrics) { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; margin:1.5rem 0; padding:1rem 0; border-block:1px solid var(--line); }
+ #result-reports :global(dt) { color:var(--muted); font-size:.9rem; }
+ #result-reports :global(dd) { margin:.5rem 0 0; font-weight:600; font-size:1.2rem; font-variant-numeric:tabular-nums; }
+ #result-reports :global(.result-audit) { margin-block:.75rem; color:var(--muted); font-size:.9rem; }
+ #result-reports :global(.result-audit summary) { padding:.65rem 0; cursor:pointer; }
+ #result-reports :global(.result-audit p) { max-width:75ch; overflow-wrap:anywhere; margin-block:.5rem; }
+ #result-reports :global(.result-contest-count) { margin:2rem 0 1rem; font-size:1.5rem; }
+ #result-reports :global(.result-contest) { border-top:1px solid var(--line); }
+ #result-reports :global(.result-contest > summary) { cursor:pointer; padding:1.1rem .25rem; font-weight:600; line-height:1.5; }
+ #result-reports :global(.result-contest > summary:hover) { background:var(--paper); }
+ #result-reports :global(.result-vote-total) { display:block; margin-left:1.25rem; font-size:.9rem; font-weight:400; color:var(--muted); font-variant-numeric:tabular-nums; }
+ #result-reports :global(table) { border-collapse:collapse; width:100%; margin-block:.5rem 1rem; font-variant-numeric:tabular-nums; }
+ #result-reports :global(caption) { text-align:left; font-size:.85rem; color:var(--muted); padding-bottom:.75rem; }
+ #result-reports :global(th), #result-reports :global(td) { text-align:right; padding:.75rem .5rem; border-bottom:1px solid var(--line); }
+ #result-reports :global(th:first-child) { text-align:left; width:65%; overflow-wrap:anywhere; }
+ #result-reports :global(tbody th) { font-weight:400; }
+ #result-reports :global(td) { white-space:nowrap; }
+ @media(max-width:700px) {
+  .result-filter-grid { grid-template-columns:1fr; }
+  .result-election-controls { flex-direction:column; }
+  #result-reports :global(.result-metrics) { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #result-reports :global(th), #result-reports :global(td) { padding:.75rem .25rem; }
+ }
 </style>

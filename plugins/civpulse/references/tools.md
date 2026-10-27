@@ -17,11 +17,23 @@ Auth account provisioning/deletion, demotion, password resets, RLS changes and w
 | `search_events` | Read | Search calendar events. Regular users see public listings; only admins can discover unlisted and private events. |
 | `search_people` | Read | Full-text search of people (officials, candidates). |
 | `search_elections` | Read | Full-text search of elections. |
-| `list_calendars` | Read | List calendars the caller can see, optionally for one organization. |
 | `get_map` | Read | Fetch one map with visible layers and their effective styles. |
 | `get_event` | Read | Fetch one event (with calendar + organization) by id. |
 | `get_person` | Read | Fetch one person (with affiliations) by id. |
 | `get_election` | Read | Fetch one election (with contests and key dates) by id. |
+| `search_site` | Read | Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account. |
+| `search_calendars` | Read | Search or browse calendars with pagination. Use the returned id with get_calendar. |
+| `search_layers` | Read | Search or browse layers with pagination. Use the returned id with get_layer. |
+| `search_articles` | Read | Search or browse articles with pagination. Use the returned id with get_article. |
+| `search_contests` | Read | Search or browse contests with pagination. Use the returned id with get_contest. |
+| `search_ballot_questions` | Read | Search or browse ballot questions with pagination. Use the returned id with get_ballot_question. |
+| `get_organization` | Read | Get one organization by id. Article association sets are returned only to admins. |
+| `get_calendar` | Read | Get one calendar by id. Article association sets are returned only to admins. |
+| `get_layer` | Read | Get one layer by id. Article association sets are returned only to admins. |
+| `get_article` | Read | Get one article by id. Article association sets are returned only to admins. |
+| `get_contest` | Read | Get one contest by id. Article association sets are returned only to admins. |
+| `get_ballot_question` | Read | Get one ballot question by id. Article association sets are returned only to admins. |
+| `list_calendars` | Read | List calendars the caller can see, optionally for one organization. |
 | `create_organization` | Admin write | Create an organization (admin only). |
 | `update_organization` | Admin write | Update an organization (admin only). |
 | `delete_organization` | Admin write | Delete an organization (admin only). |
@@ -38,18 +50,6 @@ Auth account provisioning/deletion, demotion, password resets, RLS changes and w
 | `update_election` | Admin write | Update an election (admin only). |
 | `delete_election` | Admin write | Delete an election (admin only). |
 | `manage_election_results` | Admin write | Structured Georgia SOS JSON: import_turnout accepts sanitized schema-v1 document text plus exact UTF-8 SHA-256, maximum 2 MiB / 636 rows in one atomic transaction, dry_run defaults true; read_turnout returns paged typed measures, provenance and history. Preserve unavailable values, source as-of separately from capture, county FIPS, original styles and all absentee measures. Never add overlapping views. JSON evidence is immutable in Postgres; no image upload is needed. Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero. |
-| `search_site` | Read | Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account. |
-| `search_calendars` | Read | Search or browse calendars with pagination. Use the returned id with get_calendar. |
-| `search_layers` | Read | Search or browse layers with pagination. Use the returned id with get_layer. |
-| `search_articles` | Read | Search or browse articles with pagination. Use the returned id with get_article. |
-| `search_contests` | Read | Search or browse contests with pagination. Use the returned id with get_contest. |
-| `search_ballot_questions` | Read | Search or browse ballot questions with pagination. Use the returned id with get_ballot_question. |
-| `get_organization` | Read | Get one organization by id. Article association sets are returned only to admins. |
-| `get_calendar` | Read | Get one calendar by id. Article association sets are returned only to admins. |
-| `get_layer` | Read | Get one layer by id. Article association sets are returned only to admins. |
-| `get_article` | Read | Get one article by id. Article association sets are returned only to admins. |
-| `get_contest` | Read | Get one contest by id. Article association sets are returned only to admins. |
-| `get_ballot_question` | Read | Get one ballot question by id. Article association sets are returned only to admins. |
 | `get_map_layers` | Read | Get visible layers in stacking order, including effective per-map styles. |
 | `get_layer_geojson` | Read | Get stored layer geometry. Non-admin callers must provide a visible map containing this layer. |
 | `get_person_articles` | Read | Get a person’s permitted article reading list, with publication dates and relationship labels. |
