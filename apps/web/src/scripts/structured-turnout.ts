@@ -1,6 +1,7 @@
 import {getSupabase} from '../lib/supabase';
 const labels:Record<string,string>={accepted:'Accepted ballots',requested:'Requested ballots',issued:'Issued ballots',returned:'Returned ballots',rejected:'Rejected ballots',spoiled_canceled:'Spoiled / canceled',outstanding:'Outstanding ballots',acceptance_ratio:'Accepted / returned ratio',turnout:'Turnout'};
 function el(tag:string,text:string){const e=document.createElement(tag);e.textContent=text;return e;}
+/** Wire report controls and resolve after the first structured snapshot is rendered. */
 export async function initStructuredTurnout(): Promise<void>{
  const election=document.querySelector<HTMLSelectElement>('#result-election')!;
  const status=document.querySelector<HTMLElement>('#turnout-status')!;

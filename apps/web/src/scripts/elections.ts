@@ -489,12 +489,15 @@ export async function initElectionViewFromUrl(): Promise<void> {
     initElectionPrecinctTurnout(response.election.id),
   ]) : Promise.resolve();
 
-  if (response.election && (await isCurrentUserAdmin())) {
-    const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
-    if (edit) {
-      edit.href = `/admin/elections/?edit=${response.election.id}`;
-      edit.hidden = false;
-    }
+  if (response.election) {
+    const electionId = response.election.id;
+    void isCurrentUserAdmin().then(isAdmin => {
+      const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
+      if (isAdmin && edit) {
+        edit.href = `/admin/elections/?edit=${electionId}`;
+        edit.hidden = false;
+      }
+    }).catch(() => { /* Optional edit controls remain hidden if the lookup fails. */ });
   }
   await turnoutReady;
 }

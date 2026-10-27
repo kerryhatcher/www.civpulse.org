@@ -24,6 +24,7 @@ afterEach(() => {
   if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow); else delete globals.window;
   if (originalDocument) Object.defineProperty(globalThis, 'document', originalDocument); else delete globals.document;
 });
+/** Keep runtime loading pending until a test explicitly completes it. */
 function deferred() {
   let resolve!: () => void;
   const promise = new Promise<void>(r => { resolve = r; });

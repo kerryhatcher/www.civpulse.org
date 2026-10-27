@@ -10,6 +10,7 @@ export function restoreSectionAnchorAfter(loaded: Promise<unknown>): void {
   for (const type of ['wheel', 'touchstart', 'pointerdown', 'keydown']) {
     window.addEventListener(type, cancel, { passive: true, signal: controller.signal });
   }
+  /** Release input listeners and align a still-visible target when loading settles. */
   function restore() {
     controller.abort();
     // A visitor who has started navigating should keep control of the viewport.
