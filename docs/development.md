@@ -707,3 +707,23 @@ valid public UUIDs and slugs can start with those digits. Public record details
 and paginated archives belong in the sitemap; admin/auth shells, UUID viewers
 and generated JSON assets remain excluded. Run `bun test scripts/tests/sitemap.test.ts`
 when changing the filter, then check the deployed XML against public record IDs.
+
+### Structured Georgia SOS turnout verification
+
+Run `ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/structured-turnout-db.test.ts scripts/tests/election-results-db.test.ts`.
+The tests use rollback-only fixtures and can apply the new migration transactionally.
+After applying locally with the normal migration CLI, run
+`ELECTION_RESULTS_INTEGRATION=1 bun test scripts/tests/structured-turnout-integration.test.ts scripts/tests/election-results-integration.test.ts`.
+The integration exercises real Auth/MCP serialization, all 636 rows, concurrent
+imports, competing replacements and anonymous readback, then cleans up fixtures.
+Optional `TURNOUT_PREPARED_JSON=/tmp/turnout.json` validates a locally converted
+saved export under a disposable election identity; do not commit that private file.
+
+Browser QA: select a disposable election on `/elections/results/`, inspect all
+measure types/nulls and source timestamps, Load more, select an older turnout
+snapshot and switch elections. Verify anonymous and signed-in reads, narrow
+screens and console errors. The turnout pager pins its report UUID so concurrent
+imports cannot mix snapshots. Remove disposable election/reports afterward.
+The local migration was applied with `migration up --db-url` pinned to
+127.0.0.1 using a temporary workdir reflecting the shared local migration history;
+no reset or production migration was run.

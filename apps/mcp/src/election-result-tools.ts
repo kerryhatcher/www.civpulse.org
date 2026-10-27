@@ -1,6 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { parseStructuredTurnout } from './structured-turnout';
 import { createToolkit } from './toolkit';
 
 const uuid = z.string().uuid();
@@ -20,6 +21,8 @@ export const resultSnapshot = z.object({ election_date: z.string().date(), statu
 
 const source = z.object({path:z.string().regex(/^[a-f0-9]{64}\.(jpg|png|pdf)$/),locator:z.string().min(1).max(2000),transcription:z.string().min(1).max(10000)}).strict();
 const operation = z.discriminatedUnion('action', [
+ z.object({action:z.literal('import_turnout'),document:z.string().min(2).max(2097152),sha256:z.string().regex(/^[a-f0-9]{64}$/),expected_report_id:uuid.nullable().default(null),dry_run:z.boolean().default(true)}).strict(),
+ z.object({action:z.literal('read_turnout'),election_id:uuid,report_id:uuid.nullable().default(null),offset:z.number().int().min(0).default(0),limit:z.number().int().min(1).max(100).default(100)}).strict(),
  z.object({action:z.literal('upload'),base64:z.string().min(4).max(13981016),mime_type:z.enum(['image/jpeg','image/png','application/pdf'])}).strict(),
  z.object({action:z.literal('view'),path:z.string().regex(/^[a-f0-9]{64}\.(jpg|png|pdf)$/)}).strict(),
  z.object({action:z.literal('read'),election_id:uuid,history:z.boolean().default(false),offset:z.number().int().min(0).default(0),limit:z.number().int().min(1).max(100).default(50)}).strict(),
@@ -29,8 +32,19 @@ const operation = z.discriminatedUnion('action', [
 
 export function registerElectionResultTools(server: McpServer, supabase: SupabaseClient) {
  const { register } = createToolkit(server, supabase);
- register('manage_election_results', 'Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero.',
+ register('manage_election_results', 'Structured Georgia SOS JSON: import_turnout accepts sanitized schema-v1 document text plus exact UTF-8 SHA-256, maximum 2 MiB / 636 rows in one atomic transaction, dry_run defaults true; read_turnout returns paged typed measures, provenance and history. Preserve unavailable values, source as-of separately from capture, county FIPS, original styles and all absentee measures. Never add overlapping views. JSON evidence is immutable in Postgres; no image upload is needed. Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero.',
  {operation}, async ({operation:input})=>{
+  if(input.action==='import_turnout') {
+   parseStructuredTurnout(input.document);
+   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input.document)))).map(v=>v.toString(16).padStart(2,'0')).join('');
+   if(digest!==input.sha256)throw new Error('Evidence checksum mismatch');
+   const {data,error}=await supabase.rpc('import_structured_turnout',{p_document:input.document,p_sha256:input.sha256,p_expected_report_id:input.expected_report_id,p_dry_run:input.dry_run});
+   if(error)throw error;return data;
+  }
+  if(input.action==='read_turnout') {
+   const {data,error}=await supabase.rpc('get_structured_turnout',{p_election_id:input.election_id,p_report_id:input.report_id,p_offset:input.offset,p_limit:input.limit});
+   if(error)throw error;return data;
+  }
   if(input.action==='read') {
    const {data,error}=await supabase.rpc('get_election_results',{p_election_id:input.election_id,p_history:input.history,p_offset:input.offset,p_limit:input.limit});
    if(error)throw error;return data;

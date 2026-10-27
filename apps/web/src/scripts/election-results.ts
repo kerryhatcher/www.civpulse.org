@@ -50,7 +50,7 @@ export async function initElectionResults(){
     reports.append(article);
    }
    offset+=data.reports.length;more.hidden=data.reports.length<20;
-   status.textContent=offset?`${offset} report${offset===1?'':'s'} shown. ${history.checked?'Includes earlier snapshots.':'Latest snapshot for each reporting scope.'}`:'No reports yet. Results have not been reported; vote counts are not zero.';
+   status.textContent=offset?`${offset} report${offset===1?'':'s'} shown. ${history.checked?'Includes earlier snapshots.':'Latest snapshot for each reporting scope.'}`:'No photo/PDF reports yet. Check structured turnout below; missing vote counts are not zero.';
   }catch(error){if(request===generation)status.textContent=`Could not load reports: ${error instanceof Error?error.message:'Please try again.'}`;}
  }
  async function choose(){

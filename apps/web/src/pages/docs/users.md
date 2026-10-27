@@ -341,3 +341,11 @@ available. Signed-in visitors see **Account**, and admins also see **Admin**.
 Select the Civic Pulse logo to return home. The shorter footer contains
 **About**, **Guides & help**, and **Search**; archive and directory links are
 available in **Browse** on every page.
+
+Georgia SOS structured turnout appears separately on the election results page.
+Choose a turnout snapshot or load more county rows to inspect all available
+measures and source locators. These are unofficial cumulative observations;
+overlapping early, absentee and turnout tables must never be added together.
+Display text and numeric values are preserved, unavailable values stay unavailable,
+and an absent source time is labeled separately from collection time. Registration
+and precinct denominators are not inferred. Reports update live after an import.
