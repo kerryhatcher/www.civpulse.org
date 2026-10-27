@@ -1,3 +1,5 @@
+import { initElectionPrecinctTurnout } from './precinct-turnout';
+import { initElectionTurnout } from './election-turnout';
 import { readDirectory } from './directory-data';
 import { orderElections, searchDirectory } from '../lib/directories';
 import { historyLink } from '../lib/history';
@@ -482,6 +484,10 @@ export async function initElectionViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillElectionView(response);
+  if (response.election) {
+    void initElectionTurnout(response.election.id);
+    void initElectionPrecinctTurnout(response.election.id);
+  }
 
   if (response.election && (await isCurrentUserAdmin())) {
     const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');

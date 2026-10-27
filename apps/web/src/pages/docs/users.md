@@ -354,7 +354,28 @@ Select the Civic Pulse logo to return home. The shorter footer contains
 **About**, **Guides & help**, and **Search**; archive and directory links are
 available in **Browse** on every page.
 
-Georgia SOS structured turnout appears separately on the election results page.
+Election detail pages show **Voter turnout** charts when Georgia SOS structured
+turnout is available. Choose a **County** (Bibb is selected when available) to
+compare reported ballot styles and inspect absentee measures. Exact counts, source
+as-of labels and the separate collection time accompany the charts. Each chart
+has its own zero-based ballot scale. Missing counts say “Not reported”; overlapping
+measures are not added, and no registered-voter denominator is inferred. Use
+**All reports, source details & earlier snapshots** to inspect reporting history.
+The charts load live and follow the election’s existing visibility rules.
+
+The **Bibb County precinct turnout** map uses a fixed 0–100% scale: darker
+precincts indicate higher participation. Gray means “Not reported,” while a
+reported zero uses the lightest green. Select a precinct for counts and report
+time/status, or expand **Precinct counts and percentages** for a keyboard-accessible
+table. Choose a ballot style when separate reports are available; only all-method
+precinct reports are used, never sums of overlapping reports or contest counts.
+Rates need that precinct’s voters (or ballots) and registered-voter counts. The
+November county aggregates and May precinct contest results do not currently
+provide these denominators, so their precincts remain gray. County turnout is
+never distributed across precincts. The map reuses the public Bibb boundary
+snapshot; check boundary vintages before comparing historical elections.
+
+Georgia SOS structured turnout also appears separately on the election results page.
 Choose a turnout snapshot or load more county rows to inspect all available
 measures and source locators. These are unofficial cumulative observations;
 overlapping early, absentee and turnout tables must never be added together.

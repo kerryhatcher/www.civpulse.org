@@ -190,3 +190,31 @@ Senate District 25 Republican is 2 in the official workbook, but 0 in the separa
 media export. The workbook value reconciles to the county total and is used;
 the HO1 report records the discrepancy. No county total or historical candidacy
 outcome was changed by this import.
+
+## Election detail turnout charts and precinct map
+
+Public election detail pages and the gated UUID viewer load turnout at runtime
+through the existing visibility-aware RPCs. Structured county charts page the
+latest report and pin subsequent pages to that report ID, default to Bibb, and
+keep overlapping source tables separate. Counts have no inferred registration
+percentage; source as-of labels and collection times remain distinct.
+
+The Bibb precinct map reuses the build-exported public voting-precinct layer.
+Only exact Bibb/precinct/all-method/ballot-style result scopes join to the
+boundary `precinctid`; no names, county totals, contest totals or overlapping
+method reports are combined. The latest observed report per scope supplies
+voters (otherwise ballots) and the same report's registered count. Missing,
+invalid or zero denominators remain unreported; a true zero numerator is 0%.
+Green opacity uses a fixed 0–100% scale; gray identifies unavailable rates.
+Popups and an accessible table retain exact counts, report times and status.
+Current November structured aggregates are county-level, and the May precinct
+imports do not provide election-wide turnout denominators. Neither dataset can
+currently populate precinct percentages. Boundary snapshots may differ from
+historical election boundaries and require review before interpreting comparisons.
+
+Run `bun test scripts/tests/election-turnout.test.ts
+scripts/tests/precinct-turnout.test.ts`, then the standard check/build/browser
+flow. Include empty reports, missing versus zero values, county and ballot-style
+selection, mobile layout, retry, snapshot paging and the gated UUID viewer.
+The Public map snapshots CI workflow also runs the turnout and scoped-results
+unit tests on pull requests and pushes to main.

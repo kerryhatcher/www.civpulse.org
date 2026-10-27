@@ -1,0 +1,36 @@
+---
+interface Props { electionId?: string }
+const { electionId } = Astro.props;
+---
+<section class="election-turnout" data-election-turnout data-election-id={electionId} aria-labelledby="election-turnout-title" hidden={!electionId}>
+  <h2 id="election-turnout-title">Voter turnout</h2>
+  <p data-turnout-status role="status" aria-live="polite">Loading turnout…</p>
+  <button data-turnout-retry type="button" hidden>Retry turnout</button>
+  <div data-turnout-body hidden>
+    <p class="body-note">Unofficial · turnout only. These are cumulative ballot counts, not candidate results. A turnout percentage is unavailable because registered-voter counts are not reported.</p>
+    <label for="election-turnout-county">County</label>
+    <select id="election-turnout-county" data-turnout-county></select>
+    <div class="turnout-charts" data-turnout-charts></div>
+    <p class="body-note">Each chart is a separate source view. Measures overlap; do not add them together. Missing values are not zero.</p>
+    <p class="body-note" data-turnout-source></p>
+    <p><a data-turnout-reports href={electionId ? `/elections/results/?id=${electionId}` : '/elections/results/'}>All reports, source details &amp; earlier snapshots →</a></p>
+  </div>
+  <noscript><p>Enable JavaScript to load available turnout, or visit <a href="/elections/results/">Election results &amp; turnout</a>.</p></noscript>
+</section>
+<style>
+  .election-turnout { margin-block: 2.5rem; border-block: 1px solid var(--line); padding-block: 2rem; }
+  h2 { margin-top: 0; }
+  label { display: block; margin-bottom: .5rem; font-weight: 600; }
+  select { max-width: 100%; min-height: 44px; padding: .5rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+  .turnout-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 2rem; margin-block: 1.5rem; }
+  .turnout-charts :global(figure) { margin: 0; min-width: 0; }
+  .turnout-charts :global(figcaption) { font-family: var(--serif); font-size: 1.6rem; }
+  .turnout-charts :global(ol) { list-style: none; padding: 0; }
+  .turnout-charts :global(li) { margin-block: 1rem; }
+  .turnout-charts :global(.turnout-bar-label) { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
+  .turnout-charts :global(strong) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .turnout-charts :global(.turnout-track) { height: 12px; background: var(--sage); }
+  .turnout-charts :global(.turnout-bar) { height: 100%; background: var(--ink); }
+  .turnout-charts :global(figure[data-table="absentee"] .turnout-bar) { background: var(--rust); }
+  [data-turnout-source] { overflow-wrap: anywhere; }
+</style>
