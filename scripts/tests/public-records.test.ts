@@ -8,27 +8,27 @@ const id = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')
 function client(reply: (name: string, args: any) => any) {
   return { rpc: async (name: string, args: any) => ({ data: await reply(name, args), error: null }) } as unknown as SupabaseClient;
 }
-const empty = (name: string) => name === 'browse_legislation' ? { rows: [], total: 0 } : [];
+const empty = (name: string) => name === 'export_public_legislation_page' ? { rows: [], total: 0 } : [];
 test('export pages records without direct or contextual unlisted access', async () => {
-  const rows = Array.from({ length: 101 }, (_, i) => ({ id: id(i), visibility: 'public', title: `Bill ${i}` }));
+  const rows = Array.from({ length: 501 }, (_, i) => ({ id: id(i), visibility: 'public', title: `Bill ${i}` }));
   const calls: any[] = [];
   const records = await loadPublicRecords(client((name, args) => {
     calls.push({ name, args });
-    return name === 'browse_legislation' && args.p_table === 'bills' ? { rows: rows.slice(args.p_offset, args.p_offset + args.p_limit), total: rows.length } : empty(name);
+    return name === 'export_public_legislation_page' && args.p_table === 'bills' ? { rows: rows.slice(args.p_offset, args.p_offset + args.p_limit), total: rows.length } : empty(name);
   }));
-  expect(records.length).toBe(101);
-  expect(calls.some(c => c.args.p_offset === 100)).toBe(true);
+  expect(records.length).toBe(501);
+  expect(calls.some(c => c.args.p_offset === 500)).toBe(true);
   expect(calls.every(c => !('p_id' in c.args) && !('p_bill_id' in c.args) && !('p_person_id' in c.args) && !('p_vote_id' in c.args))).toBe(true);
   const archives = recordArchivePages(records).filter(p => p.kind === 'bills');
-  expect(archives.map(a => a.records.length)).toEqual([50, 50, 1]);
+  expect(archives.map(a => a.records.length)).toEqual([...Array(10).fill(50), 1]);
   expect(archives.flatMap(a => a.records).map(r => r.id)).toEqual(records.map(r => r.id));
 });
 test('fails publication on backend errors, truncated pages, duplicate IDs and changed totals', async () => {
   await expect(loadPublicRecords({ rpc: async () => ({ error: { message: 'offline' } }) } as unknown as SupabaseClient)).rejects.toThrow('offline');
   await expect(loadPublicRecords(client(() => ({ rows: [], total: 1 })))).rejects.toThrow('Incomplete');
   await expect(loadPublicRecords(client(() => ({ rows: [{ id: id(1), visibility: 'public' }, { id: id(1), visibility: 'public' }], total: 2 })))).rejects.toThrow('repeated');
-  const rows = Array.from({ length: 100 }, (_, i) => ({ id: id(i), visibility: 'public' }));
-  await expect(loadPublicRecords(client((_, args) => ({ rows: args.p_offset ? [] : rows, total: args.p_offset ? 102 : 101 })))).rejects.toThrow('totals changed');
+  const rows = Array.from({ length: 500 }, (_, i) => ({ id: id(i), visibility: 'public' }));
+  await expect(loadPublicRecords(client((_, args) => ({ rows: args.p_offset ? [] : rows, total: args.p_offset ? 502 : 501 })))).rejects.toThrow('totals changed');
 });
 test('rejects non-public discovery records and hidden event parents', async () => {
   await expect(loadPublicRecords(client(() => ({ rows: [{ id: id(1), visibility: 'unlisted' }], total: 1 })))).rejects.toThrow('Non-public');
@@ -65,7 +65,7 @@ test('archive export bounds concurrent streams and keeps relation section order'
   let active = 0, peak = 0;
   const recordId = id(900);
   const records = await loadPublicRecords(client(async (name, args) => {
-    if (name !== 'browse_legislation') return [];
+    if (name !== 'export_public_legislation_page') return [];
     active++; peak = Math.max(peak, active);
     await new Promise(resolve => setTimeout(resolve, args.p_table === 'bill_actions' ? 5 : 1));
     active--;
@@ -73,6 +73,6 @@ test('archive export bounds concurrent streams and keeps relation section order'
     if (['bill_actions', 'bill_versions'].includes(args.p_table)) return { total: 1, rows: [{ id: id(args.p_table === 'bill_actions' ? 901 : 902), bill_id: recordId, visibility: 'public', description: args.p_table }] };
     return { total: 0, rows: [] };
   }));
-  expect(peak).toBe(3);
+  expect(peak).toBe(2);
   expect(records[0].sections.map(section => section.items[0]?.text.split(' · ').at(-1))).toEqual(['bill_actions', 'bill_versions']);
 });

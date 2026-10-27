@@ -2,8 +2,8 @@ import {readBuildRpc} from './build-read';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { LegislativeRow } from './legislation';
 
-const PAGE_SIZE = 100;
-const CONCURRENCY = 3;
+const PAGE_SIZE = 500;
+const CONCURRENCY = 2;
 const MAX_ROWS = 100_000;
 interface BuildReads {
   active: number;
@@ -32,7 +32,7 @@ async function bounded<T>(reads: BuildReads, run: () => PromiseLike<T>): Promise
 }
 
 /** Build-only, anonymous discovery reads. Never pass direct-ID or hidden contexts.
- * Share tables across profiles/archives and keep at most three RPCs in flight,
+ * Share tables across profiles/archives and keep at most two RPCs in flight,
  * including when only one large table remains. No cross-build/disk cache. */
 export function readPublicLegislationTable(client: SupabaseClient, table: string): Promise<LegislativeRow[]> {
   const reads = readsFor(client);
@@ -46,7 +46,7 @@ export function readPublicLegislationTable(client: SupabaseClient, table: string
 async function loadTable(client: SupabaseClient, reads: BuildReads, table: string): Promise<LegislativeRow[]> {
   const started = performance.now();
   async function page(offset: number, expected?: number) {
-    const { data, error } = await bounded(reads, () => readBuildRpc(client, 'browse_legislation', {p_table:table,p_offset:offset,p_limit:PAGE_SIZE}));
+    const { data, error } = await bounded(reads, () => readBuildRpc(client, 'export_public_legislation_page', {p_table:table,p_offset:offset,p_limit:PAGE_SIZE}));
     if (error) throw new Error(`Public legislation build failed (${table}, offset ${offset}): ${error.message}`);
     if (!data || !Array.isArray(data.rows) || !Number.isSafeInteger(data.total) || data.total < 0 || data.total > MAX_ROWS) throw new Error(`Invalid public legislation page (${table})`);
     if (expected !== undefined && data.total !== expected) throw new Error(`Public legislation totals changed (${table})`);

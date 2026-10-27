@@ -3,38 +3,38 @@ import type {SupabaseClient} from '@supabase/supabase-js';
 import {readPublicLegislationTable} from '../../apps/web/src/lib/legislation-build-data';
 const id=(n:number)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 const rows=(size:number)=>Array.from({length:size},(_,i)=>({id:id(i),visibility:'public',title:`Row ${i}`}));
-function mock(reply:(args:any)=>any){return {rpc:async(name:string,args:any)=>{expect(name).toBe('browse_legislation');return reply(args);}} as unknown as SupabaseClient;}
-test('one large stream uses three page slots, restores out-of-order responses, and shares pending/completed reads',async()=>{
- const source=rows(751),calls:any[]=[];let active=0,peak=0;
+function mock(reply:(args:any)=>any){return {rpc:async(name:string,args:any)=>{expect(name).toBe('export_public_legislation_page');return reply(args);}} as unknown as SupabaseClient;}
+test('one large stream uses two page slots, restores out-of-order responses, and shares pending/completed reads',async()=>{
+ const source=rows(3751),calls:any[]=[];let active=0,peak=0;
  const client=mock(async args=>{
   calls.push(args);active++;peak=Math.max(peak,active);
-  await new Promise(r=>setTimeout(r,args.p_offset===100?15:1));active--;
-  return {data:{total:source.length,rows:source.slice(args.p_offset,args.p_offset+100)},error:null};
+  await new Promise(r=>setTimeout(r,args.p_offset===500?15:1));active--;
+  return {data:{total:source.length,rows:source.slice(args.p_offset,args.p_offset+500)},error:null};
  });
  const first=readPublicLegislationTable(client,'bills');
  expect(readPublicLegislationTable(client,'bills')).toBe(first);
  const result=await first;
- expect(result).toEqual(source);expect(peak).toBe(3);expect(calls.length).toBe(8);
+ expect(result).toEqual(source);expect(peak).toBe(2);expect(calls.length).toBe(8);
  expect(await readPublicLegislationTable(client,'bills')).toBe(result);expect(calls.length).toBe(8);
  expect(calls.every(a=>Object.keys(a).sort().join(',')==='p_limit,p_offset,p_table')).toBe(true);
 });
-test('several streams share a global three-request limit and do not mix clients',async()=>{
+test('several streams share a global two-request limit and do not mix clients',async()=>{
  let active=0,peak=0;
- const client=mock(async args=>{active++;peak=Math.max(peak,active);await new Promise(r=>setTimeout(r,1));active--;return {data:{total:301,rows:rows(301).slice(args.p_offset,args.p_offset+100)},error:null};});
+ const client=mock(async args=>{active++;peak=Math.max(peak,active);await new Promise(r=>setTimeout(r,1));active--;return {data:{total:1501,rows:rows(1501).slice(args.p_offset,args.p_offset+500)},error:null};});
  const data=await Promise.all(['bills','legislative_votes','bill_actions','bill_sponsorships'].map(t=>readPublicLegislationTable(client,t)));
- expect(peak).toBe(3);expect(data.map(d=>d.length)).toEqual([301,301,301,301]);
+ expect(peak).toBe(2);expect(data.map(d=>d.length)).toEqual([1501,1501,1501,1501]);
  const other=mock(()=>({data:{total:0,rows:[]},error:null}));expect(await readPublicLegislationTable(other,'bills')).toEqual([]);
 });
 test('fails closed on changed totals, hidden rows, duplicate pages, invalid IDs, oversized/truncated pages, and errors',async()=>{
- const source=rows(201);
+ const source=rows(1001);
  for(const reply of [
-  (a:any)=>({data:{total:a.p_offset?202:201,rows:source.slice(a.p_offset,a.p_offset+100)},error:null}),
-  (a:any)=>({data:{total:201,rows:source.slice(a.p_offset,a.p_offset+100).map(r=>({...r,visibility:a.p_offset?'unlisted':'public'}))},error:null}),
-  (a:any)=>({data:{total:201,rows:source.slice(a.p_offset,a.p_offset+100).map(r=>({...r,visibility:a.p_offset?'private':'public'}))},error:null}),
-  (a:any)=>({data:{total:201,rows:source.slice(a.p_offset?0:0,a.p_offset===200?1:100)},error:null}),
+  (a:any)=>({data:{total:a.p_offset?1002:1001,rows:source.slice(a.p_offset,a.p_offset+500)},error:null}),
+  (a:any)=>({data:{total:1001,rows:source.slice(a.p_offset,a.p_offset+500).map(r=>({...r,visibility:a.p_offset?'unlisted':'public'}))},error:null}),
+  (a:any)=>({data:{total:1001,rows:source.slice(a.p_offset,a.p_offset+500).map(r=>({...r,visibility:a.p_offset?'private':'public'}))},error:null}),
+  (a:any)=>({data:{total:1001,rows:source.slice(a.p_offset?0:0,a.p_offset===1000?1:500)},error:null}),
   ()=>({data:{total:1,rows:[{id:'bad',visibility:'public'}]},error:null}),
-  ()=>({data:{total:101,rows:source.slice(0,101)},error:null}),
-  ()=>({data:{total:101,rows:source.slice(0,99)},error:null}),
+  ()=>({data:{total:501,rows:source.slice(0,501)},error:null}),
+  ()=>({data:{total:501,rows:source.slice(0,499)},error:null}),
   ()=>({data:{total:100001,rows:[]},error:null}),
   ()=>({data:{total:-1,rows:[]},error:null}),
   ()=>({data:null,error:{message:'offline'}}),
@@ -51,15 +51,15 @@ test('failed requests do not poison a later read or leave the limiter occupied',
 test('profile and archive consumers share complete sponsorship pages on the same client',async()=>{
  const {loadProfileSectionBuildData}=await import('../../apps/web/src/lib/profile-section-build-data');
  const {loadPublicRecords}=await import('../../apps/web/src/lib/public-record-build-data');
- const source=rows(201),offsets:number[]=[];
+ const source=rows(1001),offsets:number[]=[];
  const client={rpc:async(name:string,args:any)=>{
-  if(name!=='browse_legislation')return {data:[],error:null};
+  if(name!=='export_public_legislation_page')return {data:[],error:null};
   if(args.p_table!=='bill_sponsorships')return {data:{rows:[],total:0},error:null};
   offsets.push(args.p_offset);await new Promise(r=>setTimeout(r,1));
-  return {data:{rows:source.slice(args.p_offset,args.p_offset+100),total:source.length},error:null};
+  return {data:{rows:source.slice(args.p_offset,args.p_offset+500),total:source.length},error:null};
  }} as unknown as SupabaseClient;
  await Promise.all([loadProfileSectionBuildData(client),loadPublicRecords(client)]);
- expect(offsets.sort((a,b)=>a-b)).toEqual([0,100,200]);
+ expect(offsets.sort((a,b)=>a-b)).toEqual([0,500,1000]);
 });
 
 test('only confirmed statement timeouts retry, preserving the exact anonymous discovery arguments',async()=>{

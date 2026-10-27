@@ -31,7 +31,7 @@ test.skipIf(!process.env.PUBLIC_RECORDS_TEST_DATABASE_URL)('public publication f
     // Adapter calls the actual functions under the transaction's database role.
     const client = { rpc: async (name: string, a: any) => {
       let rows;
-      if (name === 'browse_legislation') rows = await tx`select public.browse_legislation(p_table=>${a.p_table},p_limit=>${a.p_limit},p_offset=>${a.p_offset}) as data`;
+      if (name === 'export_public_legislation_page') rows = await tx`select public.export_public_legislation_page(p_table=>${a.p_table},p_limit=>${a.p_limit},p_offset=>${a.p_offset}) as data`;
       else if (name === 'browse_calendar_events') { const data = await tx`select * from public.browse_calendar_events(p_public_only=>true,p_offset=>${a.p_offset})`; return { data: data.map((r: any) => r.browse_calendar_events), error: null }; }
       else if (name === 'search_records_requests') return { data: await tx`select * from public.search_records_requests(p_managed=>false,p_offset=>${a.p_offset})`, error: null };
       else if (name === 'get_meeting') rows = await tx`select public.get_meeting(${a.p_id}::uuid) as data`;
@@ -42,12 +42,15 @@ test.skipIf(!process.env.PUBLIC_RECORDS_TEST_DATABASE_URL)('public publication f
     for (const role of ['anon', 'authenticated']) {
       await tx.unsafe(`set local role ${role}`);
       await tx`select set_config('request.jwt.claim.sub',${role === 'anon' ? '' : ordinary},true)`;
-      // A fresh build client per role forces each caller through the SQL gates.
-      const records = await loadPublicRecords({rpc: client.rpc} as SupabaseClient);
-      const ids = records.map(r => r.id);
-      expect(publicIds.every(id => ids.includes(id))).toBe(true);
-      expect(hiddenIds.some(id => ids.includes(id))).toBe(false);
-      expect(JSON.stringify(records)).not.toContain(ordinary);
+      if (role === 'anon') {
+        const records = await loadPublicRecords({rpc: client.rpc} as SupabaseClient);
+        const ids = records.map(r => r.id);
+        expect(publicIds.every(id => ids.includes(id))).toBe(true);
+        expect(hiddenIds.some(id => ids.includes(id))).toBe(false);
+        expect(JSON.stringify(records)).not.toContain(ordinary);
+      } else {
+        expect((await tx`select has_function_privilege('authenticated','public.export_public_legislation_page(text,integer,integer)','execute') allowed`)[0].allowed).toBe(false);
+      }
       const [unlisted] = await tx`select public.get_records_request(${requests[1]}::uuid) as data`;
       const [privateRequest] = await tx`select public.get_records_request(${requests[2]}::uuid) as data`;
       expect(unlisted.data.status).toBe('ok');

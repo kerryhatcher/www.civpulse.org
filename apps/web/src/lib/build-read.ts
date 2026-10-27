@@ -4,7 +4,7 @@ export const isStatementTimeout = (error: {code?:string;message:string}|null) =>
   error?.code === '57014' && /statement timeout/i.test(error.message);
 
 /** Only stable, public build reads; never retry authorization failures or writes. */
-export async function readBuildRpc(client:SupabaseClient, name:'browse_legislation'|'export_public_profile_rows', args:Record<string,unknown>) {
+export async function readBuildRpc(client:SupabaseClient, name:'export_public_legislation_page'|'export_public_profile_rows', args:Record<string,unknown>) {
   for(let attempt=0;;attempt++) {
     const result=await client.rpc(name,args);
     if(!isStatementTimeout(result.error)||attempt>=2) return result;

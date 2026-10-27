@@ -1566,3 +1566,20 @@ concurrent main releases occupied versions through `20261124010600`. Calendar
 capacity SQL remains unchanged at `10700`; `10800` exactly reasserts main’s
 current browse wrapper, including lightweight choice pagination and main’s
 action/sponsorship helpers. Production history remains intact.
+
+## Public legislative build export
+
+`20261125000000_public_build_legislation_export` adds
+`export_public_legislation_page(p_table,p_offset=0,p_limit=500)`. Its allowlist
+covers only the fourteen public build resources. It requires anonymous execution,
+rejects non-null `auth.uid()`, sets an empty search path, requires public row
+visibility and reuses the existing recursive discovery helpers without contexts.
+It counts/materializes IDs and sort keys before projecting a selected page,
+avoiding repeated full-source JSON scans for every 100-row browser page. Browser
+RPCs and their 100-row caps, RLS, writes, and private/unlisted direct readers are
+unchanged. No privileged build credential or larger timeout is introduced.
+
+Release through main and the Supabase integration before building production.
+Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-legislation-export-db.test.ts`. The rollback test compares all fourteen resources and multiple large pages with
+existing discovery payloads, checks hidden parents, anonymous-only grants and
+user-context rejection, and retains direct unlisted access in the old reader.
