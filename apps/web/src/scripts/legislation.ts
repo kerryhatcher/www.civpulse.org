@@ -1,3 +1,5 @@
+import { readLegislationDirectory, readStaticBills } from "./legislation-directory-data";
+import { browseStaticSessions } from "../lib/legislation-directory";
 import { getPublicProfileSnapshot, readProfileVoteGroups } from "../lib/profile-section-data";
 import { browseProfileLegislation } from "../lib/profile-sections";
 import { getSupabase } from "../lib/supabase";
@@ -291,13 +293,13 @@ export async function initLegislationBrowse() {
   let offset = 0;
   let generation = 0;
   try {
-    await getSupabase().auth.getSession();
+    const directory = await readLegislationDirectory(root.dataset.legislationDirectory, getSupabase());
     const select = form.elements.namedItem("term_id") as HTMLSelectElement;
     const jurisdiction = form.elements.namedItem("jurisdiction") as HTMLSelectElement | null;
     const state = form.elements.namedItem("state") as HTMLSelectElement | null;
     const sort = form.elements.namedItem("sort") as HTMLSelectElement | null;
-    const allTerms: LegislativeRow[] = [];
-    for (let offset = 0; ; offset += 100) {
+    const allTerms: LegislativeRow[] = directory?.terms ?? [];
+    for (let offset = 0; !directory; offset += 100) {
       const terms = await browse("legislative_terms", {
         p_limit: 100,
         p_offset: offset,
@@ -334,7 +336,7 @@ export async function initLegislationBrowse() {
           p_filters: select.value ? { term_id: select.value } : {},
           p_offset: offset,
         };
-        const data = table === "bills" ? await (async () => {
+        const data = directory ? table === "bills" ? await readStaticBills(directory, {query:args.p_query,term:select.value,jurisdiction:jurisdiction?.value,state:state?.value,sort:sort?.value,offset}) : browseStaticSessions(directory.sessions,args.p_query,select.value,offset) : table === "bills" ? await (async () => {
           const { data, error } = await getSupabase().rpc("browse_bills", {
             p_query: args.p_query, p_term_id: select.value || null,
             p_jurisdiction: jurisdiction?.value || "", p_state: state?.value || "",

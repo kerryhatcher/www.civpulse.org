@@ -771,3 +771,17 @@ imports cannot mix snapshots. Remove disposable election/reports afterward.
 The local migration was applied with `migration up --db-url` pinned to
 127.0.0.1 using a temporary workdir reflecting the shared local migration history;
 no reset or production migration was run.
+
+### Verifying static legislation discovery
+
+Run `bun test scripts/tests/legislation-directory-static.test.ts` and
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-directory-db.test.ts`, then the normal
+check/build. Verify anonymous bills and sessions search, jurisdiction/state/term
+filters, all four bill sorts, empty results and Load more without directory RPCs.
+The initial bills load requires only the manifest; selected-term searches fetch
+only matching term shards, cached by hash. Test static asset failures, private and
+unlisted records/parents, signed-in live discovery and UUID access locally. Scan
+`dist/directory-data/legislation` for restricted fixture IDs/text and raw import
+fields. Check console errors, build timing and total/maximum JSON sizes after a
+production-data build. No paid service is added; compare Cloudflare build duration
+and Supabase read load if import volume grows.

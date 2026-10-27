@@ -1,4 +1,6 @@
 ---
+import { getLegislationDirectoryAssets } from '../../lib/legislation-directory-assets';
+const {url:directoryUrl} = await getLegislationDirectoryAssets();
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -6,7 +8,7 @@ import Layout from "../../layouts/Layout.astro";
   title="Legislative sessions"
   description="Regular and special legislative sessions."
 >
-  <main id="main" data-legislation-browser="legislative_sessions">
+  <main data-legislation-directory={directoryUrl} id="main" data-legislation-browser="legislative_sessions">
     <div class="page-intro">
       <h1>Legislative sessions</h1>
       <p>Regular and special sessions within each legislative term.</p>
