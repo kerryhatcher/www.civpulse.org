@@ -2,10 +2,12 @@ import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createToolkit } from './toolkit';
+import type { WriteCatalog } from './write-catalog';
+import type { RelatedReadCatalog } from './related-read-catalog';
 
 /** Offices and actual service are independent of election candidacies. */
-export function registerOfficeTools(server: McpServer, supabase: SupabaseClient) {
-  const { register, create, update } = createToolkit(server, supabase);
+export function registerOfficeTools(server: McpServer, supabase: SupabaseClient, writes?: WriteCatalog, reads?: RelatedReadCatalog) {
+  const { register, create, update } = createToolkit(server, supabase, writes, reads);
 
   register('list_offices', 'Find existing public offices before creating a seat. Filter by organization or exact office UUID; paginate with offset.', {
     organization_id: z.string().uuid().optional(),

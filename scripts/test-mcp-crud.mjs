@@ -149,6 +149,10 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiK
     const mapLayers = await reader('get_map_layers', { map_id: map.id });
     assert.equal(mapLayers.find(row => row.id === remoteLayer.id).style.color, '#abcdef');
     assert.ok((await reader('get_map', { id: map.id })).layers.some(row => row.id === remoteLayer.id));
+    await admin('update_map', { id: map.id, visibility: 'private' });
+    assert.ok(!JSON.stringify(await reader('get_map_layers', { map_id: map.id })).includes(remoteLayer.id), 'Related layers must not bypass a private containing map');
+    assert.ok(JSON.stringify(await admin('get_map_layers', { map_id: map.id })).includes(remoteLayer.id));
+    await admin('update_map', { id: map.id, visibility: 'public' });
     assert.ok((await reader('search_maps', { query: needle })).some(row => row.id === map.id));
     assert.ok((await reader('search_layers', { query: needle })).some(row => row.id === remoteLayer.id));
     await denied('list_map_layer_links', { map_id: map.id });
@@ -200,6 +204,13 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiK
     assert.ok((await reader('list_contests', { election_id: election.id })).contests.some(row => row.id === contest.id));
     assert.ok((await reader('search_contests', { query: needle })).some(row => row.id === contest.id));
     assert.ok(JSON.stringify(await reader('get_person_candidacies', { person_id: person.id })).includes(election.id));
+    await admin('update_election', { id: election.id, visibility: 'private' });
+    for (const [name, args] of [['list_contests', { election_id: election.id }], ['list_contest_candidates', { contest_id: contest.id }], ['get_contest_candidate', candidate]]) {
+      assert.ok(!JSON.stringify(await reader(name, args)).includes(name === 'list_contests' ? contest.id : person.id), `${name} must preserve the private election gate`);
+    }
+    assert.ok(!JSON.stringify(await reader('get_person_candidacies', { person_id: person.id })).includes(election.id));
+    assert.ok(JSON.stringify(await admin('list_contests', { election_id: election.id })).includes(contest.id));
+    await admin('update_election', { id: election.id, visibility: 'public' });
     const question = await create('create_ballot_question', { election_id: election.id, title: `${needle} question`, question_text: 'Should the test fixture pass?' });
     await admin('update_ballot_question', { id: question.id, choices: ['For', 'Against'] });
     assert.deepEqual((await reader('get_ballot_question', { id: question.id })).ballot_question.choices, ['For', 'Against']);
@@ -217,11 +228,18 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiK
     assert.equal(articleRead.people[0].person_id, person.id);
     assert.equal(articleRead.organizations[0].organization_id, org.id);
     assert.equal((await reader('get_article', { id: article.id })).status, 'missing');
+    for (const [name, args] of [['get_person_articles', { person_id: person.id }], ['get_organization_articles', { organization_id: org.id }]]) {
+      assert.ok(!JSON.stringify(await reader(name, args)).includes(article.id), 'Unlisted articles must remain undiscoverable through related reading lists');
+    }
     await admin('update_article', { id: article.id, visibility: 'public' });
     assert.ok(!('people' in await reader('get_article', { id: article.id })), 'Do not expose admin-only association sets');
     assert.ok((await reader('search_articles', { query: needle })).some(row => row.id === article.id));
     assert.ok((await reader('get_person_articles', { person_id: person.id })).some(row => row.id === article.id));
     assert.ok((await reader('get_organization_articles', { organization_id: org.id })).some(row => row.id === article.id));
+    await admin('update_person', { id: person.id, visibility: 'private' });
+    assert.ok(!JSON.stringify(await reader('get_person_articles', { person_id: person.id })).includes(article.id), 'Related reading lists must retain private person visibility');
+    assert.deepEqual((await reader('list_person_organizations', { person_id: person.id })).organizations, []);
+    await admin('update_person', { id: person.id, visibility: 'public' });
     const invalidArticle = await tool(adminToken, 'update_article', { id: article.id, title: 'Must roll back', people: [{ person_id: crypto.randomUUID() }] });
     assert.ok(invalidArticle.isError);
     assert.equal((await admin('get_article', { id: article.id })).article.title, articleInput.title, 'Article metadata must roll back with invalid links');

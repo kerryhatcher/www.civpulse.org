@@ -1,6 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import type { WriteCatalog } from './write-catalog';
+import type { RelatedReadCatalog } from './related-read-catalog';
 
 export function ok(data: unknown) {
   return { content: [{ type: 'text' as const, text: JSON.stringify(data ?? null, null, 2) }] };
@@ -15,7 +17,7 @@ export function defined<T extends Record<string, unknown>>(values: T): Partial<T
 }
 
 /** Common registration/error handling; the database still enforces every write. */
-export function createToolkit(server: McpServer, supabase: SupabaseClient) {
+export function createToolkit(server: McpServer, supabase: SupabaseClient, writes?: WriteCatalog, reads?: RelatedReadCatalog) {
   let adminCheck: Promise<void> | undefined;
   function ensureAdmin(): Promise<void> {
     return adminCheck ??= (async () => {
@@ -26,19 +28,27 @@ export function createToolkit(server: McpServer, supabase: SupabaseClient) {
   }
 
   function register<S extends z.ZodRawShape>(name: string, description: string, shape: S,
-    run: (input: z.infer<z.ZodObject<S>>) => Promise<unknown>,
+    runOperation: (input: z.infer<z.ZodObject<S>>) => Promise<unknown>,
     options: { write?: boolean; destructive?: boolean; idempotent?: boolean } = {}) {
+    const schema = z.object(shape);
+    const run = async (input: z.infer<z.ZodObject<S>>) => {
+      try {
+        if (options.write) await ensureAdmin();
+        return ok(await runOperation(input));
+      } catch (error) { return fail(error); }
+    };
+    if (options.write && writes?.capture(name, {
+      description, schema, run: input => run(input as z.infer<z.ZodObject<S>>),
+    })) return;
+    if (!options.write && reads?.capture(name, {
+      description, schema, run: input => run(input as z.infer<z.ZodObject<S>>),
+    })) return;
     server.registerTool(name, {
-      description, inputSchema: z.object(shape), annotations: {
+      description, inputSchema: schema, annotations: {
         readOnlyHint: !options.write, destructiveHint: options.destructive ?? Boolean(options.write),
         idempotentHint: options.idempotent ?? !options.write, openWorldHint: false,
       },
-    }, async input => {
-      try {
-        if (options.write) await ensureAdmin();
-        return ok(await run(input as z.infer<z.ZodObject<S>>));
-      } catch (error) { return fail(error); }
-    });
+    }, run);
   }
 
   function readRpc(name: string, description: string, shape: z.ZodRawShape, rpc: string,
