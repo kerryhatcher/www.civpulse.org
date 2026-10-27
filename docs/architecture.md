@@ -489,7 +489,7 @@ stops the whole export. Timeouts are never increased and records are never omitt
 Anonymous bill and session browsing uses hashed JSON under
 `/directory-data/legislation/`. The manifest carries public terms, sessions and
 the first 25 bills; further searches, sorting, filters and Load more read public
-bill shards grouped by term. Term filters download only their matching shards.
+bill shards of at most 500 rows, grouped by term. Term filters download only their matching shards.
 The build reuses the existing anonymous legislation export and per-build table
 cache shared by archives and profiles; it adds no database migration or privileged
 credential. Projected rows omit raw import/provenance payloads. Existing recursive
