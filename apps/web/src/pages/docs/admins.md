@@ -406,3 +406,8 @@ material. Exact replay is a no-op; successive corrections replace rather than ad
 See the repository's `docs/election-results.md` for offline export preparation and
 the JSON contract. Deployment of the feature is required first; saved reports
 then appear live on the results page without a rebuild.
+
+If the connector rejects `read_turnout` or `import_turnout` as an unknown action,
+follow the [tool refresh instructions](/docs/ai/#if-setup-does-not-work), then
+verify a read succeeds before retrying the import. Updating bundled skills alone
+does not refresh the connected app's schema.
