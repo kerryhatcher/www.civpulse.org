@@ -58,7 +58,10 @@ client gets the same supported read/write permissions as the user's account.
 
 ## Tools
 
-The source exposes **108 tools**. See the generated [tool guide](../plugins/civpulse/references/tools.md)
+The compatibility endpoint exposes **128 tools**. The opt-in v2 catalog exposes
+**66 tools**, consolidating common searches, getters, create/update pairs,
+relationship writes and related reads without removing capabilities. See
+[Compact catalog v2](#compact-catalog-v2), the generated [tool guide](../plugins/civpulse/references/tools.md)
 and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every operation.
 
 - **Search/read:** all ten civic types, unified search with type/limit/offset,
@@ -90,6 +93,167 @@ Tool annotations identify reads, writes and destructive actions, while the
 database remains the enforcement boundary. Images are limited to the existing
 public org-logos/person-images buckets and supported image formats, up to 2 MB.
 Content edits do not trigger a public website rebuild.
+
+### Compact catalog v2
+
+After deploying this source, connect a client to
+`https://api.civpulse.org/functions/v1/mcp/v2` to opt into the compact catalog.
+The existing `/mcp` endpoint, registered app connection, and plugin binding keep
+the compatibility catalog. No existing client is switched automatically.
+Reconnect using the client's OAuth flow and refresh tool discovery when changing
+endpoints. To roll back, reconnect to the original `/mcp` endpoint. Both versions
+require the same verified, live Supabase user session; neither accepts anonymous
+or service-role tokens. No database migration or permission change is required.
+
+| Compatibility tools | Compact equivalent |
+| --- | --- |
+| `search_site` | `search_site` with the same query/type/limit/offset (default `mode: "site"`) |
+| `search_organizations`, `search_people`, `search_maps`, `search_elections`, `search_events` | `search_site` with `mode: "directory"` and singular `type`: organization, person, map, election, event |
+| `search_calendars`, `search_layers`, `search_articles`, `search_contests`, `search_ballot_questions` | `search_site` with the matching singular type and default site mode |
+| `get_organization`, `get_person`, `get_election`, `get_contest`, `get_ballot_question`, `get_article`, `get_map`, `get_layer`, `get_calendar`, `get_event` | `get_civic_record` with the matching singular type and original `id` |
+
+Site mode includes past events and supports offset pagination. Directory mode
+preserves the original directory RPC's response fields, ordering, limits and
+defaults. Directory mode has no offset: use site mode for pagination. Person
+and organization directories default to 20 rows and cap at 50; maps default to
+20 and cap at 100; elections/events default to 50 and cap at 100.
+
+Event filters (`organization_id`, `calendar_id`, `include_past`) require directory
+mode and `type: "event"`. Its `include_past` default remains false. Invalid mode,
+type, filter and pagination combinations return an error before querying;
+filters are never silently discarded. For example:
+
+```json
+{"name":"search_site","arguments":{"mode":"directory","type":"event","organization_id":"<organization-uuid>","include_past":true,"limit":50}}
+```
+
+```json
+{"name":"get_civic_record","arguments":{"type":"person","id":"<person-uuid>"}}
+```
+
+Common retrieval returns the original type-specific envelope, including status
+values, person affiliations, election contests/key dates, event calendar and
+organization, and visible map layers/effective styles. A denied or missing map
+never triggers a layer read. These dispatchers call the original RPCs with the
+caller client; they never read unrestricted tables. Article association sets
+remain admin-only. Specialized reads, bulk geometry operations, uploads,
+legislation, election results, documents and account administration retain their
+existing schemas. All access controls remain unchanged in both catalogs.
+
+#### Create/update and relationship writes
+
+The compact catalog replaces 13 create/update pairs with `save_<resource>`:
+organization, calendar, event, person, election, map, layer, contest,
+ballot_question, article, layer_feature, office and office_term. The request is a
+strict, operation-specific object. Choose `operation: "create"` with all original
+creation fields or `operation: "update"` with the original ID/key fields and only
+the intended patch. Update never inserts or upserts a missing row. Empty patches
+are rejected. Unknown fields and create/update field mismatches are rejected
+before any database operation.
+
+```json
+{"name":"save_person","arguments":{"request":{"operation":"create","slug":"example-person","full_name":"Example Person"}}}
+```
+
+```json
+{"name":"save_person","arguments":{"request":{"operation":"update","id":"<person-uuid>","phone":null}}}
+```
+
+`save_relationship` consolidates create/update for map_layer, contest_candidate,
+person_organization, organization_relationship, article_person and
+article_organization. Select `request.relationship` and place the original
+fields with the explicit operation under `request.change`. Composite links keep
+both endpoint UUIDs as keys and update only their attributes. The existing
+organization_relationship variant uses its row UUID on update and still permits
+the original endpoint, reciprocal-label and source corrections.
+
+```json
+{"name":"save_relationship","arguments":{"request":{"relationship":"map_layer","change":{"operation":"update","map_id":"<map-uuid>","layer_id":"<layer-uuid>","visible_by_default":false}}}}
+```
+
+Deletes remain separate: the 13 resource save tools have no delete operation.
+Existing resource delete tools retain their original schemas and cascades (no
+new office/office-term delete capability is added). `delete_relationship`
+consolidates the six relationship deletes without deleting either endpoint:
+
+```json
+{"name":"delete_relationship","arguments":{"request":{"relationship":"map_layer","map_id":"<map-uuid>","layer_id":"<layer-uuid>"}}}
+```
+
+For organization_relationship deletion, supply its row `id` instead of endpoint
+IDs. Deleting that reciprocal row removes the relationship from both profiles.
+
+All compact writes delegate to the original admin-guarded handlers using the
+caller client, with the original RLS and transactions. Omitted fields remain
+untouched, nullable fields retain their explicit clearing behavior, and feature
+IDs remain bigint strings. `save_article` retains atomic metadata and association
+replacement: omitted sets are preserved, while an explicit `[]` still clears a
+set. Individual link removal uses `delete_relationship`. Stored-layer dataset
+replacement remains the separate `save_postgis_layer`; `save_layer` only edits
+metadata and never changes source type or stored geometry.
+
+Save tools advertise conservative write/destructive annotations and do not claim
+idempotency across create/update. After an uncertain create response, reconcile
+the record before retrying. Relationship deletion retains its idempotent hint.
+The original endpoint still advertises every original create/update/delete tool.
+
+#### Related-record reads
+
+`read_related_records` replaces 15 related reads in the compact catalog. Supply
+`request.relation` from the table below and the original key fields. Each branch
+uses the original schema and handler, preserving response arrays/status
+envelopes, ordering, labels, sources, effective styles, and access checks.
+
+| Original tool | `request.relation` | Original key fields |
+| --- | --- | --- |
+| `get_map_layers` | `map_layers` | `map_id` |
+| `get_person_articles` | `person_articles` | `person_id` |
+| `get_organization_articles` | `organization_articles` | `organization_id` |
+| `get_person_candidacies` | `person_candidacies` | `person_id` |
+| `list_person_organizations` | `person_organizations` | `person_id` |
+| `list_contests` | `election_contests` | `election_id` |
+| `list_ballot_questions` | `election_ballot_questions` | `election_id` |
+| `list_contest_candidates` | `contest_candidates` | `contest_id` |
+| `get_contest_candidate` | `contest_candidate` | `contest_id`, `person_id` |
+| `get_organization_relationships` | `organization_relationships` | `organization_id` |
+| `list_calendars` | `calendars` | Optional/nullable `organization_id`; omission keeps original permitted calendar listing |
+| `get_office_terms` | `office_terms` | `person_id` or `organization_id`; both accepted, at least one required |
+| `list_map_layer_links` | `map_layer_links` | `map_id`; admin only |
+| `list_article_people` | `article_people` | `article_id`; admin only |
+| `list_article_organizations` | `article_organizations` | `article_id`; admin only |
+
+```json
+{"name":"read_related_records","arguments":{"request":{"relation":"person_articles","person_id":"<person-uuid>"}}}
+```
+
+```json
+{"name":"read_related_records","arguments":{"request":{"relation":"contest_candidate","contest_id":"<contest-uuid>","person_id":"<person-uuid>"}}}
+```
+
+The singular contest_candidate selector retains its original single-candidate
+envelope and missing result. It does not broaden candidate access. The
+map_layers selector returns only layers permitted through the containing map;
+map_layer_links remains the admin-only editable link view. Likewise public
+profile reading lists remain separate selectors from admin-only article link
+sets. Person/election/contest visibility gates and hidden-article discovery rules
+run in the original handlers/RPCs with the caller token. Read-only annotations
+do not grant permission to an admin-only selector.
+
+Unknown selectors, cross-selector fields, invalid UUIDs and unsupported
+pagination/filter fields fail validation rather than being silently discarded.
+No implicit pagination, extra filters, arbitrary tables/joins, account lookup,
+or geometry access are introduced. Specialized person vote/legislative history,
+meeting/document reads, stored features/geometry, and the office directory
+retain their existing tools and filter/pagination capabilities.
+
+`bun run plugin:build` generates both catalogs and validates their size. The
+[compact guide](../plugins/civpulse/references/compact-tools.md) and
+[compact schemas](../plugins/civpulse/references/compact-tool-schemas.json) are
+packaged alongside compatibility references. Common reads removed 19 definitions;
+create/update and relationship consolidation removed 29 more; related reads
+remove another 14, for 62 fewer tools than the compatibility endpoint. Refresh
+any client that cached an earlier 109- or 80-tool v2 catalog before use. The
+original endpoint retains all original related-read names and schemas.
 
 ### Meeting documents
 

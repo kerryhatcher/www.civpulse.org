@@ -2,6 +2,8 @@ import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createToolkit, defined } from './toolkit';
+import type { WriteCatalog } from './write-catalog';
+import type { RelatedReadCatalog } from './related-read-catalog';
 
 const uuid = z.string().uuid();
 const visibility = z.enum(['public', 'unlisted', 'private']);
@@ -15,26 +17,14 @@ const slug = z.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 const rowId = z.string().regex(/^[1-9][0-9]*$/).refine(value => BigInt(value) <= 9223372036854775807n, 'ID exceeds bigint range');
 const geometry = z.object({ type: z.enum(['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon']), coordinates: z.array(z.unknown()) });
 
-export function registerExtendedTools(server: McpServer, supabase: SupabaseClient, user: Pick<User, 'id' | 'email'>) {
-  const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase);
+export function registerExtendedTools(server: McpServer, supabase: SupabaseClient, user: Pick<User, 'id' | 'email'>, writes?: WriteCatalog, reads?: RelatedReadCatalog) {
+  const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase, writes, reads);
   async function rpc(name: string, args: Record<string, unknown>) {
     const { data, error } = await supabase.rpc(name, args);
     if (error) throw new Error(error.message);
     return data;
   }
 
-  // Search all ten content types, with stable pagination and relationship matches.
-  readRpc('search_site', 'Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.',
-    { query, type: z.enum(['organization', 'person', 'election', 'contest', 'ballot_question', 'article', 'map', 'layer', 'calendar', 'event']).nullish(), limit, offset },
-    'search_site', input => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
-  for (const [plural, type] of [['calendars', 'calendar'], ['layers', 'layer'], ['articles', 'article'], ['contests', 'contest'], ['ballot_questions', 'ballot_question']]) {
-    readRpc(`search_${plural}`, `Search or browse ${plural.replaceAll('_', ' ')} with pagination. Use the returned id with get_${type}.`,
-      { query, limit, offset }, 'search_site', input => ({ p_query: input.query, p_type: type, p_limit: input.limit, p_offset: input.offset }));
-  }
-  for (const type of ['organization', 'calendar', 'layer', 'article', 'contest', 'ballot_question']) {
-    readRpc(`get_${type}`, `Get one ${type.replaceAll('_', ' ')} by id. Article association sets are returned only to admins.`,
-      { id: uuid }, 'mcp_get_record', ({ id }) => ({ p_type: type, p_id: id }));
-  }
   readRpc('get_map_layers', 'Get visible layers in stacking order, including effective per-map styles.',
     { map_id: uuid }, 'get_map_layers', ({ map_id }) => ({ p_map_id: map_id }));
   readRpc('get_layer_geojson', 'Get stored layer geometry. Non-admin callers must provide a visible map containing this layer.',

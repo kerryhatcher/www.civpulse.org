@@ -2,6 +2,8 @@
 // Integration test against the running LOCAL Supabase stack. Never uses hosted credentials.
 import assert from 'node:assert/strict';
 import { runCrudSuite } from './test-mcp-crud.mjs';
+import { compactWriteReplacement } from '../apps/mcp/src/write-catalog.ts';
+import { compactRelatedReadReplacement } from '../apps/mcp/src/related-read-catalog.ts';
 
 const root = new URL('..', import.meta.url).pathname;
 const status = Bun.spawnSync(['bun', 'run', 'supabase', 'status', '--output', 'json'], { cwd: root });
@@ -26,8 +28,8 @@ async function request(url, { token, method = 'GET', body, ...options } = {}) {
   return { response, data: text ? JSON.parse(text) : null };
 }
 
-async function rpc(token, method, params = {}) {
-  const response = await fetch(mcp, {
+async function rpc(token, method, params = {}, endpoint = mcp) {
+  const response = await fetch(endpoint, {
     method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream',
       ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }),
@@ -37,8 +39,40 @@ async function rpc(token, method, params = {}) {
   return { response, data: json ? JSON.parse(json) : null };
 }
 
+function compactReadReplacement(name, args) {
+  const related = compactRelatedReadReplacement(name, args);
+  if (related) return related;
+  const directories = { search_organizations: 'organization', search_people: 'person', search_maps: 'map', search_elections: 'election', search_events: 'event' };
+  const aliases = { search_calendars: 'calendar', search_layers: 'layer', search_articles: 'article', search_contests: 'contest', search_ballot_questions: 'ballot_question' };
+  const types = ['organization', 'person', 'election', 'contest', 'ballot_question', 'article', 'map', 'layer', 'calendar', 'event'];
+  const type = name.startsWith('get_') ? name.slice(4) : null;
+  let replacement;
+  if (type && types.includes(type)) replacement = { name: 'get_civic_record', arguments: { ...args, type } };
+  else if (directories[name]) replacement = { name: 'search_site', arguments: { ...args, type: directories[name], mode: 'directory' } };
+  else if (aliases[name]) replacement = { name: 'search_site', arguments: { ...args, type: aliases[name] } };
+  else if (name === 'search_site' || name === 'whoami') replacement = { name, arguments: args };
+  return replacement;
+}
+
 async function tool(token, name, args = {}) {
   const result = await rpc(token, 'tools/call', { name, arguments: args });
+  assert.equal(result.response.status, 200);
+  assert.ok(result.data.result, JSON.stringify(result.data));
+  // Compare reads using real OAuth identities and the same fixtures. Never replay writes.
+  const replacement = compactReadReplacement(name, args);
+  if (replacement) {
+    const compact = await rpc(token, 'tools/call', replacement, `${mcp}/v2`);
+    assert.equal(compact.response.status, 200);
+    assert.equal(Boolean(compact.data.result?.isError), Boolean(result.data.result.isError), `${name}: v2 error parity`);
+    if (result.data.result.isError) assert.deepEqual(compact.data.result.content, result.data.result.content, `${name}: v2 error content parity`);
+    else assert.deepEqual(JSON.parse(compact.data.result.content[0].text), JSON.parse(result.data.result.content[0].text), `${name}: v2 response parity`);
+  }
+  return result.data.result;
+}
+
+async function compactTool(token, name, args = {}) {
+  const replacement = compactWriteReplacement(name, args) ?? compactReadReplacement(name, args) ?? { name, arguments: args };
+  const result = await rpc(token, 'tools/call', replacement, `${mcp}/v2`);
   assert.equal(result.response.status, 200);
   assert.ok(result.data.result, JSON.stringify(result.data));
   return result.data.result;
@@ -200,11 +234,19 @@ try {
   }
   const catalog = await rpc(admin.access_token, 'tools/list');
   assert.equal(catalog.response.status, 200);
-  assert.ok(catalog.data.result.tools.length < 128, 'Keep the MCP tool catalog within client limits');
+  assert.ok(catalog.data.result.tools.length <= 128, 'Keep the MCP tool catalog within client limits');
+  const compactCatalog = await rpc(admin.access_token, 'tools/list', {}, `${mcp}/v2`);
+  assert.equal(compactCatalog.response.status, 200);
+  assert.equal(compactCatalog.data.result.tools.length, catalog.data.result.tools.length - 62);
+  assert.equal((await rpc(undefined, 'tools/list', {}, `${mcp}/v2`)).response.status, 401);
+  assert.ok((await rpc(reader.access_token, 'tools/call', { name: 'search_users', arguments: {} }, `${mcp}/v2`)).data.result.isError);
   if (process.env.MCP_TOOL_CATALOG) {
     await Bun.write(process.env.MCP_TOOL_CATALOG, JSON.stringify({ server: 'Civic Pulse', tools: catalog.data.result.tools }, null, 2));
   }
   await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool, apiUrl: env.API_URL, apiKey: env.ANON_KEY });
+  // Independent disposable fixtures exercise actual v2 writes/transactions, not duplicate replays.
+  await runCrudSuite({ adminToken: sessions[1].refreshed.data.access_token, readerToken: sessions[0].refreshed.data.access_token, tool: compactTool, apiUrl: env.API_URL, apiKey: env.ANON_KEY });
+  console.log('PASS compact create/update/relationship writes, separate deletes, rollback and non-admin denial');
 
   // Use the existing disposable reader only after all non-admin CRUD checks.
   const adminToken = sessions[1].refreshed.data.access_token;

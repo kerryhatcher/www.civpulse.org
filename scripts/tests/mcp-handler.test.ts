@@ -10,14 +10,15 @@ const env = {
 };
 
 describe('Supabase gateway routing and OAuth discovery', () => {
-  for (const path of ['/functions/v1/mcp', '/mcp', '/functions/v1/mcp/', '/mcp/']) {
+  for (const path of ['/functions/v1/mcp', '/mcp', '/functions/v1/mcp/', '/mcp/', '/functions/v1/mcp/v2', '/mcp/v2', '/functions/v1/mcp/v2/', '/mcp/v2/']) {
     test(`serves challenge and metadata at ${path}`, async () => {
       const response = await handleRequest(new Request(`https://api.civpulse.org${path}`), env);
       expect(response.status).toBe(401);
-      const metadata = `${resource}/.well-known/oauth-protected-resource`;
+      const endpoint = path.includes('/v2') ? `${resource}/v2` : resource;
+      const metadata = `${endpoint}/.well-known/oauth-protected-resource`;
       expect(response.headers.get('WWW-Authenticate')).toContain(metadata);
       const discovery = await handleRequest(new Request(`https://api.civpulse.org${path.replace(/\/$/, '')}/.well-known/oauth-protected-resource`), env);
-      expect(await discovery.json()).toMatchObject({ resource, authorization_servers: [env.AUTHORIZATION_SERVER] });
+      expect(await discovery.json()).toMatchObject({ resource: endpoint, authorization_servers: [env.AUTHORIZATION_SERVER] });
     });
   }
 

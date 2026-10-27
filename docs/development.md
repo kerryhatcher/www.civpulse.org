@@ -52,6 +52,30 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+MCP consolidation has two catalogs: the original `/mcp` and opt-in
+`/mcp/v2`. Run `bun test scripts/tests/mcp-common-reads.test.ts
+scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts
+scripts/tests/mcp-handler.test.ts` for
+schema parity, RPC/write dispatch, operation-specific validation and endpoint
+discovery/challenges. `SUPABASE_TELEMETRY_DISABLED=1 bun run mcp:test`
+runs real local OAuth/CRUD fixtures and compares both versions' search/retrieval
+responses with regular-user and admin tokens, including hidden/private records.
+It also runs the complete CRUD suite against v2 with independent disposable
+fixtures, checking real transactions, relationship deletes, partial updates,
+rollback and regular-user write denial. Unit tests compare every consolidated
+branch, including office/office-term writes and feature ID precision. It also
+checks v2's signed-out and account-directory denial. No hosted credentials
+are used. Run `bun run mcp:check`, `bun run mcp:build`, and `bun run plugin:build`
+to validate and regenerate both catalogs and the deployable Edge Function bundle.
+See [the migration guide](mcp.md#compact-catalog-v2).
+
+Related-read tests compare all 15 original handlers with their compact selectors,
+including status envelopes, exact parent IDs, nullable calendar filters, combined
+office-term filters, singular candidates and admin-only table reads. The local
+suite also verifies private-map/election/person gates and unlisted-article
+exclusion through related readers on both endpoints. No schema migration is
+needed; all selectors reuse the caller's existing client and guarded handlers.
+
 Profile generation fetches affiliations in sequential groups of 100 people,
 with stable pagination and joined organization details. This avoids hundreds
 of simultaneous Data API requests as the people directory grows. The build
