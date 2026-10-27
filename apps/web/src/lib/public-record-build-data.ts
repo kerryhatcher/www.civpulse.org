@@ -36,19 +36,33 @@ export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<
     }
     return rows;
   }
-  // Sequential streams and bounded detail workers avoid per-page API fan-out.
+  // Page each stream sequentially, with at most three independent streams active.
+  async function legislativeStreams(tables: string[]) {
+    const rows: LegislativeRow[][] = new Array(tables.length);
+    let next = 0;
+    await Promise.all(Array.from({ length: Math.min(3, tables.length) }, async () => {
+      while (next < tables.length) {
+        const index = next++, table = tables[index];
+        rows[index] = await pages<LegislativeRow>('browse_legislation', 100, { p_table: table, p_limit: 100 }, true);
+        console.info(`Public record export: ${table} (${rows[index].length} rows)`);
+      }
+    }));
+    return rows;
+  }
   const tables = ['bills', 'legislative_votes', 'legislative_sessions'];
   const published = new Map<string, PublicRecord>();
-  for (const table of tables) {
-    for (const row of await pages<LegislativeRow>('browse_legislation', 100, { p_table: table, p_limit: 100 }, true)) {
+  const parentRows = await legislativeStreams(tables);
+  for (const [index, table] of tables.entries()) {
+    for (const row of parentRows[index]) {
       if (row.visibility !== 'public') throw new Error('Non-public legislative record in discovery export');
       const record = legislativeRecord(table, row); records.push(record); published.set(row.id, record);
     }
   }
   const relationTables = ['bill_actions', 'bill_versions', 'bill_amendments', 'bill_sponsorships', 'bill_positions', 'article_bills', 'bill_relationships', 'legislative_vote_bills', 'legislative_vote_choices'];
-  for (const table of relationTables) {
+  const relationRows = await legislativeStreams(relationTables);
+  for (const [index, table] of relationTables.entries()) {
     const groups = new Map<string, { text: string; href?: string }[]>();
-    for (const row of await pages<LegislativeRow>('browse_legislation', 100, { p_table: table, p_limit: 100 }, true)) {
+    for (const row of relationRows[index]) {
       if (row.visibility !== 'public') throw new Error('Non-public legislative child in discovery export');
       const owners = [row.bill_id, row.vote_id].filter((id): id is string => typeof id === 'string' && published.has(id));
       for (const id of owners) {

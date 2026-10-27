@@ -1502,6 +1502,12 @@ visibility/context comparisons and 16,001-row timeout regression with
 `scripts/tests/legislative-sponsorship-browse-db.test.ts` and the same local database
 variable. Both helpers remain uncallable by API roles.
 
+`20261124010300_legislative_action_browse_performance` similarly resolves bill,
+session, body and optional event parents once for bill actions. Its regression,
+`scripts/tests/legislative-action-browse-db.test.ts`, compares row and parent
+visibility (including events and calendars), contextual access and 16,001 actions
+under the same timeout. This keeps action imports from blocking archive builds.
+
 ## Election result snapshots
 
 Private evidence and immutable, scoped election reports support agent-assisted OCR
@@ -1510,7 +1516,7 @@ source presence and predecessor IDs; public reads inherit election visibility.
 See [election results](election-results.md) for the RPC contract, deduplication,
 photo examples, validation and release sequence.
 
-`20261124010300_calendar_bill_child_capacity` applies the same bounded parent
+`20261124010700_calendar_bill_child_capacity` applies the same bounded parent
 visibility calculation to imported bill actions and sponsorships, which also
 exceeded the three-second API timeout as imports grew. Referenced bills, bodies,
 sessions, events and office terms retain their existing recursive visibility gates.
@@ -1519,8 +1525,44 @@ The helper is private; grants, RLS and query results are unchanged. Verify with
 all caller/parent/context gates and exercises 20,000 rows per resource under the
 API timeout, including a last-page request. No paid resource is required.
 
-Calendar capacity migration uses version `20261124010300` after the concurrent
+Calendar capacity migration uses version `20261124010700` after the concurrent
 main sponsorship release claimed `20261124010200`. The user approved moving the
 feature migration with unchanged SQL after local/preview verification. Production
 history remains intact; the final migration reasserts the tested wrapper in all
 environments. No production migration-history repair is required.
+
+### Public profile legislative vote export performance
+
+`20261124010400_profile_vote_export_performance` pages visibility-approved
+choices before building their bill associations. Each 500-row page resolves
+associations only for its selected votes, preserving the existing anonymous-only
+export, ordering, fields and related-record visibility checks. It does not raise
+query timeouts or omit votes. Merge the append-only migration to `main` before
+production application, then rebuild the static frontend.
+
+Verify with `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-vote-export-db.test.ts`.
+The transactional test compares old/new payloads across hidden parents and
+relationships, and exports all 16,001 fixture choices with a three-second
+statement timeout per page. All fixtures and function changes roll back.
+
+The hosted dataset still exceeded the limit with per-link recursive checks.
+`20261124010500_profile_vote_export_shared_gates` reuses permitted bill/action
+sets and public version/amendment parent joins across the page. The anonymous
+export's existing gate ensures these sets cannot inherit administrator access.
+The same regression now uses 16,001 distinct bills as well as choices and checks
+hidden linked actions. Apply through the main integration before rebuilding.
+
+`20261124010600_choice_browse_page_projection` fixes the remaining public-record
+archive timeout when browsing choices with an empty search query. It counts and
+sorts permitted IDs/timestamps before projecting provenance text and reference
+labels for the selected page. The visibility helper, filters, direct-ID/person/
+vote contexts, nonempty search path, ordering and payload remain unchanged.
+The choice-browse regression now uses 50,001 choices with long source notes and
+the same three-second anonymous timeout. Merge and apply through the main
+integration before rebuilding the frontend; do not omit archive records.
+
+The user approved versions `20261124010700` and `20261124010800` after
+concurrent main releases occupied versions through `20261124010600`. Calendar
+capacity SQL remains unchanged at `10700`; `10800` exactly reasserts main’s
+current browse wrapper, including lightweight choice pagination and main’s
+action/sponsorship helpers. Production history remains intact.

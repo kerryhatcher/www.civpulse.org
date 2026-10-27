@@ -1,3 +1,4 @@
+import { renderProfileDescription } from '../lib/profile-description';
 import { readDirectory } from './directory-data';
 import { browsePeople, type DirectoryPerson } from '../lib/directories';
 import { loadOfficeTerms } from './office-terms';
@@ -266,7 +267,7 @@ function fillPersonView(response: PersonViewResponse): void {
 
   const bio = document.querySelector<HTMLElement>('[data-person-bio]');
   if (bio) {
-    bio.textContent = person.description ?? '';
+    bio.innerHTML = renderProfileDescription(person.description ?? '');
     bio.hidden = !person.description;
   }
 

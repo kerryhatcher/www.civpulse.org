@@ -32,7 +32,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('bill children preserve 
     await tx.unsafe('reset role');await tx.unsafe(`update public.${target} set visibility='public' where id=$1`,[id]);
    }
   }
-  await tx.unsafe(await Bun.file('supabase/migrations/20261124010300_calendar_bill_child_capacity.sql').text());
+  await tx.unsafe(await Bun.file('supabase/migrations/20261124010700_calendar_bill_child_capacity.sql').text());
   for(const s of samples){
    await tx`select set_config('request.jwt.claim.sub',${s.uid},true)`;
    await tx.unsafe(`update public.${s.target} set visibility=$1 where id=$2`,[s.visibility,s.id]);

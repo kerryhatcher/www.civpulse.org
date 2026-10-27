@@ -1,10 +1,12 @@
 import { expect, test } from 'bun:test';
 import { SQL } from 'bun';
 
-test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('choice browsing preserves discovery/context gates and scales to 16,000 choices', async () => {
+test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('choice browsing preserves discovery/context gates and scales to 50,000 choices', async () => {
   const sql = new SQL(process.env.LEGISLATION_TEST_DATABASE_URL!);
   const rollback = Error('rollback');
   try { await sql.begin(async tx => {
+    await tx.unsafe(await Bun.file('supabase/migrations/20261124010200_legislative_sponsorship_browse_performance.sql').text());
+    await tx.unsafe(await Bun.file('supabase/migrations/20261124010300_legislative_action_browse_performance.sql').text());
     const suffix = crypto.randomUUID();
     const [org] = await tx`insert into organizations(name,slug) values ('Choice QA',${suffix}) returning id`;
     const [term] = await tx`insert into legislative_terms(organization_id,identifier,name,starts_on) values (${org.id},'qa','QA term','2025-01-01') returning id`;
@@ -38,7 +40,7 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('choice browsing preserv
       }
     }
     await tx`select set_config('request.jwt.claim.sub','',true)`;
-    await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261124010100_legislative_choice_browse_performance.sql',import.meta.url)).text());
+    await tx.unsafe(await Bun.file(new URL('../../supabase/migrations/20261124010600_choice_browse_page_projection.sql',import.meta.url)).text());
     for (const sample of snapshots) {
       await tx`select set_config('request.jwt.claim.sub',${sample.id},true)`;
       await tx.unsafe(`update public.${sample.target} set visibility=$1 where id=$2`, [sample.visibility,sample.targetId]);
@@ -51,18 +53,20 @@ test.skipIf(!process.env.LEGISLATION_TEST_DATABASE_URL)('choice browsing preserv
       expect(r.allowed).toBe(false);
     }
     await tx`insert into legislative_votes(session_id,body_id,identifier,occurred_on,question,category,method,outcome,coverage)
-      select ${session.id}::uuid,${body.id}::uuid,'bulk-'||n,'2025-02-01'::date,'QA bulk','passage','roll_call','not_reported','partial' from generate_series(1,16000) n`;
+      select ${session.id}::uuid,${body.id}::uuid,'bulk-'||n,'2025-02-01'::date,'QA bulk','passage','roll_call','not_reported','partial' from generate_series(1,50000) n`;
+    await tx.unsafe('alter table legislative_vote_choices disable trigger user');
     await tx`insert into legislative_vote_choices(vote_id,office_term_id,choice,source_choice,membership_review_note)
-      select id,${service.id}::uuid,'yes','Yea','QA reconciled source identity' from legislative_votes where session_id=${session.id} and identifier like 'bulk-%'`;
+      select id,${service.id}::uuid,'yes','Yea',repeat('QA reconciled source identity ',20) from legislative_votes where session_id=${session.id} and identifier like 'bulk-%'`;
+    await tx.unsafe('alter table legislative_vote_choices enable trigger user');
     await tx.unsafe("set local statement_timeout='3s'");
     for (const id of ['',ordinary,admin]) {
       await tx`select set_config('request.jwt.claim.sub',${id},true)`;
       await tx.unsafe(`set local role ${id?'authenticated':'anon'}`);
       const started = performance.now();
       const data = await browse(null,null,null);
-      expect(data.total).toBe(16001);
+      expect(data.total).toBe(50001);
       expect(data.rows).toHaveLength(100);
-      console.log(`16,001 choices (${id===admin?'admin':id?'user':'anon'}): ${Math.round(performance.now()-started)}ms`);
+      console.log(`50,001 choices (${id===admin?'admin':id?'user':'anon'}): ${Math.round(performance.now()-started)}ms`);
       await tx.unsafe('reset role');
     }
     throw rollback;

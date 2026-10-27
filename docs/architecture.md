@@ -41,6 +41,34 @@ docs/         architecture, backend, and development notes
 
 ## Backend
 
+### County hub pilot
+
+`/counties/bibb/` is a static community hub using the existing layout and public
+build readers. `apps/web/src/data/bibb-county.ts` explicitly curates organization
+and map slugs; name matching is not a county classification system. Elections
+are included only when their owning organization is in that selection, and people
+come from its public affiliations. No other county pages are generated yet.
+
+The Census QuickFacts figures in that file are a manually verified snapshot,
+with a source URL, individual reference periods, indicator codes and check date.
+The snapshot contains 59 measures grouped by topic, with Georgia values for the
+same measures and vintages. Six headline measures and three percentage charts
+are selected from that snapshot. Topic tables use native HTML details/summary
+and work without JavaScript. `/counties/bibb/statistics.csv` is a prerendered
+export of the same data, including reference periods and source links; adding
+or refreshing figures requires no schema migration or live Census API request.
+The 18 detailed age bands derive percentages from the checked-in
+`bibb-age-2025.json` count snapshot of CC-EST2025-AGESEX-13 (YEAR=7). Georgia is
+the sum of its 159 counties; each geography's age counts sum to its total. Race
+and ethnicity retain QuickFacts definitions and explain overlapping categories.
+Poverty uses the 2024 SAIPE state/county file for both geographies, including
+90% confidence intervals. Per-measure source overrides keep these dataset links
+in the HTML and CSV. CSV detail fields preserve counts, intervals, and definitions.
+Update those together and rebuild when refreshing the figures. The page does
+not require a Census API key or a live Census request. Browser event reads call
+`search_events` per selected organization under existing RLS, then display only
+public events. Full directory links retain their site-wide scope.
+
 ### Profile build requests
 
 People and organization profiles share one in-flight public profile snapshot per
@@ -424,3 +452,10 @@ existing election/profile content still follows its normal rebuild behavior.
 Original result photographs/PDFs live in private Supabase Storage and never enter
 prerendered HTML. The AI agent transcribes originals, and admin-only MCP tools
 validate and save immutable cumulative reports. See [election results](election-results.md).
+
+### County demographic charts
+
+`DemographicCharts.astro` renders age/race bars and poverty interval plots from
+that same Census snapshot. `county-charts.ts` progressively adds keyboard-accessible
+topic tabs; without JavaScript all chart sections remain visible. No charting
+dependency or runtime data request is needed. Tables and CSV retain all measures.

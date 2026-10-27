@@ -689,3 +689,21 @@ local history plus the new migration, then `migration up --db-url` pinned to
 The 46-assertion database test, real two-photo MCP integration, anonymous/admin
 browser flow, MCP type check, plugin archive check, Astro check and static build
 passed. The build retains its existing profile-sections dynamic-import warning.
+
+The public-record archive exports up to three independent legislative table
+streams concurrently, with sequential pages inside each stream. Results are
+assembled in the original table order, keeping archive section ordering stable.
+The shared build client still caps all outbound requests at six. Build logs show
+completed tables and row counts; backend failures identify the failing table.
+This reduces publication time without raising SQL timeouts or omitting records.
+Run `bun test scripts/tests/public-records.test.ts`, `bun run check` and
+`bun run build` when changing export scheduling.
+
+### Sitemap route filtering
+
+The sitemap filter in `apps/web/astro.config.mjs` matches only the exact error-page
+paths `/404`, `/404/` and `/404.html`. Do not exclude every URL containing `/404`:
+valid public UUIDs and slugs can start with those digits. Public record details
+and paginated archives belong in the sitemap; admin/auth shells, UUID viewers
+and generated JSON assets remain excluded. Run `bun test scripts/tests/sitemap.test.ts`
+when changing the filter, then check the deployed XML against public record IDs.

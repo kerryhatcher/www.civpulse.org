@@ -17,18 +17,26 @@ const {
 } = Astro.props;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const nav = [
-  { url: '/', label: 'Home' },
-  { url: '/maps/', label: 'Explore maps' },
-  { url: '/calendar/', label: 'Community calendar' },
-  { url: '/elections/', label: 'Elections' },
-  { url: '/people/', label: 'People' },
-  { url: '/legislation/', label: 'Legislation' },
-  { url: '/requests/', label: 'Records requests' },
-  { url: '/search/', label: 'Search' },
-  { url: '/docs/', label: 'Docs' },
+const groups = [
+  { label: 'Community', links: [
+    { url: '/maps/', label: 'Maps' },
+    { url: '/calendar/', label: 'Calendar' },
+    { url: '/people/', label: 'People' },
+    { url: '/orgs/', label: 'Organizations' },
+  ] },
+  { label: 'Government', links: [
+    { url: '/elections/', label: 'Elections' },
+    { url: '/legislation/', label: 'Legislation' },
+    { url: '/requests/', label: 'Records requests' },
+  ] },
+  { label: 'Research & help', links: [
+    { url: '/records/', label: 'Public record archive' },
+    { url: '/documents/', label: 'Meeting documents' },
+    { url: '/docs/', label: 'Guides & help' },
+    { url: '/about/', label: 'About Civic Pulse' },
+  ] },
 ];
-const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
+const isCurrent = (url: string) => path === url.replace(/\/+$/, '') || path.startsWith(url);
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 
@@ -59,16 +67,21 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
           />
         </a>
         <nav aria-label="Main navigation">
-          {
-            nav.map((item) => (
-              <a
-                href={item.url}
-                aria-current={isCurrent(item.url) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            ))
-          }
+          <details class="browse-menu" data-browse-menu>
+            <summary>Browse</summary>
+            <div class="browse-panel">
+              {groups.map((group) => (
+                <section aria-label={group.label}>
+                  <h2>{group.label}</h2>
+                  {group.links.map((item) => (
+                    <a href={item.url} aria-current={isCurrent(item.url) ? 'page' : undefined}>{item.label}</a>
+                  ))}
+                </section>
+              ))}
+            </div>
+          </details>
+          <a href="/calendar/" aria-current={isCurrent('/calendar/') ? 'page' : undefined}>Calendar</a>
+          <a href="/search/" aria-current={isCurrent('/search/') ? 'page' : undefined}>Search</a>
           <a data-nav-admin href="/admin/organizations/" hidden>Admin</a>
           <a data-nav-auth href="/signin/">Sign in</a>
         </nav>
@@ -79,21 +92,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
           Civic Pulse <span aria-hidden="true">·</span> A clearer signal from your
           community
         </p>
-        <div>
-          <a href="/orgs/">Organizations</a>
-          <span aria-hidden="true">/</span>
-          <a href="/elections/">Elections</a>
-          <span aria-hidden="true">/</span>
-          <a href="/people/">People</a>
-          <span aria-hidden="true">/</span>
-          <a href="/records/">Public record archive</a>
-          <span aria-hidden="true">/</span>
-          <a href="/about/">About this project</a>
-          <span aria-hidden="true">/</span>
-          <a href="/docs/">Documentation</a>
-          <span aria-hidden="true">/</span>
-          <a href="/signin/">Sign in</a>
-        </div>
+        <nav aria-label="Footer navigation">
+          <a href="/about/">About</a>
+          <a href="/docs/">Guides & help</a>
+          <a href="/search/">Search</a>
+        </nav>
       </footer>
     </div>
   </body>
@@ -102,4 +105,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 <script>
   import { initAuthNav } from '../scripts/auth';
   void initAuthNav();
+  const menu = document.querySelector<HTMLDetailsElement>('[data-browse-menu]');
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu?.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  document.addEventListener('click', (event) => {
+    if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+  });
 </script>

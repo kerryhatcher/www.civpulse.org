@@ -16,6 +16,7 @@ Original Civic Pulse content is licensed under CC BY 4.0 unless otherwise noted.
 
 ## Civic information
 
+- [Bibb County community hub](https://www.civpulse.org/counties/bibb/): Curated local maps, organizations, people, elections, upcoming events, and dated Census QuickFacts demographics. County coverage is selective; Census figures are a saved snapshot.
 - [Search Civic Pulse](https://www.civpulse.org/search/): Search public people, organizations, elections, articles, maps, events, and meeting records.
 - [People](https://www.civpulse.org/people/): Officials, candidates, affiliations, office service, and recorded votes.
 - [Organizations](https://www.civpulse.org/orgs/): Organizations and their related people, calendars, and records.

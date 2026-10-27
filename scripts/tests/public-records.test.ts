@@ -60,3 +60,19 @@ test('archive reuses the gated calendar snapshot without per-meeting or duplicat
  expect(JSON.stringify(records)).toContain('Public minutes');
  expect(calls).not.toContain('get_meeting');expect(calls).not.toContain('browse_calendar_events');
 });
+
+test('archive export bounds concurrent streams and keeps relation section order', async () => {
+  let active = 0, peak = 0;
+  const recordId = id(900);
+  const records = await loadPublicRecords(client(async (name, args) => {
+    if (name !== 'browse_legislation') return [];
+    active++; peak = Math.max(peak, active);
+    await new Promise(resolve => setTimeout(resolve, args.p_table === 'bill_actions' ? 5 : 1));
+    active--;
+    if (args.p_table === 'bills') return { total: 1, rows: [{ id: recordId, visibility: 'public', title: 'QA bill' }] };
+    if (['bill_actions', 'bill_versions'].includes(args.p_table)) return { total: 1, rows: [{ id: id(args.p_table === 'bill_actions' ? 901 : 902), bill_id: recordId, visibility: 'public', description: args.p_table }] };
+    return { total: 0, rows: [] };
+  }));
+  expect(peak).toBe(3);
+  expect(records[0].sections.map(section => section.items[0]?.text.split(' · ').at(-1))).toEqual(['bill_actions', 'bill_versions']);
+});
