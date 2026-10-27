@@ -1,5 +1,6 @@
 import { getSupabase } from '../lib/supabase';
-import { readTurnoutSnapshot, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
+import { readTurnoutSnapshot, turnoutByCounty, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
+import { selectedCounty } from './county-filter';
 
 const measureLabels: Record<string, string> = {
   requested: 'Requested', issued: 'Issued', returned: 'Returned', accepted: 'Accepted',
@@ -49,19 +50,44 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
   if (!section) return;
   const status = section.querySelector<HTMLElement>('[data-turnout-status]')!;
   const body = section.querySelector<HTMLElement>('[data-turnout-body]')!;
-  const county = section.querySelector<HTMLSelectElement>('[data-turnout-county]')!;
   const charts = section.querySelector<HTMLElement>('[data-turnout-charts]')!;
   const source = section.querySelector<HTMLElement>('[data-turnout-source]')!;
   const retry = section.querySelector<HTMLButtonElement>('[data-turnout-retry]')!;
   const reports = section.querySelector<HTMLAnchorElement>('[data-turnout-reports]')!;
   reports.href = `/elections/results/?id=${encodeURIComponent(electionId)}`;
+  let snapshot: TurnoutPage | undefined;
+  function render() {
+    if (!snapshot) return;
+    charts.replaceChildren();
+    for (const group of turnoutByCounty(snapshot.rows, selectedCounty())) {
+      const county = el('section');
+      county.dataset.turnoutCountyGroup = group.id;
+      county.append(el('h3', `${group.label} County`));
+      const grid = el('div', undefined, 'turnout-charts');
+      const rows = group.rows;
+      const turnout = rows.filter(row => row.table === 'turnout');
+      const early = rows.filter(row => row.table === 'early');
+      if (turnout.length) grid.append(chart('Reported turnout by ballot style', turnout, turnout.map(row => ({ label: row.ballot_style, cell: row.measures.turnout }))));
+      if (early.length) grid.append(chart('Early voting ballots accepted', early, early.map(row => ({ label: row.ballot_style, cell: row.measures.accepted }))));
+      for (const row of rows.filter(row => row.table === 'absentee')) {
+        const figure = chart(`Absentee ballots · ${row.ballot_style}`, [row], Object.entries(measureLabels).map(([key, label]) => ({ label, cell: row.measures[key] })));
+        const ratio = row.measures.acceptance_ratio;
+        if (ratio) figure.append(el('p', `Accepted / returned: ${ratio.value == null ? 'Not reported' : ratio.display}`, 'body-note'));
+        grid.append(figure);
+      }
+      if (!grid.childElementCount) grid.append(el('p', 'No chartable turnout measures reported for this county. View all reports for details.'));
+      county.append(grid);
+      charts.append(county);
+    }
+    if (!charts.childElementCount) charts.append(el('p', 'No turnout is reported for the county selected in the header. Choose another county or All counties to explore available reports.'));
+  }
   async function load() {
     retry.hidden = true;
     body.hidden = true;
     status.hidden = false;
     status.textContent = 'Loading turnout…';
     try {
-      const snapshot = await readTurnoutSnapshot(async (reportId, offset) => {
+      snapshot = await readTurnoutSnapshot(async (reportId, offset) => {
         const { data, error } = await getSupabase().rpc('get_structured_turnout', {
           p_election_id: electionId, p_report_id: reportId, p_offset: offset, p_limit: 100,
         });
@@ -72,30 +98,6 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
         section!.hidden = true;
         return;
       }
-      const counties = [...new Map(snapshot.rows.map(row => [row.county_fips, row.county_label])).entries()]
-        .sort((a, b) => a[1].localeCompare(b[1]));
-      county.replaceChildren(...counties.map(([id, label]) => {
-        const option = el('option', label);
-        option.value = id;
-        return option;
-      }));
-      county.value = counties.some(([id]) => id === '13021') ? '13021' : counties[0][0];
-      function render() {
-        const rows = snapshot.rows.filter(row => row.county_fips === county.value);
-        charts.replaceChildren();
-        const turnout = rows.filter(row => row.table === 'turnout');
-        const early = rows.filter(row => row.table === 'early');
-        if (turnout.length) charts.append(chart('Reported turnout by ballot style', turnout, turnout.map(row => ({ label: row.ballot_style, cell: row.measures.turnout }))));
-        if (early.length) charts.append(chart('Early voting ballots accepted', early, early.map(row => ({ label: row.ballot_style, cell: row.measures.accepted }))));
-        for (const row of rows.filter(row => row.table === 'absentee')) {
-          const figure = chart(`Absentee ballots · ${row.ballot_style}`, [row], Object.entries(measureLabels).map(([key, label]) => ({ label, cell: row.measures[key] })));
-          const ratio = row.measures.acceptance_ratio;
-          if (ratio) figure.append(el('p', `Accepted / returned: ${ratio.value == null ? 'Not reported' : ratio.display}`, 'body-note'));
-          charts.append(figure);
-        }
-        if (!charts.childElementCount) charts.append(el('p', 'No chartable turnout measures reported for this county. View all reports for details.'));
-      }
-      county.onchange = render;
       render();
       source.replaceChildren(el('span', `Collected ${stamp(snapshot.report.captured_at)}. `));
       const link = el('a', 'Georgia Secretary of State source');
@@ -111,5 +113,6 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
     }
   }
   retry.onclick = () => { void load(); };
+  window.addEventListener('countychange', render);
   await load();
 }

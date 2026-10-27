@@ -2,6 +2,7 @@ import { searchDirectory, type DirectoryOrganization } from '../lib/directories'
 import { readDirectory } from './directory-data';
 import { organizationLogoUrl } from '../lib/supabase-build';
 import { getSupabase } from '../lib/supabase';
+import { filterCounty } from './county-filter';
 
 function initials(name: string): string {
   return name
@@ -61,13 +62,14 @@ export function initOrgSearch(): void {
   let timer: number | undefined;
   let requestId = 0;
 
-  function restoreInitial(): void {
-    requestId += 1;
-    resultsEl.replaceChildren();
-    resultsEl.hidden = true;
-    if (status) status.hidden = true;
-    if (empty) empty.hidden = true;
-    if (initial) initial.hidden = false;
+  async function liveOrganizations(): Promise<DirectoryOrganization[]> {
+    const rows: DirectoryOrganization[] = [];
+    for (let offset = 0; ; offset += 500) {
+      const { data, error } = await supabase.from('organizations').select('id,slug,name,description,logo_path').order('name').order('id').range(offset, offset + 499);
+      if (error) throw error;
+      rows.push(...data);
+      if (data.length < 500) return rows;
+    }
   }
 
   async function search(query: string): Promise<void> {
@@ -80,9 +82,9 @@ export function initOrgSearch(): void {
 
     try {
       const snapshot = await readDirectory('organizations');
-      const { data, error } = snapshot ? {data:searchDirectory(snapshot, query).slice(0,24),error:null} : await supabase.rpc('search_organizations', {
+      const { data, error } = snapshot ? {data: query ? searchDirectory(snapshot, query).slice(0,24) : snapshot.map(entry => entry.record),error:null} : !query ? {data: await liveOrganizations(), error:null} : await supabase.rpc('search_organizations', {
         p_query: query,
-        p_limit: 24,
+        p_limit: 50,
       });
 
       if (id !== requestId) return;
@@ -94,7 +96,8 @@ export function initOrgSearch(): void {
         return;
       }
 
-      const organizations = (data ?? []) as unknown as DirectoryOrganization[];
+      const organizations = await filterCounty((data ?? []) as unknown as DirectoryOrganization[], 'organization');
+      if (id !== requestId) return;
       resultsEl.replaceChildren(...organizations.map(renderCard));
       resultsEl.hidden = organizations.length === 0;
       if (empty) empty.hidden = organizations.length > 0;
@@ -116,11 +119,6 @@ export function initOrgSearch(): void {
     window.clearTimeout(timer);
     const query = inputEl.value.trim();
 
-    if (!query) {
-      restoreInitial();
-      return;
-    }
-
     if (initial) initial.hidden = true;
     timer = window.setTimeout(() => void search(query), 200);
   }
@@ -131,7 +129,8 @@ export function initOrgSearch(): void {
     event.preventDefault();
     window.clearTimeout(timer);
     const query = inputEl.value.trim();
-    if (query) void search(query);
-    else restoreInitial();
+    void search(query);
   });
+  window.addEventListener('countychange', update);
+  update();
 }

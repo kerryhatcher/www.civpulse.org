@@ -20,6 +20,7 @@ export function includeInSitemap(page) {
     '/profile-data/',
     '/directory-data/',
     '/calendar-data/',
+    '/county-data.json',
     '/calendar/view/',
     '/people/view/',
     '/elections/view/',

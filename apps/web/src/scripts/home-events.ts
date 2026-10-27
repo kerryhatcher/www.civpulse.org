@@ -1,4 +1,5 @@
 import {readCalendarAsset} from '../lib/calendar-data';
+import { filterCounty } from './county-filter';
 import {isPublicEvent,upcomingEvents} from '../lib/calendar-snapshot';
 import { eventViewHref, formatEventWhen, type EventRecord } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
@@ -48,28 +49,35 @@ export function initHomeEvents(): void {
   const status = document.querySelector<HTMLElement>('[data-home-events-status]');
   const empty = document.querySelector<HTMLElement>('[data-home-events-empty]');
   if (!list) return;
+  const listEl = list;
 
-  void (async()=>{
+  let revision = 0;
+  async function load() {
+    const current = ++revision;
     try {
       const client=getSupabase();
       const {data:{session},error:authError}=await client.auth.getSession();
       if(authError) throw authError;
       let events:EventRecord[];
       if(session) {
-        const {data,error}=await client.rpc('search_events',{p_query:'',p_limit:4});
+        const {data,error}=await client.rpc('search_events',{p_query:'',p_limit:50});
         if(error) throw error;
         events=(data??[]) as unknown as EventRecord[];
       } else {
-        const url=list.dataset.homeEventsSnapshot;
+        const url=listEl.dataset.homeEventsSnapshot;
         if(!url) throw new Error('Missing published upcoming events');
-        events=upcomingEvents(await readCalendarAsset<EventRecord[]>(url));
+        events=await readCalendarAsset<EventRecord[]>(url);
       }
-      list.replaceChildren(...events.map(renderHomeEvent));
-      list.hidden=events.length===0;
+      events=upcomingEvents(await filterCounty(events, 'event'));
+      if (current !== revision) return;
+      listEl.replaceChildren(...events.map(renderHomeEvent));
+      listEl.hidden=events.length===0;
       if(status) status.hidden=true;
       if(empty) empty.hidden=events.length>0;
     } catch {
       if(status) status.textContent='Could not load upcoming events. Please reload to try again.';
     }
-  })();
+  }
+  window.addEventListener('countychange', () => void load());
+  void load();
 }

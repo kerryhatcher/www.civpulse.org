@@ -1,3 +1,5 @@
+import { GEORGIA_COUNTIES } from './county-scope';
+
 export type TurnoutCell = { value: number | null; display: string };
 export type TurnoutRow = {
   table: string;
@@ -14,6 +16,21 @@ export type TurnoutPage = {
   total: number;
   report: { id: string; captured_at: string; source_url: string };
 };
+
+/** Keep each county's overlapping source views separate, including All counties. */
+export function turnoutByCounty(rows: TurnoutRow[], county: string) {
+  const groups = new Map<string, { id: string; label: string; rows: TurnoutRow[] }>();
+  for (const row of rows) {
+    if (county !== 'all' && row.county_fips !== county) continue;
+    let group = groups.get(row.county_fips);
+    if (!group) {
+      group = { id: row.county_fips, label: GEORGIA_COUNTIES.find(item => item.fips === row.county_fips)?.name ?? row.county_label, rows: [] };
+      groups.set(row.county_fips, group);
+    }
+    group.rows.push(row);
+  }
+  return [...groups.values()].sort((a, b) => a.label.localeCompare(b.label));
+}
 
 /** Pin subsequent pages to the first report so live imports cannot mix snapshots. */
 export async function readTurnoutSnapshot(

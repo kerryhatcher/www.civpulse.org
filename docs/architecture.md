@@ -41,6 +41,35 @@ docs/         architecture, backend, and development notes
 
 ## Backend
 
+### Session county preference
+
+The shared static layout renders a Georgia county selector (default Bibb/FIPS
+13021, plus All counties). `county-filter.ts` validates and stores the preference
+in `sessionStorage` under `civicpulse.county`; it is independent of auth and never
+changes authorization. Storage failures leave a working page-local selection.
+County changes update active discovery flows; the calendar and request directory
+reload to rebuild their organization/calendar controls. Detail links and admin
+forms keep their full subject. Named county hubs remain fixed to their county.
+
+`/county-data.json` is built solely from public snapshots. Its keys pair a record
+kind and UUID with known county FIPS codes. The explicit slug registry in
+`src/data/county-coverage.ts` classifies local organizations/maps; public affiliations, calendars/events, and request
+organization links propagate that coverage. Unclassified affiliations keep a
+person unclassified. Election race/question jurisdictions classify explicit
+county references; result reports and turnout use their own county fields.
+Do not treat SOS registered-office counties or mailing addresses as service areas.
+Extend `county-coverage.ts` when another county has verified coverage; a hub's
+curated selections establish relevance, not exclusive service coverage. Regional
+library maps and statewide district maps remain available across counties.
+Unknown and statewide records remain discoverable.
+
+The geography index is presentation metadata, never a visibility allowlist.
+Signed-in discovery still uses existing permission-checked RPCs; restricted IDs
+and metadata never enter the public index. Filtering happens before people,
+site-search and request-directory pagination. Historical archive URLs retain
+their all-county page boundaries and hide only known out-of-area entries.
+Account synchronization and a general county-assignment schema are not added.
+
 ### County hub pilot
 
 `/counties/bibb/` is a static community hub using the existing layout and public
@@ -183,10 +212,16 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   deadlines are calendar events tagged with the election, so they appear on the
   community calendar and link back to the election.
   Store contests for the same election together, including races outside Bibb
-  County. The static detail page and UUID viewer default to a Bibb County display
-  filter, with an all-recorded-races option. Search, person candidacies, admin
+  County. The static detail page and UUID viewer use the header's session county
+  (Bibb by default); All counties in that same menu reveals the full ballot.
+  The ballot and turnout charts have no independent county selectors. Charts
+  render the pinned turnout snapshot for the selected county, or separate county
+  groups for All counties, without combining counts or falling back to another
+  county when data is missing. Header changes rerender charts without refetching.
+  Search, person candidacies, admin
   editing, and `get_election` retain every visibility-permitted contest. A direct
-  contest/question anchor reveals an out-of-area race. The frontend geographic
+  contest/question anchor reveals only that out-of-area race, with a notice,
+  without changing the saved county preference. The frontend geographic
   policy in `election-scope.ts` uses the 2026 Macon-Bibb composite ballot's district
   list; review it when district boundaries change. This is presentation, not RLS.
 - Articles: external URLs with titles and many-to-many links to people and
@@ -259,7 +294,7 @@ checking references in both the database and deployed builds.
 
 ## Account roles and registration
 
-Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. When email confirmation is enabled in Supabase, the confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Saved preferences are planned, not implemented.
+Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. When email confirmation is enabled in Supabase, the confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Account-saved preferences remain planned; the header county preference is stored only for the browser tab's session.
 
 `public.admins` remains the only source of admin authority; user-editable metadata never grants roles. Admins use `/admin/users/` to search registered accounts and promote another user. The `admin_list_users` and `promote_user_to_admin` RPCs check `is_admin()` on every call, use an empty search path, and expose no service key. Promotion is immediate without a token refresh. Account profiles are readable only by their owner or admins.
 

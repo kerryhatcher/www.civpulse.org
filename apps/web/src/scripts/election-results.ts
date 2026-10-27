@@ -1,4 +1,6 @@
 import { getSupabase } from "../lib/supabase";
+import { selectedCounty } from './county-filter';
+import { GEORGIA_COUNTIES } from '../lib/county-scope';
 import {
   areaKey,
   areaLabel,
@@ -322,7 +324,8 @@ export async function initElectionResults() {
         offset += data.reports.length;
         status.textContent = `Loading reports… ${loaded.length} received.`;
       }
-      rows = loaded;
+      const county = GEORGIA_COUNTIES.find(item => item.fips === selectedCounty());
+      rows = county ? loaded.filter(row => row.scope.county.toLowerCase() === county.name.toLowerCase()) : loaded;
       const old = area.value;
       area.replaceChildren();
       const areas = [
@@ -352,6 +355,7 @@ export async function initElectionResults() {
     }
   }
   area.addEventListener("change", methods);
+  window.addEventListener('countychange', () => void choose());
   method.addEventListener("change", styles);
   style.addEventListener("change", render);
   search.addEventListener("input", render);

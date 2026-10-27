@@ -1,5 +1,7 @@
 import { searchDocuments, mergeDocumentMatches, type DocumentMatch } from '../lib/document-search';
 import { documentApi, publicDocumentUrl, type PublicDocument } from '../lib/documents';
+import { readCountyIndex, selectedCounty } from './county-filter';
+import { matchesCounty } from '../lib/county-scope';
 
 function card(document: PublicDocument, passages: string[] = []): HTMLElement {
   const row = window.document.createElement('article'); row.className = 'org-card document-result';
@@ -65,7 +67,10 @@ export async function initDocuments(): Promise<void> {
     try {
       const page = await searchDocuments(api!,query,offset,append);
       if (request!==current) return;
-      matches=mergeDocumentMatches(matches,page.rows);
+      const index=await readCountyIndex();
+      if (request!==current) return;
+      const county=selectedCounty();
+      matches=mergeDocumentMatches(matches,page.rows.filter(row=>!row.document.meetings.length||row.document.meetings.some(meeting=>matchesCounty(index,'event',meeting.id,county))));
       results!.replaceChildren(...matches.map(row=>card(row.document,row.passages)));
       more!.hidden=!page.hasMore; offset=page.nextOffset;
       warning=page.warning || warning;
@@ -80,6 +85,7 @@ export async function initDocuments(): Promise<void> {
   }
   const params = new URLSearchParams(location.search); input.value=(params.get('q')??'').slice(0,500);
   form.addEventListener('submit',event=>{event.preventDefault();void search();});
+  window.addEventListener('countychange',()=>void search());
   more.addEventListener('click',()=>void search(true));
   button.disabled=false; await search();
 }

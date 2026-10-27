@@ -16,6 +16,6 @@ test('error pages, protected shells and data assets remain excluded', () => {
     '/signin/', '/signup/', '/oauth/consent/', '/requests/view/',
     '/legislation/view/', '/legislation/vote/', '/legislation/session/',
     '/maps/view/', '/calendar/view/', '/people/view/', '/elections/view/',
-    '/map-data/maps/example.json', '/profile-data/example.json', '/directory-data/example.json',
+    '/map-data/maps/example.json', '/profile-data/example.json', '/directory-data/example.json', '/county-data.json',
   ]) expect(includeInSitemap(origin + path)).toBe(false);
 });

@@ -1,6 +1,8 @@
 import {readPublicRequestDirectory,publicRequestTarget} from './request-data';
 import {browsePublicRequests,requestAnchor} from '../lib/request-snapshot';
 import { getSupabase } from '../lib/supabase';
+import { countySearchPage, filterCounty } from './county-filter';
+type RequestSearchRow = Pick<RequestDetail['request'], 'id'|'title'|'stage'|'outcome'|'visibility'|'updated_at'> & { target_name: string|null; source_name: string|null };
 import { REQUEST_STAGES, REQUEST_OUTCOMES, UPDATE_KINDS, REQUEST_BUCKET, REQUEST_FILE_TYPES, type RequestDetail } from '../lib/records-requests';
 const $ = <T extends HTMLElement = HTMLElement>(selector:string) => document.querySelector<T>(selector)!;
 function message(text:string,error=false) { const el=$('[data-request-message]'); el.textContent=text; el.dataset.kind=error?'error':'success'; }
@@ -41,18 +43,20 @@ export async function initRequestDirectory() {
   let offset=0;
   const load=async()=>{
    message('Loading requests…'); const v=values(form);
-   const published=snapshot?browsePublicRequests(snapshot.requests,String(v.query),String(v.stage),String(v.organization),offset):null;
-   const rows=published?published.rows:await rpc('search_records_requests',{p_query:v.query,p_stage:v.stage||null,p_organization_id:v.organization||null,p_managed:!!session&&v.scope==='managed',p_offset:offset});
+   const published=snapshot?browsePublicRequests(await filterCounty(snapshot.requests,'request'),String(v.query),String(v.stage),String(v.organization),offset):null;
+   const rows=published?published.rows:await countySearchPage<RequestSearchRow>(async cursor=>rpc('search_records_requests',{p_query:v.query,p_stage:v.stage||null,p_organization_id:v.organization||null,p_managed:!!session&&v.scope==='managed',p_offset:cursor}), 'request', offset, 26, 25);
+   const visible=rows.slice(0,25);
    const list=$('[data-request-results]'); list.replaceChildren();
-   for(const row of rows) {
+   for(const row of visible) {
     const article=el('article','');article.className='request-result'; const h=el('h2',''), a=el('a',row.title);a.href=snapshot?`/records/requests/${row.id}/`:`/requests/view/?id=${row.id}`;h.append(a);
     article.append(h,el('p',`${REQUEST_STAGES[row.stage as keyof typeof REQUEST_STAGES]} · ${row.outcome?REQUEST_OUTCOMES[row.outcome as keyof typeof REQUEST_OUTCOMES]:'Outcome not assessed'} · ${row.visibility}`));
     article.append(el('p',[row.target_name?`To: ${row.target_name}`:'',row.source_name?`From: ${row.source_name}`:''].filter(Boolean).join(' · ')),el('p',`Updated ${date(row.updated_at)}`)); list.append(article);
    }
-   message(rows.length?`Showing ${offset+1}–${offset+rows.length}.`:'No requests match these filters. Try another topic, stage or organization.');
-   $('[data-request-prev]').hidden=offset===0; $('[data-request-next]').hidden=published?offset+rows.length>=published.total:rows.length<25;
+   message(visible.length?`Showing ${offset+1}–${offset+visible.length}.`:'No requests match these filters. Try another topic, stage or organization.');
+   $('[data-request-prev]').hidden=offset===0; $('[data-request-next]').hidden=published?offset+visible.length>=published.total:rows.length<=25;
   };
   bind(form,async()=>{offset=0;await load();});
+  window.addEventListener('countychange', () => location.reload());
   $('[data-request-prev]').addEventListener('click',()=>void busy($<HTMLButtonElement>('[data-request-prev]'),async()=>{offset=Math.max(0,offset-25);await load();}));
   $('[data-request-next]').addEventListener('click',()=>void busy($<HTMLButtonElement>('[data-request-next]'),async()=>{offset+=25;await load();}));
   await load();
