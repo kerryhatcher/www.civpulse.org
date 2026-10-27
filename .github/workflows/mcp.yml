@@ -21,5 +21,8 @@ jobs:
       - run: bun run mcp:check
       - run: bun run georgia:check
       - run: bun run scripts/build-mcp.mjs --check
+      - run: bun test scripts/tests/mcp-common-reads.test.ts
+      - run: bun test scripts/tests/mcp-compact-writes.test.ts
+      - run: bun test scripts/tests/mcp-related-reads.test.ts
       - run: bun test scripts/tests/mcp-handler.test.ts scripts/tests/mcp-urls.test.ts scripts/tests/mcp-meeting-documents.test.ts scripts/tests/mcp-legislation.test.ts scripts/tests/mcp-offices.test.ts scripts/tests/georgia-source.test.ts scripts/tests/georgia-reader.test.ts scripts/tests/election-results-mcp.test.ts
       - run: bun run plugin:build

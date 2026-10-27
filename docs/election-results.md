@@ -93,3 +93,100 @@ After integrating current main, legislative batch imports use `import_legislatio
 with explicit `mode=batched` instead of `import_legislation_bundle`. The original
 atomic mode remains the default and preserves its response and 100-record limit.
 This consolidation keeps both workflows within the 128-tool catalog budget.
+
+## Structured Georgia SOS aggregates (schema v1)
+
+`manage_election_results` also supports `import_turnout` and `read_turnout`.
+These operations use the connected administrator's token; no SQL, service key or
+photo conversion is needed. Photo/PDF operations and their validation are unchanged.
+The immutable JSON original is stored in Postgres, with a server-verified SHA-256
+of the exact UTF-8 document text. It is not a Storage path. Only admins can inspect
+the original bytes; public readback projects the allowlisted public aggregate data.
+Never supply raw Qlik session transcripts, tokens, headers or voter-level data.
+
+Prepare the updater's saved export offline:
+
+```sh
+bun run scripts/prepare-georgia-turnout.ts /path/to/ga-sos-turnout-2026-11-03.json /tmp/turnout.json
+```
+
+The command prints the SHA-256 and row counts. It validates source/election and
+column identities, resolves the 159 Census county FIPS codes, preserves the
+original county/ballot-style labels and builds precise normalized-row locators.
+Its output contains only a fixed public aggregate schema, excluding raw session
+and arbitrary definition fields. `upstream_sha256` retains the collector's
+snapshot reference; it is distinct from the independently verified document hash.
+The checked-in county codes come from Census's 2020 national county code file.
+The app/object IDs and source URL are pinned. Changed columns, ballot styles or
+unresolved counties require a reviewed schema update, never silent coercion.
+
+Read `operation={action:"read_turnout",election_id:"<UUID>"}` first. Call
+`operation={action:"import_turnout",document:"<exact file text>",sha256:"<printed hash>",expected_report_id:null,dry_run:true}`.
+After successful validation, use `dry_run:false` with the same document and hash.
+A replacement must supply the current report UUID. All three tables are one
+bounded batch: at most 636 source rows / 2 MiB, validated before any report write
+and committed atomically. There is no partial resume offset: retry the entire
+unchanged request after an uncertain response. Exact evidence replay is a no-op;
+identical tables at a later capture also reuse the current report. The election
+lock serializes replacements. Stale captures, older source times and changed
+values at an unchanged source timestamp reject. Newer snapshots may lower counts
+and preserve their predecessor; no totals are accumulated across observations.
+
+Each table retains its source title, object ID, as-of label and nullable as-of
+instant with `America/New_York` timezone. Collection time is separate. A missing
+source footnote means `as_of:null`, never the reload or capture time. Early voting
+stores accepted ballots; absentee stores requested, issued, returned, accepted,
+rejected, spoiled/canceled, outstanding and acceptance ratio. Turnout preserves
+county/ballot style. Every measure has `value` and verbatim `display`; counts are
+safe nonnegative integers, ratios are fractions in [0,1], and unavailable values
+remain null. Suppressed rows are absent, never synthesized zeros. No registration
+or precinct denominators are inferred. These records are always unofficial and
+turnout-only, including before election day; they contain no candidate votes.
+
+Readback returns report UUID, predecessor, exact document hash, source/app/capture
+references, 100 history metadata entries and up to 100 source rows per page.
+Use `offset` until `total` is reached. `report_id` selects a historical snapshot;
+read it before paging so a concurrent replacement cannot mix report pages.
+The election visibility rules match photo reports: public readable by anyone,
+unlisted via exact UUID, private admin-only. Public projections contain no editor
+IDs or raw private originals. The results page shows structured rows separately
+from photo/PDF reports and offers history and Load more controls. It never adds
+these overlapping views together. Results are live RPC data after deployment;
+Astro code/documentation changes require a build and deployment.
+
+Release `20261124010900_structured_turnout` through GitHub main before applying
+it with the normal guarded workflow, then deploy MCP/frontend and refresh plugin
+schemas. This feature branch must not apply the migration or upload the real
+November bundle to production. Local acceptance may use that bundle inside a
+rollback-only transaction; do not commit the private export.
+
+Run the existing photo/PDF suites plus `structured-turnout-db.test.ts` with
+`ELECTION_RESULTS_TEST_DATABASE_URL` pointed at local Supabase. The test applies
+this migration and rolls back schema/fixtures. The JSON conversion command does
+not collect new data or publish anything.
+
+## Scoped browsing and May 19 breakdowns
+
+The browser loads all paginated reports through the existing visibility-aware
+RPC, then selects an exact county/unit-type/unit, counting group, and ballot
+style. It defaults to a county overview when present. Search matches contest and
+candidate labels; native disclosures keep long ballots manageable. URL filters
+preserve the selected scope, search, and history mode. No cross-report sum is
+computed. Older reports remain independent snapshots. Public access rules and
+private evidence storage are unchanged.
+
+The May 19, 2026 Bibb import adds 31 precinct reports (official precinct codes)
+and four county voting-method reports to the existing county/all snapshot.
+Both partitions independently reconcile to the county choice totals. Source:
+Georgia SOS county Excel export, last updated June 5 at 08:33:45 EDT. PDF evidence
+is a faithful conversion of that workbook, with one worksheet per page; the
+original workbook SHA-256 is recorded in source transcriptions. Contest ballot
+counts are preserved where printed; election-wide precinct/method turnout stays
+unknown where the workbook does not supply it. No precinct-by-method totals are
+inferred from the partially unreported media-feed cells.
+
+One source discrepancy is retained explicitly: Howard 1 / Rick A. Williams / State
+Senate District 25 Republican is 2 in the official workbook, but 0 in the separate
+media export. The workbook value reconciles to the county total and is used;
+the HO1 report records the discrepancy. No county total or historical candidacy
+outcome was changed by this import.

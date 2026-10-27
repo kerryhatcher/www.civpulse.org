@@ -1583,3 +1583,15 @@ Release through main and the Supabase integration before building production.
 Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-legislation-export-db.test.ts`. The rollback test compares all fourteen resources and multiple large pages with
 existing discovery payloads, checks hidden parents, anonymous-only grants and
 user-context rejection, and retains direct unlisted access in the old reader.
+
+### Structured Georgia SOS turnout
+
+`20261124010900_structured_turnout` adds immutable JSON-evidence reports and a
+fixed Census county-code reference, with RLS and no direct report writes.
+`import_structured_turnout` checks administrator access, exact UTF-8 checksum,
+allowlisted nested schema, source identity, canonical counties, measures and time
+semantics before an atomic election-locked replacement. `get_structured_turnout`
+projects public source rows under election visibility; raw bytes/editors stay
+admin-only. No Storage policies or photo/PDF rules change. See
+[election results](election-results.md#structured-georgia-sos-aggregates-schema-v1)
+for contracts, bounds, correction semantics and main-before-production release.

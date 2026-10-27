@@ -23,3 +23,27 @@ County summaries, precinct summaries, tabulator tapes and counting-group totals 
 For November 3, 2026 before election day, turnout-only snapshots are permitted; contest votes are blocked. No reports means not reported, never zero. The May 19 Georgia SOS page is a source reference, not permission to fabricate totals if the page fails to load.
 
 The results page reads live RPC snapshots; election/contest/profile edits still follow their existing rebuild workflow. Report precisely what was validated, saved, skipped as duplicate or left unresolved.
+
+## Structured Georgia SOS JSON
+
+Use `operation.action=import_turnout` for sanitized schema-v1 JSON, not the photo
+`upload` operation. Prepare the saved updater export with the site's documented
+`bun run scripts/prepare-georgia-turnout.ts input.json output.json` command, or
+construct the exact documented allowlisted contract. Preserve all three source
+tables, canonical county FIPS and original labels, typed absentee measures,
+fractions/display text/nulls, source URL, app/object IDs and row locators. Never
+upload session transcripts/tokens. Missing source as-of remains null; collection
+and reload times are not substitutes. Always unofficial and turnout-only.
+
+Read `read_turnout` first, validate with `import_turnout` using exact document text
+and its UTF-8 SHA-256, `dry_run=true`, and the current `expected_report_id` (null
+for the first import). Then save when authorized. Each request is one atomic
+batch of at most 636 rows / 2 MiB; retry the entire identical request after an
+uncertain response. Exact replay is a no-op. Newer corrections may lower counts;
+never sum snapshots or overlapping table views. Reread every page using the saved
+`report_id` and offsets to verify county values, provenance and predecessor.
+JSON evidence is immutable in Postgres; photo/PDF originals remain in Storage.
+The public results page reads live data after the new MCP/frontend is deployed.
+
+Consult the [complete structured JSON contract](../../references/structured-turnout.md)
+before constructing a document. This contract is distinct from photo `sources`.

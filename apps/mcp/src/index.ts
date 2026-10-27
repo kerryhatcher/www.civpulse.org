@@ -39,7 +39,10 @@ async function respond(request: Request, env: Env): Promise<Response> {
   const endpoint = new URL(env.MCP_RESOURCE_URL);
   const path = url.pathname.replace(/^\/functions\/v1(?=\/)/, "");
   const endpointPath = endpoint.pathname.replace(/^\/functions\/v1(?=\/)/, "");
-  const metadataUrl = `${env.MCP_RESOURCE_URL}/.well-known/oauth-protected-resource`;
+  const compactPath = `${endpointPath}/v2`;
+  const compact = path === compactPath || path.startsWith(`${compactPath}/`);
+  const resourceUrl = compact ? `${env.MCP_RESOURCE_URL}/v2` : env.MCP_RESOURCE_URL;
+  const metadataUrl = `${resourceUrl}/.well-known/oauth-protected-resource`;
   if (![endpoint.hostname, new URL(env.SUPABASE_URL).hostname, "localhost", "127.0.0.1"].includes(url.hostname)) {
     return new Response("Forbidden host", { status: 403 });
   }
@@ -57,9 +60,10 @@ async function respond(request: Request, env: Env): Promise<Response> {
   if (
     path === "/.well-known/oauth-protected-resource" ||
     path === "/.well-known/oauth-protected-resource/mcp" ||
-    path === `${endpointPath}/.well-known/oauth-protected-resource`
+    path === `${endpointPath}/.well-known/oauth-protected-resource` ||
+    path === `${compactPath}/.well-known/oauth-protected-resource`
   ) {
-    return Response.json(protectedResourceMetadata(env));
+    return Response.json(protectedResourceMetadata({ ...env, MCP_RESOURCE_URL: resourceUrl }));
   }
 
   if (path === "/") {
@@ -71,7 +75,7 @@ async function respond(request: Request, env: Env): Promise<Response> {
     });
   }
 
-  if (path === endpointPath || path === `${endpointPath}/`) {
+  if (path === endpointPath || path === `${endpointPath}/` || path === compactPath || path === `${compactPath}/`) {
     const authorization = request.headers.get("Authorization") ?? "";
     const token = /^Bearer\s+(\S+)$/i.exec(authorization)?.[1];
     const unauthorized = (invalid = false) => Response.json(
@@ -112,7 +116,7 @@ async function respond(request: Request, env: Env): Promise<Response> {
       return Response.json({ error: "temporarily_unavailable" }, { status: 503, headers: { "Cache-Control": "no-store", "Retry-After": "5" } });
     }
 
-    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }, env.GEORGIA_SOURCE_READER_URL));
+    const handler = createMcpHandler(() => buildServer(supabase, user, { apiUrl: env.KB_API_URL, accessToken: token }, env.GEORGIA_SOURCE_READER_URL, compact ? 'compact' : 'legacy'));
     return handler.fetch(request);
   }
 

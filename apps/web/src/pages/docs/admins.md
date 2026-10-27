@@ -392,3 +392,17 @@ fetch counted pages with bounded parallelism. The Publish workflow is unchanged.
 A changing total or failed/incomplete export stops publication and leaves the
 previous deployment serving. Publish again after imports/edits settle; no private
 or unlisted records should be made public to get a build through.
+
+### Georgia SOS structured turnout
+
+The AI tool `manage_election_results` accepts `import_turnout` JSON evidence and
+`read_turnout` readback alongside the existing photo/PDF operations. Validate
+first with `dry_run:true`, then save with the current predecessor report ID.
+Each JSON import is atomic (up to 636 source rows / 2 MiB), checksum verified and
+unofficial turnout-only. Preserve all absentee measures, county FIPS, original
+ballot styles, display text, nulls and source as-of labels. Collection time cannot
+replace an absent source timestamp. Do not upload raw authentication/session
+material. Exact replay is a no-op; successive corrections replace rather than add.
+See the repository's `docs/election-results.md` for offline export preparation and
+the JSON contract. Deployment of the feature is required first; saved reports
+then appear live on the results page without a rebuild.
