@@ -151,10 +151,17 @@ Fees are recorded in USD as separate estimated, billed and paid entries. Totals
 sum each category independently; estimates are not added to bills or payments.
 No fees recorded does not establish that a request is free.
 
+Public request listings and details use the latest published snapshot. Search,
+stage/organization filters and Next/Previous work within that snapshot. Imports,
+edits and visibility changes appear after publication. Signed-in readers and
+**Requests I manage** use live access checks. Public detail links open the
+published page; **Open live request with access checks** opens the live viewer.
+
 Public requests appear in the directory. Unlisted requests require their direct
 link. Private requests are visible only to their assigned owner and admins.
 Account ownership and transfer history are always private. Files can be private
-even when a request is public; downloads use short-lived links.
+even when a request is public. Download rechecks current file access and uses a
+short-lived link; a file may become unavailable after a page was published.
 
 Only admins create requests. If one is assigned to you, use **Account → Manage
 your records requests**, then **Manage this request** to update it. You can add

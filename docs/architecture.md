@@ -521,3 +521,26 @@ retain the live RPC gate, including direct unlisted access and admin-only privat
 access. Signed-in readers use the live viewer. The explicit `live=1` link offers
 the existing context-gated reader without a redirect loop. A missing index or
 section file fails visibly without silently querying the backend.
+
+### Static public records requests
+
+Anonymous `/requests/` discovery reads a hashed public directory file under
+`/directory-data/`; search, stage/organization filters and 25-row pagination run
+in the browser. The build shares one anonymous request discovery/detail snapshot
+with the archive. Published `/records/requests/<uuid>/` pages prerender request
+facts, timeline, independent fee totals, related links and safe shared-file names
+and sizes. Only discovered public requests enter these files; explicit projection
+omits ownership, transfers, private files, storage paths and signing URLs.
+
+Legacy public UUID links redirect through a hashed public-ID index. Unlisted and
+private UUID readers, signed-in discovery, managed requests and editing remain
+live behind existing RPC checks. Signed-in visits to published details use the
+live viewer; an explicit live link preserves that path for anonymous readers.
+
+Download is deliberately live: a click re-reads `get_records_request`, resolves
+the requested file only from its current permitted file list, then requests the
+existing 60-second Storage signature. Both the RPC and Storage RLS enforce current
+request/file access. Already-issued signatures retain their existing short expiry.
+A visibility/file-policy change requires a rebuild to refresh published metadata,
+but new downloads immediately recheck access. No backend policy, bucket exposure,
+service credential, migration or hosting-plan change is introduced.

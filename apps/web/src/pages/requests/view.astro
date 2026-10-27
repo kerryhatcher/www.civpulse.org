@@ -1,9 +1,11 @@
 ---
+import {getRequestAssets} from '../../lib/request-assets';
+const {indexUrl} = await getRequestAssets();
 import Layout from '../../layouts/Layout.astro';
 import RequestEditor from '../../components/RequestEditor.astro';
 ---
 <Layout title="Records request" description="Read a records request, its timeline, fees and supporting documents.">
- <main id="main" data-request-view>
+ <main id="main" data-request-view data-request-index={indexUrl}>
   <p><a href="/requests/">All records requests</a></p>
   <p data-request-message role="status" aria-live="polite">Loading request…</p>
   <button type="button" data-request-retry hidden>Try again</button>
@@ -13,9 +15,9 @@ import RequestEditor from '../../components/RequestEditor.astro';
    <p data-request-description class="request-prose"></p>
    <details data-request-manage hidden class="request-section"><summary>Manage this request</summary><RequestEditor /></details>
    <div class="request-columns">
-    <section class="request-section"><h2>Request timeline</h2><ol data-request-timeline class="request-timeline"></ol></section>
-    <aside><section class="request-section"><h2>Fees and payments</h2><p>USD · estimates, bills and payments are tracked separately.</p><dl data-fee-totals class="account-list"></dl><ul data-request-fees class="request-items"></ul></section>
-    <section class="request-section"><h2>Files and related coverage</h2><ul data-request-files class="request-items"></ul><ul data-request-links class="request-items"></ul></section></aside>
+    <section class="request-section" id="timeline"><h2>Request timeline</h2><ol data-request-timeline class="request-timeline"></ol></section>
+    <aside><section class="request-section" id="fees"><h2>Fees and payments</h2><p>USD · estimates, bills and payments are tracked separately.</p><dl data-fee-totals class="account-list"></dl><ul data-request-fees class="request-items"></ul></section>
+    <section class="request-section" id="files"><h2>Files and related coverage</h2><ul data-request-files class="request-items"></ul><ul data-request-links class="request-items"></ul></section></aside>
    </div>
   </article>
  </main>

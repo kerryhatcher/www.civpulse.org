@@ -1607,3 +1607,17 @@ credential changes are needed. Vote totals count only exported public choices,
 not context-permitted unlisted choices. The explicit live viewer retains its
 existing context-aware totals and relationships. Public-ID indexes list only
 records admitted to the snapshot; unknown IDs still use the live access gate.
+
+### Public request snapshot and downloads
+
+The public build shares anonymous `search_records_requests(p_managed=false)`
+pages and `get_records_request` reads across directory and archive consumers.
+It validates public visibility, stable update timestamps and an unprivileged
+projection before publication. Owner IDs, transfer history, private files and
+storage paths never enter public files. No SQL/RLS/grant changes are needed.
+
+Public file metadata includes only file ID, name and size. Download resolves
+that ID through a fresh request RPC, then uses the existing private bucket's
+60-second signed-URL operation. Current owner/admin/file/request policy stays
+authoritative; URL origin and bucket signing path are checked before navigation.
+Public/unlisted/private access and ownership-transfer behavior remain unchanged.
