@@ -1,9 +1,10 @@
 ---
+import SectionLink from './SectionLink.astro';
 interface Props { electionId?: string }
 const { electionId } = Astro.props;
 ---
-<section class="election-turnout" data-election-turnout data-election-id={electionId} aria-labelledby="election-turnout-title" hidden={!electionId}>
-  <h2 id="election-turnout-title">Voter turnout</h2>
+<section id="voter-turnout" data-shareable-section class="election-turnout" data-election-turnout data-election-id={electionId} aria-labelledby="election-turnout-title" hidden={!electionId}>
+  <h2 id="election-turnout-title">Voter turnout <SectionLink target="voter-turnout" label="voter turnout" /></h2>
   <p data-turnout-status role="status" aria-live="polite">Loading turnout…</p>
   <button data-turnout-retry type="button" hidden>Retry turnout</button>
   <div data-turnout-body hidden>

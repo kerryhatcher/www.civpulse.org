@@ -484,16 +484,20 @@ export async function initElectionViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillElectionView(response);
-  if (response.election) {
-    void initElectionTurnout(response.election.id);
-    void initElectionPrecinctTurnout(response.election.id);
-  }
+  const turnoutReady = response.election ? Promise.allSettled([
+    initElectionTurnout(response.election.id),
+    initElectionPrecinctTurnout(response.election.id),
+  ]) : Promise.resolve();
 
-  if (response.election && (await isCurrentUserAdmin())) {
-    const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
-    if (edit) {
-      edit.href = `/admin/elections/?edit=${response.election.id}`;
-      edit.hidden = false;
-    }
+  if (response.election) {
+    const electionId = response.election.id;
+    void isCurrentUserAdmin().then(isAdmin => {
+      const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
+      if (isAdmin && edit) {
+        edit.href = `/admin/elections/?edit=${electionId}`;
+        edit.hidden = false;
+      }
+    }).catch(() => { /* Optional edit controls remain hidden if the lookup fails. */ });
   }
+  await turnoutReady;
 }

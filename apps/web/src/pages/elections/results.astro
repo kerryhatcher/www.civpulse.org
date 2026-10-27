@@ -1,4 +1,5 @@
 ---
+import SectionLink from '../../components/SectionLink.astro';
 import Layout from '../../layouts/Layout.astro';
 ---
 <Layout title="Election results & turnout" description="Sourced election reports and Georgia turnout, with reporting history.">
@@ -8,8 +9,8 @@ import Layout from '../../layouts/Layout.astro';
    <label for="result-election">Election</label>
    <div class="result-election-controls"><select id="result-election" required><option value="">Choose an election</option></select><button type="submit">Refresh reports</button></div>
   </form>
-  <fieldset id="result-filters" disabled>
-   <legend>Explore a report</legend>
+  <fieldset id="result-filters" data-shareable-section disabled>
+   <legend>Explore a report <SectionLink target="result-filters" label="report filters" /></legend>
    <div class="result-filter-grid">
     <div><label for="result-area">Reporting area</label><select id="result-area"><option value="">County overview</option></select></div>
     <div><label for="result-method">Voting method</label><select id="result-method"><option value="all">All voting methods</option></select></div>
@@ -21,9 +22,12 @@ import Layout from '../../layouts/Layout.astro';
   <p id="result-status" role="status" aria-live="polite">Loading elections…</p>
   <button id="result-retry" type="button" hidden>Try loading reports again</button>
   <p class="result-explainer">Each view stands on its own. County totals already include precinct and voting-method results; these reports are never added together. “Not reported” is different from zero.</p>
-  <div id="result-reports"></div>
-  <section aria-labelledby="turnout-heading">
-   <h2 id="turnout-heading">Georgia SOS structured turnout</h2>
+  <section id="reports" data-shareable-section aria-labelledby="reports-heading">
+   <h2 id="reports-heading">Election reports <SectionLink target="reports" label="election reports" /></h2>
+   <div id="result-reports"></div>
+  </section>
+  <section id="structured-turnout" data-shareable-section aria-labelledby="turnout-heading">
+   <h2 id="turnout-heading">Georgia SOS structured turnout <SectionLink target="structured-turnout" label="Georgia SOS structured turnout" /></h2>
    <label for="turnout-history">Turnout snapshot</label><select id="turnout-history"><option value="">Latest snapshot</option></select>
    <p id="turnout-status" role="status" aria-live="polite">Loading structured turnout…</p>
    <div id="turnout-rows"></div><button id="turnout-more" type="button" hidden>Load more turnout rows</button>
@@ -35,7 +39,8 @@ import Layout from '../../layouts/Layout.astro';
 <script>
  import { initElectionResults } from '../../scripts/election-results';
  import {initStructuredTurnout} from '../../scripts/structured-turnout';
- void initElectionResults().then(()=>initStructuredTurnout());
+ import { restoreSectionAnchorAfter } from '../../scripts/section-anchors';
+ restoreSectionAnchorAfter(initElectionResults().then(()=>initStructuredTurnout()));
 </script>
 <style>
  #turnout-rows { overflow-wrap:anywhere; }

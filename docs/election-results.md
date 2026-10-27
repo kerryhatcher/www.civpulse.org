@@ -222,3 +222,21 @@ flow. Include empty reports, missing versus zero values, county and ballot-style
 selection, mobile layout, retry, snapshot paging and the gated UUID viewer.
 The Public map snapshots CI workflow also runs the turnout and scoped-results
 unit tests on pull requests and pushes to main.
+
+### Shareable section links
+
+Election detail sections expose `dates-and-deadlines`, `voter-turnout`,
+`precinct-turnout`, and `ballot` IDs with native heading permalinks. Public and
+gated UUID detail pages use the same IDs. The reports page exposes
+`result-filters`, `reports`, and `structured-turnout`; hash links preserve its
+existing election and reporting query parameters.
+
+`restoreSectionAnchorAfter` re-aligns an initial hash after the page’s initial
+runtime reads finish, including turnout charts above the map. It respects hidden
+or unavailable sections, malformed fragments, changed hashes and visitor input;
+it does not override someone who has started scrolling or navigating. Existing
+contest/question links still reveal their linked races through election scope.
+
+The UUID viewer’s optional admin-edit lookup runs independently of turnout and
+anchor readiness. A delayed or failed role lookup cannot postpone the shared
+section’s alignment; the edit link stays hidden unless admin access is confirmed.
