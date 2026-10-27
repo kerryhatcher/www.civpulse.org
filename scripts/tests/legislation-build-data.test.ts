@@ -25,7 +25,7 @@ test('several streams share a global three-request limit and do not mix clients'
  expect(peak).toBe(3);expect(data.map(d=>d.length)).toEqual([301,301,301,301]);
  const other=mock(()=>({data:{total:0,rows:[]},error:null}));expect(await readPublicLegislationTable(other,'bills')).toEqual([]);
 });
-test('fails closed on changed totals, hidden rows/parents, duplicate pages, invalid IDs, oversized/truncated pages, and errors',async()=>{
+test('fails closed on changed totals, hidden rows, duplicate pages, invalid IDs, oversized/truncated pages, and errors',async()=>{
  const source=rows(201);
  for(const reply of [
   (a:any)=>({data:{total:a.p_offset?202:201,rows:source.slice(a.p_offset,a.p_offset+100)},error:null}),
@@ -60,4 +60,16 @@ test('profile and archive consumers share complete sponsorship pages on the same
  }} as unknown as SupabaseClient;
  await Promise.all([loadProfileSectionBuildData(client),loadPublicRecords(client)]);
  expect(offsets.sort((a,b)=>a-b)).toEqual([0,100,200]);
+});
+
+test('only confirmed statement timeouts retry, preserving the exact anonymous discovery arguments',async()=>{
+ const calls:any[]=[];
+ const client=mock(args=>{calls.push(args);return calls.length<3?{data:null,error:{code:'57014',message:'canceling statement due to statement timeout'}}:{data:{total:0,rows:[]},error:null};});
+ expect(await readPublicLegislationTable(client,'bills')).toEqual([]);expect(calls.length).toBe(3);expect(calls.every(a=>JSON.stringify(a)===JSON.stringify(calls[0]))).toBe(true);
+ for(const error of [{code:'42501',message:'permission denied'},{code:'57014',message:'canceling statement due to user request'}]){
+  let attempts=0;const denied=mock(()=>{attempts++;return {data:null,error};});
+  await expect(readPublicLegislationTable(denied,'bills')).rejects.toThrow(error.message);expect(attempts).toBe(1);
+ }
+ let attempts=0;const persistent=mock(()=>{attempts++;return {data:null,error:{code:'57014',message:'statement timeout'}};});
+ await expect(readPublicLegislationTable(persistent,'bills')).rejects.toThrow('statement timeout');expect(attempts).toBe(3);
 });

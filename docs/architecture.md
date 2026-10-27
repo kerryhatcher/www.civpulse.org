@@ -472,6 +472,9 @@ assembled in offset order, preserving record/section ordering.
 
 Changing totals, incomplete/oversized pages, invalid/repeated IDs, hidden rows
 or backend errors fail publication. There is no disk or cross-build cache,
-credential change, RLS change, larger response cap or timeout increase. Development
+credential change, RLS change, larger response cap or timeout increase. A
+confirmed statement-timeout error from this read-only RPC retries at most twice
+with short backoff and identical credentials/parameters; permission and validation
+errors never retry. Persistent timeouts still fail publication. Development
 expires the in-memory cache after thirty seconds. Table logs show rows, pages
 and elapsed time to identify future build regressions.
