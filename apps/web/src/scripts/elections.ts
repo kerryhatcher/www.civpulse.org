@@ -484,10 +484,10 @@ export async function initElectionViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillElectionView(response);
-  if (response.election) {
-    void initElectionTurnout(response.election.id);
-    void initElectionPrecinctTurnout(response.election.id);
-  }
+  const turnoutReady = response.election ? Promise.allSettled([
+    initElectionTurnout(response.election.id),
+    initElectionPrecinctTurnout(response.election.id),
+  ]) : Promise.resolve();
 
   if (response.election && (await isCurrentUserAdmin())) {
     const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
@@ -496,4 +496,5 @@ export async function initElectionViewFromUrl(): Promise<void> {
       edit.hidden = false;
     }
   }
+  await turnoutReady;
 }

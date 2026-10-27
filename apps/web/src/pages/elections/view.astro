@@ -1,4 +1,5 @@
 ---
+import SectionLink from '../../components/SectionLink.astro';
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
 import ElectionTurnout from '../../components/ElectionTurnout.astro';
@@ -27,8 +28,8 @@ import Layout from '../../layouts/Layout.astro';
 
       <div class="prose election-description" data-election-description hidden></div>
 
-      <section class="election-dates" data-election-dates-section hidden>
-        <h2>Dates &amp; deadlines</h2>
+      <section id="dates-and-deadlines" data-shareable-section class="election-dates" data-election-dates-section hidden>
+        <h2>Dates &amp; deadlines <SectionLink target="dates-and-deadlines" label="dates and deadlines" /></h2>
         <div class="election-date-groups" data-election-dates></div>
         <p class="body-note">
           Every date is also on the <a href="/calendar/">community calendar</a>.
@@ -38,8 +39,8 @@ import Layout from '../../layouts/Layout.astro';
       <ElectionTurnout />
       <ElectionPrecinctTurnout />
 
-      <section class="election-contests" data-election-contests-section hidden>
-        <h2>What's on the ballot</h2>
+      <section id="ballot" data-shareable-section class="election-contests" data-election-contests-section hidden>
+        <h2>What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
         <ElectionScope />
         <div class="contest-list" data-election-contests></div>
       </section>
@@ -55,5 +56,6 @@ import Layout from '../../layouts/Layout.astro';
 <script>
   import { initElectionViewFromUrl } from '../../scripts/elections';
 
-  void initElectionViewFromUrl();
+  import { restoreSectionAnchorAfter } from '../../scripts/section-anchors';
+  restoreSectionAnchorAfter(initElectionViewFromUrl());
 </script>

@@ -395,6 +395,20 @@ Display text and numeric values are preserved, unavailable values stay unavailab
 and an absent source time is labeled separately from collection time. Registration
 and precinct denominators are not inferred. Reports update live after an import.
 
+### Share an election section
+
+Use **Link** beside a section heading, then copy the browser address (or use
+**Copy link address** on that link). Election detail pages support
+`#dates-and-deadlines`, `#voter-turnout`, `#precinct-turnout`, and `#ballot`.
+For example, [November 3 precinct turnout](/elections/2026-11-03-general-election/#precinct-turnout)
+opens directly at the map. Shared UUID viewer links use the same anchors and
+retain their existing access rules.
+
+On the [reports page](/elections/results/), share `#result-filters`, `#reports`,
+or `#structured-turnout`. Keep the election `?id=…` and any reporting filters in
+the URL; clicking **Link** preserves them. Direct links settle on the section
+after its data loads, unless the visitor has started navigating the page.
+
 ### Exploring election reports
 
 On [Election results & turnout](/elections/results/), choose an election to start

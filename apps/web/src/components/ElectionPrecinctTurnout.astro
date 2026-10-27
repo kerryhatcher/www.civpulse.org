@@ -1,5 +1,6 @@
 ---
 import 'leaflet/dist/leaflet.css';
+import SectionLink from './SectionLink.astro';
 import { TURNOUT_BANDS, TURNOUT_MISSING_COLOR } from '../lib/precinct-turnout';
 import { getMapBuildData, type PublicMapManifest } from '../lib/map-build-data';
 interface Props { electionId?: string }
@@ -10,8 +11,8 @@ const precincts = snapshot.assets.filter(asset => asset.path.startsWith('maps/')
   .flatMap(asset => (JSON.parse(asset.body) as PublicMapManifest).layers)
   .find(layer => layer.presentation?.key === 'voting-precincts');
 ---
-<section class="precinct-turnout" data-precinct-turnout data-election-id={electionId} data-boundaries-url={precincts?.source_url} aria-labelledby="precinct-turnout-title" hidden={!electionId}>
-  <h2 id="precinct-turnout-title">Bibb County precinct turnout</h2>
+<section id="precinct-turnout" data-shareable-section class="precinct-turnout" data-precinct-turnout data-election-id={electionId} data-boundaries-url={precincts?.source_url} aria-labelledby="precinct-turnout-title" hidden={!electionId}>
+  <h2 id="precinct-turnout-title">Bibb County precinct turnout <SectionLink target="precinct-turnout" label="Bibb County precinct turnout" /></h2>
   <p>Darker precincts mean a higher share of registered voters participated. Select a precinct for exact counts. Gray means the percentage is not reported.</p>
   <p data-precinct-status role="status" aria-live="polite">Loading precinct turnout…</p>
   <button type="button" data-precinct-retry hidden>Retry precinct map</button>
