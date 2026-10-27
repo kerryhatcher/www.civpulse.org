@@ -52,6 +52,29 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Open Exhibition visual system
+
+The shared layout uses self-hosted Anton for the Civic Pulse masthead, Barlow
+Condensed for headings, and Barlow for body text. Global tokens define ultramarine,
+lime, and light reading surfaces. A CSS `prefers-color-scheme: dark` media
+query swaps semantic surface/text tokens to navy, pale text, and lime accents.
+The browser applies preference changes immediately without JavaScript or stored
+state. Matching media-qualified theme-color metadata styles browser chrome.
+Map layer colors remain source-defined; do not invert map tiles or imagery.
+The homepage topic links progressively enhance into a detail panel through
+`home-exhibition.ts`; native anchors and all directory links remain usable when
+JavaScript is disabled. Topic hashes support direct links and browser history.
+No new server rendering, data queries, or visibility rules are introduced.
+
+Verify the homepage at desktop and phone widths, each topic and browser Back,
+search submission, election fallback when no callout is active, and map-directory
+links. The homepage groups events by Eastern calendar date without dropping
+events or visibility badges. The full calendar is linked from Upcoming dates.
+Test both color-scheme preferences, including a change while the page is open,
+plus selected calendar buttons, fields, focus states, and map popups. Check a directory, reading page, and signed-in admin page because the
+fonts, colors, header, and footer are shared. Keep election timing tests and
+anonymous/signed-in event checks intact.
+
 MCP consolidation has two catalogs: the original `/mcp` and opt-in
 `/mcp/v2`. Run `bun test scripts/tests/mcp-common-reads.test.ts
 scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts
@@ -129,7 +152,7 @@ changing the election or early-voting data does. Multiple qualifying elections
 appear in Election Day/name order.
 
 Verify the day before the window (hidden), its first day (visible), early-voting
-start, Election Day (visible with today's status), and the following day
+start, Election Day (visible), and the following day
 (hidden), including a visitor outside the Eastern time zone. Check missing and
 non-public dates, multiple elections, narrow screens, keyboard focus, and the
 election-details link. Confirm anonymous and signed-in visitors receive the same

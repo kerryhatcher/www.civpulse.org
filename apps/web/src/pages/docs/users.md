@@ -6,6 +6,30 @@ description: Find a meeting, explore a map, check an election, and understand wh
 
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
+## Start from the homepage
+
+The homepage pairs a civic topic index with a detail panel. Choose People,
+Organizations, Elections, Calendar, Maps, or Public records, then follow the
+panel's link to the full directory. The selected topic is included in the URL,
+so you can share it and use your browser's Back button to return to an earlier
+topic. On a phone, the selected panel appears below the topic links. Without
+JavaScript, the sections remain available as ordinary page anchors.
+
+Search beside the Civic Pulse masthead when you already know a name or subject.
+Upcoming dates group events by their Eastern Time calendar date; every event
+remains a separate link. Select **Upcoming dates** to open the full calendar.
+Eligible election notices use the same published records as the election directory. The Bibb County link opens the initial
+county hub; it does not filter every directory to Bibb County. More county hubs
+can join the same Civic Pulse identity later.
+
+## Appearance
+
+Civic Pulse automatically follows your browser or operating system’s light or
+dark appearance preference, including changes made while the page is open.
+Change that preference in your browser or system settings; no site toggle or
+saved theme choice is needed. Source map colors and document images retain
+their original appearance.
+
 ## Explore your county
 
 The [Bibb County community hub](/counties/bibb/) brings together selected local
@@ -340,26 +364,24 @@ have turnout reports before election day, while May 19, 2026 is historical. Thes
 are reported counts, not winner projections. Original photographs remain private
 for admin review.
 
-## Start from the homepage
+## Navigate and search
 
-Use **What would you like to find?** on the [homepage](/) to search by name,
-organization, place, or topic. Select **Search** or press Enter to open the
-search results, then narrow them by content type. An empty search opens the
-search page so you can choose a type to browse.
+Use the search beside the masthead on the [homepage](/) to find a name,
+organization, place, or topic. Press Enter or select **Search**, then narrow
+results by content type. An empty search opens the search page.
 
-**Elections at a glance** shows up to three upcoming published elections in date
-order, including Election Day itself. Dates roll forward in Eastern Time; new
-or edited election records appear after the next site publish. The homepage
-also links to people, organizations, and public records, shows the public map
-count, and lists upcoming community events.
+The Elections panel highlights an eligible upcoming election. Outside its
+callout window, the panel lists up to three upcoming published elections,
+including Election Day itself. Dates roll forward in Eastern Time; new or
+edited election records appear after the next publish. **All elections** in
+the homepage footer opens the full election directory.
 
-The header's **Browse** menu groups all destinations under **Community**,
+On interior pages, **Browse** groups destinations under **Community**,
 **Government**, and **Research & help**. Open it by click, tap, or keyboard;
-press Escape to close it. **Calendar**, **Search**, and **Sign in** remain directly
-available. Signed-in visitors see **Account**, and admins also see **Admin**.
-Select the Civic Pulse logo to return home. The shorter footer contains
-**About**, **Guides & help**, and **Search**; archive and directory links are
-available in **Browse** on every page.
+press Escape to close it. Signed-in visitors see **Account**, and admins also
+see **Admin**. Select the Civic Pulse logo to return home. Homepage topics
+provide the same directory access, while the footer links to guides and the
+Bibb County hub. Maps remain available through the Maps topic and directory.
 
 Election detail pages show **Voter turnout** charts when Georgia SOS structured
 turnout is available. Choose a **County** (Bibb is selected when available) to

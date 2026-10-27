@@ -1,3 +1,4 @@
+import { civicDate } from '../lib/election-callout';
 import {readCalendarAsset} from '../lib/calendar-data';
 import {isPublicEvent,upcomingEvents} from '../lib/calendar-snapshot';
 import { eventViewHref, formatEventWhen, type EventRecord } from '../lib/calendars';
@@ -9,27 +10,36 @@ const VISIBILITY_LABELS: Record<EventRecord['visibility'], string> = {
   private: 'Private',
 };
 
-function renderHomeEvent(event: EventRecord): HTMLElement {
+function renderHomeDay(events: EventRecord[]): HTMLElement {
+  const event = events[0]!;
   const item = document.createElement('li');
   item.className = 'home-event';
 
-  const when = document.createElement('p');
+  const when = document.createElement('time');
   when.className = 'home-event-when';
-  when.textContent = formatEventWhen(event,'America/New_York');
+  when.dateTime = civicDate(new Date(event.starts_at));
+  when.textContent = new Intl.DateTimeFormat('en-US', {
+    month: 'short', day: 'numeric', timeZone: 'America/New_York',
+  }).format(new Date(event.starts_at));
+
   item.append(when);
 
+  const entries = document.createElement('div');
+  entries.className = 'home-day-events';
+  for (const event of events) {
   const heading = document.createElement('h3');
   const link = document.createElement('a');
   link.href = eventViewHref(event.id,isPublicEvent(event));
   link.textContent = event.title;
+  link.setAttribute('aria-label', `${event.title}, ${formatEventWhen(event, 'America/New_York')}`);
   heading.append(link);
-  item.append(heading);
+  entries.append(heading);
 
   if (event.visibility !== 'public') {
     const badge = document.createElement('span');
     badge.className = 'visibility-badge';
     badge.textContent = VISIBILITY_LABELS[event.visibility];
-    item.append(badge);
+    entries.append(badge);
   }
 
   const meta = document.createElement('p');
@@ -37,7 +47,9 @@ function renderHomeEvent(event: EventRecord): HTMLElement {
   meta.textContent = [event.organization_name, event.calendar_name, event.location]
     .filter(Boolean)
     .join(' · ');
-  item.append(meta);
+  entries.append(meta);
+  }
+  item.append(entries);
 
   return item;
 }
@@ -64,7 +76,12 @@ export function initHomeEvents(): void {
         if(!url) throw new Error('Missing published upcoming events');
         events=upcomingEvents(await readCalendarAsset<EventRecord[]>(url));
       }
-      list.replaceChildren(...events.map(renderHomeEvent));
+      const days = new Map<string, EventRecord[]>();
+      for (const event of events) {
+        const day = civicDate(new Date(event.starts_at));
+        days.set(day, [...(days.get(day) ?? []), event]);
+      }
+      list.replaceChildren(...[...days.values()].map(renderHomeDay));
       list.hidden=events.length===0;
       if(status) status.hidden=true;
       if(empty) empty.hidden=events.length>0;

@@ -22,7 +22,7 @@ function renderResult(result: SearchResult): HTMLElement {
       .map(word => word[0]?.toUpperCase() ?? '').join('');
     card.append(fallback);
   }
-  const type = document.createElement('p'); type.className = 'org-eyebrow';
+  const type = document.createElement('p'); type.className = 'site-search-result-type';
   type.textContent = labels[result.entity_type] ?? 'Content';
   const title = document.createElement('h2');
   let target: URL | null = null;
@@ -38,7 +38,7 @@ function renderResult(result: SearchResult): HTMLElement {
     if (result.entity_type === 'article') { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
     title.append(link);
   } else title.textContent = result.title;
-  card.append(type, title);
+  card.append(title, type);
   if (result.visibility !== 'public') {
     const access = document.createElement('span'); access.className = 'visibility-badge';
     access.textContent = result.visibility === 'private' ? 'Private' : 'Unlisted'; card.append(access);

@@ -1,0 +1,8 @@
+# Local design exploration and generated review output.
+/build/
+/questions/
+/review/
+/mocks/*
+!/mocks/exhibition-open.png
+!/mocks/exhibition-open.json
+!/mocks/exhibition-open.png.json
