@@ -193,6 +193,13 @@ outcome was changed by this import.
 
 ## Election detail turnout charts and precinct map
 
+The site header provides the only county selector for ballots, turnout charts,
+and report browsing. County changes update the charts from their loaded snapshot;
+All counties displays separate labeled county groups without summing their
+counts. A county absent from the snapshot shows a no-data message instead of
+selecting another county. Ballots have no independent area dropdown. Direct race
+anchors reveal their target without changing the header's session preference.
+
 Public election detail pages and the gated UUID viewer load turnout at runtime
 through the existing visibility-aware RPCs. Structured county charts page the
 latest report and pin subsequent pages to that report ID, default to Bibb, and

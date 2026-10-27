@@ -800,11 +800,20 @@ counties on organizations, people, maps, calendar and site search; verify matchi
 records, pagination, no-result states, navigation/reload persistence, and a new
 session's Bibb default. Repeat signed in and signed out, including admin navigation.
 Check mobile header wrapping, keyboard selection and console health. Verify
-ballot-area overrides and direct race anchors; turnout should scan past source
+header county changes on ballots and direct race anchors; turnout should scan past source
 pages containing other counties and retain its pinned report. County coverage
 comes from the explicit registry, not address/name heuristics. Regional library
 and statewide maps remain available in every county. The public geography JSON
 must contain only public IDs; restricted records keep their existing live gates.
+
+Election ballots and turnout charts use only the header county selector. Verify
+there is no ballot-area or chart county dropdown on static and signed-in UUID
+pages. Changing the header must rerender turnout from the already loaded pinned
+snapshot, keep All counties in separate labeled groups, and show a no-data message
+without a fallback when the chosen county is missing. A direct race anchor
+reveals only its target and does not change the saved county or reveal other
+out-of-area races. Run `bun test scripts/tests/election-turnout.test.ts` for county
+grouping, preservation of overlapping source views, and missing/zero values.
 
 ### Verifying public legislation details
 

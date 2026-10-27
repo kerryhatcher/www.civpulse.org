@@ -212,10 +212,16 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   deadlines are calendar events tagged with the election, so they appear on the
   community calendar and link back to the election.
   Store contests for the same election together, including races outside Bibb
-  County. The static detail page and UUID viewer default to a Bibb County display
-  filter, with an all-recorded-races option. Search, person candidacies, admin
+  County. The static detail page and UUID viewer use the header's session county
+  (Bibb by default); All counties in that same menu reveals the full ballot.
+  The ballot and turnout charts have no independent county selectors. Charts
+  render the pinned turnout snapshot for the selected county, or separate county
+  groups for All counties, without combining counts or falling back to another
+  county when data is missing. Header changes rerender charts without refetching.
+  Search, person candidacies, admin
   editing, and `get_election` retain every visibility-permitted contest. A direct
-  contest/question anchor reveals an out-of-area race. The frontend geographic
+  contest/question anchor reveals only that out-of-area race, with a notice,
+  without changing the saved county preference. The frontend geographic
   policy in `election-scope.ts` uses the 2026 Macon-Bibb composite ballot's district
   list; review it when district boundaries change. This is presentation, not RLS.
 - Articles: external URLs with titles and many-to-many links to people and

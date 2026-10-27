@@ -2,7 +2,7 @@ import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
-import { GEORGIA_COUNTIES, matchesCounty } from '../lib/county-scope';
+import { matchesCounty } from '../lib/county-scope';
 import { orderElections, searchDirectory } from '../lib/directories';
 import { historyLink } from '../lib/history';
 import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
@@ -433,45 +433,35 @@ function fillElectionView(response: ElectionViewResponse): void {
 
 /** Scope only the rendered ballot; RPCs, admin editing and search keep all data. */
 export async function initElectionScope(): Promise<void> {
-  const select = document.querySelector<HTMLSelectElement>('[data-election-scope]');
-  if (!select) return;
+  if (!document.querySelector('[data-election-scope]')) return;
   const cards = [...document.querySelectorAll<HTMLElement>('[data-bibb-relevant]')];
   let index;
   try { index = await readCountyIndex(); } catch { return; }
   const countyIndex = index;
-  function resetScope() {
-    const county = selectedCounty();
-    select!.options[0].textContent = `${GEORGIA_COUNTIES.find(item => item.fips === county)?.name ?? 'Selected'} County races`;
-    select!.value = county === 'all' ? 'all' : 'bibb';
-    select!.options[0].disabled = county === 'all';
-  }
-  resetScope();
   const empty = document.querySelector<HTMLElement>('[data-election-scope-empty]');
+  const linked = document.querySelector<HTMLElement>('[data-election-linked-race]');
+  function linkedRace() {
+    return /^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)
+      ? cards.find(card => `#${card.id}` === window.location.hash) : undefined;
+  }
   function apply() {
+    const target = linkedRace();
+    let revealed = false;
     for (const card of cards) {
       const [kind, ...parts] = card.id.split('-');
-      const relevant = selectedCounty() === '13021' ? card.dataset.bibbRelevant === 'true'
-        : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), selectedCounty());
-      card.hidden = select!.value !== 'all' && !relevant;
+      const relevant = selectedCounty() === 'all' || (selectedCounty() === '13021' ? card.dataset.bibbRelevant === 'true'
+        : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), selectedCounty()));
+      card.hidden = !relevant && card !== target;
+      if (!relevant && card === target) revealed = true;
     }
+    if (linked) linked.hidden = !revealed;
     if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
   }
   function revealLinkedRace() {
-    if (!/^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)) return;
-    const target = cards.find(card => `#${card.id}` === window.location.hash);
-    if (!target) return;
     apply();
-    if (target.hidden) select!.value = 'all';
-    apply();
-    target.scrollIntoView();
+    linkedRace()?.scrollIntoView();
   }
-  select.onchange = apply;
-  window.addEventListener('countychange', () => {
-    resetScope();
-    apply();
-    revealLinkedRace();
-  });
-  apply();
+  window.addEventListener('countychange', apply);
   revealLinkedRace();
   window.addEventListener('hashchange', revealLinkedRace);
 }
