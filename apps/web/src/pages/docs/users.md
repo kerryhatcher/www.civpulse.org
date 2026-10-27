@@ -356,7 +356,9 @@ available in **Browse** on every page.
 
 Election detail pages show **Voter turnout** charts when Georgia SOS structured
 turnout is available. Choose a **County** (Bibb is selected when available) to
-compare reported ballot styles and inspect absentee measures. Exact counts, source
+compare reported ballot styles and inspect early-voting and absentee measures.
+The early-voting chart remains visible alongside reported turnout when both
+source tables are available; their overlapping counts are never combined. Exact counts, source
 as-of labels and the separate collection time accompany the charts. Each chart
 has its own zero-based ballot scale. Missing counts say “Not reported”; overlapping
 measures are not added, and no registered-voter denominator is inferred. Use

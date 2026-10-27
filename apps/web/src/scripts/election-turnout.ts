@@ -86,7 +86,7 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
         const turnout = rows.filter(row => row.table === 'turnout');
         const early = rows.filter(row => row.table === 'early');
         if (turnout.length) charts.append(chart('Reported turnout by ballot style', turnout, turnout.map(row => ({ label: row.ballot_style, cell: row.measures.turnout }))));
-        else if (early.length) charts.append(chart('Early voting ballots accepted', early, early.map(row => ({ label: row.ballot_style, cell: row.measures.accepted }))));
+        if (early.length) charts.append(chart('Early voting ballots accepted', early, early.map(row => ({ label: row.ballot_style, cell: row.measures.accepted }))));
         for (const row of rows.filter(row => row.table === 'absentee')) {
           const figure = chart(`Absentee ballots · ${row.ballot_style}`, [row], Object.entries(measureLabels).map(([key, label]) => ({ label, cell: row.measures[key] })));
           const ratio = row.measures.acceptance_ratio;
