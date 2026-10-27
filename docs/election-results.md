@@ -205,11 +205,15 @@ boundary `precinctid`; no names, county totals, contest totals or overlapping
 method reports are combined. The latest observed report per scope supplies
 voters (otherwise ballots) and the same report's registered count. Missing,
 invalid or zero denominators remain unreported; a true zero numerator is 0%.
-Green opacity uses a fixed 0–100% scale; gray identifies unavailable rates.
+`TURNOUT_BANDS` defines shared, fixed percentage bins for map fills and legend:
+under 10%, 10–<15%, 15–<20%, 20–<25%, 25–<30%, and 30%+. Opaque yellow-to-green
+colors distinguish lower-turnout precincts without blending into the background.
+The final band is open-ended; popups and tables retain the actual percentage.
+Gray identifies unavailable rates and stays distinct from a reported zero.
 Popups and an accessible table retain exact counts, report times and status.
-Current November structured aggregates are county-level, and the May precinct
-imports do not provide election-wide turnout denominators. Neither dataset can
-currently populate precinct percentages. Boundary snapshots may differ from
+Structured county aggregates cannot populate precinct percentages. Precinct
+reports with both participation and registration counts enable the map’s rates;
+contest-only reports or missing denominators leave those precincts unreported. Boundary snapshots may differ from
 historical election boundaries and require review before interpreting comparisons.
 
 Run `bun test scripts/tests/election-turnout.test.ts

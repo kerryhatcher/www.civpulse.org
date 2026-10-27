@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { precinctTurnout, turnoutRate, turnoutFill } from '../../apps/web/src/lib/precinct-turnout';
+import { precinctTurnout, turnoutRate, turnoutFill, TURNOUT_BANDS, TURNOUT_MISSING_COLOR } from '../../apps/web/src/lib/precinct-turnout';
 import type { ResultReport } from '../../apps/web/src/lib/election-results';
 function report(turnout: object, scope = {}, observed_at = '2026-10-26') {
   return { scope: { county: 'Bibb', unit_type: 'precinct', unit: 'EM1', counting_group: 'all', ballot_style: 'all', ...scope }, observed_at, snapshot: { turnout, contests: [] } } as unknown as ResultReport;
@@ -21,9 +21,21 @@ test('selects latest exact scope without summing methods or ballot styles', () =
   ], 'all');
   expect(selected.size).toBe(1); expect(selected.get('EM1')).toBe(latest);
 });
-test('uses fixed opacity scale and separate missing fill', () => {
-  expect(turnoutFill(0).fillOpacity).toBe(0.08);
-  expect(turnoutFill(50).fillOpacity).toBeCloseTo(0.54);
-  expect(turnoutFill(100).fillOpacity).toBe(1);
-  expect(turnoutFill(null).fillColor).not.toBe(turnoutFill(0).fillColor);
+test('uses explicit opaque percentage bands with exact lower boundaries', () => {
+  for (let i = 0; i < TURNOUT_BANDS.length; i++) {
+    const band = TURNOUT_BANDS[i];
+    expect(turnoutFill(band.min)).toEqual({ fillColor: band.color, fillOpacity: 1 });
+    if (i > 0) expect(turnoutFill(band.min - 0.001).fillColor).toBe(TURNOUT_BANDS[i - 1].color);
+  }
+  expect(new Set(TURNOUT_BANDS.map(band => band.color)).size).toBe(TURNOUT_BANDS.length);
+  expect(turnoutFill(50)).toEqual(turnoutFill(30));
+  expect(turnoutFill(100)).toEqual(turnoutFill(30));
+});
+test('missing values stay distinct from zero and reported low turnout', () => {
+  for (const rate of [null, NaN, Infinity, -1, 101]) {
+    expect(turnoutFill(rate)).toEqual({ fillColor: TURNOUT_MISSING_COLOR, fillOpacity: 1 });
+  }
+  expect(turnoutFill(0).fillColor).not.toBe(TURNOUT_MISSING_COLOR);
+  expect(turnoutFill(9.94).fillColor).not.toBe(turnoutFill(12.16).fillColor);
+  expect(turnoutFill(16).fillColor).not.toBe(turnoutFill(22).fillColor);
 });

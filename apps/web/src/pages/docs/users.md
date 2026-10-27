@@ -372,15 +372,18 @@ measures are not added, and no registered-voter denominator is inferred. Use
 **All reports, source details & earlier snapshots** to inspect reporting history.
 The charts load live and follow the election’s existing visibility rules.
 
-The **Bibb County precinct turnout** map uses a fixed 0–100% scale: darker
-precincts indicate higher participation. Gray means “Not reported,” while a
-reported zero uses the lightest green. Select a precinct for counts and report
+The **Bibb County precinct turnout** map uses distinct, opaque percentage bands:
+under 10%, 10–<15%, 15–<20%, 20–<25%, 25–<30%, and 30%+. Colors progress from
+pale yellow to dark green, making differences at lower turnout easier to see.
+The darkest band includes all rates at or above 30%; exact percentages remain in
+the popup and table. Gray means “Not reported,” while a reported zero uses the
+lightest color. Select a precinct for counts and report
 time/status, or expand **Precinct counts and percentages** for a keyboard-accessible
 table. Choose a ballot style when separate reports are available; only all-method
 precinct reports are used, never sums of overlapping reports or contest counts.
-Rates need that precinct’s voters (or ballots) and registered-voter counts. The
-November county aggregates and May precinct contest results do not currently
-provide these denominators, so their precincts remain gray. County turnout is
+Rates need that precinct’s voters (or ballots) and registered-voter counts in
+the same report. Imported precinct registration counts enable percentages as soon
+as the report is available; missing denominators remain gray. County turnout is
 never distributed across precincts. The map reuses the public Bibb boundary
 snapshot; check boundary vintages before comparing historical elections.
 
