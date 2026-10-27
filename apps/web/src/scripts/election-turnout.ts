@@ -1,5 +1,5 @@
 import { getSupabase } from '../lib/supabase';
-import { readTurnoutSnapshot, turnoutByCounty, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
+import { readTurnoutSnapshot, turnoutByCounty, turnoutSummary, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
 import { selectedCounty } from './county-filter';
 
 const measureLabels: Record<string, string> = {
@@ -55,9 +55,11 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
   const retry = section.querySelector<HTMLButtonElement>('[data-turnout-retry]')!;
   const reports = section.querySelector<HTMLAnchorElement>('[data-turnout-reports]')!;
   reports.href = `/elections/results/?id=${encodeURIComponent(electionId)}`;
+  const summary = document.querySelector<HTMLElement>('[data-turnout-summary]');
   let snapshot: TurnoutPage | undefined;
   function render() {
     if (!snapshot) return;
+    if (summary) summary.textContent = turnoutSummary(snapshot, selectedCounty());
     charts.replaceChildren();
     for (const group of turnoutByCounty(snapshot.rows, selectedCounty())) {
       const county = el('section');
@@ -86,6 +88,7 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
     body.hidden = true;
     status.hidden = false;
     status.textContent = 'Loading turnout…';
+    if (summary) summary.textContent = 'Loading reported turnout…';
     try {
       snapshot = await readTurnoutSnapshot(async (reportId, offset) => {
         const { data, error } = await getSupabase().rpc('get_structured_turnout', {
@@ -95,7 +98,9 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
         return data as TurnoutPage;
       });
       if (snapshot.status !== 'ok' || !snapshot.rows.length) {
-        section!.hidden = true;
+        if (summary) summary.textContent = turnoutSummary(snapshot, selectedCounty());
+        section!.hidden = !summary;
+        status.textContent = 'No structured turnout has been published for this election yet.';
         return;
       }
       render();
@@ -109,6 +114,7 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
     } catch {
       section!.hidden = false;
       status.textContent = 'Turnout could not be loaded. Try again.';
+      if (summary) summary.textContent = 'Turnout could not be loaded. Use the turnout section to retry or open source reports.';
       retry.hidden = false;
     }
   }

@@ -66,11 +66,6 @@ import Layout from '../layouts/Layout.astro';
       <p class="status">Times are shown in America/New_York. Select a day to see its events.</p>
       <div class="calendar-month-grid" data-calendar-grid></div>
     </section>
-    <p class="status" data-calendar-signed-in hidden>You're signed in. Admin accounts can also view unlisted and private events.</p>
-    <p class="status" data-calendar-status role="status" aria-live="polite">Loading events…</p>
-    <button type="button" data-calendar-clear-day hidden>Show events from today onward</button>
-    <div class="event-list" data-calendar-results hidden></div>
-    <p class="status" data-calendar-empty hidden>No events match those filters.</p>
     <details class="calendar-feed-options">
       <summary>Subscribe or download the calendar</summary>
       <div class="calendar-subscription">
@@ -83,6 +78,11 @@ import Layout from '../layouts/Layout.astro';
         </details>
       </div>
     </details>
+    <p class="status" data-calendar-signed-in hidden>You're signed in. Admin accounts can also view unlisted and private events.</p>
+    <p class="status" data-calendar-status role="status" aria-live="polite">Loading events…</p>
+    <button type="button" data-calendar-clear-day hidden>Show events from today onward</button>
+    <div class="event-list" data-calendar-results hidden></div>
+    <p class="status" data-calendar-empty hidden>No events match those filters.</p>
     <noscript><p>Enable JavaScript to browse events, or subscribe using the public calendar feed.</p></noscript>
   </main>
 </Layout>

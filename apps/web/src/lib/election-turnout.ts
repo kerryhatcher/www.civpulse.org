@@ -48,3 +48,16 @@ export async function readTurnoutSnapshot(
   }
   return { ...first, rows };
 }
+
+/** Summarize one source view only; never sum overlapping turnout tables. */
+export function turnoutSummary(snapshot: TurnoutPage, county: string): string {
+  if (snapshot.status !== 'ok' || !snapshot.rows.length) return 'No structured turnout has been published for this election yet.';
+  const groups = turnoutByCounty(snapshot.rows, county);
+  if (!groups.length) return 'No turnout is reported for the selected county. Choose another county or All counties.';
+  const collected = new Date(snapshot.report.captured_at).toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
+  if (county === 'all') return `Unofficial turnout available for ${groups.length} ${groups.length === 1 ? 'county' : 'counties'}. View the charts for separate county counts. Collected ${collected}.`;
+  const group = groups[0];
+  const rows = group.rows.filter(row => row.table === 'turnout');
+  const counts = rows.map(row => `${row.ballot_style}: ${row.measures.turnout?.value == null ? 'Not reported' : row.measures.turnout.value.toLocaleString('en-US') + ' ballots'}`);
+  return `${group.label} County · Unofficial turnout. ${counts.length ? counts.join(' · ') + '.' : 'Reports are available; view the charts for counts.'} Collected ${collected}. Counts are cumulative, not candidate results.`;
+}
