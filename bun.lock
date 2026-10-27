@@ -52,6 +52,9 @@
       "version": "0.0.1",
       "dependencies": {
         "@astrojs/sitemap": "^3.7.4",
+        "@fontsource/anton": "^5.3.0",
+        "@fontsource/barlow": "^5.3.0",
+        "@fontsource/barlow-condensed": "^5.3.0",
         "@fontsource/dm-sans": "^5.3.0",
         "@fontsource/unna": "^5.3.0",
         "@supabase/supabase-js": "^2.118.0",
@@ -253,6 +256,12 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.28.2", "", { "os": "win32", "cpu": "ia32" }, "sha512-YmJbfTlvU7Sdn9BB+4PRES4oB6pxgS37MAONj+hBr/cpXS1aBPKXxNnDbu+QCWPj0o9dgyxeq79g6c5P8KeuYA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.28.2", "", { "os": "win32", "cpu": "x64" }, "sha512-5ebpxr3nWMzrL/rnUI755Jkuee0bHL/Gq0WTF9lvcpv73wAp5eu8MfBUgWK9bhWvZjj7yX8etf/8tI8Ney695g=="],
+
+    "@fontsource/anton": ["@fontsource/anton@5.3.0", "", {}, "sha512-OR1D5n124n2XRs66SbX7IjcOSptljEJE8FcDNnlni2y1/M6KpTx7cU2PIWzTSsBj4WFkHPw24On8qw3qkQZuTw=="],
+
+    "@fontsource/barlow": ["@fontsource/barlow@5.3.0", "", {}, "sha512-tGR0y6QObRtKv71MOth44222+mdNFM/ZWFWDV1VLzNbG4oK9PNRlyJzmkck4vHAi9ibHBXgt4SlY51amFP55CA=="],
+
+    "@fontsource/barlow-condensed": ["@fontsource/barlow-condensed@5.3.0", "", {}, "sha512-RA7MmIx0v3eQ6Gcf74qLVLOwLB0GpPOzx+eU9iG/AmCnSJGcIWYeU8y6CEMGZ210MGwGg5CZhzLkkvyZdTTk1g=="],
 
     "@fontsource/dm-sans": ["@fontsource/dm-sans@5.3.0", "", {}, "sha512-lYJtMXXO28q1z+yz+z8XKd0s4hXaa9QdkETzkyD760sidCv5heI86weYA0sx0Nc4pAMAQTUuyf4gO44cYKKS9g=="],
 

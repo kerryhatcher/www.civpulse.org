@@ -1,10 +1,12 @@
 ---
 import '../styles/global.css';
-import '@fontsource/unna/400.css';
-import '@fontsource/unna/700.css';
-import '@fontsource/dm-sans/400.css';
-import '@fontsource/dm-sans/500.css';
-import '@fontsource/dm-sans/600.css';
+import Icon from '../components/Icon.astro';
+import '@fontsource/anton/400.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow/700.css';
 import { GEORGIA_COUNTIES, DEFAULT_COUNTY } from '../lib/county-scope';
 
 interface Props {
@@ -38,6 +40,7 @@ const groups = [
   ] },
 ];
 const isCurrent = (url: string) => path === url.replace(/\/+$/, '') || path.startsWith(url);
+const isHome = path === '/';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 
@@ -47,7 +50,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f6f1e7" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0838d7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#090f20" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={`${title} · Civic Pulse`} />
@@ -55,19 +60,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta property="og:type" content="website" />
     <title>{title} · Civic Pulse</title>
   </head>
-  <body>
+  <body class:list={{ 'home-page': isHome }}>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
       <header class="site-header">
-        <a href="/" class="brand" aria-label="Civic Pulse home">
-          <img
-            src="/brand/civic-pulse.svg"
-            alt="Civic Pulse"
-            width="257"
-            height="48"
-          />
-        </a>
+        {isHome ? <a class="site-location" href="/counties/bibb/">Bibb County, Georgia <Icon size={16} /></a> : <a href="/" class="brand" aria-label="Civic Pulse home">Civic Pulse<span aria-hidden="true">.</span></a>}
         <nav aria-label="Main navigation">
+          <a href="/about/" aria-current={isCurrent('/about/') ? 'page' : undefined}>About</a>
           <label class="county-picker">
             <span class="visually-hidden">County</span>
             <svg class="county-picker-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
@@ -100,15 +99,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
       <p class="county-status" data-county-status role="status"></p>
       <slot />
       <footer class="site-footer">
-        <p>
-          Civic Pulse <span aria-hidden="true">·</span> A clearer signal from your
-          community
-        </p>
+        {!isHome && <p>Civic Pulse <span aria-hidden="true">/</span> Public information. Open to everyone.</p>}
         <nav aria-label="Footer navigation">
           <a href="/about/">About</a>
           <a href="/docs/">Guides & help</a>
           <a href="/search/">Search</a>
+          {isHome && <a href="/elections/">All elections</a>}
         </nav>
+        {isHome && <a class="footer-local" href="/counties/bibb/">Explore Bibb County <Icon /></a>}
       </footer>
     </div>
   </body>

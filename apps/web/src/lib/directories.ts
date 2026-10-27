@@ -51,15 +51,20 @@ export function searchDirectory<T>(entries: DirectoryEntry<T>[], query: string, 
   return ranked.filter(item => item.matches).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).map(item => item.record);
 }
 
-export function browsePeople(entries: DirectorySnapshot<'people'>, query: string, kind: string, sort: string, offset = 0, limit = 24) {
+export function orderPeople<T extends DirectoryPerson>(records: T[], sort: string): T[] {
   const first = (person: DirectoryPerson) => person.full_name.trim().toLowerCase();
   const last = (person: DirectoryPerson) => first(person).replace(/\s*,?\s+(jr\.?|sr\.?|ii|iii|iv)$/i, '').match(/\S+$/)?.[0] ?? '';
   const compare = (a: string,b: string) => a.localeCompare(b, 'en');
-  const people = searchDirectory(entries,query).filter(person => !kind || person.kind === kind);
-  people.sort((a,b) => {
+  const priority = (person: DirectoryPerson) => person.kind === 'other' ? 2 : person.kind === 'candidate' ? 1 : 0;
+  return [...records].sort((a,b) => {
+    if (sort === 'civic_first' && priority(a) !== priority(b)) return priority(a) - priority(b);
     const key = sort.startsWith('last_') ? last : first;
     return compare(key(a),key(b)) * (sort.endsWith('_desc') ? -1 : 1) || compare(first(a),first(b)) || compare(a.id,b.id);
   });
+}
+
+export function browsePeople(entries: DirectorySnapshot<'people'>, query: string, kind: string, sort: string, offset = 0, limit = 24) {
+  const people = orderPeople(searchDirectory(entries,query).filter(person => !kind || person.kind === kind), sort);
   return { total: people.length, people: people.slice(offset,offset+limit) };
 }
 

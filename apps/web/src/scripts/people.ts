@@ -1,7 +1,7 @@
 import { renderProfileDescription } from '../lib/profile-description';
 import { readDirectory } from './directory-data';
 import { filterCounty, selectedCounty } from './county-filter';
-import { browsePeople, type DirectoryPerson } from '../lib/directories';
+import { browsePeople, orderPeople, type DirectoryPerson } from '../lib/directories';
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
@@ -114,16 +114,19 @@ export function initPeopleSearch(): void {
     ui.status.textContent = 'Loading people…';
     try {
       const snapshot = await readDirectory('people');
-      let { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : selectedCounty() !== 'all' ? {data:null,error:null} : await supabase.rpc('browse_people', {
+      const rankAcrossPages = ui.sort.value === 'civic_first';
+      const needsAll = selectedCounty() !== 'all' || rankAcrossPages;
+      const rpcSort = rankAcrossPages ? 'first_asc' : ui.sort.value;
+      let { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : needsAll ? {data:null,error:null} : await supabase.rpc('browse_people', {
         p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
-        p_sort: ui.sort.value, p_limit: pageSize, p_offset: page * pageSize,
+        p_sort: rpcSort, p_limit: pageSize, p_offset: page * pageSize,
       });
-      if (!snapshot && selectedCounty() !== 'all' && !error) {
+      if (!snapshot && needsAll && !error) {
         const all: Person[] = [];
         for (let offset = 0; ; offset += 100) {
           const result = await supabase.rpc('browse_people', {
             p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
-            p_sort: ui.sort.value, p_limit: 100, p_offset: offset,
+            p_sort: rpcSort, p_limit: 100, p_offset: offset,
           });
           if (id !== requestId) return;
           if (result.error) throw result.error;
@@ -131,7 +134,7 @@ export function initPeopleSearch(): void {
           all.push(...response.people);
           if (all.length >= response.total || !response.people.length) break;
         }
-        const scoped = await filterCounty(all, 'person');
+        const scoped = orderPeople(await filterCounty(all, 'person'), ui.sort.value);
         data = { people: scoped.slice(page * pageSize, (page + 1) * pageSize), total: scoped.length };
       }
       if (id !== requestId) return;

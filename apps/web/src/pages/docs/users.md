@@ -6,6 +6,30 @@ description: Find a meeting, explore a map, check an election, and understand wh
 
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
+## Start from the homepage
+
+The homepage pairs a civic topic index with a detail panel. Choose People,
+Organizations, Elections, Calendar, Maps, or Public records, then follow the
+panel's link to the full directory. The selected topic is included in the URL,
+so you can share it and use your browser's Back button to return to an earlier
+topic. On a phone, the selected panel appears below the topic links. Without
+JavaScript, the sections remain available as ordinary page anchors.
+
+Search beside the Civic Pulse masthead when you already know a name or subject.
+Upcoming dates group events by their Eastern Time calendar date; every event
+remains a separate link. Select **Upcoming dates** to open the full calendar.
+Eligible election notices use the same published records as the election directory. The Bibb County link opens the initial
+county hub; it does not filter every directory to Bibb County. More county hubs
+can join the same Civic Pulse identity later.
+
+## Appearance
+
+Civic Pulse automatically follows your browser or operating system’s light or
+dark appearance preference, including changes made while the page is open.
+Change that preference in your browser or system settings; no site toggle or
+saved theme choice is needed. Source map colors and document images retain
+their original appearance.
+
 ## Explore your county
 
 Open the county name in the header (for example, **Bibb County**, beside the
@@ -120,17 +144,19 @@ If you do not see meeting notes, they may not have been added yet. For an older 
 
 ## Keep up with the calendar
 
+The month/agenda and event list appear first. Expand **Filter events and calendars** to search or choose organizations, categories, calendars, and calendar colors. Below the events, expand **Subscribe or download the calendar** for feed and download options.
+
 Calendar times and election dates and deadlines are shown in Eastern Time (America/New_York), including daylight saving changes. Election-day hours show when local polls open and close. **Subscribe to calendar** adds an updating feed of public events to your calendar app. If that button does not open your app, expand **Use a subscription URL** and copy the address. **Download calendar** imports a one-time copy instead. Updates to a subscription depend on your calendar app's refresh schedule.
 
 ## Search and explore
 
 - [Search Civic Pulse](/search/) by name or topic, or choose a **Content type** to browse without entering a search term. Results can include people, organizations, elections, articles, maps, and events.
-- [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. **Copy map link** shares the current layer selection.
-- Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). Sort by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and first-name A–Z order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
+- [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. Selecting **Show on map** in the directory moves keyboard focus into the details; Tab reaches its actions, and Escape or the close button returns focus to the directory entry. **Copy map link** shares the current layer selection.
+- Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). The default **Officials and candidates first** order shows elected and appointed officials, then candidates, then other people, alphabetically within each group. You can also sort all matches by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and officials/candidates-first order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
   Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header to see every race in the same election. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 
-If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. Some records have not been added yet.
+If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. On Search Civic Pulse, **Clear search** removes the query and content-type filter and returns focus to the search field; it keeps your header county selection. Some records have not been added yet.
 
 ## Accounts and access
 
@@ -365,26 +391,24 @@ have turnout reports before election day, while May 19, 2026 is historical. Thes
 are reported counts, not winner projections. Original photographs remain private
 for admin review.
 
-## Start from the homepage
+## Navigate and search
 
-Use **What would you like to find?** on the [homepage](/) to search by name,
-organization, place, or topic. Select **Search** or press Enter to open the
-search results, then narrow them by content type. An empty search opens the
-search page so you can choose a type to browse.
+Use the search beside the masthead on the [homepage](/) to find a name,
+organization, place, or topic. Press Enter or select **Search**, then narrow
+results by content type. An empty search opens the search page.
 
-**Elections at a glance** shows up to three upcoming published elections in date
-order, including Election Day itself. Dates roll forward in Eastern Time; new
-or edited election records appear after the next site publish. The homepage
-also links to people, organizations, and public records, shows the public map
-count, and lists upcoming community events.
+The Elections panel highlights an eligible upcoming election. Outside its
+callout window, the panel lists up to three upcoming published elections,
+including Election Day itself. Dates roll forward in Eastern Time; new or
+edited election records appear after the next publish. **All elections** in
+the homepage footer opens the full election directory.
 
-The header's **Browse** menu groups all destinations under **Community**,
+On interior pages, **Browse** groups destinations under **Community**,
 **Government**, and **Research & help**. Open it by click, tap, or keyboard;
-press Escape to close it. **Calendar**, **Search**, and **Sign in** remain directly
-available. Signed-in visitors see **Account**, and admins also see **Admin**.
-Select the Civic Pulse logo to return home. The shorter footer contains
-**About**, **Guides & help**, and **Search**; archive and directory links are
-available in **Browse** on every page.
+press Escape to close it. Signed-in visitors see **Account**, and admins also
+see **Admin**. Select the Civic Pulse logo to return home. Homepage topics
+provide the same directory access, while the footer links to guides and the
+Bibb County hub. Maps remain available through the Maps topic and directory.
 
 Election detail pages show **Voter turnout** charts when Georgia SOS structured
 turnout is available. The charts use the **county in the site header**, just like
@@ -425,6 +449,8 @@ and an absent source time is labeled separately from collection time. Registrati
 and precinct denominators are not inferred. Reports update live after an import.
 
 ### Share an election section
+
+Use **Dates**, **Ballot**, and **Results** near the top of a published election page to jump directly to that section. Ballot information appears before turnout, including when no turnout has been reported yet.
 
 Use **Link** beside a section heading, then copy the browser address (or use
 **Copy link address** on that link). Election detail pages support

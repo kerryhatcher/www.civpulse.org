@@ -1,0 +1,661 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T05:22:12.880Z",
+  "title": "Design System: Civic Pulse",
+  "extensions": {
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "Ultramarine",
+        "tonalRamp": [
+          "oklch(15.00% 0.2422 264.26)",
+          "oklch(26.43% 0.2422 264.26)",
+          "oklch(37.86% 0.2422 264.26)",
+          "oklch(49.29% 0.2422 264.26)",
+          "oklch(60.71% 0.2422 264.26)",
+          "oklch(72.14% 0.2422 264.26)",
+          "oklch(83.57% 0.2422 264.26)",
+          "oklch(95.00% 0.2422 264.26)"
+        ]
+      },
+      "lime": {
+        "role": "secondary",
+        "displayName": "Acid lime",
+        "tonalRamp": [
+          "oklch(15.00% 0.1716 119.76)",
+          "oklch(26.43% 0.1716 119.76)",
+          "oklch(37.86% 0.1716 119.76)",
+          "oklch(49.29% 0.1716 119.76)",
+          "oklch(60.71% 0.1716 119.76)",
+          "oklch(72.14% 0.1716 119.76)",
+          "oklch(83.57% 0.1716 119.76)",
+          "oklch(95.00% 0.1716 119.76)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0067 115.70)",
+          "oklch(26.43% 0.0067 115.70)",
+          "oklch(37.86% 0.0067 115.70)",
+          "oklch(49.29% 0.0067 115.70)",
+          "oklch(60.71% 0.0067 115.70)",
+          "oklch(72.14% 0.0067 115.70)",
+          "oklch(83.57% 0.0067 115.70)",
+          "oklch(95.00% 0.0067 115.70)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0121 167.18)",
+          "oklch(26.43% 0.0121 167.18)",
+          "oklch(37.86% 0.0121 167.18)",
+          "oklch(49.29% 0.0121 167.18)",
+          "oklch(60.71% 0.0121 167.18)",
+          "oklch(72.14% 0.0121 167.18)",
+          "oklch(83.57% 0.0121 167.18)",
+          "oklch(95.00% 0.0121 167.18)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0132 211.06)",
+          "oklch(26.43% 0.0132 211.06)",
+          "oklch(37.86% 0.0132 211.06)",
+          "oklch(49.29% 0.0132 211.06)",
+          "oklch(60.71% 0.0132 211.06)",
+          "oklch(72.14% 0.0132 211.06)",
+          "oklch(83.57% 0.0132 211.06)",
+          "oklch(95.00% 0.0132 211.06)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Interior rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.0196 255.55)",
+          "oklch(26.43% 0.0196 255.55)",
+          "oklch(37.86% 0.0196 255.55)",
+          "oklch(49.29% 0.0196 255.55)",
+          "oklch(60.71% 0.0196 255.55)",
+          "oklch(72.14% 0.0196 255.55)",
+          "oklch(83.57% 0.0196 255.55)",
+          "oklch(95.00% 0.0196 255.55)"
+        ]
+      },
+      "blue-rule": {
+        "role": "primary",
+        "displayName": "Canvas rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.1391 268.36)",
+          "oklch(26.43% 0.1391 268.36)",
+          "oklch(37.86% 0.1391 268.36)",
+          "oklch(49.29% 0.1391 268.36)",
+          "oklch(60.71% 0.1391 268.36)",
+          "oklch(72.14% 0.1391 268.36)",
+          "oklch(83.57% 0.1391 268.36)",
+          "oklch(95.00% 0.1391 268.36)"
+        ]
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Topic hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.2404 264.72)",
+          "oklch(26.43% 0.2404 264.72)",
+          "oklch(37.86% 0.2404 264.72)",
+          "oklch(49.29% 0.2404 264.72)",
+          "oklch(60.71% 0.2404 264.72)",
+          "oklch(72.14% 0.2404 264.72)",
+          "oklch(83.57% 0.2404 264.72)",
+          "oklch(95.00% 0.2404 264.72)"
+        ]
+      },
+      "blue-deep": {
+        "role": "primary",
+        "displayName": "Deep blue",
+        "tonalRamp": [
+          "oklch(15.00% 0.2024 264.36)",
+          "oklch(26.43% 0.2024 264.36)",
+          "oklch(37.86% 0.2024 264.36)",
+          "oklch(49.29% 0.2024 264.36)",
+          "oklch(60.71% 0.2024 264.36)",
+          "oklch(72.14% 0.2024 264.36)",
+          "oklch(83.57% 0.2024 264.36)",
+          "oklch(95.00% 0.2024 264.36)"
+        ]
+      },
+      "ink-hover": {
+        "role": "neutral",
+        "displayName": "Search hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0206 159.28)",
+          "oklch(26.43% 0.0206 159.28)",
+          "oklch(37.86% 0.0206 159.28)",
+          "oklch(49.29% 0.0206 159.28)",
+          "oklch(60.71% 0.0206 159.28)",
+          "oklch(72.14% 0.0206 159.28)",
+          "oklch(83.57% 0.0206 159.28)",
+          "oklch(95.00% 0.0206 159.28)"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.2422 264.26)",
+          "oklch(26.43% 0.2422 264.26)",
+          "oklch(37.86% 0.2422 264.26)",
+          "oklch(49.29% 0.2422 264.26)",
+          "oklch(60.71% 0.2422 264.26)",
+          "oklch(72.14% 0.2422 264.26)",
+          "oklch(83.57% 0.2422 264.26)",
+          "oklch(95.00% 0.2422 264.26)"
+        ]
+      },
+      "on-canvas": {
+        "role": "neutral",
+        "displayName": "on canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.0067 115.70)",
+          "oklch(26.43% 0.0067 115.70)",
+          "oklch(37.86% 0.0067 115.70)",
+          "oklch(49.29% 0.0067 115.70)",
+          "oklch(60.71% 0.0067 115.70)",
+          "oklch(72.14% 0.0067 115.70)",
+          "oklch(83.57% 0.0067 115.70)",
+          "oklch(95.00% 0.0067 115.70)"
+        ]
+      },
+      "canvas-rule": {
+        "role": "neutral",
+        "displayName": "canvas rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.1391 268.36)",
+          "oklch(26.43% 0.1391 268.36)",
+          "oklch(37.86% 0.1391 268.36)",
+          "oklch(49.29% 0.1391 268.36)",
+          "oklch(60.71% 0.1391 268.36)",
+          "oklch(72.14% 0.1391 268.36)",
+          "oklch(83.57% 0.1391 268.36)",
+          "oklch(95.00% 0.1391 268.36)"
+        ]
+      },
+      "surface-soft": {
+        "role": "neutral",
+        "displayName": "surface soft",
+        "tonalRamp": [
+          "oklch(15.00% 0.0092 258.34)",
+          "oklch(26.43% 0.0092 258.34)",
+          "oklch(37.86% 0.0092 258.34)",
+          "oklch(49.29% 0.0092 258.34)",
+          "oklch(60.71% 0.0092 258.34)",
+          "oklch(72.14% 0.0092 258.34)",
+          "oklch(83.57% 0.0092 258.34)",
+          "oklch(95.00% 0.0092 258.34)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "surface hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0170 267.79)",
+          "oklch(26.43% 0.0170 267.79)",
+          "oklch(37.86% 0.0170 267.79)",
+          "oklch(49.29% 0.0170 267.79)",
+          "oklch(60.71% 0.0170 267.79)",
+          "oklch(72.14% 0.0170 267.79)",
+          "oklch(83.57% 0.0170 267.79)",
+          "oklch(95.00% 0.0170 267.79)"
+        ]
+      },
+      "map-caption": {
+        "role": "neutral",
+        "displayName": "map caption",
+        "tonalRamp": [
+          "oklch(15.00% 0.0067 115.70)",
+          "oklch(26.43% 0.0067 115.70)",
+          "oklch(37.86% 0.0067 115.70)",
+          "oklch(49.29% 0.0067 115.70)",
+          "oklch(60.71% 0.0067 115.70)",
+          "oklch(72.14% 0.0067 115.70)",
+          "oklch(83.57% 0.0067 115.70)",
+          "oklch(95.00% 0.0067 115.70)"
+        ]
+      },
+      "panel": {
+        "role": "secondary",
+        "displayName": "panel",
+        "tonalRamp": [
+          "oklch(15.00% 0.1716 119.76)",
+          "oklch(26.43% 0.1716 119.76)",
+          "oklch(37.86% 0.1716 119.76)",
+          "oklch(49.29% 0.1716 119.76)",
+          "oklch(60.71% 0.1716 119.76)",
+          "oklch(72.14% 0.1716 119.76)",
+          "oklch(83.57% 0.1716 119.76)",
+          "oklch(95.00% 0.1716 119.76)"
+        ]
+      },
+      "panel-rule": {
+        "role": "secondary",
+        "displayName": "panel rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.1057 121.59)",
+          "oklch(26.43% 0.1057 121.59)",
+          "oklch(37.86% 0.1057 121.59)",
+          "oklch(49.29% 0.1057 121.59)",
+          "oklch(60.71% 0.1057 121.59)",
+          "oklch(72.14% 0.1057 121.59)",
+          "oklch(83.57% 0.1057 121.59)",
+          "oklch(95.00% 0.1057 121.59)"
+        ]
+      },
+      "selected-ink": {
+        "role": "neutral",
+        "displayName": "selected ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0121 167.18)",
+          "oklch(26.43% 0.0121 167.18)",
+          "oklch(37.86% 0.0121 167.18)",
+          "oklch(49.29% 0.0121 167.18)",
+          "oklch(60.71% 0.0121 167.18)",
+          "oklch(72.14% 0.0121 167.18)",
+          "oklch(83.57% 0.0121 167.18)",
+          "oklch(95.00% 0.0121 167.18)"
+        ]
+      },
+      "dark-canvas": {
+        "role": "neutral",
+        "displayName": "dark canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.0367 267.72)",
+          "oklch(26.43% 0.0367 267.72)",
+          "oklch(37.86% 0.0367 267.72)",
+          "oklch(49.29% 0.0367 267.72)",
+          "oklch(60.71% 0.0367 267.72)",
+          "oklch(72.14% 0.0367 267.72)",
+          "oklch(83.57% 0.0367 267.72)",
+          "oklch(95.00% 0.0367 267.72)"
+        ]
+      },
+      "dark-paper": {
+        "role": "neutral",
+        "displayName": "dark paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0378 261.65)",
+          "oklch(26.43% 0.0378 261.65)",
+          "oklch(37.86% 0.0378 261.65)",
+          "oklch(49.29% 0.0378 261.65)",
+          "oklch(60.71% 0.0378 261.65)",
+          "oklch(72.14% 0.0378 261.65)",
+          "oklch(83.57% 0.0378 261.65)",
+          "oklch(95.00% 0.0378 261.65)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "dark ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0123 121.70)",
+          "oklch(26.43% 0.0123 121.70)",
+          "oklch(37.86% 0.0123 121.70)",
+          "oklch(49.29% 0.0123 121.70)",
+          "oklch(60.71% 0.0123 121.70)",
+          "oklch(72.14% 0.0123 121.70)",
+          "oklch(83.57% 0.0123 121.70)",
+          "oklch(95.00% 0.0123 121.70)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "dark muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.0299 259.59)",
+          "oklch(26.43% 0.0299 259.59)",
+          "oklch(37.86% 0.0299 259.59)",
+          "oklch(49.29% 0.0299 259.59)",
+          "oklch(60.71% 0.0299 259.59)",
+          "oklch(72.14% 0.0299 259.59)",
+          "oklch(83.57% 0.0299 259.59)",
+          "oklch(95.00% 0.0299 259.59)"
+        ]
+      },
+      "dark-blue": {
+        "role": "primary",
+        "displayName": "dark blue",
+        "tonalRamp": [
+          "oklch(15.00% 0.1028 270.53)",
+          "oklch(26.43% 0.1028 270.53)",
+          "oklch(37.86% 0.1028 270.53)",
+          "oklch(49.29% 0.1028 270.53)",
+          "oklch(60.71% 0.1028 270.53)",
+          "oklch(72.14% 0.1028 270.53)",
+          "oklch(83.57% 0.1028 270.53)",
+          "oklch(95.00% 0.1028 270.53)"
+        ]
+      },
+      "dark-blue-deep": {
+        "role": "primary",
+        "displayName": "dark blue deep",
+        "tonalRamp": [
+          "oklch(15.00% 0.0698 273.25)",
+          "oklch(26.43% 0.0698 273.25)",
+          "oklch(37.86% 0.0698 273.25)",
+          "oklch(49.29% 0.0698 273.25)",
+          "oklch(60.71% 0.0698 273.25)",
+          "oklch(72.14% 0.0698 273.25)",
+          "oklch(83.57% 0.0698 273.25)",
+          "oklch(95.00% 0.0698 273.25)"
+        ]
+      },
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "dark line",
+        "tonalRamp": [
+          "oklch(15.00% 0.0453 261.84)",
+          "oklch(26.43% 0.0453 261.84)",
+          "oklch(37.86% 0.0453 261.84)",
+          "oklch(49.29% 0.0453 261.84)",
+          "oklch(60.71% 0.0453 261.84)",
+          "oklch(72.14% 0.0453 261.84)",
+          "oklch(83.57% 0.0453 261.84)",
+          "oklch(95.00% 0.0453 261.84)"
+        ]
+      },
+      "dark-surface-soft": {
+        "role": "neutral",
+        "displayName": "dark surface soft",
+        "tonalRamp": [
+          "oklch(15.00% 0.0441 260.60)",
+          "oklch(26.43% 0.0441 260.60)",
+          "oklch(37.86% 0.0441 260.60)",
+          "oklch(49.29% 0.0441 260.60)",
+          "oklch(60.71% 0.0441 260.60)",
+          "oklch(72.14% 0.0441 260.60)",
+          "oklch(83.57% 0.0441 260.60)",
+          "oklch(95.00% 0.0441 260.60)"
+        ]
+      },
+      "dark-surface-hover": {
+        "role": "neutral",
+        "displayName": "dark surface hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0474 258.30)",
+          "oklch(26.43% 0.0474 258.30)",
+          "oklch(37.86% 0.0474 258.30)",
+          "oklch(49.29% 0.0474 258.30)",
+          "oklch(60.71% 0.0474 258.30)",
+          "oklch(72.14% 0.0474 258.30)",
+          "oklch(83.57% 0.0474 258.30)",
+          "oklch(95.00% 0.0474 258.30)"
+        ]
+      },
+      "dark-map-caption": {
+        "role": "neutral",
+        "displayName": "dark map caption",
+        "tonalRamp": [
+          "oklch(15.00% 0.0378 261.65)",
+          "oklch(26.43% 0.0378 261.65)",
+          "oklch(37.86% 0.0378 261.65)",
+          "oklch(49.29% 0.0378 261.65)",
+          "oklch(60.71% 0.0378 261.65)",
+          "oklch(72.14% 0.0378 261.65)",
+          "oklch(83.57% 0.0378 261.65)",
+          "oklch(95.00% 0.0378 261.65)"
+        ]
+      },
+      "dark-panel": {
+        "role": "secondary",
+        "displayName": "dark panel",
+        "tonalRamp": [
+          "oklch(15.00% 0.0372 134.49)",
+          "oklch(26.43% 0.0372 134.49)",
+          "oklch(37.86% 0.0372 134.49)",
+          "oklch(49.29% 0.0372 134.49)",
+          "oklch(60.71% 0.0372 134.49)",
+          "oklch(72.14% 0.0372 134.49)",
+          "oklch(83.57% 0.0372 134.49)",
+          "oklch(95.00% 0.0372 134.49)"
+        ]
+      },
+      "dark-panel-rule": {
+        "role": "secondary",
+        "displayName": "dark panel rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.0681 126.63)",
+          "oklch(26.43% 0.0681 126.63)",
+          "oklch(37.86% 0.0681 126.63)",
+          "oklch(49.29% 0.0681 126.63)",
+          "oklch(60.71% 0.0681 126.63)",
+          "oklch(72.14% 0.0681 126.63)",
+          "oklch(83.57% 0.0681 126.63)",
+          "oklch(95.00% 0.0681 126.63)"
+        ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control boundary"
+      },
+      "dark-control-line": {
+        "role": "neutral",
+        "displayName": "Dark control boundary"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Monumental identity",
+        "purpose": "Homepage masthead; at 800px and below uses clamp(48px,21vw,176px), no horizontal transform, and 1.05 line height."
+      },
+      "headline": {
+        "displayName": "Exhibition headline",
+        "purpose": "Selected topic and election headline."
+      },
+      "title": {
+        "displayName": "Condensed section title",
+        "purpose": "Secondary section headings on interior surfaces."
+      },
+      "topic": {
+        "displayName": "Topic label",
+        "purpose": "Desktop numbered civic index; at 800px and below uses Barlow Condensed 600, with clamp(22px,6.9vw,27px) below 480px."
+      },
+      "body": {
+        "displayName": "Reading text",
+        "purpose": "General readable prose."
+      },
+      "panel-body": {
+        "displayName": "Panel copy",
+        "purpose": "Selected-topic explanatory text."
+      },
+      "label": {
+        "displayName": "Navigation label",
+        "purpose": "Shared navigation."
+      },
+      "panel-label": {
+        "displayName": "Numbered topic label",
+        "purpose": "Visible focusable exhibit identifier from the approved composition; not a generic decorative eyebrow."
+      },
+      "date": {
+        "displayName": "Grouped date",
+        "purpose": "Eastern-calendar-day label beside individually linked upcoming events."
+      },
+      "panel-action": {
+        "displayName": "Exhibit action",
+        "purpose": "Condensed primary action in a selected-topic panel."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "topic-reveal",
+        "value": "200ms cubic-bezier(.16,1,.3,1); translateY(6px) to translateY(0)",
+        "purpose": "Selected panel entry; disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "navigation-underline",
+        "value": "transform 180ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Header link hover/current underline."
+      },
+      {
+        "name": "record-border",
+        "value": "border-color 160ms ease",
+        "purpose": "Directory card hover emphasis."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "stacked-exhibition",
+        "value": "800px"
+      },
+      {
+        "name": "single-column-browse",
+        "value": "650px"
+      },
+      {
+        "name": "compact-mobile",
+        "value": "480px"
+      }
+    ],
+    "appearance": {
+      "preference": "prefers-color-scheme: dark",
+      "default": "light",
+      "persistence": "none",
+      "toggle": false,
+      "documentColorScheme": "light dark",
+      "themeColor": {
+        "light": "canvas",
+        "dark": "dark-canvas"
+      },
+      "fixedRoles": [
+        "on-canvas",
+        "selected-ink",
+        "lime"
+      ],
+      "darkTokenMapping": {
+        "canvas": "dark-canvas",
+        "paper": "dark-paper",
+        "ink": "dark-ink",
+        "muted": "dark-muted",
+        "blue": "dark-blue",
+        "rust": "dark-blue",
+        "rust-dark": "dark-blue-deep",
+        "focus": "lime",
+        "line": "dark-line",
+        "canvas-rule": "dark-line",
+        "surface-soft": "dark-surface-soft",
+        "surface-hover": "dark-surface-hover",
+        "map-caption": "dark-map-caption",
+        "panel": "dark-panel",
+        "panel-rule": "dark-panel-rule",
+        "control-line": "dark-control-line"
+      }
+    },
+    "paletteRampPolicy": "Eight-step synthesized OKLCH strips for palette inspection only. The frontmatter and actual CSS semantic assignments are normative; ramp steps are not shipped CSS tokens."
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink action on paper or lime; blue hover.",
+      "html": "<a class=\"ds-primary\" href=\"#details\">View election details</a>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border:1px solid var(--ink,#111815);border-radius:var(--radius,6px);background:var(--ink,#111815);color:var(--paper,#f6f7f2);font:600 16px \"Barlow\",sans-serif;text-decoration:none}.ds-primary:hover{background:var(--blue,#0838d7)}.ds-primary:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}@media(prefers-color-scheme:dark){.ds-primary:hover{background:var(--lime,#daf868);color:var(--selected-ink,#111815)}}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Paper control with lime hover.",
+      "html": "<button class=\"ds-secondary\">Next</button>",
+      "css": ".ds-secondary{min-height:44px;padding:10px 14px;border:1px solid var(--line,#b8c1cd);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;cursor:pointer}.ds-secondary:hover:not(:disabled){background:var(--sage,#daf868)}.ds-secondary:disabled{opacity:.5;cursor:default}.ds-secondary:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}@media(prefers-color-scheme:dark){.ds-secondary:hover:not(:disabled){color:var(--selected-ink,#111815)}}"
+    },
+    {
+      "name": "Text field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Paper input with line border and blue focus.",
+      "html": "<label class=\"ds-field\">Search<input class=\"ds-input\" placeholder=\"Find public information\" /></label>",
+      "css": ".ds-field{display:grid;gap:6px;color:var(--ink,#111815);font:500 14px \"Barlow\",sans-serif}.ds-input{min-height:44px;padding:10px 12px;border:1px solid var(--line,#b8c1cd);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;caret-color:var(--blue,#0838d7)}.ds-input::placeholder{color:var(--muted,#485254)}.ds-input:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}"
+    },
+    {
+      "name": "Header navigation",
+      "kind": "nav",
+      "description": "Fixed pale canvas text with lime underline in both appearances.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Example\"><a href=\"#about\" aria-current=\"page\">About</a><a href=\"#signin\">Sign in</a></nav>",
+      "css": ".ds-nav{display:flex;gap:24px;padding:8px 16px;background:var(--canvas,#0838d7);font:400 16px \"Barlow\",sans-serif}.ds-nav a{position:relative;display:flex;align-items:center;min-height:44px;min-width:44px;color:var(--on-canvas,#f6f7f2);text-decoration:none}.ds-nav a:after{content:\"\";position:absolute;bottom:4px;left:0;right:0;height:2px;background:var(--lime,#daf868);transform:scaleX(0);transform-origin:left;transition:transform 180ms cubic-bezier(.16,1,.3,1)}.ds-nav a:hover:after,.ds-nav a[aria-current=\"page\"]:after{transform:scaleX(1)}.ds-nav a:focus-visible{outline:3px solid var(--lime,#daf868);outline-offset:5px}"
+    },
+    {
+      "name": "Visibility badge",
+      "kind": "chip",
+      "description": "Informational access label used on permitted search results.",
+      "html": "<span class=\"ds-badge\">Private</span>",
+      "css": ".ds-badge{display:inline-block;align-self:flex-start;padding:2px 6px;border:1px solid var(--line,#b8c1cd);font:600 11px \"Barlow\",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--rust-dark,#062baa)}"
+    },
+    {
+      "name": "Directory card",
+      "kind": "card",
+      "description": "Square paper record with border emphasis on hover.",
+      "html": "<article class=\"ds-card\"><h2><a href=\"#record\">Community organization</a></h2><p>Public bodies, local groups, and calendars.</p></article>",
+      "css": ".ds-card{display:flex;flex-direction:column;gap:12px;padding:22px;border:1px solid var(--line,#b8c1cd);border-radius:0;background:var(--paper,#f6f7f2);color:var(--ink,#111815);transition:border-color 160ms ease}.ds-card:hover{border-color:var(--ink,#111815)}.ds-card h2{margin:0;font:600 24px/1.08 \"Barlow Condensed\",sans-serif}.ds-card p{margin:0;font:400 16px/1.6 \"Barlow\",sans-serif}.ds-card a{color:inherit;text-underline-offset:5px}.ds-card a:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}"
+    },
+    {
+      "name": "Selected topic",
+      "kind": "custom",
+      "refersTo": "topic-selected",
+      "description": "Lime index selection with fixed dark text in both appearances.",
+      "html": "<a class=\"ds-topic\" href=\"#topic-elections\" aria-current=\"true\"><span class=\"ds-number\">03</span><span class=\"ds-name\">Elections</span><span class=\"ds-description\">Dates, races, candidates, and results.</span><svg width=\"30\" height=\"30\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></a>",
+      "css": ".ds-topic{display:grid;grid-template-columns:38px minmax(0,.94fr) minmax(0,1.06fr) 36px;gap:18px;align-items:center;min-height:96px;padding:23px 14px;border-radius:var(--radius,6px);background:var(--lime,#daf868);color:var(--selected-ink,#111815);text-decoration:none}.ds-number{font:600 23px \"Barlow Condensed\",sans-serif;font-variant-numeric:tabular-nums}.ds-name{font:700 clamp(28px,3vw,46px)/1.05 \"Barlow\",sans-serif;letter-spacing:-.04em}.ds-description{font:400 17px/1.35 \"Barlow\",sans-serif}.ds-topic:focus-visible{outline:3px solid var(--paper,#f6f7f2);outline-offset:5px}"
+    },
+    {
+      "name": "Exhibition detail",
+      "kind": "custom",
+      "refersTo": "detail-panel",
+      "description": "Lime light panel and olive dark panel with a numbered topic identifier.",
+      "html": "<section class=\"ds-detail\"><h2 class=\"ds-detail-label\"><span>03</span> Elections</h2><h3 class=\"ds-detail-title\">Follow your next election.</h3><p class=\"ds-detail-copy\">Explore published dates, races, candidates, and results.</p></section>",
+      "css": ".ds-detail{background:var(--panel,#daf868);color:var(--ink,#111815);padding:30px 32px 6px;border-radius:var(--radius,6px)}.ds-detail-label{margin:2px 0 14px;font:600 17px/1.2 \"Barlow\",sans-serif;letter-spacing:.08em;text-transform:uppercase}.ds-detail-label span{margin-right:24px;letter-spacing:0}.ds-detail-title{margin:0 0 14px;font:400 clamp(40px,5.85vw,96px)/1.08 \"Anton\",sans-serif;letter-spacing:-.025em;overflow-wrap:anywhere}.ds-detail-copy{font:400 26px/1.2 \"Barlow\",sans-serif}@media(prefers-color-scheme:dark){.ds-detail-title{color:var(--lime,#daf868)}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Open Exhibition",
+    "overview": "Civic Pulse presents public information with the directness of exhibition signage: monumental condensed headings, a saturated ultramarine ground, and precise topic labels. Paper reading surfaces and lime selection surfaces keep dense civic information readable inside that expressive identity. The browser/system appearance preference automatically switches the canvas and reading surfaces to navy while retaining lime selection and pale reading text.\n\nThe name remains geographically expandable. Bibb County, Georgia appears as separate location context, without suggesting that other county hubs already exist. This document records implemented styles; it does not certify a finish-review verdict. Source authority is `src/styles/global.css`, `src/layouts/Layout.astro`, and the implemented homepage and search scripts. The approved composition and review screenshots provide visual context; source values take precedence.",
+    "keyCharacteristics": [
+      "Monumental Anton display typography with readable Barlow labels and prose.",
+      "Ultramarine/light and navy/dark canvases, distinct reading surfaces, and acid-lime selected topics.",
+      "Numbered, ruled topic navigation and compact date indexes.",
+      "Flat surfaces, restrained rounding, and explicit keyboard focus."
+    ],
+    "rules": [
+      {
+        "name": "Surface Contrast",
+        "body": "Use on-canvas text on the canvas, ink text on reading surfaces, and fixed selected-ink text on lime; select the focus color for the surface underneath it.",
+        "section": "colors"
+      },
+      {
+        "name": "Display and Reading",
+        "body": "Reserve Anton for identity and major headings; use Barlow for explanatory copy and controls.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do keep geographic context separate from the Civic Pulse name.",
+      "Do pair monumental display headings with readable Barlow body copy.",
+      "Do use lime for selected topics and preserve fixed dark text on that lime surface.",
+      "Do preserve visible keyboard focus, reduced-motion behavior, and automatic system appearance.",
+      "Do preserve source map colors, icons, historical records, and version notes."
+    ],
+    "donts": [
+      "Don't turn every reading surface into a floating or heavily rounded card.",
+      "Don't imply geographic coverage or civic capabilities that are not available.",
+      "Don't expose hidden data to achieve a visual composition; static Astro and visibility-aware reads remain binding."
+    ]
+  }
+}

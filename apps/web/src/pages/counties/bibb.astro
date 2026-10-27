@@ -167,7 +167,7 @@ const overviewStats = county.census.overviewCodes.map(code => county.census.stat
   .county-start { background: var(--ink); color: var(--paper); padding: 28px 32px; }
   .county-start h2 { font-size: 1.8rem; margin-bottom: 18px; }
   .county-start a { display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--sage); padding-block: 14px; text-decoration: none; }
-  .county-start a:hover { color: var(--sage); }
+  .county-start a:hover { color: var(--paper); text-decoration: underline; }
   .county-start :focus-visible { outline-color: var(--paper); }
   .county-sections { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-block: 18px; border-block: 1px solid var(--line); }
   .county-sections a { padding-block: 6px; }
@@ -180,7 +180,7 @@ const overviewStats = county.census.overviewCodes.map(code => county.census.stat
   .county-map-links { padding: 0; margin-block: 24px; list-style: none; }
   .county-map-links a { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line); text-decoration: none; }
   .county-map-links a:hover { text-decoration: underline; }
-  .county-map-feature { background: var(--sage); display: block; align-self: stretch; text-decoration: none; padding: 20px; }
+  .county-map-feature { color: var(--selected-ink); background: var(--sage); display: block; align-self: stretch; text-decoration: none; padding: 20px; }
   .county-map-preview { height: 310px; background: var(--paper); }
   .county-map-feature > span { display: flex; justify-content: space-between; margin-top: 20px; font-size: 1.3rem; font-weight: 500; }
   .county-map-feature .county-map-caption { display: block; margin-top: 6px; font-size: .9rem; font-weight: 400; }
@@ -206,7 +206,7 @@ const overviewStats = county.census.overviewCodes.map(code => county.census.stat
   .county-comparison figcaption > span { display: block; color: var(--muted); font-size: .8rem; font-weight: 400; margin-top: 4px; }
   .county-chart-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 48px; align-items: center; gap: 10px; font-size: .8rem; margin-top: 12px; }
   .county-chart-row strong { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
-  .county-chart-track { height: 9px; background: var(--canvas); }
+  .county-chart-track { height: 9px; background: var(--surface-soft); }
   .county-chart-track > span { display: block; height: 100%; background: var(--ink); }
   .county-chart-state .county-chart-track > span { background: var(--rust); }
   .county-section .county-chart-note { font-size: .8rem; max-width: none; }

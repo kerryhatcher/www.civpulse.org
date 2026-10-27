@@ -65,7 +65,6 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
   }
 >
   <main id="main">
-    <p><a href={`/elections/results/?id=${election.id}`}>Results &amp; turnout →</a></p>
     <div class="org-header">
       <div class="org-header-text">
         <p class="org-eyebrow">{ELECTION_KIND_LABELS[election.kind]}</p>
@@ -86,6 +85,12 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
         Edit election
       </a>
     </div>
+
+    <nav class="election-section-nav" aria-label="Election sections">
+      {dateGroups.length > 0 && <a href="#dates-and-deadlines">Dates &amp; deadlines</a>}
+      <a href="#ballot">What's on the ballot</a>
+      <a href="#results-and-turnout">Results &amp; turnout</a>
+    </nav>
 
     {election.description && <div class="prose election-description"><p>{election.description}</p></div>}
 
@@ -118,9 +123,6 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
         </section>
       )
     }
-
-    <ElectionTurnout electionId={election.id} />
-    <ElectionPrecinctTurnout electionId={election.id} />
 
     <section id="ballot" data-shareable-section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
@@ -187,6 +189,12 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       }
     </section>
 
+    <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
+      <p><a href={`/elections/results/?id=${election.id}`}>Election results, turnout reports &amp; source details →</a></p>
+      <ElectionTurnout electionId={election.id} />
+      <ElectionPrecinctTurnout electionId={election.id} />
+    </section>
+
     <p class="org-back">
       <a href="/elections/">← All elections</a>
     </p>
@@ -212,3 +220,8 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
   void initAdminEditLink();
   initElectionScope();
 </script>
+
+<style>
+  .election-section-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: 1rem; }
+  .election-section-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+</style>

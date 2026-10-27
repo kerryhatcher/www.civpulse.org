@@ -4,6 +4,11 @@ title: Admin guide
 description: Add board meeting notes and maintain the records people use across Civic Pulse.
 ---
 
+Admin pages follow your browser or operating system’s light/dark appearance
+setting, just like the public site. Changing appearance does not change access
+or published content.
+
+
 ## Publish a meeting document to the public archive
 
 Archive publication is separate from uploading a meeting attachment. When the

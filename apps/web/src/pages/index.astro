@@ -2,12 +2,9 @@
 import {calendarAssetUrl} from '../lib/calendar-assets';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
-import 'leaflet/dist/leaflet.css';
-import { fetchPublicMaps } from '../lib/maps';
-import { fetchPublicElections, fetchElectionDetail, formatElectionDate, electionHref } from '../lib/elections';
+import { fetchPublicElections, fetchElectionDetail, electionHref } from '../lib/elections';
 import { civicDate, electionCalloutStart } from '../lib/election-callout';
 
-const maps = await fetchPublicMaps();
 const elections = (await fetchPublicElections()).sort((a, b) => a.election_date.localeCompare(b.election_date) || a.name.localeCompare(b.name));
 const electionCallouts = (await Promise.all(elections.map(async (election) => {
   const detail = await fetchElectionDetail(election.id);
@@ -19,157 +16,70 @@ const electionCallouts = (await Promise.all(elections.map(async (election) => {
   return { election, earlyVoting, startsOn: electionCalloutStart(earlyVoting) };
 }))).filter((entry) => entry !== null)
   .sort((a, b) => a.election.election_date.localeCompare(b.election.election_date) || a.election.name.localeCompare(b.election.name));
+const topics = [{"id":"people","label":"People","description":"Officials, candidates, and recorded votes.","href":"/people/"},{"id":"organizations","label":"Organizations","description":"Public bodies, local groups, and calendars.","href":"/orgs/"},{"id":"elections","label":"Elections","description":"Dates, races, candidates, and results.","href":"/elections/"},{"id":"calendar","label":"Calendar","description":"Meetings, events, and important dates.","href":"/calendar/"},{"id":"maps","label":"Maps","description":"Places, precincts, and districts.","href":"/maps/"},{"id":"records","label":"Public records","description":"Browse civic records and track records requests.","href":"/records/"}];
 ---
 
-<Layout title="A closer look at your community">
-  <main id="main">
-    <section class="home-intro" aria-labelledby="home-title">
-      <h1 id="home-title">A closer look at your community.</h1>
-      <p>Follow the decisions, places, and gatherings that shape where you live.</p>
-      <form class="home-search" action="/search/" method="get" role="search" aria-label="Search Civic Pulse">
-        <label for="home-query">What would you like to find?</label>
-        <div class="home-search-controls">
-          <input id="home-query" type="search" name="q" maxlength="500" placeholder="A person, organization, place, or topic…" />
-          <button class="button-link" type="submit">Search <Icon /></button>
-        </div>
+<Layout title="Your community, in the open">
+  <main id="main" class="exhibition-home">
+    <section class="exhibition-masthead" aria-label="Civic Pulse search">
+      <h1>Civic Pulse</h1>
+      <form action="/search/" method="get" role="search" class="exhibition-search">
+        <label class="visually-hidden" for="home-query">Find a person, place, or public record</label>
+        <input id="home-query" type="search" name="q" maxlength="500" placeholder="Find a person, place, or public record" />
+        <button type="submit">Search <Icon /></button>
       </form>
-      <p class="home-search-hint">Search people, elections, maps, events, and meeting notes.</p>
-      <p><a href="/counties/bibb/">Explore the Bibb County community hub <Icon /></a></p>
     </section>
+    <div class="exhibition-workspace" data-exhibition>
+      <nav class="exhibition-index" aria-label="Explore civic topics">
+        {topics.map((topic,index) => <a href={'#topic-' + topic.id} data-topic={topic.id} aria-current={topic.id === 'elections' ? 'true' : undefined}>
+          <span class="topic-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
+          <span class="topic-name">{topic.label}</span>
+          <span class="topic-description">{topic.description}</span>
+          <Icon size={30} />
+        </a>)}
+      </nav>
+      <div class="exhibition-detail">
+        <section id="topic-elections" data-topic-panel="elections" aria-labelledby="elections-heading">
+          <h2 id="elections-heading" class="detail-section-title" tabindex="-1"><span aria-hidden="true">03</span> Elections</h2>
+          {electionCallouts.map(({election,earlyVoting,startsOn}) => <article class="exhibition-election" data-election-callout data-starts-on={startsOn} data-election-day={election.election_date} data-early-voting={earlyVoting} hidden>
+            <h3>{election.name}</h3>
+            <p>Find key dates, registration details, what’s on the ballot and more.</p>
+            <a class="button-link" href={electionHref(election)}>View election details <Icon /></a>
+          </article>)}
+          <div class="exhibition-election-fallback">
+            <h3>Follow your next election.</h3>
+            <p>Explore published dates, races, candidates, and results.</p>
+            <ul class="home-election-list">{elections.map(election => <li data-upcoming-election data-election-day={election.election_date} hidden><a href={electionHref(election)}>{election.name}</a></li>)}</ul>
+            <p data-home-elections-empty hidden>No upcoming elections are published yet.</p>
+            <a class="button-link" href="/elections/">Explore elections <Icon /></a>
+          </div>
 
-    {electionCallouts.map(({ election, earlyVoting, startsOn }) => (
-      <section class="home-election-callout" data-election-callout data-starts-on={startsOn}
-        data-election-day={election.election_date} data-early-voting={earlyVoting}
-        aria-labelledby={`election-${election.id}`} hidden>
-        <div>
-          <h2 id={`election-${election.id}`}>{election.name}</h2>
-          <p class="home-election-status" data-voting-status>Make your plan to vote.</p>
-          <p class="home-election-dates">
-            Early voting begins <time datetime={earlyVoting}>{formatElectionDate(earlyVoting)}</time>.
-            {' '}Election Day is <time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time>.
-          </p>
-        </div>
-        <a class="button-link" href={electionHref(election)} aria-label={`View election details: ${election.name}`}>
-          View election details <Icon />
-        </a>
-      </section>
-    ))}
-
-    <section class="home-overview" aria-labelledby="overview-title">
-      <div class="home-election-overview">
-        <h2 id="overview-title">Elections at a glance</h2>
-        <ul class="home-election-list">
-          {elections.map((election) => (
-            <li data-upcoming-election data-election-day={election.election_date} hidden>
-              <time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time>
-              <a href={electionHref(election)}>{election.name}</a>
-            </li>
-          ))}
-        </ul>
-        <p data-home-elections-empty hidden>No upcoming elections are published yet.</p>
-        <noscript><p>Open the election directory for published dates and races.</p></noscript>
-        <a class="home-more-link" href="/elections/">All elections & races <Icon /></a>
-      </div>
-      <div class="home-starting-points">
-        <h2>Follow your community</h2>
-        <dl>
-          <div><dt><a href="/people/">People & representatives</a></dt><dd>Officials, candidates, and their recorded votes.</dd></div>
-          <div><dt><a href="/orgs/">Organizations</a></dt><dd>Local groups, public bodies, and their calendars.</dd></div>
-          <div><dt><a href="/records/">Public records</a></dt><dd>Browse civic records, or <a href="/requests/">track a records request</a>.</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <div class="home-destinations">
-      <section class="destination maps-destination" aria-labelledby="maps-title">
-        <header class="destination-heading">
-          <h2 id="maps-title">Explore maps</h2>
-          <p>{maps.length} public {maps.length === 1 ? 'map' : 'maps'} of places, precincts, and districts.</p>
-        </header>
-        <div class="destination-body">
-          {
-            maps.length > 0 ? (
-              <div class="map-carousel" data-map-carousel role="region" aria-label="Map previews">
-                <div class="map-carousel-viewport" data-carousel-viewport>
-                  {maps.map((map, index) => (
-                    <article
-                      class="map-slide"
-                      aria-label={`Map ${index + 1} of ${maps.length}`}
-                    >
-                      <a
-                        class="map-slide-preview-link"
-                        href={`/maps/${map.slug}/`}
-                        aria-label={`View map: ${map.name}`}
-                      >
-                        <div class="map-slide-preview" data-map-preview data-map-id={map.id}></div>
-                      </a>
-                      <div class="map-slide-body">
-                        <h3>
-                          <a href={`/maps/${map.slug}/`}>{map.name}</a>
-                        </h3>
-                        {map.description && <p>{map.description}</p>}
-                        {map.organizations?.name && (
-                          <span class="map-slide-meta">{map.organizations.name}</span>
-                        )}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-                <div class="map-carousel-controls">
-                  <span class="map-carousel-count" data-carousel-count></span>
-                  <button type="button" data-carousel-prev aria-label="Previous map">
-                    <Icon name="chevron-left" />
-                  </button>
-                  <button type="button" data-carousel-next aria-label="Next map">
-                    <Icon name="chevron-right" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div class="empty-state">
-                <p>No public maps are published yet.</p>
-              </div>
-            )
-          }
-          <p class="body-note">Previews show each map's default layers.</p>
-        </div>
-        <a class="destination-link map-cta" href="/maps/">
-          Open map explorer <Icon />
-        </a>
-      </section>
-
-      <section class="destination calendar-destination" aria-labelledby="calendar-title">
-        <header class="destination-heading">
-          <h2 id="calendar-title">Community calendar</h2>
-          <p>Local events, programs and gatherings.</p>
-        </header>
-        <div class="destination-body">
+        </section>
+        {topics.filter(topic => topic.id !== 'elections').map(topic => <section id={'topic-' + topic.id} data-topic-panel={topic.id} aria-labelledby={topic.id + '-heading'}>
+          <h2 id={topic.id + '-heading'} class="detail-section-title" tabindex="-1"><span aria-hidden="true">{String(topics.indexOf(topic)+1).padStart(2,'0')}</span> {topic.label}</h2>
+          <h3 class="exhibition-topic-title">{topic.id === 'people' ? 'Know who represents you.' : topic.id === 'organizations' ? 'Meet your community.' : topic.id === 'calendar' ? 'Be part of what happens next.' : topic.id === 'maps' ? 'A different view of where you live.' : 'Follow the public record.'}</h3>
+          <p>{topic.description}</p>
+          <a class="button-link" href={topic.href}>Explore {topic.label.toLowerCase()} <Icon /></a>
+          {topic.id === 'records' && <div class="exhibition-related"><a href="/requests/">Track records requests <Icon size={16} /></a><a href="/documents/">Search meeting documents <Icon size={16} /></a><a href="/legislation/">Explore legislation <Icon size={16} /></a></div>}
+          {topic.id === 'organizations' && <p class="exhibition-related"><a href="/counties/bibb/">Explore the Bibb County community hub <Icon size={16} /></a></p>}
+        </section>)}
+        <section class="exhibition-dates" aria-labelledby="upcoming-heading">
+          <h2 id="upcoming-heading"><a href="/calendar/">Upcoming dates <span class="visually-hidden">— open full calendar</span></a></h2>
           <p class="status" data-home-events-status>Loading upcoming events…</p>
           <ul class="home-event-list" data-home-events-list data-home-events-snapshot={await calendarAssetUrl('home')} hidden></ul>
           <p class="status" data-home-events-empty hidden>No upcoming events yet.</p>
-          <p class="body-note">The next events from every organization and calendar.</p>
-        </div>
-        <a class="destination-link calendar-cta" href="/calendar/">
-          View the calendar <Icon />
-        </a>
-      </section>
-    </div>
+          <noscript><p><a href="/calendar/">Open the community calendar for upcoming dates.</a></p></noscript>
 
-    <script
-      type="application/json"
-      data-home-maps
-      set:html={JSON.stringify(maps)}
-      is:inline
-    ></script>
+        </section>
+      </div>
+    </div>
   </main>
 </Layout>
-
 <script>
-  import { initHomeMaps } from '../scripts/home-maps';
   import { initHomeEvents } from '../scripts/home-events';
   import { initHomeElections } from '../scripts/home-elections';
-
-  initHomeMaps();
+  import { initExhibition } from '../scripts/home-exhibition';
+  initExhibition();
   initHomeEvents();
   initHomeElections();
 </script>

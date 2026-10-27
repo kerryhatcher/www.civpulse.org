@@ -83,7 +83,23 @@ export function renderMap(container: HTMLElement, config: MapConfig, layers: Lay
   const loading = new Map<string, Promise<void>>();
   const failures = new Map<string, string>();
   const checkboxes = new Map<string, HTMLInputElement>();
-  const records: { feature: GeoJSON.Feature; layer: LayerConfig; rendered: L.Layer; title: string; search: string }[] = [];
+  type MapRecord = { feature: GeoJSON.Feature; layer: LayerConfig; rendered: L.Layer; title: string; search: string };
+  const records: MapRecord[] = [];
+  const directoryButtons = new Map<MapRecord, HTMLButtonElement>();
+  let popupReturn: { popup: L.Popup; record: MapRecord } | undefined;
+  let changingPopup = false;
+  const keyboardPopups = new WeakSet<HTMLElement>();
+  map.on('popupclose', (event: L.PopupEvent) => {
+    if (popupReturn?.popup !== event.popup) return;
+    const origin = popupReturn.record;
+    popupReturn = undefined;
+    if (changingPopup || !alive) return;
+    // A popup can also close after focus has moved elsewhere; do not steal it back.
+    const active = document.activeElement;
+    if (active === document.body || (active && event.popup.getElement()?.contains(active))) {
+      (directoryButtons.get(origin) ?? search).focus();
+    }
+  });
   let limit = 60;
   const groups = new Map<string, HTMLElement>();
   for (const [index, layer] of layers.entries()) {
@@ -162,20 +178,43 @@ export function renderMap(container: HTMLElement, config: MapConfig, layers: Lay
     for (const [id, layer] of rendered) if (selected.has(id) && layer.getBounds().isValid()) bounds.extend(layer.getBounds());
     if (bounds.isValid()) map.fitBounds(bounds, { padding: [24, 24], maxZoom: 15, animate: false });
   }
-  function focus(record: typeof records[number]): void {
+  function focus(record: MapRecord, returnTo?: MapRecord): void {
     if ('getLatLng' in record.rendered) map.setView((record.rendered as L.Marker).getLatLng(), 15, { animate: false });
     else if ('getBounds' in record.rendered) map.fitBounds((record.rendered as L.Polygon).getBounds(), { padding: [32, 32], maxZoom: 15, animate: false });
-    record.rendered.openPopup();
+    // Opening a related feature replaces the old popup without returning to the directory.
+    changingPopup = true;
+    try { record.rendered.openPopup(); }
+    finally { changingPopup = false; }
     canvas.scrollIntoView({ block: 'center', behavior: 'instant' });
     status.textContent = `Showing ${record.title}.`;
+    if (!returnTo) return;
+    const popup = record.rendered.getPopup();
+    const popupElement = popup?.getElement();
+    const details = popupElement?.querySelector<HTMLElement>('.map-feature-details');
+    if (!popup || !popupElement || !details) return;
+    popupReturn = { popup, record: returnTo };
+    details.tabIndex = -1;
+    details.setAttribute('role', 'region');
+    details.setAttribute('aria-label', `${record.title} details`);
+    if (!keyboardPopups.has(popupElement)) {
+      keyboardPopups.add(popupElement);
+      popupElement.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        event.preventDefault();
+        event.stopPropagation();
+        map.closePopup(popup);
+      });
+    }
+    details.focus({ preventScroll: true });
   }
   async function related(key: string, property: string, value: string): Promise<void> {
+    const returnTo = popupReturn?.record;
     const layer = layers.find(l => keyOf(l) === key);
     if (!layer) { status.textContent = 'The related layer is not available on this map.'; return; }
     selected.add(layer.id); const checkbox = checkboxes.get(layer.id); if (checkbox) checkbox.checked = true;
     await load(layer); refresh(); writeUrl();
     const matches = records.filter(r => r.layer.id === layer.id && String(r.feature.properties?.[property]) === value);
-    if (matches[0]) { focus(matches[0]); if (matches.length > 1) { search.value = value; renderDirectory(); status.textContent = `${matches.length} matching polling places. See the directory for all records.`; } }
+    if (matches[0]) { focus(matches[0], returnTo); if (matches.length > 1) { search.value = value; renderDirectory(); status.textContent = `${matches.length} matching polling places. See the directory for all records.`; } }
     else status.textContent = 'No matching feature in the saved data.';
   }
   async function load(layer: LayerConfig): Promise<void> {
@@ -206,11 +245,13 @@ export function renderMap(container: HTMLElement, config: MapConfig, layers: Lay
     const query = search.value.trim().toLocaleLowerCase();
     const visible = records.filter(r => selected.has(r.layer.id) && (!query || r.search.includes(query)));
     list.replaceChildren();
+    directoryButtons.clear();
     for (const record of visible.slice(0, limit)) {
       const row = element('article', '', 'map-place-row');
       const info = element('div'); info.append(element('strong', record.title), element('small', record.layer.name));
       const show = element('button', 'Show on map'); show.type = 'button'; show.setAttribute('aria-label', `Show ${record.title} on map`);
-      show.addEventListener('click', () => focus(record)); row.append(info, show); list.append(row);
+      directoryButtons.set(record, show);
+      show.addEventListener('click', () => focus(record, record)); row.append(info, show); list.append(row);
     }
     more.hidden = visible.length <= limit;
     resultStatus.textContent = !selected.size ? 'Choose a layer to explore places.' : !visible.length ? (query ? 'No places match your search in the selected layers.' : 'No places to show in the selected layers.') : `${visible.length} feature${visible.length === 1 ? '' : 's'}${query ? ' matching your search' : ' in selected layers'}${visible.length > limit ? ` · showing ${limit}` : ''}`;

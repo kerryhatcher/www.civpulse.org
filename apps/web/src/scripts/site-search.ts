@@ -24,7 +24,7 @@ function renderResult(result: SearchResult): HTMLElement {
       .map(word => word[0]?.toUpperCase() ?? '').join('');
     card.append(fallback);
   }
-  const type = document.createElement('p'); type.className = 'org-eyebrow';
+  const type = document.createElement('p'); type.className = 'site-search-result-type';
   type.textContent = labels[result.entity_type] ?? 'Content';
   const title = document.createElement('h2');
   let target: URL | null = null;
@@ -40,7 +40,7 @@ function renderResult(result: SearchResult): HTMLElement {
     if (result.entity_type === 'article') { link.target = '_blank'; link.rel = 'noopener noreferrer'; }
     title.append(link);
   } else title.textContent = result.title;
-  card.append(type, title);
+  card.append(title, type);
   if (result.visibility !== 'public') {
     const access = document.createElement('span'); access.className = 'visibility-badge';
     access.textContent = result.visibility === 'private' ? 'Private' : 'Unlisted'; card.append(access);
@@ -129,7 +129,7 @@ export async function initSiteSearch(): Promise<void> {
       }));
       previous.hidden = offset === 0; next.hidden = rows.length <= pageSize;
       status.textContent = visible.length ? `Showing results ${offset + 1}–${offset + visible.length}${rows.length > pageSize ? ' · more available' : ''}`
-        : offset ? 'No more results. Choose Previous to return.' : 'No matching content you can access.';
+        : offset ? 'No more results. Choose Previous to return.' : 'No results matched your search and filters. Try a shorter term, choose All content, or clear the search. You can also broaden the county selection.';
     } catch {
       if (token === request) { results.replaceChildren(); status.textContent = 'Could not search. Please try again.'; }
     } finally { if (token === request) results.removeAttribute('aria-busy'); }
@@ -140,6 +140,13 @@ export async function initSiteSearch(): Promise<void> {
   }
   restoreUrl();
   form.addEventListener('submit', event => { event.preventDefault(); window.clearTimeout(timer); offset = 0; void search(); });
+  form.addEventListener('reset', event => {
+    event.preventDefault();
+    input.value = ''; type.value = ''; offset = 0;
+    window.clearTimeout(timer);
+    void search();
+    input.focus();
+  });
   input.addEventListener('input', update); type.addEventListener('change', update);
   window.addEventListener('countychange', update);
   previous.addEventListener('click', () => { offset = Math.max(0, offset - pageSize); void search(); });
@@ -147,7 +154,11 @@ export async function initSiteSearch(): Promise<void> {
   window.addEventListener('popstate', () => { restoreUrl(); void search(); });
   const { data: { session } } = await supabase.auth.getSession();
   let identity = session?.user.id ?? null;
-  function showAccess(): void { access.textContent = 'Search shows public content. Admins can also search unlisted and private content.'; }
+  function showAccess(): void {
+    access.textContent = identity
+      ? 'Results include content your account can access. Your county selection also applies.'
+      : 'Search public civic information. Your county selection also applies.';
+  }
   showAccess(); ready = true; await search();
   supabase.auth.onAuthStateChange((_event, current) => {
     const nextIdentity = current?.user.id ?? null;
