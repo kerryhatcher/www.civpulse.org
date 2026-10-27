@@ -1,0 +1,51 @@
+---
+import 'leaflet/dist/leaflet.css';
+import { getMapBuildData, type PublicMapManifest } from '../lib/map-build-data';
+interface Props { electionId?: string }
+const { electionId } = Astro.props;
+// Reuse only already-exported public boundaries, never private map/layer metadata.
+const snapshot = await getMapBuildData();
+const precincts = snapshot.assets.filter(asset => asset.path.startsWith('maps/'))
+  .flatMap(asset => (JSON.parse(asset.body) as PublicMapManifest).layers)
+  .find(layer => layer.presentation?.key === 'voting-precincts');
+---
+<section class="precinct-turnout" data-precinct-turnout data-election-id={electionId} data-boundaries-url={precincts?.source_url} aria-labelledby="precinct-turnout-title" hidden={!electionId}>
+  <h2 id="precinct-turnout-title">Bibb County precinct turnout</h2>
+  <p>Darker precincts mean a higher share of registered voters participated. Select a precinct for exact counts. Gray means the percentage is not reported.</p>
+  <p data-precinct-status role="status" aria-live="polite">Loading precinct turnout…</p>
+  <button type="button" data-precinct-retry hidden>Retry precinct map</button>
+  <div data-precinct-body hidden>
+    <label for="precinct-ballot-style">Ballot style</label>
+    <select id="precinct-ballot-style" data-precinct-style></select>
+    <p class="body-note">All voting methods · each ballot style is shown separately. Percentages use reported voters (or ballots when voters are unavailable) divided by that precinct’s registered voters. County and contest counts are never substituted.</p>
+    <div class="precinct-map" data-precinct-map tabindex="0" aria-label="Bibb County precinct turnout map. Use the table below for keyboard access."></div>
+    <div class="precinct-legend" aria-label="Turnout fill scale">
+      {[0, 25, 50, 75, 100].map(rate => <span><i style={`background:rgba(23,62,52,${0.08 + .92 * rate / 100})`} aria-hidden="true"></i>{rate}%</span>)}
+      <span><i class="missing" aria-hidden="true"></i>Not reported</span>
+    </div>
+    <details><summary>Precinct counts and percentages</summary>
+      <div class="precinct-table"><table>
+        <caption>Bibb precinct turnout, latest report for the selected ballot style. Select a precinct name to locate it on the map.</caption>
+        <thead><tr><th scope="col">Precinct</th><th scope="col">Participation</th><th scope="col">Registered</th><th scope="col">Turnout</th><th scope="col">Report</th></tr></thead>
+        <tbody data-precinct-rows></tbody>
+      </table></div>
+    </details>
+    <p class="body-note">Boundaries: <a href="/maps/">Macon-Bibb County Government IT GIS</a>. Boundary changes between elections may affect comparisons. Reports retain their own times and certification status.</p>
+  </div>
+</section>
+<style>
+  .precinct-turnout { margin-block: 2.5rem; }
+  label { font-weight: 600; margin-right: .5rem; }
+  select { max-width: 100%; min-height: 44px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); padding: .5rem; }
+  .precinct-map { height: 480px; width: 100%; background: var(--paper); border: 1px solid var(--line); z-index: 0; }
+  .precinct-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
+  .precinct-legend span { display: inline-flex; gap: .4rem; align-items: center; }
+  i { width: 1.25rem; height: 1.25rem; border: 1px solid var(--muted); }
+  i.missing { background: rgba(184,188,176,.6); }
+  .precinct-table { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .precinct-table :global(th), .precinct-table :global(td) { padding: .6rem; text-align: left; border-bottom: 1px solid var(--line); }
+  .precinct-table :global(button) { min-height: 44px; }
+  caption { text-align: left; margin-bottom: .75rem; }
+  @media(max-width:600px) { .precinct-map { height: 380px; } }
+</style>

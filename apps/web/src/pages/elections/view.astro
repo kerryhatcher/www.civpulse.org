@@ -1,5 +1,7 @@
 ---
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
+import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
 import Layout from '../../layouts/Layout.astro';
 ---
@@ -32,6 +34,9 @@ import Layout from '../../layouts/Layout.astro';
           Every date is also on the <a href="/calendar/">community calendar</a>.
         </p>
       </section>
+
+      <ElectionTurnout />
+      <ElectionPrecinctTurnout />
 
       <section class="election-contests" data-election-contests-section hidden>
         <h2>What's on the ballot</h2>

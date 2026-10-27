@@ -1,5 +1,7 @@
 ---
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
+import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
 import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
@@ -116,6 +118,9 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       )
     }
 
+    <ElectionTurnout electionId={election.id} />
+    <ElectionPrecinctTurnout electionId={election.id} />
+
     <section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot</h2>
       <ElectionScope />
@@ -192,6 +197,14 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
   import { initAdminEditLink } from '../../scripts/auth';
   import { initElectionScope } from '../../scripts/elections';
 
+  import { initElectionPrecinctTurnout } from '../../scripts/precinct-turnout';
+  import { initElectionTurnout } from '../../scripts/election-turnout';
+
+  const turnout = document.querySelector<HTMLElement>('[data-election-turnout]');
+  if (turnout?.dataset.electionId) {
+    void initElectionTurnout(turnout.dataset.electionId);
+    void initElectionPrecinctTurnout(turnout.dataset.electionId);
+  }
   void initAdminEditLink();
   initElectionScope();
 </script>
