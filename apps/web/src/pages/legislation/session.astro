@@ -1,4 +1,6 @@
 ---
+import {getLegislationDetailAssets} from '../../lib/legislation-detail-assets';
+const indexUrl=(await getLegislationDetailAssets()).indexes.legislative_sessions;
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -6,7 +8,7 @@ import Layout from "../../layouts/Layout.astro";
   title="Legislative session"
   description="Bills, votes and calendar events associated with this session."
 >
-  <main id="main" data-legislation-view="legislative_sessions">
+  <main data-legislation-public-index={indexUrl} id="main" data-legislation-view="legislative_sessions">
     <p>
       <a href="/legislation/sessions/">All sessions</a>
     </p>
