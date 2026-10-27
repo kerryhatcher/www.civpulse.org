@@ -12,6 +12,11 @@ export interface BillOptions {query?: string; term?: string; jurisdiction?: stri
  * Greedy wildcard matching avoids exponential regexp backtracking on user input. */
 export function legislativeSearch(query: string): (text: string) => boolean {
   if (query.length > 500) throw new Error('Search query must be 500 characters or fewer');
+  if (!query) return () => true;
+  if (![String.fromCharCode(37),String.fromCharCode(95),String.fromCharCode(92)].some(char => query.includes(char))) {
+    const needle=query.toLowerCase();
+    return text => text.toLowerCase().includes(needle);
+  }
   const tokens: {char:string;wild:boolean}[] = [{char:'%',wild:true}];
   const chars = Array.from(query.toLowerCase());
   for (let i=0;i<chars.length;i++) {
@@ -39,7 +44,8 @@ export function legislativeSearch(query: string): (text: string) => boolean {
 export function billSearchText(row: LegislativeRow) {
   return [row.title,row.identifier,row.summary,row.labels?.term_id,row.labels?.session_id,row.labels?.body_id].filter(v => v != null).join(' ');
 }
-const compare = (a: unknown,b: unknown) => String(a ?? '').localeCompare(String(b ?? ''),'en');
+const collator = new Intl.Collator('en');
+const compare = (a: unknown,b: unknown) => collator.compare(String(a ?? ''),String(b ?? ''));
 export function browseStaticBills(rows: LegislativeRow[], options: BillOptions = {}) {
   const match = legislativeSearch(options.query ?? '');
   const filtered = rows.filter(row => (!options.term || row.term_id === options.term) &&
