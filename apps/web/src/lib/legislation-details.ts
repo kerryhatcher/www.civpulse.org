@@ -60,3 +60,9 @@ export function assembleLegislationDetails(tables:Map<string,LegislativeRow[]>):
   }
   return details;
 }
+
+/** Redirect fragments come from known section IDs, never arbitrary URL text. */
+export function legislationAnchor(hash:string):string {
+  const section=Object.values(detailChildren).flat().find(section=>hash==='#'+section);
+  return section?'#'+section:'';
+}

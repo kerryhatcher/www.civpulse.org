@@ -1,3 +1,4 @@
+import {legislationAnchor} from '../lib/legislation-details';
 import {getSupabase} from '../lib/supabase';
 import {legislativeCard} from './legislation';
 import type {LegislativeRow} from '../lib/legislation';
@@ -13,7 +14,7 @@ export async function initPublicLegislationDetail() {
   const root=document.querySelector<HTMLElement>('[data-public-legislation-detail]');if(!root)return;
   // A signed-in caller keeps the existing live, permission-checked detail flow.
   const {data:{session},error}=await getSupabase().auth.getSession();
-  if(!error && session && root.dataset.liveViewer) {location.replace(root.dataset.liveViewer+location.hash);return;}
+  if(!error && session && root.dataset.liveViewer) {location.replace(root.dataset.liveViewer+'#'+encodeURIComponent(legislationAnchor(location.hash).slice(1)));return;}
   for(const section of root.querySelectorAll<HTMLElement>('[data-static-legislation-section]')) {
     const button=section.querySelector<HTMLButtonElement>('[data-section-more]');if(!button)continue;
     const list=section.querySelector<HTMLElement>('[data-section-results]')!,status=section.querySelector<HTMLElement>('[data-section-status]')!;

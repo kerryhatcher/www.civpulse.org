@@ -1,3 +1,4 @@
+import {legislationAnchor} from '../lib/legislation-details';
 import {publicLegislationTarget} from './legislation-detail-target';
 import type {DetailTable} from '../lib/legislation-details';
 import { readLegislationDirectory, readStaticBills } from "./legislation-directory-data";
@@ -451,7 +452,12 @@ export async function initLegislationView() {
   }
   try {
     const target=await publicLegislationTarget(getSupabase(),root.dataset.legislationPublicIndex,table as DetailTable,id,new URLSearchParams(location.search).get('live')==='1');
-    if(target){location.replace(target+location.hash);return;}
+    if(target){
+      // The resolver returns only a published /records/<kind>/<uuid>/ path.
+      // Keep the navigation prefix literal as an additional same-origin guard.
+      const recordPath=target.slice('/records/'.length)+legislationAnchor(location.hash);
+      location.replace('/records/'+recordPath);return;
+    }
     const data = await browse(table, { p_id: id });
     const row = data.rows[0];
     if (!row) {

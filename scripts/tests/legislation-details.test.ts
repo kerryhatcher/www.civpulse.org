@@ -1,5 +1,5 @@
 import {expect,test} from 'bun:test';
-import {assembleLegislationDetails,detailRow,recordedVoteTotals} from '../../apps/web/src/lib/legislation-details';
+import {assembleLegislationDetails,detailRow,recordedVoteTotals,legislationAnchor} from '../../apps/web/src/lib/legislation-details';
 import {publicLegislationTarget} from '../../apps/web/src/scripts/legislation-detail-target';
 import {readDetailPage} from '../../apps/web/src/scripts/legislation-detail';
 import type {LegislativeRow} from '../../apps/web/src/lib/legislation';
@@ -50,4 +50,11 @@ test('static detail pages validate URLs, status and public rows without backend 
   response=new Response('',{status:404});await expect(readDetailPage('/directory-data/legislation/details-test.json')).rejects.toThrow('404');
   response=Response.json([row(1,{visibility:'unlisted'})]);await expect(readDetailPage('/directory-data/legislation/details-test.json')).rejects.toThrow('Invalid');
  }finally{globalThis.fetch=before;}
+});
+
+test('redirects preserve only existing section anchors',()=>{
+ expect(legislationAnchor('#bill_actions')).toBe('#bill_actions');
+ expect(legislationAnchor('#legislative_vote_choices')).toBe('#legislative_vote_choices');
+ expect(legislationAnchor('#//evil.test')).toBe('');
+ expect(legislationAnchor('#javascript:alert(1)')).toBe('');
 });
