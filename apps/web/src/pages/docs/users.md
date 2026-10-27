@@ -216,6 +216,13 @@ records require administrator access.
 [Sessions](/legislation/sessions/) groups
 regular and special sessions, with links to their bills, actions and votes.
 
+Public bill, vote and session details are published snapshots, including their
+related records and vote counts. Use **Load more** for longer sections. Existing
+public UUID links open the published page and retain section anchors. Signed-in
+readers and **Open live record with access checks** use current permissions;
+unlisted direct links and private administrator access retain their existing
+rules. New imports and edits appear in public details after publication.
+
 A bill record includes sponsorship history, documented positions, official text
 versions, amendments, a timeline, votes and media coverage. Follow a vote to read
 the exact question and each recorded member choice. A vote on an amendment or

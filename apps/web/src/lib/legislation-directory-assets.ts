@@ -9,7 +9,7 @@ export async function loadLegislationDirectoryAssets() {
   const publicBills = bills.map(row => {
     const term = termMap.get(String(row.term_id));
     if (!term) throw new Error('Missing public legislative term');
-    return directoryRow({...row,jurisdiction:term.jurisdiction,state_name:term.state_name});
+    return directoryRow({...row,links:{...row.links,record:`/records/bills/${row.id}/`},jurisdiction:term.jurisdiction,state_name:term.state_name});
   });
   const assets: {path:string;body:string}[] = [];
   async function add(key:string,value:unknown) {
@@ -29,7 +29,7 @@ export async function loadLegislationDirectoryAssets() {
       shards.push({term:term.id,count:page.length,url:await add(`${term.id}-${offset}`,page)});
     }
   }
-  const manifest: LegislationDirectory = {version:1,terms:terms.map(directoryRow),sessions:sessions.map(directoryRow),initial:browseStaticBills(publicBills),bills:shards};
+  const manifest: LegislationDirectory = {version:1,terms:terms.map(directoryRow),sessions:sessions.map(row=>directoryRow({...row,links:{...row.links,record:`/records/sessions/${row.id}/`}})),initial:browseStaticBills(publicBills),bills:shards};
   const url = await add('manifest',manifest);
   return {assets,url};
 }

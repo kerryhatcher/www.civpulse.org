@@ -1,4 +1,6 @@
 ---
+import {getLegislationDetailAssets} from '../../lib/legislation-detail-assets';
+const indexUrl=(await getLegislationDetailAssets()).indexes.legislative_votes;
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -6,7 +8,7 @@ import Layout from "../../layouts/Layout.astro";
   title="Legislative vote"
   description="The question, result and individual recorded choices for a legislative vote."
 >
-  <main id="main" data-legislation-view="legislative_votes">
+  <main data-legislation-public-index={indexUrl} id="main" data-legislation-view="legislative_votes">
     <p>
       <a href="/legislation/">All legislation</a>
     </p>

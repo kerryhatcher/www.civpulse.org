@@ -1,4 +1,6 @@
 ---
+import {getLegislationDetailAssets} from '../../lib/legislation-detail-assets';
+const indexUrl=(await getLegislationDetailAssets()).indexes.bills;
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -6,7 +8,7 @@ import Layout from "../../layouts/Layout.astro";
   title="Bill record"
   description="Bill text, sponsorship, timeline, votes and media coverage."
 >
-  <main id="main" data-legislation-view="bills">
+  <main data-legislation-public-index={indexUrl} id="main" data-legislation-view="bills">
     <p>
       <a href="/legislation/">All legislation</a>
     </p>

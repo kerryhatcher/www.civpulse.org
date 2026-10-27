@@ -1,3 +1,5 @@
+import {publicLegislationTarget} from './legislation-detail-target';
+import type {DetailTable} from '../lib/legislation-details';
 import { readLegislationDirectory, readStaticBills } from "./legislation-directory-data";
 import { browseStaticSessions } from "../lib/legislation-directory";
 import { getPublicProfileSnapshot, readProfileVoteGroups } from "../lib/profile-section-data";
@@ -87,7 +89,7 @@ export function legislativeCard(
   const titleField = primary[table];
   title.append(
     paths[table] && heading !== "h1"
-      ? link(label, `/legislation/${paths[table]}/?id=${row.id}`)
+      ? link(label, row.links?.record ?? `/legislation/${paths[table]}/?id=${row.id}`)
       : titleField
         ? reference(row, titleField, label)
         : document.createTextNode(label),
@@ -448,7 +450,8 @@ export async function initLegislationView() {
     return;
   }
   try {
-    await getSupabase().auth.getSession();
+    const target=await publicLegislationTarget(getSupabase(),root.dataset.legislationPublicIndex,table as DetailTable,id,new URLSearchParams(location.search).get('live')==='1');
+    if(target){location.replace(target+location.hash);return;}
     const data = await browse(table, { p_id: id });
     const row = data.rows[0];
     if (!row) {
