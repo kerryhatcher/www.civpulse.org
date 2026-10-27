@@ -386,3 +386,17 @@ paragraphs separated by blank lines, emphasis and lists. These render on public
 person profiles and UUID profile viewers. Raw HTML displays as text, and unsafe
 link protocols are blocked. Save the description, then publish the site to update
 the public profile. Other description fields retain their existing formatting.
+
+### Georgia SOS structured turnout
+
+The AI tool `manage_election_results` accepts `import_turnout` JSON evidence and
+`read_turnout` readback alongside the existing photo/PDF operations. Validate
+first with `dry_run:true`, then save with the current predecessor report ID.
+Each JSON import is atomic (up to 636 source rows / 2 MiB), checksum verified and
+unofficial turnout-only. Preserve all absentee measures, county FIPS, original
+ballot styles, display text, nulls and source as-of labels. Collection time cannot
+replace an absent source timestamp. Do not upload raw authentication/session
+material. Exact replay is a no-op; successive corrections replace rather than add.
+See the repository's `docs/election-results.md` for offline export preparation and
+the JSON contract. Deployment of the feature is required first; saved reports
+then appear live on the results page without a rebuild.

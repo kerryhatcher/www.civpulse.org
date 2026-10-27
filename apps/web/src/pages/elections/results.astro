@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 ---
-<Layout title="Election results & turnout" description="Sourced election reports for Macon-Bibb, with turnout and reporting history.">
+<Layout title="Election results & turnout" description="Sourced election reports and Georgia turnout, with reporting history.">
  <main id="main" class="results-page">
   <div class="page-intro"><h1>Election results &amp; turnout</h1><p>Explore Macon-Bibb votes and participation, countywide or in your precinct.</p></div>
   <form id="result-form" class="result-election-form">
@@ -22,15 +22,25 @@ import Layout from '../../layouts/Layout.astro';
   <button id="result-retry" type="button" hidden>Try loading reports again</button>
   <p class="result-explainer">Each view stands on its own. County totals already include precinct and voting-method results; these reports are never added together. “Not reported” is different from zero.</p>
   <div id="result-reports"></div>
+  <section aria-labelledby="turnout-heading">
+   <h2 id="turnout-heading">Georgia SOS structured turnout</h2>
+   <label for="turnout-history">Turnout snapshot</label><select id="turnout-history"><option value="">Latest snapshot</option></select>
+   <p id="turnout-status" role="status" aria-live="polite">Loading structured turnout…</p>
+   <div id="turnout-rows"></div><button id="turnout-more" type="button" hidden>Load more turnout rows</button>
+  </section>
   <noscript><p>JavaScript is needed to load the latest election reports. Enable it and reload this page.</p></noscript>
   <p class="result-footer"><a href="/elections/">All elections</a> · <a href="/docs/admins/#election-results-and-turnout">Import results with an AI agent</a></p>
  </main>
 </Layout>
 <script>
  import { initElectionResults } from '../../scripts/election-results';
- void initElectionResults();
+ import {initStructuredTurnout} from '../../scripts/structured-turnout';
+ void initElectionResults().then(()=>initStructuredTurnout());
 </script>
 <style>
+ #turnout-rows { overflow-wrap:anywhere; }
+ #turnout-rows :global(article) { border-top:1px solid var(--line); padding-block:1.5rem; margin-block:1.5rem; }
+
  .results-page { max-width: 1120px; }
  .page-intro { margin-bottom:1rem; }
  .page-intro h1 { font-size:clamp(2rem,4vw,3rem); }
