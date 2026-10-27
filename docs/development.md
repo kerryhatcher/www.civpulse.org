@@ -788,6 +788,11 @@ and Supabase read load if import volume grows.
 
 ### Verifying the session county filter
 
+County-jurisdiction matching uses case-insensitive literal county names with
+word-boundary checks and fixed regexes for the statewide and Macon-Bibb aliases.
+Keep punctuation, multiword names, repeated matches, and misleading prefixes or
+suffixes covered in the county tests; do not build regexes from county names.
+
 Run `bun test scripts/tests/county-filter.test.ts scripts/tests/directories.test.ts
 scripts/tests/calendar-snapshot.test.ts`, then `bun run check` and `bun run build`.
 In a fresh browser session, verify Bibb is selected. Change to Jones and All

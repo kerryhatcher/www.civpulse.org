@@ -18,6 +18,14 @@ export function matchesCounty(index: CountyIndex, kind: string, id: string, coun
 /** Only explicit county jurisdictions are classified; never guess from addresses. */
 export function jurisdictionCounties(jurisdiction: string | null): string[] {
   if (!jurisdiction || /\bstatewide\b/i.test(jurisdiction)) return [];
-  return counties.filter(county => new RegExp(`\\b${county.name} County\\b`, 'i').test(jurisdiction)
-    || (county.name === 'Bibb' && /\bmacon[-– ]bibb\b/i.test(jurisdiction))).map(county => county.fips);
+  const text = jurisdiction.toLowerCase();
+  return counties.filter(county => {
+    const name = `${county.name.toLowerCase()} county`;
+    for (let start = text.indexOf(name); start !== -1; start = text.indexOf(name, start + 1)) {
+      const before = text[start - 1] ?? '';
+      const after = text[start + name.length] ?? '';
+      if (!/\w/.test(before) && !/\w/.test(after)) return true;
+    }
+    return county.name === 'Bibb' && /\bmacon[-– ]bibb\b/i.test(jurisdiction);
+  }).map(county => county.fips);
 }

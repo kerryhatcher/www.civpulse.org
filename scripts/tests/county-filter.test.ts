@@ -38,6 +38,16 @@ describe('county selection and geography policy', () => {
     expect(jurisdictionCounties('Macon')).toEqual([]);
     expect(jurisdictionCounties(null)).toEqual([]);
   });
+  test('literal county matching preserves case, punctuation, and word boundaries', () => {
+    expect(jurisdictionCounties('(jOnEs CoUnTy), District 1')).toEqual(['13169']);
+    expect(jurisdictionCounties('Ben Hill County')).toEqual(['13017']);
+    expect(jurisdictionCounties('NotJones County; Jones Countywide; Jones County_2; Jones County2')).toEqual([]);
+    expect(jurisdictionCounties('NotJones County; (Jones County)')).toEqual(['13169']);
+    expect(jurisdictionCounties('Macon–Bibb')).toEqual(['13021']);
+    expect(jurisdictionCounties('Macon Bibb')).toEqual(['13021']);
+    expect(jurisdictionCounties('Statewide: Jones County')).toEqual([]);
+    expect(jurisdictionCounties('[]()+*?^$ Jones County \\')).toEqual(['13169']);
+  });
 });
 
 describe('county pagination', () => {
