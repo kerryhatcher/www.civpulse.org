@@ -36,7 +36,7 @@ test('profile exports page sequentially, bound concurrency and share office term
  let active=0,peak=0;const offsets:number[]=[];
  const client={rpc:async(name:string,args:Record<string,unknown>)=>{
   peak=Math.max(peak,++active);await new Promise(r=>setTimeout(r,1));active--;
-  if(name==='browse_legislation')return {data:{rows:[],total:0},error:null};
+  if(name==='export_public_legislation_page')return {data:{rows:[],total:0},error:null};
   if(args.p_section!=='offices')return {data:[],error:null};
   const offset=Number(args.p_offset);offsets.push(offset);
   return {data:Array.from({length:Math.min(500,501-offset)},(_,i)=>({owner_id:'person',data:{id:`term-${offset+i}`,organization_id:'org',starts_on:'2020-01-01',office_name:'Office',person_name:'Person'}})),error:null};

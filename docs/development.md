@@ -732,6 +732,26 @@ and paginated archives belong in the sitemap; admin/auth shells, UUID viewers
 and generated JSON assets remain excluded. Run `bun test scripts/tests/sitemap.test.ts`
 when changing the filter, then check the deployed XML against public record IDs.
 
+### Verifying full-site build performance
+
+Run `bun test scripts/tests/legislation-build-data.test.ts scripts/tests/public-records.test.ts scripts/tests/profile-section-data.test.ts` for shared reads, out-of-order page completion, the global two-request ceiling, and fail-closed export behavior.
+Run `PUBLIC_RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-records-db.test.ts` for actual anonymous/ordinary caller gates, hidden parents, and direct unlisted access. Finish with `bun run check`, `bun run build`, and anonymous/signed-in archive/profile browser checks.
+
+Measure the full Cloudflare build/deploy against the previous successful build,
+recording dataset/page counts and the `Public legislation build:` timings.
+Use only public production credentials for a local hosted-data benchmark.
+Keep the six-request HTTP ceiling and two-request legislative ceiling; do not
+raise timeouts, omit records or reuse a snapshot across builds to improve timing.
+
+Run `bun test scripts/tests/build-read.test.ts` for timeout-only retries and
+profile subpage equivalence, final short pages, authorization failure, and
+malformed/failed subpages. Per-section logs include export row counts and timing;
+confirmed timeout retries/splits are visible in build logs and do not bypass
+validation or change credentials.
+
+The build export migration must reach main before production application. Run
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-legislation-export-db.test.ts` to compare all resource payloads, ordering, totals, hidden parents and execute/context gates. The capacity fixtures roll back. A shared local turnout migration may require a temporary migration workdir containing its exact file; never reset or repair shared history.
+
 ### Structured Georgia SOS turnout verification
 
 Run `ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/structured-turnout-db.test.ts scripts/tests/election-results-db.test.ts`.

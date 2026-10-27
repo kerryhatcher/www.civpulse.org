@@ -459,3 +459,27 @@ validate and save immutable cumulative reports. See [election results](election-
 that same Census snapshot. `county-charts.ts` progressively adds keyboard-accessible
 topic tabs; without JavaScript all chart sections remain visible. No charting
 dependency or runtime data request is needed. Tables and CSV retain all measures.
+
+### Build-time legislative page scheduling
+
+Profiles and the archive share public legislative tables in memory for one
+anonymous build client. The build-only `export_public_legislation_page` RPC
+returns up to 500 rows with exact totals, counting lightweight IDs and sort keys
+before projecting the selected page. It reuses existing recursive discovery
+helpers, requires public rows, rejects user JWTs, grants only anonymous execute,
+and has an empty search path. No direct-ID or unlisted context is accepted.
+Browser RPCs, their caps, table RLS and write grants remain unchanged.
+
+At most two legislative page requests run across all tables; the existing
+six-request HTTP ceiling remains. Pages are assembled in original offset order.
+Changing totals, invalid/repeated IDs, hidden rows, malformed/truncated pages or
+persistent backend errors fail publication. Cache entries live only in the build
+process; development expires them after thirty seconds. Row/page/timing logs
+identify future regressions. No disk cache or privileged credentials are used.
+
+Confirmed statement timeouts from public build reads retry at most twice with
+short backoff and identical credentials/parameters. Permission/validation errors
+never retry. Profile exports keep 500-row pages normally; a confirmed timeout
+splits only that range into sequential 100-row reads through the same anonymous
+export RPC. Short pages preserve EOF, and any denied/malformed/failed subpage
+stops the whole export. Timeouts are never increased and records are never omitted.

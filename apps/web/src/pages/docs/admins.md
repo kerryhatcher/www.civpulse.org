@@ -387,6 +387,12 @@ person profiles and UUID profile viewers. Raw HTML displays as text, and unsafe
 link protocols are blocked. Save the description, then publish the site to update
 the public profile. Other description fields retain their existing formatting.
 
+Publications share public legislative reads across profiles and the archive and
+fetch counted pages with bounded parallelism. The Publish workflow is unchanged.
+A changing total or failed/incomplete export stops publication and leaves the
+previous deployment serving. Publish again after imports/edits settle; no private
+or unlisted records should be made public to get a build through.
+
 ### Georgia SOS structured turnout
 
 The AI tool `manage_election_results` accepts `import_turnout` JSON evidence and

@@ -1,3 +1,5 @@
+import {readPublicProfileBuildPage} from './build-read';
+import { readPublicLegislationTable } from './legislation-build-data';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { getBuildSupabase } from './supabase-build';
 import { emptyProfileSections, type PublicProfileSections } from './profile-sections';
@@ -8,11 +10,14 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
   const get = (map: typeof people,id: string) => { if (!map.has(id)) map.set(id,emptyProfileSections()); return map.get(id)!; };
   const resources: Record<string,LegislativeRow[]> = {};
   const tasks = ['offices','person_articles','organization_articles','candidacies','votes','legislative_votes'].map(section => async () => {
+    const started = performance.now();
+    let exported = 0;
     for (let offset=0;;offset+=500) {
-      const { data,error } = await client.rpc('export_public_profile_rows',{p_section:section,p_offset:offset,p_limit:500});
-      if (error) throw new Error(`Public profile export failed (${section}): ${error.message}`);
+      const { data,error } = await readPublicProfileBuildPage(client,section,offset);
+      if (error) throw new Error(`Public profile export failed (${section}, offset ${offset}): ${error.message}`);
       const rows = data as {owner_id:string;position:number;data:unknown}[];
       if (!Array.isArray(rows)) throw new Error(`Invalid public profile export (${section})`);
+      exported += rows.length;
       for (const row of rows) {
         const target = get(section==='organization_articles' ? organizations : people,row.owner_id);
         if (section==='offices') {
@@ -26,17 +31,10 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
       }
       if (rows.length<500) break;
     }
+    console.info(`Public profile build: ${section} (${exported} rows, ${Math.round(performance.now() - started)}ms)`);
   });
   for (const table of ['legislative_terms','legislative_sessions','legislative_bodies','bill_sponsorships']) tasks.push(async () => {
-    const rows: LegislativeRow[] = [];
-    for (let offset=0;;offset+=100) {
-      const {data,error} = await client.rpc('browse_legislation',{p_table:table,p_offset:offset,p_limit:100});
-      if (error) throw new Error(`Public profile legislation export failed (${table}): ${error.message}`);
-      if (!data || !Array.isArray(data.rows) || !Number.isInteger(data.total) || (!data.rows.length && offset<data.total)) throw new Error(`Incomplete profile legislation export (${table})`);
-      rows.push(...data.rows);
-      if (rows.length===data.total) break;
-      if (rows.length>data.total) throw new Error(`Profile legislation changed during export (${table})`);
-    }
+    const rows = await readPublicLegislationTable(client, table);
     resources[table]=rows;
   });
   // Bounded workers prevent per-profile HTTP fan-out during imports/builds.

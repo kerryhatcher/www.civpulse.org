@@ -1,6 +1,7 @@
+import { readPublicLegislationTable } from './legislation-build-data';
 import type { PublicCalendarSnapshot } from './calendar-snapshot';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { legislativeResources, type LegislativeRow } from './legislation';
+import { legislativeResources } from './legislation';
 import type { EventRecord } from './calendars';
 import type { MeetingRecord } from './meetings';
 import type { RequestDetail } from './records-requests';
@@ -36,18 +37,9 @@ export async function loadPublicRecords(client: SupabaseClient, calendar?: Pick<
     }
     return rows;
   }
-  // Page each stream sequentially, with at most three independent streams active.
+  // Shared reader bounds page requests across every stream and build consumer.
   async function legislativeStreams(tables: string[]) {
-    const rows: LegislativeRow[][] = new Array(tables.length);
-    let next = 0;
-    await Promise.all(Array.from({ length: Math.min(3, tables.length) }, async () => {
-      while (next < tables.length) {
-        const index = next++, table = tables[index];
-        rows[index] = await pages<LegislativeRow>('browse_legislation', 100, { p_table: table, p_limit: 100 }, true);
-        console.info(`Public record export: ${table} (${rows[index].length} rows)`);
-      }
-    }));
-    return rows;
+    return Promise.all(tables.map(table => readPublicLegislationTable(client, table)));
   }
   const tables = ['bills', 'legislative_votes', 'legislative_sessions'];
   const published = new Map<string, PublicRecord>();
