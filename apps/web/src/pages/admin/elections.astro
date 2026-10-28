@@ -83,6 +83,12 @@ import AdminTabs from '../../components/AdminTabs.astro';
         </div>
 
         <label class="field">
+          <span>Georgia SOS results JSON URL</span>
+          <input type="url" name="results_json_url" maxlength="2000" placeholder="https://results.sos.ga.gov/cdn/results/Georgia/export-….json" />
+          <small>Leave blank until SOS publishes the feed. Saving the URL does not import results or start automatic updates.</small>
+        </label>
+
+        <label class="field">
           <span>Description</span>
           <textarea name="description" rows="2" maxlength="4000"></textarea>
         </label>

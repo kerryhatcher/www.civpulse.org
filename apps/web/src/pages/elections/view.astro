@@ -4,6 +4,7 @@ import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
 import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
+import BallotResults from '../../components/BallotResults.astro';
 import Layout from '../../layouts/Layout.astro';
 ---
 
@@ -42,6 +43,7 @@ import Layout from '../../layouts/Layout.astro';
       <section id="ballot" data-shareable-section class="election-contests" data-election-contests-section hidden>
         <h2>What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
         <ElectionScope />
+        <BallotResults />
         <div class="contest-list" data-election-contests></div>
       </section>
 

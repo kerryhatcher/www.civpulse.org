@@ -1,5 +1,97 @@
 # Election results and turnout
 
+## Unified election detail
+
+Both public detail pages and the visibility-gated UUID viewer hydrate results
+alongside the existing ballot through `get_election_results`. The page-session
+reader shares paginated report requests with the precinct map; no result counts
+or restricted report data are embedded at build time. Refresh results reloads
+the shared report snapshot and reloads the precinct map from that same snapshot.
+Map retries also request fresh reports. Existing election/ballot edits still
+require a static rebuild.
+
+The inline view selects the newest county/all-unit/all-method report for each
+exact county and ballot style. It never sums precinct, county, method or style
+reports. Each contest/question uses its own reporting denominators, never the
+election-wide precinct total. Shares use the reported choice total, or the sum
+of that report's recorded choices if the total is absent; separately reported
+unresolved write-ins remain separate. Neither shares nor reporting percentages
+infer turnout, winners, certification or candidate status. Missing counts stay
+unknown. A source missing a ballot candidate cannot hide that candidate.
+
+The same page transitions from ballot-only to ballot-with-results as reports
+are published. Empty/error states retain the ballot, profile links and retry.
+The existing RLS/RPC access gates also apply to anonymous and signed-in readers.
+Historical SOS race labels retain their original wording. The Bibb ballot gate
+recognizes statewide SOS office labels, known legislative/judicial jurisdictions,
+and explicit Bibb districts. Migration `20261125000600_historical_bibb_ballot_jurisdictions`
+fills only missing district fields on nine verified local May contests with
+`Bibb County`. Free-form descriptions and URLs are not jurisdiction evidence.
+Unclassified local offices remain outside that gate.
+The question gate also recognizes Georgia's Republican/Democratic primary-ballot
+jurisdiction labels as statewide, retaining the May party questions in Bibb's view.
+
+## Georgia SOS results JSON feeds
+
+Each election has an optional `results_json_url`, editable in Elections admin.
+Leave it null until SOS publishes the exact URL; the November 3, 2026 URL has
+not been supplied. Do not derive a URL from the election name or import a past
+feed as its results. The database accepts only HTTPS SOS Georgia export URLs.
+
+The three supplied examples use `electionDate`, `electionName`, `createdAt`,
+statewide `results`, and county `localResults`. May's feed is approximately
+161 MB, containing 9,708 ballot items across 160 jurisdictions. Store these
+as source snapshots in `sos_result_snapshots` and `sos_result_items`, preserving
+SOS jurisdiction/contest/choice IDs, vote counts, method/precinct breakdowns,
+reporting statuses, nulls and additional source fields. The statewide totals
+and county totals overlap; do not sum them. Reporting status is not an inferred
+certification or candidacy outcome. Source IDs are not Civic Pulse person IDs.
+
+To validate a published feed, set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and
+`SUPABASE_ACCESS_TOKEN` to a signed-in administrator's session token in the
+shell, then run:
+
+```sh
+bun run scripts/sos-results.ts <election-UUID>
+bun run scripts/sos-results.ts <election-UUID> --apply
+```
+
+The first command downloads and validates without writing. The second stages
+bounded batches and atomically publishes the complete snapshot. Missing URLs
+return `awaiting_url`; HTTP errors leave the current snapshot intact. Redirects
+are rejected, downloads are limited to 256 MiB, and source dates must match the
+election. The exact download SHA-256 is a collector receipt; Postgres validates
+the structure and completeness of staged items, but does not independently
+reassemble and verify the original document hash. Source JSON is stored as JSONB,
+not byte-for-byte original formatting. No service-role/browser credential is added.
+
+Identical downloads are no-ops. Interrupted staging can be resumed by rerunning
+the same feed; conflicting staged items reject. Only a newer source timestamp
+can replace the current snapshot, with an explicit expected-current ID checked
+under an election lock. Revisions may lower counts. Historical published
+snapshots are immutable; abandoned staging remains admin-only for diagnosis.
+
+`get_sos_results(election_id, snapshot_id?, jurisdiction_index?, offset?, limit?)`
+returns current metadata by default and at most ten ballot items per page when
+a jurisdiction index is supplied. Pin `snapshot_id` while paging; the manifest
+contains each jurisdiction's item count. Exact UUID reads permit public/unlisted
+elections; private elections require an admin. These are public SOS aggregates,
+independent of editorial candidate visibility. Raw tables have RLS, admin SELECT,
+and no direct API write grants. Imports do not trigger static frontend rebuilds.
+
+This is a storage and manual refresh foundation. Scheduled fetching, Realtime
+subscriptions/push notifications and integration into visitor result charts are
+future work. Saving the URL alone starts no fetch. Existing photo/PDF and turnout
+imports/readers remain separate and retain their current behavior.
+
+Merge `20261125000400_sos_results_feeds` and
+`20261125000500_attach_known_sos_results_urls` to main before applying in production.
+The second migration attaches the three supplied URLs only to matching existing
+date/slug records and preserves administrator-supplied URLs. It imports no totals.
+Verify locally with `ELECTION_RESULTS_TEST_DATABASE_URL` and
+`bun test scripts/tests/sos-results.test.ts scripts/tests/sos-results-db.test.ts`.
+No real result totals are seeded or imported by these migrations.
+
 The first release supports Macon-Bibb using existing election, contest, question
 and candidate records. `/elections/results/?id=<election UUID>` is a static Astro
 shell with live browser RPC data. It shows separate scoped reports and optional

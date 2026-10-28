@@ -9,7 +9,7 @@ export type Counts = {
 export type ContestResult = Counts & {
   contest_id?: string;
   question_id?: string;
-  choices: Array<{ label: string; votes: number }>;
+  choices: Array<{ label: string; votes: number; person_id?: string }>;
   total_votes?: number | null;
   unresolved_write_ins?: number | null;
   undervotes?: number | null;

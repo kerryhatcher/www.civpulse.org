@@ -1,5 +1,6 @@
 import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
+import { initBallotResults } from './ballot-results';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
 import { matchesCounty } from '../lib/county-scope';
@@ -193,6 +194,7 @@ function buildCandidateCard(
 ): HTMLElement {
   const link = document.createElement('a');
   link.className = 'candidate-card';
+  link.dataset.candidateId = candidate.person.id;
   link.href = personHref(candidate.person);
 
   const image = personImageUrl(candidate.person.image_path);
@@ -296,7 +298,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   if (question.description) {
     const description = document.createElement('p'); description.className = 'contest-description'; description.textContent = question.description; card.append(description);
   }
-  const label = document.createElement('p'); label.className = 'body-note'; label.textContent = 'Response choices'; card.append(label);
+  const label = document.createElement('p'); label.className = 'body-note'; label.dataset.ballotChoiceLabel = ''; label.textContent = 'Response choices'; card.append(label);
   const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
   for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; choices.append(item); }
   card.append(choices);
@@ -456,6 +458,7 @@ export async function initElectionScope(): Promise<void> {
     }
     if (linked) linked.hidden = !revealed;
     if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
+    window.dispatchEvent(new Event('ballotscopechange'));
   }
   function revealLinkedRace() {
     apply();
@@ -498,6 +501,7 @@ export async function initElectionViewFromUrl(): Promise<void> {
   fillElectionView(response);
   const turnoutReady = response.election ? Promise.allSettled([
     initElectionTurnout(response.election.id),
+    initBallotResults(response.election.id),
     initElectionPrecinctTurnout(response.election.id),
   ]) : Promise.resolve();
 

@@ -120,6 +120,9 @@ Publishing rebuilds from the production code on `main`; it does not publish unme
 - [Users](/admin/users/): find registered accounts and grant admin access when appropriate.
 - [Organizations](/admin/organizations/) and [People](/admin/people/): maintain profiles and the people referenced by meeting attendance.
 - [Offices](/admin/offices/) and [Elections](/admin/elections/): maintain offices, contests, candidates, and election information.
+  Elections also accept an optional Georgia SOS results JSON URL. Leave it blank
+  until SOS publishes the feed. Saving it does not import data or enable automatic
+  refreshes; an administrator currently runs the manual feed importer.
 - [Articles](/admin/articles/): add external articles and link them to people or organizations.
 - [Layers](/admin/layers/) and [Maps](/admin/maps/): manage geographic data and published maps.
 - [Calendars](/admin/calendars/) and [Meetings](/admin/meetings/): manage events and their meeting records.

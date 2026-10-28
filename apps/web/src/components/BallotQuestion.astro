@@ -12,7 +12,7 @@ const { question } = Astro.props;
   </header>
   <p class="ballot-question-text">{question.question_text}</p>
   {question.description && <p class="contest-description">{question.description}</p>}
-  <p class="body-note">Response choices</p>
+  <p class="body-note" data-ballot-choice-label>Response choices</p>
   <ul class="ballot-question-choices">{question.choices.map(choice => <li>{choice}</li>)}</ul>
   {question.source_url && /^https?:\/\//i.test(question.source_url) && <p><a href={question.source_url} target="_blank" rel="noopener noreferrer">Official source ↗</a></p>}
 <ObjectHistoryLink table="ballot_questions" id={question.id} />

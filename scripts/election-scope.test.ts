@@ -18,8 +18,25 @@ test('out-of-area districts and similarly numbered districts stay outside the Bi
   expect(isBibbContest({ office: 'Unknown office', district: null })).toBe(false);
 });
 
+test('historical SOS labels and explicit Bibb jurisdictions remain visible', () => {
+  expect(isBibbContest({office:'Governor - Rep',district:null})).toBe(true);
+  expect(isBibbContest({office:'State Senate - District 18 - Rep',district:null})).toBe(true);
+  expect(isBibbContest({office:'State Senate - District 19 - Rep',district:null})).toBe(false);
+  expect(isBibbContest({office:'State Senate',district:'District 18'})).toBe(true);
+  expect(isBibbContest({office:'BOE - Post 7 - At Large',district:'Bibb County'})).toBe(true);
+  expect(isBibbContest({office:'BOE - Post 7 - At Large',district:null,description:'Source: https://results.sos.ga.gov/results/public/bibb-county-ga/elections/GeneralPrimary51926'})).toBe(false);
+  expect(isBibbContest({office:'State Senate - District 19 - Rep',district:null,description:'Source: https://results.sos.ga.gov/results/public/bibb-county-ga/elections/GeneralPrimary51926'})).toBe(false);
+  expect(isBibbContest({office:'PSC - District 3 - Rep',district:null})).toBe(true);
+  expect(isBibbContest({office:'Justice - Supreme Court of Georgia (Bethel)',district:null})).toBe(true);
+  expect(isBibbContest({office:'BOE - Post 7 - At Large',district:null,description:'Source: https://results.sos.ga.gov/results/public/fulton-county-ga/elections/GeneralPrimary51926'})).toBe(false);
+});
+
 test('ballot question scope includes Georgia and Bibb but excludes other counties', () => {
   expect(isBibbJurisdiction('Georgia (statewide)')).toBe(true);
+  expect(isBibbJurisdiction('Georgia')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Republican primary ballot')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Democratic primary ballot')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Fulton County')).toBe(false);
   expect(isBibbJurisdiction('Macon-Bibb County')).toBe(true);
   expect(isBibbJurisdiction('Bibb County school district')).toBe(true);
   expect(isBibbJurisdiction('Fulton County')).toBe(false);

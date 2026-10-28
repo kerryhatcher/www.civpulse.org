@@ -236,7 +236,7 @@ export async function initElectionAdmin(): Promise<void> {
   async function loadElections(): Promise<void> {
     const { data, error } = await supabase
       .from('elections')
-      .select(ELECTION_COLUMNS)
+      .select(`${ELECTION_COLUMNS}, results_json_url`)
       .order('election_date', { ascending: false });
 
     if (error) {
@@ -413,6 +413,7 @@ export async function initElectionAdmin(): Promise<void> {
     set('slug', election.slug);
     set('election_date', election.election_date);
     set('description', election.description);
+    set('results_json_url', election.results_json_url ?? null);
     const kind = electionFormEl.querySelector<HTMLSelectElement>('select[name="kind"]');
     const visibility = electionFormEl.querySelector<HTMLSelectElement>('select[name="visibility"]');
     if (kind) kind.value = election.kind;
@@ -475,6 +476,7 @@ export async function initElectionAdmin(): Promise<void> {
         visibility: visibilityValue(String(values.get('visibility') ?? 'public')),
         organization_id: textOrNull(values.get('organization_id')),
         description: textOrNull(values.get('description')),
+        results_json_url: textOrNull(values.get('results_json_url')),
       };
 
       const { error } = id
