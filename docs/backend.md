@@ -1621,3 +1621,48 @@ that ID through a fresh request RPC, then uses the existing private bucket's
 60-second signed-URL operation. Current owner/admin/file/request policy stays
 authoritative; URL origin and bucket signing path are checked before navigation.
 Public/unlisted/private access and ownership-transfer behavior remain unchanged.
+
+## Frontend rebuild invalidation
+
+`20261125000100_frontend_rebuild_tracking` adds a singleton
+`public.frontend_rebuild_state` row with `needs_rebuild`, a monotonic `revision`,
+change timestamp and publication timestamp. RLS is enabled; anonymous and
+authenticated API roles have no access. The service role has select access but
+no direct write grant.
+
+`frontend_private.mark_frontend_rebuild_required()` is an empty-search-path,
+security-definer trigger function with no API-role execution grants. Statement
+triggers mark changes transactionally for insert/update/delete/truncate on the
+44 explicitly listed static-content tables. These cover organization/person
+profiles and affiliations, maps/layers/features, calendars/meetings, elections,
+offices, articles, legislation and public request content/children. Parent and
+relationship changes, deletes and visibility transitions invalidate the snapshot.
+Rollbacks also roll back invalidation. Statement-level invalidation avoids
+updating the singleton once per imported row. Private-only and no-op statements
+on tracked tables can conservatively cause an extra rebuild.
+
+Auth/admin/profile settings, audit history, import/upload receipts, request
+ownership/transfer history, runtime short links/counts, public document search,
+and runtime election result/turnout reports are excluded. New static readers or
+schema additions must extend the trigger allowlist in a new migration.
+
+`20261125000200_frontend_rebuild_cron` enables `pg_cron`/`pg_net`, schedules the
+hourly invocation and adds persistent build ID/revision/request time and a
+five-minute lease. The service-role-only `claim_frontend_rebuild`,
+`record_frontend_rebuild` and `release_frontend_rebuild` RPCs serialize checks,
+retain tracked builds across Edge invocations, and reject expired/replaced leases
+and mismatched build IDs. They use empty search paths and explicit execute grants.
+The obsolete standalone acknowledgement RPC is dropped. Successful reconciliation
+clears the flag only if the current revision equals the build revision. Failed
+builds stay dirty; newer edits can be queued in the same hourly pass. A crashed
+invocation cannot permanently hold a lease. The publication timestamp records
+the successful reconciliation time, rather than Cloudflare's exact deploy time.
+
+The private invocation function reads the environment-specific URL and signing
+token from Vault at runtime. The reusable token is never placed in `cron.job` or
+`pg_net` headers; the queued request carries a five-minute HMAC signature instead.
+The Edge Function uses a service-only RPC to verify the signature against Vault
+before claiming a rebuild lease.
+The row stores no credentials. Cron history records queuing; HTTP/Edge responses
+and Cloudflare status determine success. See [publishing setup and local tests](development.md#hourly-database-driven-publishing).
+Merge both append-only migrations to main before production application.

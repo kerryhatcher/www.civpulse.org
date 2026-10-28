@@ -243,6 +243,13 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   raw logs, credentials, or the hook URL. No service-role key or new tables are
   needed. See [development.md](./development.md#manual-publishing-setup).
 
+- Database writes to static-content tables set a protected rebuild flag and
+  increment its revision. Supabase Cron invokes a dedicated Edge Function hourly to
+  reconcile the saved build ID and request the existing production Cloudflare
+  build hook when needed. A database lease prevents overlapping checks. Only a
+  confirmed successful deployment clears its captured revision; concurrent edits
+  and failed builds stay pending. Completion is checked on the next hourly run. See [hourly publishing setup](development.md#hourly-database-driven-publishing).
+
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
   `/admin/maps/`, `/admin/offices/`, `/admin/calendars/`, `/admin/elections/`, `/admin/articles/` with an admin tab
