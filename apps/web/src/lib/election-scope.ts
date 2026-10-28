@@ -10,7 +10,8 @@ const BIBB_DISTRICTS: Record<string, readonly number[]> = {
 };
 
 export function isBibbJurisdiction(value: string | null): boolean {
-  return /\bbibb\b|\bstatewide\b/i.test(value ?? '');
+  return /\bbibb\b|\bstatewide\b/i.test(value ?? '')
+    || /^Georgia(?:\s*[—–-]\s*(?:Republican|Democratic) primary ballot)?$/i.test(value?.trim() ?? '');
 }
 
 export function isBibbContest(contest: Pick<ElectionContest, 'office' | 'district'> & { description?: string | null }): boolean {

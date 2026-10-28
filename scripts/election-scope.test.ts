@@ -29,6 +29,10 @@ test('historical SOS labels and explicit Bibb source provenance remain visible',
 
 test('ballot question scope includes Georgia and Bibb but excludes other counties', () => {
   expect(isBibbJurisdiction('Georgia (statewide)')).toBe(true);
+  expect(isBibbJurisdiction('Georgia')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Republican primary ballot')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Democratic primary ballot')).toBe(true);
+  expect(isBibbJurisdiction('Georgia — Fulton County')).toBe(false);
   expect(isBibbJurisdiction('Macon-Bibb County')).toBe(true);
   expect(isBibbJurisdiction('Bibb County school district')).toBe(true);
   expect(isBibbJurisdiction('Fulton County')).toBe(false);

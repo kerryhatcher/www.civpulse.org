@@ -25,6 +25,8 @@ Historical SOS race labels retain their original wording. The Bibb ballot gate
 recognizes statewide SOS office labels, known legislative districts, and explicit
 official Bibb source URLs on imported contests, so those results do not disappear
 in the default county view. Unclassified local offices remain outside that gate.
+The question gate also recognizes Georgia's Republican/Democratic primary-ballot
+jurisdiction labels as statewide, retaining the May party questions in Bibb's view.
 
 ## Georgia SOS results JSON feeds
 
