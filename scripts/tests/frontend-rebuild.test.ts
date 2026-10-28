@@ -60,7 +60,7 @@ test('reconciles a successful tracked deployment and clears its flag', async () 
   const res = await f.run(); expect(await res.text()).toContain('pending flag cleared');
   expect(f.work()[2].body).toEqual({ p_lease: lease, p_action: 'succeeded', p_build_id: id });
 });
-test('newer edits survive acknowledgement and start a fresh build in the same hourly pass', async () => {
+test('newer edits survive acknowledgement and start a fresh build in the same scheduled pass', async () => {
   const newer = { ...state, revision: '9007199254740994' };
   const f = fixture([pending, cf(build), newer, cf([]), cf({ build_uuid: id }), { ...newer, build_id: id, build_revision: newer.revision }]);
   expect((await f.run()).status).toBe(202);
