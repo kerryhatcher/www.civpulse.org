@@ -1,8 +1,8 @@
 ---
 version: 1
 slug: "apps-web-src-pages-requests"
-primary_target: "apps/web/src/pages/requests"
-related_targets: []
+primary_target: "src/pages/requests/index.astro"
+related_targets: ["src/pages/requests/view.astro", "src/pages/admin/requests.astro", "src/scripts/records-requests.ts"]
 ---
 
 # Records requests
@@ -14,7 +14,7 @@ Operate for owners/admins; Read for visitors. Extend CivicPulse's existing resou
 Residents follow requests; admins create them; assigned owners maintain a dated account, evidence and outcomes. Ownership identities/history stay private. Public, unlisted and private use runtime access checks.
 
 ## Direction
-Use the incumbent Unna headings, DM Sans controls, cream background and green actions. A readable request summary leads into a chronological activity log; editing lives in clearly named disclosures.
+Use the Open Exhibition system in DESIGN.md: Anton page titles, Barlow Condensed section headings, Barlow body copy and controls, ultramarine/light and navy/dark canvases, paper reading surfaces, and lime selection/focus accents. A readable request summary leads into a chronological activity log; editing lives in clearly named disclosures.
 
 ## First viewport
 Title, stage, outcome and organization relationships establish the request's current state. A clear manage action exposes the editor only to authorized users.

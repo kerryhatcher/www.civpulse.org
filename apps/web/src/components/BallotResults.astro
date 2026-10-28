@@ -1,0 +1,37 @@
+---
+interface Props { electionId?: string }
+const { electionId } = Astro.props;
+---
+<div class="ballot-results-status" data-ballot-results data-election-id={electionId}>
+  <p data-ballot-results-summary role="status" aria-live="polite">Loading available results…</p>
+  <button data-ballot-results-refresh type="button">Refresh results</button>
+  <noscript><p>Enable JavaScript to display available results alongside the ballot.</p></noscript>
+</div>
+<style is:global>
+  .ballot-results-status { display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem 1rem; margin-block:1rem 1.5rem; }
+  .ballot-results-status p { flex:1 1 28rem; margin:0; }
+  .ballot-results-status button { min-height:44px; }
+  .ballot-results { margin-top:1.25rem; }
+  .contest-card .candidate-list[hidden], .contest-card .ballot-question-choices[hidden] { display:none; }
+  .ballot-result-scope { margin-block:1.5rem; }
+  .ballot-result-scope h4 { margin:0 0 .35rem; font:600 1.2rem var(--sans); }
+  .ballot-result-scope .body-note { margin-block:.35rem; }
+  .ballot-result-scope table { width:100%; border-collapse:collapse; margin-block:.75rem; font-variant-numeric:tabular-nums; }
+  .ballot-result-scope caption { text-align:left; color:var(--muted); padding-bottom:.5rem; }
+  .ballot-result-scope th, .ballot-result-scope td { padding:.65rem .5rem; border-bottom:1px solid var(--line); text-align:right; }
+  .ballot-result-scope th:first-child { text-align:left; overflow-wrap:anywhere; }
+  .ballot-result-scope tbody th { font-weight:400; }
+  .ballot-result-scope td { white-space:nowrap; }
+  .ballot-result-scope .result-name { display:block; }
+  .ballot-result-scope .result-candidate-meta { display:block; color:var(--muted); font-size:.85rem; margin-top:.2rem; }
+  .ballot-result-scope .result-track { display:block; height:4px; background:var(--surface-soft); margin-top:.4rem; }
+  .ballot-result-scope .result-fill { display:block; height:100%; background:var(--ink); }
+  .ballot-result-source { color:var(--muted); font-size:.9rem; }
+  .ballot-result-scope a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+  @media(max-width:480px) {
+    .ballot-result-scope table { table-layout:fixed; }
+    .ballot-result-scope th, .ballot-result-scope td { padding:.65rem .25rem; }
+    .ballot-result-scope th:first-child { width:50%; }
+    .ballot-result-scope td { white-space:normal; }
+  }
+</style>

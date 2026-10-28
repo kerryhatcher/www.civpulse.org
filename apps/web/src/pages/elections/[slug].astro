@@ -4,6 +4,7 @@ import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
 import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
+import BallotResults from '../../components/BallotResults.astro';
 import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
 import BallotQuestion from '../../components/BallotQuestion.astro';
@@ -140,6 +141,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
     <section id="ballot" data-shareable-section class="election-contests" aria-labelledby="election-contests-title">
       <h2 id="election-contests-title">What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
       <ElectionScope />
+      <BallotResults electionId={election.id} />
       {
         contests.length > 0 || ballot_questions.length > 0 ? (
           <div class="contest-list">
@@ -161,7 +163,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                     {contest.candidates.map(({ person, party, status, is_write_in }) => {
                       const image = personImageUrl(person.image_path);
                       return (
-                        <a class="candidate-card" href={personHref(person)}>
+                        <a class="candidate-card" data-candidate-id={person.id} href={personHref(person)}>
                           {image ? (
                             <img
                               class="candidate-image"
@@ -215,12 +217,14 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
   import { initElectionPrecinctTurnout } from '../../scripts/precinct-turnout';
   import { initElectionTurnout } from '../../scripts/election-turnout';
+  import { initBallotResults } from '../../scripts/ballot-results';
   import { restoreSectionAnchorAfter } from '../../scripts/section-anchors';
 
   const turnout = document.querySelector<HTMLElement>('[data-election-turnout]');
   if (turnout?.dataset.electionId) {
     restoreSectionAnchorAfter(Promise.allSettled([
       initElectionTurnout(turnout.dataset.electionId),
+      initBallotResults(turnout.dataset.electionId),
       initElectionPrecinctTurnout(turnout.dataset.electionId),
     ]));
   }

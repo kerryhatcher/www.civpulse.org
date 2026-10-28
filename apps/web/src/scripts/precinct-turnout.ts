@@ -1,6 +1,5 @@
-import { getSupabase } from '../lib/supabase';
+import { readElectionReports } from '../lib/election-report-reader';
 import { precinctTurnout, turnoutRate, turnoutFill } from '../lib/precinct-turnout';
-import type { ResultReport } from '../lib/election-results';
 import type * as Leaflet from 'leaflet';
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, text: string) {
   const node = document.createElement(tag); node.textContent = text; return node;
@@ -25,16 +24,7 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
     try {
       const url = section!.dataset.boundariesUrl;
       if (!url) { status.textContent = 'Public precinct boundaries are not available for this map.'; return; }
-      const reports: ResultReport[] = [];
-      for (let offset = 0; ; offset += 100) {
-        const { data, error } = await getSupabase().rpc('get_election_results', {
-          p_election_id: electionId, p_history: false, p_offset: offset, p_limit: 100,
-        });
-        if (error) throw error;
-        if (data?.status !== 'ok') { section!.hidden = true; return; }
-        reports.push(...data.reports);
-        if (data.reports.length < 100) break;
-      }
+      const reports = await readElectionReports(electionId);
       const response = await fetch(url);
       if (!response.ok) throw new Error('Precinct boundaries unavailable');
       const geometry = await response.json() as GeoJSON.FeatureCollection;

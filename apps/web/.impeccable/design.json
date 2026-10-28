@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-27T05:22:12.880Z",
+  "generatedAt": "2026-10-28T17:06:53.169Z",
   "title": "Design System: Civic Pulse",
   "extensions": {
     "colorMeta": {
@@ -454,7 +454,7 @@
       },
       "headline": {
         "displayName": "Exhibition headline",
-        "purpose": "Selected topic and election headline."
+        "purpose": "Selected-topic exhibition headline. Interior page titles use Anton at clamp(42px,5vw,76px)."
       },
       "title": {
         "displayName": "Condensed section title",
@@ -462,7 +462,7 @@
       },
       "topic": {
         "displayName": "Topic label",
-        "purpose": "Desktop numbered civic index; at 800px and below uses Barlow Condensed 600, with clamp(22px,6.9vw,27px) below 480px."
+        "purpose": "Desktop numbered civic index uses Barlow 700; below 480px uses Barlow Condensed 600 with clamp(22px,6.9vw,27px)."
       },
       "body": {
         "displayName": "Reading text",
@@ -576,7 +576,7 @@
       "refersTo": "button-secondary",
       "description": "Paper control with lime hover.",
       "html": "<button class=\"ds-secondary\">Next</button>",
-      "css": ".ds-secondary{min-height:44px;padding:10px 14px;border:1px solid var(--line,#b8c1cd);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;cursor:pointer}.ds-secondary:hover:not(:disabled){background:var(--sage,#daf868)}.ds-secondary:disabled{opacity:.5;cursor:default}.ds-secondary:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}@media(prefers-color-scheme:dark){.ds-secondary:hover:not(:disabled){color:var(--selected-ink,#111815)}}"
+      "css": ".ds-secondary{min-height:44px;padding:10px 14px;border:1px solid var(--control-line,#758291);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;cursor:pointer}.ds-secondary:hover:not(:disabled){background:var(--sage,#daf868)}.ds-secondary:disabled{opacity:.5;cursor:default}.ds-secondary:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}@media(prefers-color-scheme:dark){.ds-secondary:hover:not(:disabled){color:var(--selected-ink,#111815)}}"
     },
     {
       "name": "Text field",
@@ -584,7 +584,7 @@
       "refersTo": "input",
       "description": "Paper input with line border and blue focus.",
       "html": "<label class=\"ds-field\">Search<input class=\"ds-input\" placeholder=\"Find public information\" /></label>",
-      "css": ".ds-field{display:grid;gap:6px;color:var(--ink,#111815);font:500 14px \"Barlow\",sans-serif}.ds-input{min-height:44px;padding:10px 12px;border:1px solid var(--line,#b8c1cd);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;caret-color:var(--blue,#0838d7)}.ds-input::placeholder{color:var(--muted,#485254)}.ds-input:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}"
+      "css": ".ds-field{display:grid;gap:6px;color:var(--ink,#111815);font:500 14px \"Barlow\",sans-serif}.ds-input{min-height:44px;padding:10px 12px;border:1px solid var(--control-line,#758291);border-radius:var(--radius,6px);background:var(--paper,#f6f7f2);color:var(--ink,#111815);font:400 16px \"Barlow\",sans-serif;caret-color:var(--blue,#0838d7)}.ds-input::placeholder{color:var(--muted,#485254)}.ds-input:focus-visible{outline:3px solid var(--focus,#0838d7);outline-offset:5px}"
     },
     {
       "name": "Header navigation",
@@ -649,6 +649,7 @@
       "Do keep geographic context separate from the Civic Pulse name.",
       "Do pair monumental display headings with readable Barlow body copy.",
       "Do use lime for selected topics and preserve fixed dark text on that lime surface.",
+      "Do distinguish visible control boundaries from decorative separators.",
       "Do preserve visible keyboard focus, reduced-motion behavior, and automatic system appearance.",
       "Do preserve source map colors, icons, historical records, and version notes."
     ],

@@ -78,6 +78,7 @@ export interface Election {
   description: string | null;
   organization_id: string | null;
   visibility: ElectionVisibility;
+  results_json_url?: string | null;
 }
 
 /** A person as referenced from a contest, with the race-specific facts. */

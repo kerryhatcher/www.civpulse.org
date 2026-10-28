@@ -45,7 +45,7 @@ jobs:
           PUBLIC_RECORDS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
 
       - name: Verify election results and evidence
-        run: bun test scripts/tests/election-results-db.test.ts scripts/tests/structured-turnout-db.test.ts scripts/tests/structured-turnout-integration.test.ts scripts/tests/election-results-integration.test.ts
+        run: bun test scripts/tests/election-results-db.test.ts scripts/tests/structured-turnout-db.test.ts scripts/tests/structured-turnout-integration.test.ts scripts/tests/election-results-integration.test.ts scripts/tests/sos-results-db.test.ts
         env:
           ELECTION_RESULTS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
           ELECTION_RESULTS_INTEGRATION: '1'

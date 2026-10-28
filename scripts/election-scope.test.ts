@@ -18,6 +18,15 @@ test('out-of-area districts and similarly numbered districts stay outside the Bi
   expect(isBibbContest({ office: 'Unknown office', district: null })).toBe(false);
 });
 
+test('historical SOS labels and explicit Bibb source provenance remain visible', () => {
+  expect(isBibbContest({office:'Governor - Rep',district:null})).toBe(true);
+  expect(isBibbContest({office:'State Senate - District 18 - Rep',district:null})).toBe(true);
+  expect(isBibbContest({office:'State Senate - District 19 - Rep',district:null})).toBe(false);
+  expect(isBibbContest({office:'State Senate',district:'District 18'})).toBe(true);
+  expect(isBibbContest({office:'BOE - Post 7 - At Large',district:null,description:'Source: https://results.sos.ga.gov/results/public/bibb-county-ga/elections/GeneralPrimary51926'})).toBe(true);
+  expect(isBibbContest({office:'BOE - Post 7 - At Large',district:null,description:'Source: https://results.sos.ga.gov/results/public/fulton-county-ga/elections/GeneralPrimary51926'})).toBe(false);
+});
+
 test('ballot question scope includes Georgia and Bibb but excludes other counties', () => {
   expect(isBibbJurisdiction('Georgia (statewide)')).toBe(true);
   expect(isBibbJurisdiction('Macon-Bibb County')).toBe(true);

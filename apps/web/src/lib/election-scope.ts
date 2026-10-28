@@ -13,8 +13,15 @@ export function isBibbJurisdiction(value: string | null): boolean {
   return /\bbibb\b|\bstatewide\b/i.test(value ?? '');
 }
 
-export function isBibbContest(contest: Pick<ElectionContest, 'office' | 'district'>): boolean {
+export function isBibbContest(contest: Pick<ElectionContest, 'office' | 'district'> & { description?: string | null }): boolean {
   if (isBibbJurisdiction(`${contest.office} ${contest.district ?? ''}`)) return true;
+  // Historical SOS imports retain source ballot labels instead of canonical office names.
+  if (contest.description?.includes('https://results.sos.ga.gov/results/public/bibb-county-ga/')) return true;
+  if (/^(?:US Senate|Governor|Lieutenant Governor|Secretary of State|Attorney General|Commissioner of Agriculture|Commissioner of Insurance|State School Superintendent|Commissioner of Labor)(?: - (?:Rep|Dem))?$/.test(contest.office)) return true;
+  const sourceDistrict = contest.office.match(/^(US House of Representatives|State Senate|State House of Representatives) - District (\d+)(?: - (?:Rep|Dem))?$/);
+  const sourceOffices: Record<string, string> = { 'US House of Representatives':'United States House of Representatives', 'State Senate':'Georgia State Senate', 'State House of Representatives':'Georgia House of Representatives' };
+  if (sourceDistrict) return BIBB_DISTRICTS[sourceOffices[sourceDistrict[1]]]?.includes(Number(sourceDistrict[2])) ?? false;
+  if (contest.office === 'State Senate' && /^District (18|25|26)$/.test(contest.district ?? '')) return true;
   const district = contest.district?.match(/^(?:Georgia )?District (\d+)$/i);
   return Boolean(district && BIBB_DISTRICTS[contest.office]?.includes(Number(district[1])));
 }

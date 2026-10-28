@@ -109,7 +109,9 @@ Migrations are append-only files in `supabase/migrations/`.
   visibility.
 - `public.elections` — `slug`, `name`, `election_date` (required), `kind`,
   `description`, `organization_id` (optional administering body), `visibility`,
-  timestamps.
+  nullable `results_json_url` (Georgia SOS HTTPS export), timestamps. Source feed
+  snapshots/items use admin-only staging RPCs and visibility-aware paged reads;
+  see [SOS results JSON feeds](election-results.md#georgia-sos-results-json-feeds).
 - `public.contests` — a race within an election: `election_id` (required),
   `office`, `district`, `seat`, `description`, `partisan`, `position`,
   timestamps.
