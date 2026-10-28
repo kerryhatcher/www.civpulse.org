@@ -40,7 +40,7 @@ function chart(title: string, rows: TurnoutRow[], values: { label: string; cell:
   }
   figure.append(list);
   for (const row of rows.filter((row, i) => rows.findIndex(r => r.source_title === row.source_title && r.as_of_label === row.as_of_label) === i)) {
-    figure.append(el('p', `${row.source_title} · ${row.as_of_label || 'Source as-of time not reported'}`, 'body-note'));
+    if (row.as_of_label) figure.append(el('p', `${row.source_title} · ${row.as_of_label}`, 'body-note'));
   }
   return figure;
 }

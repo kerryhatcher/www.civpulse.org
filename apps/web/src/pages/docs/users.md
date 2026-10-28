@@ -419,7 +419,9 @@ If your county has no reported turnout, the charts say so instead of switching
 to another county. There are no separate county dropdowns within the page.
 The early-voting chart remains visible alongside reported turnout when both
 source tables are available; their overlapping counts are never combined. Exact counts, source
-as-of labels and the separate collection time accompany the charts. Each chart
+as-of labels (when reported) and the separate collection time accompany the charts.
+Charts omit source-note lines when the source provides no as-of label; full source
+details remain available under **All reports, source details & earlier snapshots**. Each chart
 has its own zero-based ballot scale. Missing counts say “Not reported”; overlapping
 measures are not added, and no registered-voter denominator is inferred. Use
 **All reports, source details & earlier snapshots** to inspect reporting history.
