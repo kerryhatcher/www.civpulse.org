@@ -1647,14 +1647,14 @@ and runtime election result/turnout reports are excluded. New static readers or
 schema additions must extend the trigger allowlist in a new migration.
 
 `20261125000200_frontend_rebuild_cron` enables `pg_cron`/`pg_net`, schedules the
-hourly invocation and adds persistent build ID/revision/request time and a
+scheduled invocation and adds persistent build ID/revision/request time and a
 five-minute lease. The service-role-only `claim_frontend_rebuild`,
 `record_frontend_rebuild` and `release_frontend_rebuild` RPCs serialize checks,
 retain tracked builds across Edge invocations, and reject expired/replaced leases
 and mismatched build IDs. They use empty search paths and explicit execute grants.
 The obsolete standalone acknowledgement RPC is dropped. Successful reconciliation
 clears the flag only if the current revision equals the build revision. Failed
-builds stay dirty; newer edits can be queued in the same hourly pass. A crashed
+builds stay dirty; newer edits can be queued in the same scheduled pass. A crashed
 invocation cannot permanently hold a lease. The publication timestamp records
 the successful reconciliation time, rather than Cloudflare's exact deploy time.
 
@@ -1664,5 +1664,11 @@ token from Vault at runtime. The reusable token is never placed in `cron.job` or
 The Edge Function uses a service-only RPC to verify the signature against Vault
 before claiming a rebuild lease.
 The row stores no credentials. Cron history records queuing; HTTP/Edge responses
-and Cloudflare status determine success. See [publishing setup and local tests](development.md#hourly-database-driven-publishing).
+and Cloudflare status determine success. See [publishing setup and local tests](development.md#database-driven-publishing).
 Merge both append-only migrations to main before production application.
+
+`20261125000300_frontend_rebuild_twenty_minutes` reschedules the existing job to
+`*/20 * * * *` (minutes 0, 20 and 40 of each hour). Its historical
+`frontend-rebuild-hourly` name, job ID, history, command and lease behavior are
+preserved; no second job is created. Completion checks and failed-build retries
+use the same 20-minute schedule. Release the append-only migration through main.

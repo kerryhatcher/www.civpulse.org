@@ -244,11 +244,11 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   needed. See [development.md](./development.md#manual-publishing-setup).
 
 - Database writes to static-content tables set a protected rebuild flag and
-  increment its revision. Supabase Cron invokes a dedicated Edge Function hourly to
+  increment its revision. Supabase Cron invokes a dedicated Edge Function every 20 minutes to
   reconcile the saved build ID and request the existing production Cloudflare
   build hook when needed. A database lease prevents overlapping checks. Only a
   confirmed successful deployment clears its captured revision; concurrent edits
-  and failed builds stay pending. Completion is checked on the next hourly run. See [hourly publishing setup](development.md#hourly-database-driven-publishing).
+  and failed builds stay pending. Completion is checked on the next scheduled run. See [automatic publishing setup](development.md#database-driven-publishing).
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,

@@ -389,7 +389,7 @@ The [Publish admin page](/admin/publish/) calls the `publish` Supabase Edge
 Function. It verifies the user with Auth, checks `public.is_admin()` on each
 request, and either requests a production build or returns its status. It reuses
 active production builds, including builds started by Git pushes or other admins.
-Database change tracking and hourly publishing are described below.
+Database change tracking and automatic publishing are described below.
 
 Configure the following **Supabase Edge Function secrets**, never `PUBLIC_*`
 variables, source files, or browser configuration:
@@ -440,7 +440,7 @@ A failed status read disables publishing until a successful refresh. Ambiguous
 publish requests are not retried automatically. Cloudflare deduplicates hook
 requests while queued/initializing; there is no database lock across concurrent
 admins. Save edits before publishing and publish again after an active build if
-you edited content during it. The separate hourly process tracks unpublished revisions;
+you edited content during it. The separate scheduled process tracks unpublished revisions;
 manual builds can leave the flag pending and cause one extra scheduled rebuild.
 
 For local development, use a separate hook/Worker if testing real deployments;
@@ -451,34 +451,34 @@ Astro origin) and run
 `bun run publish:check` type-checks the handler. `bun run publish:test` exercises auth, scope isolation, sanitized statuses,
 request failures, and deduplication with mock upstream calls and never deploys.
 
-### Hourly database-driven publishing
+### Database-driven publishing
 
-Supabase Cron runs `frontend_private.invoke_rebuild()` at minute 17 of every hour
-(UTC), using `pg_cron` and `pg_net`. It invokes the `rebuild-frontend` Edge Function
+Supabase Cron runs `frontend_private.invoke_rebuild()` every 20 minutes, at minutes 0, 20 and 40 of
+each hour (UTC), using `pg_cron` and `pg_net`. It invokes the `rebuild-frontend` Edge Function
 with a short-lived HMAC signature. GitHub Actions only tests the function; it no
 longer schedules rebuilds or needs database/deploy credentials.
 
 Each invocation claims a five-minute database lease, then checks a previously
 tracked Cloudflare build, if any. A successful production build clears only its
 captured revision. Newer edits remain pending and can start another build in that
-same hourly pass. A running build stays tracked. A confirmed failed, canceled or
-skipped build is retired with the flag still set and retried next hour. Unknown
+same scheduled pass. A running build stays tracked. A confirmed failed, canceled or
+skipped build is retired with the flag still set and retried on the next 20-minute run. Unknown
 statuses, mismatched Worker/branch/ID, upstream errors and ambiguous hook requests
 never clear the flag. An existing manual/Git-push build or deduplicated hook is
 never adopted, because it may have read data before the captured revision.
 
 The function makes bounded API requests and returns without waiting for the build.
 Cloudflare still performs the existing guarded migration check, Astro build and
-deployment. Completion is reconciled at the next hourly invocation, so the flag
+deployment. Completion is reconciled at the next scheduled invocation, so the flag
 can remain pending after the new site is already live. A timeout or crash releases
 coordination through lease expiry; stored build IDs survive between invocations.
 Lost hook responses may cause an extra build after the untracked build finishes.
-Manual/Git-push builds can also cause one redundant hourly publication.
+Manual/Git-push builds can also cause one redundant scheduled publication.
 
-Setup, after merging both rebuild migrations to **main**:
+Setup, after merging all rebuild migrations to **main**:
 
-1. Let the Supabase integration apply `20261125000100_frontend_rebuild_tracking`
-   and `20261125000200_frontend_rebuild_cron` and deploy `rebuild-frontend`, declared
+1. Let the Supabase integration apply `20261125000100_frontend_rebuild_tracking`, `20261125000200_frontend_rebuild_cron`, and
+   `20261125000300_frontend_rebuild_twenty_minutes` and deploy `rebuild-frontend`, declared
    in `supabase/config.toml`. The later version follows the repository's existing
    future-dated migration history. Initial state is dirty to publish existing data.
    Production application must use the main integration or guarded `bun run db:push`.
@@ -507,7 +507,8 @@ token. Keep clocks synchronized. Rotate the token in Vault; Edge verification
 uses the current Vault value automatically. No CORS access or caller-selected
 Worker/build/branch is offered.
 
-Inspect the **Cron** Dashboard job `frontend-rebuild-hourly` and
+Inspect the **Cron** Dashboard job `frontend-rebuild-hourly` (the historical name
+is retained; its schedule is now `*/20 * * * *`) and
 `cron.job_run_details`. Cron success means an HTTP request was queued; inspect
 `net._http_response` for that request ID and the Edge Function logs to verify the
 invocation succeeded. Cloudflare build logs remain authoritative for deployment.
@@ -518,6 +519,8 @@ have completed. Follow the same main migration guard for standalone function dep
 
 Run `bun run rebuild:check`, `bun run rebuild:test`, and
 `REBUILD_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/frontend-rebuild-db.test.ts scripts/tests/frontend-rebuild-cron-db.test.ts`.
+The timer-only rollback test also works after the earlier rebuild migrations are
+applied: `REBUILD_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/frontend-rebuild-timer-db.test.ts`.
 The database tests apply feature migrations and fixtures in rollback-only
 transactions against local Supabase at the preceding migration; queued HTTP
 requests never commit or leave the database. Never point them at production.

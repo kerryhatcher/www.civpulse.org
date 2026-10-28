@@ -56,10 +56,10 @@ export async function handleRebuild(request: Request, env: RebuildEnv, fetcher: 
       if (['queued', 'initializing', 'running'].includes(build.status)) return reply('Build still active; changes remain pending');
       if (build.status !== 'stopped') throw Error('Unknown build status');
       if (build.build_outcome !== 'success') {
-        // Retire confirmed terminal failures, allowing a retry on the next hourly run.
+        // Retire confirmed terminal failures, allowing a retry on the next scheduled run.
         if (!['fail', 'cancelled', 'terminated', 'skipped'].includes(build.build_outcome)) throw Error('Unknown build outcome');
         await rpc('record_frontend_rebuild', { p_lease: lease, p_action: 'failed', p_build_id: current.build_id });
-        return reply('Build failed; changes remain pending for the next hourly retry', 502);
+        return reply('Build failed; changes remain pending for the next scheduled retry', 502);
       }
       current = state(await rpc('record_frontend_rebuild', { p_lease: lease, p_action: 'succeeded', p_build_id: current.build_id }));
       if (current.lease_id !== lease || current.build_id !== null) throw Error('Invalid acknowledgement');
@@ -77,7 +77,7 @@ export async function handleRebuild(request: Request, env: RebuildEnv, fetcher: 
       p_lease: lease, p_action: 'track', p_build_id: triggered.build_uuid, p_revision: current.revision,
     }));
     if (tracked.build_id !== triggered.build_uuid || tracked.build_revision !== current.revision) throw Error('Build was not tracked');
-    return reply('Build requested; completion will be checked next hour', 202);
+    return reply('Build requested; completion will be checked on the next scheduled run', 202);
   } catch {
     // Never expose exceptions, response bodies, credential values or the hook URL.
     return reply('Could not complete rebuild check; changes remain pending', 502);
