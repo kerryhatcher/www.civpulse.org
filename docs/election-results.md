@@ -6,8 +6,9 @@ Both public detail pages and the visibility-gated UUID viewer hydrate results
 alongside the existing ballot through `get_election_results`. The page-session
 reader shares paginated report requests with the precinct map; no result counts
 or restricted report data are embedded at build time. Refresh results reloads
-the report snapshot for the inline display. The map retains its loaded snapshot
-until a page reload. Existing election/ballot edits still require a static rebuild.
+the shared report snapshot and reloads the precinct map from that same snapshot.
+Map retries also request fresh reports. Existing election/ballot edits still
+require a static rebuild.
 
 The inline view selects the newest county/all-unit/all-method report for each
 exact county and ballot style. It never sums precinct, county, method or style
@@ -22,9 +23,11 @@ The same page transitions from ballot-only to ballot-with-results as reports
 are published. Empty/error states retain the ballot, profile links and retry.
 The existing RLS/RPC access gates also apply to anonymous and signed-in readers.
 Historical SOS race labels retain their original wording. The Bibb ballot gate
-recognizes statewide SOS office labels, known legislative districts, and explicit
-official Bibb source URLs on imported contests, so those results do not disappear
-in the default county view. Unclassified local offices remain outside that gate.
+recognizes statewide SOS office labels, known legislative/judicial jurisdictions,
+and explicit Bibb districts. Migration `20261125000600_historical_bibb_ballot_jurisdictions`
+fills only missing district fields on nine verified local May contests with
+`Bibb County`. Free-form descriptions and URLs are not jurisdiction evidence.
+Unclassified local offices remain outside that gate.
 The question gate also recognizes Georgia's Republican/Democratic primary-ballot
 jurisdiction labels as statewide, retaining the May party questions in Bibb's view.
 

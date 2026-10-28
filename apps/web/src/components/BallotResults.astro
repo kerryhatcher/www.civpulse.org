@@ -3,8 +3,8 @@ interface Props { electionId?: string }
 const { electionId } = Astro.props;
 ---
 <div class="ballot-results-status" data-ballot-results data-election-id={electionId}>
-  <p data-ballot-results-summary role="status" aria-live="polite">Loading available results…</p>
-  <button data-ballot-results-refresh type="button">Refresh results</button>
+  <p data-ballot-results-summary role="status" aria-live="polite"></p>
+  <button data-ballot-results-refresh type="button" hidden>Refresh results</button>
   <noscript><p>Enable JavaScript to display available results alongside the ballot.</p></noscript>
 </div>
 <style is:global>

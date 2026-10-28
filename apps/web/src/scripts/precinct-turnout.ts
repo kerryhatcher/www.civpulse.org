@@ -16,7 +16,9 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
   const retry = section.querySelector<HTMLButtonElement>('[data-precinct-retry]')!;
   let map: Leaflet.Map | undefined;
   let resize: ResizeObserver | undefined;
-  async function load() {
+  let generation = 0;
+  async function load(refresh = false) {
+    const request = ++generation;
     section!.hidden = false;
     retry.hidden = true;
     body.hidden = true;
@@ -24,13 +26,16 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
     try {
       const url = section!.dataset.boundariesUrl;
       if (!url) { status.textContent = 'Public precinct boundaries are not available for this map.'; return; }
-      const reports = await readElectionReports(electionId);
+      const reports = await readElectionReports(electionId, refresh);
+      if (request !== generation) return;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Precinct boundaries unavailable');
       const geometry = await response.json() as GeoJSON.FeatureCollection;
+      if (request !== generation) return;
       if (!geometry.features?.length || geometry.features.some(f => f.properties?.county !== 'Bibb' || !f.properties?.precinctid)) throw new Error('Unexpected precinct boundaries');
       geometry.features.sort((a, b) => String(a.properties!.precinctid).localeCompare(String(b.properties!.precinctid), 'en', { numeric: true }));
       const { default: L } = await import('leaflet');
+      if (request !== generation) return;
       const choices = [...new Set(reports.filter(r => r.scope.county === 'Bibb' && r.scope.unit_type === 'precinct' && r.scope.counting_group === 'all').map(r => r.scope.ballot_style))].sort();
       if (!choices.length) choices.push('all');
       styles.replaceChildren(...choices.map(value => { const option = el('option', value === 'all' ? 'All ballot styles' : value); option.value = value; return option; }));
@@ -86,6 +91,7 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       styles.onchange = render;
       render();
     } catch {
+      if (request !== generation) return;
       resize?.disconnect();
       map?.remove(); map = undefined;
       body.hidden = true;
@@ -93,6 +99,9 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       retry.hidden = false;
     }
   }
-  retry.onclick = () => { void load(); };
+  retry.onclick = () => { void load(true); };
+  window.addEventListener('electionreportschange', event => {
+    if ((event as CustomEvent<{electionId:string}>).detail?.electionId === electionId) void load();
+  });
   await load();
 }

@@ -458,6 +458,7 @@ export async function initElectionScope(): Promise<void> {
     }
     if (linked) linked.hidden = !revealed;
     if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
+    window.dispatchEvent(new Event('ballotscopechange'));
   }
   function revealLinkedRace() {
     apply();
