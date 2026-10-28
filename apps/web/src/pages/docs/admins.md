@@ -96,6 +96,15 @@ Admin changes are saved to the database immediately. The calendar and meeting vi
 
 ## Publish saved changes
 
+Once hourly publishing is configured, saved changes that affect static pages are
+queued automatically. Every hour, the publisher checks for pending changes and
+rebuilds the site when needed. Edits saved during a build remain queued for the
+next run, and failed builds leave changes pending. Completed builds are checked
+on the next hourly run; the public site updates as soon as deployment succeeds.
+Scheduling and build time can
+delay publication beyond an hour. Use **Publish** below when you need an earlier
+update. Runtime short links and election results continue to update immediately.
+
 1. Save your edits, then open [Publish](/admin/publish/) from the admin navigation.
 2. Select **Publish changes** to rebuild the public site with saved changes from all admins. Unsaved edits are not included.
 3. Watch **Build status**: queued, preparing, building and deploying, then **Published successfully**. Status updates every 10 seconds while the page is open. You can leave and return later, or select **Refresh status**.

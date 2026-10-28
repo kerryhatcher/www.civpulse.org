@@ -45,7 +45,9 @@
     "kb:check": "bun run --cwd apps/kb check",
     "kb:test": "bun run --cwd apps/kb test",
     "kb:dev": "bun run --cwd apps/kb dev",
-    "mcp:build": "bun run scripts/build-mcp.mjs"
+    "mcp:build": "bun run scripts/build-mcp.mjs",
+    "rebuild:check": "bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/rebuild-frontend/handler.ts",
+    "rebuild:test": "bun test scripts/tests/frontend-rebuild.test.ts"
   },
   "devDependencies": {
     "supabase": "^2.121.0",

@@ -427,3 +427,8 @@ import_map = "./functions/mcp/deno.json"
 [functions.publish]
 verify_jwt = true
 entrypoint = "./functions/publish/index.ts"
+
+# Cron uses a Vault signature, verified through a service-only RPC on every call.
+[functions.rebuild-frontend]
+verify_jwt = false
+entrypoint = "./functions/rebuild-frontend/index.ts"
