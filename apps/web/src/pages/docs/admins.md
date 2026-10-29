@@ -9,6 +9,17 @@ setting, just like the public site. Changing appearance does not change access
 or published content.
 
 
+## Voter roll history
+
+The backend now has an admin-only model for historical SOS county registration
+rolls. It preserves original snapshots so future imports can show changes to
+registration details, absence from a later county roll and reappearance. An
+absence does not by itself establish why a voter left the roll. Ordinary
+signed-in accounts cannot access these records.
+
+A voter-file importer and management page are not available yet. Do not upload
+voter rolls into public people profiles, maps or the public document archive.
+
 ## Publish a meeting document to the public archive
 
 Archive publication is separate from uploading a meeting attachment. When the
