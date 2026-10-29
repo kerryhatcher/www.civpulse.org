@@ -1,5 +1,16 @@
 # Supabase backend
 
+## Voter registration snapshots
+
+The [admin-only voter roll model](voter-rolls.md) stores immutable full-county
+SOS imports and original per-voter rows, keyed by SOS registration number.
+Completed snapshots provide field changes, county-scoped absence and reappearance
+history. Staging files cannot establish absence. Tables and RPCs require an
+administrator and never feed public profiles, search, audit history or build
+exports. The model is implemented separately from a future file importer/UI;
+no production import is included. Follow the main-before-production migration
+rule and the synthetic local verification documented there.
+
 The backend lives in [`supabase/`](../supabase): Postgres migrations, Auth
 configuration, and local development settings. The frontend uses
 `@supabase/supabase-js` with the public anon key from `apps/web/src/lib/supabase.ts`.
