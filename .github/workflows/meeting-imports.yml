@@ -16,12 +16,23 @@ jobs:
     env:
       SUPABASE_TELEMETRY_DISABLED: '1'
     steps:
+      - name: Reserve local Supabase ports
+        # Keep outbound checkout/image-pull connections off the stack's fixed ports.
+        run: |
+          reserved_ports=$(sysctl -n net.ipv4.ip_local_reserved_ports)
+          sudo sysctl -w "net.ipv4.ip_local_reserved_ports=${reserved_ports:+${reserved_ports},}54320-54329"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: '1.4.3'
       - run: bun install --frozen-lockfile
-      - run: bun run db:start
+      - name: Start local Supabase
+        run: |
+          if ! bun run db:start; then
+            sudo ss -tanp '( sport >= :54320 and sport <= :54329 )'
+            docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+            exit 1
+          fi
       - name: Configure local public client
         run: |
           bun -e '

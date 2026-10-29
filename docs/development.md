@@ -787,6 +787,15 @@ Meeting-import CI requests `supabase status -o json` explicitly. Supabase's
 auto-detected default output differs between interactive agent sessions and CI;
 do not parse the default `db:status` output as JSON.
 
+The meeting-import integration job reserves TCP/UDP ports 54320–54329 with
+`net.ipv4.ip_local_reserved_ports` before checkout or dependency/image downloads.
+These fixed Supabase ports overlap Linux's ephemeral outbound-port range; without
+the reservation, an outgoing connection can make Docker's bind to 54322 fail.
+The step preserves the runner's existing reservations and changes only the
+disposable CI runner. Local developer ports and services remain unchanged. Failed
+startup prints socket owners/states and container port mappings before failing;
+it does not kill processes or ignore startup errors.
+
 ### Verifying public calendar snapshots
 
 Run `bun test scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts`
