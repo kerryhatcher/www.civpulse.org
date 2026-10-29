@@ -138,5 +138,7 @@ The test installs the migration within its transaction when needed, uses only
 synthetic voters, and rolls back schema and fixtures. It checks full snapshots,
 retry conflicts, immutable history, absence/reappearance, source-field changes,
 cross-county observations, corrections, backfills, pagination and access denial.
+The test validates the parsed database hostname before connecting and rejects
+distinct voters claiming the same source row.
 The existing Meeting imports and originals GitHub workflow also runs this test
 against its disposable local Supabase database on pull requests and main pushes.

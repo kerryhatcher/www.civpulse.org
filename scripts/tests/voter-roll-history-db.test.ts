@@ -13,7 +13,11 @@ const columns = ['County','Voter Registration Number','Status','Status Reason','
   'Mailing City','Mailing Zipcode','Mailing State','Mailing Country'];
 
 test.skipIf(!url)('voter roll snapshots preserve history, enforce complete county scope and deny non-admin access', async () => {
-  if (!/^postgres(?:ql)?:\/\/[^@]+@(127\.0\.0\.1|localhost):/.test(url!)) throw new Error('Use a loopback test database');
+  let target: URL;
+  try { target = new URL(url!); } catch { throw new Error('Use a loopback test database'); }
+  if (!['postgres:', 'postgresql:'].includes(target.protocol)
+    || !['127.0.0.1', 'localhost'].includes(target.hostname) || !target.port)
+    throw new Error('Use a loopback test database');
   const db = new SQL(url!), rollback = new Error('rollback voter roll fixtures');
   try {
     await db.begin(async tx => {
@@ -54,6 +58,7 @@ test.skipIf(!url)('voter roll snapshots preserve history, enforce complete count
       await fail(() => append(first,[row(),row('000000001',3)]),'Duplicate registration');
       await fail(() => append(first,[row('invalid')]),'check constraint');
       expect(await append(first,[row()])).toBe(1);
+      await fail(() => append(first,[row('000000002',2)]),'voter_roll_records_import_id_source_row_key');
       expect(await append(first,[row()])).toBe(0); // exact batch retry
       await fail(() => append(first,[row('000000001',2,{Status:'INACTIVE'})]),'Conflicting retry');
       await fail(() => append(first,[row('000000002',3),row('000000001',2,{Status:'INACTIVE'})]),'Conflicting retry');
