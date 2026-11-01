@@ -1,0 +1,24 @@
+---
+import Layout from '../../../../../../layouts/Layout.astro';
+import MapLayerEvidence from '../../../../../../components/MapLayerEvidence.astro';
+import { getMapBuildData } from '../../../../../../lib/map-build-data';
+import { MAP_FEATURE_PAGE_SIZE, type LayerEvidence } from '../../../../../../lib/map-feature-text';
+import type { MapConfig } from '../../../../../../lib/maps';
+export async function getStaticPaths() {
+  const { maps, evidence } = await getMapBuildData();
+  return maps.flatMap(map => (evidence.get(map.id) ?? []).flatMap(layer => layer.rows.length > 5
+    ? Array.from({ length: Math.ceil(layer.rows.length / MAP_FEATURE_PAGE_SIZE) }, (_, index) => ({
+      params: { slug: map.slug, layer: layer.layer.id, page: String(index + 1) }, props: { map, evidence: layer, page: index + 1 },
+    })) : []));
+}
+interface Props { map: MapConfig; evidence: LayerEvidence; page: number }
+const { map, evidence, page } = Astro.props;
+---
+<Layout title={`${evidence.layer.name} — ${map.name} features, page ${page}`} description={`Public features from ${evidence.layer.name} on ${map.name}. Read recorded details and original sources, page ${page}.`}>
+  <main id="main">
+    <div class="page-intro"><h1>{evidence.layer.name}: features</h1><p>{map.name} · Page {page}</p></div>
+    <p><a href={`/maps/${map.slug}/#layer-${evidence.layer.id}`}>← Map and all layer summaries</a></p>
+    <p>Published public snapshot. Dates and names are recorded source facts, not a guarantee of current coverage or officeholders.</p>
+    <MapLayerEvidence evidence={evidence} slug={map.slug} page={page} />
+  </main>
+</Layout>

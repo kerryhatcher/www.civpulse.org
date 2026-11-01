@@ -4,18 +4,22 @@ import { recordDescription } from '../../lib/page-metadata';
 import Layout from '../../layouts/Layout.astro';
 import 'leaflet/dist/leaflet.css';
 import { baseMapLabel } from '../../lib/basemaps';
-import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
+import { type MapConfig } from '../../lib/maps';
+import { getMapBuildData } from '../../lib/map-build-data';
+import type { LayerEvidence } from '../../lib/map-feature-text';
+import MapLayerEvidence from '../../components/MapLayerEvidence.astro';
 
 export async function getStaticPaths() {
-  const maps = await fetchPublicMaps();
-  return maps.map((map) => ({ params: { slug: map.slug }, props: { map } }));
+  const { maps, evidence } = await getMapBuildData();
+  return maps.map((map) => ({ params: { slug: map.slug }, props: { map, layers: evidence.get(map.id) ?? [] } }));
 }
 
 interface Props {
   map: MapConfig;
+  layers: LayerEvidence[];
 }
 
-const { map } = Astro.props;
+const { map, layers } = Astro.props;
 const base = baseMapLabel(map.base_map);
 ---
 
@@ -32,13 +36,23 @@ const base = baseMapLabel(map.base_map);
         </p>
       )}
       {map.description && <p>{map.description}</p>}
+      <p><a href="#map-evidence">Read public layers, sources and features</a></p>
       <a class="button-link map-edit" data-map-edit-link hidden>Edit map</a>
     </div>
 
     <div class="map-viewer" data-map-viewer hidden></div>
     <p class="map-viewer-note">
-      Base map: {base} · <span data-map-layer-note>loading layers…</span>
+      Base map: {base} · <span data-map-layer-note>{layers.length} public layers in this snapshot</span>
     </p>
+    <noscript><p>The interactive map needs JavaScript. Public geographic information is listed below.</p></noscript>
+    <section id="map-evidence" aria-labelledby="map-evidence-title">
+      <h2 id="map-evidence-title">Public layers and geographic information</h2>
+      <p>These readable records and the public map use the same published snapshot. Coverage includes only features added to Civic Pulse and may be incomplete. Check original sources for current boundaries, representatives, schedules and voting information.</p>
+      {layers.length ? <>
+        <ul>{layers.map(({ layer }) => <li><a href={`#layer-${layer.id}`}>{layer.name}</a></li>)}</ul>
+        {layers.map(evidence => <MapLayerEvidence evidence={evidence} slug={map.slug} />)}
+      </> : <p>No public layers are recorded for this map.</p>}
+    </section>
     <p class="org-back">
       <a href="/maps/">← All maps</a>
     </p>
