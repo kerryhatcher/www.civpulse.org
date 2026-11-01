@@ -499,3 +499,14 @@ profiles from discovery and removes its source affiliations; static changes
 require that rebuild too. Source files must remain in the collector's evidence
 archive. Do not upload full statewide payroll or treat payment recipients as
 people without verification. Production migrations must reach main before use.
+
+### Reviewing payment recipients
+
+Payment publication links recipients to one exact existing organization/person
+match, or creates a provisional organization stub for missing/ambiguous matches.
+Mappings are shared across years. Use the school finance `resolve_recipient`
+action with recipient_id, kind, a sourced review_note and an existing target_id
+to confirm/correct an identity. Omit target_id to create a new person/organization
+stub that still needs review. Reclassification preserves all payment source facts
+and does not delete the previous stub. Do not treat a provisional organization
+classification as a verified legal identity. Payroll aggregates have no payee link.

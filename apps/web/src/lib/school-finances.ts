@@ -1,5 +1,6 @@
 export type FinanceDataset = 'payroll' | 'payments';
 export interface SchoolFinanceRow {
+  recipient?: null | { id: string; kind: 'person' | 'organization'; record_id: string; slug: string; name: string; is_stub: boolean; identity_review_required: boolean };
   row_number: number; source_row_number: number; person_id: string | null; identity_review_required: boolean | null; name: string; title: string | null; amount: string; travel: string | null; payment_count: number | null; category: string;
 }
 export interface SchoolFinanceResult {

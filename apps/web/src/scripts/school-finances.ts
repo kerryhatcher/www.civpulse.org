@@ -76,6 +76,14 @@ export async function initSchoolFinances() {
           name.append(text('small', row.identity_review_required ? 'Identity needs review · separate source profile' : 'Identity reviewed'));
         }
         if (!payroll && row.category === 'payroll_aggregate') name.append(text('small', 'Payroll aggregate · overlaps payroll dataset'));
+        if (!payroll && row.recipient) {
+          const recipient = row.recipient;
+          const profile = text('a', row.name) as HTMLAnchorElement;
+          profile.href = recipient.kind === 'person' ? `/people/view/?id=${encodeURIComponent(recipient.record_id)}` : `/orgs/${encodeURIComponent(recipient.slug)}/`;
+          name.replaceChildren(profile);
+          name.append(text('small', recipient.is_stub ? 'Provisional recipient stub · needs review' : recipient.identity_review_required ? 'Linked recipient · identity needs review' : 'Recipient identity reviewed'));
+          if (recipient.name !== row.name) name.append(text('small', `Linked to: ${recipient.name}`));
+        }
         tr.append(name);
         for (const value of payroll ? [row.title ?? 'Not reported',formatFinanceMoney(row.amount),row.travel === null ? 'Not reported' : formatFinanceMoney(row.travel),String(row.source_row_number)] : [String(row.payment_count ?? 'Not reported'),formatFinanceMoney(row.amount),String(row.source_row_number)]) tr.append(text('td',value));
         body.append(tr);

@@ -156,4 +156,10 @@ export async function fetchPublicPeopleForOrganization(organizationId: string): 
   return (await getProfileBuildData()).byOrganization.get(organizationId) ?? [];
 }
 
+/** One snapshot per route request, including development with thousands of stubs. */
+export async function fetchPublicPeopleByOrganization(organizationIds: string[]): Promise<Map<string, { person: Person; role: string }[]>> {
+  const { byOrganization } = await getProfileBuildData();
+  return new Map(organizationIds.map(id => [id, byOrganization.get(id) ?? []]));
+}
+
 export { personImageUrl };
