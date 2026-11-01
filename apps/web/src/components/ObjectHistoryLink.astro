@@ -1,9 +1,11 @@
 ---
 import { historyUrl } from '../lib/history';
-interface Props { table: string; id?: string }
-const { table, id } = Astro.props;
+import RecordFeedback from './RecordFeedback.astro';
+interface Props { table: string; id?: string; feedback?: boolean }
+const { table, id, feedback = false } = Astro.props;
 ---
 <p><a href={id ? historyUrl(table, id) : '/history/'} data-history-link data-history-table={table}>View history</a></p>
+{feedback && <RecordFeedback />}
 <script>
   import { historyUrl } from '../lib/history';
   for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-history-link]')) {

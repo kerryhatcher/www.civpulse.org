@@ -1,6 +1,7 @@
 ---
 import LegislativeCard from './LegislativeCard.astro';
 import RecordProvenance from './RecordProvenance.astro';
+import RecordFeedback from './RecordFeedback.astro';
 import { recordSourceUrl, voteDetailScope } from '../lib/record-provenance';
 import {legislativeResources} from '../lib/legislation';
 import {coverageLabel} from '../lib/legislation-display';
@@ -36,6 +37,7 @@ const sectionLabel=(child:string)=>child==='legislative_vote_bills'&&table==='bi
   </section>)}
   <p>Published snapshot. Changes appear after the next publication. Coverage includes public records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>
   <p><a href={viewer}>Open live record with access checks</a> · <a href="/about/#sources">Sources and credits</a></p>
+  <RecordFeedback />
 </main>
 <script>
   import {initPublicLegislationDetail} from '../scripts/legislation-detail';

@@ -40,6 +40,36 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Editorial policy and correction routing
+
+`/editorial/` publishes source-priority, identity reconciliation, automated-content
+review, coverage and correction requirements, alongside the confirmed operator/
+maintainer identity (Kerry Hatcher). This identity was explicitly confirmed for
+public use; it is not inferred from credentials or commit authorship. Repository
+contributions/source credits are distinguished from factual-review certification.
+The policy describes requirements for new correction work, not retrospective
+human review or a complete historical notice register.
+
+The existing public repository issue tracker is the reporting channel. Live
+repository metadata checked November 1, 2026 showed `has_issues=true`, public,
+not archived and not disabled. GitHub sign-in is required to submit; no issue is
+created by the site. No private inbox, mail address, automatic triage or service
+deadline is invented. Public-report privacy instructions reflect that real channel.
+
+`corrections.ts` creates fixed-origin GitHub issue-form links. Prefilled context
+accepts generated public profile/record/history route shapes, removes query and
+fragment data and rejects noindex UUID viewers, account/admin paths and foreign
+origins. Private viewer IDs/access parameters are never propagated. This is a
+presentation safeguard, not a new access grant or a record-discovery API.
+`RecordFeedback` is shared by record/history-link components and public detail
+templates; About and the shared footer link to policy/corrections. Static rendering
+and RLS/public-snapshot gates remain unchanged.
+
+Editors must triage and recheck sources, use the appropriate correction workflow,
+preserve original facts/history, add scoped dated notices where supported and
+verify successful publication before claiming a public fix. GitHub closure, edit,
+import and build timestamps do not independently verify facts or publication.
+
 ## Bibb resident-question pilot guides
 
 The site already has 159 county overview hubs, including substantial Bibb

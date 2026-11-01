@@ -1,4 +1,5 @@
 ---
+import RecordFeedback from './RecordFeedback.astro';
 import {REQUEST_STAGES,REQUEST_OUTCOMES,UPDATE_KINDS} from '../lib/records-requests';
 import {requestFeeTotals,type PublicRequestDetail} from '../lib/request-snapshot';
 interface Props {detail:PublicRequestDetail}
@@ -21,6 +22,7 @@ const viewer=`/requests/view/?id=${r.id}&live=1`;
  </div>
  <p>Published snapshot. Changes appear after the next publication. Follow-up dates are manually recorded, not legal deadlines. File downloads recheck current access and use short-lived links.</p>
  <p><a href={viewer}>Open live request with access checks</a></p>
+<RecordFeedback />
 </main>
 <script>
  import {getSupabase} from '../lib/supabase';

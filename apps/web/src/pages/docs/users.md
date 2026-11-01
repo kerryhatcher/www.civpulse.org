@@ -6,6 +6,26 @@ description: Find a meeting, explore a map, check an election, and understand wh
 
 You can browse public information without signing in. Start with the [community calendar](/calendar/) for events or [Search](/search/) when you know a name or topic.
 
+## Editorial methods and corrections
+
+The [editorial policy](/editorial/) identifies Civic Pulse's operator/maintainer,
+source and identity-matching methods, automated-content limitations and coverage
+gaps. It sets review/correction requirements without claiming that every legacy
+record has been individually verified.
+
+Use **Report a correction on GitHub** on a record, or the
+[corrections section](/editorial/#corrections), to prepare a report with the public
+page, exact claim, proposed change and original dated source. GitHub sign-in is
+required to submit; a Civic Pulse account is not required. The link does not send
+anything automatically. Reports are public: omit private/unlisted record links,
+credentials, account details and sensitive personal material. No confidential
+submission or response-time guarantee is provided by that channel.
+
+Public pages update after successful publication, which can be later than a live
+record edit. A closed issue or merged PR alone does not confirm that the public
+page changed. Material corrections should identify what changed, why and which
+source was checked; a dated note applies to that claim, not to all other facts.
+
 ## Start from the homepage
 
 The homepage pairs a civic topic index with a detail panel. Choose People,

@@ -8,6 +8,32 @@ Admin pages follow your browser or operating system’s light/dark appearance
 setting, just like the public site. Changing appearance does not change access
 or published content.
 
+## Editorial correction workflow
+
+The [editorial policy](/editorial/) names the confirmed operator/maintainer and
+sets requirements for new/corrected material; it does not certify review of every
+legacy record. The public [GitHub issue tracker](https://github.com/kerryhatcher/www.civpulse.org/issues)
+is the correction channel. Reports require GitHub sign-in and are public. No
+confidential contact or response-time promise is supplied; do not request private
+record links, account information or sensitive personal data in a public issue.
+
+For a report, identify the public record, exact claim and original dated source.
+Reconcile identity/body/jurisdiction/service period before changing an association.
+Compare automated transcripts/summaries/OCR to source documents or recordings for
+material names, figures and choices. Retain uncertainty when evidence conflicts.
+Use the record-specific editor/correction/import workflow, preserving original
+source facts and revision history; do not overwrite immutable financial imports.
+
+For a material change, add a dated correction note to the affected public
+description/notes where supported, describing the changed claim, reason and public
+report link. A note is scoped to that correction, not whole-record verification.
+Use source dates accurately; edit/import/rebuild times are not verification dates.
+After the successful rebuild, inspect the public record and related histories or
+downloads before saying the correction is publicly visible. A merged PR/closed
+issue or a saved edit alone does not establish publication. Explain unresolved
+reports or no-change outcomes rather than inventing a correction notice. No
+automatic triage, confidential inbox or historical notice register is implied.
+
 ## Civic topic guide maintenance
 
 The Bibb pilot adds four resident-question guides under the existing county hub:
