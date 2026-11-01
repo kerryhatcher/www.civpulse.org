@@ -30,8 +30,15 @@ export function provenanceDates(publishedOn?: string | null, fetchedOn?: string 
  * renderer escapes raw HTML and normalizes dangerous protocols before this step. */
 export function biographySources(person: Pick<Person, 'description' | 'visibility'>): ProvenanceSource[] {
   if (person.visibility !== 'public' || !person.description) return [];
+  return biographyCitations(person.description);
+}
+
+/** Safe citation extraction for a biography already returned by its access gate.
+ * Public prerendering must use biographySources to retain its visibility filter. */
+export function biographyCitations(description:string|null):ProvenanceSource[]{
+  if(!description)return [];
   const sources = new Map<string, ProvenanceSource>();
-  for (const match of renderProfileDescription(person.description).matchAll(/<a href="([^"]+)"/g)) {
+  for (const match of renderProfileDescription(description).matchAll(/<a href="([^"]+)"/g)) {
     const url = recordSourceUrl(match[1].replaceAll('&amp;', '&'));
     if (url) sources.set(url, { label: `Cited biography source: ${new URL(url).hostname}`, url });
   }

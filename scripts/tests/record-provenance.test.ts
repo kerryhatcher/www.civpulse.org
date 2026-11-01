@@ -1,5 +1,5 @@
 import {expect,test} from 'bun:test';
-import {biographySources,electionSources,provenanceDates,recordSourceUrl,meetingVoteScope,legislativeVoteScope,voteDetailScope} from '../../apps/web/src/lib/record-provenance';
+import {biographySources,biographyCitations,electionSources,provenanceDates,recordSourceUrl,meetingVoteScope,legislativeVoteScope,voteDetailScope} from '../../apps/web/src/lib/record-provenance';
 import type {ElectionDetail} from '../../apps/web/src/lib/elections';
 
 test('publication and retrieval are separate source facts and never imply verification',()=>{
@@ -18,6 +18,7 @@ test('biography provenance uses rendered public citations only, with safe URLs a
  const description='Cited [official biography](https://example.test/bio?a=1&b=2). [Again][source].\n\n[source]: https://example.test/bio?a=1&b=2\n\n[bad](javascript:alert%281%29) [mail](mailto:a@example.test) <a href="https://injected.test/">fake</a>';
  expect(biographySources({visibility:'public',description})).toEqual([{label:'Cited biography source: example.test',url:'https://example.test/bio?a=1&b=2'}]);
  expect(biographySources({visibility:'private',description})).toEqual([]);expect(biographySources({visibility:'unlisted',description})).toEqual([]);
+ expect(biographyCitations(description)).toEqual(biographySources({visibility:'public',description}));expect(biographyCitations(null)).toEqual([]);
  expect(biographySources({visibility:'public',description:'No source recorded.'})).toEqual([]);
  for(const url of ['javascript:alert(1)','data:text/html,bad'])expect(recordSourceUrl(url)).toBe(null);
  const credentialed=new URL('https://example.test/');credentialed.username='fixture-user';credentialed.password='fixture-password';expect(recordSourceUrl(credentialed.href)).toBe(null);

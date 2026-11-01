@@ -68,6 +68,9 @@ verify anonymous/actual signed-in UUID biography/event sources, live event date
 and source synchronization on public permalinks, meeting scope notes and denied
 viewer gates at desktop/mobile widths. Attendance-vote detail pages omit the
 profile-history exclusion note while retaining their source/date provenance.
+Runtime biography extraction runs only after a successful person access gate and
+includes citations on permitted unlisted/private biographies. Public prerendering
+still uses the separate publicity-filtered helper; denied viewers show no record.
 
 In a browser with JavaScript disabled, verify a cited biography, sourced office,
 election date source and meeting/vote context, plus explicit unknowns. Repeat at
