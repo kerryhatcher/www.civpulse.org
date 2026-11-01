@@ -43,7 +43,8 @@ test('identical empty/nonempty bodies share content URLs without losing owners o
   expect(assets.owners.size).toBe(5);
   expect(assets.owners.get('people/empty-a')).toBe(assets.owners.get('organizations/empty-org'));
   expect(assets.owners.get('people/a')).toBe(assets.owners.get('people/b'));
-  expect(assets.files.size).toBe(3); // Empty body, one shared reference body, one identical profile body.
+  expect(assets.files.size).toBe(2); // Empty body and one inline identical nonempty body.
+  expect(JSON.parse(assets.owners.get('people/a')!.body).legislativeResourcesUrl).toBeUndefined();
   expect([...assets.files.values()].map(asset=>asset.body).join('')).not.toContain('private-marker');
   expect(assets.owners.has('people/hidden')).toBe(false);
   await assertResolved(assets);
@@ -71,6 +72,27 @@ test('measured shared references hydrate equivalently, retain fixed table order 
   const tiny=await buildProfileSectionAssets({people:new Map([['a',withReferences('a',small)],['b',withReferences('b',small)]]),organizations:new Map()},[{id:'a'},{id:'b'}],[]);
   expect([...tiny.owners.values()].every(asset=>!asset.body.includes('legislativeResourcesUrl'))).toBe(true);
   await assertResolved(assets);
+});
+
+test('reference savings count distinct emitted primaries rather than repeated owners',async()=>{
+  const shared=references();shared.legislative_terms[0].description='x'.repeat(5000);
+  const same=withReferences('same',shared);
+  const owners=Array.from({length:100},(_,i)=>({id:String(i)}));
+  const identical=await buildProfileSectionAssets({people:new Map(owners.map(({id})=>[id,{...same}])),organizations:new Map()},owners,[]);
+  expect(identical.files.size).toBe(1);
+  expect([...identical.files.values()][0].body).toBe(JSON.stringify(same));
+  expect([...identical.owners.values()].every(asset=>!asset.body.includes('legislativeResourcesUrl'))).toBe(true);
+  const votes={...same,legislativeVotes:[{id:'choice',vote_id:'vote',term_id:'term',session_id:'session',body_id:'body',bills:[]}]};
+  const duplicateVotes=await buildProfileSectionAssets({people:new Map([['a',votes],['b',{...votes}]]),organizations:new Map()},[{id:'a'},{id:'b'}],[]);
+  expect(duplicateVotes.owners.get('people/a')).toBe(duplicateVotes.owners.get('people/b'));
+  expect(JSON.parse(duplicateVotes.owners.get('people/a')!.body).legislativeResourcesUrl).toBeUndefined();
+  const a=withReferences('a',shared),b=withReferences('b',shared);
+  const distinct=await buildProfileSectionAssets({people:new Map([['a',a],['b',b]]),organizations:new Map()},[{id:'a'},{id:'b'}],[]);
+  expect(distinct.files.size).toBe(3);
+  const actualBytes=[...distinct.files.values()].reduce((sum,asset)=>sum+new TextEncoder().encode(asset.body).length,0);
+  const inlineBytes=[a,b].reduce((sum,profile)=>sum+new TextEncoder().encode(JSON.stringify(profile)).length,0);
+  expect(inlineBytes-actualBytes).toBeGreaterThan(1024);
+  for(const source of [a,b])expect(expanded(distinct,JSON.parse(distinct.owners.get(`people/${source===a?'a':'b'}`)!.body))).toEqual(source);
 });
 
 test('all emitted vote pages/filter files resolve and preserve pagination/filtering; signed-in profiles skip every asset',async()=>{

@@ -515,8 +515,11 @@ shared source objects and equal bodies are hashed once. The route emits each
 unique file once; public owner lists remain the publication boundary.
 
 Repeated legislative terms/sessions/bodies can use a shared reference asset when
-the conservative aggregate JSON saving exceeds 1 KiB after counting its file and
-per-profile pointers. Empty/small or single-owner reference groups stay inline.
+the deduplicated JSON saving exceeds 1 KiB after counting its file and pointers.
+Price distinct primary bodies after vote transformations, rather than counting
+owners: identical nonempty owners stay inline when extraction adds bytes/fetches.
+The calculation reuses serialized shared fields instead of repeating large arrays.
+Empty/small or single-body reference groups stay inline.
 Only the existing public reference arrays are extracted, in their fixed order;
 sponsorships remain profile-specific. Anonymous loading hydrates the reference
 file before rendering sections. Required-file failures reject the load, without
