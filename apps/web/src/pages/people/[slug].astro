@@ -1,5 +1,6 @@
 ---
 import { renderProfileDescription } from '../../lib/profile-description';
+import { personPageTitle, recordDescription } from '../../lib/page-metadata';
 import { profileSectionUrl } from "../../lib/profile-section-assets";
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
@@ -71,8 +72,8 @@ const contact = [
 ---
 
 <Layout
-  title={person.full_name}
-  description={person.description ?? `${PERSON_KIND_LABELS[person.kind]}: ${person.full_name}.`}
+  title={personPageTitle(person.full_name, person.title, PERSON_KIND_LABELS[person.kind])}
+  description={recordDescription(person.full_name, person.description, `${person.title?.trim() || (person.kind === 'other' ? 'Civic profile' : PERSON_KIND_LABELS[person.kind])}. View recorded roles, organizations and available civic records.`)}
 >
   <main id="main" data-profile-snapshot={await profileSectionUrl("people",person.id)}>
     {person.slug.startsWith('open-ga-6111-fy') && <p><a href={`/finances/?dataset=payroll&year=${person.slug.match(/^open-ga-6111-fy(\d{4})-/)?.[1] ?? ''}&person=${person.id}`}>View this profile's school payroll source record</a></p>}

@@ -858,6 +858,14 @@ Run `bun test scripts/tests/public-records.test.ts`, `bun run check` and
 
 ### Sitemap route filtering
 
+For public title/description changes, run `PAGE_METADATA_TEST_DIST=apps/web/dist bun test scripts/tests/page-metadata.test.ts`
+after the build. It checks recorded-role/date fallbacks and all indexable HTML for
+populated descriptions, matching Open Graph values and canonical/OG URLs, plus
+subject consistency on profile/map/election details. Inspect desktop/phone directory
+headings in a browser and compare sampled record titles to their visible fields.
+Audit duplicate descriptions against the actual dataset; distinct records can
+share names, so resolve ambiguity with verified source context, never invented facts.
+
 The shared `apps/web/src/lib/indexing-policy.mjs` determines both the Layout's
 static `noindex, follow` meta tag and sitemap exclusions. Keep its route families
 aligned with the [indexing matrix](architecture.md#search-engine-indexing-policy).

@@ -1,5 +1,6 @@
 ---
 import { profileSectionUrl } from "../../lib/profile-section-assets";
+import { recordDescription } from '../../lib/page-metadata';
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
@@ -81,7 +82,7 @@ const contact = [
 ].filter((item) => item.value);
 ---
 
-<Layout title={org.name} description={org.description ?? `Contact details for ${org.name}.`}>
+<Layout title={`${org.name} — Organization profile`} description={recordDescription(org.name, org.description, 'View contact information, recorded relationships and related public civic records.')}>
   <main id="main" data-profile-snapshot={await profileSectionUrl("organizations",org.id)}>
     {org.slug === 'bibb-county-board-of-education' && <p><a href="/finances/">Search this organization's school payroll and payments</a></p>}
     <div class="org-header">

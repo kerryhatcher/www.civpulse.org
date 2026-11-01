@@ -1,5 +1,6 @@
 ---
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import { recordDescription } from '../../lib/page-metadata';
 import Layout from '../../layouts/Layout.astro';
 import 'leaflet/dist/leaflet.css';
 import { baseMapLabel } from '../../lib/basemaps';
@@ -19,8 +20,8 @@ const base = baseMapLabel(map.base_map);
 ---
 
 <Layout
-  title={map.name}
-  description={map.description ?? `An interactive map: ${map.name}.`}
+  title={`${map.name} — Interactive map`}
+  description={recordDescription(map.name, map.description, 'Explore this public interactive map and its available geographic layers.')}
 >
   <main id="main">
     <div class="page-intro">

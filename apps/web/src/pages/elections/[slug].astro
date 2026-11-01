@@ -1,5 +1,6 @@
 ---
 import SectionLink from '../../components/SectionLink.astro';
+import { electionPageTitle, recordDescription } from '../../lib/page-metadata';
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
 import ElectionTurnout from '../../components/ElectionTurnout.astro';
@@ -59,10 +60,10 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 ---
 
 <Layout
-  title={election.name}
+  title={electionPageTitle(election.name, election.election_date, formatElectionDate(election.election_date))}
   description={
-    election.description ??
-    `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}.`
+    recordDescription(election.name, election.description,
+      `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}. Explore published contests, candidates, ballot questions and key dates.`)
   }
 >
   <main id="main">
