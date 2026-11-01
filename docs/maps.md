@@ -42,8 +42,14 @@ rerun; previously completed imports are retained. No automatic source refresh is
 configured.
 
 `scripts/data/maps/manifest.json` records source URLs, counts, hashes, original
-styles, preset selections, and repairs. Compressed GeoJSON stays under
-`scripts/data/maps/`, outside public assets and prerendered HTML. Original marker
+styles, preset selections, and repairs. Compressed GeoJSON snapshots stay under
+`scripts/data/maps/`, outside public assets and prerendered HTML. The published
+copies are in the Cloudflare R2 bucket `civpulse-files` under `maps/` and are
+served at `https://files.civpulse.org/maps/<file>.geojson.gz`; the manifest's
+`sourceUrl` values point there. The bucket is uploaded by hand with
+`wrangler r2 object put civpulse-files/maps/<file> --file <path> --content-type
+application/gzip --remote` (set `CLOUDFLARE_ACCOUNT_ID` to the account that owns
+the bucket). Re-upload a file whenever its snapshot hash changes. Original marker
 assets are in `apps/web/public/maps/icons/`.
 
 The original elementary attendance dataset has two ring self-intersections:
