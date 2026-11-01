@@ -184,6 +184,18 @@ fabricated margin. Figures from different periods are labeled separately.
 
 ### Profile build requests
 
+`organization-build-data.ts` shares production organization and affiliation
+promises by anonymous build client across profiles, organization readers and
+directory generation. The organization stream selects the existing full public
+organization fields in database `name,id` order; profile affiliation projections
+remain explicitly limited to `id,slug,name,role`. Affiliation pages retain
+`person_id,organization_id` order. Profiles and directory assembly still apply
+their public-person/readable-organization allowlists before using relationships.
+Failed streams reject every dependent consumer, rather than publishing partial
+data. Development deliberately bypasses these production caches so each read
+retains its existing freshness. `build-rows.ts` holds the unchanged sequential
+500-row reader; its previous profile-module export remains available.
+
 People and organization profiles share one in-flight public profile snapshot per
 production build. People, organizations and affiliations load in three parallel
 streams, each fetching stable, ordered pages of 500 rows sequentially. Profiles

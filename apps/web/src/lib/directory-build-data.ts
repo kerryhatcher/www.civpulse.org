@@ -3,7 +3,7 @@ import type { Person, AffiliationRow } from './people';
 import type { Organization } from './organizations';
 import type { Election, ElectionContest, ElectionCandidate, BallotQuestion } from './elections';
 import { fetchElectionDetail } from './elections';
-import { readRows } from './profile-build-data';
+import { readBuildAffiliations } from './organization-build-data';
 import type { DirectorySnapshot } from './directories';
 
 const text = (...values: unknown[]) => values.filter(value => value !== null && value !== undefined).join(' ');
@@ -15,7 +15,7 @@ interface Candidate extends Omit<ElectionCandidate, 'person'> { contest_id: stri
 
 /** Anon reads plus explicit parent/child allowlists keep even search-only text public. */
 export async function loadDirectoryBuildData(client: SupabaseClient, records: {people:Person[];organizations:Organization[];elections:Election[]}) {
-  const affiliations = await readRows<AffiliationRow>(client,'person_organizations','person_id,organization_id,role',['person_id','organization_id']);
+  const affiliations = await readBuildAffiliations(client);
   // Ballot questions deliberately have no anon table grant. Reuse the existing
   // gated election-detail RPC and its per-build cache, rather than widen grants.
   const contests: ElectionContest[] = [], candidates: Candidate[] = [], questions: BallotQuestion[] = [];

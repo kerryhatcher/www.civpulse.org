@@ -1,4 +1,5 @@
-import { readRows } from './profile-build-data';
+import { readBuildOrganizations } from './organization-build-data';
+export { ORGANIZATION_COLUMNS } from './organization-build-data';
 import { getBuildSupabase, organizationLogoUrl } from './supabase-build';
 
 export interface Organization {
@@ -25,16 +26,11 @@ export interface Organization {
   sos_record_url?: string | null;
 }
 
-export const ORGANIZATION_COLUMNS =
-  'id, slug, name, description, email, phone, address_line, website_url, social_url, logo_path, sos_control_number, sos_business_type, sos_status, sos_formation_date, sos_last_annual_registration, sos_principal_office, sos_registered_agent, sos_county, sos_naics_code, sos_officers, sos_record_url';
-
 /** Public, paginated build snapshot; configured backend failures stop publication. */
-let directoryRows: Promise<Organization[]> | undefined;
 export async function fetchOrganizations(): Promise<Organization[]> {
   const client = getBuildSupabase();
   if (!client) return [];
-  if (import.meta.env.DEV) return readRows<Organization>(client, 'organizations', ORGANIZATION_COLUMNS, ['name', 'id'], false);
-  return directoryRows ??= readRows<Organization>(client, 'organizations', ORGANIZATION_COLUMNS, ['name', 'id'], false);
+  return readBuildOrganizations(client);
 }
 
 export { organizationLogoUrl };
