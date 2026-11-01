@@ -20,7 +20,7 @@ const observation = z.discriminatedUnion('kind', [
       original_text: z.string().min(1).max(2000) }).strict() }).strict(),
 ]);
 
-export function registerMeetingImportTools(server: McpServer, supabase: SupabaseClient) {
+export function registerMeetingImportTools(server: McpServer, supabase: SupabaseClient, citedOutcomes = true) {
   const { register, readRpc } = createToolkit(server, supabase);
   register('import_meeting_records', 'Validate or atomically import up to 100 sourced attendance, motion rounds and individual choices (2 MiB, admin only). Default dry_run=true. Resolve existing meeting/person UUIDs; order attendance then votes then choices. Each provider/source_key is immutable: exact replay returns canonical IDs unchanged; changed snapshots or editorial drift reject the entire batch. Omission never deletes. Use observed for presence supported only at a ballot, unknown for roster-only evidence, and choice unknown for Vote Not Recorded. Never infer ballots or outcomes from totals, unanimity or sponsorship. Preserve agenda context separately from actual motion text. See get_meeting for reconciliation.',
     { meeting_id: uuid, provider: z.string().min(1).max(100), records: z.array(observation).min(1).max(100), dry_run: z.boolean().default(true) },
@@ -30,6 +30,14 @@ export function registerMeetingImportTools(server: McpServer, supabase: Supabase
       if (error) throw new Error(error.message);
       return data;
     }, { write: true, destructive: false, idempotent: true });
+  if (citedOutcomes) register('set_meeting_vote_outcome', 'Append a cited outcome observation to an existing meeting vote (admin only). Required source_url/document_sha256/locator must support the exact motion; never infer from totals or passFail codes. Exact replay is unchanged. Conflicts do not overwrite. To correct, read get_meeting, pass its latest observation ID as supersedes_id and a public correction_reason. Original imported rows and citations remain unchanged. Public static pages require rebuild.',
+    { vote_id: uuid, outcome: z.enum(['passed','failed','tabled','withdrawn']),
+      source_url: z.string().url().startsWith('https://').max(2000), document_sha256: sha,
+      locator: z.string().trim().min(1).max(2000), supersedes_id: uuid.nullish(), correction_reason: z.string().trim().min(1).max(2000).nullish() },
+    async ({vote_id,outcome,source_url,document_sha256,locator,supersedes_id,correction_reason}) => {
+      const {data,error}=await supabase.rpc('set_meeting_vote_outcome',{p_vote_id:vote_id,p_outcome:outcome,p_source_url:source_url,p_document_sha256:document_sha256,p_locator:locator,p_supersedes_id:supersedes_id ?? null,p_correction_reason:correction_reason ?? null});
+      if(error)throw new Error(error.message); return data;
+    }, {write:true,destructive:false,idempotent:true});
   readRpc('get_person_meeting_votes', 'Read paginated meeting ballots with original source evidence, optional organization and inclusive date filters. Public meetings only for non-admins, including ordinary signed-in users; private/unlisted meetings require admin discovery access. Unknown means no supported recorded choice. Public slug profiles show imports after rebuild; signed-in/UUID profiles read live.',
     { person_id: uuid, organization_id: uuid.optional(), from: z.string().date().optional(), to: z.string().date().optional(),
       offset: z.number().int().min(0).default(0), limit: z.number().int().min(1).max(50).default(21) },

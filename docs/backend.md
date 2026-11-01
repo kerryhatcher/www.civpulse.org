@@ -1817,3 +1817,29 @@ The existing readers still define each payload and visibility rule; owner/ordina
 ordering, bounded pagination, anonymous-only execution and API timeouts are
 unchanged. No new indexes or direct-reader grants are needed. This append-only
 migration must reach GitHub main before production application.
+
+## Cited meeting vote outcomes
+
+`meeting_vote_outcome_observations` is append-only for API clients: direct
+insert/update/delete is not granted even to application admins. Admins may inspect
+it; writes go only through `set_meeting_vote_outcome`, a security-definer RPC
+with empty search path, explicit grants and `is_admin()` check. It locks the vote
+and stores a required HTTPS citation/hash/locator. Exact replay is idempotent;
+conflicts do not overwrite, and corrections require the latest observation UUID
+and a public reason. Original imported rows and source payloads remain unchanged.
+The vote foreign key prevents deletion from discarding cited observations.
+
+Private `meeting_private.outcome_evidence` has no client schema/function access.
+Established gated readers enrich only already-permitted votes: the latest
+source/attachment-aware `get_meeting`, `get_person_meeting_votes`, actual live
+`get_person_votes`, and anonymous-only `export_public_profile_rows`. Their
+original implementations are revoked from client execution; parent visibility,
+public discovery, filters, ordering and bounded pagination remain in force. The
+new table is registered in history via its vote/meeting parents and marks frontend
+rebuild state on inserts. Public history omits private editor account UUIDs.
+
+Migrations `20261125001700`–`20261125002000` are append-only, including citation
+validation and null-safe public-history privacy follow-ups. Apply only after main,
+then deploy the matching MCP source and rebuild static content. Never feature-apply
+to production or repair migration history. See [meeting-imports.md](./meeting-imports.md)
+for citation/correction semantics and the explicitly pending real-data backfill.

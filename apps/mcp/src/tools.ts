@@ -221,7 +221,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   // The compatibility catalog is already at its 128-tool limit.
   if (catalog === 'compact') registerSchoolFinanceTools(server, supabase);
   registerExtendedTools(server, supabase, user, writes, reads, catalog === 'compact');
-  registerMeetingTools(server, supabase);
+  registerMeetingTools(server, supabase, catalog === 'compact');
   registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase, writes, reads);
   registerDocumentTools(server, supabase, documentContext);

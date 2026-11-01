@@ -82,7 +82,22 @@ test('compact catalog replaces only planned reads/writes; all other schemas rema
   }
   const legacy = await catalog('legacy'), compact = await catalog('compact');
   expect(legacy).toHaveLength(128);
-  expect(compact).toHaveLength(71);
+  expect(compact).toHaveLength(72);
+  expect(new Set(compact.map(tool => tool.name)).size).toBe(compact.length);
+  // Account for deliberate v2-only tools as well as consolidated legacy tools:
+  // a matching count alone must not hide a missing tool or accidental addition.
+  const legacyNames = new Set(legacy.map(tool => tool.name));
+  expect(compact.filter(tool => !legacyNames.has(tool.name)).map(tool => tool.name).sort()).toEqual([
+    'delete_relationship', 'get_civic_record', 'get_county_statistic_catalog', 'read_related_records',
+    'save_article', 'save_ballot_question', 'save_calendar', 'save_contest', 'save_county_statistic',
+    'save_county_statistic_source', 'save_election', 'save_event', 'save_layer', 'save_layer_feature',
+    'save_map', 'save_office', 'save_office_term', 'save_organization', 'save_person', 'save_relationship',
+    'school_finances', 'search_county_statistics', 'set_meeting_vote_outcome',
+  ]);
+  expect(legacyNames.has('set_meeting_vote_outcome')).toBe(false);
+  expect(compact.find(tool => tool.name === 'set_meeting_vote_outcome')?.annotations).toMatchObject({
+    readOnlyHint: false, idempotentHint: true,
+  });
   expect(legacy.some(x => x.name === 'school_finances')).toBe(false);
   expect(compact.find(x => x.name === 'school_finances')?.annotations?.readOnlyHint).toBe(false);
   const removed = new Set([...Object.values(directories).map(x => `search_${x}`), ...['calendars', 'layers', 'articles', 'contests', 'ballot_questions'].map(x => `search_${x}`), ...types.map(x => `get_${x}`)]);

@@ -1,4 +1,5 @@
 ---
+import MeetingOutcome from './MeetingOutcome.astro';
 import {meetingAttendanceLabel,type MeetingRecord} from '../lib/meetings';
 import {memberProfileHref} from '../lib/member-mentions';
 import {meetingVideoWatchUrl,meetingVideoEmbed,formatMeetingVideoStart} from '../lib/meeting-video';
@@ -21,7 +22,7 @@ const start=formatMeetingVideoStart(meeting?.event?.meeting_video_start_seconds)
   <section data-meeting-notes hidden={!meeting?.event?.meeting_notes}><h3>Notes and minutes</h3><p data-meeting-notes-text class="meeting-text">{meeting?.event?.meeting_notes}</p></section>
   <section data-meeting-transcript hidden={!meeting?.event?.meeting_transcript}><h3>Transcript</h3><p data-meeting-transcript-text class="meeting-text">{meeting?.event?.meeting_transcript}</p></section>
   <section data-meeting-attendance hidden={!meeting?.attendance?.length}><h3>Attendance</h3><ul data-meeting-attendance-list>{meeting?.attendance?.map(person=><li><a href={memberProfileHref(person.person_id)}>{person.full_name}</a> — {meetingAttendanceLabel(person.status)}{person.note && ` (${person.note})`}</li>)}</ul></section>
-  <section data-meeting-votes hidden={!meeting?.votes?.length}><h3>Votes</h3><div data-meeting-vote-list>{meeting?.votes?.map(vote=><article id={`vote-${vote.id}`}><h4>{vote.subject}</h4>{vote.description && <p>{vote.description}</p>}<p>Outcome: {vote.outcome ?? 'Not recorded'}</p><ul>{vote.choices.map(choice=><li><a href={memberProfileHref(choice.person_id)}>{choice.full_name}</a>: {choice.choice}</li>)}</ul></article>)}</div></section>
+  <section data-meeting-votes hidden={!meeting?.votes?.length}><h3>Votes</h3><div data-meeting-vote-list>{meeting?.votes?.map(vote=><article id={`vote-${vote.id}`}><h4>{vote.subject}</h4>{vote.description && <p>{vote.description}</p>}<MeetingOutcome vote={vote} /><ul>{vote.choices.map(choice=><li><a href={memberProfileHref(choice.person_id)}>{choice.full_name}</a>: {choice.choice}</li>)}</ul></article>)}</div></section>
   <section data-meeting-attachments hidden={!meeting?.attachments?.length}><h3>Attachments</h3><ul data-meeting-attachment-list>{meeting?.attachments?.map(file=><li><button type="button" disabled>{file.file_name}</button></li>)}</ul><noscript><p>Enable JavaScript to download attachments with access checks.</p></noscript></section>
 </section>
 <style>

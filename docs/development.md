@@ -1396,3 +1396,45 @@ the fixtures and rebuild cleanly. Check labels are text-escaped, hidden names/ID
 never enter anonymous HTML, and a failed signed-in refresh retains published links.
 Run `bun run plugin:build`, `bun run plugin:claude:sync` and
 `bun run plugin:claude:check` to keep generated tool guides/schemas synchronized.
+
+### Cited outcome local validation and migration ordering
+
+Check the **actual largest migration version** before naming a newly generated
+file; this repository contains future-dated versions. During issue #126 validation,
+a new uncommitted file accidentally reused 016 and the shared local database at
+54322 applied it before rejecting main's same-version relationship follow-up.
+That shared history was not repaired, reset or rewritten. It therefore must not
+be treated as a clean validation database for main/this feature. The feature SQL
+was preserved under unique 017, then subsequent checks rolled forward through
+018–020; no already-applied migration was edited.
+
+Validation instead used an isolated project `civpulse-issue126` (API 54341, DB
+54342). Current CLI/Podman secret-copy startup failed; official CLI 2.75.0 with a
+temporary compatible config started the isolated stack. Its older platform
+bootstrap lacked `storage.allow_only_operation`; the existing platform function
+definition was read from shared local and copied only to isolated local before
+applying all repository migrations. No project dependency changes or shared writes
+were needed for that workaround. These are local environment observations, not
+production migration or performance claims.
+
+Use `MEETING_OUTCOMES_TEST_DATABASE_URL` pointing to an isolated local/preview
+DB with current migrations, then run `bun test scripts/tests/meeting-outcomes-db.test.ts
+scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts
+scripts/tests/mcp-common-reads.test.ts`.
+The shared catalog regression expects 72 compact tools and the exact v2-only
+tool names, including `set_meeting_vote_outcome`, while preserving the 128-tool
+compatibility catalog and unchanged schemas for retained tools. This catches
+accidental additions/removals that a count alone would miss. Generated Codex and
+Claude compact references must agree after `bun run plugin:build`,
+`bun run plugin:claude:sync` and `bun run plugin:claude:check`.
+Also run `scripts/tests/profile-sections-db.test.ts` and
+`scripts/tests/person-votes-db.test.ts` against the isolated DB using
+`PROFILE_TEST_DATABASE_URL` and `MEETINGS_TEST_DATABASE_URL`. Their SQL assertions
+unwrap the JSON objects returned by the cited-outcome `get_person_votes` reader,
+matching the browser RPC payload while retaining paging/privacy/export checks.
+Transactional fixtures roll back. Browser QA uses synthetic local cited outcomes,
+explicitly injects that isolated API/anon key into the build process (without
+changing checked-in environment files), checks no-JS/anonymous/actual Admin desktop
+and mobile meeting/person flows, then removes fixtures and builds cleanly.
+Never point feature SQL/backfill at production or repair shared history to unblock
+validation. Apply through main before matching MCP/static release.

@@ -1,3 +1,4 @@
+import { publicOutcomeFields } from './meeting-outcomes';
 import type { CalendarRef, EventRecord } from './calendars';
 import type { MeetingRecord } from './meetings';
 import { dayBoundary, dayKey, monthWindow, occursOn, shiftDay } from './calendar-display';
@@ -40,7 +41,7 @@ export function publicMeeting(meeting: MeetingRecord, publicPeople: Set<string>)
     meeting_transcript:event.meeting_transcript,meeting_video_url:event.meeting_video_url,
     meeting_video_start_seconds:event.meeting_video_start_seconds},
     attendance:(meeting.attendance??[]).filter(person=>publicPeople.has(person.person_id)).map(({person_id,full_name,slug,status,note})=>({person_id,full_name,slug,status,note})),
-    votes:(meeting.votes??[]).map(({id,subject,description,outcome,choices})=>({id,subject,description,outcome,choices:choices.filter(person=>publicPeople.has(person.person_id)).map(({person_id,full_name,choice})=>({person_id,full_name,choice}))})),
+    votes:(meeting.votes??[]).map(vote=>({id:vote.id,subject:vote.subject,description:vote.description,outcome:vote.outcome,...publicOutcomeFields(vote),choices:vote.choices.filter(person=>publicPeople.has(person.person_id)).map(({person_id,full_name,choice})=>({person_id,full_name,choice}))})),
     attachments:(meeting.attachments??[]).map(({id,file_name,storage_path,mime_type,size_bytes})=>({id,file_name,storage_path,mime_type,size_bytes}))};
 }
 export function eventsForMonth(events: EventRecord[], month: string): EventRecord[] {

@@ -694,3 +694,23 @@ Person relationship tools are available in the compact catalog at
 `https://api.civpulse.org/functions/v1/mcp/v2` after the matching MCP deployment.
 The compatibility catalog remains at its existing 128-tool limit; refresh tool
 discovery and use only selectors advertised by the connected endpoint.
+
+## Cited corrections to imported vote outcomes
+
+Do not edit an imported motion's original outcome or replay it under a new key.
+Use the compact MCP `set_meeting_vote_outcome` tool with the existing vote UUID,
+passed/failed/tabled/withdrawn, original HTTPS document URL, SHA-256 of its exact
+bytes, and a precise page/item/round locator. Verify the motion text and whether
+the body is a committee or the full commission; numeric passFail codes and totals
+are not enough. The tool trusts the admin's citation review and does not download
+or certify the source itself.
+
+Read back the meeting and check created/unchanged/conflict. Exact citation replay
+is unchanged. To correct, name the current observation's UUID in
+`supersedes_id` and explain the change in a public `correction_reason`.
+A stale or omitted expected ID conflicts; original observations and ballots stay
+intact. Cited records cannot be deleted through the vote editor. Public pages
+show the effective result, original recorded outcome and source evidence; private
+records retain their existing gates. Rebuild and recheck meeting/person pages and
+published JSON before closing a correction report. No real outcome backfill is
+included; review and publish source-supported batches after the release.

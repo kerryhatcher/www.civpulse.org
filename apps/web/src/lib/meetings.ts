@@ -1,3 +1,4 @@
+import type { MeetingOutcome } from './meeting-outcomes';
 export interface MeetingRecord {
   status: 'ok' | 'missing' | 'private';
   event?: {
@@ -15,13 +16,13 @@ export interface MeetingRecord {
     status: 'present' | 'absent' | 'excused' | 'observed' | 'unknown';
     note: string | null;
   }[];
-  votes?: {
+  votes?: (MeetingOutcome & {
     id: string;
     subject: string;
     description: string | null;
     outcome: string | null;
     choices: { person_id: string; full_name: string; choice: string }[];
-  }[];
+  })[];
   attachments?: {
     id: string;
     file_name: string;

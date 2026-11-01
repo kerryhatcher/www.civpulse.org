@@ -1,9 +1,11 @@
+import { outcomeLabel,type MeetingOutcome } from '../lib/meeting-outcomes';
+import { renderOutcomeEvidence } from './meeting-outcomes';
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { unknownSourceDates } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { getSupabase } from '../lib/supabase';
 
-export interface PersonVote {
+export interface PersonVote extends MeetingOutcome {
   vote_id: string; meeting_id: string; meeting_title: string; starts_at: string;
   organization_name: string; subject: string; description: string | null;
   outcome: string | null; choice: string;
@@ -16,7 +18,7 @@ function renderVote(vote: PersonVote): HTMLElement {
   const result = document.createElement('p');
   const choice = document.createElement('strong');
   choice.textContent = `Vote: ${vote.choice}`;
-  result.append(choice, ` · Outcome: ${vote.outcome ?? 'Not recorded'}`);
+  result.append(choice, ` · Outcome: ${outcomeLabel(vote.outcome)}`);
   const meeting = document.createElement('p');
   const link = document.createElement('a');
   link.href = `/calendar/view/?id=${encodeURIComponent(vote.meeting_id)}#vote-${vote.vote_id}`;
@@ -28,6 +30,7 @@ function renderVote(vote: PersonVote): HTMLElement {
   });
   meeting.append(link, ' · ', date, ` · ${vote.organization_name}`);
   article.append(heading, result, meeting);
+  const evidence=renderOutcomeEvidence(vote); if(evidence)article.append(evidence);
   const provenance = document.createElement('p'); provenance.textContent = unknownSourceDates; article.append(provenance);
   if (vote.description) {
     const detail = document.createElement('p');

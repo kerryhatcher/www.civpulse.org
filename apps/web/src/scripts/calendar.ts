@@ -1,3 +1,5 @@
+import { outcomeLabel } from '../lib/meeting-outcomes';
+import { renderOutcomeEvidence } from './meeting-outcomes';
 import {readPublicCalendar, readCalendarMonth, readPublicEvent} from '../lib/calendar-data';
 import {recordSourceUrl,meetingVoteScope} from '../lib/record-provenance';
 import {renderRecordProvenance} from '../lib/record-provenance-dom';
@@ -484,7 +486,8 @@ async function fillMeetingView(id: string, snapshot?: MeetingRecord,event?:NonNu
       article.style.scrollMarginTop = '6rem';
       const heading = document.createElement('h4'); heading.textContent = vote.subject; article.append(heading);
       if (vote.description) { const detail = document.createElement('p'); detail.textContent = vote.description; article.append(detail); }
-      const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${vote.outcome ?? 'Not recorded'}`; article.append(outcome);
+      const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${outcomeLabel(vote.outcome)}`; article.append(outcome);
+      const evidence=renderOutcomeEvidence(vote); if(evidence)article.append(evidence);
       const choices = document.createElement('ul');
       for (const choice of vote.choices) {
         const item = document.createElement('li');

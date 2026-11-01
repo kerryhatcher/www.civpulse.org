@@ -1,3 +1,4 @@
+import {outcomeLabel,outcomeEvidence} from './meeting-outcomes';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl } from './articles';
 import { CANDIDATE_STATUS_LABELS, formatElectionDate } from './elections';
 import { officeLabel, serviceDates } from './offices';
@@ -37,8 +38,8 @@ export function profileEvidence(profile: PublicProfileSections, kind: 'people' |
       })) },
     votes: { key: 'votes', title: 'Meeting votes', initial: 20,
       rows: profile.votes.map(vote => ({ title: vote.subject,
-        lines: [`Vote: ${vote.choice} · Outcome: ${vote.outcome ?? 'Not recorded'}`, `${vote.organization_name} · Meeting date: ${new Date(vote.starts_at).toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'medium', timeStyle: 'short' })}`, ...(vote.description ? [vote.description] : []), unknownSourceDates],
-        links: [{ label: vote.meeting_title, href: `/records/events/${encodeURIComponent(vote.meeting_id)}/#vote-${encodeURIComponent(vote.vote_id)}` }],
+        lines: [`Vote: ${vote.choice} · Outcome: ${outcomeLabel(vote.outcome)}`, `${vote.organization_name} · Meeting date: ${new Date(vote.starts_at).toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'medium', timeStyle: 'short' })}`, ...(vote.description ? [vote.description] : []), ...outcomeEvidence(vote).lines, unknownSourceDates],
+        links: [{ label: vote.meeting_title, href: `/records/events/${encodeURIComponent(vote.meeting_id)}/#vote-${encodeURIComponent(vote.vote_id)}` }, ...outcomeEvidence(vote).links],
       })) },
     'legislative-votes': { key: 'legislative-votes', title: 'Legislative vote choices', initial: 20,
       rows: profile.legislativeVotes.filter(vote => vote.category !== 'attendance').map(vote => ({

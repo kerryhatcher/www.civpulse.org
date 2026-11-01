@@ -47,6 +47,10 @@ jobs:
       - run: bun test scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
         env:
           MEETING_IMPORT_INTEGRATION: '1'
+      - name: Verify cited meeting outcome observations
+        run: bun test scripts/tests/meeting-outcomes-db.test.ts scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts
+        env:
+          MEETING_OUTCOMES_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
       - name: Verify person relationship visibility and admin constraints
         run: bun test scripts/tests/person-relationships-db.test.ts
         env:

@@ -8,7 +8,7 @@ export const HISTORY_TYPES: Record<string, string> = {
   articles: 'Articles', article_people: 'Article people', article_organizations: 'Article organizations',
   maps: 'Maps', layers: 'Layers', layer_features: 'Geographic features', map_layers: 'Map layers',
   calendars: 'Calendars', events: 'Events and meetings', meeting_attendance: 'Meeting attendance',
-  meeting_votes: 'Meeting votes', meeting_vote_choices: 'Individual votes', meeting_attachments: 'Meeting attachments',
+  meeting_vote_outcome_observations: 'Cited vote outcomes', meeting_votes: 'Meeting votes', meeting_vote_choices: 'Individual votes', meeting_attachments: 'Meeting attachments',
 };
 export function historyUrl(table: string, id: string): string {
   return `/history/?${new URLSearchParams({type: table, id})}`;

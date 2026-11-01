@@ -618,3 +618,17 @@ The v2 `school_finances` tool also supports `resolve_recipient` for reviewed
 person/organization links or new stubs. Publication automatically resolves exact
 recipient names and creates provisional organization stubs for ambiguous/missing
 matches. The public browse projection includes only publicly visible targets.
+
+## Cited meeting outcomes (compact catalog)
+
+After deployment, `/mcp/v2` advertises `set_meeting_vote_outcome`; compatibility
+`/mcp` remains at 128 tools. The compact catalog has 72 tools. The new admin tool
+requires vote UUID, supported outcome, HTTPS source URL, document SHA-256 and
+locator. It appends evidence, preserves the immutable import, and returns
+created/unchanged/conflict. Inspect the current meeting before a correction;
+pass its latest observation UUID as `supersedes_id` and a public
+`correction_reason`. Check status explicitly. No code/tally inference or new
+import keys. See [the source contract](./meeting-imports.md#cited-outcome-observations).
+Run `bun run plugin:build`, `bun run plugin:claude:sync` and
+`bun run plugin:claude:check` after tool changes; refresh client discovery after
+the main-first migration/MCP release. This source change does not deploy or backfill.
