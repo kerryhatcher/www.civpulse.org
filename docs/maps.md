@@ -46,11 +46,18 @@ styles, preset selections, and repairs. Compressed GeoJSON snapshots stay under
 `scripts/data/maps/`, outside public assets and prerendered HTML. The published
 copies are in the Cloudflare R2 bucket `civpulse-files` under `maps/` and are
 served at `https://files.civpulse.org/maps/<file>.geojson.gz`; the manifest's
-`sourceUrl` values point there. The bucket is uploaded by hand with
-`wrangler r2 object put civpulse-files/maps/<file> --file <path> --content-type
-application/gzip --remote` (set `CLOUDFLARE_ACCOUNT_ID` to the account that owns
-the bucket). Re-upload a file whenever its snapshot hash changes. Original marker
-assets are in `apps/web/public/maps/icons/`.
+`sourceUrl` values point there. The bucket is uploaded by hand with the command
+below (set `CLOUDFLARE_ACCOUNT_ID` to the account that owns the bucket):
+
+```bash
+wrangler r2 object put civpulse-files/maps/<file> --file <path> \
+  --content-type application/gzip --remote
+```
+
+Re-upload a file whenever its snapshot hash changes. For `school-zones-elementary`
+the published object is the original source file, `school-zones-elementary.geojson.gz`
+(its `originalSha256`), not the `.import.geojson.gz` snapshot; re-upload the original
+when its hash changes. Original marker assets are in `apps/web/public/maps/icons/`.
 
 The original elementary attendance dataset has two ring self-intersections:
 Hartley (`school-zones-elementary:5`) and Porter (`school-zones-elementary:10`).
