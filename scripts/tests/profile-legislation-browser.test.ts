@@ -44,3 +44,38 @@ test.skipIf(!process.env.PROFILE_EVIDENCE_BROWSER)('legislative initialization p
     expect(errors).toEqual([]);
   }finally{await browser.close();await rm(dir,{recursive:true,force:true});}
 },30000);
+
+test.skipIf(!process.env.PROFILE_EVIDENCE_BROWSER)('empty live office/candidacy/article reads retain published history links but hide sections without history',async()=>{
+  const dir=await mkdtemp(join(tmpdir(),'profile-history-'));
+  const browser=await chromium.launch({channel:'chrome',headless:true});
+  try{
+    const entry=join(dir,'entry.ts');
+    await Bun.write(entry,`import {loadOfficeTerms} from ${JSON.stringify(resolve('apps/web/src/scripts/office-terms.ts'))};
+      import {loadPersonCandidacies} from ${JSON.stringify(resolve('apps/web/src/scripts/person-candidacies.ts'))};
+      import {loadProfileArticles} from ${JSON.stringify(resolve('apps/web/src/scripts/profile-articles.ts'))};
+      globalThis.qaLoad=async()=>{await loadOfficeTerms(undefined,'organization');await loadPersonCandidacies('person');await loadProfileArticles('person','person');};`);
+    const build=await Bun.build({entrypoints:[entry],target:'browser',plugins:[{name:'synthetic-client',setup(builder){
+      builder.onLoad({filter:/\/supabase\.ts$/},()=>({contents:'export const getSupabase=()=>globalThis.qaClient;',loader:'ts'}));
+    }}]});expect(build.success).toBe(true);
+    const page=await browser.newPage();const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+    const fallback='<div data-public-profile-evidence>Published evidence</div><p data-public-profile-history><a href="/published/history/">Read all 21 entries</a></p>';
+    await page.setContent(`<section data-office-terms>${fallback}<p data-office-status></p><div data-office-groups>${['current','former','upcoming'].map(g=>`<div data-office-group="${g}"><ul data-office-list="${g}"></ul></div>`).join('')}</div></section>
+      <section data-person-candidacies>${fallback}<p data-candidacies-status></p><div data-candidacy-groups>${['current','past'].map(g=>`<ul data-${g}-candidacies></ul><p data-${g}-candidacies-empty></p>`).join('')}</div></section>
+      <section data-profile-articles>${fallback}<p data-articles-status></p><ul data-profile-article-list></ul></section>`);
+    await page.evaluate(()=>{const state=globalThis as any;state.qaFail=true;state.qaClient={auth:{getSession:async()=>({data:{session:{}}})},rpc:async()=>state.qaFail?{error:{message:'Synthetic offline'},data:null}:{error:null,data:[]}};});
+    await page.addScriptTag({type:'module',content:await build.outputs[0].text()});
+    await page.waitForFunction(()=>typeof (globalThis as any).qaLoad==='function');
+    await page.evaluate(()=>(globalThis as any).qaLoad());
+    for(const root of await page.locator('section').all()){expect(await root.isVisible()).toBe(true);expect(await root.locator('[data-public-profile-evidence]').isVisible()).toBe(true);}
+    await page.evaluate(()=>{(globalThis as any).qaFail=false;});
+    await page.evaluate(()=>(globalThis as any).qaLoad());
+    for(const root of await page.locator('section').all()){
+      expect(await root.isVisible()).toBe(true);expect(await root.locator('[data-public-profile-history] a').isVisible()).toBe(true);
+      expect(await root.locator('[data-public-profile-evidence]').isHidden()).toBe(true);
+    }
+    await page.locator('[data-public-profile-history]').evaluateAll(nodes=>nodes.forEach(node=>node.remove()));
+    await page.evaluate(()=>(globalThis as any).qaLoad());
+    for(const root of await page.locator('section').all())expect(await root.isHidden()).toBe(true);
+    expect(errors).toEqual([]);
+  }finally{await browser.close();await rm(dir,{recursive:true,force:true});}
+},30000);

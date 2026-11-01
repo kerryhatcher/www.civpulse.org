@@ -58,7 +58,7 @@ export async function loadPersonCandidacies(personId: string): Promise<void> {
     status.hidden = true;
     replacePublishedEvidence(root);
     groups.hidden = false;
-    root.hidden = races.length === 0;
+    root.hidden = races.length === 0 && !root.querySelector('[data-public-profile-history]');
   } catch {
     status.textContent = 'Could not load candidacies. Please reload to try again.';
   }

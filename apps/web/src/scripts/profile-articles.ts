@@ -64,7 +64,8 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
     render();
     replacePublishedEvidence(root);
     status.textContent = `${articles.length} articles`;
-    status.hidden = articles.length <= pageSize; root.hidden = articles.length === 0;
+    status.hidden = articles.length <= pageSize;
+    root.hidden = articles.length === 0 && !root.querySelector('[data-public-profile-history]');
   } catch {
     status.textContent = 'Could not load articles. Please try again.';
     const retry = document.createElement('button');

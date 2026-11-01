@@ -54,7 +54,7 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
         return item;
       }));
     }
-    root.hidden = terms.length === 0;
+    root.hidden = terms.length === 0 && !root.querySelector('[data-public-profile-history]');
     replacePublishedEvidence(root);
     status.hidden = true;
     groups.hidden = false;

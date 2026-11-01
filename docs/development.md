@@ -67,6 +67,9 @@ retains 20 published choices and the link to all 21 entries while loading and
 after a synthetic RPC failure, then retries successfully and reinitializes without
 duplicating or removing the ordinary history link. This test bundles the actual
 enhancement module with an in-memory RPC boundary and needs no database/server.
+It also checks office, candidacy and article sections after empty live reads:
+published history navigation remains available even if current records were
+removed, while sections without a published history link still hide when empty.
 
 At desktop/mobile widths, disable JavaScript and read office sources, candidacy
 election links, article roles/dates and vote context; follow history pagination.
