@@ -18,6 +18,31 @@ test('recursive inventory deduplicates URLs, preserves sources, flags policy mis
   await expect(captureInventory({out,transport:async()=>{throw Error('Must not fetch');}})).rejects.toThrow('Refusing to overwrite');
  }finally{await rm(out,{recursive:true,force:true});}
 });
+test('answer accuracy scores require retained claim and dated source comparison evidence',async()=>{
+ const trials=await Bun.file('docs/measurement/2026-11-01/ai-trials.json').json();
+ for(const trial of trials){
+  const accuracy=trial.factual_accuracy;
+  if(!accuracy)continue;
+  if(accuracy.verdict==='not_auditable'){
+   expect(accuracy.checked_items).toBeNull();expect(accuracy.supported_checked_items).toBeNull();
+   expect(accuracy.missing_evidence.length).toBeGreaterThan(0);
+   continue;
+  }
+  const checks=accuracy.selected_core_contact_checks;
+  expect(Array.isArray(checks)).toBe(true);expect(checks.length).toBeGreaterThan(0);
+  expect(accuracy.checked_items).toBe(checks.length);
+  expect(accuracy.supported_checked_items).toBe(checks.filter((check:any)=>check.status==='supported').length);
+  for(const check of checks){
+   expect(check.answer_claim?.trim().length).toBeGreaterThan(0);
+   expect(check.source_comparison?.trim().length).toBeGreaterThan(0);
+   expect(check.source).toMatch(/^https:\/\//);
+   expect(check.source_observed_at).toMatch(/^\d{4}-\d{2}-\d{2}/);
+  }
+ }
+ const worksheet=await Bun.file('docs/measurement/2026-11-01/trial-worksheet.csv').text();
+ expect(worksheet).not.toContain('partially_verified');
+ expect(worksheet).toContain('not_auditable: answer/source comparison evidence not retained');
+});
 test('capture rejects non-sitemaps and off-origin, query, credential or fragment URLs',()=>{
  expect(()=>sitemapLocations('<html>Blocked</html>')).toThrow();
  expect(sitemapLocations('<urlset><url><loc>https://www.civpulse.org/a&amp;b/</loc></url></urlset>')).toEqual([root+'/a&b/']);

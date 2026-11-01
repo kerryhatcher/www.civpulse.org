@@ -14,7 +14,7 @@ coverage and a general AI citation/accuracy rate remain **unknown**.
 | [Provider summary](provider-summary.json) | Selected saved GSC/GA4/Bing snapshots, source dates/scopes, lab/field observations and explicit gaps |
 | [Indexed URL sample](indexed-url-sample.json) | Eight purposeful key URLs inspected through Google's indexed-version API; no live crawl/indexing request |
 | [Prompt portfolio](prompt-portfolio.json) | Three exact unbranded civic questions, target pages for observer analysis and fact-check rubrics |
-| [AI observations](ai-trials.json) | Two ChatGPT attempts, one completed answer with a partial factual audit; Copilot access limitation |
+| [AI observations](ai-trials.json) | Two ChatGPT attempts, one completed answer whose factual accuracy is not auditable from retained evidence; Copilot access limitation |
 | [Retrieval observations](web-retrieval-trials.json) | Three prompts × two separate web-tool requests; returned URLs, not consumer SERP ranks or AI citations |
 | [Trial worksheet](trial-worksheet.csv) | Comparable run identifiers, dates, sample units, outcomes and accuracy availability |
 | [Metric worksheet](metric-worksheet.csv) | Selected aggregate values, periods and interpretation limits |
@@ -97,12 +97,14 @@ with zero citations. Browser timing is retained at date precision, not invented
 exact timestamps. No account or chat identifiers are published.
 
 The completed P1 answer's three resolved source URLs are retained exactly. Its
-selected official contact checks—website, street/suite, phone and weekday hours—
-were supported by the [county contact page](https://www.maconbibb.us/board-of-elections/contact-us/)
-and [official board site](https://www.maconbibb.us/board-of-elections/) read on the
-baseline date. This is **4/4 selected checks, not 100% full-answer accuracy**.
-Detailed statutory duties, email, ZIP/location context and all citation chips were
-not fully audited. A PeachTracker citation label was visible but its Open control
+summary is an observer paraphrase, not a retained answer excerpt. The initial
+selected-contact accuracy score has been withdrawn: the evaluated claim values,
+official comparison values/excerpts and claim-level source observation dates were
+not retained. **Answer accuracy is not auditable and remains unknown.** Check
+categories and source links alone cannot reproduce a factual comparison; current
+official-page values cannot reconstruct the missing observed answer. The intended
+contact checks remain listed for a future properly retained trial, with no score
+or supported-claim count. A PeachTracker citation label was visible but its Open control
 did not resolve a URL in the observed UI. Thus citation enumeration is incomplete:
 zero Civic Pulse URLs among resolved links is not a complete citation rate.
 Copilot required sign-in, so no prompt was submitted there. P2/P3 consumer-AI
@@ -140,7 +142,10 @@ visibility metric.
    fresh trials per selected available platform across different days. Record UI
    model label/version if exposed, mode, date, region if actually known, result
    type, all resolvable citation URLs and errors. Assess each material claim
-   against dated official sources: supported / contradicted / unverified. Keep
+   against dated official sources: supported / contradicted / unverified. Retain
+   a bounded public answer excerpt or explicit evaluated claim values alongside
+   each official comparison value/excerpt, URL and actual source observation date;
+   otherwise mark accuracy not auditable and leave score counts unknown. Keep
    full-answer completeness distinct from selected fact checks. Do not silently
    replace prompts when comparing versions. Keep search retrieval and consumer-AI
    answer denominators separate; small repeats are descriptive, not guarantees.

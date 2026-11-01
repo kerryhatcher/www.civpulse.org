@@ -47,38 +47,22 @@
     "citation_gap": "Additional citation chips were visible; the Open PeachTracker control did not resolve a URL in the observed UI. Only resolved links are enumerated, not a full citation census.",
     "answer_summary": "Described registration, election administration, early/absentee voting, counting/certification and public information duties; supplied agency address, phone, hours, email and official links.",
     "factual_accuracy": {
-      "verdict": "partially_verified",
-      "selected_core_contact_checks": [
-        {
-          "claim": "Official Board of Elections website URL",
-          "status": "supported",
-          "source": "https://www.maconbibb.us/board-of-elections/"
-        },
-        {
-          "claim": "Office street address and MB101 suite",
-          "status": "supported",
-          "source": "https://www.maconbibb.us/board-of-elections/contact-us/"
-        },
-        {
-          "claim": "Office phone",
-          "status": "supported",
-          "source": "https://www.maconbibb.us/board-of-elections/contact-us/"
-        },
-        {
-          "claim": "Weekday office hours",
-          "status": "supported",
-          "source": "https://www.maconbibb.us/board-of-elections/contact-us/"
-        }
+      "verdict": "not_auditable",
+      "answer_excerpt": null,
+      "supported_checked_items": null,
+      "checked_items": null,
+      "planned_contact_checks": [
+        "Official website URL",
+        "Office street address and suite",
+        "Office phone",
+        "Weekday office hours"
       ],
-      "supported_checked_items": 4,
-      "checked_items": 4,
-      "not_fully_checked": [
-        "All statutory-duty details",
-        "Email claim",
-        "ZIP and former-Sears/lower-level context",
-        "All additional citation-chip URLs"
+      "missing_evidence": [
+        "Evaluated answer excerpt or explicit claim values",
+        "Official comparison values or excerpts",
+        "Claim-level source observation dates"
       ],
-      "note": "4/4 selected contact checks supported by official page content read on Nov 1; not a claim of 100% full-answer accuracy. No publication date supplied for these contact facts."
+      "note": "The initial selected-check score was withdrawn: retained categories and links alone cannot reproduce the comparison. Answer accuracy remains unknown; current source values must not be substituted for the missing observed answer."
     },
     "civpulse_visible_name_mention": false,
     "civpulse_resolved_citation_count": 0,
@@ -89,7 +73,8 @@
       "One completed answer; no global citation/recommendation/accuracy rate.",
       "Logged-in browser; selected unpersonalized mode; region/version not exposed.",
       "Browser run timestamps captured at date precision only; no account/chat identifiers retained."
-    ]
+    ],
+    "answer_summary_note": "Observer paraphrase only; not a retained answer excerpt or evidence for scoring individual claims."
   },
   {
     "run_id": "copilot-access-1",

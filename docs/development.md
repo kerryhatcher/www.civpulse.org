@@ -1462,7 +1462,12 @@ collection, change bindings, publish raw analytics query strings/private viewer
 IDs or treat `has_more` snapshot history as additional traffic to sum. Store
 aggregate evidence only in this public repository; never tokens or account emails.
 Repeat prompt trials manually with exact text, observed platform/model/mode and
-dates; unavailable answers have no accuracy/citation denominator. No automation
+dates; unavailable answers have no accuracy/citation denominator. An accuracy score
+also requires retained evaluated answer claims/excerpts and official comparison
+values/excerpts with source URLs and observation dates. Categories and links alone
+are not auditable: leave counts unknown rather than reconstructing missing answer
+values from current sources. The baseline regression checks this evidence rule.
+No automation
 or paid vendor is required. This issue changes reports/tooling only, not site
 rendering or access rules. The required check/build uses explicit isolated local
 54341 credentials; shared 54322 remains unsuitable after the documented collision.
