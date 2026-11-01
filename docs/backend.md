@@ -1762,3 +1762,9 @@ nonaggregate payees at publication, reusing exact matches or creating review-mar
 organization stubs. Private helpers have no API execution grants; the recipient
 registry has RLS and no direct API table access. Public projections omit hidden
 person mappings. See [recipient profiles](school-finances.md#payment-recipient-profiles).
+
+School finance migration `20261125001200` adds staging-only reviewed payroll
+bindings (`resolve_payroll_person`) and row-level stub ownership. Publication
+creates profiles only for unresolved rows. Review, withdrawal and supersession
+preserve canonical biographies, visibility and affiliations; only source-owned
+stubs receive those lifecycle mutations. Original financial facts remain immutable.

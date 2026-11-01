@@ -94,19 +94,20 @@ tracked separately. No production import or deployment is performed by tests.
 
 ## Employee person records and identity review
 
-Publishing payroll creates **one public `people` record for every source row**,
+Payroll can link a reviewed existing person during staging; see the reviewed
+links contract below. Unresolved rows create separate public `people` stubs,
 including identical names, with kind `other`, the reported job title and a
-historical source description. No name is matched to an existing person. There
-are no employee IDs in the source. Each row receives a distinct generated person
-UUID and `identity_review_required=true`; names remain exactly as reported.
+historical source description. There are no employee IDs in the source. Only
+unresolved identities receive `identity_review_required=true`; source names
+remain exactly as reported.
 The organization affiliation says `Payroll record FY2025 (identity needs review)`
 rather than asserting current employment. No employee contact details, individual
 schools or work locations are inferred. Payment recipients are not automatically
 classified as people: the export also contains organizations and payroll totals.
 
-The user selected separate profiles for repeated names with review flags.
-Cross-year and corrected releases also retain separate source profiles rather
-than guessing human identity. Superseded profiles retain historical provenance
+Repeated names remain separate when identity is uncertain. Cross-year and
+corrected releases can share a canonical person after evidence-backed review;
+unresolved rows retain separate source profiles. Superseded profiles retain historical provenance
 and gain a superseded-source notice. Publication retries create no duplicate
 profiles. New source profiles enter existing person search, affiliations and
 static profile publication. Finance rows link to the existing UUID person viewer;
@@ -115,7 +116,8 @@ pretty profiles appear after the normal rebuild.
 `review_person` accepts `{release_id,row_number,person_id,confirm_identity:true,
 review_note:"Source-backed verification, at least ten characters"}` for a
 published payroll release. It checks the current row/person binding, clears the
-flag and records the review note on the person profile and dated affiliation.
+flag and records the review note on the row. Source-owned stubs also receive the
+review note on their profile and affiliation; canonical profiles are preserved.
 It does not merge people or transfer links. Existing admin person editing remains
 available; reconcile identities only with additional evidence. Original payroll
 names and amounts remain immutable. Private/unlisted person IDs and review flags
@@ -222,3 +224,20 @@ appear after the normal rebuild. Runtime finance search reflects publication
 immediately. Run `FINANCE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/school-finance-recipients-db.test.ts`
 for exact/ambiguous matching, cross-year reuse, identity correction, hidden-person
 redaction, retries, FK integrity and role/execute-grant checks.
+
+## Reviewed payroll links (migration 20261125001200)
+
+The current import policy links payroll to an existing person when independent
+source evidence supports the match. During staging, `resolve_payroll_person`
+accepts `{release_id,row_number,person_id,confirm_identity:true,review_note}`.
+The sourced note must contain 10–2000 characters. Exact retries are accepted;
+a conflicting target is rejected. Matching is an explicit editorial decision,
+not an automatic fuzzy-name join. Name order, punctuation and initials can differ;
+check job/organization context and ambiguity before linking.
+
+Unresolved rows receive separate person stubs marked for review, including
+same-name rows that cannot be distinguished. Matched rows clear that flag and
+retain their original source name, title, amounts and row number. Linking never
+rewrites an existing biography, visibility or affiliations. Finance rows themselves
+retain the reporting organization. Withdrawal and supersession affect only
+profiles generated for that source, preserving linked canonical people.
