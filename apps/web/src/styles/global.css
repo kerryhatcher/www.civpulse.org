@@ -3033,3 +3033,19 @@ body { background: var(--canvas); }
 .site-header .county-picker select, .site-header .county-picker-location { color: var(--on-canvas); }
 .site-header .county-picker::after { background: var(--lime); }
 .site-shell > .county-status { color: var(--on-canvas); }
+
+/* School finance tables keep exact figures readable beside their source context. */
+.finance-page .calendar-filters { align-items: end; }
+.finance-page .calendar-filters .field { min-width: 10rem; }
+.finance-table-scroll { max-width: 100%; overflow-x: auto; margin-block: 1.5rem; }
+.finance-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.finance-table caption { text-align: left; font-weight: 600; padding-bottom: 1rem; }
+.finance-table th, .finance-table td { text-align: left; vertical-align: top; padding: .85rem; border-bottom: 1px solid var(--line); }
+.finance-table thead th { background: var(--surface-soft); white-space: nowrap; }
+.finance-table td { white-space: nowrap; }
+.finance-table th[scope="row"] { min-width: 13rem; font-weight: 600; }
+.finance-table small { display: block; font-weight: 400; max-width: 28ch; }
+.finance-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1.5rem; }
+.finance-page details { border-top: 1px solid var(--line); padding-block: 1rem; }
+.finance-page summary { cursor: pointer; font-weight: 600; }
+.finance-page [data-finance-provenance] { overflow-wrap: anywhere; max-width: 75ch; }

@@ -519,3 +519,23 @@ unavailable/suppressed figures are labeled explicitly rather than treated as zer
 all counties as CSV/JSON. Search and API/MCP reads use the current database; pages
 and downloadable snapshots reflect the last website rebuild. AI connections can
 read structured observations and the indicator/source catalog; see the [AI guide](/docs/ai/).
+
+## Bibb school payroll and payments
+
+Open [School finances](/finances/) from the navigation or Bibb county hub.
+Choose Payments or Payroll & travel, select a fiscal year and search a reported
+name, recipient or job title. Use the sort menu and Previous/Next for more rows.
+The totals follow your search. Download this page as CSV exports only the visible
+page; expand Source and reporting details for the original source, file checksum,
+export filters and retrieval date. Displayed currency is rounded to cents; the
+CSV preserves reported precision.
+
+Payroll names link to separate person records and are marked **Identity needs
+review** until checked. Repeated names receive separate profiles; a matching name
+is not proof of the same individual. Profiles cite a fiscal year and original
+source row, and their school affiliation describes historical payroll evidence.
+No school location or current employment is inferred.
+
+Records are not unique employee headcounts or individual invoices. SALARY and
+BENEFITS payment entries overlap payroll, so never add those datasets. Missing
+years mean data is unavailable, not zero spending. Fiscal years run July 1–June 30.

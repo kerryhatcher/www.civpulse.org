@@ -1,6 +1,6 @@
 ---
 name: civic-research
-description: Use when researching Civic Pulse organizations, people, elections, candidates, ballot questions, articles, calendars or events.
+description: Use when researching Civic Pulse organizations, people, elections, candidates, ballot questions, articles, calendars, events, or official-source county civic and demographic statistics.
 ---
 
 # Civic research
@@ -20,3 +20,7 @@ Use get_person_articles or get_organization_articles for profile reading lists. 
 Visibility follows the connected account. Regular users have the same civic content access as anonymous visitors; private content and discovery of unlisted records require an admin. Registered account lookup is separate from public people research: use civic-user-admin and search_users for authorized account-directory requests. Do not place private or unlisted records into public documents without authorization. Return relevant names, dates, record IDs and source links; explain missing data and permission limits. This skill is read-only; use civic-editing for requested changes.
 
 See [the tool guide](../../references/tools.md) for available operations and permission boundaries.
+
+For official-source county civic and demographic data, start with get_county_statistic_catalog to discover counties/FIPS, the 59 indicators, units, topics, and source datasets. Use search_county_statistics with query, county_fips, indicator_code, topic, limit and offset; paginate until total_count is covered. Georgia comparisons use FIPS 13000 with matching indicator and period. Return numeric value, unit, reference period, official source URL and availability. Preserve ACS margins/component estimates, SAIPE confidence intervals, and age counts; do not turn suppression or missing values into zero, sum overlapping race/ethnicity or poverty categories, or compare mismatched vintages. Public per-county CSV/JSON snapshots are at /counties/<slug>/statistics.csv and statistics.json; database/MCP reads are current while snapshots update after a rebuild. General search_site covers civic records; these specialized statistics tools cover structured observations.
+
+Catalog compatibility: the original 128-tool endpoint exposes county discovery through search_site(type=county_statistic_catalog) and observations through search_site(type=county_statistic). Use dedicated get_county_statistic_catalog/search_county_statistics/save tools only when advertised by the compact catalog. Do not assume a missing dedicated tool means the data is unavailable.

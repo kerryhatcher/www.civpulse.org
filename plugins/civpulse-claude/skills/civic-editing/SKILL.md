@@ -105,3 +105,7 @@ released district-service migration; do not relabel districts as legislative
 bodies to bypass validation. When committee sources provide session labels but
 no appointment dates, retain sourced session/role summaries without inventing
 dated membership intervals.
+
+For structured official-source county statistics, resolve county/FIPS, indicator and source with get_county_statistic_catalog and read the current observation with search_county_statistics. Use save_county_statistic with its exact updated_at as expected_updated_at; null creates a missing observation only. Preserve source variables, reference period, unit, uncertainty and derivation inputs; explicitly label unavailable/suppressed values instead of guessing or using zero. If a write reports concurrent changes, reread before retrying. save_county_statistic_source updates verified official dataset provenance, including exact source-file SHA-256 and retrieval date. All writes require an admin and request a static rebuild; verify through MCP and the rebuilt county page.
+
+Catalog compatibility: the original 128-tool endpoint exposes county discovery through search_site(type=county_statistic_catalog) and observations through search_site(type=county_statistic). Use dedicated get_county_statistic_catalog/search_county_statistics/save tools only when advertised by the compact catalog. Do not assume a missing dedicated tool means the data is unavailable.

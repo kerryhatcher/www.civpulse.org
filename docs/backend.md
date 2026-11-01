@@ -1743,3 +1743,15 @@ allows valid population growth above 100% while other percent shares remain
 bounded to 0–100, and rejects non-finite confidence bounds. It preserves the
 already-applied local migration history and is released through main with the
 initial county-statistics migration.
+
+## Bibb school financial records
+
+`school_finance_releases` and `school_finance_rows` retain staged, immutable
+source records with reviewed publication and exact numeric amounts. The admin
+`manage_school_finances` RPC handles batches, reconciliation, corrections,
+withdrawal and employee identity review. Payroll publication creates separate
+source-backed public person profiles and dated organization affiliations, even
+for repeated names. `browse_school_finances` exposes only current published
+releases and public person links, with filtered totals and indexed name/title
+search. RLS is enabled, with no direct API-role table grants. See
+[school finances](school-finances.md) for contracts and release verification.

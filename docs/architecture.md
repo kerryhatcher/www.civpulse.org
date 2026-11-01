@@ -605,3 +605,14 @@ request/file access. Already-issued signatures retain their existing short expir
 A visibility/file-policy change requires a rebuild to refresh published metadata,
 but new downloads immediately recheck access. No backend policy, bucket exposure,
 service credential, migration or hosting-plan change is introduced.
+
+## School finances
+
+`/finances/` is a static Astro shell with live public-key RPC search for Bibb
+school payroll and recipient payment summaries. Separate staged releases preserve
+source checksums, filters and exact amounts; publication is atomic. Payroll
+creates separate public person records per source row, flagged for identity
+review, and dated school affiliations. Existing people/affiliation rebuild
+tracking publishes those profiles. Finance search needs no static bulk export or
+server adapter. Originals remain in collector evidence. See
+[school finances](school-finances.md).
