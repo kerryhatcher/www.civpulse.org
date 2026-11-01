@@ -30,7 +30,8 @@ export function attachProfileLegislation(people:Map<string,PublicProfileSections
 export async function loadProfileSectionBuildData(client: SupabaseClient) {
   const people = new Map<string,PublicProfileSections>(), organizations = new Map<string,PublicProfileSections>();
   const get = (map: typeof people,id: string) => { if (!map.has(id)) map.set(id,emptyProfileSections()); return map.get(id)!; };
-  const resources: Record<string,LegislativeRow[]> = {};
+  const resourceTables = ['legislative_terms','legislative_sessions','legislative_bodies','bill_sponsorships'];
+  const resourceRows: LegislativeRow[][] = [];
   const tasks = ['offices','person_articles','organization_articles','candidacies','votes','legislative_votes'].map(section => async () => {
     const started = performance.now();
     let exported = 0;
@@ -55,13 +56,14 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
     }
     console.info(`Public profile build: ${section} (${exported} rows, ${Math.round(performance.now() - started)}ms)`);
   });
-  for (const table of ['legislative_terms','legislative_sessions','legislative_bodies','bill_sponsorships']) tasks.push(async () => {
-    const rows = await readPublicLegislationTable(client, table);
-    resources[table]=rows;
-  });
+  resourceTables.forEach((table,index) => tasks.push(async () => {
+    resourceRows[index] = await readPublicLegislationTable(client, table);
+  }));
   // Bounded workers prevent per-profile HTTP fan-out during imports/builds.
   let next=0;
   await Promise.all(Array.from({length:3},async()=>{while(next<tasks.length) await tasks[next++]();}));
+  // JSON key order contributes to profile content hashes; never use RPC completion order.
+  const resources = Object.fromEntries(resourceTables.map((table,index) => [table,resourceRows[index]]));
   attachProfileLegislation(people,resources);
   for (const profile of organizations.values()) profile.officeTerms.sort((a,b)=>b.starts_on.localeCompare(a.starts_on)||a.office_name.localeCompare(b.office_name)||a.person_name.localeCompare(b.person_name)||a.id.localeCompare(b.id));
   return {people,organizations};

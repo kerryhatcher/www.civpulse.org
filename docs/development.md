@@ -763,8 +763,18 @@ Before the refactor, save the built `directory-data/`, `profile-data/`, `people/
 `orgs/`, `elections/` and `counties/` directories outside the repo. Rebuild against
 the same dataset and use the existing `BUILD_GROUPING_BASELINE_DIR` output check
 for directory/profile paths, hashes and HTML; compare county output too because
-its government curation uses these readers. The local verification matched all
-416 directory/profile/public-HTML files and all 478 county files exactly.
+its government curation uses these readers. An independent repeat exposed an
+existing race: legislative resource keys followed RPC completion order, changing
+28 profile hashes and their HTML references despite equivalent data. Resource
+assembly now uses an explicit order after reads finish; the grouping suite varies
+completion order and checks identical profile JSON/hashes. Pre-fix baselines can
+therefore differ in profile key order and asset references. Compare their parsed
+data semantically, then save a new stabilized baseline and require byte-identical
+paths, hashes and HTML across repeated builds. County output is unaffected.
+The corrected local comparison found all 894 saved files semantically equivalent:
+838 retained exact bytes/paths, while 28 profile JSON assets and 28 HTML references
+changed only resource-key order/content hashes. Two builds with stabilized
+assembly then matched all 894 paths and files byte for byte.
 
 An actual local concurrent profile/organization/directory read used 141 public
 people and 59 organizations: people requests stayed at one, organization requests

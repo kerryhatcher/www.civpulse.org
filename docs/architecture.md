@@ -486,6 +486,10 @@ workaround. Old open pages may need a reload following publication.
 
 ### Public profile section snapshots
 
+Parallel legislative reads fill indexed slots, then assemble resource keys in
+the explicit terms/sessions/bodies/sponsorships order. RPC completion order must
+not affect serialized profile JSON or its content-hashed asset path.
+
 After public exports complete, profile sponsorship assembly builds one office-term
 index of positions in the shared sponsorship array. Each profile looks up its
 distinct term IDs and sorts only the matched positions, retaining the global
