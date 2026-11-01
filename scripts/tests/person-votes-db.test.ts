@@ -25,7 +25,7 @@ test.skipIf(!process.env.MEETINGS_TEST_DATABASE_URL)('profile voting history pri
         await tx`insert into public.meeting_vote_choices(vote_id,meeting_id,person_id,choice) values(${vote.id},${event.id},${person.id},'yes')`;
       }
     }
-    const read=async(offset=0,limit=50)=>tx`select * from public.get_person_votes(${person.id}::uuid,${offset},${limit})`;
+    const read=async(offset=0,limit=50)=>(await tx`select public.get_person_votes(${person.id}::uuid,${offset},${limit}) data`).map(row=>row.data);
     const role=async(name:'anon'|'authenticated',id='')=>{
       await tx.unsafe(`set local role ${name}`);
       await tx`select set_config('request.jwt.claim.sub',${id},true)`;

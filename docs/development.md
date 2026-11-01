@@ -1427,6 +1427,11 @@ compatibility catalog and unchanged schemas for retained tools. This catches
 accidental additions/removals that a count alone would miss. Generated Codex and
 Claude compact references must agree after `bun run plugin:build`,
 `bun run plugin:claude:sync` and `bun run plugin:claude:check`.
+Also run `scripts/tests/profile-sections-db.test.ts` and
+`scripts/tests/person-votes-db.test.ts` against the isolated DB using
+`PROFILE_TEST_DATABASE_URL` and `MEETINGS_TEST_DATABASE_URL`. Their SQL assertions
+unwrap the JSON objects returned by the cited-outcome `get_person_votes` reader,
+matching the browser RPC payload while retaining paging/privacy/export checks.
 Transactional fixtures roll back. Browser QA uses synthetic local cited outcomes,
 explicitly injects that isolated API/anon key into the build process (without
 changing checked-in environment files), checks no-JS/anonymous/actual Admin desktop

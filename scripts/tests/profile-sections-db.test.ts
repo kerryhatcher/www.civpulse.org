@@ -68,7 +68,10 @@ test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('public export matches gated
   expect(await own('offices')).toEqual([...(await tx`select * from get_office_terms(${people[0]})`)].map(r=>({...r,starts_on:r.starts_on instanceof Date?r.starts_on.toISOString().slice(0,10):r.starts_on})));
   expect(await own('person_articles')).toEqual([...(await tx`select * from get_person_articles(${people[0]})`)]);
   expect((await own('candidacies')).map(r=>r.election_id)).toEqual((await tx`select * from get_person_candidacies(${people[0]})`).map(r=>r.election_id));
-  const votes=[...(await tx`select * from get_person_votes(${people[0]},0,50)`),...(await tx`select * from get_person_votes(${people[0]},50,50)`)];
+  // The cited-outcome reader returns JSON objects, just as the browser RPC does.
+  // Select its value explicitly rather than treating its scalar SQL result as
+  // the old table-returning reader's columns.
+  const votes=[...(await tx`select get_person_votes(${people[0]},0,50) data`),...(await tx`select get_person_votes(${people[0]},50,50) data`)].map(r=>r.data);
   expect((await own('votes')).map(r=>r.vote_id)).toEqual(votes.map(r=>r.vote_id));expect(votes).toHaveLength(55);
   const snapshot=emptyProfileSections();snapshot.legislativeVotes=await own('legislative_votes');
   const keys=(rows:any[])=>rows.map(({group_id,vote_id,vote_count}:any)=>({group_id,vote_id,vote_count}));
