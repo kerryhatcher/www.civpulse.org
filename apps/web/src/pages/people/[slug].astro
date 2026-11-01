@@ -2,6 +2,10 @@
 import { renderProfileDescription } from '../../lib/profile-description';
 import { personPageTitle, recordDescription } from '../../lib/page-metadata';
 import { personStructuredData } from '../../lib/structured-data';
+import { getProfileSectionBuildData } from '../../lib/profile-section-build-data';
+import { emptyProfileSections } from '../../lib/profile-sections';
+import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
+import ProfileEvidence from '../../components/ProfileEvidence.astro';
 import { profileSectionUrl } from "../../lib/profile-section-assets";
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
@@ -21,19 +25,22 @@ import {
 export async function getStaticPaths() {
   const people = await fetchPublicPeople();
   const affiliations = await fetchPublicAffiliationsByPerson(people.map(person => person.id));
+  const sections = await getProfileSectionBuildData();
 
   return people.map((person) => ({
     params: { slug: person.slug },
-    props: { person, affiliations: affiliations.get(person.id) ?? [] },
+    props: { person, affiliations: affiliations.get(person.id) ?? [], evidence: profileEvidence(sections.people.get(person.id) ?? emptyProfileSections(), 'people') },
   }));
 }
 
 interface Props {
   person: Person;
   affiliations: OrganizationAffiliation[];
+  evidence: Record<ProfileEvidenceKey, EvidenceSection>;
 }
 
-const { person, affiliations } = Astro.props;
+const { person, affiliations, evidence } = Astro.props;
+const history = (key: ProfileEvidenceKey) => profileHistoryHref('people', person.slug, key);
 const image = personImageUrl(person.image_path);
 
 function initials(name: string): string {
@@ -153,12 +160,14 @@ const contact = [
       )
     }
 
-    <OfficeTerms personId={person.id} />
-    <section data-person-legislation hidden aria-label="Legislative record"></section>
+    <OfficeTerms personId={person.id} published={evidence.offices} historyHref={history('offices')} />
+    <section data-person-legislation hidden={!evidence['legislative-votes'].rows.length} aria-label="Legislative record">
+      <h2>Legislative record</h2><ProfileEvidence section={evidence['legislative-votes']} historyHref={history('legislative-votes')} />
+    </section>
 
-    <PersonVotes personId={person.id} />
-    <PersonCandidacies personId={person.id} />
-    <ProfileArticles personId={person.id} />
+    <PersonVotes personId={person.id} published={evidence.votes} historyHref={history('votes')} />
+    <PersonCandidacies personId={person.id} published={evidence.candidacies} historyHref={history('candidacies')} />
+    <ProfileArticles personId={person.id} published={evidence.articles} historyHref={history('articles')} />
 
     <p class="org-back">
       <a href="/people/">← All people</a>

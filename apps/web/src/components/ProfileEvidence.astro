@@ -1,0 +1,25 @@
+---
+import { PROFILE_EVIDENCE_PAGE_SIZE, type EvidenceSection } from '../lib/profile-evidence';
+interface Props { section: EvidenceSection; historyHref?: string; page?: number }
+const { section, historyHref, page } = Astro.props;
+const start = page ? (page - 1) * PROFILE_EVIDENCE_PAGE_SIZE : 0;
+const rows = section.rows.slice(start, start + (page ? PROFILE_EVIDENCE_PAGE_SIZE : section.initial));
+---
+<div data-public-profile-evidence={section.key}>
+  <p class="status">Published public snapshot; coverage may be incomplete. Source dates and recorded choices do not establish current office, attendance or a complete voting record.</p>
+  {rows.length ? <>
+    <p>Showing {start + 1}–{start + rows.length} of {section.rows.length} recorded entries.</p>
+    <ol class="profile-evidence-list" start={start + 1}>
+      {rows.map(row => <li><h3 data-profile-evidence-title>{row.title}</h3>
+        {row.lines.filter(Boolean).map(line => <p>{line}</p>)}
+        <ul>{row.links.map(link => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+      </li>)}
+    </ol>
+  </> : <p>No public entries recorded in this published snapshot.</p>}
+</div>
+{!page && historyHref && section.rows.length > section.initial && <p data-public-profile-history><a href={historyHref}>Read all {section.rows.length} entries: {section.title}</a></p>}
+<style>
+  .profile-evidence-list { padding-left: 1.5rem; }
+  .profile-evidence-list > li { border-top: 1px solid var(--line); padding-block: 1rem; overflow-wrap: anywhere; }
+  .profile-evidence-list p { white-space: pre-line; margin-block: .5rem; }
+</style>

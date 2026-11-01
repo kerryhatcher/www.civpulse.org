@@ -1,3 +1,4 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { getSupabase } from '../lib/supabase';
 
@@ -58,6 +59,7 @@ export async function loadPersonVotes(personId: string): Promise<void> {
       const votes = (data ?? []) as PersonVote[];
       const page = votes.slice(0, 20);
       list.append(...page.map(renderVote)); offset += page.length;
+      replacePublishedEvidence(root);
       more.hidden = votes.length <= 20;
       status.textContent = offset ? '' : 'No meeting votes recorded here.';
       status.hidden = offset > 0;

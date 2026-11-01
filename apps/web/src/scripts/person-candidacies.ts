@@ -1,3 +1,4 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { CANDIDATE_STATUS_LABELS, electionHref, formatElectionDate } from '../lib/elections';
@@ -55,8 +56,9 @@ export async function loadPersonCandidacies(personId: string): Promise<void> {
       root.querySelector<HTMLElement>(`[data-${key}-candidacies-empty]`)!.hidden = selected.length > 0;
     }
     status.hidden = true;
+    replacePublishedEvidence(root);
     groups.hidden = false;
-    root.hidden = races.length === 0;
+    root.hidden = races.length === 0 && !root.querySelector('[data-public-profile-history]');
   } catch {
     status.textContent = 'Could not load candidacies. Please reload to try again.';
   }

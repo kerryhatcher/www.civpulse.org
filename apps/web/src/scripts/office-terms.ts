@@ -1,3 +1,4 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { loadPersonLegislation } from './legislation';
 import { historyLink } from '../lib/history';
@@ -53,7 +54,8 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
         return item;
       }));
     }
-    root.hidden = terms.length === 0;
+    root.hidden = terms.length === 0 && !root.querySelector('[data-public-profile-history]');
+    replacePublishedEvidence(root);
     status.hidden = true;
     groups.hidden = false;
   } catch {

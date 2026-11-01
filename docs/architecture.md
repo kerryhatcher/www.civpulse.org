@@ -40,6 +40,33 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Readable profile evidence
+
+Public person/organization slug templates project the existing anonymous
+`getProfileSectionBuildData()` export into readable office, candidacy, article,
+meeting-vote and legislative-choice evidence. Only discovered public owners get
+HTML; public person/election/article gates are retained. Meeting and legislative
+parent/relationship visibility remains enforced by the unchanged export RPCs.
+Organization profiles expose their public officeholders/articles. No privileged
+credential, schema change or server rendering is introduced.
+
+Each existing component receives an optional public fallback: ten initial office,
+candidacy/article records or twenty vote records. Larger sets link to bounded,
+crawlable `/<people|orgs>/<slug>/history/<section>/<page>/` pages of twenty records.
+These paths are self-canonical/indexable; they are distinct from the noindex
+`/history/` audit utility. Source precision and association roles are preserved;
+missing service ends are not current-office claims. Source/context links lead to
+public elections, meetings, bills, votes and original publishers.
+
+Successful component enhancement hides its own fallback after replacing live DOM.
+Pending/failing loads retain readable evidence; later pagination cannot restore
+and duplicate it. The anonymous browser still uses the published snapshot, while
+signed-in profiles and UUID viewers retain their existing live RPC gates.
+Legislative filters/grouped pagination are unchanged: static evidence lists
+individual nonattendance choices, while the interactive view groups by bill.
+Public history links remain available after enhancement. Rebuilds replace all
+profile/history HTML with the same public snapshot used by JSON assets.
+
 ## Readable map evidence
 
 Public `/maps/<slug>/` pages prerender layer descriptions, source attribution and
