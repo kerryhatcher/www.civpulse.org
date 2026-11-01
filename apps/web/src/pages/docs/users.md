@@ -64,6 +64,24 @@ The [Bibb County community hub](/counties/bibb/) brings together selected local
 maps, organizations, people, elections, and upcoming events. Use the section links
 to move around the page, open a district map, or follow an organization to its
 profile and calendar. Elections appear newest first and may include past elections.
+
+The [Bibb County overview](/counties/bibb/) includes **Research a local question**:
+[follow a Macon-Bibb government decision](/counties/bibb/government/) connects
+recorded bodies/people, district sources, agendas and meeting records;
+[research a Macon-Bibb election](/counties/bibb/elections/) connects dated election
+records, contests and candidate profiles with official ballot resources. Find the
+overview through **Browse → Bibb County & research guides** or the county picker.
+The guides work without JavaScript and identify coverage gaps. Their record
+previews are not a complete current roster, live schedule or personalized ballot.
+Use the linked official resources for current personal voting information.
+
+Two more Bibb guides cover [property-tax research](/counties/bibb/property-taxes/)
+and [districting/apportionment](/counties/bibb/districting/). The tax guide separates
+assessment/valuation and appeal resources from billing/payment, without calculating
+liability or replacing the instructions on a notice. The district guide distinguishes
+seat allocation from boundary changes and connects saved map versions to official
+plan sources. Electoral map features are not parcel or tax determinations, and
+neither guide establishes that a particular legal deadline or map applies to you.
 The hub is a curated starting point, not a complete county directory. Choose
 **All counties** in the header to browse without the county default.
 

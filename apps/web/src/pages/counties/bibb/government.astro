@@ -1,0 +1,42 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BibbGuideMaintenance from '../../../components/counties/BibbGuideMaintenance.astro';
+import { getBibbTopics, BIBB_TOPIC_RESOURCES as official } from '../../../lib/bibb-topic-hubs';
+import { formatEventWhen } from '../../../lib/calendars';
+const data = await getBibbTopics();
+---
+<Layout title="Macon-Bibb government: follow a local decision" description="Connect Macon-Bibb district maps, recorded public bodies and people, meeting records and official agendas to research a local government decision."
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Bibb County', href: '/counties/bibb/' }, { name: 'Following a local decision', href: '/counties/bibb/government/' }]}>
+  <main id="main">
+    <div class="page-intro"><h1>How do I follow a Macon-Bibb government decision?</h1><p>Find the responsible body, compare the source record, and follow the decision beyond a headline.</p></div>
+    <nav aria-label="Government research steps"><a href="#body">Find the body</a> · <a href="#district">Check the district</a> · <a href="#meeting">Read the meeting record</a></nav>
+    <section id="body" class="guide-section">
+      <h2>Start with the body that published the record</h2>
+      <p>A shared place name does not make every organization the county commission. Keep the body, office and subject together as you research. The <a href={official.commission}>official Macon-Bibb commission page</a> provides current commissioner contacts and links to its district lookup and meeting resources.</p>
+      <p>Civic Pulse has selected organization records below. Their recorded affiliations are useful research leads, not a complete or independently verified roster of current officials. If the commission or another body is missing here, use its official directory rather than guessing from a similarly named profile.</p>
+      {data.organizations.map(org => <article class="org-card"><h3><a href={`/orgs/${org.slug}/`}>{org.name}</a></h3>
+        <ul>{org.people.slice(0, 6).map(person => <li><a href={`/people/${person.slug}/`}>{person.name}</a> — {person.role}</li>)}</ul>
+        {!org.people.length && <p>No public person affiliations are recorded for this organization.</p>}
+        <a href={`/orgs/${org.slug}/`}>Full organization record and recorded people</a>
+      </article>)}
+      {!data.organizations.length && <p>No selected public organization records are available yet.</p>}
+    </section>
+    <section id="district" class="guide-section">
+      <h2>Connect a district to its source and official contacts</h2>
+      <p>Use a district map to inspect its recorded boundary, source check and plan/version notes. Then compare it with the official directory or district lookup linked from the commission page. A source map annotation may describe a past officeholder; it is not a current-service guarantee.</p>
+      <ul>{data.maps.filter(map => map.slug !== 'voting').map(map => <li><a href={`/maps/${map.slug}/#map-evidence`}>{map.name}: readable layers and source notes</a></li>)}</ul>
+      <p>Different boards can use different districts. Do not transfer a district assignment from one map to a different office or assume that every place shown has the same jurisdiction.</p>
+    </section>
+    <section id="meeting" class="guide-section">
+      <h2>Separate an agenda item from an action taken</h2>
+      <ol><li>Find the body and meeting date in the <a href={official.agendas}>official commission agenda/minutes portal</a>, linked by the county.</li><li>Read the agenda and supporting packet for the proposal, then the minutes or recording for what was discussed or decided. A title alone does not establish an outcome.</li><li>Compare any Civic Pulse vote or meeting summary with that source. Missing choices are unknown, not absences or opposition; imported histories are not complete participation denominators.</li></ol>
+      <h3>Recent dated meeting records from the selected organizations</h3>
+      {data.meetings.length ? <ul>{data.meetings.map(event => <li><a href={`/records/events/${event.id}/`}>{event.title}</a> — {formatEventWhen(event, 'America/New_York')} · {event.organization_name}</li>)}</ul> : <p>No public meeting records from these selected organizations have been added yet. This is a coverage gap, not a statement that they do not meet.</p>}
+      <p><a href="/calendar/">Browse the community calendar</a> · <a href="/records/events/page/1/">Read the public event/meeting archive</a> · <a href="/requests/">Explore published records requests</a></p>
+      <p>If the supporting material is not in the meeting record, check the source publisher and existing records requests. Preserve the record date, body and item title when following up so similarly named proposals are not confused.</p>
+    </section>
+    <p>Continue with <a href="/counties/bibb/elections/">election research</a>, <a href="/counties/bibb/property-taxes/">property tax questions</a> or <a href="/counties/bibb/districting/">districting and apportionment</a>. For geography and statistics, return to the <a href="/counties/bibb/">Bibb County overview</a>.</p>
+    <BibbGuideMaintenance />
+  </main>
+</Layout>
+<style>.guide-section { padding-block: 1.5rem; border-bottom: 1px solid var(--line); scroll-margin-top: 1rem; } p, ol { max-width: 75ch; } li { margin-block: .6rem; overflow-wrap: anywhere; } .org-card { margin-block: 1rem; }</style>
