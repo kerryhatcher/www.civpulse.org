@@ -21,7 +21,7 @@ Auth account provisioning/deletion, demotion, password resets, RLS changes and w
 | `get_event` | Read | Fetch one event (with calendar + organization) by id. |
 | `get_person` | Read | Fetch one person (with affiliations) by id. |
 | `get_election` | Read | Fetch one election (with contests and key dates) by id. |
-| `search_site` | Read | Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account. |
+| `search_site` | Read | Search civic records or official-source county demographic statistics. type=county_statistic searches 59 structured Census measures per Georgia county, returning numeric values, units, periods, source URLs, uncertainty and total_count; paginate with limit/offset. type=county_statistic_catalog discovers all county/FIPS codes, indicators, definitions and official datasets. Other types retain civic search and visibility. For advanced filters and admin statistic edits use tools advertised by the compact catalog. |
 | `search_calendars` | Read | Search or browse calendars with pagination. Use the returned id with get_calendar. |
 | `search_layers` | Read | Search or browse layers with pagination. Use the returned id with get_layer. |
 | `search_articles` | Read | Search or browse articles with pagination. Use the returned id with get_article. |

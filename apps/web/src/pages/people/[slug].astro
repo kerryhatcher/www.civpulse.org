@@ -75,6 +75,7 @@ const contact = [
   description={person.description ?? `${PERSON_KIND_LABELS[person.kind]}: ${person.full_name}.`}
 >
   <main id="main" data-profile-snapshot={await profileSectionUrl("people",person.id)}>
+    {person.slug.startsWith('open-ga-6111-fy') && <p><a href={`/finances/?dataset=payroll&year=${person.slug.match(/^open-ga-6111-fy(\d{4})-/)?.[1] ?? ''}&person=${person.id}`}>View this profile's school payroll source record</a></p>}
     <div class="org-header">
       {
         image ? (

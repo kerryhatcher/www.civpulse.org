@@ -1002,3 +1002,13 @@ verify timestamp conflict rejection, source/period/uncertainty preservation and
 live RPC updates. The static page changes only after a rebuild. Restore any
 synthetic local edit before the final build. Source suppression must never become
 zero. A missing observation must fail the build rather than hide an entire profile.
+
+### School finance verification
+
+Run the parser/MCP and rollback database tests in
+[school-finances.md](school-finances.md#release-and-verification), then check/build.
+Optional real-source tests use `FINANCE_SOURCE_DIR` and verify the FY2025 payroll
+and FY2024/FY2025 payment counts without production writes. Browser-test anonymous
+and signed-in filters, pagination, source details, person review labels/links,
+page CSV, unavailable years and mobile layout. Test feature DDL only locally or
+in a disposable preview; do not alter the shared local migration history.

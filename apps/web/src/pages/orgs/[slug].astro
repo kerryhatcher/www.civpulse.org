@@ -89,6 +89,7 @@ const contact = [
 
 <Layout title={org.name} description={org.description ?? `Contact details for ${org.name}.`}>
   <main id="main" data-profile-snapshot={await profileSectionUrl("organizations",org.id)}>
+    {org.slug === 'bibb-county-board-of-education' && <p><a href="/finances/">Search this organization's school payroll and payments</a></p>}
     <div class="org-header">
       {
         logo ? (

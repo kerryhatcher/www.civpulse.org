@@ -67,7 +67,7 @@
   },
   {
     "name": "search_site",
-    "description": "Search or browse ten civic types. mode=site (default) returns ranked site rows, includes past events, and supports limit/offset. mode=directory requires organization/person/map/election/event and returns the original directory rows/order; event filters require directory event mode. Directory mode has no offset. Visibility follows your account.",
+    "description": "Search civic types or structured official-source county data. type=county_statistic returns numeric observations with units, periods, provenance and uncertainty; type=county_statistic_catalog discovers the statistics catalog. mode=site (default) returns ranked site rows, includes past events, and supports limit/offset. mode=directory requires organization/person/map/election/event and returns the original directory rows/order; event filters require directory event mode. Directory mode has no offset. Visibility follows your account.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -89,7 +89,9 @@
                 "map",
                 "layer",
                 "calendar",
-                "event"
+                "event",
+                "county_statistic",
+                "county_statistic_catalog"
               ]
             },
             {
@@ -189,6 +191,279 @@
     "annotations": {
       "readOnlyHint": true,
       "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_county_statistic_catalog",
+    "description": "Discover structured Georgia county civic and demographic statistics. Returns all counties/FIPS/slugs, topics, indicators (units, definitions, headline positions), and official source datasets with URLs, retrieval dates and SHA-256 checksums. Start here before search_county_statistics; 13000 is the Georgia state comparison. Current profile has 59 measures per geography. More official sources/measures can be added by admins.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "search_county_statistics",
+    "description": "Search official-source county civic/demographic data by county name/FIPS, measure, topic, publisher, reference period or query text. Filter with county_fips, indicator_code or topic. Returns numeric values, units, availability, Georgia/county identity, periods, source URLs/checksums, numerator/denominator, ACS margins and SAIPE confidence intervals. Empty query browses; paginate until total_count is covered. Values are source-specific estimates, not personalized data. For Georgia comparisons query county_fips=13000 using the same indicator. Static downloads: /counties/<slug>/statistics.csv and statistics.json; live REST: county_statistic_records.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "default": "",
+          "type": "string",
+          "maxLength": 500
+        },
+        "county_fips": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^13\\d{3}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "indicator_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "topic": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limit": {
+          "default": 100,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "save_county_statistic",
+    "description": "Create or update a structured official-source county statistic (admin only). Resolve county, indicator and source from get_county_statistic_catalog first. Supply exact existing updated_at to update; null creates only and never overwrites. Preserve period, provenance, uncertainty and calculation inputs. Explicit unavailable/suppressed status requires null value; do not substitute zero or guess missing data. Updates mark the static website for rebuild; REST/MCP reads change immediately.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "county_fips": {
+          "type": "string",
+          "pattern": "^13\\d{3}$"
+        },
+        "indicator_code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "expected_updated_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "suppressed",
+            "unavailable"
+          ]
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "source_variables": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "numerator": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "margin_of_error": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lower_bound": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "upper_bound": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "confidence_level": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detail": {
+          "default": "",
+          "type": "string",
+          "maxLength": 4000
+        },
+        "components": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "county_fips",
+        "indicator_code",
+        "expected_updated_at",
+        "value",
+        "status",
+        "period",
+        "source_id",
+        "source_variables"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "save_county_statistic_source",
+    "description": "Create/update an official-source dataset catalog entry (admin only). Verify the original official source and exact file SHA-256 before saving. This metadata is returned by public API/MCP and static exports. Existing statistic rows retain their values; refresh them separately. Changes trigger a website rebuild.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "source_url": {
+          "type": "string",
+          "pattern": "^https:\\/\\/[^\\s]+$"
+        },
+        "retrieved_on": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "publisher",
+        "title",
+        "source_url",
+        "retrieved_on",
+        "sha256"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
     }
@@ -865,6 +1140,129 @@
     "annotations": {
       "readOnlyHint": false,
       "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "school_finances",
+    "description": "Bibb school payroll/payment records. operation.action=browse reads published releases with dataset/year/query/person filters, sort and pagination; source rows are not headcounts or invoices. Never add overlapping payroll and payment totals. All other actions require admin: begin registers the schema-v1 manifest; append accepts 1–500 immutable rows / 1 MiB with exact decimal strings and source row numbers; publish requires confirm_publication=true and expected_current_id (null initially), complete count and exact totals. It atomically replaces the current release and creates one public person per payroll source row, including repeated names, flagged for identity review. Never name-match existing people. review_person requires release_id, row_number, person_id, confirm_identity=true and sourced review_note; never merges people. withdraw hides the release and its generated profiles without reviving history. Retain original files in collector evidence. See docs/school-finances.md for precise contracts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "browse"
+                },
+                "dataset": {
+                  "default": "payments",
+                  "type": "string",
+                  "enum": [
+                    "payroll",
+                    "payments"
+                  ]
+                },
+                "year": {
+                  "default": null,
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 2015,
+                      "maximum": 2100
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "person_id": {
+                  "default": null,
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "query": {
+                  "default": "",
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "offset": {
+                  "default": 0,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100000
+                },
+                "limit": {
+                  "default": 50,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "sort": {
+                  "default": "amount",
+                  "type": "string",
+                  "enum": [
+                    "amount",
+                    "name"
+                  ]
+                }
+              },
+              "required": [
+                "action"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "begin",
+                    "append",
+                    "publish",
+                    "withdraw",
+                    "review_person"
+                  ]
+                },
+                "payload": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "action",
+                "payload"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
     }

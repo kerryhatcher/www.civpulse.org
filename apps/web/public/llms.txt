@@ -44,3 +44,6 @@ search_site(type=county_statistic, query=...). Compact catalogs also advertise
 get_county_statistic_catalog, search_county_statistics, and admin-only statistic
 and source save tools. Georgia comparison FIPS is 13000. Paginate until total_count
 is covered; preserve availability markers, definitions, periods and uncertainty.
+
+## School finances
+- [Bibb school finances](https://www.civpulse.org/finances/): Search published school payroll, travel and recipient payment summaries by fiscal year. Person profiles are separate per payroll source row and require identity review. Records are not unique headcounts or invoices; payroll and payment totals overlap.

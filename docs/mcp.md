@@ -600,3 +600,16 @@ Initial data covers the full 59-measure Bibb profile for 159 counties plus Georg
 with official Census population/age/race/housing, ACS, SAIPE, business and geography
 sources. Do not discard availability or uncertainty, mix reference periods, or
 sum overlapping categories. See [database and refresh workflow](backend.md#county-statistics).
+
+### School finances
+
+The `school_finances` tool with `operation.action=browse` reads published Bibb school payroll/payment summaries
+with dataset/year/name/title/person filters, amount/name sorting and bounded
+pagination. Its other actions require admin access for begin, append,
+publish, withdraw and review_person. Publication creates one employee source
+profile per payroll row, including repeated names, with identity-review flags.
+See [the import contract](school-finances.md) for precise schemas, retries and
+source-evidence requirements. Never infer a verified person identity from a name.
+
+School finances is v2-only (`/functions/v1/mcp/v2`); the 128-tool compatibility
+catalog stays unchanged. Refresh cached v2 discovery after deploying the bundle.

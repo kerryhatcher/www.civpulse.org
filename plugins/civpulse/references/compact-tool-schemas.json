@@ -1145,6 +1145,129 @@
     }
   },
   {
+    "name": "school_finances",
+    "description": "Bibb school payroll/payment records. operation.action=browse reads published releases with dataset/year/query/person filters, sort and pagination; source rows are not headcounts or invoices. Never add overlapping payroll and payment totals. All other actions require admin: begin registers the schema-v1 manifest; append accepts 1–500 immutable rows / 1 MiB with exact decimal strings and source row numbers; publish requires confirm_publication=true and expected_current_id (null initially), complete count and exact totals. It atomically replaces the current release and creates one public person per payroll source row, including repeated names, flagged for identity review. Never name-match existing people. review_person requires release_id, row_number, person_id, confirm_identity=true and sourced review_note; never merges people. withdraw hides the release and its generated profiles without reviving history. Retain original files in collector evidence. See docs/school-finances.md for precise contracts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "browse"
+                },
+                "dataset": {
+                  "default": "payments",
+                  "type": "string",
+                  "enum": [
+                    "payroll",
+                    "payments"
+                  ]
+                },
+                "year": {
+                  "default": null,
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 2015,
+                      "maximum": 2100
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "person_id": {
+                  "default": null,
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "query": {
+                  "default": "",
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "offset": {
+                  "default": 0,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100000
+                },
+                "limit": {
+                  "default": 50,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "sort": {
+                  "default": "amount",
+                  "type": "string",
+                  "enum": [
+                    "amount",
+                    "name"
+                  ]
+                }
+              },
+              "required": [
+                "action"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "begin",
+                    "append",
+                    "publish",
+                    "withdraw",
+                    "review_person"
+                  ]
+                },
+                "payload": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "action",
+                "payload"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "get_layer_geojson",
     "description": "Get stored layer geometry. Non-admin callers must provide a visible map containing this layer.",
     "inputSchema": {

@@ -30,6 +30,7 @@ const overviewStats = county.census.overviewCodes.map(code => county.census.stat
 <Layout title={`${county.name}, Georgia`} description={`Explore ${county.name}: Census demographics, local government, elections, community events, and maps on Civic Pulse.`}>
   <main id="main" class="county-page">
     <p><a href="/counties/">Explore all Georgia county hubs</a></p>
+    {county.fips === '13021' && <p><a href="/finances/">Explore Bibb school payroll and payments</a></p>}
     <div class="county-intro">
       <div>
         <h1>{county.name}, Georgia</h1>

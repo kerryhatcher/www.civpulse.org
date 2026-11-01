@@ -321,7 +321,7 @@
   },
   {
     "name": "search_site",
-    "description": "Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.",
+    "description": "Search civic records or official-source county demographic statistics. type=county_statistic searches 59 structured Census measures per Georgia county, returning numeric values, units, periods, source URLs, uncertainty and total_count; paginate with limit/offset. type=county_statistic_catalog discovers all county/FIPS codes, indicators, definitions and official datasets. Other types retain civic search and visibility. For advanced filters and admin statistic edits use tools advertised by the compact catalog.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -344,7 +344,9 @@
                 "map",
                 "layer",
                 "calendar",
-                "event"
+                "event",
+                "county_statistic",
+                "county_statistic_catalog"
               ]
             },
             {
