@@ -461,13 +461,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/us-house-districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/us-house-districts.geojson.gz",
         "attribution": "U.S. Census Bureau, TIGERweb"
       },
       "file": "us-house-districts.geojson.gz",
       "features": 14,
       "sha256": "b0b3df58e1ab7b776fdf507c9375f58e6488cf000d0edc9e03681a46321af62f",
-      "sourceUrl": "https://www.civpulse.org/data/us-house-districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/us-house-districts.geojson.gz"
     },
     {
       "id": "bf4ba084-86bb-5e0a-9670-a9dc9883a500",
@@ -1096,13 +1096,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/state-house-districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/state-house-districts.geojson.gz",
         "attribution": "U.S. Census Bureau, TIGERweb"
       },
       "file": "state-house-districts.geojson.gz",
       "features": 180,
       "sha256": "75c8ec9b422a4afca35af1dcae266227feb5cb0995a02bf77773e7abd3441e2b",
-      "sourceUrl": "https://www.civpulse.org/data/state-house-districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/state-house-districts.geojson.gz"
     },
     {
       "id": "ae07c325-380b-5ba0-b06b-5060fce09ad0",
@@ -1359,13 +1359,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/state-senate-districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/state-senate-districts.geojson.gz",
         "attribution": "U.S. Census Bureau, TIGERweb"
       },
       "file": "state-senate-districts.geojson.gz",
       "features": 56,
       "sha256": "1e6d0c5853f6e49262049a51c4ca4f11c8325aed3043ae7438ff3b6f2396b594",
-      "sourceUrl": "https://www.civpulse.org/data/state-senate-districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/state-senate-districts.geojson.gz"
     },
     {
       "id": "a3ba3def-81ef-5a2d-950c-b0573a78d30f",
@@ -1469,13 +1469,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/psc-districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/psc-districts.geojson.gz",
         "attribution": "Georgia General Assembly (SB 472 / PSC-2022); U.S. Census Bureau (county GIS)"
       },
       "file": "psc-districts.geojson.gz",
       "features": 5,
       "sha256": "f62ef11bbb9cdb62b3e2475393e0a4e4d9ddbda0e6e8df7675aed2fcf5428c83",
-      "sourceUrl": "https://www.civpulse.org/data/psc-districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/psc-districts.geojson.gz"
     },
     {
       "id": "e04603f0-2718-54a1-98af-38cc2aec4b39",
@@ -1567,13 +1567,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/georgia-statewide.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/georgia-statewide.geojson.gz",
         "attribution": "U.S. Census Bureau, TIGERweb"
       },
       "file": "georgia-statewide.geojson.gz",
       "features": 1,
       "sha256": "1d598f1bc68a8a7d27c2b122206f9d640cf0cf76e69dac2a906582149dcf0b8c",
-      "sourceUrl": "https://www.civpulse.org/data/georgia-statewide.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/georgia-statewide.geojson.gz"
     },
     {
       "id": "a7a0ffb5-8eab-5ec8-bd3c-002f26e8cbef",
@@ -1674,13 +1674,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/rapid-service-area.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/rapid-service-area.geojson.gz",
         "attribution": "Macon-Bibb County Transit Authority — Rapid Transit"
       },
       "file": "rapid-service-area.geojson.gz",
       "features": 4,
       "sha256": "a64b4fdc0c803b5ce69d59f148973a81069941265189ea1c8926577dc7c6a8f3",
-      "sourceUrl": "https://www.civpulse.org/data/rapid-service-area.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/rapid-service-area.geojson.gz"
     },
     {
       "id": "d5357fef-30b4-5c5e-9431-0280d25ca302",
@@ -1774,13 +1774,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-elementary.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-elementary.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-elementary.geojson.gz",
       "features": 22,
       "sha256": "852b18ef85b7be5f89fe3207ae4c4e7ddf2a69e1fa18482034fdca814ba7d78d",
-      "sourceUrl": "https://www.civpulse.org/data/schools-elementary.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-elementary.geojson.gz"
     },
     {
       "id": "7a2e5fea-95f2-5ded-845c-a6a2b8f9907f",
@@ -1874,13 +1874,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-middle.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-middle.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-middle.geojson.gz",
       "features": 6,
       "sha256": "b91de86f730c08cb0025be43a288cf938cc15c472ef3a9c62ab040a9f06a7c53",
-      "sourceUrl": "https://www.civpulse.org/data/schools-middle.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-middle.geojson.gz"
     },
     {
       "id": "1ea0813f-2d53-5e9e-8298-d4af44ef762f",
@@ -1974,13 +1974,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-high.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-high.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-high.geojson.gz",
       "features": 6,
       "sha256": "d44c1b50aa2c2bf9a1cebeb82e68e65c929cb58ce3a5ff32f353d923ac31ea5d",
-      "sourceUrl": "https://www.civpulse.org/data/schools-high.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-high.geojson.gz"
     },
     {
       "id": "27ec68f9-529f-534c-8ea3-9f1f3c0f62e5",
@@ -2074,13 +2074,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-pre-k.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-pre-k.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-pre-k.geojson.gz",
       "features": 1,
       "sha256": "febaa75752936425b34f807df07b53c1b19a08390875f81f4509facddf3ba380",
-      "sourceUrl": "https://www.civpulse.org/data/schools-pre-k.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-pre-k.geojson.gz"
     },
     {
       "id": "918a6166-d9bf-59bb-b403-d48e55bd40e0",
@@ -2174,13 +2174,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-administration.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-administration.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-administration.geojson.gz",
       "features": 7,
       "sha256": "ee0af53e5a8c110ce7e6654a9b1e65f5c99e1fb3c51d8ed511bc28873ceaf82a",
-      "sourceUrl": "https://www.civpulse.org/data/schools-administration.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-administration.geojson.gz"
     },
     {
       "id": "1d701a1d-4e3a-51b1-837a-b47a4e78b8cf",
@@ -2274,13 +2274,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/schools-specialty.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/schools-specialty.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "schools-specialty.geojson.gz",
       "features": 1,
       "sha256": "07d62c0b350d99b918b9f07bed4b1bb882476de60b61ef6bbe9fe9fa506b0617",
-      "sourceUrl": "https://www.civpulse.org/data/schools-specialty.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/schools-specialty.geojson.gz"
     },
     {
       "id": "b9315dc9-de58-5151-b5b4-06e4b60f6ca9",
@@ -2438,14 +2438,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/school-zones-elementary.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/school-zones-elementary.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission",
         "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
       },
       "file": "school-zones-elementary.import.geojson.gz",
       "features": 23,
       "sha256": "a9feaab4a3765ee50ba826988acd6a953297bd4684a1eb15986c68d14ca08997",
-      "sourceUrl": "https://www.civpulse.org/data/school-zones-elementary.geojson",
+      "sourceUrl": "https://files.civpulse.org/maps/school-zones-elementary.geojson.gz",
       "originalFile": "school-zones-elementary.geojson.gz",
       "originalSha256": "235080b70b452d65e2796b29cc30ec004d266b25b8f5e68e552e2fec38fd80bb",
       "repairs": [
@@ -2564,14 +2564,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/school-zones-middle.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/school-zones-middle.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission",
         "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
       },
       "file": "school-zones-middle.geojson.gz",
       "features": 6,
       "sha256": "da77f9f398c30e90dd85146609441089ae49042dac4270f46c46b41d7b434506",
-      "sourceUrl": "https://www.civpulse.org/data/school-zones-middle.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/school-zones-middle.geojson.gz"
     },
     {
       "id": "1d93b577-259f-5d2c-b099-fbe1eaf36352",
@@ -2678,14 +2678,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/school-zones-high.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/school-zones-high.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission",
         "note": "Attendance boundaries are labeled 2025–26 in the source. Confirm current enrollment assignments with BCSD."
       },
       "file": "school-zones-high.geojson.gz",
       "features": 6,
       "sha256": "e6c363d0e3e788116033cc222654a90029d02151685cfabbe82a5042100b2fde",
-      "sourceUrl": "https://www.civpulse.org/data/school-zones-high.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/school-zones-high.geojson.gz"
     },
     {
       "id": "4a7f6fd5-e497-52c0-a6ce-5c76826bb376",
@@ -2792,13 +2792,13 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/school-board-districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/school-board-districts.geojson.gz",
         "attribution": "Bibb County School District; Middle Georgia Regional Commission"
       },
       "file": "school-board-districts.geojson.gz",
       "features": 6,
       "sha256": "fee8e9591bb657873e33df62b6a614d83097345c8b64b70ebc6c474877e9bbc8",
-      "sourceUrl": "https://www.civpulse.org/data/school-board-districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/school-board-districts.geojson.gz"
     },
     {
       "id": "d0f9eb2a-e029-5611-ac8c-dac8e5382567",
@@ -2880,14 +2880,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/transit-routes.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/transit-routes.geojson.gz",
         "attribution": "Macon-Bibb County Transit Authority",
         "note": "Schedule snapshot: June 7, 2026 – October 31, 2026. No live arrivals. Confirm current service with MBCTA."
       },
       "file": "transit-routes.geojson.gz",
       "features": 10,
       "sha256": "1ccaef8975dd4f09c575b68b765936fe9015351c0877a0c1a27fb3a423895d8b",
-      "sourceUrl": "https://www.civpulse.org/data/transit-routes.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/transit-routes.geojson.gz"
     },
     {
       "id": "7c8b61d2-5e8b-5bd3-91ba-2f92eed8dbc6",
@@ -2977,14 +2977,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/transit-stops.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/transit-stops.geojson.gz",
         "attribution": "Macon-Bibb County Transit Authority",
         "note": "Schedule snapshot: June 7, 2026 – October 31, 2026. No live arrivals. Confirm current service with MBCTA."
       },
       "file": "transit-stops.geojson.gz",
       "features": 854,
       "sha256": "fe07e52cd330b5c3720581f7649be88187c5e1ed5cdd7394b6169fa6b616426d",
-      "sourceUrl": "https://www.civpulse.org/data/transit-stops.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/transit-stops.geojson.gz"
     },
     {
       "id": "a5d90eb6-f31f-5c20-933e-5adc04a04ea0",
@@ -3078,14 +3078,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/recreation-centers.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/recreation-centers.geojson.gz",
         "attribution": "Macon-Bibb County Government Recreation Department",
         "note": "Published hours are a saved snapshot. Confirm hours before visiting. Map points are approximate street-address locations."
       },
       "file": "recreation-centers.geojson.gz",
       "features": 11,
       "sha256": "af68f4c2022c8700797b16cd31133bd255b7d023c83c52d4f4922aadb22c77ac",
-      "sourceUrl": "https://www.civpulse.org/data/recreation-centers.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/recreation-centers.geojson.gz"
     },
     {
       "id": "86019056-a535-5229-8c03-f15bc854b856",
@@ -3282,14 +3282,14 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/libraries.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/libraries.geojson.gz",
         "attribution": "Macon-Bibb County Government IT GIS",
         "note": "MGRLS hours checked October 15, 2026. Confirm holiday hours before visiting. Library WOW is a mobile service without a fixed marker."
       },
       "file": "libraries.geojson.gz",
       "features": 18,
       "sha256": "beb5b6c73c01e3c75832f02b9239d28fa25faaaefa5a41151c99b74be660f475",
-      "sourceUrl": "https://www.civpulse.org/data/libraries.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/libraries.geojson.gz"
     },
     {
       "id": "9b2fe500-3f07-5f7b-ae44-65c0954ddcee",
@@ -3410,7 +3410,7 @@
           }
         ],
         "renderer": "fields",
-        "sourceUrl": "https://www.civpulse.org/data/commission_districts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/commission-districts.geojson.gz",
         "attribution": "Macon-Bibb County Government IT GIS",
         "titleSuffix": "repname1",
         "note": "Macon-Bibb County Government IT GIS · October 15, 2026 snapshot. Confirm current contact details with the county."
@@ -3418,7 +3418,7 @@
       "file": "commission-districts.geojson.gz",
       "features": 9,
       "sha256": "76ee330bc6fba9ac934e238a94e7d841ea2a36b0150d7fe631a7bab232cfd168",
-      "sourceUrl": "https://www.civpulse.org/data/commission_districts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/commission-districts.geojson.gz"
     },
     {
       "id": "09cb594e-bc60-56e6-a66d-bb3fa8884eb3",
@@ -4001,14 +4001,14 @@
           }
         ],
         "renderer": "events",
-        "sourceUrl": "https://www.civpulse.org/data/calendar-events.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/event-locations.geojson.gz",
         "attribution": "Saved public community calendars",
         "note": "Events grouped at approximate venue locations. Confirm the meeting point with the organizer."
       },
       "file": "event-locations.geojson.gz",
       "features": 34,
       "sha256": "da0805255d2ce671a723d4762cf42d8dfc4ae4e0eeb274eaa98b67bf725d09c7",
-      "sourceUrl": "https://www.civpulse.org/data/calendar-events.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/event-locations.geojson.gz"
     },
     {
       "id": "83ca0253-930a-5e9e-87bf-c846f0287c0d",
@@ -4807,14 +4807,14 @@
           }
         ],
         "renderer": "polling",
-        "sourceUrl": "https://www.civpulse.org/data/polling_places.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/polling-places.geojson.gz",
         "attribution": "Macon-Bibb County Government IT GIS",
         "titleSuffix": "pollingid"
       },
       "file": "polling-places.geojson.gz",
       "features": 34,
       "sha256": "2a6a873efc5fd0442a590939eca86027b1783011ca72513aa1b6fecbc4e2e25e",
-      "sourceUrl": "https://www.civpulse.org/data/polling_places.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/polling-places.geojson.gz"
     },
     {
       "id": "507659a2-299d-544c-a62f-d52922717732",
@@ -5103,14 +5103,14 @@
           }
         ],
         "renderer": "precincts",
-        "sourceUrl": "https://www.civpulse.org/data/voting_precincts.geojson",
+        "sourceUrl": "https://files.civpulse.org/maps/voting-precincts.geojson.gz",
         "attribution": "Macon-Bibb County Government IT GIS",
         "titleSuffix": "precinctid"
       },
       "file": "voting-precincts.geojson.gz",
       "features": 31,
       "sha256": "a904c8b56d0615518e796abbeabd14fb832d69c54e393e263e701e85afa082c9",
-      "sourceUrl": "https://www.civpulse.org/data/voting_precincts.geojson"
+      "sourceUrl": "https://files.civpulse.org/maps/voting-precincts.geojson.gz"
     }
   ]
 }
