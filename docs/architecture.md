@@ -40,6 +40,50 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Bibb resident-question pilot guides
+
+The site already has 159 county overview hubs, including substantial Bibb
+geography/statistics and selected local links. The pilot adds four guides:
+`/counties/bibb/government/` (following a local decision),
+`/counties/bibb/elections/` (researching an election record),
+`/counties/bibb/property-taxes/` (assessment versus billing research) and
+`/counties/bibb/districting/` (apportionment/boundary research). They answer distinct
+questions rather than duplicating the county overview or generating thin locality
+variants. The Bibb overview and shared Browse menu provide discovery; guides have
+visible breadcrumbs, cross-links, self-canonicals and sitemap entries.
+
+`bibb-topic-hubs.ts` reuses existing anonymous snapshots and explicit organization/
+map curation. It projects public affiliations/candidate profiles and requires
+public event/calendar/election parents. Election previews follow the Bibb elections
+organization relationship, not a person's inferred residence or ballot eligibility.
+Up to three dated elections/six contests per election, six selected-organization
+meetings and nine saved dates are displayed with links to fuller public records.
+Missing expected election detail fails publication. No schema, RLS or privileged
+read is added; signing in does not enrich these static guides.
+
+Official resource purposes are supported by the [county commission page](https://www.maconbibb.us/commissioners/),
+[county elections page](https://www.maconbibb.us/board-of-elections/),
+[Georgia.gov sample-ballot guide](https://georgia.gov/view-sample-ballot) and
+[SOS election calendar](https://sos.ga.gov/page/election-calendar-and-events).
+The fixed November 1, 2026 linking-page review date is editorial evidence, not a
+build/verification timestamp. Direct agenda-portal/MVP fetches were blocked, so
+their destinations are confirmed through official parent links; no service
+availability or personalized voter result is asserted. The editor publishing a
+guide change owns review under the admin guide's maintenance process. Known
+roster/import gaps and record dates remain visible; no named maintainer, officeholder
+assignment, voting hours or eligibility advice is invented.
+
+Property-tax roles and destinations come from the official Bibb Assessors,
+[Tax Commissioner](https://www.maconbibbtax.us/property.html) and
+[DOR county facts](https://dor.georgia.gov/county-property-tax-facts-bibb), with no
+parcel/payment import or personalized tax/appeal advice. The payment service's
+verification challenge is not bypassed. District terminology uses
+[Census apportionment](https://www.census.gov/topics/public-sector/congressional-apportionment/about.html)
+and [Georgia Legislature resources](https://www.legis.ga.gov/joint-office/reapportionment).
+Saved maps remain source-backed snapshots, not assertions about legal validity,
+personal voting assignments or cadastral/tax boundaries. No rates, statutory
+deadlines, pending litigation outcomes or named officeholders are hardcoded.
+
 ## Record provenance and date semantics
 
 The provenance audit found these existing public facts; no schema was added:

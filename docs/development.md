@@ -52,6 +52,22 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Bibb topic guides
+
+Run `bun test scripts/tests/bibb-topic-hubs.test.ts`, check/build and
+`BIBB_TOPICS_TEST_DIST=apps/web/dist bun test scripts/tests/bibb-topic-hubs.test.ts`.
+Projection coverage checks public parents/candidate/affiliation gates, explicit
+geography, source order, bounded previews and missing-data cases. Built coverage
+checks distinct titles, canonicals/indexability, sitemap discovery, contextual
+links and official-resource URLs.
+
+At desktop/mobile widths, enter through Bibb's county overview with JavaScript
+disabled, follow each question guide and a contextual record/map, and return
+through breadcrumbs. With JavaScript, verify Browse discovery and an actual local
+admin session produce the same public guide content with no console errors or
+overflow. No production content edits are needed. The official linking-page
+review is manual and dated: do not claim it refreshes automatically during builds.
+
 ### Record provenance
 
 Run `bun test scripts/tests/record-provenance.test.ts scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts`,

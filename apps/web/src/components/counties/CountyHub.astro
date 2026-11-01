@@ -48,6 +48,14 @@ const overviewStats = county.census.overviewCodes.map(code => county.census.stat
     </div>
 
     <p><a href="/statistics/">Search county statistics</a> · <a href={`/counties/${county.slug}/statistics.json`}>Download JSON / API snapshot</a></p>
+    {county.fips === '13021' && <section class="county-section" aria-labelledby="bibb-guides-title">
+      <h2 id="bibb-guides-title">Research a local question</h2>
+      <p>Go beyond a directory: connect a district or record to its original source and the next research step.</p>
+      <ul><li><a href="/counties/bibb/government/">How do I follow a Macon-Bibb government decision?</a> — bodies, recorded people, district sources, agendas and meeting records.</li>
+        <li><a href="/counties/bibb/elections/">How do I research a Macon-Bibb election?</a> — recorded contests and dates, geographic scope and official ballot resources.</li>
+        <li><a href="/counties/bibb/property-taxes/">Where do I research a property tax question?</a> — assessment records, valuation/appeal resources and billing roles.</li>
+        <li><a href="/counties/bibb/districting/">How do I research districting and apportionment?</a> — seat allocation, boundary versions and official plan sources.</li></ul>
+    </section>}
     <nav class="county-sections" aria-label={`${county.name} sections`}>
       <a href="#explore">Maps & places</a><a href="#demographics">Demographics</a>
       <a href="#government">Government & people</a><a href="#elections">Elections</a><a href="#events">Events & meetings</a>

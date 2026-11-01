@@ -8,7 +8,50 @@ Admin pages follow your browser or operating system’s light/dark appearance
 setting, just like the public site. Changing appearance does not change access
 or published content.
 
-### Source and refresh conventions
+## Civic topic guide maintenance
+
+The Bibb pilot adds four resident-question guides under the existing county hub:
+[following a government decision](/counties/bibb/government/),
+[researching an election](/counties/bibb/elections/),
+[property tax research](/counties/bibb/property-taxes/) and
+[districting/apportionment](/counties/bibb/districting/). Do not clone these into
+locality variants without distinct questions, public coverage and reviewed local
+sources. The county overview remains the broad geographic/statistical entry.
+
+The editor publishing a guide change owns its source review. This is a workflow
+responsibility, not a new permission role or an assignment to a named person.
+Before publication, review the official linking pages, linked resource purpose,
+geographic scope and dated records. Review again when an official notice changes,
+a correction is reported, or curation is expanded. Keep a source-review note in
+the PR and update `BIBB_TOPIC_LINK_REVIEW` only after that review, never as a build
+timestamp or automatic whole-record verification date.
+
+The initial official linking-page review was November 1, 2026. County commission
+and elections pages, Georgia.gov's sample-ballot guide and the SOS calendar were
+checked. Direct automated portal/My Voter Page fetches returned access errors;
+their links/purposes were confirmed from the official parent pages, not from
+accessing personal voter information. No voting hours, eligibility determination
+or current officeholder roster is copied into these guides.
+
+The expanded tax/districting source review uses the Bibb Assessors' notice and
+appeal materials, Tax Commissioner property/FAQ pages, DOR's Bibb facts, Census
+apportionment explanation and Georgia Legislature's reapportionment resources.
+The payment destination presents a verification challenge; its purpose/link was
+confirmed on the Tax Commissioner's site. The legislature's office landing page
+is application-rendered; its official process/resource PDFs provide background,
+not a claim that any plan is currently effective. Do not copy rates, appeal/payment
+deadlines, exemption determinations or litigation outcomes into the guides without
+a separate source review. No parcel/payment dataset or tax calculation is supplied.
+
+Public organizations, maps, affiliations, elections and calendar records supply
+the guide previews at build time. Fix source records first, then publish. Record
+dates may be past or future; they are not a live schedule. The local commission
+roster/meeting coverage is incomplete, so retain the official-directory link and
+explicit gap language. Do not match officials by name or infer a personalized
+ballot from imported contests. The publishing editor must verify that new links
+resolve and that private/unlisted records remain absent, including after sign-in.
+
+## Source and refresh conventions
 
 Cite material biography claims with Markdown links in the person's description,
 including reference-style citations if useful. Identify which claim a source
