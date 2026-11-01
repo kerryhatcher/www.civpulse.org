@@ -74,8 +74,8 @@ begin
     end if;
    end loop;
   elsif p_action='withdraw' then
-   update public.people set visibility='unlisted' where id in (select person_id from public.school_finance_rows where release_id=r.id and person_is_stub);
-   delete from public.person_organizations where organization_id=r.organization_id and person_id in (select person_id from public.school_finance_rows where release_id=r.id and person_is_stub); 
+   update public.people set visibility='unlisted' where id in (select person_id from public.school_finance_rows where release_id=r.id and person_is_stub) and not exists(select 1 from public.school_finance_rows shared join public.school_finance_releases sr on sr.id=shared.release_id left join public.school_finance_recipients payee on payee.id=shared.recipient_id where (shared.person_id=public.people.id or payee.person_id=public.people.id) and sr.status='published' and sr.id<>r.id);
+   delete from public.person_organizations where organization_id=r.organization_id and person_id in (select person_id from public.school_finance_rows where release_id=r.id and person_is_stub) and not exists(select 1 from public.school_finance_rows shared join public.school_finance_releases sr on sr.id=shared.release_id where shared.person_id=public.person_organizations.person_id and sr.organization_id=public.person_organizations.organization_id and sr.status='published' and sr.id<>r.id); 
    update public.school_finance_releases set status='withdrawn' where id=r.id returning * into r;
   elsif r.status='published' then
    null; -- Exact retry after an uncertain publication response.
@@ -108,7 +108,7 @@ begin
     select s.person_id,r.organization_id,'Payroll record FY'||r.fiscal_year||' (identity needs review)'
     from public.school_finance_rows s where s.release_id=r.id and s.person_is_stub;
    end if;
-   update public.people set description=description||' This source release has been superseded; consult the current finance dataset.' where id in (select person_id from public.school_finance_rows where release_id=old.id and person_is_stub);
+   update public.people set description=description||' This source release has been superseded; consult the current finance dataset.' where id in (select person_id from public.school_finance_rows where release_id=old.id and person_is_stub) and not exists(select 1 from public.school_finance_rows shared where shared.person_id=public.people.id and shared.release_id=r.id);
    update public.school_finance_releases set status='superseded' where id=old.id;
    update public.school_finance_releases set status='published',published_at=now(),supersedes=old.id where id=r.id returning * into r;
   end if;
