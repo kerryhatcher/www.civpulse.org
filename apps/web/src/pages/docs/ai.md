@@ -71,6 +71,25 @@ Add a remote HTTP server named `civpulse`, use the server URL above, and choose 
 
 Finish the client's browser authorization flow before calling tools. The configuration contains no credentials. Clients that only accept a static API key cannot complete this OAuth setup without an appropriate integration.
 
+## Connect in Claude Code
+
+The repository includes a Claude Code plugin that connects to the compact `/mcp/v2` endpoint and adds skills, agents and a status command. Inside Claude Code, add the marketplace and install the plugin:
+
+```text
+/plugin marketplace add kerryhatcher/www.civpulse.org
+/plugin install civpulse@civpulse
+```
+
+Run `/mcp`, choose `civpulse`, and finish the browser sign-in on civpulse.org, then run `/civpulse:status` to see which account and access level you are using. Without the plugin, `claude mcp add --transport http civpulse https://api.civpulse.org/functions/v1/mcp/v2` connects the tools alone.
+
+Ask normally, for example "which candidates are running for Bibb County Commission?" or, as an administrator, "update the phone number on this organization". The plugin provides:
+
+- a `civic-data-model` skill explaining the record types, visibility and when edits reach the public site;
+- research, editing, mapping, results and user-administration skills;
+- a read-only `civic-researcher` agent, a `civic-editor` agent that cannot delete records, and a `civic-results-transcriber` agent that does a dry run before saving.
+
+Regular accounts can read public content. Administrators can also read private content and make changes, which are live in the database immediately but appear on the public website after the next rebuild. Revoke access any time under [Account → Connected apps](https://www.civpulse.org/account/).
+
 ## Plugins and source repositories
 
 ### OpenAI, ChatGPT, and Codex

@@ -1,0 +1,14 @@
+{
+  "name": "civpulse",
+  "owner": {
+    "name": "Kerry Hatcher"
+  },
+  "description": "Claude Code plugins for working with Civic Pulse data.",
+  "plugins": [
+    {
+      "name": "civpulse",
+      "source": "./plugins/civpulse-claude",
+      "description": "Search and manage Civic Pulse data: MCP server, skills and agents for civic research, editing, mapping and election results."
+    }
+  ]
+}

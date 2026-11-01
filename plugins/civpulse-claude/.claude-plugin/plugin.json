@@ -1,0 +1,12 @@
+{
+  "name": "civpulse",
+  "version": "1.0.0",
+  "description": "Search and manage Civic Pulse data from Claude Code: remote MCP server, research/editing/mapping/results skills, and focused agents.",
+  "author": {
+    "name": "Kerry Hatcher"
+  },
+  "repository": "https://github.com/kerryhatcher/www.civpulse.org",
+  "homepage": "https://new.civpulse.org",
+  "license": "MIT",
+  "keywords": ["civic", "elections", "maps", "community", "mcp"]
+}

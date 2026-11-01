@@ -39,6 +39,8 @@
     "check:pins": "bun run scripts/check-action-pins.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "plugin:build": "bun run scripts/build-plugin.mjs",
+    "plugin:claude:sync": "bun run scripts/build-claude-plugin.mjs",
+    "plugin:claude:check": "bun run scripts/build-claude-plugin.mjs --check",
     "media:check": "bun run --cwd apps/media check",
     "media:test": "bun run --cwd apps/media test",
     "media:deploy": "bun run --cwd apps/media deploy",

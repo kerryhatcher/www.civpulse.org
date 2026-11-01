@@ -14,6 +14,7 @@ supabase/         Postgres migrations and local Supabase configuration
 scripts/          Dev orchestration (scripts/dev.mjs) and local seed helpers
 docs/             Architecture, backend, and development notes
 plugins/civpulse/ Portable Codex/ChatGPT plugin, skills and MCP configuration
+plugins/civpulse-claude/ Claude Code plugin (MCP, skills, agents); marketplace in .claude-plugin/
 pi-astro/         Pi package: Astro Docs MCP extension + Astro skills
 package.json      Workspace root and task shortcuts
 ```
@@ -132,5 +133,6 @@ See [pi-astro/README.md](pi-astro/README.md).
 
 [Plugin source and connection instructions](plugins/civpulse/README.md) include
 research, editing and mapping skills. Run `bun run plugin:build` to generate and
-validate the portable archive. See [MCP documentation](docs/mcp.md) for OAuth,
+validate the portable archive. For Claude Code, see the
+[Claude Code plugin](plugins/civpulse-claude/README.md) (`bun run plugin:claude:check`). See [MCP documentation](docs/mcp.md) for OAuth,
 permissions, deployment and the full integration test.
