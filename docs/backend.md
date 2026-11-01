@@ -1774,3 +1774,12 @@ terms before invoking the gated office-history reader in the static profile
 export. Imported payroll/payee profiles without terms cannot contribute rows;
 excluding them avoids timeouts as person counts grow. Anonymous-only execution,
 visibility rules, output fields, ordering and pagination remain unchanged.
+
+Migration `20261125001400` similarly prefilters person/article,
+organization/article and person/candidacy exports with indexed `EXISTS` checks
+for public related records. `NOT MATERIALIZED` lets PostgreSQL retain ordered
+first-page early stopping while avoiding gated-reader calls for unrelated owners.
+The existing readers still define each payload and visibility rule; owner/ordinal
+ordering, bounded pagination, anonymous-only execution and API timeouts are
+unchanged. No new indexes or direct-reader grants are needed. This append-only
+migration must reach GitHub main before production application.

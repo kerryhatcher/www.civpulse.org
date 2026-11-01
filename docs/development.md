@@ -1204,3 +1204,32 @@ Organization profile path generation uses `fetchPublicPeopleByOrganization` to
 load one people/affiliation snapshot per route request, including development.
 Do not call the single-organization reader once for every stub: in development
 it intentionally reloads data and thousands of concurrent snapshots exhaust memory.
+
+### Sparse related-profile export verification
+
+Run `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-related-export-db.test.ts`.
+The loopback-only test applies old/new function definitions inside a rolled-back
+transaction, compares every exported article/candidacy row and ordinal, checks
+visibility, unchanged direct readers, anonymous-only execution and 500-row page
+boundaries with a dense 650-record owner. It also verifies that reader calls do
+not exceed eligible owners under a three-second statement limit. It does not
+apply migrations or change migration history. Set `PROFILE_EXPORT_PLAN_DIR` to a
+local directory to retain `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` plans and RPC
+timings; the integration workflow runs this regression too.
+
+A local PostgreSQL 17.11 run added 7,000 unrelated public people, 5,000 unrelated
+organizations, 100 related owners of each type and dense article/candidacy owners
+to the development seed. First/second 500-row page measurements were:
+
+| Section | RPC ms before → after | Gated-reader calls before → after |
+| --- | --- | --- |
+| Person articles | 37.59/47.51 → 6.43/10.31 | 2916/3457 → 82/104 |
+| Organization articles | 40.67/50.78 → 14.90/16.65 | 2166/2779 → 118/118 |
+| Candidacies | 92.03/111.40 → 13.74/15.15 | 3467/4393 → 104/104 |
+
+These are single local synthetic runs, not production latency estimates. UUID
+ordering and cache state affect timing and early stopping. Explicit CTE
+materialization was rejected because it slowed a dense first organization page;
+the inline eligibility checks retain planner freedom. Release the migration
+through main before production application; never raise API timeouts to mask an
+export regression.
