@@ -59,7 +59,7 @@ client gets the same supported read/write permissions as the user's account.
 ## Tools
 
 The compatibility endpoint exposes **128 tools**. The opt-in v2 catalog exposes
-**66 tools**, consolidating common searches, getters, create/update pairs,
+**70 tools**, consolidating common searches, getters, create/update pairs,
 relationship writes and related reads without removing capabilities. See
 [Compact catalog v2](#compact-catalog-v2), the generated [tool guide](../plugins/civpulse/references/tools.md)
 and [JSON schemas](../plugins/civpulse/references/tool-schemas.json) for every operation.
@@ -558,3 +558,29 @@ and compact MCP discovery expose all six actions, match the packaged schemas,
 retain strict branch inputs and defaults, and dispatch authenticated turnout
 reads through the existing admin guard. These are protocol tests, not a claim
 that a separate production `/mcp/v2` connection was exercised.
+
+## Structured county civic and demographic statistics
+
+Both catalogs retain the existing public/auth permissions and support two new
+`search_site` types: `county_statistic_catalog` discovers counties/FIPS, topics,
+indicator definitions/units and official source datasets; `county_statistic`
+searches observations and returns `{results,total_count,limit,offset}`. Use county
+names, measure names/codes, reference periods and official publisher terms in the
+query. Read all pages before claiming a complete inventory. Each observation
+includes its numeric value, unit, period, availability, official source URL,
+checksum and retrieval date, count/calculation inputs, ACS margin and/or SAIPE
+interval. Georgia comparison FIPS is 13000. Original civic search/get types keep
+their old payloads and visibility gates. The original endpoint stays at 128 tools.
+
+The compact `/mcp/v2` catalog has 70 tools and adds
+`get_county_statistic_catalog`, `search_county_statistics` (county/indicator/topic
+filters), `save_county_statistic`, and `save_county_statistic_source`. Saves require
+an administrator; observation updates require the loaded `expected_updated_at`,
+while null creates only. Public REST reads and writes under the same RLS remain
+available independently of catalog choice. Static county HTML/CSV/JSON is generated
+from those same rows at build time. Refresh client tool discovery after release.
+
+Initial data covers the full 59-measure Bibb profile for 159 counties plus Georgia,
+with official Census population/age/race/housing, ACS, SAIPE, business and geography
+sources. Do not discard availability or uncertainty, mix reference periods, or
+sum overlapping categories. See [database and refresh workflow](backend.md#county-statistics).

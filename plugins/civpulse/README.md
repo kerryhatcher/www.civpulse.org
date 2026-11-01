@@ -46,7 +46,7 @@ bun run mcp:check
 bun run mcp:test  # requires the running local Supabase stack
 ```
 
-The archive is written outside this folder to `dist/plugins/civpulse-1.4.0.zip`.
+The archive is written outside this folder to `dist/plugins/civpulse-1.5.0.zip`.
 The builder validates manifests, compatibility metadata, skill YAML and contained
 references, regenerates the catalog, excludes symlinks/credentials, and inspects
 the ZIP. Keep both manifests and the registered app mapping synchronized on edits.
@@ -66,3 +66,5 @@ a separate web rebuild/deploy. The plugin does not deploy the site. Admins can s
 Account provisioning/deletion, demotion and password resets remain outside the plugin.
 
 Format reference: [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins).
+
+Version 1.5.0 adds structured official-source county statistics discovery/search on both catalogs, with dedicated statistics and admin-save tools in the compact catalog. See the generated tool guides and civic-research skill.

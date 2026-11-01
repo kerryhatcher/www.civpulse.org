@@ -82,7 +82,7 @@ test('compact catalog replaces only planned reads/writes; all other schemas rema
   }
   const legacy = await catalog('legacy'), compact = await catalog('compact');
   expect(legacy).toHaveLength(128);
-  expect(compact).toHaveLength(66);
+  expect(compact).toHaveLength(70);
   const removed = new Set([...Object.values(directories).map(x => `search_${x}`), ...['calendars', 'layers', 'articles', 'contests', 'ballot_questions'].map(x => `search_${x}`), ...types.map(x => `get_${x}`)]);
   for (const tool of legacy) {
     if (removed.has(tool.name) || tool.name === 'search_site' || compactWriteReplacement(tool.name, {}) || compactRelatedReadReplacement(tool.name, {})) continue;

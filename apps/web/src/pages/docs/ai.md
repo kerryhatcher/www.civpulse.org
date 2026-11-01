@@ -194,3 +194,31 @@ To stop access, open [Account → Connected apps](/account/) on Civic Pulse and 
 - **Changes are not visible on a public profile:** confirm the save, then allow for the site's separate rebuild and deployment.
 
 For website tasks without an AI assistant, use the [visitor guide](/docs/users/) or [admin guide](/docs/admins/).
+
+## Official-source county statistics
+
+The database holds 59 structured measures for every Georgia county plus Georgia
+(FIPS 13000), including population, all 18 age bands, race/ethnicity, poverty,
+housing, income/work/business, education/connectivity and health/geography.
+Both MCP catalogs support `search_site(type="county_statistic_catalog")`
+for county/FIPS, indicator/unit/definition/topic and source discovery, and
+`search_site(type="county_statistic", query="Bibb household income", limit=20, offset=0)`
+for observations. Results include numeric values, units, availability, periods,
+official sources/checksums and uncertainty; paginate to `total_count`.
+
+When advertised, use `get_county_statistic_catalog` and
+`search_county_statistics` for dedicated county/indicator/topic filters.
+Administrators can use `save_county_statistic` with the exact loaded
+`expected_updated_at` and `save_county_statistic_source` for verified
+provenance updates. These dedicated tools are on the compact `/mcp/v2`
+catalog; the original endpoint keeps its 128-tool catalog and supports statistics
+through `search_site`. Existing civic search types and visibility are unchanged.
+Refresh your connection’s tool catalog after deployment to discover the added types.
+
+Each county has CSV and JSON snapshots linked from its summary. All-data downloads
+and live human search are at [County statistics](/statistics/). Live REST reads use
+`/rest/v1/county_statistic_records` or the `search_county_statistics` RPC
+with a public API key; writes require an authenticated administrator. Static
+snapshots update after rebuild. Cite the source URL, measure definition and period;
+keep confidence intervals and suppression markers intact and do not add overlapping
+race/ethnicity or poverty categories together.

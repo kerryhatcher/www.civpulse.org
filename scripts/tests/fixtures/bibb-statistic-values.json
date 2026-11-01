@@ -1,0 +1,297 @@
+[
+  {
+    "code": "PST045225",
+    "county": 157556,
+    "georgia": 11302748
+  },
+  {
+    "code": "POP010220",
+    "county": 157346,
+    "georgia": 10711908
+  },
+  {
+    "code": "PST120225",
+    "county": 0.1,
+    "georgia": 5.5
+  },
+  {
+    "code": "AGE295225",
+    "county": 23.3,
+    "georgia": 22.2
+  },
+  {
+    "code": "AGE775225",
+    "county": 18.8,
+    "georgia": 16.7
+  },
+  {
+    "code": "SEX255225",
+    "county": 53.2,
+    "georgia": 51.7
+  },
+  {
+    "code": "POP645224",
+    "county": 3.8,
+    "georgia": 11.2
+  },
+  {
+    "code": "VET605224",
+    "county": 8510,
+    "georgia": 601304
+  },
+  {
+    "code": "AGE04_TOT",
+    "county": 6.3,
+    "georgia": 5.7
+  },
+  {
+    "code": "AGE59_TOT",
+    "county": 6.3,
+    "georgia": 6
+  },
+  {
+    "code": "AGE1014_TOT",
+    "county": 6.5,
+    "georgia": 6.4
+  },
+  {
+    "code": "AGE1519_TOT",
+    "county": 6.7,
+    "georgia": 6.7
+  },
+  {
+    "code": "AGE2024_TOT",
+    "county": 6.6,
+    "georgia": 7
+  },
+  {
+    "code": "AGE2529_TOT",
+    "county": 6.9,
+    "georgia": 7
+  },
+  {
+    "code": "AGE3034_TOT",
+    "county": 6.7,
+    "georgia": 6.8
+  },
+  {
+    "code": "AGE3539_TOT",
+    "county": 6.3,
+    "georgia": 6.8
+  },
+  {
+    "code": "AGE4044_TOT",
+    "county": 6,
+    "georgia": 6.5
+  },
+  {
+    "code": "AGE4549_TOT",
+    "county": 5.7,
+    "georgia": 6.2
+  },
+  {
+    "code": "AGE5054_TOT",
+    "county": 5.5,
+    "georgia": 6.2
+  },
+  {
+    "code": "AGE5559_TOT",
+    "county": 5.7,
+    "georgia": 6
+  },
+  {
+    "code": "AGE6064_TOT",
+    "county": 6,
+    "georgia": 6
+  },
+  {
+    "code": "AGE6569_TOT",
+    "county": 6,
+    "georgia": 5.3
+  },
+  {
+    "code": "AGE7074_TOT",
+    "county": 5,
+    "georgia": 4.4
+  },
+  {
+    "code": "AGE7579_TOT",
+    "county": 3.7,
+    "georgia": 3.4
+  },
+  {
+    "code": "AGE8084_TOT",
+    "county": 2.2,
+    "georgia": 2
+  },
+  {
+    "code": "AGE85PLUS_TOT",
+    "county": 2,
+    "georgia": 1.6
+  },
+  {
+    "code": "RHI125225",
+    "county": 37.5,
+    "georgia": 56.8
+  },
+  {
+    "code": "RHI225225",
+    "county": 56.4,
+    "georgia": 32.4
+  },
+  {
+    "code": "RHI325225",
+    "county": 0.6,
+    "georgia": 1.1
+  },
+  {
+    "code": "RHI425225",
+    "county": 2.3,
+    "georgia": 5.4
+  },
+  {
+    "code": "RHI525225",
+    "county": 0.1,
+    "georgia": 0.1
+  },
+  {
+    "code": "RHI625225",
+    "county": 3.1,
+    "georgia": 4.2
+  },
+  {
+    "code": "RHI725225",
+    "county": 5.6,
+    "georgia": 12.1
+  },
+  {
+    "code": "RHI825225",
+    "county": 33.7,
+    "georgia": 47.9
+  },
+  {
+    "code": "SAIPE-2024-ALL",
+    "county": 23.4,
+    "georgia": 12.8
+  },
+  {
+    "code": "SAIPE-2024-UNDER18",
+    "county": 29.3,
+    "georgia": 16.9
+  },
+  {
+    "code": "SAIPE-2024-AGE5-17",
+    "county": 30.8,
+    "georgia": 16.5
+  },
+  {
+    "code": "HSD410224",
+    "county": 59921,
+    "georgia": 4074366
+  },
+  {
+    "code": "HSD310224",
+    "county": 2.51,
+    "georgia": 2.62
+  },
+  {
+    "code": "HSG010225",
+    "county": 72122,
+    "georgia": 4734436
+  },
+  {
+    "code": "HSG445224",
+    "county": 51.4,
+    "georgia": 65.7
+  },
+  {
+    "code": "HSG495224",
+    "county": 174500,
+    "georgia": 303300
+  },
+  {
+    "code": "HSG860224",
+    "county": 1066,
+    "georgia": 1393
+  },
+  {
+    "code": "HSG650224",
+    "county": 1427,
+    "georgia": 1783
+  },
+  {
+    "code": "INC110224",
+    "county": 51234,
+    "georgia": 77353
+  },
+  {
+    "code": "INC910224",
+    "county": 31699,
+    "georgia": 40924
+  },
+  {
+    "code": "LFE046224",
+    "county": 56.4,
+    "georgia": 63.1
+  },
+  {
+    "code": "LFE305224",
+    "county": 22.2,
+    "georgia": 28.3
+  },
+  {
+    "code": "EST211223",
+    "county": 4147,
+    "georgia": 261320
+  },
+  {
+    "code": "BZA110223",
+    "county": 77509,
+    "georgia": 4405730
+  },
+  {
+    "code": "NES010224",
+    "county": 16933,
+    "georgia": 1236191
+  },
+  {
+    "code": "EDU635224",
+    "county": 87.4,
+    "georgia": 89.2
+  },
+  {
+    "code": "EDU685224",
+    "county": 26.3,
+    "georgia": 34.9
+  },
+  {
+    "code": "COM100224",
+    "county": 92.7,
+    "georgia": 95.8
+  },
+  {
+    "code": "INT250224",
+    "county": 85.8,
+    "georgia": 91
+  },
+  {
+    "code": "POP815224",
+    "county": 5.9,
+    "georgia": 15.5
+  },
+  {
+    "code": "DIS010224",
+    "county": 11.7,
+    "georgia": 9.4
+  },
+  {
+    "code": "POP060220",
+    "county": 630.9,
+    "georgia": 185.6
+  },
+  {
+    "code": "LND110220",
+    "county": 249.38,
+    "georgia": 57716.96
+  }
+]

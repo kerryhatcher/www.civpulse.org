@@ -64,6 +64,11 @@ jobs:
         run: bun test scripts/tests/voter-roll-history-db.test.ts
         env:
           VOTER_ROLL_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - name: Verify structured county statistics and MCP discovery
+        run: bun test scripts/tests/county-statistics-db.test.ts scripts/tests/county-statistics-mcp.test.ts
+        env:
+          COUNTY_STATISTICS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          COUNTY_STATISTICS_MCP_INTEGRATION: '1'
       - run: bun run mcp:build && bun run plugin:build
       - if: always()
         run: bun run db:stop

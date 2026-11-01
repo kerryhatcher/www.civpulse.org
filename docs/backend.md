@@ -1685,3 +1685,61 @@ Merge both append-only migrations to main before production application.
 `frontend-rebuild-hourly` name, job ID, history, command and lease behavior are
 preserved; no second job is created. Completion checks and failed-build retries
 use the same 20-minute schedule. Release the append-only migration through main.
+
+## County statistics
+
+`20261125000800_county_statistics` stores the full Bibb-style 59-measure profile
+for all 159 counties plus Georgia (9,440 observations). Apply through main and
+the Supabase integration before the frontend/MCP release. No feature-branch SQL
+may be applied to production. Local verification uses `bun run db:migrate`.
+
+Tables: `county_geographies` (FIPS/name/slug/kind), `county_statistic_topics`,
+`county_statistic_indicators` (units, definitions, ordering, six headline slots),
+`county_statistic_sources` (publisher, official URL, retrieval date, exact file
+SHA-256), and `county_statistics` (numeric value, availability, period, source
+variables, numerator/denominator, ACS margin, SAIPE bounds/confidence, component
+inputs, detail, server-controlled update timestamp). All tables have public-read
+RLS and admin-only insert/update/delete; no privileged browser/build key is used.
+The `county_statistic_records` view uses security_invoker. Empty-search-path
+`search_county_statistics(query,county_fips,indicator_code,topic,limit,offset)`
+returns `{results,total_count,limit,offset}` with stable ordering and a 500-row cap.
+It is security-invoker and preserves all source/uncertainty fields. The five
+source tables mark the existing static rebuild state on writes.
+
+Data is sourced directly from Census bulk downloads: Vintage 2025 PEP county
+population/age/race/housing, 2020 Census counts/Gazetteer land area, 2020–2024 ACS
+five-year detailed tables, 2024 SAIPE, 2023 CBP and 2024 Nonemployer Statistics.
+`bun run scripts/import-county-statistics.ts --output /tmp/county-statistics.json`
+fetches and validates a refresh without any database connection. A temporary
+cache retains only Georgia ACS rows and the original source-file checksum.
+`--seed /path/to/NEW-migration.sql` emits initial source-attributed seed SQL;
+never append to or edit an applied migration. Review source changes and use a new
+append-only migration or authenticated administrator writes for subsequent refreshes.
+Do not infer source geography from a service area or address. Georgia age/race
+counts sum the 159 county counts; Census business totals use the published state
+records. Derived ACS shares retain component estimates and margins, without
+fabricated ratio intervals. Suppression/unavailability is explicit and never zero.
+
+Public REST examples (include the site's public `apikey` header):
+
+- `/rest/v1/county_statistic_records?county_fips=eq.13021&order=topic_position,indicator_position`
+- POST `/rest/v1/rpc/search_county_statistics` with `{"p_query":"Bibb household income","p_limit":20,"p_offset":0}`.
+
+`/statistics/` provides live human search; `/statistics/data.csv` and `data.json`
+provide the build snapshot. Each county has equivalent CSV/JSON with its county
+and Georgia records. MCP both catalogs support `search_site` types
+`county_statistic_catalog` and `county_statistic`; compact also exposes dedicated
+catalog/search and admin-save tools. The original catalog stays at 128 tools;
+compact grows from 66 to 70. Update plugin guides/schemas with `bun run plugin:build`.
+
+Verify RLS, completeness, numeric validation, search, pagination, conflicts and
+rebuild invalidation with
+`COUNTY_STATISTICS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/county-statistics-db.test.ts`.
+Verify real local Auth and both MCP catalogs with
+`COUNTY_STATISTICS_MCP_INTEGRATION=1 bun test scripts/tests/county-statistics-mcp.test.ts`.
+
+The append-only `20261125000900_county_statistic_numeric_validation` follow-up
+allows valid population growth above 100% while other percent shares remain
+bounded to 0–100, and rejects non-finite confidence bounds. It preserves the
+already-applied local migration history and is released through main with the
+initial county-statistics migration.
