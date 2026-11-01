@@ -1,0 +1,778 @@
+[
+  {
+    "run_id": "web-P1-1",
+    "prompt_id": "P1",
+    "exact_prompt": "What does the Macon-Bibb County Board of Elections do, and where can I find its official contact information? Cite sources.",
+    "repeat": 1,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:28.549Z",
+    "completed_at": "2026-11-01T23:06:29.894Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 25,
+    "returned_sources": [
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/contact-us/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/customer-service/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/boenewlocation7723/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2026/04/L-A-Legal-Notification-2026-General-Primary-Non-partisan-May-19-2026.pdf"
+      },
+      {
+        "title": "League of Women Voters - LWV of Macon",
+        "url": "https://macon.lwv.org/upcoming-elections"
+      },
+      {
+        "title": "County Election Office - Georgia State Election Board",
+        "url": "https://seb.ga.gov/county-election-office/"
+      },
+      {
+        "title": "What Does the Macon-Bibb Board of Elections Do? — PeachTracker",
+        "url": "https://www.peachtracker.org/blog/what-does-the-macon-bibb-board-of-elections-do"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2020/12/VOTER__ELECTION_INFORMATION_FLYER_-_2020__REVISED__11-19-20.pdf"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://maconbibb.us/wp-content/uploads/2020/09/VOTER__ELECTION_INFORMATION_FLYER_-_2020__REVISED__8-26-20.pdf"
+      },
+      {
+        "title": "To check your provisional ballot status, contact the Board of Elections at (478) 621-6622 or provisionalstatus@maconbibb.us.",
+        "url": "https://my.lwv.org/sites/default/files/lwvgovernmentdirectory25-27_websml.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/public-notice/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2024/09/LA-Notice-for-website.pdf"
+      },
+      {
+        "title": "Macon Bibb County Board of Elections - EBID",
+        "url": "https://ebidmacon.com/ebid-business/macon-bibb-county-board-of-elections/"
+      },
+      {
+        "title": "Bibb County, GA Election Office | U.S. Vote Foundation",
+        "url": "https://www.usvotefoundation.org/bibb-county-ga-election-office"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/category/board-of-elections/"
+      },
+      {
+        "title": "About the Elections Division | Georgia Secretary of State",
+        "url": "https://sos.ga.gov/page/about-elections-division"
+      },
+      {
+        "title": "MACON-BIBB COUNTY",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2019/09/EARLY_VOTING__ABSENTEE_INFORMATION_FLYER_2019-2020.pdf"
+      },
+      {
+        "title": "Absentee Voting in Macon",
+        "url": "https://www.reddit.com/r/macon/comments/it80ps"
+      },
+      {
+        "title": "The Election Deniers Are in Charge Now",
+        "url": "https://www.theatlantic.com/podcasts/2026/07/they-think-2020-was-rigged-now-theyre-in-charge/687923/?utm_source=apple_news"
+      },
+      {
+        "title": "Macon, Georgia",
+        "url": "https://en.wikipedia.org/wiki/Macon%2C_Georgia"
+      },
+      {
+        "title": "In Georgia, the winner in the presidential race may be determined by who doesn't vote",
+        "url": "https://apnews.com/article/ce8a97510ed8827236d04f8e4e16b2b3"
+      },
+      {
+        "title": "In battleground Georgia, some poor people see no reason to vote. That decision could sway election",
+        "url": "https://apnews.com/article/34209a5bba0b2697eb6fcdd004dca584"
+      },
+      {
+        "title": "Bibb County, Georgia",
+        "url": "https://en.wikipedia.org/wiki/Bibb_County%2C_Georgia"
+      },
+      {
+        "title": "The Election Deniers' Long Game",
+        "url": "https://www.theatlantic.com/magazine/2026/10/big-lie-local-elections-midterms/688359/?utm_source=openai"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  },
+  {
+    "run_id": "web-P2-1",
+    "prompt_id": "P2",
+    "exact_prompt": "What is the difference between the Macon-Bibb County Board of Tax Assessors and Tax Commissioner? Cite official sources.",
+    "repeat": 1,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:28.553Z",
+    "completed_at": "2026-11-01T23:06:30.587Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 23,
+    "returned_sources": [
+      {
+        "title": "Macon-Bibb County Tax|FAQ",
+        "url": "https://www.maconbibbtax.us/faq.html"
+      },
+      {
+        "title": "TAX ASSESSORS",
+        "url": "https://maconbibb.us/wp-content/uploads/2024/05/20240530154612245.pdf"
+      },
+      {
+        "title": "County Property Tax Facts Bibb | Department of Revenue",
+        "url": "https://dor.georgia.gov/county-property-tax-facts-bibb"
+      },
+      {
+        "title": "Macon County Tax|General Information",
+        "url": "https://tax.maconcountypay.com/general-information.html"
+      },
+      {
+        "title": "MAIL SO",
+        "url": "https://www.maconbibbtax.us/resources/sites/bibbcountyga/docs/19.01.09.Macon%20Bibb%20Tax%20Brochure.revised%201.19.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Board Of Tax Assessors",
+        "url": "https://www.bibbassessors.com/"
+      },
+      {
+        "title": "Macon-Bibb County, Georgia",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2024/05/Macon-Bibb-County-ACFR-FY23-003.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Board Of Tax Assessors",
+        "url": "https://www.bibbassessors.com/board-of-assessors/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY, GEORGIA",
+        "url": "https://maconbibb.us/wp-content/uploads/2024/05/Macon-Bibb-Georgia-6-30-15-1.pdf"
+      },
+      {
+        "title": "Microsoft Word - 11 - LIST OF PRINCIPAL OFFICIALS.doc",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2013/10/Budget2011.pdf"
+      },
+      {
+        "title": "County Property Tax Facts | Department of Revenue",
+        "url": "https://dor.georgia.gov/county-property-tax-facts"
+      },
+      {
+        "title": "Board of Tax Assessors - Macon County, GA",
+        "url": "https://www.maconcountyga.gov/board-of-tax-assessors.cfm"
+      },
+      {
+        "title": "Microsoft Word - 1-Cover.doc",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2013/10/Budget2009.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Tax|Contact Us",
+        "url": "https://www.maconbibbtax.us/contact.html"
+      },
+      {
+        "title": "Filing Property Tax in Georgia | Department of Revenue",
+        "url": "https://dor.georgia.gov/local-government-services/filing-property-tax-georgia"
+      },
+      {
+        "title": "Macon-Bibb County Tax|Property/Garbage",
+        "url": "https://www.maconbibbtax.us/property.html"
+      },
+      {
+        "title": "Property Records Online | Department of Revenue",
+        "url": "https://dor.georgia.gov/property-records-online"
+      },
+      {
+        "title": "Macon-Bibb County Tax",
+        "url": "https://www.maconbibbtax.us/"
+      },
+      {
+        "title": "Property tax in the United States",
+        "url": "https://en.wikipedia.org/wiki/Property_tax_in_the_United_States"
+      },
+      {
+        "title": "Tax assessment",
+        "url": "https://en.wikipedia.org/wiki/Tax_assessment"
+      },
+      {
+        "title": "Taxation in the United States",
+        "url": "https://en.wikipedia.org/wiki/Taxation_in_the_United_States"
+      },
+      {
+        "title": "Georgia Department of Revenue",
+        "url": "https://en.wikipedia.org/wiki/Georgia_Department_of_Revenue"
+      },
+      {
+        "title": "Georgia (U.S. state)",
+        "url": "https://en.wikipedia.org/wiki/Georgia_%28U.S._state%29"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  },
+  {
+    "run_id": "web-P3-1",
+    "prompt_id": "P3",
+    "exact_prompt": "What is the difference between apportionment and redistricting, and where can I find Macon-Bibb commission district maps? Cite sources.",
+    "repeat": 1,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:28.553Z",
+    "completed_at": "2026-11-01T23:06:29.643Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 28,
+    "returned_sources": [
+      {
+        "title": "Apportionment and Redistricting Process for the U.S. House of Representatives - EveryCRSReport.com",
+        "url": "https://www.everycrsreport.com/reports/R45951.html"
+      },
+      {
+        "title": "Redistricting Introduction",
+        "url": "https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/25763"
+      },
+      {
+        "title": "CHAPTER 1: FREQUENTLY ASKED QUESTIONS ABOUT REDISTRICTING",
+        "url": "https://www.maldef.org/wp-content/uploads/2021/05/FINAL-LDF_04142021_RedistrictingGuide-22e.pdf"
+      },
+      {
+        "title": "I. WHAT IS REDISTRICTING?",
+        "url": "https://www.ilga.gov/documents/senate/Committees/Redistricting/Brennan%20Center%20-%20Citizen%27s%20Guide%20to%20Redistricting%20-%20Dawn%20Clark%20Netsch%20handout%20-%20July%2029%2C%202009%20Hearing%20-%20Chicago.pdf"
+      },
+      {
+        "title": "Redistricting in Georgia",
+        "url": "https://www.legis.ga.gov/api/document/docs/default-source/house-budget-and-research-office-document-library/newsandhighlights/2020/redistricting_in_georgia.pdf"
+      },
+      {
+        "title": "I. WHAT IS REDISTRICTING?",
+        "url": "https://www.ilga.gov/senate/Committees/Redistricting/Brennan%20Center%20-%20Citizen%27s%20Guide%20to%20Redistricting%20-%20Dawn%20Clark%20Netsch%20handout%20-%20July%2029%2C%202009%20Hearing%20-%20Chicago.pdf"
+      },
+      {
+        "title": "Redistricting in Tenne",
+        "url": "https://www.comptroller.tn.gov/content/dam/cot/pa/documents/lg/GuideToRedistrict.pdf"
+      },
+      {
+        "title": "Knowledge FAQ - Redistricting Data Hub",
+        "url": "https://redistrictingdatahub.org/resources/knowledge-faq/"
+      },
+      {
+        "title": "Redistricting Glossary: Basics - The American Redistricting Project",
+        "url": "https://thearp.org/blog/reference/redistricting-glossary-basics/"
+      },
+      {
+        "title": "Congressional Redistricting: An Overview - EveryCRSReport.com",
+        "url": "https://www.everycrsreport.com/reports/R42831.html"
+      },
+      {
+        "title": "Redistricting | MIT Election Lab",
+        "url": "https://electionlab.mit.edu/research/redistricting"
+      },
+      {
+        "title": "NCSL Redistricting and Census Resources",
+        "url": "https://www.ncsl.org/redistricting-and-census/ncsl-redistricting-and-census-resources"
+      },
+      {
+        "title": "Reapportionment | Center for the Study of Federalism",
+        "url": "https://federalism.org/encyclopedia/no-topic/reapportionment/"
+      },
+      {
+        "title": "About Redistricting | NJ Apportionment Commission",
+        "url": "https://apportionmentcommission.org/aboutredistricting.asp"
+      },
+      {
+        "title": "Macon-Bibb Community Government - Unification -",
+        "url": "https://www.macon-bibb.com/Unity/"
+      },
+      {
+        "title": "Civics for Change: Redistricting 101 - Andrew Goodman Foundation | Andrew Goodman Foundation",
+        "url": "https://andrewgoodman.org/news-list/civics-for-change-redistricting-101/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/Clerk-of-commission/"
+      },
+      {
+        "title": "What is Redistricting? | Latino Policy & Politics Institute",
+        "url": "https://latino.ucla.edu/what-is-redistricting/"
+      },
+      {
+        "title": "Apportionment (politics)",
+        "url": "https://en.wikipedia.org/wiki/Apportionment_%28politics%29"
+      },
+      {
+        "title": "New Jersey Apportionment Commission",
+        "url": "https://en.wikipedia.org/wiki/New_Jersey_Apportionment_Commission"
+      },
+      {
+        "title": "Redistricting",
+        "url": "https://en.wikipedia.org/wiki/Redistricting"
+      },
+      {
+        "title": "Redistricting commission",
+        "url": "https://en.wikipedia.org/wiki/Redistricting_commission"
+      },
+      {
+        "title": "Electoral district",
+        "url": "https://en.wikipedia.org/wiki/Electoral_district"
+      },
+      {
+        "title": "United States congressional apportionment",
+        "url": "https://en.wikipedia.org/wiki/United_States_congressional_apportionment"
+      },
+      {
+        "title": "Apportionment and Redistricting Process for the U.S. House of Representatives",
+        "url": "https://www.reddit.com/r/BillSentinel/comments/1rm31jo/apportionment_and_redistricting_process_for_the/"
+      },
+      {
+        "title": "The Difference Between Gerrymandering and Redistricting, Explained",
+        "url": "https://time.com/7304038/gerrymandering-partisan-racial-redistricting-trump-texas-republicans/"
+      },
+      {
+        "title": "Congressional Redistricting Criteria and Considerations",
+        "url": "https://www.reddit.com/r/BillSentinel/comments/1rm34fg/congressional_redistricting_criteria_and/"
+      },
+      {
+        "title": "New legislation reignites district map battle",
+        "url": "https://www.axios.com/local/atlanta/2023/02/28/new-legislation-reignites-district-map-battle"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  },
+  {
+    "run_id": "web-P1-2",
+    "prompt_id": "P1",
+    "exact_prompt": "What does the Macon-Bibb County Board of Elections do, and where can I find its official contact information? Cite sources.",
+    "repeat": 2,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:30.587Z",
+    "completed_at": "2026-11-01T23:06:32.717Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 25,
+    "returned_sources": [
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/contact-us/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/customer-service/"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/boenewlocation7723/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2026/04/L-A-Legal-Notification-2026-General-Primary-Non-partisan-May-19-2026.pdf"
+      },
+      {
+        "title": "League of Women Voters - LWV of Macon",
+        "url": "https://macon.lwv.org/upcoming-elections"
+      },
+      {
+        "title": "What Does the Macon-Bibb Board of Elections Do? — PeachTracker",
+        "url": "https://www.peachtracker.org/blog/what-does-the-macon-bibb-board-of-elections-do"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2020/12/VOTER__ELECTION_INFORMATION_FLYER_-_2020__REVISED__11-19-20.pdf"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://maconbibb.us/wp-content/uploads/2020/09/VOTER__ELECTION_INFORMATION_FLYER_-_2020__REVISED__8-26-20.pdf"
+      },
+      {
+        "title": "To check your provisional ballot status, contact the Board of Elections at (478) 621-6622 or provisionalstatus@maconbibb.us.",
+        "url": "https://my.lwv.org/sites/default/files/lwvgovernmentdirectory25-27_websml.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/public-notice/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY BOARD OF ELECTIONS",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2024/09/LA-Notice-for-website.pdf"
+      },
+      {
+        "title": "Macon Bibb County Board of Elections - EBID",
+        "url": "https://ebidmacon.com/ebid-business/macon-bibb-county-board-of-elections/"
+      },
+      {
+        "title": "Bibb County, GA Election Office | U.S. Vote Foundation",
+        "url": "https://www.usvotefoundation.org/bibb-county-ga-election-office"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/category/board-of-elections/"
+      },
+      {
+        "title": "About the Elections Division | Georgia Secretary of State",
+        "url": "https://sos.ga.gov/page/about-elections-division"
+      },
+      {
+        "title": "MACON-BIBB COUNTY",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2019/09/EARLY_VOTING__ABSENTEE_INFORMATION_FLYER_2019-2020.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Government",
+        "url": "https://www.maconbibb.us/board-of-elections/agendasminutes/"
+      },
+      {
+        "title": "Absentee Voting in Macon",
+        "url": "https://www.reddit.com/r/macon/comments/it80ps"
+      },
+      {
+        "title": "The Election Deniers Are in Charge Now",
+        "url": "https://www.theatlantic.com/podcasts/2026/07/they-think-2020-was-rigged-now-theyre-in-charge/687923/?utm_source=apple_news"
+      },
+      {
+        "title": "Macon, Georgia",
+        "url": "https://en.wikipedia.org/wiki/Macon%2C_Georgia"
+      },
+      {
+        "title": "In Georgia, the winner in the presidential race may be determined by who doesn't vote",
+        "url": "https://apnews.com/article/ce8a97510ed8827236d04f8e4e16b2b3"
+      },
+      {
+        "title": "In battleground Georgia, some poor people see no reason to vote. That decision could sway election",
+        "url": "https://apnews.com/article/34209a5bba0b2697eb6fcdd004dca584"
+      },
+      {
+        "title": "Bibb County, Georgia",
+        "url": "https://en.wikipedia.org/wiki/Bibb_County%2C_Georgia"
+      },
+      {
+        "title": "The Election Deniers' Long Game",
+        "url": "https://www.theatlantic.com/magazine/2026/10/big-lie-local-elections-midterms/688359/?utm_source=openai"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  },
+  {
+    "run_id": "web-P2-2",
+    "prompt_id": "P2",
+    "exact_prompt": "What is the difference between the Macon-Bibb County Board of Tax Assessors and Tax Commissioner? Cite official sources.",
+    "repeat": 2,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:30.587Z",
+    "completed_at": "2026-11-01T23:06:31.753Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 23,
+    "returned_sources": [
+      {
+        "title": "Macon-Bibb County Tax|FAQ",
+        "url": "https://www.maconbibbtax.us/faq.html"
+      },
+      {
+        "title": "TAX ASSESSORS",
+        "url": "https://maconbibb.us/wp-content/uploads/2024/05/20240530154612245.pdf"
+      },
+      {
+        "title": "County Property Tax Facts Bibb | Department of Revenue",
+        "url": "https://dor.georgia.gov/county-property-tax-facts-bibb"
+      },
+      {
+        "title": "Macon County Tax|General Information",
+        "url": "https://tax.maconcountypay.com/general-information.html"
+      },
+      {
+        "title": "MAIL SO",
+        "url": "https://www.maconbibbtax.us/resources/sites/bibbcountyga/docs/19.01.09.Macon%20Bibb%20Tax%20Brochure.revised%201.19.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Board Of Tax Assessors",
+        "url": "https://www.bibbassessors.com/"
+      },
+      {
+        "title": "Macon-Bibb County, Georgia",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2024/05/Macon-Bibb-County-ACFR-FY23-003.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Board Of Tax Assessors",
+        "url": "https://www.bibbassessors.com/board-of-assessors/"
+      },
+      {
+        "title": "MACON-BIBB COUNTY, GEORGIA",
+        "url": "https://maconbibb.us/wp-content/uploads/2024/05/Macon-Bibb-Georgia-6-30-15-1.pdf"
+      },
+      {
+        "title": "Microsoft Word - 11 - LIST OF PRINCIPAL OFFICIALS.doc",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2013/10/Budget2011.pdf"
+      },
+      {
+        "title": "County Property Tax Facts | Department of Revenue",
+        "url": "https://dor.georgia.gov/county-property-tax-facts"
+      },
+      {
+        "title": "Board of Tax Assessors - Macon County, GA",
+        "url": "https://www.maconcountyga.gov/board-of-tax-assessors.cfm"
+      },
+      {
+        "title": "Microsoft Word - 1-Cover.doc",
+        "url": "https://www.maconbibb.us/wp-content/uploads/2013/10/Budget2009.pdf"
+      },
+      {
+        "title": "Macon-Bibb County Tax|Contact Us",
+        "url": "https://www.maconbibbtax.us/contact"
+      },
+      {
+        "title": "Macon-Bibb County Tax|Property/Garbage",
+        "url": "https://www.maconbibbtax.us/property.html"
+      },
+      {
+        "title": "Property Records Online | Department of Revenue",
+        "url": "https://dor.georgia.gov/property-records-online"
+      },
+      {
+        "title": "Macon-Bibb County Tax",
+        "url": "https://www.maconbibbtax.us/"
+      },
+      {
+        "title": "Macon-Bibb County Board Of Tax Assessors",
+        "url": "https://www.bibbassessors.com/about-us/"
+      },
+      {
+        "title": "Property tax in the United States",
+        "url": "https://en.wikipedia.org/wiki/Property_tax_in_the_United_States"
+      },
+      {
+        "title": "Tax assessment",
+        "url": "https://en.wikipedia.org/wiki/Tax_assessment"
+      },
+      {
+        "title": "Taxation in the United States",
+        "url": "https://en.wikipedia.org/wiki/Taxation_in_the_United_States"
+      },
+      {
+        "title": "Georgia Department of Revenue",
+        "url": "https://en.wikipedia.org/wiki/Georgia_Department_of_Revenue"
+      },
+      {
+        "title": "Georgia (U.S. state)",
+        "url": "https://en.wikipedia.org/wiki/Georgia_%28U.S._state%29"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  },
+  {
+    "run_id": "web-P3-2",
+    "prompt_id": "P3",
+    "exact_prompt": "What is the difference between apportionment and redistricting, and where can I find Macon-Bibb commission district maps? Cite sources.",
+    "repeat": 2,
+    "platform": "OpenAI web search tool; underlying search provider/model unspecified",
+    "surface": "retrieval results, not an AI answer or consumer Google/Bing UI",
+    "started_at": "2026-11-01T23:06:30.587Z",
+    "completed_at": "2026-11-01T23:06:31.823Z",
+    "status": "completed_retrieval",
+    "sample_size": 1,
+    "result_count": 28,
+    "returned_sources": [
+      {
+        "title": "Apportionment and Redistricting Process for the U.S. House of Representatives - EveryCRSReport.com",
+        "url": "https://www.everycrsreport.com/reports/R45951.html"
+      },
+      {
+        "title": "Understanding Redistricting: Terms You Should Know",
+        "url": "https://www.ncsl.org/redistricting-and-census/understanding-redistricting-terms-you-should-know"
+      },
+      {
+        "title": "Into the Thicket: A Redistricting Starter Kit for Legislative Staff",
+        "url": "https://www.ncsl.org/redistricting-and-census/redistricting-starter-kit"
+      },
+      {
+        "title": "Redistricting Introduction",
+        "url": "https://www.leg.state.nv.us/App/InterimCommittee/REL/Document/25763"
+      },
+      {
+        "title": "CHAPTER 1: FREQUENTLY ASKED QUESTIONS ABOUT REDISTRICTING",
+        "url": "https://www.maldef.org/wp-content/uploads/2021/05/FINAL-LDF_04142021_RedistrictingGuide-22e.pdf"
+      },
+      {
+        "title": "I. WHAT IS REDISTRICTING?",
+        "url": "https://www.ilga.gov/documents/senate/Committees/Redistricting/Brennan%20Center%20-%20Citizen%27s%20Guide%20to%20Redistricting%20-%20Dawn%20Clark%20Netsch%20handout%20-%20July%2029%2C%202009%20Hearing%20-%20Chicago.pdf"
+      },
+      {
+        "title": "Redistricting in Georgia",
+        "url": "https://www.legis.ga.gov/api/document/docs/default-source/house-budget-and-research-office-document-library/newsandhighlights/2020/redistricting_in_georgia.pdf"
+      },
+      {
+        "title": "I. WHAT IS REDISTRICTING?",
+        "url": "https://www.ilga.gov/senate/Committees/Redistricting/Brennan%20Center%20-%20Citizen%27s%20Guide%20to%20Redistricting%20-%20Dawn%20Clark%20Netsch%20handout%20-%20July%2029%2C%202009%20Hearing%20-%20Chicago.pdf"
+      },
+      {
+        "title": "Redistricting in Tenne",
+        "url": "https://www.comptroller.tn.gov/content/dam/cot/pa/documents/lg/GuideToRedistrict.pdf"
+      },
+      {
+        "title": "Knowledge FAQ - Redistricting Data Hub",
+        "url": "https://redistrictingdatahub.org/resources/knowledge-faq/"
+      },
+      {
+        "title": "Redistricting Glossary: Basics - The American Redistricting Project",
+        "url": "https://thearp.org/blog/reference/redistricting-glossary-basics/"
+      },
+      {
+        "title": "Congressional Redistricting: An Overview - EveryCRSReport.com",
+        "url": "https://www.everycrsreport.com/reports/R42831.html"
+      },
+      {
+        "title": "Redistricting | MIT Election Lab",
+        "url": "https://electionlab.mit.edu/research/redistricting"
+      },
+      {
+        "title": "NCSL Redistricting and Census Resources",
+        "url": "https://www.ncsl.org/redistricting-and-census/ncsl-redistricting-and-census-resources"
+      },
+      {
+        "title": "Reapportionment | Center for the Study of Federalism",
+        "url": "https://federalism.org/encyclopedia/no-topic/reapportionment/"
+      },
+      {
+        "title": "Apportionment and Redistricting Process for the U.S. House of Representatives - EveryCRSReport.com",
+        "url": "https://d27r7ebsgu0es2.cloudfront.net/reports/R45951.html"
+      },
+      {
+        "title": "About Redistricting | NJ Apportionment Commission",
+        "url": "https://apportionmentcommission.org/aboutredistricting.asp"
+      },
+      {
+        "title": "Apportionment (politics)",
+        "url": "https://en.wikipedia.org/wiki/Apportionment_%28politics%29"
+      },
+      {
+        "title": "New Jersey Apportionment Commission",
+        "url": "https://en.wikipedia.org/wiki/New_Jersey_Apportionment_Commission"
+      },
+      {
+        "title": "Redistricting",
+        "url": "https://en.wikipedia.org/wiki/Redistricting"
+      },
+      {
+        "title": "Redistricting commission",
+        "url": "https://en.wikipedia.org/wiki/Redistricting_commission"
+      },
+      {
+        "title": "Electoral district",
+        "url": "https://en.wikipedia.org/wiki/Electoral_district"
+      },
+      {
+        "title": "United States congressional apportionment",
+        "url": "https://en.wikipedia.org/wiki/United_States_congressional_apportionment"
+      },
+      {
+        "title": "Apportionment and Redistricting Process for the U.S. House of Representatives",
+        "url": "https://www.reddit.com/r/BillSentinel/comments/1rm31jo/apportionment_and_redistricting_process_for_the/"
+      },
+      {
+        "title": "The Difference Between Gerrymandering and Redistricting, Explained",
+        "url": "https://time.com/7304038/gerrymandering-partisan-racial-redistricting-trump-texas-republicans/"
+      },
+      {
+        "title": "Congressional Redistricting Criteria and Considerations",
+        "url": "https://www.reddit.com/r/BillSentinel/comments/1rm34fg/congressional_redistricting_criteria_and/"
+      },
+      {
+        "title": "New legislation reignites district map battle",
+        "url": "https://www.axios.com/local/atlanta/2023/02/28/new-legislation-reignites-district-map-battle"
+      },
+      {
+        "title": "Political Geography and Representation: A Case Study of Districting in Pennsylvania",
+        "url": "https://arxiv.org/abs/2010.14608"
+      }
+    ],
+    "civpulse_returned_urls": [],
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "factual_accuracy": {
+      "assessment": "not_applicable",
+      "reason": "Retrieval list only: no synthesized answer was produced or scored."
+    },
+    "limitations": [
+      "Returned-result set only; provider selection, cache, region and ranking controls not exposed.",
+      "Same-session repeats are not independent population samples; do not infer a global citation/indexing/ranking rate."
+    ]
+  }
+]

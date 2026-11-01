@@ -1438,3 +1438,31 @@ changing checked-in environment files), checks no-JS/anonymous/actual Admin desk
 and mobile meeting/person flows, then removes fixtures and builds cleanly.
 Never point feature SQL/backfill at production or repair shared history to unblock
 validation. Apply through main before matching MCP/static release.
+
+### Search visibility measurement baseline
+
+[The dated baseline](./measurement/2026-11-01/README.md) versions production
+sitemap inventory, privacy-minimized provider evidence, exact prompt trials and
+manual comparison cadence. It distinguishes indexing from discovered URLs,
+retrieval links from AI citations, and missing data from zero observations.
+
+Run a new read-only sitemap capture with
+`bun run scripts/search-visibility-baseline.mjs --out docs/measurement/YYYY-MM-DD`.
+Use a new dated directory; the script refuses overwrite. Optional `--local
+apps/web/dist` labels a separate local content comparison, never a production
+missing-page count. It recursively reads only same-origin, queryless production
+sitemaps, retains source hashes and writes a gzip CSV inventory. It does not crawl
+all pages, submit sitemaps or request indexing. Verify with
+`bun test scripts/tests/search-visibility-baseline.test.ts`.
+
+Provider reads use the HTP SEO review workflow: resolve the exact owned hostname,
+inventory all source metadata, choose explicit property/range scopes, then retain
+one latest selected snapshot with freshness and row limits. Do not register
+collection, change bindings, publish raw analytics query strings/private viewer
+IDs or treat `has_more` snapshot history as additional traffic to sum. Store
+aggregate evidence only in this public repository; never tokens or account emails.
+Repeat prompt trials manually with exact text, observed platform/model/mode and
+dates; unavailable answers have no accuracy/citation denominator. No automation
+or paid vendor is required. This issue changes reports/tooling only, not site
+rendering or access rules. The required check/build uses explicit isolated local
+54341 credentials; shared 54322 remains unsuitable after the documented collision.

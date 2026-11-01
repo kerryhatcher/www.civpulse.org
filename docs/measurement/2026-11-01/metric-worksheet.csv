@@ -1,0 +1,13 @@
+metric,value,unit,start_date,end_date,limitation
+"GSC clicks","0","reported count","2026-10-04","2026-10-31","www; latest observed Oct 30; provider completeness not guaranteed"
+"GSC impressions","0","reported count","2026-10-04","2026-10-31","www; no meaningful CTR/position with zero impressions"
+"GSC indexed URLs","","unknown","","","Page indexing report processing; sample is not global coverage"
+"GA4 active users","20","distinct summary","2026-10-04","2026-10-31","Do not sum daily users"
+"GA4 sessions","87","count","2026-10-04","2026-10-31","hostname-filtered provider summary"
+"GA4 pageviews","969","count","2026-10-04","2026-10-31","raw paths/query strings omitted"
+"GA4 Organic Search sessions","6","count","2026-10-04","2026-10-31","Not GSC clicks or AI referrals"
+"AI referral sessions","","unknown","2026-10-04","2026-10-31","source/medium/referrer dimensions unavailable"
+"Bing returned traffic impressions","5","sum of 2 returned daily rows","2026-10-28","2026-10-29","apex property; missing days not zero; query rows separate"
+"Bing returned traffic clicks","0","sum of 2 returned daily rows","2026-10-28","2026-10-29","not a full 28-day matched comparison"
+"CrUX PHONE","","insufficient_data","","","No field grade"
+"CrUX DESKTOP","","insufficient_data","","","No field grade"
