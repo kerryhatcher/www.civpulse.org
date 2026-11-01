@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { neighborCounties } from '../../data/neighbor-counties';
+---
+<Layout title="County community hubs" description="Explore Bibb County and neighboring Middle Georgia county community hubs.">
+  <main id="main" class="prose">
+    <h1>County community hubs</h1>
+    <p>Explore local government, people, maps, elections, and public events in Bibb County and its neighboring Middle Georgia communities.</p>
+    <ul>
+      <li><a href="/counties/bibb/">Bibb County</a></li>
+      {neighborCounties.map(county => <li><a href={`/counties/${county.slug}/`}>{county.name} County</a></li>)}
+    </ul>
+    <p>Coverage varies by county and grows as public records are added.</p>
+  </main>
+</Layout>

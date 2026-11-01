@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { neighborCounties } from '../../data/neighbor-counties';
+import { organizationCountyCoverage, mapCountyCoverage } from '../../data/county-coverage';
+import { fetchOrganizations } from '../../lib/organizations';
+import { fetchPublicMaps } from '../../lib/maps';
+import { fetchPublicPeopleForOrganization } from '../../lib/people';
+import { fetchPublicElections, formatElectionDate, electionHref } from '../../lib/elections';
+
+export function getStaticPaths() {
+  return neighborCounties.map(county => ({ params: { county: county.slug }, props: { county } }));
+}
+const { county } = Astro.props;
+const [organizations, maps, elections] = await Promise.all([
+  fetchOrganizations(), fetchPublicMaps(), fetchPublicElections(),
+]);
+const localOrganizations = organizations.filter(org => organizationCountyCoverage[org.slug]?.includes(county.fips));
+const ids = new Set(localOrganizations.map(org => org.id));
+const localMaps = maps.filter(map => mapCountyCoverage[map.slug]?.includes(county.fips));
+const localElections = elections.filter(election => election.organization_id && ids.has(election.organization_id))
+  .sort((a, b) => b.election_date.localeCompare(a.election_date));
+const profiles = await Promise.all(localOrganizations.map(async org => ({ org, people: await fetchPublicPeopleForOrganization(org.id) })));
+const censusUrl = `https://www.census.gov/quickfacts/fact/table/${county.slug}countygeorgia/PST045225`;
+---
+<Layout title={`${county.name} County, Georgia`} description={`Explore ${county.name} County local government, people, maps, elections, and public events on Civic Pulse.`}>
+  <main id="main" class="county-hub">
+    <p><a href="/counties/">County community hubs</a></p>
+    <h1>{county.name} County, Georgia</h1>
+    <p class="lead">Your community, connected.</p>
+    <p>Explore the local organizations, people, and public decisions shaping {county.name} County.</p>
+    <nav aria-label={`${county.name} County sections`}>
+      <a href="#government">Government & people</a><a href="#maps">Maps & places</a><a href="#elections">Elections</a><a href="#events">Events & meetings</a><a href="#demographics">Demographics</a>
+    </nav>
+    <section id="government">
+      <h2>Local government & people</h2>
+      {profiles.map(({ org, people }) => <article class="org-card">
+        <h3><a href={`/orgs/${org.slug}/`}>{org.name}</a></h3>
+        {org.description && <p>{org.description}</p>}
+        {people.length > 0 && <ul>{people.map(({ person, role }) => <li><a href={`/people/${person.slug}/`}>{person.full_name}</a>{role && ` — ${role}`}</li>)}</ul>}
+        {people.length === 0 && <p class="status">People have not been published for this organization yet.</p>}
+      </article>)}
+      {profiles.length === 0 && <p class="status">Local organization profiles have not been published yet.</p>}
+      <p>These are selected public records, not a complete list of agencies or representatives.</p>
+      <a href="/orgs/">Browse all organizations</a>
+    </section>
+    <section id="maps">
+      <h2>Maps & places</h2>
+      <ul>{localMaps.map(map => <li><a href={`/maps/${map.slug}/`}>{map.name}</a></li>)}</ul>
+      {localMaps.length === 0 && <p class="status">Local maps have not been published yet.</p>}
+      <a href="/maps/">Browse all maps</a>
+    </section>
+    <section id="elections">
+      <h2>Elections & voting</h2>
+      <ul>{localElections.map(election => <li><a href={electionHref(election)}>{election.name}</a> · <time datetime={election.election_date}>{formatElectionDate(election.election_date)}</time></li>)}</ul>
+      {localElections.length === 0 && <p class="status">No elections from the selected local organizations are published yet.</p>}
+      <p>Elections appear newest first and may include past elections.</p>
+      <a href="/elections/">Browse all elections</a>
+    </section>
+    <section id="events" data-county-events data-organization-ids={JSON.stringify([...ids])}>
+      <h2>Events & meetings</h2>
+      <p>Public events from the local organizations above.</p>
+      <p class="status" data-county-events-status role="status">Loading upcoming events…</p>
+      <ul data-county-events-list></ul>
+      <noscript><p>Enable JavaScript to load public events.</p></noscript>
+      <a href="/calendar/">Browse the community calendar</a>
+    </section>
+    <section id="demographics">
+      <h2>Get to know {county.name} County</h2>
+      <p>Explore population, housing, education, and economic measures from the U.S. Census Bureau. Reference periods and methodology are provided by Census.</p>
+      <a href={censusUrl}>{county.name} County Census QuickFacts</a>
+      <p class="body-note">County FIPS: {county.fips}. A saved demographic snapshot is not yet available on this hub.</p>
+    </section>
+    <p>Coverage is growing. The full directories and community calendar include records beyond {county.name} County. This hub stays focused on {county.name} County when you change the header county preference.</p>
+    <a href="/counties/">Explore neighboring county hubs</a>
+  </main>
+</Layout>
+<script>
+  import { initCountyEvents } from '../../scripts/county-events';
+  initCountyEvents();
+</script>
+<style>
+  .county-hub { padding-block: 40px; }
+  h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); }
+  .lead { font-family: var(--serif); font-size: 1.8rem; margin-top: 20px; }
+  nav { display: flex; flex-wrap: wrap; gap: 16px 28px; padding-block: 24px; margin-top: 24px; border-block: 1px solid var(--line); }
+  section { padding-block: 32px; border-bottom: 1px solid var(--line); scroll-margin-top: 20px; }
+  h2 { font-size: 2.3rem; margin-bottom: 16px; }
+  p { max-width: 75ch; margin-block: 14px; }
+  li { margin-block: 12px; }
+  article { margin-block: 20px; }
+</style>

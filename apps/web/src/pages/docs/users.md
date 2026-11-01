@@ -495,3 +495,7 @@ of the reported choice total. Source notes and detailed participation metrics ar
 under expandable reporting details. **Include earlier reports** shows past
 snapshots for the selected scope separately. The URL retains your filters for
 sharing. **Refresh reports** fetches the latest data without a site rebuild.
+
+### Neighboring county hubs
+
+The [county community hubs](/counties/) directory links Bibb, [Crawford](/counties/crawford/), [Houston](/counties/houston/), [Jones](/counties/jones/), [Monroe](/counties/monroe/), [Peach](/counties/peach/), and [Twiggs](/counties/twiggs/). Open a hub for selected public local organizations, people, maps, elections, and events. Sections explain when local records are not yet published. Neighboring hubs link their own Census QuickFacts profiles; Bibb retains its saved demographic tables and CSV. Changing the header county preference does not change a named hub. Full directory links open site-wide directories with the current header preference.
