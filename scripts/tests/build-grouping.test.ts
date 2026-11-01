@@ -77,6 +77,32 @@ test('profile export assembly attaches indexed sponsorships after the shared pub
   expect(result.organizations.get('org')!.officeTerms.map(row=>row.id)).toEqual([id(1),id(2)]);
 });
 
+test('profile resource JSON and content hashes ignore out-of-order public export completion', async () => {
+  const tables = ['legislative_terms', 'legislative_sessions', 'legislative_bodies', 'bill_sponsorships'];
+  const outputs: string[] = [];
+  const completions: string[][] = [];
+  for (const slow of ['legislative_terms', 'legislative_sessions']) {
+    const completed: string[] = [];
+    const client = { rpc: async (name: string, args: Record<string, unknown>) => {
+      if (name === 'export_public_profile_rows') return {
+        data: args.p_section === 'legislative_votes' ? [{ owner_id: 'person', position: 0, data: { id: 'vote' } }] : [], error: null,
+      };
+      const table = String(args.p_table);
+      if (table === slow) await Bun.sleep(20);
+      completed.push(table);
+      const rows = [{ id: `00000000-0000-4000-8000-${String(tables.indexOf(table)).padStart(12, '0')}`, visibility: 'public' }];
+      return { data: { total: rows.length, rows }, error: null };
+    } } as unknown as SupabaseClient;
+    const profile = (await loadProfileSectionBuildData(client)).people.get('person')!;
+    expect(Object.keys(profile.legislation)).toEqual(tables);
+    outputs.push(JSON.stringify(profile));
+    completions.push(completed);
+  }
+  expect(completions[0]).not.toEqual(completions[1]);
+  expect(outputs[0]).toBe(outputs[1]);
+  expect(Bun.hash(outputs[0])).toBe(Bun.hash(outputs[1]));
+});
+
 const baseline = process.env.BUILD_GROUPING_BASELINE_DIR;
 test.skipIf(!baseline)('directory/profile snapshot paths, hashes and public HTML match the pre-change output', async () => {
   let files = 0;

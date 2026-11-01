@@ -749,6 +749,42 @@ production only with public credentials and the configured public Turnstile key.
 
 ### Verifying public profile snapshots
 
+Run `bun test scripts/tests/organization-build-data.test.ts scripts/tests/profile-build-data.test.ts scripts/tests/directories.test.ts`
+when changing shared organization/affiliation reads. Concurrent profile,
+organization and directory consumers must reuse one production stream per table
+and client, with no extra organization fields entering profile affiliations.
+Tests cover paging beyond 1,000 rows, database ordering, public-person filters,
+client isolation, later-page failure propagation, fresh development reads and
+recovery after a development failure. The synthetic three-page-per-table fixture
+uses nine requests across consumers instead of the previous five-stream layout's
+15 (people once, organizations twice, affiliations twice).
+
+Before the refactor, save the built `directory-data/`, `profile-data/`, `people/`,
+`orgs/`, `elections/` and `counties/` directories outside the repo. Rebuild against
+the same dataset and use the existing `BUILD_GROUPING_BASELINE_DIR` output check
+for directory/profile paths, hashes and HTML; compare county output too because
+its government curation uses these readers. An independent repeat exposed an
+existing race: legislative resource keys followed RPC completion order, changing
+28 profile hashes and their HTML references despite equivalent data. Resource
+assembly now uses an explicit order after reads finish; the grouping suite varies
+completion order and checks identical profile JSON/hashes. Pre-fix baselines can
+therefore differ in profile key order and asset references. Compare their parsed
+data semantically, then save a new stabilized baseline and require byte-identical
+paths, hashes and HTML across repeated builds. County output is unaffected.
+The corrected local comparison found all 894 saved files semantically equivalent:
+838 retained exact bytes/paths, while 28 profile JSON assets and 28 HTML references
+changed only resource-key order/content hashes. Two builds with stabilized
+assembly then matched all 894 paths and files byte for byte.
+
+An actual local concurrent profile/organization/directory read used 141 public
+people and 59 organizations: people requests stayed at one, organization requests
+fell from two to one, and affiliation requests fell from two to one (five total
+requests to three). One 437-page build changed from 4.53 s to 4.34 s. The local
+dataset had no bills, legislative votes or sponsorships; these timings do not
+establish production savings. Measure with the release dataset separately.
+Exercise organization affiliation and election candidate searches and public
+profiles anonymously and with a real local session, watching console errors.
+
 Run `bun test scripts/tests/profile-sections.test.ts
 scripts/tests/profile-section-data.test.ts` and
 `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres

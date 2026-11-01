@@ -184,6 +184,18 @@ fabricated margin. Figures from different periods are labeled separately.
 
 ### Profile build requests
 
+`organization-build-data.ts` shares production organization and affiliation
+promises by anonymous build client across profiles, organization readers and
+directory generation. The organization stream selects the existing full public
+organization fields in database `name,id` order; profile affiliation projections
+remain explicitly limited to `id,slug,name,role`. Affiliation pages retain
+`person_id,organization_id` order. Profiles and directory assembly still apply
+their public-person/readable-organization allowlists before using relationships.
+Failed streams reject every dependent consumer, rather than publishing partial
+data. Development deliberately bypasses these production caches so each read
+retains its existing freshness. `build-rows.ts` holds the unchanged sequential
+500-row reader; its previous profile-module export remains available.
+
 People and organization profiles share one in-flight public profile snapshot per
 production build. People, organizations and affiliations load in three parallel
 streams, each fetching stable, ordered pages of 500 rows sequentially. Profiles
@@ -473,6 +485,10 @@ data cannot be recalled; private/unlisted data must never be made public as a
 workaround. Old open pages may need a reload following publication.
 
 ### Public profile section snapshots
+
+Parallel legislative reads fill indexed slots, then assemble resource keys in
+the explicit terms/sessions/bodies/sponsorships order. RPC completion order must
+not affect serialized profile JSON or its content-hashed asset path.
 
 After public exports complete, profile sponsorship assembly builds one office-term
 index of positions in the shared sponsorship array. Each profile looks up its
