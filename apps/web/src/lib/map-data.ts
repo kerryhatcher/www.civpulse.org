@@ -18,6 +18,8 @@ export async function fetchMapLayers(config: MapConfig, publicPreview = false, c
   if (error) throw new Error(error.message);
   return ((data ?? []) as LayerConfig[]).map(layer => {
     const published = layer.visibility === 'public' && manifest?.layers.find(item => item.id === layer.id);
-    return published ? { ...layer, source_type: published.source_type, source_url: published.source_url } : layer;
+    // The RPC remains the authority for IDs/visibility. For an authorized public
+    // snapshot layer, presentation and attribution must match its published geometry.
+    return published || layer;
   });
 }

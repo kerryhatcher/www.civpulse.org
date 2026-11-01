@@ -61,6 +61,10 @@ The built-output check follows every layer continuation and compares all titles
 and ordering with the exact geometry/presentation manifest. Unit coverage checks
 public filtering, shared geometry/external reads, fail-closed source errors,
 source dates, configured-only fields and unsafe URL rejection.
+Access-check regressions also vary live names/title fields/attribution against
+published metadata for anonymous and signed-in callers. Authorized public layers
+retain their complete published configuration; omitted layers are never restored,
+restricted layers stay live/gated, and RPC failures never fall back to snapshots.
 
 Browser-test a public map without JavaScript at desktop/mobile widths: read its
 credits and source dates, follow a large layer's feature pages and return to the

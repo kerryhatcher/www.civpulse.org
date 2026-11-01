@@ -549,7 +549,12 @@ are downloaded; homepage previews use only public default-visible layers.
 A public anonymous map load needs no map/layer RPC unless its manifest indicates
 unlisted layers, which are never exported. Signed-in map views consult the live
 layer RPC to preserve private/unlisted access; only layers still returned as
-public can reuse published geometry. UUID map viewers retain the live map,
+public reuse the complete published layer, including name, description, style,
+presentation, attribution and geometry, so readable evidence and the interactive
+view stay on one snapshot until rebuild. The RPC's returned IDs and visibility
+remain authoritative: omitted layers stay omitted, newly restricted layers use
+their live gated configuration, and new layers without a snapshot remain live.
+UUID map viewers retain the live map,
 layer and geometry gates. No auth, RLS, or backend schema changes are involved.
 
 Configured backend errors, invalid/truncated pages or changing feature totals
