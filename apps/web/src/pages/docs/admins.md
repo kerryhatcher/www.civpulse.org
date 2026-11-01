@@ -510,3 +510,9 @@ to confirm/correct an identity. Omit target_id to create a new person/organizati
 stub that still needs review. Reclassification preserves all payment source facts
 and does not delete the previous stub. Do not treat a provisional organization
 classification as a verified legal identity. Payroll aggregates have no payee link.
+
+Payroll imports can link a source row to an existing person before publication
+when source evidence supports the identity. Only uncertain rows need separate
+person stubs flagged for review. Preserve the original payroll name and use a
+sourced review note for spelling, initials or name-order differences; a similar
+name alone is insufficient. See [the finance import contract](https://github.com/kerryhatcher/www.civpulse.org/blob/main/docs/school-finances.md).

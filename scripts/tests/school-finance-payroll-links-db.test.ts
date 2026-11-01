@@ -1,0 +1,21 @@
+import {expect,test} from 'bun:test';
+import {SQL} from 'bun';
+const url=process.env.FINANCE_TEST_DATABASE_URL;
+test.skipIf(!url)('reviewed payroll links preserve curated people through review, retry, and withdrawal',async()=>{
+ const db=new SQL(url!),rollback=new Error('rollback');try{await db.begin(async tx=>{
+ for(const [table,file] of [['school_finance_releases','20261125001000_school_finances.sql'],['school_finance_recipients','20261125001100_school_finance_recipients.sql']])if(!(await tx`select to_regclass(${`public.${table}`}) t`)[0].t)await tx.unsafe(await Bun.file(`supabase/migrations/${file}`).text());
+ if(!(await tx`select 1 from information_schema.columns where table_schema='public' and table_name='school_finance_rows' and column_name='person_is_stub'`).length)await tx.unsafe(await Bun.file('supabase/migrations/20261125001200_school_finance_payroll_links.sql').text());
+ const admin=crypto.randomUUID(),person=crypto.randomUUID();await tx`insert into auth.users(id,email) values(${admin},${admin+'@example.test'})`;await tx`insert into public.admins(user_id) values(${admin})`;await tx`insert into public.people(id,slug,full_name,description,visibility) values(${person},${'qa-'+person},'Supported QA Person','Curated biography','public')`;
+ await tx.unsafe('set local role authenticated');await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
+ const call=async(a:string,p:unknown)=>(await tx`select public.manage_school_finances(${a},${JSON.stringify(p)}::text::jsonb) r`)[0].r;
+ const fail=async(fn:()=>Promise<unknown>,message:string)=>{await tx.unsafe('savepoint rejected');let caught=false;try{await fn()}catch(e){caught=true;expect(String(e)).toContain(message)}finally{await tx.unsafe('rollback to savepoint rejected')}expect(caught).toBe(true)};
+ const release=await call('begin',{dataset:'payroll',fiscal_year:2023,source_url:'https://open.ga.gov/export/qa.zip',source_sha256:'8'.repeat(64),source_filename:'qa.txt',source_filters:{organization:'BIBB COUNTY BOARD OF EDUCATION'},retrieved_at:'2026-11-01T00:00:00Z',parser_version:'qa',expected_rows:3,expected_amount:'30.00',expected_travel:'0.00'});
+ await call('append',{release_id:release.release_id,rows:['PERSON,SUPPORTED QA','UNCERTAIN,QA','UNCERTAIN,QA'].map((name,i)=>({row_number:i+1,source_row_number:i+1,name,title:'QA TEACHER',amount:'10.00',travel:'0.00'}))});
+ const binding={release_id:release.release_id,row_number:1,person_id:person,confirm_identity:true,review_note:'Verified synthetic identity against independent source evidence'};
+ await fail(()=>call('resolve_payroll_person',{...binding,review_note:'short'}),'review note');await fail(()=>call('resolve_payroll_person',{...binding,person_id:crypto.randomUUID()}),'target does not exist');await call('resolve_payroll_person',binding);await call('resolve_payroll_person',binding);
+ expect((await tx`select public.browse_school_finances('payroll',2023) r`)[0].r.release).toBeNull();await call('publish',{release_id:release.release_id,confirm_publication:true});await call('publish',{release_id:release.release_id,confirm_publication:true});
+ const rows=(await tx`select public.browse_school_finances('payroll',2023,'',0,100,'name') r`)[0].r.rows;const linked=rows.find((r:any)=>r.row_number===1);expect(linked.person_id).toBe(person);expect(linked.identity_review_required).toBe(false);const uncertain=rows.filter((r:any)=>r.row_number!==1);expect(new Set(uncertain.map((r:any)=>r.person_id)).size).toBe(2);expect(uncertain.every((r:any)=>r.identity_review_required)).toBe(true);
+ await fail(()=>call('resolve_payroll_person',binding),'Staging payroll');await call('review_person',binding);await call('withdraw',{release_id:release.release_id});await tx.unsafe('reset role');const canonical=(await tx`select description,visibility from public.people where id=${person}`)[0];expect(canonical.description).toBe('Curated biography');expect(canonical.visibility).toBe('public');expect((await tx`select count(*)::int n from public.people where id in (${uncertain[0].person_id},${uncertain[1].person_id}) and visibility='unlisted'`)[0].n).toBe(2);
+ await tx.unsafe('set local role anon');await fail(()=>call('resolve_payroll_person',binding),'permission denied');throw rollback;
+ })}catch(e){if(e!==rollback)throw e}finally{await db.close()}
+},30000);
