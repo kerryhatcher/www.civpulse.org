@@ -8,6 +8,7 @@ import '@fontsource/barlow/500.css';
 import '@fontsource/barlow/600.css';
 import '@fontsource/barlow/700.css';
 import { GEORGIA_COUNTIES, DEFAULT_COUNTY } from '../lib/county-scope';
+import { shouldNoIndex } from '../lib/indexing-policy.mjs';
 
 interface Props {
   title: string;
@@ -51,6 +52,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {shouldNoIndex(Astro.url.pathname) && <meta name="robots" content="noindex, follow" />}
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#0838d7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#090f20" media="(prefers-color-scheme: dark)" />

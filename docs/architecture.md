@@ -189,6 +189,39 @@ See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 
 ## Visibility model
 
+### Search engine indexing policy
+
+`src/lib/indexing-policy.mjs` supplies one static HTML/sitemap policy. The shared
+Layout emits `robots: noindex, follow` for the following utility shells, including
+requests with query strings. The same paths are omitted from the sitemap.
+Other public HTML uses the default indexable behavior without a robots meta tag.
+
+| Route family | Indexing policy | Public discovery destination |
+| --- | --- | --- |
+| `/signin/`, `/signup/`, `/account/` | Noindex | Public civic directories |
+| `/admin/` and descendants | Noindex | Published public records |
+| `/oauth/` and descendants | Noindex | AI connection guide `/docs/ai/` |
+| `/search/`, `/history/` | Noindex, including query results and revisions | Public directories and record pages |
+| `/maps/view/`, `/people/view/`, `/elections/view/` | Noindex, regardless of session or requested record visibility | Public `/maps/<slug>/`, `/people/<slug>/`, `/elections/<slug>/` pages |
+| `/calendar/view/`, `/requests/view/`, `/legislation/view/`, `/legislation/vote/`, `/legislation/session/` | Noindex, including live public viewers | Published `/records/{events,requests,bills,votes,sessions}/<uuid>/` pages |
+| Exact `/404`, `/404/`, `/404.html` | Noindex | Valid public URLs, including IDs starting with `404`, remain indexable |
+| Home, about, guides, county hubs, public profiles/maps/elections, directories and `/records/` archives/details | Indexable and included in the sitemap | Self-canonical public pages |
+| Public browsing tools `/calendar/`, `/documents/`, `/elections/results/`, `/finances/`, `/statistics/` | Indexable, queryless canonical, included in the sitemap | Their public directory/report content |
+
+Generated JSON assets remain omitted from the sitemap under its existing rules.
+Cloudflare short links `/l/*` retain their separate response-level noindex policy.
+Pretty restricted map rewrites serve the same noindex viewer HTML. No request-time
+visibility decision is made while rendering HTML: a shared UUID shell remains
+noindex even when its current record is public. Published record URLs keep their
+own public indexing policy.
+
+`robots.txt` continues allowing crawling so engines can observe noindex. Meta tags
+work in Astro dev, preview and static hosting; duplicate `_headers` rules are not
+needed for these HTML pages. Noindex is a discovery hint, not access control:
+existing RLS/RPC gates and the public/unlisted/private rules below still enforce
+access. Sitemap omission alone does not prevent indexing, and removal can wait
+until a crawler revisits the page. See [Google's noindex guidance](https://developers.google.com/search/docs/crawling-indexing/block-indexing).
+
 Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 | Value | Meaning |

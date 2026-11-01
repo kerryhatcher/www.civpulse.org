@@ -858,12 +858,25 @@ Run `bun test scripts/tests/public-records.test.ts`, `bun run check` and
 
 ### Sitemap route filtering
 
+The shared `apps/web/src/lib/indexing-policy.mjs` determines both the Layout's
+static `noindex, follow` meta tag and sitemap exclusions. Keep its route families
+aligned with the [indexing matrix](architecture.md#search-engine-indexing-policy).
+Do not block utility/viewer paths in `robots.txt`; crawlers must read their meta tags.
+
 The sitemap filter in `apps/web/astro.config.mjs` matches only the exact error-page
 paths `/404`, `/404/` and `/404.html`. Do not exclude every URL containing `/404`:
 valid public UUIDs and slugs can start with those digits. Public record details
 and paginated archives belong in the sitemap; admin/auth shells, UUID viewers
 and generated JSON assets remain excluded. Run `bun test scripts/tests/sitemap.test.ts`
 when changing the filter, then check the deployed XML against public record IDs.
+
+After `bun run build`, run
+`INDEXING_TEST_DIST=apps/web/dist bun test scripts/tests/sitemap.test.ts scripts/tests/indexing-build.test.ts`.
+This inspects every generated HTML page's robots meta, its sitemap membership,
+and crawl permission in the generated robots file. The output sweep skips unless
+the dist path is supplied. Also check the rendered sign-in/account/admin and
+UUID viewer pages anonymously and with a local session; public profile/record
+pages must remain indexable. Noindex must not change viewer RPC access outcomes.
 
 ### Verifying full-site build performance
 
