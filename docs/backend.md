@@ -96,8 +96,9 @@ Only admins write. Direct reads expose public/public links (admins can also edit
 hidden links). `get_person_relationships(p_person_id)` is a security-definer RPC
 with empty search path and explicit execution grants. It normalizes labels and
 requires **both** endpoints public for anonymous callers, including when the
-owner is an unlisted UUID. Signed-in viewers may read both endpoints under the
-existing person viewer rules; hidden targets link to the UUID viewer. This does
+owner is an unlisted UUID. Ordinary signed-in viewers may read public and unlisted
+endpoints; private endpoints require an admin, matching `get_person`. Hidden
+targets link to the UUID viewer. This does
 not make unlisted people publicly discoverable. Anonymous paginated build reads
 and a second public-person allowlist produce static related-person lists.
 Signed-in enhancement replaces that list only after a successful permission-checked
@@ -106,7 +107,10 @@ gates, and relationship writes mark the frontend rebuild dependency dirty.
 
 Validate locally with
 `PERSON_RELATIONSHIPS_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-relationships-db.test.ts`.
-Fixtures roll back. Release migration `20261125001500` through GitHub main
+Fixtures and the validation/visibility follow-up schema changes roll back. Labels
+must contain a non-whitespace character; source URLs require an HTTP(S) host
+(case-insensitive scheme), with no whitespace, credentials or backslashes.
+Release migrations `20261125001500` and `20261125001600` through GitHub main
 before production application, then deploy the matching MCP tools and rebuild the
 static site. No feature-branch production SQL or migration-history repair.
 

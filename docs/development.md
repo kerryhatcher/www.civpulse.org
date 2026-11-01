@@ -1384,8 +1384,12 @@ After applying pending migrations to the local database with
 
 `PERSON_RELATIONSHIPS_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-relationships-db.test.ts scripts/tests/person-relationships.test.ts scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts`.
 
-DB fixtures roll back and test both-endpoint visibility, directional reads,
-constraints and admin writes. For browser QA use synthetic local public/unlisted/
+DB fixtures and the append-only validation/visibility follow-up are applied inside
+the test transaction and roll back, without changing migration history. Coverage
+includes whitespace-only labels, malformed source authorities, uppercase HTTP(S)
+schemes, reciprocal labels and both-endpoint gates: anonymous public-only,
+ordinary signed-in public/unlisted, admin private access, and admin-only writes.
+For browser QA use synthetic local public/unlisted/
 private people, rebuild for the public snapshot, verify both directions with JS
 disabled and anonymous/actual Admin sessions at desktop/mobile widths, then remove
 the fixtures and rebuild cleanly. Check labels are text-escaped, hidden names/IDs

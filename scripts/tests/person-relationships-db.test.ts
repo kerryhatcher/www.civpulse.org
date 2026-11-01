@@ -5,6 +5,9 @@ test.skipIf(!process.env.PERSON_RELATIONSHIPS_TEST_DATABASE_URL)('person links g
   const sql = new SQL(process.env.PERSON_RELATIONSHIPS_TEST_DATABASE_URL!);
   const rollback = new Error('rollback person relationship fixtures');
   try { await sql.begin(async tx => {
+    // Exercise the append-only follow-up without persistently changing local
+    // schema or migration history; CI may already have applied it.
+    await tx.unsafe(await Bun.file('supabase/migrations/20261125001600_person_relationship_validation_visibility.sql').text());
     const [initialRebuild] = await tx`select revision from public.frontend_rebuild_state where id`;
     const admin = crypto.randomUUID(), user = crypto.randomUUID(), suffix = crypto.randomUUID();
     for (const id of [admin,user]) await tx`insert into auth.users(id,email) values (${id},${`${id}@example.test`})`;
@@ -37,9 +40,20 @@ test.skipIf(!process.env.PERSON_RELATIONSHIPS_TEST_DATABASE_URL)('person links g
     await denied(()=>tx`insert into public.person_relationships(person_id,related_person_id,relationship,reverse_relationship) values (${a},${crypto.randomUUID()},'Missing','Missing')`,'23503');
     await denied(()=>tx`update public.person_relationships set source_url='javascript:alert(1)' where id=${links[0]}`,'23514');
     await denied(()=>tx`update public.person_relationships set relationship=' ' where id=${links[0]}`,'23514');
+    for (const blank of ['\t','\n',' \t\r\n ']) {
+      await denied(()=>tx`update public.person_relationships set relationship=${blank} where id=${links[0]}`,'23514');
+      await denied(()=>tx`update public.person_relationships set reverse_relationship=${blank} where id=${links[0]}`,'23514');
+    }
+    for (const invalid of ['https://#fragment','https://?query','https:///path','https://:443','https://example.test:bad','https://example.test/with space','https://example.test\\path']) {
+      await denied(()=>tx`update public.person_relationships set source_url=${invalid} where id=${links[0]}`,'23514');
+    }
+    for (const valid of ['HTTP://example.test/path','HTTPS://example.test:443/path?query=value#fragment','https://[::1]/record',null]) {
+      await tx`update public.person_relationships set source_url=${valid} where id=${links[0]}`;
+    }
     await tx`update public.person_relationships set reverse_relationship='Updated parent' where id=${links[0]}`;
     await tx.unsafe('set local role anon'); await tx`select set_config('request.jwt.claim.sub','',true)`;
     expect((await tx`select * from public.get_person_relationships(${a})`).map(r=>r.related_person_id)).toEqual([b]);
+    expect((await tx`select * from public.get_person_relationships(${a})`)[0].relationship).toBe('Child of');
     expect((await tx`select * from public.get_person_relationships(${b})`)[0].relationship).toBe('Updated parent');
     expect(await tx`select * from public.get_person_relationships(${u})`).toHaveLength(0);
     expect(await tx`select * from public.get_person_relationships(${p})`).toHaveLength(0);
@@ -50,14 +64,17 @@ test.skipIf(!process.env.PERSON_RELATIONSHIPS_TEST_DATABASE_URL)('person links g
     await denied(()=>tx`insert into public.person_relationships(person_id,related_person_id,relationship,reverse_relationship) values (${b},${u},'Unauthorized','Unauthorized')`,'42501');
     await denied(()=>tx.unsafe('truncate public.person_relationships'),'42501');
     await tx.unsafe('set local role authenticated'); await tx`select set_config('request.jwt.claim.sub',${user},true)`;
-    expect(await tx`select * from public.get_person_relationships(${a})`).toHaveLength(3);
-    expect((await tx`select * from public.get_person_relationships(${p})`)[0].related_person_id).toBe(a);
-    expect(await tx`select * from public.get_person_relationships(${p})`).toHaveLength(2);
+    expect((await tx`select * from public.get_person_relationships(${a})`).map(r=>r.related_person_id)).toEqual([b,u]);
+    expect((await tx`select * from public.get_person_relationships(${u})`).map(r=>r.related_person_id)).toEqual([a]);
+    expect(await tx`select * from public.get_person_relationships(${p})`).toHaveLength(0);
+    expect((await tx`select public.get_person(${p}) as body`)[0].body.status).toBe('private');
     expect(await tx`select id from public.person_relationships where person_id=${a}`).toHaveLength(1);
     await denied(()=>tx`insert into public.person_relationships(person_id,related_person_id,relationship,reverse_relationship) values (${b},${u},'Unauthorized','Unauthorized')`,'42501');
     expect(await tx`update public.person_relationships set relationship='Unauthorized' where person_id=${a} returning id`).toHaveLength(0);
     expect(await tx`delete from public.person_relationships where person_id=${a} returning id`).toHaveLength(0);
     await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
+    expect(await tx`select * from public.get_person_relationships(${a})`).toHaveLength(3);
+    expect((await tx`select * from public.get_person_relationships(${p})`).map(r=>r.related_person_id)).toEqual([a,u]);
     expect(await tx`select id from public.person_relationships where person_id=${a}`).toHaveLength(3);
     await tx`delete from public.person_relationships where id=${links[0]}`;
     expect(await tx`select id from public.people where id=${b}`).toHaveLength(1);
