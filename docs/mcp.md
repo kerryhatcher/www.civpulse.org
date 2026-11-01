@@ -306,6 +306,22 @@ The account package links a registered ChatGPT cloud app through `.app.json`;
 direct-client MCP configuration is preserved separately in
 `plugins/civpulse-mcp.json`. The registered connection handles OAuth in ChatGPT.
 
+## Claude Code plugin
+
+[plugins/civpulse-claude](../plugins/civpulse-claude/README.md) is a separate
+Claude Code package (marketplace manifest at `.claude-plugin/marketplace.json`).
+It declares the remote `civpulse` server at `/mcp/v2` in `.mcp.json`, bundles the
+skills and `references/` shared with `plugins/civpulse` (copied, not symlinked,
+because Claude Code installs plugins into a cache), and adds a `civic-data-model`
+skill, three agents and `/civpulse:status`. The agents list explicit MCP tools:
+`civic-researcher` has read-only tools only and `civic-editor` has no record
+`delete_*` tools. Both are checked against the generated compact catalog.
+
+After changing `plugins/civpulse` or the tool catalog, run
+`bun run plugin:build && bun run plugin:claude:sync`. CI runs
+`bun run plugin:claude:check`, which fails on drift, unknown tool names in agent
+definitions, broken skill links, symlinks or bundled credentials.
+
 ## Enabling it on a Supabase project
 
 The hosted Civic Pulse project has OAuth and dynamic registration enabled, with

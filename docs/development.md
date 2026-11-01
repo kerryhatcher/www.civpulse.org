@@ -99,6 +99,8 @@ branch, including office/office-term writes and feature ID precision. It also
 checks v2's signed-out and account-directory denial. No hosted credentials
 are used. Run `bun run mcp:check`, `bun run mcp:build`, and `bun run plugin:build`
 to validate and regenerate both catalogs and the deployable Edge Function bundle.
+Then run `bun run plugin:claude:sync` to refresh the Claude Code plugin's copies
+of the shared skills and references (`bun run plugin:claude:check` verifies them).
 See [the migration guide](mcp.md#compact-catalog-v2).
 
 Related-read tests compare all 15 original handlers with their compact selectors,
