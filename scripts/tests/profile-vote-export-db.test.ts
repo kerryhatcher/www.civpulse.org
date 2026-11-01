@@ -54,3 +54,17 @@ test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('profile vote export preserv
  throw rollback;
  });}catch(e){if(e!==rollback)throw e;}finally{await sql.close();}
 },120000);
+
+test.skipIf(!process.env.PROFILE_TEST_DATABASE_URL)('office export skips thousands of source profiles without terms and preserves anonymous gates',async()=>{
+ const db=new SQL(process.env.PROFILE_TEST_DATABASE_URL!),rollback=Error('rollback office export');try{await db.begin(async tx=>{
+ const suffix=crypto.randomUUID(),org=crypto.randomUUID(),office=crypto.randomUUID(),person=crypto.randomUUID(),hidden=crypto.randomUUID();
+ await tx`insert into organizations(id,name,slug) values(${org},'Office export QA',${suffix})`;await tx`insert into offices(id,organization_id,name) values(${office},${org},'Representative')`;
+ await tx`insert into people(id,full_name,slug,visibility) values(${person},'Public office QA',${suffix+'-public'},'public'),(${hidden},'Hidden office QA',${suffix+'-hidden'},'unlisted')`;
+ await tx`insert into office_terms(office_id,person_id,selection_method,starts_on) values(${office},${person},'elected','2024-01-01'),(${office},${hidden},'elected','2024-01-01')`;
+ await tx`insert into people(full_name,slug,visibility) select 'Payroll source QA '||n,${suffix}||'-source-'||n,'public' from generate_series(1,7000) n`;
+ await tx.unsafe(await Bun.file('supabase/migrations/20261125001300_profile_office_export_scale.sql').text());
+ await tx.unsafe('set local role anon');await tx`select set_config('request.jwt.claim.sub','',true)`;await tx.unsafe("set local statement_timeout='2s'");
+ const rows=await tx`select * from public.export_public_profile_rows('offices',0,500)`;const expected=await tx`select * from public.get_office_terms(${person})`;expect(rows.filter(r=>r.owner_id===person).map(r=>r.data.id)).toEqual(expected.map(r=>r.id));expect(rows.some(r=>r.owner_id===hidden)).toBe(false);
+ await tx.unsafe('set local role authenticated');await tx`select set_config('request.jwt.claim.sub',${crypto.randomUUID()},true)`;await tx.unsafe('savepoint denied');let denied=false;try{await tx`select * from public.export_public_profile_rows('offices',0,500)`}catch{denied=true}await tx.unsafe('rollback to savepoint denied');expect(denied).toBe(true);throw rollback;
+ })}catch(e){if(e!==rollback)throw e}finally{await db.close()}
+},30000);

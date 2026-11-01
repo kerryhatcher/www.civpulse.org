@@ -1768,3 +1768,9 @@ bindings (`resolve_payroll_person`) and row-level stub ownership. Publication
 creates profiles only for unresolved rows. Review, withdrawal and supersession
 preserve canonical biographies, visibility and affiliations; only source-owned
 stubs receive those lifecycle mutations. Original financial facts remain immutable.
+
+Migration `20261125001300` materializes public people who actually have office
+terms before invoking the gated office-history reader in the static profile
+export. Imported payroll/payee profiles without terms cannot contribute rows;
+excluding them avoids timeouts as person counts grow. Anonymous-only execution,
+visibility rules, output fields, ordering and pagination remain unchanged.
