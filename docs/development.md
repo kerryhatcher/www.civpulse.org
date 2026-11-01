@@ -1205,6 +1205,34 @@ load one people/affiliation snapshot per route request, including development.
 Do not call the single-organization reader once for every stub: in development
 it intentionally reloads data and thousands of concurrent snapshots exhaust memory.
 
+### Structured data verification
+
+After `bun run check` and `bun run build`, run
+`STRUCTURED_DATA_TEST_DIST=apps/web/dist bun test scripts/tests/structured-data.test.ts`.
+This checks identity/relationship projections, hidden parent exclusions, all-day
+inclusive dates, script-termination escaping and actual built graphs/canonicals.
+Check representative home, person, organization, election and public event pages
+in a browser; breadcrumb names must match visible headings and no graph may be
+added by signing in. Confirm restricted UUID viewers still emit no JSON-LD.
+The local seed contains election deadlines/voting periods, so zero `Event` nodes
+is expected there; the event regression uses an explicit synthetic physical
+meeting and must not invent details to make a live record pass validation.
+
+Submit rendered code to [Google's Rich Results Test](https://search.google.com/test/rich-results)
+for supported Organization/BreadcrumbList markup, and to the
+[Schema.org validator](https://validator.schema.org/) for Person/WebSite/Event
+vocabulary. A valid Schema.org event with a venue name can still lack Google's
+required detailed address. Report actual tool results and any access/challenge
+blocker; a parser test alone is not an external-validator result. Do not deploy
+feature code simply to obtain a public URL for these code-input tools.
+
+Local validation on November 1, 2026: Schema.org accepted the built public Person
+and BreadcrumbList with zero errors/warnings. Further homepage validation did
+not complete within the bounded tool attempt. Google's code-input test returned
+“Something went wrong — Log in and try again”; a Google pass is therefore not
+claimed. The local browser checked temporary physical-event fixtures and
+anonymous/admin viewer exclusions; those fixtures were removed afterward.
+
 ### Sparse related-profile export verification
 
 Run `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-related-export-db.test.ts`.

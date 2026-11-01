@@ -41,6 +41,53 @@ docs/         architecture, backend, and development notes
 
 ## Page titles and descriptions
 
+### Public structured data
+
+`structured-data.ts` emits a small JSON-LD graph through the shared Layout.
+The homepage identifies Civic Pulse as an `Organization` and its `WebSite`, with
+an explicit publisher relationship. It does not identify Civic Pulse as a public
+agency or as the parent of any organization listed on the site.
+
+Public person and organization slug pages emit `Person` and `Organization`
+respectively. UUID-based absolute entity IDs remain stable when a slug changes;
+`url` and `mainEntityOfPage` use the same canonical public URL as the HTML.
+Person names, public portraits and displayed public organization affiliations
+are included. Affiliation does not imply employment, current office or endorsement;
+recorded titles can describe past service and are not emitted as `jobTitle`.
+Organization names, displayed summaries and logos come from the existing public
+snapshot. Website/social fields are not automatically promoted to verified
+`sameAs` identities. No ratings, inferred government relationships or hidden
+records enter these graphs.
+
+Profiles, election pages and public event detail pages include visible breadcrumbs
+and matching `BreadcrumbList` data. Elections are not labeled as events. Individual
+public event details may emit `Event` when they have valid dates and a recorded
+physical venue. Public event, calendar and election-parent gates still apply;
+election deadlines/voting periods, missing venues and explicit virtual locations
+are excluded. All-day dates use the displayed New York calendar dates, including
+the inclusive last day instead of the database's exclusive end. Venue text is
+preserved as `Place.name`; it is not parsed into an invented postal address.
+Calendar ownership alone does not establish an organizer. No admission policy,
+ticket offer, cancellation status or performer is inferred.
+
+This is Schema.org vocabulary, not a guarantee of Google rich-result eligibility.
+In particular, free-text venues do not establish Google's required detailed
+event address or public admission. Utility/auth/admin/restricted viewer shells
+emit no graphs, even when opened by an administrator; the browser never augments
+JSON-LD from privileged live data. Serialization escapes HTML script terminators
+and line separators before inserting JSON into an inline script.
+
+Maintenance follows [Google's general structured-data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies),
+[Organization guidance](https://developers.google.com/search/docs/appearance/structured-data/organization),
+[site-name guidance](https://developers.google.com/search/docs/appearance/site-names),
+[breadcrumbs](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb)
+and [event guidance](https://developers.google.com/search/docs/appearance/structured-data/event).
+The vocabulary references are [Person](https://schema.org/Person),
+[Organization](https://schema.org/Organization), [WebSite](https://schema.org/WebSite),
+[BreadcrumbList](https://schema.org/BreadcrumbList) and [Event](https://schema.org/Event).
+
+### Editorial titles and descriptions
+
 The shared Layout uses each page's title/description for both HTML metadata and
 Open Graph, adds the Civic Pulse title suffix once, and publishes the same
 queryless public URL in canonical and `og:url`. Titles describe the page subject;
