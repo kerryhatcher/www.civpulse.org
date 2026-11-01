@@ -1,4 +1,5 @@
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownSourceDates } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { getSupabase } from '../lib/supabase';
 
@@ -27,6 +28,7 @@ function renderVote(vote: PersonVote): HTMLElement {
   });
   meeting.append(link, ' · ', date, ` · ${vote.organization_name}`);
   article.append(heading, result, meeting);
+  const provenance = document.createElement('p'); provenance.textContent = unknownSourceDates; article.append(provenance);
   if (vote.description) {
     const detail = document.createElement('p');
     detail.textContent = vote.description; article.append(detail);

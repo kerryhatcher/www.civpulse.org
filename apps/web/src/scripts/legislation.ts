@@ -1,4 +1,5 @@
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { legislativeVoteScope, unknownVerification } from '../lib/record-provenance';
 import {legislationAnchor} from '../lib/legislation-details';
 import {publicLegislationTarget} from './legislation-detail-target';
 import type {DetailTable} from '../lib/legislation-details';
@@ -97,6 +98,7 @@ export function legislativeCard(
         : document.createTextNode(label),
   );
   card.append(title);
+  if (table === 'legislative_votes') card.append(node('p', unknownVerification));
   const states = node("div");
   states.className = "legislation-states";
   if (table === "bills" && row.jurisdiction) {
@@ -577,7 +579,7 @@ export async function loadPersonLegislation(personId: string) {
   root.append(
     node(
       "p",
-      "Recorded legislative votes and sponsorships during this person’s service in office.",
+      "Recorded legislative votes and sponsorships during this person’s service in office. " + legislativeVoteScope,
     ),
   );
   const controls = node("form");

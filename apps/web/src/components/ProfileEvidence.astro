@@ -1,11 +1,14 @@
 ---
 import { PROFILE_EVIDENCE_PAGE_SIZE, type EvidenceSection } from '../lib/profile-evidence';
+import { meetingVoteScope, legislativeVoteScope } from '../lib/record-provenance';
 interface Props { section: EvidenceSection; historyHref?: string; page?: number }
 const { section, historyHref, page } = Astro.props;
 const start = page ? (page - 1) * PROFILE_EVIDENCE_PAGE_SIZE : 0;
 const rows = section.rows.slice(start, start + (page ? PROFILE_EVIDENCE_PAGE_SIZE : section.initial));
 ---
 <div data-public-profile-evidence={section.key}>
+  {page && section.key === 'votes' && <p>{meetingVoteScope}</p>}
+  {page && section.key === 'legislative-votes' && <p>{legislativeVoteScope}</p>}
   <p class="status">Published public snapshot; coverage may be incomplete. Source dates and recorded choices do not establish current office, attendance or a complete voting record.</p>
   {rows.length ? <>
     <p>Showing {start + 1}–{start + rows.length} of {section.rows.length} recorded entries.</p>

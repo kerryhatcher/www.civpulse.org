@@ -40,7 +40,36 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Record provenance and date semantics
+
+The provenance audit found these existing public facts; no schema was added:
+
+| Record | Available source facts | Date meaning and gaps |
+| --- | --- | --- |
+| Person biography | HTTP(S) citations in safe rendered Markdown | No dedicated publication/retrieval/verification fields; contact URLs are not citations |
+| Office term | `source_url`, service start/end and precision | Service period, not source publication or verification; missing source/date metadata is explicit |
+| Election | Public date/deadline URLs and ballot-question source URLs | Election/key dates describe events, not verification; source links remain claim-scoped |
+| Meeting/vote | Event source URL, recorded video and contextual public meeting record | Meeting/vote date is not source publication/retrieval or verification |
+| Article association | URL, `published_on`, `fetched_on`, role | Publication and retrieval are separate; neither establishes verification |
+| Legislative vote | Existing public source URL, occurrence date and coverage | `retrieved_at` remains excluded by the established public detail projection; no broader import metadata exposure |
+
+`RecordProvenance.astro` renders source/date context next to public biographies,
+elections and meeting/vote details. Compact profile history/live-card notes retain
+the same meanings after enhancement. Biography citations are discovered from
+anchors produced by the existing safe micromark renderer (including reference
+links); raw Markdown is not parsed by a new citation grammar. Source URLs reject
+executable schemes and embedded credentials. Hidden people/elections/dates cannot
+contribute public provenance. All dates remain explicit source facts or Unknown;
+`updated_at`, import completion and build time are never verification fallbacks.
+
+Vote scope notes persist after enhancement and on history pages: imported/added
+records can be incomplete, legislative attendance roll calls are excluded, and
+missing choices do not establish absence/opposition or a participation denominator.
+No official affiliation, source completeness or whole-record verification is
+inferred from a link. Refresh/publication conventions are in the admin guide.
+
 ## Readable profile evidence
+
 
 Public person/organization slug templates project the existing anonymous
 `getProfileSectionBuildData()` export into readable office, candidacy, article,

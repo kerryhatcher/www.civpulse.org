@@ -8,6 +8,8 @@ import ElectionScope from '../../components/ElectionScope.astro';
 import BallotResults from '../../components/BallotResults.astro';
 import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
+import RecordProvenance from '../../components/RecordProvenance.astro';
+import { electionSources } from '../../lib/record-provenance';
 import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
 import { CALENDAR_ZONE } from '../../lib/calendar-display';
@@ -94,6 +96,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       <a href="#results-and-turnout">Results &amp; turnout</a>
       <a href="#ballot">What's on the ballot</a>
     </nav>
+    <RecordProvenance sources={electionSources(detail)} recordDate={{ label: 'Election date (not a verification date)', value: formatElectionDate(election.election_date) }} note="Named sources below support their particular dates or ballot questions, not necessarily the entire election summary. A source publication or retrieval date is not recorded separately here." />
 
     <aside class="turnout-summary" aria-labelledby="turnout-summary-title">
       <h2 id="turnout-summary-title">Turnout at a glance</h2>

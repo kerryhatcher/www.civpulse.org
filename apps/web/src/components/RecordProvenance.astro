@@ -1,0 +1,19 @@
+---
+import { provenanceDates, recordSourceUrl, type ProvenanceSource } from '../lib/record-provenance';
+interface Props { title?: string; sources?: ProvenanceSource[]; recordDate?: { label: string; value: string }; note?: string; publishedOn?: string | null; fetchedOn?: string | null }
+const { title = 'Sources and verification', sources = [], recordDate, note, publishedOn, fetchedOn } = Astro.props;
+const safeSources = sources.filter(source => recordSourceUrl(source.url));
+---
+<aside class="record-provenance" aria-label={title}>
+  <h2>{title}</h2>
+  {safeSources.length ? <ul>{safeSources.map(source => <li><a href={recordSourceUrl(source.url)!}>{source.label}</a></li>)}</ul> : <p>Original source not recorded for this summary.</p>}
+  <dl>{recordDate && <div><dt>{recordDate.label}</dt><dd>{recordDate.value}</dd></div>}{provenanceDates(publishedOn, fetchedOn).map(fact => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
+  {note && <p>{note}</p>}
+  <p>Retrieval records when a source was obtained, not when its claims were verified. An edit, import or site publication timestamp is not a verification date. Check dated source notes for the scope of any claim.</p>
+</aside>
+<style>
+  .record-provenance { border-block: 1px solid var(--line); padding-block: 1rem; margin-block: 1.5rem; overflow-wrap: anywhere; }
+  h2 { font-size: 1.4rem; }
+  dl { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+  dt { font-weight: 600; } dd { margin: 0; }
+</style>

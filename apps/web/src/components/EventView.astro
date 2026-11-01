@@ -1,5 +1,7 @@
 ---
 import MeetingDetails from './MeetingDetails.astro';
+import RecordProvenance from './RecordProvenance.astro';
+import { recordSourceUrl, meetingVoteScope } from '../lib/record-provenance';
 import type {MeetingRecord} from '../lib/meetings';
 import ObjectHistoryLink from './ObjectHistoryLink.astro';
 import {eventSourceUrl, formatEventWhen, type EventRecord} from '../lib/calendars';
@@ -25,6 +27,10 @@ const sourceUrl=eventSourceUrl(event?.url);
         <a class="button-link" data-event-url href={sourceUrl ?? undefined} target="_blank" rel="noopener">Event details</a>
       </p>
       <MeetingDetails meeting={meeting} />
+      {event && <RecordProvenance sources={[
+        ...(recordSourceUrl(event.url) ? [{ label: 'Recorded event source', url: event.url! }] : []),
+        ...(recordSourceUrl(meeting?.event?.meeting_video_url) ? [{ label: 'Recorded meeting video', url: meeting!.event!.meeting_video_url! }] : []),
+      ]} recordDate={{ label: 'Meeting/event date (not a verification date)', value: formatEventWhen(event, 'America/New_York') }} note={event.is_meeting ? meetingVoteScope : 'This event record may be incomplete. Confirm the current event details with the named source.'} />}
       <p class="event-detail-actions">
         <a class="button-link event-edit" data-event-edit-link hidden>Edit event</a>
         <a class="event-back" data-event-calendar-link href="/calendar/">← Back to the calendar</a>

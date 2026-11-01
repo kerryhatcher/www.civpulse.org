@@ -52,6 +52,22 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Record provenance
+
+Run `bun test scripts/tests/record-provenance.test.ts scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts`,
+then check/build and
+`PROVENANCE_TEST_DIST=apps/web/dist bun test scripts/tests/record-provenance.test.ts`.
+Coverage includes separate source publication/retrieval facts, unknown verification,
+invalid dates, reference-style Markdown citations, escaped raw HTML, unsafe URLs
+and public-only source selection. The built check confirms missing date metadata
+does not become a build/edit date on person/election pages.
+
+In a browser with JavaScript disabled, verify a cited biography, sourced office,
+election date source and meeting/vote context, plus explicit unknowns. Repeat at
+desktop/mobile widths and after actual admin sign-in; live card enhancement must
+retain date semantics and vote exclusions/denominator notes. Temporary local
+citations/private source fixtures must be restored/removed before the final build.
+
 ### Readable profile evidence
 
 Run `bun test scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/profile-sections.test.ts`,

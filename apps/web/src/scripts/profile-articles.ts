@@ -1,4 +1,5 @@
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownVerification } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
@@ -21,7 +22,8 @@ function renderArticle(article: ProfileArticle): HTMLLIElement {
   fetched.textContent = articleFetchedLabel(article.fetched_on);
   const published = document.createElement('span'); published.className = 'candidate-meta';
   published.textContent = articlePublishedLabel(article.published_on);
-  link.append(title, source, published, fetched, role); item.append(link, historyLink('articles', article.id));
+  const verified = document.createElement('span'); verified.className = 'candidate-meta'; verified.textContent = unknownVerification;
+  link.append(title, source, published, fetched, role, verified); item.append(link, historyLink('articles', article.id));
   return item;
 }
 
