@@ -1755,3 +1755,10 @@ for repeated names. `browse_school_finances` exposes only current published
 releases and public person links, with filtered totals and indexed name/title
 search. RLS is enabled, with no direct API-role table grants. See
 [school finances](school-finances.md) for contracts and release verification.
+
+Payment recipients use `school_finance_recipients` and a foreign key on finance
+rows. Public import wrappers retain existing validation and atomically resolve
+nonaggregate payees at publication, reusing exact matches or creating review-marked
+organization stubs. Private helpers have no API execution grants; the recipient
+registry has RLS and no direct API table access. Public projections omit hidden
+person mappings. See [recipient profiles](school-finances.md#payment-recipient-profiles).

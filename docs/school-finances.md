@@ -183,3 +183,42 @@ Updater follow-ups: [collector #11](https://github.com/CivicPulse/updater/issues
 and [authenticated publisher #12](https://github.com/CivicPulse/updater/issues/12).
 
 The [fresh-download test report](research/bibb-school-finances-test-import-2026-11-01.json) records original checksums, exact totals, 4,260 distinct employee profiles, seven repeated-name groups, retry checks and anonymous readback. The test rolled back all records and schema changes.
+
+## Payment recipient profiles
+
+Migration `20261125001100_school_finance_recipients.sql` adds a shared recipient
+registry and a `recipient_id` foreign key on each nonaggregate payment row.
+At publication, a single exact name match across existing organizations and
+people is reused. Matching ignores case and repeated whitespace, but preserves
+punctuation; there is no fuzzy matching. Missing or ambiguous matches create a
+public **provisional organization stub**, as requested by the user. Stubs and
+unverified matches are marked for identity review. This provisional type does
+not establish that the recipient is legally an organization. Long source labels
+stay intact in the finance records; profile display names fit existing limits.
+
+SALARY, SALARIES and BENEFITS remain aggregates with no recipient profile.
+Registry mappings are reused across years/releases and exact publication retries;
+the immutable source name, amount and original row number do not change. Staging
+creates no profiles. Existing published releases are linked by the migration.
+Resolving a recipient does not delete a previous stub or unrelated affiliations.
+
+The admin `resolve_recipient` action takes `recipient_id`, `kind` (`person` or
+`organization`), a sourced `review_note` of 10–2000 characters, and optionally
+`target_id`. An existing target confirms the reviewed mapping. Omit `target_id`
+to create a stub of the selected kind; that new stub still needs identity review.
+This changes the shared mapping for every linked payment, not the source facts.
+The reporting organization remains independently linked on the release.
+
+Public browse rows include a `recipient` object with kind, profile ID/slug/name,
+stub status and review flag. Private/unlisted people and all their mapping IDs
+are omitted, even for signed-in/admin public browse. The source payment label
+remains public. The registry has RLS and no direct API-role table grants. Original
+import/read implementations live in a non-exposed private schema with revoked
+API execution; public wrappers retain admin checks and publication visibility.
+
+The UI links recipient names to their profiles and distinguishes provisional
+stubs, unverified links and reviewed identities. New pretty organization pages
+appear after the normal rebuild. Runtime finance search reflects publication
+immediately. Run `FINANCE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/school-finance-recipients-db.test.ts`
+for exact/ambiguous matching, cross-year reuse, identity correction, hidden-person
+redaction, retries, FK integrity and role/execute-grant checks.

@@ -539,3 +539,13 @@ No school location or current employment is inferred.
 Records are not unique employee headcounts or individual invoices. SALARY and
 BENEFITS payment entries overlap payroll, so never add those datasets. Missing
 years mean data is unavailable, not zero spending. Fiscal years run July 1–June 30.
+
+### Payment recipient profiles
+
+In school finance results, recipient names link to organization or person
+profiles. A **Provisional recipient stub · needs review** label means the source
+name has not been verified; an organization stub may later be classified as a
+person. Existing exact name matches also remain marked for review until checked.
+The table preserves the original reported name, even if the linked profile has a
+different display name. SALARY/SALARIES/BENEFITS entries remain payroll aggregates.
+New organization pages become available after the site's next publication build.

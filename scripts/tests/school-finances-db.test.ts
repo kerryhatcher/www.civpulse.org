@@ -6,6 +6,7 @@ test.skipIf(!url)('finance release import, retries, atomic publication, correcti
  const db=new SQL(url!),rollback=new Error('rollback');
  try { await db.begin(async tx=>{
   if (!(await tx`select to_regclass('public.school_finance_releases') t`)[0].t) await tx.unsafe(await Bun.file('supabase/migrations/20261125001000_school_finances.sql').text());
+  if (!(await tx`select to_regclass('public.school_finance_recipients') t`)[0].t) await tx.unsafe(await Bun.file('supabase/migrations/20261125001100_school_finance_recipients.sql').text());
   const admin=crypto.randomUUID();await tx`insert into auth.users(id,email) values(${admin},${`${admin}@example.test`})`;await tx`insert into public.admins(user_id) values(${admin})`;
   const fail=async(fn:()=>Promise<unknown>,message:string)=>{await tx.unsafe('savepoint bad');let caught=false;try{await fn()}catch(e){caught=true;expect(String(e)).toContain(message)}finally{await tx.unsafe('rollback to savepoint bad')}expect(caught).toBe(true)};
   const call=async(action:string,payload:unknown)=>(await tx`select public.manage_school_finances(${action},${JSON.stringify(payload)}::text::jsonb) r`)[0].r;
@@ -59,6 +60,7 @@ test.skipIf(!url||!process.env.FINANCE_SOURCE_DIR)('saved Bibb exports reconcile
  const db=new SQL(url!),rollback=new Error('rollback');
  try{await db.begin(async tx=>{
   if (!(await tx`select to_regclass('public.school_finance_releases') t`)[0].t) await tx.unsafe(await Bun.file('supabase/migrations/20261125001000_school_finances.sql').text());
+  if (!(await tx`select to_regclass('public.school_finance_recipients') t`)[0].t) await tx.unsafe(await Bun.file('supabase/migrations/20261125001100_school_finance_recipients.sql').text());
   const admin=crypto.randomUUID();await tx`insert into auth.users(id,email) values(${admin},${`${admin}@example.test`})`;await tx`insert into public.admins(user_id) values(${admin})`;
   await tx.unsafe('set local role authenticated');await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
   for(const [dataset,year,file,count] of [['payments',2025,'payments-2025.csv',2586],['payments',2024,'payments-2024.csv',2749],['payroll',2025,'SalaryTravelDataExport2025.txt',4260]] as const){
@@ -69,6 +71,12 @@ test.skipIf(!url||!process.env.FINANCE_SOURCE_DIR)('saved Bibb exports reconcile
    for(let i=0;i<prepared.rows.length;i+=500)await call('append',{release_id:release.release_id,rows:prepared.rows.slice(i,i+500)});
    await call('publish',{release_id:release.release_id,confirm_publication:true});
    const read=(await tx`select public.browse_school_finances(${dataset},${year}) r`)[0].r;expect(read.total).toBe(count);expect(decimalUnits(read.filtered_amount)).toBe(decimalUnits(prepared.expected_amount));if(prepared.expected_travel!==null)expect(decimalUnits(read.filtered_travel)).toBe(decimalUnits(prepared.expected_travel));else expect(read.filtered_travel).toBeNull();
+   if(dataset==='payments'){
+    const expected=prepared.rows.filter(row=>!['SALARY','SALARIES','BENEFITS'].includes(row.name.trim().toUpperCase())).length;
+    await tx.unsafe('reset role');
+    expect((await tx`select count(*)::int n from public.school_finance_rows where release_id=${release.release_id} and recipient_id is not null`)[0].n).toBe(expected);
+    await tx.unsafe('set local role authenticated');
+   }
   }
   throw rollback;
  })}catch(e){if(e!==rollback)throw e}finally{await db.close()}

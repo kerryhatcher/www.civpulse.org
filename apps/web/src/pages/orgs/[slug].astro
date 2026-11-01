@@ -11,7 +11,7 @@ import {
   type Organization,
 } from '../../lib/organizations';
 import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
-import { fetchPublicPeopleForOrganization, personImageUrl, type Person } from '../../lib/people';
+import { fetchPublicPeopleByOrganization, personImageUrl, type Person } from '../../lib/people';
 
 export async function getStaticPaths() {
   const [organizations, maps, relationships] = await Promise.all([
@@ -22,13 +22,7 @@ export async function getStaticPaths() {
       .filter((map) => map.organization_id !== null)
       .map((map) => [map.organization_id as string, map] as const),
   );
-  const peopleByOrganization = new Map<string, { person: Person; role: string }[]>();
-
-  await Promise.all(
-    organizations.map(async (org) => {
-      peopleByOrganization.set(org.id, await fetchPublicPeopleForOrganization(org.id));
-    }),
-  );
+  const peopleByOrganization = await fetchPublicPeopleByOrganization(organizations.map(org => org.id));
 
   const organizationById = new Map(organizations.map((org) => [org.id, org]));
   return organizations.map((org) => {

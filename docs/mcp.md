@@ -613,3 +613,8 @@ source-evidence requirements. Never infer a verified person identity from a name
 
 School finances is v2-only (`/functions/v1/mcp/v2`); the 128-tool compatibility
 catalog stays unchanged. Refresh cached v2 discovery after deploying the bundle.
+
+The v2 `school_finances` tool also supports `resolve_recipient` for reviewed
+person/organization links or new stubs. Publication automatically resolves exact
+recipient names and creates provisional organization stubs for ambiguous/missing
+matches. The public browse projection includes only publicly visible targets.

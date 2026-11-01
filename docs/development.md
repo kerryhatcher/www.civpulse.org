@@ -1012,3 +1012,14 @@ and FY2024/FY2025 payment counts without production writes. Browser-test anonymo
 and signed-in filters, pagination, source details, person review labels/links,
 page CSV, unavailable years and mobile layout. Test feature DDL only locally or
 in a disposable preview; do not alter the shared local migration history.
+
+Recipient regression coverage is in `scripts/tests/school-finance-recipients-db.test.ts`.
+It runs in the existing Supabase integration workflow. The real-source finance
+test also applies the recipient extension inside its rollback transaction.
+Verify anonymous/signed-in payment profile links, provisional/review labels and
+private-person redaction in the browser before release.
+
+Organization profile path generation uses `fetchPublicPeopleByOrganization` to
+load one people/affiliation snapshot per route request, including development.
+Do not call the single-organization reader once for every stub: in development
+it intentionally reloads data and thousands of concurrent snapshots exhaust memory.
