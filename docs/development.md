@@ -749,6 +749,46 @@ production only with public credentials and the configured public Turnstile key.
 
 ### Verifying public profile snapshots
 
+For asset layout changes, run `bun test scripts/tests/profile-section-assets.test.ts scripts/tests/profile-section-data.test.ts`.
+It checks shared empty/nonempty bodies, owner lookups, unselected-owner exclusion,
+source immutability, deduplication-aware reference profitability (including identical
+vote-bearing owners), fixed reference ordering, deterministic content hashes,
+resolved URLs, vote paging/filtering, signed-in bypass and required-reference
+failure/retry. Save a fresh stabilized build's `profile-data/`, `people/` and
+`orgs/` directories outside the repo before editing. After rebuilding against the
+same data, run
+`PROFILE_ASSET_BASELINE_DIR=/tmp/saved-profile-build bun test scripts/tests/profile-section-assets.test.ts`.
+It compares every owner's expanded payload and table order while resolving old
+and new reference/page/filter URLs, rather than requiring unchanged transport URLs.
+
+Local deduplication verification preserved all 200 owner payloads and resolved
+every generated profile reference. The physical profile files changed from 200
+to 188 and raw JSON bytes from 533,493 to 515,073; 28 profiles shared one
+legislative reference file. Full local build times were 3.95 s before and 3.86 s
+after initially. The local data had no bills, legislative votes or sponsorships,
+so these are not production savings estimates.
+
+Pure asset-generation benchmarks used synthetic public-only in-memory records,
+alternated old/new execution order, and compared every expanded owner payload
+after each pair. Five measured pairs followed one warmup; median generation time
+excludes fetching data, Astro file writes and upload:
+
+| Workload | Files before / after | JSON bytes before / after | Generation before / after |
+| --- | --- | --- | --- |
+| 10,000 empty owners | 10,000 / 1 | 990,000 / 99 | 140.97 / 3.53 ms |
+| 1,000 profiles sharing 50 terms, 200 sessions and 100 bodies | 1,000 / 1,001 | 109,322,780 / 490,841 | 122.62 / 22.09 ms |
+
+These timings were rerun after the profitability fix. Repeating an identical
+nonempty owner does not multiply inline bytes: 100 identical owners now keep one
+inline file without a shared-reference request. Distinct profiles must save over
+1 KiB after deduplicating the post-vote-transformation bodies and counting the
+shared file plus each pointer's actual UTF-8 bytes.
+The reference-heavy case trades one additional file/request for removing repeated
+reference payloads. No deployment was run, so upload time is unavailable; do not
+infer it from these CPU measurements. In the browser, verify anonymous primary
+and shared-reference requests resolve, sections/votes still render, and an actual
+signed-in session performs no profile-asset reads. Check desktop and phone widths.
+
 Run `bun test scripts/tests/organization-build-data.test.ts scripts/tests/profile-build-data.test.ts scripts/tests/directories.test.ts`
 when changing shared organization/affiliation reads. Concurrent profile,
 organization and directory consumers must reuse one production stream per table

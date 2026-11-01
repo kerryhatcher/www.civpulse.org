@@ -11,6 +11,7 @@ export interface PublicProfileSections {
   votes: PersonVote[];
   legislativeVotes: LegislativeRow[];
   legislation: Record<string, LegislativeRow[]>;
+  legislativeResourcesUrl?: string;
   legislativeInitial?: {total:number;rows:LegislativeRow[]};
   legislativePages?: Record<string,string>;
   legislativeVotesUrl?: string;
