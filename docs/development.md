@@ -1025,6 +1025,8 @@ and anonymous/signed-in navigation. Run `bun test scripts/tests/county-filter.te
 Run `bun test scripts/tests/county-statistics-build.test.ts` for indexed FIPS/state
 joins, all 159 download projections, chart-scale availability rules, failed reads,
 completeness/headline/comparison validation, shared requests and development expiry.
+The default suite exercises the public download accessor for every county and
+rejects unknown county codes using an in-memory build client; no database is needed.
 To check a refactor against its previous rendered output, preserve the old built
 `counties/` directory outside the repo, build the change against the same local
 dataset, then run

@@ -1,7 +1,8 @@
 import { expect, spyOn, test } from 'bun:test';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { GEORGIA_COUNTY_HUBS } from '../../apps/web/src/lib/county-scope';
-import { countyStatisticsCsv, formatStatistic, readCountyStatisticSnapshot, type StatisticRecord } from '../../apps/web/src/lib/county-statistics';
+import * as buildSupabase from '../../apps/web/src/lib/supabase-build';
+import { countyStatisticsCsv, formatStatistic, getCountyStatisticDownloadRecords, readCountyStatisticSnapshot, type StatisticRecord } from '../../apps/web/src/lib/county-statistics';
 
 function fixture(): StatisticRecord[] {
   return ['13000', ...GEORGIA_COUNTY_HUBS.map(c => c.fips)].sort().flatMap((fips, county) => Array.from({ length: 59 }, (_, i) => ({
@@ -42,14 +43,19 @@ test('all 159 county groups/downloads match the previous filter projection and s
   const snapshot = await first;
   expect(snapshot.records).toEqual(rows);
   expect(snapshot.georgiaByCode.size).toBe(59);
-  for (const county of GEORGIA_COUNTY_HUBS) {
-    const local = rows.filter(row => row.county_fips === county.fips);
-    const download = rows.filter(row => row.county_fips === '13000' || row.county_fips === county.fips);
-    expect(snapshot.byFips.get(county.fips)).toEqual(local);
-    expect(JSON.stringify({ records: snapshot.downloadsByFips.get(county.fips) })).toBe(JSON.stringify({ records: download }));
-    expect(countyStatisticsCsv(snapshot.downloadsByFips.get(county.fips)!)).toBe(countyStatisticsCsv(download));
-    for (const row of local) expect(snapshot.georgiaByCode.get(row.indicator_code)).toBe(rows.find(state => state.county_fips === '13000' && state.indicator_code === row.indicator_code)!);
-  }
+  const buildClient = spyOn(buildSupabase, 'getBuildSupabase').mockReturnValue(source.client);
+  try {
+    for (const county of GEORGIA_COUNTY_HUBS) {
+      const local = rows.filter(row => row.county_fips === county.fips);
+      const download = rows.filter(row => row.county_fips === '13000' || row.county_fips === county.fips);
+      expect(snapshot.byFips.get(county.fips)).toEqual(local);
+      expect(JSON.stringify({ records: snapshot.downloadsByFips.get(county.fips) })).toBe(JSON.stringify({ records: download }));
+      expect(countyStatisticsCsv(snapshot.downloadsByFips.get(county.fips)!)).toBe(countyStatisticsCsv(download));
+      expect(await getCountyStatisticDownloadRecords(county.fips)).toEqual(download);
+      for (const row of local) expect(snapshot.georgiaByCode.get(row.indicator_code)).toBe(rows.find(state => state.county_fips === '13000' && state.indicator_code === row.indicator_code)!);
+    }
+    await expect(getCountyStatisticDownloadRecords('unknown')).rejects.toThrow('Unknown Georgia county unknown');
+  } finally { buildClient.mockRestore(); }
   expect(snapshot.povertyScaleMax).toBe(Math.max(50, Math.ceil(Math.max(...rows.filter(row => row.topic_id === 'poverty' && row.status === 'available').map(row => Number(row.upper_bound ?? row.value))) / 20) * 20));
   expect(snapshot.ageScaleMax).toBe(Math.max(10, Math.ceil(Math.max(...rows.filter(row => row.topic_id === 'age' && row.status === 'available').map(row => Number(row.value))) / 5) * 5));
   expect(formatStatistic(rows[20])).toBe('Suppressed by Census');
