@@ -9,15 +9,19 @@ import '@fontsource/barlow/600.css';
 import '@fontsource/barlow/700.css';
 import { GEORGIA_COUNTIES, DEFAULT_COUNTY } from '../lib/county-scope';
 import { shouldNoIndex } from '../lib/indexing-policy.mjs';
+import { breadcrumbStructuredData, serializeStructuredData, siteStructuredData, type Breadcrumb, type SchemaNode } from '../lib/structured-data';
 
 interface Props {
   title: string;
   description?: string;
+  structuredData?: SchemaNode[];
+  breadcrumbs?: Breadcrumb[];
 }
 
 const {
   title,
   description = 'Civic Pulse helps residents follow local decisions, find community events, and explore the places that shape where they live.',
+  structuredData = [], breadcrumbs = [],
 } = Astro.props;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -44,6 +48,10 @@ const groups = [
 const isCurrent = (url: string) => path === url.replace(/\/+$/, '') || path.startsWith(url);
 const isHome = path === '/';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const schema = shouldNoIndex(Astro.url.pathname) ? [] : [
+  ...(isHome ? siteStructuredData(canonical) : structuredData),
+  ...(breadcrumbs.length > 1 ? [breadcrumbStructuredData(breadcrumbs, canonical)] : []),
+];
 ---
 
 <!doctype html>
@@ -63,6 +71,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <title>{title} · Civic Pulse</title>
+    {schema.length > 0 && <script is:inline type="application/ld+json" set:html={serializeStructuredData(schema)} />}
   </head>
   <body class:list={{ 'home-page': isHome }}>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -101,6 +110,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
         </nav>
       </header>
       <p class="county-status" data-county-status role="status"></p>
+      {breadcrumbs.length > 1 && <nav class="page-breadcrumbs" aria-label="Breadcrumb"><ol>
+        {breadcrumbs.map((item, index) => <li>{index === breadcrumbs.length - 1
+          ? <span aria-current="page">{item.name}</span> : <a href={item.href}>{item.name}</a>}</li>)}
+      </ol></nav>}
       <slot />
       <footer class="site-footer">
         {!isHome && <p>Civic Pulse <span aria-hidden="true">/</span> Public information. Open to everyone.</p>}
@@ -115,6 +128,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     </div>
   </body>
 </html>
+
+<style>
+  .page-breadcrumbs { margin-block: 1rem; font-size: .9rem; color: var(--on-canvas); }
+  .page-breadcrumbs :focus-visible { outline-color: var(--on-canvas); }
+  .page-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 0; }
+  .page-breadcrumbs li { overflow-wrap: anywhere; }
+  .page-breadcrumbs li + li::before { content: '/'; margin-inline-end: .5rem; }
+</style>
 
 <script>
   import { initAuthNav } from '../scripts/auth';

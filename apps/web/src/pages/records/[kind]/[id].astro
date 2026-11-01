@@ -11,6 +11,7 @@ import {calendarAssetUrl} from '../../../lib/calendar-assets';
 import type {EventRecord} from '../../../lib/calendars';
 import type {MeetingRecord} from '../../../lib/meetings';
 import Layout from '../../../layouts/Layout.astro';
+import { eventStructuredData } from '../../../lib/structured-data';
 import { getPublicRecordSnapshot } from '../../../lib/public-record-snapshot';
 import { archiveHref, recordKinds, type PublicRecord } from '../../../lib/public-records';
 export async function getStaticPaths() {
@@ -21,7 +22,10 @@ export async function getStaticPaths() {
 interface Props { record: PublicRecord; event?:EventRecord; meeting?:MeetingRecord; legislation?:Detail; request?:RequestDetail }
 const { record,event,meeting,legislation,request } = Astro.props;
 ---
-<Layout title={record.title} description={record.description}>
+<Layout title={record.title} description={record.description}
+  structuredData={event ? eventStructuredData(event, new URL(Astro.url.pathname, Astro.site ?? Astro.url)) : []}
+  breadcrumbs={event ? [{ name: 'Home', href: '/' }, { name: 'Public record archive', href: '/records/' }, { name: 'Events and meetings', href: archiveHref('events') }, { name: event.title, href: Astro.url.pathname }] : []}
+>
   {request ? <PublicRequestDetail detail={request} /> : legislation ? <LegislationDetail detail={legislation} /> : event ? <EventView event={event} meeting={meeting} snapshotUrl={await calendarAssetUrl(`events/${event.id}`)} /> : (<main id="main">
     <p><a href="/records/">Public record archive</a> / <a href={archiveHref(record.kind)}>{recordKinds[record.kind]}</a></p>
     <div class="page-intro"><h1>{record.title}</h1></div>

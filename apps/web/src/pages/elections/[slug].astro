@@ -61,6 +61,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
 <Layout
   title={electionPageTitle(election.name, election.election_date, formatElectionDate(election.election_date))}
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Elections', href: '/elections/' }, { name: election.name, href: Astro.url.pathname }]}
   description={
     recordDescription(election.name, election.description,
       `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}. Explore published contests, candidates, ballot questions and key dates.`)

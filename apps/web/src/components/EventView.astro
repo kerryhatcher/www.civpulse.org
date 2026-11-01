@@ -8,7 +8,6 @@ const {event,meeting,snapshotUrl,indexUrl}=Astro.props;
 const sourceUrl=eventSourceUrl(event?.url);
 ---
   <main id="main" data-event-id={event?.id} data-event-snapshot={snapshotUrl} data-event-index={indexUrl}>
-    {event && <p><a href="/records/">Public record archive</a> / <a href="/records/events/page/1/">Events and meetings</a></p>}
     <div class="page-intro">
       <p class="org-eyebrow">Event</p>
     </div>

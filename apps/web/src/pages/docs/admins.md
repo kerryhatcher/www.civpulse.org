@@ -14,6 +14,21 @@ historical roles and service dates explicit; do not turn an old title into a
 current-office claim. Give each record a useful summary rather than repeating a
 generic description. These metadata changes publish with the next site rebuild.
 
+Public profiles also publish machine-readable names, portraits/logos and the
+same public affiliations shown on the page. Maintain those source records
+accurately and preserve historical wording: an affiliation is not automatically
+an employer or current office. Website and social links remain ordinary contact
+links; they are not automatically treated as verified identity (`sameAs`) links.
+Do not enter private facts merely to enrich search markup.
+
+Public event detail markup uses recorded dates and physical venue text. Keep
+venues and dates accurate, and use election date kinds for deadlines and voting
+periods so they are not labeled as attendance events. A venue name is not a
+verified street address, and the calendar publisher is not automatically the
+organizer. Search engines may require more verified facts before showing an event
+rich result. Structured data changes publish after the next rebuild, alongside
+the visible page; private/unlisted viewers and admin pages publish no JSON-LD.
+
 
 ## Voter roll history
 
