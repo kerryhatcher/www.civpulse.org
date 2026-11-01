@@ -8,6 +8,12 @@ Admin pages follow your browser or operating system’s light/dark appearance
 setting, just like the public site. Changing appearance does not change access
 or published content.
 
+Public profile page titles use the person's recorded title (or type when no title
+is recorded), and page descriptions use the record name and stored summary. Keep
+historical roles and service dates explicit; do not turn an old title into a
+current-office claim. Give each record a useful summary rather than repeating a
+generic description. These metadata changes publish with the next site rebuild.
+
 
 ## Voter roll history
 

@@ -39,6 +39,61 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Page titles and descriptions
+
+The shared Layout uses each page's title/description for both HTML metadata and
+Open Graph, adds the Civic Pulse title suffix once, and publishes the same
+queryless public URL in canonical and `og:url`. Titles describe the page subject;
+the H1 and visible record fields remain the source of identity and context.
+
+Editorial patterns:
+
+- Home describes officials, elections and public records; its description names
+  Macon-Bibb as a starting point while acknowledging records from other communities.
+- Broad directories describe their content, without claiming every record serves
+  Macon-Bibb. A session county preference does not change static metadata.
+- People use `Name — recorded title`; without a title, use the recorded kind,
+  or `Civic profile` for Other. Preserve historical wording such as Former or a
+  service period. Do not infer current office or jurisdiction from affiliations,
+  mailing addresses or the site's default county.
+- Organizations and maps keep their recorded names and identify the page as an
+  organization profile or interactive map. Elections with a year in their names
+  keep that title; names without a year gain the recorded election date. This is
+  factual time context, not a claim about current/upcoming status.
+- Public record descriptions keep the record's name alongside the stored summary.
+  `page-metadata.ts` trims empty/whitespace summaries and uses a named description
+  of the available record view instead of a bare kind/name. A summary already
+  beginning with the subject is preserved. No completeness or outcome is inferred.
+- Published `/records/` descriptions already supply record/source/date context;
+  retain those facts rather than replacing them with a universal local label.
+
+Before/after examples from the local QA snapshot (the Layout adds `· Civic Pulse`):
+
+| Page | Before title | After title |
+| --- | --- | --- |
+| Home | Your community, in the open | Local officials, elections & public records |
+| `/people/` | People | Officials, candidates & civic profiles |
+| `/orgs/` | Organizations | Organizations & public bodies |
+| `/elections/` | Elections | Election dates, candidates & ballots |
+| `/maps/` | Explore maps | Civic maps: precincts, districts & places |
+| Thomas Jackson Gillon Jr | Thomas Jackson Gillon Jr | Thomas Jackson Gillon Jr — Election Supervisor |
+| Gena Tripp | Gena Tripp | Gena Tripp — Civic profile |
+
+Gena Tripp's description changes from `Credited author in candidate news coverage.`
+to `Gena Tripp. Credited author in candidate news coverage.` This preserves the
+source claim while distinguishing her page from other credited authors. The
+407-page indexable local snapshot had no empty or duplicate titles, but eight
+duplicate description groups covering 139 pages. After the change, that snapshot
+has no empty or duplicate titles/descriptions. This is an audit of local fixture
+and public records, not a measurement of production rankings or click-through rate.
+New records may still need editorial review, especially distinct people sharing
+a name/title. Do not add invented facts just to make metadata unique.
+
+These patterns follow Google's guidance on [descriptive titles](https://developers.google.com/search/docs/appearance/title-link)
+and [page-specific descriptions](https://developers.google.com/search/docs/appearance/snippet).
+Search engines may choose different title links or snippets; no ranking or
+display result is guaranteed.
+
 ## Backend
 
 ### Session county preference

@@ -61,6 +61,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta property="og:title" content={`${title} · Civic Pulse`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <title>{title} · Civic Pulse</title>
   </head>
   <body class:list={{ 'home-page': isHome }}>
