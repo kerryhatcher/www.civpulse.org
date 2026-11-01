@@ -189,6 +189,20 @@ If enhancement fails, the public snapshot remains readable alongside the retry
 message. Signing in retains the live access checks; restricted records are never
 added to the public HTML or history pages. A successful rebuild is needed to
 update published evidence.
+
+**Sources and verification** distinguishes source publication and retrieval from
+the date of a service period, election, meeting or vote. **Last verified: Unknown**
+means no verification date is recorded for that view; a recent fetch or site
+update does not establish factual verification. Biography source links are the
+citations entered with its text, and election source links identify the particular
+date or ballot question they support. An unrelated article or contact website is
+not automatically evidence for a biography. Confirm current facts with the named
+original sources.
+
+Vote histories may omit meetings, motions, votes or member choices. Missing choices
+are unknown, not absences or opposition. Legislative histories exclude attendance
+roll calls. Counts describe entries available here, not all votes a person could
+have cast, and must not be used as a complete participation denominator.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
   Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header, then return to the election to see every race. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 

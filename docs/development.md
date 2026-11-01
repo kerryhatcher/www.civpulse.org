@@ -52,6 +52,32 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Record provenance
+
+Run `bun test scripts/tests/record-provenance.test.ts scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts`,
+then check/build and
+`PROVENANCE_TEST_DIST=apps/web/dist bun test scripts/tests/record-provenance.test.ts`.
+Coverage includes separate source publication/retrieval facts, unknown verification,
+invalid dates, reference-style Markdown citations, escaped raw HTML, unsafe URLs
+and public-only source selection. The built check confirms missing date metadata
+does not become a build/edit date on person/election pages.
+The CI step checks helpers; built-output and browser checks remain local release
+verification. Run `PROVENANCE_BROWSER_URL=http://127.0.0.1:4332 bun test scripts/tests/record-provenance-browser.test.ts`
+against a local static preview with local Auth configured. Synthetic RPC responses
+verify anonymous/actual signed-in UUID biography/event sources, live event date
+and source synchronization on public permalinks, meeting scope notes and denied
+viewer gates at desktop/mobile widths. Attendance-vote detail pages omit the
+profile-history exclusion note while retaining their source/date provenance.
+Runtime biography extraction runs only after a successful person access gate and
+includes citations on permitted unlisted/private biographies. Public prerendering
+still uses the separate publicity-filtered helper; denied viewers show no record.
+
+In a browser with JavaScript disabled, verify a cited biography, sourced office,
+election date source and meeting/vote context, plus explicit unknowns. Repeat at
+desktop/mobile widths and after actual admin sign-in; live card enhancement must
+retain date semantics and vote exclusions/denominator notes. Temporary local
+citations/private source fixtures must be restored/removed before the final build.
+
 ### Readable profile evidence
 
 Run `bun test scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/profile-sections.test.ts`,

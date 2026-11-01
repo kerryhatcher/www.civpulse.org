@@ -1,4 +1,5 @@
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownSourceDates } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { CANDIDATE_STATUS_LABELS, electionHref, formatElectionDate } from '../lib/elections';
@@ -23,6 +24,7 @@ function renderCandidacy(race: PersonCandidacy, personId: string): HTMLLIElement
   meta.className = 'candidate-meta';
   meta.textContent = [race.party, CANDIDATE_STATUS_LABELS[race.status]].filter(Boolean).join(' · ');
   link.append(office, election, date, meta);
+  const provenance = document.createElement('span'); provenance.textContent = unknownSourceDates; link.append(provenance);
   if (race.is_write_in) {
     const badge = document.createElement('span');
     badge.className = 'candidate-write-in';

@@ -1,4 +1,6 @@
 import { renderProfileDescription } from '../lib/profile-description';
+import {biographyCitations,biographyProvenanceNote} from '../lib/record-provenance';
+import {renderRecordProvenance} from '../lib/record-provenance-dom';
 import { readDirectory } from './directory-data';
 import { filterCounty, selectedCounty } from './county-filter';
 import { browsePeople, orderPeople, type DirectoryPerson } from '../lib/directories';
@@ -291,6 +293,7 @@ function fillPersonView(response: PersonViewResponse): void {
     bio.innerHTML = renderProfileDescription(person.description ?? '');
     bio.hidden = !person.description;
   }
+  renderRecordProvenance(document.querySelector('[data-person-provenance]'),{title:'Biography sources and verification',sources:biographyCitations(person.description),note:biographyProvenanceNote});
 
   const contactSection = document.querySelector<HTMLElement>('[data-person-contact-section]');
   const contact = document.querySelector<HTMLElement>('[data-person-contact]');

@@ -8,6 +8,32 @@ Admin pages follow your browser or operating system’s light/dark appearance
 setting, just like the public site. Changing appearance does not change access
 or published content.
 
+### Source and refresh conventions
+
+Cite material biography claims with Markdown links in the person's description,
+including reference-style citations if useful. Identify which claim a source
+supports and preserve any source date/period in the prose. Contact websites and
+social links are not automatically biography citations. A cited link is a source
+reference, not a declaration that Civic Pulse independently verified every claim.
+If a biography has no citations, its provenance panel says so.
+
+Keep date meanings separate: an article's **Published** date is its publication;
+**Fetched on** is retrieval. Office service dates, election dates, and meeting/vote
+dates describe the event or service, not when someone checked a source. Current
+person/office/election/meeting models have no dedicated verification date, so
+**Last verified** remains **Unknown**. Do not use an edit, import or site rebuild
+timestamp to fill that gap, or parse a date mentioned in prose into verification.
+Dated source notes can describe a particular claim and review scope; they do not
+automatically become a whole-record verification status.
+
+Maintain original office source links, election date/deadline links and ballot
+question sources next to their claims. Check the original record before correcting
+facts, retain historical context and publish a successful rebuild afterward.
+Source retrieval is not a guarantee that a source is current or correct. Vote
+histories cover added records only; attendance roll calls are excluded from
+legislative history. Never infer a participation denominator, absence or opposition
+from missing records. Private/unlisted source facts stay behind their access gates.
+
 Public profile page titles use the person's recorded title (or type when no title
 is recorded), and page descriptions use the record name and stored summary. Keep
 historical roles and service dates explicit; do not turn an old title into a

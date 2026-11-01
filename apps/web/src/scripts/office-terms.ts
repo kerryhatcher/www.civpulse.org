@@ -1,4 +1,5 @@
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownSourceDates, recordSourceUrl } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { loadPersonLegislation } from './legislation';
 import { historyLink } from '../lib/history';
@@ -42,14 +43,15 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
         const method = document.createElement('span');
         method.textContent = term.selection_method === 'elected' ? 'Elected' : 'Appointed';
         card.append(name, link, dates, method, historyLink('offices', term.office_id), historyLink('office_terms', term.id));
-        if (term.source_url) {
+        const provenance = document.createElement('span'); provenance.textContent = unknownSourceDates; card.append(provenance);
+        if (recordSourceUrl(term.source_url)) {
           const source = document.createElement('a');
-          source.href = term.source_url;
+          source.href = recordSourceUrl(term.source_url)!;
           source.textContent = 'Source';
           source.target = '_blank';
           source.rel = 'noopener noreferrer';
           card.append(source);
-        }
+        } else { const missing = document.createElement('span'); missing.textContent = 'Original source: Not recorded.'; card.append(missing); }
         item.append(card);
         return item;
       }));
