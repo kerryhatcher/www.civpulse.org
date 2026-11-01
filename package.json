@@ -52,6 +52,7 @@
     "rebuild:test": "bun test scripts/tests/frontend-rebuild.test.ts"
   },
   "devDependencies": {
+    "playwright": "^1.64.1",
     "supabase": "^2.121.0",
     "wrangler": "^4.152.0"
   },

@@ -388,6 +388,10 @@ already include precinct or machine ballots, so do not add them together.
 
 Turnout uses reported voters, or ballots when voters are unavailable, divided by
 the matching registered-voter count. The page labels which numerator it uses.
+The **Voters** count remains visible when registered voters are missing, including
+a reported count of zero. In that case the turnout percentage is unavailable;
+a reported registration count of zero also cannot produce a percentage.
+**Ballots cast** is reported separately and never filled from voter-history counts.
 Contest participation can use a different denominator. Missing data says “Not
 reported”; no reports does not mean zero votes. The November 3, 2026 election can
 have turnout reports before election day, while May 19, 2026 is historical. These

@@ -132,8 +132,17 @@ disabled; builds do not upload or backfill any meeting files.
 
 ### Ad-hoc browser checks
 
-Playwright is not a dependency of this repo. For quick verification, run a
-throwaway Node script from the Astro app (or a checkout that has Playwright)
+For the public election-report turnout cards, start Astro and run
+`ELECTION_RESULTS_TEST_URL=http://127.0.0.1:4323 bun test scripts/tests/election-results-browser.test.ts`
+(substitute the actual port). The test uses Playwright with system Chrome,
+anonymous desktop/phone contexts, and synthetic RPC responses; it writes no
+database rows. It checks area selection, independent voters/ballots, missing and
+zero registration, percentages, source notes, console health and horizontal
+overflow. Without the URL it skips. Screenshots are saved under `/tmp/issue-111-*.png`.
+After deployment, also check the saved WA2 and EM1 reports against live data.
+
+Playwright is a root devDependency for the election-report browser regression.
+For quick verification, run a throwaway Bun script from the repo
 against the dev server, using the system Chrome channel — the bundled Chromium
 download may be absent:
 
@@ -143,7 +152,7 @@ bunx playwright screenshot --channel=chrome --viewport-size=1280,900 \
 ```
 
 For scripted flows, `chromium.launch({ channel: 'chrome' })` works the same way.
-Add `playwright` as a devDependency only if you are committing tests.
+Use `bun run` for scripted flows.
 
 ### Homepage election callout
 
