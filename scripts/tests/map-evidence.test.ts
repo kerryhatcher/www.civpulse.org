@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 import { featureTitle, layerEvidence, layerPageHref, MAP_FEATURE_PAGE_SIZE } from '../../apps/web/src/lib/map-feature-text';
 import type { LayerConfig } from '../../apps/web/src/lib/layers';
+import { safeMapUrl } from '../../apps/web/src/lib/layers';
 const layer: LayerConfig = { id: 'layer', name: 'Districts', description: 'Recorded coverage', visibility: 'public', source_type: 'postgis', source_url: null,
   presentation: { titleProperty: 'name', titleSuffix: 'number', attribution: 'Recorded publisher', sourceUrl: 'https://source.test/',
     popupFields: [{ property: 'member', label: 'Member in source' }, { property: 'link', label: 'District record', format: 'url' }] } };
@@ -18,6 +19,17 @@ test('readable projection shares popup titles/text and only configured evidence,
   expect(JSON.stringify(evidence.rows)).not.toMatch(/coordinates|NEVER EXPORT|\/people\//);
   expect(layerEvidence(layer, []).rows).toEqual([]);
   expect(layerEvidence(layer, [feature(), { ...feature(), properties: { sourceChecked: '2026-10-01' } }]).sourceChecks).toEqual(['2026-10-01', '2026-10-15']);
+});
+
+test('source links reject disguised off-origin paths and fall through unusable feature URLs',()=>{
+  for(const bad of ['/\\attacker.example/path','/\t/attacker.example','//[','javascript:alert(1)'])expect(safeMapUrl(bad)).toBeUndefined();
+  expect(safeMapUrl('/maps/example/?id=1')).toBe('/maps/example/?id=1');
+  expect(safeMapUrl('https://source.test/')).toBe('https://source.test/');
+  for(const sourceUrl of ['', 'javascript:alert(1)']){
+    const evidence=layerEvidence(layer,[{...feature(),properties:{sourceUrl,detailsUrl:'https://details.test/'}}]);
+    expect(evidence.rows[0].sourceUrl).toBe('https://details.test/');
+  }
+  expect(layerEvidence(layer,[{...feature(),properties:{sourceUrl:'javascript:bad',detailsUrl:''}}]).rows[0].sourceUrl).toBe('https://source.test/');
 });
 
 const dist = process.env.MAP_EVIDENCE_TEST_DIST;

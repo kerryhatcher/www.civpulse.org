@@ -39,7 +39,7 @@ export function layerEvidence(layer: LayerConfig, features: GeoJSON.Feature[]): 
       const value = p[field.property];
       return value == null || value === '' ? [] : [{ label: field.label, text: valueText(value),
         ...(field.format === 'url' ? { href: safeMapUrl(value) } : {}) }];
-    }), sourceUrl: safeMapUrl(p.sourceUrl ?? p.detailsUrl ?? display.sourceUrl) };
+    }), sourceUrl: safeMapUrl(p.sourceUrl) ?? safeMapUrl(p.detailsUrl) ?? display.sourceUrl };
   });
   const dates = features.flatMap(feature => {
     const value = feature.properties?.sourceChecked;

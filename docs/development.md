@@ -61,6 +61,11 @@ The built-output check follows every layer continuation and compares all titles
 and ordering with the exact geometry/presentation manifest. Unit coverage checks
 public filtering, shared geometry/external reads, fail-closed source errors,
 source dates, configured-only fields and unsafe URL rejection.
+Run `bun test scripts/tests/map-build-source.test.ts` for protocol-relative HTTPS,
+bounded streaming, missing bodies and invalid JSON. External geometry tests cover
+coordinate shapes and nested collections; explicit null geometry remains valid
+GeoJSON. Blank/unsafe feature URLs fall through to valid source credits, and
+local-path links must resolve to the local origin.
 Access-check regressions also vary live names/title fields/attribution against
 published metadata for anonymous and signed-in callers. Authorized public layers
 retain their complete published configuration; omitted layers are never restored,

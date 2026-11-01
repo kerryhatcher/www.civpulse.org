@@ -82,7 +82,7 @@ export function featurePopup(feature: GeoJSON.Feature, layer: LayerConfig, relat
   }
   if (display.note) appendText(root, display.note);
   if (display.key?.startsWith('transit-') && new Date().toISOString().slice(0, 10) > '2026-10-31') appendText(root, 'This schedule snapshot has expired. Check MBCTA for current service.');
-  appendLink(root, 'Original source', p.sourceUrl ?? p.detailsUrl ?? display.sourceUrl);
+  appendLink(root, 'Original source', safeMapUrl(p.sourceUrl) ?? safeMapUrl(p.detailsUrl) ?? display.sourceUrl);
   if (p.fulladd) appendLink(root, 'Get directions', `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(String(p.fulladd))}`);
   if (display.attribution) appendText(root, `Source: ${display.attribution}`);
   return root;

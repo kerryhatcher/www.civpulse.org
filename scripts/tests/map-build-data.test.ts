@@ -21,7 +21,7 @@ function fixture(failure?: 'maps' | 'layers' | 'geometry' | 'truncated') {
         { id: 'shared', name: 'Public', visibility: 'public', source_type: 'postgis', position: 1, style: { color: args.p_map_id } },
         { id: 'SECRET-LAYER', name: 'SECRET-LAYER', visibility: 'unlisted', source_type: 'postgis' },
         { id: 'PRIVATE-LAYER', name: 'PRIVATE-LAYER', visibility: 'private', source_type: 'postgis' },
-        { id: 'external', name: 'External', visibility: 'public', source_type: 'geojson', source_url: 'https://example.org/public.json', position: 0 },
+        { id: 'external', name: 'External', visibility: 'public', source_type: 'geojson', source_url: 'https://example.org/public.json', presentation:{sourceUrl:'  '}, position: 0 },
       ], error: failure === 'layers' ? { message: 'layers failed' } : null };
       const offset = args.p_offset as number, limit = args.p_limit as number;
       return { data: { type: 'FeatureCollection', numberMatched: 211,
@@ -66,4 +66,19 @@ for (const failure of ['maps', 'layers', 'geometry', 'truncated'] as const) {
 test('external source failure or malformed data stops publication', async () => {
   await expect(loadMapBuildData(fixture().client, async () => { throw Error('offline'); })).rejects.toThrow('offline');
   await expect(loadMapBuildData(fixture().client, async () => ({ type: 'GeometryCollection', geometries: [] }))).rejects.toThrow('Invalid public GeoJSON');
+});
+
+test('external geometry validation fails publication for malformed coordinates and accepts supported shapes',async()=>{
+  const p=[-83,32],ring=[p,[-82,32],[-82,33],p];
+  const valid=[null,{type:'Point',coordinates:p},{type:'MultiPoint',coordinates:[p]},
+    {type:'LineString',coordinates:[p,p]},{type:'MultiLineString',coordinates:[[p,p]]},
+    {type:'Polygon',coordinates:[ring]},{type:'MultiPolygon',coordinates:[[ring]]},
+    {type:'GeometryCollection',geometries:[{type:'Point',coordinates:p}]}];
+  for(const geometry of valid)await expect(loadMapBuildData(fixture().client,async()=>({type:'Feature',geometry,properties:{}}))).resolves.toBeDefined();
+  for(const geometry of [undefined,{type:'Point'},{type:'Point',coordinates:['-83',32]},
+    {type:'Point',coordinates:[NaN,32]},{type:'LineString',coordinates:[p]},
+    {type:'Polygon',coordinates:[[p,p,p]]},{type:'Polygon',coordinates:[[p,p,p,[-82,33]]]},
+    {type:'GeometryCollection',geometries:[{type:'Point'}]},{type:'Unknown',coordinates:p}]){
+    await expect(loadMapBuildData(fixture().client,async()=>({type:'FeatureCollection',features:[{type:'Feature',geometry,properties:{}}]}))).rejects.toThrow('Invalid public GeoJSON geometry');
+  }
 });

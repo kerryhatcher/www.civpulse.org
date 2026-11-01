@@ -543,7 +543,10 @@ Public map pages, the explorer and homepage previews share build-generated
 only explicitly public maps and layers through the existing RPC access gates.
 Geometry is paginated sequentially and exported once per layer, preserving full
 coordinate precision, feature IDs/properties, per-map styling and presentation.
-External public GeoJSON URLs remain direct HTTP sources. Only selected layers
+External public GeoJSON is captured at build time into content-hashed assets;
+upstream source changes appear only after rebuild. External downloads have a
+10 MiB byte cap and 30-second timeout; malformed geometry fails publication.
+Only selected layers
 are downloaded; homepage previews use only public default-visible layers.
 
 A public anonymous map load needs no map/layer RPC unless its manifest indicates

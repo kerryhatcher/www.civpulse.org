@@ -7,6 +7,29 @@ import { layerEvidence, type LayerEvidence } from './map-feature-text';
 export interface PublicMapManifest { layers: LayerConfig[]; requiresAccessCheck: boolean }
 interface StaticAsset { path: string; body: string }
 
+/** Reject malformed source geometry before Leaflet can encounter it at runtime.
+ * Explicit null geometry is valid GeoJSON; missing geometry is not. */
+function validGeometry(value: unknown, depth=0): boolean {
+  if(value===null)return true;
+  if(!value||typeof value!=='object'||depth>32)return false;
+  const geometry=value as {type?:string;coordinates?:unknown;geometries?:unknown};
+  const position=(p:unknown):p is number[]=>Array.isArray(p)&&p.length>=2&&p.every(n=>typeof n==='number'&&Number.isFinite(n));
+  const line=(p:unknown)=>Array.isArray(p)&&p.length>=2&&p.every(position);
+  const ring=(p:unknown)=>Array.isArray(p)&&p.length>=4&&p.every(position)&&JSON.stringify(p[0])===JSON.stringify(p.at(-1));
+  const polygon=(p:unknown)=>Array.isArray(p)&&p.every(ring);
+  const c=geometry.coordinates;
+  switch(geometry.type){
+    case 'Point':return position(c);
+    case 'MultiPoint':return Array.isArray(c)&&c.every(position);
+    case 'LineString':return line(c);
+    case 'MultiLineString':return Array.isArray(c)&&c.every(line);
+    case 'Polygon':return polygon(c);
+    case 'MultiPolygon':return Array.isArray(c)&&c.every(polygon);
+    case 'GeometryCollection':return Array.isArray(geometry.geometries)&&geometry.geometries.every(g=>g!==null&&validGeometry(g,depth+1));
+    default:return false;
+  }
+}
+
 async function readPublicGeoJSON(source: string): Promise<unknown> {
   if (import.meta.env.SSR) return (await import('./map-build-source')).readPublicGeoJSON(source);
   throw new Error('Public map source capture is build-only');
@@ -50,6 +73,7 @@ export async function loadMapBuildData(client: SupabaseClient, readExternal = re
           else if (value?.type === 'FeatureCollection' && Array.isArray(value.features)
             && value.features.every(feature => feature?.type === 'Feature')) features.push(...value.features);
           else throw new Error(`Invalid public GeoJSON (${layer.id})`);
+          if(features.some(feature=>!validGeometry(feature.geometry)))throw new Error(`Invalid public GeoJSON geometry (${layer.id})`);
         } else {
           let total: number | undefined;
           let pageSize = 10;
@@ -78,7 +102,7 @@ export async function loadMapBuildData(client: SupabaseClient, readExternal = re
         featuresByLayer.set(layer.id, features);
       }
       layers.push({ ...layer, source_type: 'geojson', source_url: geometry.get(layer.id)!,
-        presentation: { ...layer.presentation, sourceUrl: layer.presentation?.sourceUrl ?? (layer.source_type === 'geojson' ? layer.source_url ?? undefined : undefined) } });
+        presentation: { ...layer.presentation, sourceUrl: layer.presentation?.sourceUrl?.trim() || (layer.source_type === 'geojson' ? layer.source_url ?? undefined : undefined) } });
     }
     layers.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
     evidence.set(map.id, layers.map(layer => layerEvidence(layer, featuresByLayer.get(layer.id)!)));
