@@ -2,29 +2,17 @@
 import { defineConfig } from 'astro/config';
 
 import sitemap from '@astrojs/sitemap';
+import { shouldNoIndex } from './src/lib/indexing-policy.mjs';
 
 /** @param {string} page */
 export function includeInSitemap(page) {
   const pathname = new URL(page).pathname;
-  return !/^\/404(?:\/|\.html)?$/.test(pathname) && ![
-    '/admin/',
-    '/account/',
-    '/signin/',
-    '/signup/',
-    '/requests/view/',
-    '/legislation/view/',
-    '/legislation/vote/',
-    '/legislation/session/',
-    '/maps/view/',
+  return !shouldNoIndex(pathname) && ![
     '/map-data/',
     '/profile-data/',
     '/directory-data/',
     '/calendar-data/',
     '/county-data.json',
-    '/calendar/view/',
-    '/people/view/',
-    '/elections/view/',
-    '/oauth/',
   ].some((path) => pathname.includes(path));
 }
 
