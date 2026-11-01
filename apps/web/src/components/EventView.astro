@@ -37,7 +37,7 @@ const sourceUrl=eventSourceUrl(event?.url);
       </p>
     </article>
     {event && <p class="status">Published snapshot. Changes appear after the next publication. Coverage includes records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>}
-  <ObjectHistoryLink table="events" id={event?.id} />
+  <ObjectHistoryLink feedback table="events" id={event?.id} />
   </main>
 
 

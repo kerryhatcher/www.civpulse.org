@@ -1,0 +1,5 @@
+---
+import { correctionReportUrl } from '../lib/corrections';
+---
+<p class="record-feedback"><a href="/editorial/">Editorial methods</a> · <a href={correctionReportUrl(Astro.url.pathname)}>Report a correction on GitHub</a> <small>(public report; GitHub sign-in required)</small></p>
+<style>.record-feedback { margin-block: 1rem; overflow-wrap: anywhere; } small { color: var(--muted); }</style>

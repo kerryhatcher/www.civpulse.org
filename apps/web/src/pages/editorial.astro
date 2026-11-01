@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CIVIC_PULSE_REPOSITORY, CORRECTION_ISSUES, correctionReportUrl } from '../lib/corrections';
+---
+<Layout title="Editorial methods & corrections" description="Who operates Civic Pulse, how sources and identities are handled, limits of automated records and coverage, and how to report and publish corrections.">
+  <main id="main">
+    <div class="page-intro"><h1>Editorial methods and corrections</h1><p>Use the source record, keep uncertainty visible, and make material corrections traceable.</p></div>
+    <nav aria-label="Editorial policy sections"><a href="#responsibility">Responsibility</a> · <a href="#sources">Sources and identities</a> · <a href="#automation">Automated material</a> · <a href="#coverage">Coverage limits</a> · <a href="#corrections">Report a correction</a></nav>
+    <div class="prose">
+      <section id="responsibility">
+        <h2>Who is responsible</h2>
+        <p>Kerry Hatcher is the Civic Pulse operator and maintainer. Technical contributions are recorded in the <a href={CIVIC_PULSE_REPOSITORY}>public code repository</a>; authorized site administrators maintain civic records. Source records identify publishers and article roles where recorded. A source credit or repository contribution does not certify that every factual claim has been independently reviewed.</p>
+        <p>Civic Pulse is independent of the agencies, officials and organizations it lists. <a href="/about/#sources">Source credits</a> and the <a href="/about/#license">reuse policy</a> remain separate from editorial responsibility.</p>
+        <p>Policy version: <time datetime="2026-11-01">November 1, 2026</time>. The review and correction steps below set the process for new or corrected material. They are not a retrospective claim that all legacy records have received individual human review.</p>
+      </section>
+      <section id="sources">
+        <h2>Source priority, dates and identity matching</h2>
+        <p>For an official action, start with the responsible body's original record: an agenda, minutes, recording, bill, vote, election report or published dataset. Check the body, date, reference period and record status. An agenda proposal, an imported result and a final official action are different claims. For a news association, retain the original publisher and the recorded role rather than treating the association as endorsement.</p>
+        <p>Editors should cite the source beside the claim and compare conflicting accounts instead of silently combining them. If the source is missing, uncertain or incomplete, preserve that limitation. Publication, retrieval, service/event dates and factual verification mean different things; an import, edit or rebuild is not verification. <strong>Unknown</strong> dates remain unknown.</p>
+        <p>A similar name alone is not enough to merge identities. Reconcile source identifiers, office or organization, jurisdiction and service period, and check supporting source material. Imported records may retain separate provisional identities marked for review. A person named in an old record is not automatically the current officeholder; article authors, candidates and officials can be different people with similar names.</p>
+      </section>
+      <section id="automation">
+        <h2>Automated summaries, transcripts and OCR</h2>
+        <p>Records may include automated transcription, OCR or assisted summaries. These can misread names, numbers, speaker turns, motions and vote choices, or omit context. An automated output, successful import or published page is not proof of line-by-line human verification.</p>
+        <p>Before adding or correcting a material claim, editors should compare it with the original document or recording and retain useful source links, dates and recording timestamps. Do not infer a vote or attendance classification from an ambiguous transcript. Keep uncertain wording or identity flagged, and correct the relevant source-backed record rather than treating fluent generated text as evidence.</p>
+        <p>Review/origin information is not available uniformly across legacy records. Where no individual review is documented, this policy does not assert that such a review occurred. Use the original source for consequential details and report a specific discrepancy.</p>
+      </section>
+      <section id="coverage">
+        <h2>What coverage can and cannot establish</h2>
+        <p>Civic Pulse contains selected records, not a complete archive of every agency, event, office or source. Public pages omit private/unlisted related content; signing in can expose additional records only through the existing access rules. A missing entry is not evidence that an event, person or decision did not exist.</p>
+        <p>Vote histories can omit meetings, motions or member choices. Legislative profile history excludes attendance roll calls and can group entries by bill, showing the latest matching vote. Missing choices are unknown, not absences or opposition; entry counts are not a complete participation denominator. A partial source should not be presented as a complete voting record.</p>
+        <p>Maps, guides and profiles are published snapshots. A source-check date does not establish that a boundary is legally current, and a recorded title does not establish current service. Check the source's geography, period and status rather than assuming that a newer site publication means newer facts.</p>
+      </section>
+      <section id="corrections">
+        <h2>Report an error or an uncertain identity</h2>
+        <p><a class="button-link" href={correctionReportUrl()}>Open a correction report on GitHub</a> · <a href={CORRECTION_ISSUES}>Read existing reports</a></p>
+        <p>The reporting channel is this site's public GitHub issue tracker. A GitHub account/sign-in is required to submit; a Civic Pulse account is not required. Opening the link prepares a form and does not submit a report automatically.</p>
+        <ul><li>Include the public Civic Pulse page URL and the exact claim or field that is wrong.</li><li>Explain the proposed correction and link the original source, with its date/period and the relevant passage or recording timestamp.</li><li>Describe uncertainty or conflicting evidence rather than guessing a person's identity, vote or status.</li></ul>
+        <p><strong>GitHub reports are public.</strong> Do not post private/unlisted record links, account information, credentials or sensitive personal material. This channel does not provide confidential submission. No response or publication deadline is guaranteed.</p>
+      </section>
+      <section id="handling">
+        <h2>How a correction should be handled</h2>
+        <ol><li><strong>Triage:</strong> the maintainer or an authorized editor identifies the affected record, claim and public source, checks for duplicate reports and distinguishes a factual dispute from a technical issue.</li><li><strong>Recheck:</strong> compare the original source and identity/date context. Ask for specific missing evidence when needed; retain uncertainty when the sources do not settle the claim.</li><li><strong>Correct through the record's workflow:</strong> an authorized editor uses the applicable editor or import-correction process, preserving source facts and history. Technical fixes are tracked in the repository. Do not overwrite immutable imported facts or merge identities simply to close a report.</li><li><strong>Publish and verify:</strong> public HTML and snapshots change after a successful rebuild/publication. Live views can update sooner; a saved edit or failed build does not prove that the public page changed. Reopen the affected public URL and check related histories/downloads.</li><li><strong>Explain the outcome:</strong> record the source checked and what changed, or explain why the evidence was insufficient or no change was made. Do not mark a report corrected merely because an edit was saved.</li></ol>
+        <p>For a material correction, editors should add a dated, scoped correction note to the affected public description/notes where its record workflow allows, and link the public report. State which claim changed and why. Do not use a publication date as a factual-verification date, or imply a notice covers unreviewed claims. Existing <strong>View history</strong> links can provide revision context where available.</p>
+        <p>A closed GitHub issue or merged pull request does not by itself establish that a corrected public page has been published. Keep the reported outcome and publication status distinct.</p>
+        <p>These are the handling and notice requirements for correction work, not a claim that an automated triage service, response-time guarantee or complete historical correction register already exists. See the <a href="/docs/admins/#editorial-correction-workflow">editor correction workflow</a> for publication checks.</p>
+      </section>
+    </div>
+  </main>
+</Layout>

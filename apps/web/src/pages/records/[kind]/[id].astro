@@ -11,6 +11,7 @@ import {calendarAssetUrl} from '../../../lib/calendar-assets';
 import type {EventRecord} from '../../../lib/calendars';
 import type {MeetingRecord} from '../../../lib/meetings';
 import Layout from '../../../layouts/Layout.astro';
+import RecordFeedback from '../../../components/RecordFeedback.astro';
 import { eventStructuredData } from '../../../lib/structured-data';
 import { getPublicRecordSnapshot } from '../../../lib/public-record-snapshot';
 import { archiveHref, recordKinds, type PublicRecord } from '../../../lib/public-records';
@@ -37,6 +38,7 @@ const { record,event,meeting,legislation,request } = Astro.props;
     </section>)}
     <p>Published snapshot. Changes appear after the next publication. Coverage includes records added to Civic Pulse and may be incomplete. Confirm current information with the original source.</p>
     <p><a href={record.viewer}>Open live record and available files</a> · <a href="/about/#sources">Sources and credits</a></p>
+    <RecordFeedback />
   </main>)}
 </Layout>
 <style>.record-text { white-space: pre-wrap; overflow-wrap: anywhere; }</style>

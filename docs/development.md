@@ -52,6 +52,22 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Editorial policy and corrections
+
+Run `bun test scripts/tests/corrections.test.ts`, check/build and
+`CORRECTIONS_TEST_DIST=apps/web/dist bun test scripts/tests/corrections.test.ts`.
+Tests cover fixed report origin, safe public URL context, query/fragment stripping,
+private viewer/foreign-origin rejection, confirmed policy wording, sitemap and
+built record-report links. Verify repository issues remain enabled before changing
+the channel; do not invent a contact route to make tests pass.
+
+Browser-test About/footer discovery, policy anchors and a record's prepared form
+at desktop/mobile widths without JavaScript, anonymously and with an actual admin
+session. Opening the GitHub link must remain a read-only form/sign-in check: do
+not submit a test issue or message anyone. Inspect UUID viewers with sensitive
+dummy query/fragment markers and ensure those values are absent from report URLs.
+No database fixtures or production data changes are needed.
+
 ### Bibb topic guides
 
 Run `bun test scripts/tests/bibb-topic-hubs.test.ts`, check/build and
