@@ -61,6 +61,12 @@ The built check compares every public owner's initial evidence and all history
 pages with the matching JSON asset, including externalized legislative choices.
 Projection tests cover hidden related records, source dates/roles/choices and
 unsafe source URLs; existing tests retain live access selection and vote filters.
+Run `PROFILE_EVIDENCE_BROWSER=1 bun test scripts/tests/profile-legislation-browser.test.ts`
+with local Chrome for the real-DOM legislative initialization regression. It
+retains 20 published choices and the link to all 21 entries while loading and
+after a synthetic RPC failure, then retries successfully and reinitializes without
+duplicating or removing the ordinary history link. This test bundles the actual
+enhancement module with an in-memory RPC boundary and needs no database/server.
 
 At desktop/mobile widths, disable JavaScript and read office sources, candidacy
 election links, article roles/dates and vote context; follow history pagination.

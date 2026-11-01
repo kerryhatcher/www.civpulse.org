@@ -17,7 +17,7 @@ const rows = section.rows.slice(start, start + (page ? PROFILE_EVIDENCE_PAGE_SIZ
     </ol>
   </> : <p>No public entries recorded in this published snapshot.</p>}
 </div>
-{!page && historyHref && section.rows.length > section.initial && <p><a href={historyHref}>Read all {section.rows.length} entries: {section.title}</a></p>}
+{!page && historyHref && section.rows.length > section.initial && <p data-public-profile-history><a href={historyHref}>Read all {section.rows.length} entries: {section.title}</a></p>}
 <style>
   .profile-evidence-list { padding-left: 1.5rem; }
   .profile-evidence-list > li { border-top: 1px solid var(--line); padding-block: 1rem; overflow-wrap: anywhere; }

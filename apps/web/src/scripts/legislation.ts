@@ -571,9 +571,9 @@ export async function loadPersonLegislation(personId: string) {
   if (!root) return;
   root.hidden = false;
   root.classList.add("legislation-profile");
-  const published = root.querySelector<HTMLElement>('[data-public-profile-evidence]');
+  const published = [...root.querySelectorAll<HTMLElement>('[data-public-profile-evidence], [data-public-profile-history]')];
   root.replaceChildren(node("h2", "Legislative record"));
-  if (published) root.append(published);
+  root.append(...published);
   root.append(
     node(
       "p",
