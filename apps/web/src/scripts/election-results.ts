@@ -173,7 +173,7 @@ export async function initElectionResults() {
     updateUrl();
     if (!rows.length) {
       status.textContent =
-        "No reports yet. Results have not been reported; vote counts are not zero.";
+        "No photo/PDF result reports for this election and selected county yet. Missing reports do not mean zero votes.";
       return;
     }
     const selected = selectReports(rows, area.value, method.value, style.value);
