@@ -1419,7 +1419,14 @@ production migration or performance claims.
 
 Use `MEETING_OUTCOMES_TEST_DATABASE_URL` pointing to an isolated local/preview
 DB with current migrations, then run `bun test scripts/tests/meeting-outcomes-db.test.ts
-scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts`.
+scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts
+scripts/tests/mcp-common-reads.test.ts`.
+The shared catalog regression expects 72 compact tools and the exact v2-only
+tool names, including `set_meeting_vote_outcome`, while preserving the 128-tool
+compatibility catalog and unchanged schemas for retained tools. This catches
+accidental additions/removals that a count alone would miss. Generated Codex and
+Claude compact references must agree after `bun run plugin:build`,
+`bun run plugin:claude:sync` and `bun run plugin:claude:check`.
 Transactional fixtures roll back. Browser QA uses synthetic local cited outcomes,
 explicitly injects that isolated API/anon key into the build process (without
 changing checked-in environment files), checks no-JS/anonymous/actual Admin desktop
