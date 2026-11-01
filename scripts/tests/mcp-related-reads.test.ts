@@ -12,6 +12,7 @@ const inputs: Record<keyof typeof relatedReads, Record<string, unknown>> = {
   list_person_organizations: { person_id: id }, list_contests: { election_id: id },
   list_ballot_questions: { election_id: id }, list_contest_candidates: { contest_id: id },
   get_contest_candidate: { contest_id: id, person_id: other }, list_map_layer_links: { map_id: id },
+  get_person_relationships: { person_id: id },
   get_organization_relationships: { organization_id: id }, list_article_people: { article_id: id },
   list_article_organizations: { article_id: id }, list_calendars: { organization_id: id },
   get_office_terms: { person_id: id, organization_id: other },

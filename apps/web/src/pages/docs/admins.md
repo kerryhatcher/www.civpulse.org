@@ -658,3 +658,39 @@ when source evidence supports the identity. Only uncertain rows need separate
 person stubs flagged for review. Preserve the original payroll name and use a
 sourced review note for spelling, initials or name-order differences; a similar
 name alone is insufficient. See [the finance import contract](https://github.com/kerryhatcher/www.civpulse.org/blob/main/docs/school-finances.md).
+
+## Person-to-person relationships
+
+Maintain these links through the authenticated MCP/plugin tools. Use
+`save_relationship` with `request.relationship=person_relationship` and
+`change.operation=create`, `person_id`, `related_person_id`,
+`relationship`, `reverse_relationship`, and optional `source_url`.
+The first label describes the other person on the first profile (for example,
+“Child of”); the reverse label describes the first person on the other profile
+(“Parent of”). Use the returned row `id` for partial updates and
+`delete_relationship`; deletion removes the link from both profiles but keeps
+both people. Read back `read_related_records` with
+`request.relation=person_relationships` and `person_id` from both endpoints.
+Only admins can write. Reverse duplicate pairs and self-links are rejected.
+There is no separate web relationship editor in this release.
+
+Use precise free-text labels, not an inferred spouse/family/associate category.
+The database permits a missing source for incomplete records; editorially,
+add a reliable, public source supporting the exact claim before publishing a
+family or sensitive association. Do not infer from surnames, addresses, photos,
+co-attendance or shared organizations. Consider civic relevance and privacy,
+especially for relatives who are not public figures; do not create profiles of
+private relatives merely to complete a family tree. An unlisted endpoint is not
+a public source or consent. Use existing visibility controls and avoid recording
+sensitive personal details. No real-person family links are backfilled.
+
+Recheck identity and both directional labels, preserve the source and uncertainty,
+and follow the [editorial correction workflow](#editorial-correction-workflow).
+Public/public links publish after rebuild; hidden endpoints remain excluded from
+anonymous HTML and relationship reads. A visibility change also requires prompt
+republication of previously public static copies.
+
+Person relationship tools are available in the compact catalog at
+`https://api.civpulse.org/functions/v1/mcp/v2` after the matching MCP deployment.
+The compatibility catalog remains at its existing 128-tool limit; refresh tool
+discovery and use only selectors advertised by the connected endpoint.

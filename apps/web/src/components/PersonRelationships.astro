@@ -1,0 +1,13 @@
+---
+import type { RelatedPerson } from '../lib/person-relationships';
+interface Props { personId?: string; related?: RelatedPerson[] }
+const { personId, related = [] } = Astro.props;
+---
+<section class="person-affiliations" data-person-relationships data-person-id={personId} hidden={!related.length}>
+  <h2>Related people</h2>
+  <p>Recorded relationships; this is not a complete family or professional network. Source links appear where recorded.</p>
+  <p data-person-relationships-status role="status" hidden></p>
+  <ul class="profile-article-list" data-person-relationship-list>
+    {related.map(row => <li><a href={`/people/${row.related_person_slug}/`}>{row.related_person_name}</a> — <span>{row.relationship}</span>{row.source_url && <> · <a href={row.source_url} rel="noopener noreferrer">Source</a></>}</li>)}
+  </ul>
+</section>

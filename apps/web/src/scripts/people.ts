@@ -4,6 +4,7 @@ import {renderRecordProvenance} from '../lib/record-provenance-dom';
 import { readDirectory } from './directory-data';
 import { filterCounty, selectedCounty } from './county-filter';
 import { browsePeople, orderPeople, type DirectoryPerson } from '../lib/directories';
+import { loadPersonRelationships } from './person-relationships';
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
@@ -379,6 +380,7 @@ export async function initPersonViewFromUrl(): Promise<void> {
   status.hidden = true;
   fillPersonView(response);
   if (response.person) {
+    void loadPersonRelationships(response.person.id);
     void loadOfficeTerms(response.person.id);
     void loadPersonCandidacies(response.person.id);
   void loadPersonVotes(response.person.id);

@@ -10,7 +10,7 @@ export const saveResources = [
 ] as const;
 export const relationshipKinds = [
   'map_layer', 'contest_candidate', 'person_organization',
-  'organization_relationship', 'article_person', 'article_organization',
+  'organization_relationship', 'person_relationship', 'article_person', 'article_organization',
 ] as const;
 
 export function compactWriteReplacement(name: string, input: Record<string, unknown>) {
@@ -77,14 +77,14 @@ export class WriteCatalog {
       }, async ({ request }) => invoke(resource, request));
     }
     server.registerTool('save_relationship', {
-      description: `Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. ${entry('create_organization_relationship').description}`,
+      description: `Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization and person relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. ${entry('create_organization_relationship').description}`,
       inputSchema: z.object({ request: z.discriminatedUnion('relationship', relationshipSchemas(resource =>
         z.object({ relationship: z.literal(resource), change: operationSchema(resource) }).strict(),
       )) }).strict(),
       annotations: saveAnnotations,
     }, async ({ request }) => invoke(request.relationship, request.change));
     server.registerTool('delete_relationship', {
-      description: 'Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship requires its row UUID and removes the link from both organization profiles. Use save_relationship for create/update.',
+      description: 'Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship and person_relationship require its row UUID and removes the link from both endpoint profiles. Use save_relationship for create/update.',
       inputSchema: z.object({ request: z.discriminatedUnion('relationship', relationshipSchemas(resource =>
         entry(`delete_${resource}`).schema.extend({ relationship: z.literal(resource) }).strict(),
       )) }).strict(),

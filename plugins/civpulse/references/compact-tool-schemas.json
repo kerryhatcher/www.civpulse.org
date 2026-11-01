@@ -5548,7 +5548,7 @@
   },
   {
     "name": "save_relationship",
-    "description": "Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.",
+    "description": "Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization and person relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5996,6 +5996,124 @@
               "properties": {
                 "relationship": {
                   "type": "string",
+                  "const": "person_relationship"
+                },
+                "change": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "person_id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "related_person_id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "relationship": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "reverse_relationship": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "source_url": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 2000,
+                              "pattern": "^[hH][tT][tT][pP][sS]?:[/][/][^\\s]+$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "operation": {
+                          "type": "string",
+                          "const": "create"
+                        }
+                      },
+                      "required": [
+                        "person_id",
+                        "related_person_id",
+                        "relationship",
+                        "reverse_relationship",
+                        "operation"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "person_id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "related_person_id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "relationship": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "reverse_relationship": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "source_url": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 2000,
+                              "pattern": "^[hH][tT][tT][pP][sS]?:[/][/][^\\s]+$"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "operation": {
+                          "type": "string",
+                          "const": "update"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "operation"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "relationship",
+                "change"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "relationship": {
+                  "type": "string",
                   "const": "article_person"
                 },
                 "change": {
@@ -6165,7 +6283,7 @@
   },
   {
     "name": "delete_relationship",
-    "description": "Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship requires its row UUID and removes the link from both organization profiles. Use save_relationship for create/update.",
+    "description": "Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship and person_relationship require its row UUID and removes the link from both endpoint profiles. Use save_relationship for create/update.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6257,6 +6375,25 @@
                 "relationship": {
                   "type": "string",
                   "const": "organization_relationship"
+                }
+              },
+              "required": [
+                "id",
+                "relationship"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "relationship": {
+                  "type": "string",
+                  "const": "person_relationship"
                 }
               },
               "required": [
@@ -6564,6 +6701,26 @@
               ],
               "additionalProperties": false,
               "description": "List related organizations, with labels normalized for the requested profile and source URLs."
+            },
+            {
+              "type": "object",
+              "properties": {
+                "person_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "relation": {
+                  "type": "string",
+                  "const": "person_relationships"
+                }
+              },
+              "required": [
+                "person_id",
+                "relation"
+              ],
+              "additionalProperties": false,
+              "description": "List related people visible at both endpoints, with directional labels and source URLs. Anonymous reads require both people public; signed-in reads follow person viewer access."
             },
             {
               "type": "object",

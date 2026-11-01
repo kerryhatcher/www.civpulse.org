@@ -323,6 +323,7 @@ var relatedReads = {
   get_contest_candidate: "contest_candidate",
   list_map_layer_links: "map_layer_links",
   get_organization_relationships: "organization_relationships",
+  get_person_relationships: "person_relationships",
   list_article_people: "article_people",
   list_article_organizations: "article_organizations",
   list_calendars: "calendars",
@@ -381,6 +382,7 @@ var relationshipKinds = [
   "contest_candidate",
   "person_organization",
   "organization_relationship",
+  "person_relationship",
   "article_person",
   "article_organization"
 ];
@@ -437,12 +439,12 @@ class WriteCatalog {
       }, async ({ request }) => invoke(resource, request));
     }
     server.registerTool("save_relationship", {
-      description: `Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. ${entry("create_organization_relationship").description}`,
+      description: `Create or partially update one relationship (admin only). Select request.relationship and change.operation=create or update. Composite links require both endpoint IDs and update attributes only. Organization and person relationships use a row UUID for updates; endpoints, labels and source may be edited. Omitted fields are preserved; update never upserts. Delete separately. ${entry("create_organization_relationship").description}`,
       inputSchema: z5.object({ request: z5.discriminatedUnion("relationship", relationshipSchemas((resource) => z5.object({ relationship: z5.literal(resource), change: operationSchema(resource) }).strict())) }).strict(),
       annotations: saveAnnotations
     }, async ({ request }) => invoke(request.relationship, request.change));
     server.registerTool("delete_relationship", {
-      description: "Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship requires its row UUID and removes the link from both organization profiles. Use save_relationship for create/update.",
+      description: "Delete only one relationship (admin only); preserve people, organizations, articles, contests, maps and layers. Select request.relationship. Composite links require both endpoint IDs; organization_relationship and person_relationship require its row UUID and removes the link from both endpoint profiles. Use save_relationship for create/update.",
       inputSchema: z5.object({ request: z5.discriminatedUnion("relationship", relationshipSchemas((resource) => entry(`delete_${resource}`).schema.extend({ relationship: z5.literal(resource) }).strict())) }).strict(),
       annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false }
     }, async ({ request }) => {
@@ -2207,7 +2209,7 @@ var url = z11.string().url().max(2000).regex(/^[hH][tT][tT][pP][sS]?:[/][/][^\s]
 var slug = z11.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 var rowId = z11.string().regex(/^[1-9][0-9]*$/).refine((value) => BigInt(value) <= 9223372036854775807n, "ID exceeds bigint range");
 var geometry = z11.object({ type: z11.enum(["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]), coordinates: z11.array(z11.unknown()) });
-function registerExtendedTools(server, supabase, user, writes, reads) {
+function registerExtendedTools(server, supabase, user, writes, reads, personRelationships = true) {
   const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase, writes, reads);
   async function rpc(name, args) {
     const { data, error } = await supabase.rpc(name, args);
@@ -2314,6 +2316,19 @@ function registerExtendedTools(server, supabase, user, writes, reads) {
   create("organization_relationship", "organization_relationships", "Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.", organizationRelationship);
   update("organization_relationship", "organization_relationships", "Update an organization relationship by id (admin only). Omitted fields are preserved.", organizationRelationship);
   remove("organization_relationship", "organization_relationships", "Delete an organization relationship from both profiles, preserving both organizations (admin only).");
+  if (personRelationships) {
+    readRpc("get_person_relationships", "List related people visible at both endpoints, with directional labels and source URLs. Anonymous reads require both people public; signed-in reads follow person viewer access.", { person_id: uuid3 }, "get_person_relationships", ({ person_id }) => ({ p_person_id: person_id }));
+    const personRelationship = {
+      person_id: uuid3,
+      related_person_id: uuid3,
+      relationship: z11.string().trim().min(1).max(160),
+      reverse_relationship: z11.string().trim().min(1).max(160),
+      source_url: url.nullish()
+    };
+    create("person_relationship", "person_relationships", "Link two different people (admin only). relationship labels the related person on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.", personRelationship);
+    update("person_relationship", "person_relationships", "Update a person relationship by id (admin only). Omitted fields are preserved.", personRelationship);
+    remove("person_relationship", "person_relationships", "Delete a person relationship from both profiles, preserving both people (admin only).");
+  }
   const article = {
     title: z11.string().trim().min(1).max(500),
     url,
@@ -2895,7 +2910,7 @@ function buildServer(supabase, user, documentContext = {}, sourceReaderUrl, cata
   registerElectionResultTools(server, supabase);
   if (catalog === "compact")
     registerSchoolFinanceTools(server, supabase);
-  registerExtendedTools(server, supabase, user, writes, reads);
+  registerExtendedTools(server, supabase, user, writes, reads, catalog === "compact");
   registerMeetingTools(server, supabase);
   registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase, writes, reads);

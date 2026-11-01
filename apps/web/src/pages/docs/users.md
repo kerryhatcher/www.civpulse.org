@@ -646,3 +646,12 @@ person. Existing exact name matches also remain marked for review until checked.
 The table preserves the original reported name, even if the linked profile has a
 different display name. SALARY/SALARIES/BENEFITS entries remain payroll aggregates.
 New organization pages become available after the site's next publication build.
+
+## Person relationships
+
+Person profiles show **Related people**, with the label appropriate to each
+profile and a source link where recorded. This is a selected network, not a
+complete family tree or evidence that absent links do not exist. Anonymous pages
+include only relationships between two public people. Signed-in viewers can
+follow permitted hidden records through the shared viewer; hidden links are not
+embedded in public HTML. Public lists update after a successful rebuild.
