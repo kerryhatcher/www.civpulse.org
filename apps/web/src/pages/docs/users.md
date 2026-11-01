@@ -530,10 +530,10 @@ page; expand Source and reporting details for the original source, file checksum
 export filters and retrieval date. Displayed currency is rounded to cents; the
 CSV preserves reported precision.
 
-Payroll names link to separate person records and are marked **Identity needs
-review** until checked. Repeated names receive separate profiles; a matching name
-is not proof of the same individual. Profiles cite a fiscal year and original
-source row, and their school affiliation describes historical payroll evidence.
+Payroll names link to existing person records when evidence supports the match.
+Uncertain identities receive separate stubs marked **Identity needs review**;
+ambiguous repeated names stay separate. Source stubs cite the fiscal year and
+original row, and school affiliations describe historical payroll evidence.
 No school location or current employment is inferred.
 
 Records are not unique employee headcounts or individual invoices. SALARY and

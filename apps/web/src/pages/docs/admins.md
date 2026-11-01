@@ -486,16 +486,18 @@ requires the exact current release ID and retains history. See the repository's
 `docs/school-finances.md` for the versioned contract and offline Bun preparer.
 The updater's collector and authenticated publisher are separate follow-up work.
 
-Publishing payroll creates one public person profile per source row, including
-same-name rows, and flags each identity for review. Existing people are never
-matched by name. Check additional source evidence before confirming an identity.
+During staging, link supported payroll identities to existing people with
+`resolve_payroll_person` and a sourced review note. Publishing creates separate
+flagged stubs only for unresolved rows, including ambiguous repeated names.
+Check additional source evidence before confirming an identity.
 Use `review_person` with the release ID, row ordinal, current person UUID,
 `confirm_identity:true` and a sourced review note to clear the flag. This does not
 merge profiles. Standard person editing remains available under People.
 
 Finance search reflects publication immediately; employee/organization profiles
 appear after the normal rebuild. Withdrawing a release hides its generated
-profiles from discovery and removes its source affiliations; static changes
+profiles and removes source affiliations only when other published releases do
+not still reference them. Curated profiles remain intact; static changes
 require that rebuild too. Source files must remain in the collector's evidence
 archive. Do not upload full statewide payroll or treat payment recipients as
 people without verification. Production migrations must reach main before use.
