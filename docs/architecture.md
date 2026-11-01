@@ -154,6 +154,18 @@ seconds. All five tables invalidate the existing rebuild state on changes.
 Database and MCP edits are live immediately; static pages/exports update after
 rebuild. `/admin/statistics/` uses admin RLS and optimistic timestamp checks.
 
+The cached statistics snapshot includes per-FIPS groups, one Georgia indicator
+lookup, shared age/poverty chart maxima, and the county-plus-Georgia download
+arrays. All county pages and CSV/JSON endpoints, including Bibb's separate routes,
+reuse these indexes instead of filtering the full 9,440-row array repeatedly.
+Rows are shared by reference; downloads retain the public reader's state-first
+FIPS order. Completeness, six-headline and matching comparison-code/period/source
+checks run before the snapshot is published. Only available observations affect
+shared chart scales; suppressed/unavailable values keep their existing semantics.
+The snapshot and every derived index expire together after 30 seconds in dev;
+production builds retain them for their anonymous build client. Public database
+credentials, fetch pagination and static rendering remain unchanged.
+
 Each county exports `statistics.csv` and `statistics.json` with its 59 rows
 and the matching 59 Georgia rows. `/statistics/data.csv` and `data.json`
 contain all 9,440 observations. `/statistics/` searches live database records

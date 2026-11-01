@@ -1022,6 +1022,39 @@ and anonymous/signed-in navigation. Run `bun test scripts/tests/county-filter.te
 
 ### Full county demographic profiles
 
+Run `bun test scripts/tests/county-statistics-build.test.ts` for indexed FIPS/state
+joins, all 159 download projections, chart-scale availability rules, failed reads,
+completeness/headline/comparison validation, shared requests and development expiry.
+To check a refactor against its previous rendered output, preserve the old built
+`counties/` directory outside the repo, build the change against the same local
+dataset, then run
+`COUNTY_STATISTICS_BASELINE_DIR=/tmp/saved-counties bun test scripts/tests/county-statistics-build.test.ts`.
+The optional comparison checks all 477 county HTML/CSV/JSON files byte for byte,
+including Bibb's static page/CSV and dynamic JSON route. Full HTML comparison also
+covers every chart bar, interval, shared scale, source, period and table value.
+`COUNTY_STATISTICS_DIST` can override the default `apps/web/dist/counties` path.
+
+The indexing change was measured locally with all 9,440 public county/Georgia
+records. Both implementations loaded their snapshots before the CPU comparison;
+execution order alternated, with one warmup and nine measured pairs. Each pass
+generated all 159 profile models, selected all county download arrays, and then
+serialized the CSV/JSON separately. Median times:
+
+| Operation | Before | After |
+| --- | --- | --- |
+| Generate 159 county profile/chart models | 99.71 ms | 64.23 ms |
+| Select the 159 county-plus-state download arrays | 4.42 ms | 0.04 ms |
+| Serialize those arrays to CSV and JSON | 89.52 ms | 88.62 ms |
+
+The generated profile/chart models and all 477 county output files matched the
+baseline exactly. One full local build changed from 4.38 s to 4.24 s (route
+generation 3.52 s to 3.25 s); summed county HTML/CSV/JSON log durations changed
+from 1,350 ms to 1,191 ms. Those coarse route timings include the initial database
+load. Serialization work is unchanged. This dataset had no bills or legislative
+votes, so the full-build measurements do not establish production savings.
+The final verification build took 4.73 s, illustrating normal whole-build variance.
+Repeat with the release dataset when assessing production build time.
+
 Run county-statistic DB/MCP tests from [backend notes](backend.md#county-statistics),
 then `bun run check`, `bun run build`, `bun run mcp:check`, `bun run mcp:build`,
 and `bun run plugin:build`. Validate all 159 built pages: six headlines, 59 topic
