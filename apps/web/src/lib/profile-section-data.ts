@@ -13,15 +13,16 @@ export async function loadPublicProfileSnapshot(url:string|undefined,client=getS
     if (session) return null;
     const response=await fetch(url);
     if (!response.ok) throw new Error(`Could not load published profile: HTTP ${response.status}`);
-    const data=await response.json() as PublicProfileSections;
-    return {...data,officeTerms:currentOfficeTerms(data.officeTerms),candidacies:currentCandidacies(data.candidacies)};
+    const {legislativeResourcesUrl,...data}=await response.json() as PublicProfileSections;
+    const references=legislativeResourcesUrl ? await readFile(legislativeResourcesUrl) as PublicProfileSections['legislation'] : {};
+    return {...data,legislation:{...references,...data.legislation},officeTerms:currentOfficeTerms(data.officeTerms),candidacies:currentCandidacies(data.candidacies)};
 }
 
 const files=new Map<string,Promise<unknown>>();
 async function readFile(url:string) {
   if(!files.has(url)) files.set(url,(async()=>{
     const response=await fetch(url);
-    if(!response.ok) throw new Error(`Could not load published voting records: HTTP ${response.status}`);
+    if(!response.ok) throw new Error(`Could not load published profile data: HTTP ${response.status}`);
     return response.json();
   })().catch(error=>{files.delete(url);throw error;}));
   return files.get(url)!;

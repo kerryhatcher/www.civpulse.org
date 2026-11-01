@@ -508,8 +508,25 @@ and signed-in profile readers retain their original access checks and behavior.
 Only explicitly public people and public related records/parents enter exports;
 legislative metadata/sponsorships use the existing anonymous browse gates.
 
+The asset builder keeps owner-to-asset lookups separate from unique files. Equal
+JSON bodies share `/profile-data/assets/<sha256>.json` across people and
+organizations, including one common empty snapshot. Serialization is memoized for
+shared source objects and equal bodies are hashed once. The route emits each
+unique file once; public owner lists remain the publication boundary.
+
+Repeated legislative terms/sessions/bodies can use a shared reference asset when
+the conservative aggregate JSON saving exceeds 1 KiB after counting its file and
+per-profile pointers. Empty/small or single-owner reference groups stay inline.
+Only the existing public reference arrays are extracted, in their fixed order;
+sponsorships remain profile-specific. Anonymous loading hydrates the reference
+file before rendering sections. Required-file failures reject the load, without
+falling back to a broader live query. Signed-in and UUID views keep their live
+gates and do not fetch these profile files. HTML, the file pool and the updated
+reader must publish together; older open pages may need a reload after release.
+
 The public renderer reuses its current cards, pagination and filters with static
-data. One shared snapshot request supplies all sections, including empty sections.
+data. One owner snapshot supplies all sections, including empty sections, with
+an additional shared reference request only when extraction is worthwhile.
 Legislative initial results contain 20 grouped entries; later unfiltered pages
 are separate static files. Full raw choices download only when a visitor uses a
 legislative filter, so a long history does not inflate the initial page download.
