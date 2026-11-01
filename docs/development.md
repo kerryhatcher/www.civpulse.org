@@ -1227,8 +1227,10 @@ blocker; a parser test alone is not an external-validator result. Do not deploy
 feature code simply to obtain a public URL for these code-input tools.
 
 Local validation on November 1, 2026: Schema.org accepted the built public Person
-and BreadcrumbList with zero errors/warnings. Further homepage validation did
-not complete within the bounded tool attempt. Google's code-input test returned
+and BreadcrumbList with zero errors/warnings. A bounded follow-up also accepted
+the rendered synthetic physical Event plus BreadcrumbList with zero errors/warnings.
+Homepage/WebSite validation still did not complete within the bounded tool attempt.
+Google's code-input test returned
 “Something went wrong — Log in and try again”; a Google pass is therefore not
 claimed. The local browser checked temporary physical-event fixtures and
 anonymous/admin viewer exclusions; those fixtures were removed afterward.
