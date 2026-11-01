@@ -1,9 +1,20 @@
 import { describe, expect, test } from 'bun:test';
-import { DEFAULT_COUNTY, GEORGIA_COUNTIES, normalizeCounty, matchesCounty, jurisdictionCounties } from '../../apps/web/src/lib/county-scope';
+import { DEFAULT_COUNTY, GEORGIA_COUNTIES, GEORGIA_COUNTY_HUBS, countySummaryHref, normalizeCounty, matchesCounty, jurisdictionCounties } from '../../apps/web/src/lib/county-scope';
 import { countySearchPage } from '../../apps/web/src/scripts/county-filter';
 import { organizationCountyCoverage, mapCountyCoverage } from '../../apps/web/src/data/county-coverage';
 
 describe('county selection and geography policy', () => {
+  test('every menu county has a unique summary route, including multiword names', () => {
+    expect(GEORGIA_COUNTY_HUBS).toHaveLength(159);
+    const paths = GEORGIA_COUNTIES.map(county => countySummaryHref(county.fips));
+    expect(new Set(paths).size).toBe(159);
+    for (const path of paths) expect(path).toMatch(/^\/counties\/[a-z0-9-]+\/$/);
+    expect(countySummaryHref('13021')).toBe('/counties/bibb/');
+    expect(countySummaryHref('13017')).toBe('/counties/ben-hill/');
+    expect(countySummaryHref('13089')).toBe('/counties/dekalb/');
+    expect(countySummaryHref('all')).toBe('/counties/');
+    expect(countySummaryHref('invalid')).toBe('/counties/bibb/');
+  });
   test('explicit service coverage uses valid counties and keeps regional maps unclassified', () => {
     for (const coverage of [...Object.values(organizationCountyCoverage), ...Object.values(mapCountyCoverage)]) {
       expect(coverage.length).toBeGreaterThan(0);
