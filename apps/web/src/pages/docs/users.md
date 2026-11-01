@@ -19,8 +19,7 @@ Search beside the Civic Pulse masthead when you already know a name or subject.
 Upcoming dates group events by their Eastern Time calendar date; every event
 remains a separate link. Select **Upcoming dates** to open the full calendar.
 Eligible election notices use the same published records as the election directory. The Bibb County link opens the initial
-county hub; it does not filter every directory to Bibb County. More county hubs
-can join the same Civic Pulse identity later.
+county hub. The header county menu opens summary pages for all 159 Georgia counties.
 
 ## Appearance
 
@@ -33,11 +32,12 @@ their original appearance.
 ## Explore your county
 
 Open the county name in the header (for example, **Bibb County**, beside the
-location icon) to choose a Georgia county or **All counties**.
+location icon) to choose a Georgia county. Selecting it opens that county’s summary page.
+Choose **All counties** to open the [Georgia county directory](/counties/).
 Bibb is the default. Your choice stays with this tab’s session across navigation,
 reloads, sign-in, and sign-out; it is not saved to your account or synced to other
 devices. A fresh session starts with Bibb. If browser storage is disabled, the
-choice lasts only until you leave the current page.
+summary page still opens, but the preference may return to Bibb on the next page.
 
 County selection filters people, organizations, maps, calendar events, search,
 records requests, election reports, and structured turnout where county coverage
@@ -46,14 +46,17 @@ available. The current county coverage is limited: verified local organizations
 and maps supply local links to people and events; explicit race/question county
 jurisdictions and report counties supply election geography. A county selection
 is not a complete list of that county’s services or a personalized ballot.
-County hubs and individual record/profile links keep their named subject.
+Each county hub and individual record/profile link has its own named subject.
+Changing the header county leaves the current page and opens the selected summary;
+use the directories or browser Back afterward to resume browsing with that preference.
 Admin editing continues to show all permitted records. Public archive pages keep
 their stable page numbering across counties; a filtered page may be empty, so
 use the calendar or records-request directory for filtered browsing.
 
 Election pages start with your header county. Bibb uses the recorded local
 district list; other counties use explicit county jurisdictions and include
-unclassified races. Choose **All counties** in the header to see the full ballot.
+unclassified races. To see the full ballot, choose **All counties** in the header,
+then reopen the election from the election directory or use browser Back.
 A direct link to a race reveals that race even when it is outside the selected
 county, without changing your county preference or revealing other out-of-area races.
 
@@ -91,8 +94,8 @@ and the source-check date. Expand
 **About these figures** for methodology and the source-check date. Population
 estimates, Census counts, business statistics, and ACS five-year survey figures cover different periods; survey
 figures have sampling uncertainty. These are saved figures, not live statistics.
-Upcoming public events load when you open the page. More county hubs will follow
-after the Bibb County pilot is reviewed.
+Upcoming public events load when you open the page. All other Georgia counties
+have summary pages linked from the header and statewide county directory.
 
 ## Search public meeting documents
 
@@ -154,7 +157,7 @@ Calendar times and election dates and deadlines are shown in Eastern Time (Ameri
 - [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. Selecting **Show on map** in the directory moves keyboard focus into the details; Tab reaches its actions, and Escape or the close button returns focus to the directory entry. **Copy map link** shares the current layer selection.
 - Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). The default **Officials and candidates first** order shows elected and appointed officials, then candidates, then other people, alphabetically within each group. You can also sort all matches by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and officials/candidates-first order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
-  Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header to see every race in the same election. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
+  Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header, then return to the election to see every race. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 
 If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. On Search Civic Pulse, **Clear search** removes the query and content-type filter and returns focus to the search field; it keeps your header county selection. Some records have not been added yet.
 
@@ -412,7 +415,7 @@ Bibb County hub. Maps remain available through the Maps topic and directory.
 
 Election detail pages show **Voter turnout** charts when Georgia SOS structured
 turnout is available. The charts use the **county in the site header**, just like
-the ballot and election reports. Change the header county to compare reported
+the ballot and election reports. Change the header county, then return to the election to compare reported
 ballot styles and inspect early-voting and absentee measures. **All counties**
 shows separate, labeled county groups; counts are never combined across counties.
 If your county has no reported turnout, the charts say so instead of switching
@@ -496,6 +499,8 @@ under expandable reporting details. **Include earlier reports** shows past
 snapshots for the selected scope separately. The URL retains your filters for
 sharing. **Refresh reports** fetches the latest data without a site rebuild.
 
-### Neighboring county hubs
+### Georgia county hubs
 
-The [county community hubs](/counties/) directory links Bibb, [Crawford](/counties/crawford/), [Houston](/counties/houston/), [Jones](/counties/jones/), [Monroe](/counties/monroe/), [Peach](/counties/peach/), and [Twiggs](/counties/twiggs/). Open a hub for selected public local organizations, people, maps, elections, and events. Sections explain when local records are not yet published. Neighboring hubs link their own Census QuickFacts profiles; Bibb retains its saved demographic tables and CSV. Changing the header county preference does not change a named hub. Full directory links open site-wide directories with the current header preference.
+The [Georgia county directory](/counties/) lists all 159 counties alphabetically. Open any county summary using this directory or the header county menu. Summaries show selected public local organizations, people, maps, elections, and events, with messages where records are not yet published. Each summary links its county’s Census QuickFacts profile; Bibb retains its saved demographic tables and CSV. County summaries do not imply complete local coverage. Full directory links use your saved header county preference.
+
+Opening a county summary directly also selects that county for the header and subsequent directory browsing.

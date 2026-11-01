@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { neighborCounties } from '../../data/neighbor-counties';
+import { GEORGIA_COUNTY_HUBS } from '../../lib/county-scope';
 import { organizationCountyCoverage, mapCountyCoverage } from '../../data/county-coverage';
 import { fetchOrganizations } from '../../lib/organizations';
 import { fetchPublicMaps } from '../../lib/maps';
@@ -8,7 +8,9 @@ import { fetchPublicPeopleForOrganization } from '../../lib/people';
 import { fetchPublicElections, formatElectionDate, electionHref } from '../../lib/elections';
 
 export function getStaticPaths() {
-  return neighborCounties.map(county => ({ params: { county: county.slug }, props: { county } }));
+  // Bibb retains its separately curated page and demographic snapshot.
+  return GEORGIA_COUNTY_HUBS.filter(county => county.fips !== '13021')
+    .map(county => ({ params: { county: county.slug }, props: { county } }));
 }
 const { county } = Astro.props;
 const [organizations, maps, elections] = await Promise.all([
@@ -20,7 +22,7 @@ const localMaps = maps.filter(map => mapCountyCoverage[map.slug]?.includes(count
 const localElections = elections.filter(election => election.organization_id && ids.has(election.organization_id))
   .sort((a, b) => b.election_date.localeCompare(a.election_date));
 const profiles = await Promise.all(localOrganizations.map(async org => ({ org, people: await fetchPublicPeopleForOrganization(org.id) })));
-const censusUrl = `https://www.census.gov/quickfacts/fact/table/${county.slug}countygeorgia/PST045225`;
+const censusUrl = `https://www.census.gov/quickfacts/fact/table/${county.slug.replaceAll('-', '')}countygeorgia/PST045225`;
 ---
 <Layout title={`${county.name} County, Georgia`} description={`Explore ${county.name} County local government, people, maps, elections, and public events on Civic Pulse.`}>
   <main id="main" class="county-hub">
@@ -70,8 +72,8 @@ const censusUrl = `https://www.census.gov/quickfacts/fact/table/${county.slug}co
       <a href={censusUrl}>{county.name} County Census QuickFacts</a>
       <p class="body-note">County FIPS: {county.fips}. A saved demographic snapshot is not yet available on this hub.</p>
     </section>
-    <p>Coverage is growing. The full directories and community calendar include records beyond {county.name} County. This hub stays focused on {county.name} County when you change the header county preference.</p>
-    <a href="/counties/">Explore neighboring county hubs</a>
+    <p>Coverage is growing. The full directories and community calendar include records beyond {county.name} County. Choose a county in the header to open another county summary.</p>
+    <a href="/counties/">Explore all Georgia county hubs</a>
   </main>
 </Layout>
 <script>

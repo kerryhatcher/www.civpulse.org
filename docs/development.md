@@ -913,11 +913,13 @@ suffixes covered in the county tests; do not build regexes from county names.
 Run `bun test scripts/tests/county-filter.test.ts scripts/tests/directories.test.ts
 scripts/tests/calendar-snapshot.test.ts`, then `bun run check` and `bun run build`.
 In a fresh browser session, verify Bibb is selected. Change to Jones and All
-counties on organizations, people, maps, calendar and site search; verify matching
-records, pagination, no-result states, navigation/reload persistence, and a new
+counties on organizations, people, maps, calendar and site search; verify the
+selected county summary opens (All counties opens the statewide directory), then
+return to the directory to verify matching records, pagination, no-result states,
+navigation/reload persistence, and a new
 session's Bibb default. Repeat signed in and signed out, including admin navigation.
 Check mobile header wrapping, keyboard selection and console health. Verify
-header county changes on ballots and direct race anchors; turnout should scan past source
+header county changes navigate to summaries, then return to ballots and direct race anchors; turnout should scan past source
 pages containing other counties and retain its pinned report. County coverage
 comes from the explicit registry, not address/name heuristics. Regional library
 and statewide maps remain available in every county. The public geography JSON
@@ -925,8 +927,9 @@ must contain only public IDs; restricted records keep their existing live gates.
 
 Election ballots and turnout charts use only the header county selector. Verify
 there is no ballot-area or chart county dropdown on static and signed-in UUID
-pages. Changing the header must rerender turnout from the already loaded pinned
-snapshot, keep All counties in separate labeled groups, and show a no-data message
+pages. After changing the header and returning from the summary to the election,
+turnout must use the saved county, keep All counties in separate labeled groups,
+and show a no-data message
 without a fallback when the chosen county is missing. A direct race anchor
 reveals only its target and does not change the saved county or reveal other
 out-of-area races. Run `bun test scripts/tests/election-turnout.test.ts` for county
@@ -968,3 +971,14 @@ file/request becomes private. Scan generated HTML/JSON for fixture owner IDs,
 transfer text, private file names, storage paths and signed URLs. Missing assets
 fail visibly without runtime discovery fallback. Clean up owned files/users/rows
 and the preview server. Compare full build duration and asset sizes before release.
+
+### Georgia county summary navigation
+
+The header county menu saves the preference and opens that summary; All counties
+opens `/counties/`. Confirm 159 unique county links and generated summaries,
+including `/counties/ben-hill/`, `/counties/jeff-davis/`, and the existing Bibb page.
+Opening a summary directly must synchronize the menu and saved preference. Test
+from calendar and requests too, where legacy county-change listeners must not
+reload before the summary opens. Check storage-denied navigation, mobile layout,
+and anonymous/signed-in navigation. Run `bun test scripts/tests/county-filter.test.ts`,
+`bun run check`, and `bun run build`.

@@ -1,4 +1,4 @@
-import { COUNTY_SESSION_KEY, DEFAULT_COUNTY, normalizeCounty, matchesCounty, type CountyIndex } from '../lib/county-scope';
+import { COUNTY_SESSION_KEY, DEFAULT_COUNTY, GEORGIA_COUNTY_HUBS, normalizeCounty, matchesCounty, countySummaryHref, type CountyIndex } from '../lib/county-scope';
 
 let memoryCounty: string | undefined;
 export function selectedCounty(): string {
@@ -34,11 +34,17 @@ export async function countySearchPage<T extends { id: string }>(
 export function initCountyFilter(): void {
   const select = document.querySelector<HTMLSelectElement>('[data-county-filter]');
   if (!select) return;
+  const slug = window.location.pathname.match(/^\/counties\/([^/]+)\/?$/)?.[1];
+  const hub = GEORGIA_COUNTY_HUBS.find(county => county.slug === slug);
+  if (hub) {
+    memoryCounty = hub.fips;
+    try { sessionStorage.setItem(COUNTY_SESSION_KEY, memoryCounty); } catch { /* The current hub still identifies the county. */ }
+  }
   select.value = selectedCounty();
   select.addEventListener('change', () => {
     memoryCounty = normalizeCounty(select.value);
     try { sessionStorage.setItem(COUNTY_SESSION_KEY, memoryCounty); } catch { /* Keep the selection in memory when storage is disabled. */ }
-    window.dispatchEvent(new Event('countychange'));
+    window.location.assign(countySummaryHref(memoryCounty));
   });
   async function apply(): Promise<void> {
     try {

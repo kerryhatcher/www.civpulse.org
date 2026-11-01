@@ -1,12 +1,22 @@
 import counties from '../../../../scripts/data/georgia-counties.json';
 
 export const GEORGIA_COUNTIES = counties;
+/** One canonical route per county, shared by the header and static hubs. */
+export const GEORGIA_COUNTY_HUBS = counties.map(county => ({
+  ...county, slug: county.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+}));
 export const DEFAULT_COUNTY = '13021';
 export const COUNTY_SESSION_KEY = 'civicpulse.county';
 export type CountyIndex = Record<string, string[]>;
 
 export function normalizeCounty(value: unknown): string {
   return value === 'all' || counties.some(county => county.fips === value) ? value as string : DEFAULT_COUNTY;
+}
+
+export function countySummaryHref(value: unknown): string {
+  const fips = normalizeCounty(value);
+  const county = GEORGIA_COUNTY_HUBS.find(county => county.fips === fips);
+  return county ? `/counties/${county.slug}/` : '/counties/';
 }
 
 /** Unknown geography remains discoverable. Empty coverage means statewide. */

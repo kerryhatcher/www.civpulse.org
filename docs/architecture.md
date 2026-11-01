@@ -46,10 +46,14 @@ docs/         architecture, backend, and development notes
 The shared static layout renders a Georgia county selector (default Bibb/FIPS
 13021, plus All counties). `county-filter.ts` validates and stores the preference
 in `sessionStorage` under `civicpulse.county`; it is independent of auth and never
-changes authorization. Storage failures leave a working page-local selection.
-County changes update active discovery flows; the calendar and request directory
-reload to rebuild their organization/calendar controls. Detail links and admin
-forms keep their full subject. Named county hubs remain fixed to their county.
+changes authorization. Choosing a county saves the preference and navigates to
+its `/counties/<slug>/` summary; All counties opens `/counties/`. Both navigation
+and static routes use `GEORGIA_COUNTY_HUBS` from the canonical county reference in
+`county-scope.ts`. The header does not dispatch `countychange` before navigation,
+avoiding competing calendar/request-directory reloads. Storage failures do not
+block navigation, but the preference may reset on the next page. Detail links
+and admin forms keep their full subject; choosing a county leaves that page.
+Opening a named county summary directly also synchronizes the header and session preference to that county. The summary pathname is matched only against the canonical county slugs, never arbitrary input.
 
 `/county-data.json` is built solely from public snapshots. Its keys pair a record
 kind and UUID with known county FIPS codes. The explicit slug registry in
@@ -70,13 +74,24 @@ site-search and request-directory pagination. Historical archive URLs retain
 their all-county page boundaries and hide only known out-of-area entries.
 Account synchronization and a general county-assignment schema are not added.
 
-### County hub pilot
+### County community hubs
 
 `/counties/bibb/` is a static community hub using the existing layout and public
 build readers. `apps/web/src/data/bibb-county.ts` explicitly curates organization
 and map slugs; name matching is not a county classification system. Elections
 are included only when their owning organization is in that selection, and people
-come from its public affiliations. The `/counties/` index also links static hubs for Crawford, Houston, Jones, Monroe, Peach, and Twiggs, the neighboring counties shown in the Macon–Bibb 2050 Comprehensive Plan (Map 1-1). These hubs use `neighbor-counties.ts` for route metadata and the verified coverage registry for public organizations and maps; people and elections follow those organizations. Hub maps require explicit map coverage; owning an organization does not establish a map’s county. Upcoming organization events appear on the hub itself, while the full calendar retains the session county preference. They link county-specific Census QuickFacts rather than reusing the Bibb snapshot. Empty sections explicitly describe missing coverage. Hub content stays fixed to its county independently of the session preference.
+come from its public affiliations. The `/counties/` index lists all 159 Georgia
+counties alphabetically, using the canonical county reference for names, FIPS,
+and slugs. The dynamic static route generates 158 summaries and excludes Bibb,
+which retains its dedicated page and saved demographics. Shared multiword slugs
+use hyphens (for example, `/counties/ben-hill/`); Census QuickFacts links remove
+those hyphens to match Census geography paths. The verified coverage registry
+selects public organizations and maps; people and elections follow organizations.
+Hub maps require explicit map coverage, not organization ownership. Upcoming
+organization events appear on each hub under existing public visibility gates.
+Summaries link county-specific Census QuickFacts instead of reusing Bibb’s
+snapshot. Empty sections explicitly describe missing coverage. No county pages
+require a database migration or imply complete local coverage.
 
 The Census QuickFacts figures in that file are a manually verified snapshot,
 with a source URL, individual reference periods, indicator codes and check date.
@@ -213,11 +228,13 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   community calendar and link back to the election.
   Store contests for the same election together, including races outside Bibb
   County. The static detail page and UUID viewer use the header's session county
-  (Bibb by default); All counties in that same menu reveals the full ballot.
+  (Bibb by default). Select All counties, then return from the county directory
+  to the election to see the full ballot.
   The ballot and turnout charts have no independent county selectors. Charts
   render the pinned turnout snapshot for the selected county, or separate county
   groups for All counties, without combining counts or falling back to another
-  county when data is missing. Header changes rerender charts without refetching.
+  county when data is missing. Header changes navigate to the county summary;
+  reopening the election uses the saved preference.
   Search, person candidacies, admin
   editing, and `get_election` retain every visibility-permitted contest. A direct
   contest/question anchor reveals only that out-of-area race, with a notice,
