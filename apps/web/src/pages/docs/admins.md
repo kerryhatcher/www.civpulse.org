@@ -14,6 +14,16 @@ historical roles and service dates explicit; do not turn an old title into a
 current-office claim. Give each record a useful summary rather than repeating a
 generic description. These metadata changes publish with the next site rebuild.
 
+Public profiles now prerender office terms, candidacies, article associations,
+meeting votes and individual nonattendance legislative choices from the existing
+anonymous export. Larger histories have public continuation pages. Keep office
+source URLs/date precision, article roles/publication/fetch dates, election
+context and meeting/vote sources accurate. Missing service ends are labeled
+unrecorded, rather than turning historical service into a current-office claim.
+Publish after corrections or visibility changes so both the profile and its
+history pages update. Signed-in interactive views retain live access checks;
+admin-visible related records must never be copied into public evidence manually.
+
 Public profiles also publish machine-readable names, portraits/logos and the
 same public affiliations shown on the page. Maintain those source records
 accurately and preserve historical wording: an affiliation is not automatically

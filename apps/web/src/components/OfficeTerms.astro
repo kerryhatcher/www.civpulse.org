@@ -1,10 +1,13 @@
 ---
-interface Props { personId?: string; organizationId?: string; viewer?: boolean }
-const { personId, organizationId, viewer = false } = Astro.props;
+import ProfileEvidence from './ProfileEvidence.astro';
+import type { EvidenceSection } from '../lib/profile-evidence';
+interface Props { personId?: string; organizationId?: string; viewer?: boolean; published?: EvidenceSection; historyHref?: string }
+const { personId, organizationId, viewer = false, published, historyHref } = Astro.props;
 ---
 <section class="person-candidacies" data-office-terms data-person-id={personId} data-organization-id={organizationId} hidden={viewer} aria-labelledby="office-terms-title">
   <h2 id="office-terms-title">{organizationId ? 'Officeholders' : 'Offices held'}</h2>
-  <p class="status" data-office-status role="status" aria-live="polite">Loading offices…</p>
+  {published && <ProfileEvidence section={published} historyHref={historyHref} />}
+  <p class="status" data-office-status role="status" aria-live="polite" hidden={!!published}>Loading offices…</p>
   <div data-office-groups hidden>
     {(['current', 'former', 'upcoming'] as const).map((group) => (
       <section data-office-group={group} hidden>

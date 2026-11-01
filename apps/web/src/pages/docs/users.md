@@ -171,6 +171,24 @@ explicitly. These lists and the public map share the last published snapshot;
 admin edits appear after a successful publication. Restricted UUID map viewers
 do not publish readable records into their HTML.
 - Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). The default **Officials and candidates first** order shows elected and appointed officials, then candidates, then other people, alphabetically within each group. You can also sort all matches by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and officials/candidates-first order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
+
+Public profiles include readable office history, candidacies, article associations
+and recorded votes even without JavaScript. Organization profiles include their
+public officeholders and articles. Initial lists show up to ten offices,
+candidacies or articles, and twenty meeting votes or legislative choices. **Read
+all entries** opens ordinary history pages of up to twenty records with
+Previous/Next links. Source, election, meeting, bill and vote links provide context.
+These are published snapshots, and missing records do not establish absence,
+opposition or a complete history. A service end not recorded is not proof of
+current office; article association roles do not imply endorsement.
+
+With JavaScript, each section switches to its existing interactive view after
+loading successfully. Legislative filters still group by bill and show the latest
+matching vote; the readable history lists individual nonattendance choices.
+If enhancement fails, the public snapshot remains readable alongside the retry
+message. Signing in retains the live access checks; restricted records are never
+added to the public HTML or history pages. A successful rebuild is needed to
+update published evidence.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
   Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header, then return to the election to see every race. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
 

@@ -1,3 +1,4 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import {legislationAnchor} from '../lib/legislation-details';
 import {publicLegislationTarget} from './legislation-detail-target';
 import type {DetailTable} from '../lib/legislation-details';
@@ -570,7 +571,9 @@ export async function loadPersonLegislation(personId: string) {
   if (!root) return;
   root.hidden = false;
   root.classList.add("legislation-profile");
+  const published = root.querySelector<HTMLElement>('[data-public-profile-evidence]');
   root.replaceChildren(node("h2", "Legislative record"));
+  if (published) root.append(published);
   root.append(
     node(
       "p",
@@ -734,6 +737,7 @@ export async function loadPersonLegislation(personId: string) {
         offset = requestedOffset;
         displayedTotal = data.total;
         pageLoaded = true;
+        replacePublishedEvidence(root);
         status.textContent = `${data.total} ${data.total === 1 ? "entry" : "entries"}, grouped by bill or resolution. Latest matching vote shown; counts follow the selected filters. Attendance roll calls are excluded. Votes without a linked bill are listed separately. Missing records do not indicate absence or opposition.`;
         pageLabel.textContent = `Page ${Math.floor(offset / pageSize) + 1} of ${Math.max(1, Math.ceil(data.total / pageSize))}`;
         pagination.hidden = data.total <= pageSize;

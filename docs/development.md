@@ -52,6 +52,25 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Readable profile evidence
+
+Run `bun test scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/profile-sections.test.ts`,
+then check/build and
+`PROFILE_EVIDENCE_TEST_DIST=apps/web/dist bun test scripts/tests/profile-evidence.test.ts`.
+The built check compares every public owner's initial evidence and all history
+pages with the matching JSON asset, including externalized legislative choices.
+Projection tests cover hidden related records, source dates/roles/choices and
+unsafe source URLs; existing tests retain live access selection and vote filters.
+
+At desktop/mobile widths, disable JavaScript and read office sources, candidacy
+election links, article roles/dates and vote context; follow history pagination.
+With JavaScript, verify successful loading hides each fallback without duplicate
+cards and Load more/filters still work. Deliberately return malformed snapshot
+JSON to verify the public evidence remains on an enhancement failure. Repeat with
+an actual admin login and temporary private/unlisted related records: they may
+appear only in the gated live view, never in static HTML/history. Clean up local
+fixtures and rebuild before completing verification.
+
 ### Readable map evidence
 
 Run `bun test scripts/tests/map-build-data.test.ts scripts/tests/map-data.test.ts scripts/tests/map-evidence.test.ts`,

@@ -1,3 +1,4 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
 import { historyLink } from '../lib/history';
 import { articleFetchedLabel, articlePublishedLabel, articleUrl, type ProfileArticle } from '../lib/articles';
@@ -61,6 +62,7 @@ export async function loadProfileArticles(kind: 'person' | 'organization', id: s
     previous.onclick = () => { page--; render(); };
     next.onclick = () => { page++; render(); };
     render();
+    replacePublishedEvidence(root);
     status.textContent = `${articles.length} articles`;
     status.hidden = articles.length <= pageSize; root.hidden = articles.length === 0;
   } catch {

@@ -2,6 +2,9 @@
 import { profileSectionUrl } from "../../lib/profile-section-assets";
 import { recordDescription } from '../../lib/page-metadata';
 import { organizationStructuredData } from '../../lib/structured-data';
+import { getProfileSectionBuildData } from '../../lib/profile-section-build-data';
+import { emptyProfileSections } from '../../lib/profile-sections';
+import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
@@ -25,6 +28,7 @@ export async function getStaticPaths() {
       .map((map) => [map.organization_id as string, map] as const),
   );
   const peopleByOrganization = await fetchPublicPeopleByOrganization(organizations.map(org => org.id));
+  const sections = await getProfileSectionBuildData();
 
   const organizationById = new Map(organizations.map((org) => [org.id, org]));
   return organizations.map((org) => {
@@ -39,6 +43,7 @@ export async function getStaticPaths() {
       params: { slug: org.slug },
       props: {
         org,
+        evidence: profileEvidence(sections.organizations.get(org.id) ?? emptyProfileSections(), 'orgs'),
         related,
         map: mapByOrganization.get(org.id) ?? null,
         people: peopleByOrganization.get(org.id) ?? [],
@@ -49,12 +54,13 @@ export async function getStaticPaths() {
 
 interface Props {
   org: Organization;
+  evidence: Record<ProfileEvidenceKey, EvidenceSection>;
   map: MapConfig | null;
   people: { person: Person; role: string }[];
   related: { organization: Organization; relationship: string; source_url: string | null }[];
 }
 
-const { org, map, people, related } = Astro.props;
+const { org, map, people, related, evidence } = Astro.props;
 const logo = organizationLogoUrl(org.logo_path);
 
 const registration = [
@@ -206,8 +212,8 @@ const contact = [
     )}
 
     <section class="org-contact"><h2>Records requests</h2><p><a href={`/requests/?organization=${org.id}`}>View requests to or from {org.name}</a></p></section>
-    <OfficeTerms organizationId={org.id} />
-    <ProfileArticles organizationId={org.id} />
+    <OfficeTerms organizationId={org.id} published={evidence.offices} historyHref={profileHistoryHref('orgs', org.slug, 'offices')} />
+    <ProfileArticles organizationId={org.id} published={evidence.articles} historyHref={profileHistoryHref('orgs', org.slug, 'articles')} />
 
     <div class="org-contact">
       <p class="org-back">

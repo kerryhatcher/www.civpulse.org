@@ -1,0 +1,27 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import ProfileEvidence from '../../../../../components/ProfileEvidence.astro';
+import { getProfileEvidenceOwners } from '../../../../../lib/profile-evidence-build';
+import { PROFILE_EVIDENCE_PAGE_SIZE, profileHistoryHref, type EvidenceSection } from '../../../../../lib/profile-evidence';
+export async function getStaticPaths() {
+  return (await getProfileEvidenceOwners()).flatMap(owner => Object.values(owner.sections).flatMap(section =>
+    section.rows.length > section.initial ? Array.from({ length: Math.ceil(section.rows.length / PROFILE_EVIDENCE_PAGE_SIZE) }, (_, index) => ({
+      params: { kind: owner.kind, slug: owner.slug, section: section.key, page: String(index + 1) }, props: { owner, section, page: index + 1 },
+    })) : []));
+}
+interface Props { owner: { kind: 'people' | 'orgs'; slug: string; name: string }; section: EvidenceSection; page: number }
+const { owner, section, page } = Astro.props;
+const pages = Math.ceil(section.rows.length / PROFILE_EVIDENCE_PAGE_SIZE);
+---
+<Layout title={`${owner.name} — ${section.title}, page ${page}`} description={`Read source-backed ${section.title.toLowerCase()} for ${owner.name}, page ${page}. Published public records may be incomplete.`}>
+  <main id="main">
+    <div class="page-intro"><h1>{owner.name}: {section.title}</h1><p>Page {page} of {pages}</p></div>
+    <p><a href={`/${owner.kind}/${owner.slug}/`}>← Back to {owner.name}</a></p>
+    <ProfileEvidence section={section} page={page} />
+    <nav aria-label="Profile history pages">
+      {page > 1 && <a rel="prev" href={profileHistoryHref(owner.kind, owner.slug, section.key, page - 1)}>← Previous page</a>}
+      <span> Page {page} of {pages} </span>
+      {page < pages && <a rel="next" href={profileHistoryHref(owner.kind, owner.slug, section.key, page + 1)}>Next page →</a>}
+    </nav>
+  </main>
+</Layout>
