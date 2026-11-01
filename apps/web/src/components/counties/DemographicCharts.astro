@@ -5,7 +5,7 @@ const {county}=Astro.props;
 const age = county.census.groups.find(group => group.id === 'age')!;
 const race = county.census.groups.find(group => group.id === 'race-ethnicity')!;
 const poverty = county.census.groups.find(group => group.id === 'poverty')!;
-const available = (group:typeof age) => group.statistics.every(stat=>stat.record.status==='available'&&stat.stateRecord.status==='available');
+const available = (group:typeof age) => group.statistics.every(stat=>stat.record.status==='available'&&stat.stateRecord.status==='available'&&(group.id!=='poverty'||[stat.record.lower_bound,stat.record.upper_bound,stat.stateRecord.lower_bound,stat.stateRecord.upper_bound].every(value=>value!==null)));
 const povertyTicks=Array.from({length:county.census.povertyScaleMax/(county.census.povertyScaleMax===50?10:20)+1},(_,i)=>i*(county.census.povertyScaleMax===50?10:20));
 const percent = (value: string) => Number.parseFloat(value);
 const bounds = (detail: string) => detail.match(/[\d.]+(?=–)|(?<=–)[\d.]+/g)!.map(Number);
@@ -24,7 +24,7 @@ const panels = [
   </div>
   {panels.map(panel => <section id={`chart-panel-${panel.id}`} data-chart-panel={panel.id} class="chart-panel" aria-labelledby={`chart-title-${panel.id}`}>
     <div class="chart-intro"><h4 id={`chart-title-${panel.id}`}>{panel.title}</h4><p>{panel.note}</p></div>
-    {!available(panel.group) && <p class="status">Some figures are unavailable or suppressed. See the topic table for the available measures.</p>}
+    {!available(panel.group) && <p class="status">Some figures or uncertainty ranges are unavailable or suppressed. See the topic table for the available measures.</p>}
     {panel.id === 'age' && available(age) && <figure>
       <figcaption class="chart-scale-caption">Share of all residents · each bar uses the shared 0–{county.census.ageScaleMax}% scale</figcaption>
       <div class="chart-columns"><span>Age</span><span>0% <span>{county.census.ageScaleMax}%</span></span><span>{county.shortName} / GA</span></div>

@@ -1737,3 +1737,9 @@ rebuild invalidation with
 `COUNTY_STATISTICS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/county-statistics-db.test.ts`.
 Verify real local Auth and both MCP catalogs with
 `COUNTY_STATISTICS_MCP_INTEGRATION=1 bun test scripts/tests/county-statistics-mcp.test.ts`.
+
+The append-only `20261125000900_county_statistic_numeric_validation` follow-up
+allows valid population growth above 100% while other percent shares remain
+bounded to 0–100, and rejects non-finite confidence bounds. It preserves the
+already-applied local migration history and is released through main with the
+initial county-statistics migration.

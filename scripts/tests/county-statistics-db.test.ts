@@ -7,6 +7,8 @@ test.skipIf(!url)('all county profiles are complete, searchable, sourced, public
  try{await db.begin(async tx=>{
   const [exists]=await tx`select to_regclass('public.county_statistics') as name`;
   if(!exists.name)await tx.unsafe(await Bun.file('supabase/migrations/20261125000800_county_statistics.sql').text());
+  const [boundsConstraint]=await tx`select exists(select 1 from pg_constraint where conname='county_statistic_finite_bounds' and conrelid='public.county_statistics'::regclass) as present`;
+  if(!boundsConstraint.present)await tx.unsafe(await Bun.file('supabase/migrations/20261125000900_county_statistic_numeric_validation.sql').text());
   expect((await tx`select count(*)::int as n from public.county_statistics`)[0].n).toBe(9440);
   expect(await tx`select county_fips from public.county_statistics group by county_fips having count(*)<>59`).toHaveLength(0);
   expect((await tx`select count(*)::int as n from public.county_geographies where kind='county'`)[0].n).toBe(159);
@@ -34,6 +36,8 @@ test.skipIf(!url)('all county profiles are complete, searchable, sourced, public
   await tx`update public.county_statistics set value=157557 where county_fips='13021' and indicator_code='PST045225'`;
   expect((await tx`select value::int as n from public.county_statistics where county_fips='13021' and indicator_code='PST045225'`)[0].n).toBe(157557);
   expect(await tx`update public.county_statistics set value=1 where county_fips='13021' and indicator_code='PST045225' and updated_at=${old.stamp}::timestamptz returning *`).toHaveLength(0);
+  await tx`update public.county_statistics set value=200 where county_fips='13021' and indicator_code='PST120225'`;
+  await denied(()=>tx`update public.county_statistics set upper_bound='Infinity'::numeric where county_fips='13021' and indicator_code='SAIPE-2024-ALL'`,'23514');
   await denied(()=>tx`update public.county_statistics set value=101 where county_fips='13021' and indicator_code='EDU685224'`,'23514');
   await denied(()=>tx`update public.county_statistics set value='NaN'::numeric where county_fips='13021' and indicator_code='PST045225'`,'23514');
   await denied(()=>tx`update public.county_statistics set status='suppressed' where county_fips='13021' and indicator_code='PST045225'`,'23514');
