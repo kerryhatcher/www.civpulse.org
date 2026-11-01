@@ -655,3 +655,15 @@ complete family tree or evidence that absent links do not exist. Anonymous pages
 include only relationships between two public people. Signed-in viewers can
 follow permitted hidden records through the shared viewer; hidden links are not
 embedded in public HTML. Public lists update after a successful rebuild.
+
+## Cited meeting vote outcomes
+
+An outcome such as **Passed** can be supported by a later cited observation while
+the original import remains unchanged. Open **Outcome evidence and original
+observation** on a meeting or vote card to see source links, exact locators,
+document hashes and corrections. Published person histories also show these facts.
+The observation date is when evidence was recorded in Civic Pulse, not a source
+publication or whole-record verification date. A committee motion's passage does
+not establish full-commission adoption; missing outcomes remain unknown and are
+not inferred from yes/no totals or provider codes. Public changes appear after a
+rebuild; signed-in/shared views can update sooner.

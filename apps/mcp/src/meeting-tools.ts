@@ -40,8 +40,8 @@ export function decodeMeetingDocument(fileName: string, base64: string) {
   return { bytes, extension, contentType };
 }
 
-export function registerMeetingTools(server: McpServer, supabase: SupabaseClient) {
-  registerMeetingImportTools(server, supabase);
+export function registerMeetingTools(server: McpServer, supabase: SupabaseClient, citedOutcomes = true) {
+  registerMeetingImportTools(server, supabase, citedOutcomes);
   registerMeetingUploadTools(server, supabase);
   const { register, readRpc } = createToolkit(server, supabase);
   const uuid = z.string().uuid();

@@ -143,3 +143,61 @@ created no production records and made no requests to the source provider.
 Release review also covers named source labels such as
 `Vote Not Recorded: Mr. Lester M. Miller`: the append-only wording guard rejects
 normalizing those rows to a cast ballot, just as it rejects the bare label.
+
+## Cited outcome observations
+
+After the cited-outcome migrations reach main and are applied, administrators can
+use the compact MCP endpoint's `set_meeting_vote_outcome` tool. Supply `vote_id`,
+`outcome` (passed/failed/tabled/withdrawn), an original `https://` source URL,
+lowercase document SHA-256 and exact page/item/round `locator`. Download and hash
+the exact original bytes and check the exact motion. This API records the admin's
+source assertion; it does not fetch the document, validate its hash against remote
+bytes or independently certify the interpretation. The source, locator and public
+correction reason must contain no private account information.
+
+The RPC appends an observation; it never updates the imported vote, ballots,
+attendance or `meeting_record_sources` payload. Exact replay of the current
+observation (outcome **and citation/correction inputs**) returns `unchanged`.
+A changed request returns `conflict`, without writing. Read `get_meeting` to
+reconcile, then explicitly pass the current observation ID as `supersedes_id`
+and a nonempty `correction_reason` to append a correction. A stale ID conflicts.
+Correcting a nonempty original outcome also requires a reason, even when no cited
+observation exists yet. Keep old observations; do not delete and recreate motions
+or invent import source keys. Check the returned status, not merely HTTP success.
+
+The effective outcome is the latest cited observation, falling back to the original
+recorded outcome. Readers return `original_outcome`, current
+`outcome_observation`, chronological `outcome_observations` and
+`original_sources`. Meeting pages and person vote histories expose the evidence,
+original result and correction history; source/attachment-aware meeting responses
+are retained. Public calendar/profile snapshots carry these fields after rebuild.
+Observation timestamps label when the editorial observation was recorded, never
+when the source was published or the whole record verified. Public history redacts
+editor account UUIDs; admins retain attribution. Private event/calendar/election
+and participant gates, discovery limits, filtering and pagination are unchanged.
+
+### CivicClerk passFail and a reviewable backfill
+
+[Issue #126](https://github.com/kerryhatcher/www.civpulse.org/issues/126) reports
+that code `1` matched “approved” in the minutes examined, while two `-1` items
+also had carried motions. That review is evidence about those cited motions, not a
+universal provider-code definition. In particular `-1` must not be translated to
+failed; `0` on an item without a recorded round does not create a vote. No numeric
+code, tally, unanimity or sponsorship alone establishes an outcome. Unconfirmed
+meaning remains unspecified. A passed pre-commission/committee motion is not a
+claim that the full commission adopted the proposal; link the separate final vote
+only when supported by its own record.
+
+This change performs **no real-person or production outcome backfill**. After
+main-first release, review small batches against posted official minutes: retain
+original bytes/hash, exact meeting/item/round identity, quoted supporting language,
+proposed outcome and committee/full-body scope; record reviewer and uncertainty in
+a review artifact. Skip missing minutes or ambiguous rounds. Read existing
+observations first, submit only verified citations, inspect created/unchanged/
+conflict results, and recheck meeting/person histories and source links. Rebuild
+and confirm the published snapshots before claiming the public site is corrected.
+The issue's reported missing archives are an observation at the time of its review,
+not a current guarantee that those minutes remain unavailable. Real backfill and
+publication remain release follow-ups requiring source review, not feature SQL.
+
+Tracked release/source-review follow-up: [#168](https://github.com/kerryhatcher/www.civpulse.org/issues/168).

@@ -995,3 +995,12 @@ public and unlisted endpoints only. UUID viewers
 load relationships only after the parent person gate succeeds. Anonymous static
 profiles make no extra relationship RPC; no-JavaScript visitors see public links.
 The new table participates in object history and frontend rebuild tracking.
+
+## Cited vote outcome publication
+
+Effective meeting outcomes are a gated read projection over immutable imported
+votes and append-only cited observations. Calendar meeting snapshots explicitly
+allowlist evidence fields (excluding editor accounts), and public profile exports
+include the same outcome/source history. Static HTML, profile JSON and live
+meeting/person readers use the same projection. Existing visibility and bounded
+history pagination remain in force; observation inserts trigger a frontend rebuild.

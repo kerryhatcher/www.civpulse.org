@@ -2121,6 +2121,82 @@
     }
   },
   {
+    "name": "set_meeting_vote_outcome",
+    "description": "Append a cited outcome observation to an existing meeting vote (admin only). Required source_url/document_sha256/locator must support the exact motion; never infer from totals or passFail codes. Exact replay is unchanged. Conflicts do not overwrite. To correct, read get_meeting, pass its latest observation ID as supersedes_id and a public correction_reason. Original imported rows and citations remain unchanged. Public static pages require rebuild.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "vote_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "failed",
+            "tabled",
+            "withdrawn"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "maxLength": 2000,
+          "format": "starts_with",
+          "pattern": "^https:\\/\\/.*"
+        },
+        "document_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "supersedes_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "correction_reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "vote_id",
+        "outcome",
+        "source_url",
+        "document_sha256",
+        "locator"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "get_person_meeting_votes",
     "description": "Read paginated meeting ballots with original source evidence, optional organization and inclusive date filters. Public meetings only for non-admins, including ordinary signed-in users; private/unlisted meetings require admin discovery access. Unknown means no supported recorded choice. Public slug profiles show imports after rebuild; signed-in/UUID profiles read live.",
     "inputSchema": {

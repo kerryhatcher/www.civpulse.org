@@ -1,0 +1,13 @@
+---
+import {outcomeLabel,outcomeEvidence,type MeetingOutcome} from '../lib/meeting-outcomes';
+interface Props { vote: MeetingOutcome }
+const {vote}=Astro.props, evidence=outcomeEvidence(vote);
+---
+<div class="meeting-outcome-evidence">
+  <p>Outcome: {outcomeLabel(vote.outcome)}</p>
+  {evidence.lines.length>0 && <details><summary>Outcome evidence and original observation</summary>
+    {evidence.lines.map(line=><p>{line}</p>)}
+    <ul>{evidence.links.map(link=><li><a href={link.href}>{link.label}</a></li>)}</ul>
+  </details>}
+</div>
+<style>.meeting-outcome-evidence { overflow-wrap:anywhere; }</style>

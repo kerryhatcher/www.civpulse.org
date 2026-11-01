@@ -127,3 +127,17 @@ Person relationship tools are available in the compact catalog at
 `https://api.civpulse.org/functions/v1/mcp/v2` after the matching MCP deployment.
 The compatibility catalog remains at its existing 128-tool limit; refresh tool
 discovery and use only selectors advertised by the connected endpoint.
+
+## Cited outcomes for imported meeting votes
+
+When advertised by /mcp/v2, use set_meeting_vote_outcome with vote_id, supported
+outcome, original HTTPS source_url, SHA-256 of exact document bytes, and precise
+locator. Verify the exact motion/body; never infer from passFail, totals, unanimity
+or sponsorship. The tool records your assertion, not an independent byte/source
+verification. It preserves immutable imported rows and sources. Exact current
+citation replay is unchanged; inspect conflict statuses. Read get_meeting first;
+explicit corrections name the latest observation ID as supersedes_id and supply a
+public correction_reason. Stale IDs do not overwrite. Never invent import source
+keys to bypass conflicts. Observation/correction fields are public where the vote
+is public: exclude account details and private notes. Rebuild/publication is needed
+for public snapshots. This release does not perform a real-data backfill.
