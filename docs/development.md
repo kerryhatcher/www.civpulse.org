@@ -1451,7 +1451,12 @@ Run a new read-only sitemap capture with
 Use a new dated directory; the script refuses overwrite. Optional `--local
 apps/web/dist` labels a separate local content comparison, never a production
 missing-page count. It recursively reads only same-origin, queryless production
-sitemaps, retains source hashes and writes a gzip CSV inventory. It does not crawl
+sitemaps, validates their actual XML root and entries with the strict SAX parser,
+retains source hashes and writes a gzip CSV inventory. XML prolog comments,
+processing instructions and DTD declarations are accepted without fetching external
+entities; commented sitemap markers or URLs are not capture evidence. Both
+`--out` and an optional `--local` require directory values before capture starts.
+It does not crawl
 all pages, submit sitemaps or request indexing. Verify with
 `bun test scripts/tests/search-visibility-baseline.test.ts`.
 

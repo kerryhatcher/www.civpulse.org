@@ -2,12 +2,29 @@
 /** Read-only production sitemap inventory. Never submits sitemaps or requests indexing. */
 import {mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
+import sax from 'sax';
 import {shouldNoIndex} from '../apps/web/src/lib/indexing-policy.mjs';
 export const origin='https://www.civpulse.org';
-export function sitemapLocations(xml){
- if(!/<(?:sitemapindex|urlset)(?:\s|>)/.test(xml))throw Error('Expected a sitemap index or URL set');
- return [...xml.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/g)].map(m=>m[1].replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>'));
+function parseSitemap(xml){
+ const parser=sax.parser(true,{xmlns:true,strictEntities:true}),stack=[],locations=[];
+ let root,location;
+ parser.onerror=error=>{throw error;};
+ parser.onopentag=tag=>{
+  if(!stack.length){
+   if(root||!['sitemapindex','urlset'].includes(tag.local))throw Error('Expected a sitemap index or URL set root');
+   root=tag.local;
+  }
+  if(location!==undefined)throw Error('Expected text inside sitemap loc');
+  stack.push(tag.local);
+  if(stack.length===3&&stack[1]===(root==='urlset'?'url':'sitemap')&&tag.local==='loc')location='';
+ };
+ parser.ontext=parser.oncdata=text=>{if(location!==undefined)location+=text;};
+ parser.onclosetag=()=>{if(location!==undefined){locations.push(location.trim());location=undefined;}stack.pop();};
+ parser.write(xml).close();
+ if(!root)throw Error('Expected a sitemap index or URL set root');
+ return {root,locations};
 }
+export function sitemapLocations(xml){return parseSitemap(xml).locations;}
 export function checkedUrl(value){const u=new URL(value);if(u.origin!==origin||u.username||u.password||u.hash||u.search)throw Error('Expected a queryless production URL: '+value);return u.href;}
 export const csvCell=value=>'"'+String(value).replaceAll('"','""')+'"';
 export function urlCategory(value){const p=new URL(value).pathname;if(p.startsWith('/records/'))return p.split('/').slice(1,3).join('/');if(p.startsWith('/counties/'))return 'counties';return p.split('/')[1]||'home';}
@@ -17,7 +34,7 @@ export async function captureInventory({out,transport=fetch,local}={}){
  const observedAt=new Date().toISOString(),pending=[origin+'/sitemap-index.xml'],seen=new Set(),urlSources=new Map(),documents=[];
  while(pending.length){const url=checkedUrl(pending.shift());if(seen.has(url))continue;if(seen.size>=100)throw Error('Too many sitemap documents');seen.add(url);
   const response=await transport(url,{signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error(`Sitemap ${url}: HTTP ${response.status}`);checkedUrl(response.url||url);const xml=await response.text();
-  const locations=sitemapLocations(xml).map(checkedUrl),isIndex=/<sitemapindex(?:\s|>)/.test(xml);
+  const parsed=parseSitemap(xml),locations=parsed.locations.map(checkedUrl),isIndex=parsed.root==='sitemapindex';
   documents.push({url,status:response.status,observed_at:new Date().toISOString(),sha256:new Bun.CryptoHasher('sha256').update(xml).digest('hex'),bytes:Buffer.byteLength(xml),kind:isIndex?'index':'urlset',entries:locations.length});
   if(isIndex)pending.push(...locations);else for(const item of locations){const sources=urlSources.get(item)??new Set();sources.add(url);urlSources.set(item,sources);}
  }
@@ -33,4 +50,16 @@ export async function captureInventory({out,transport=fetch,local}={}){
  }
  await Bun.write(resolve(out,'inventory-summary.json'),JSON.stringify(summary,null,2)+'\n');return summary;
 }
-if(import.meta.main){const args=process.argv.slice(2),arg=k=>args[args.indexOf(k)+1];if(!args.includes('--out'))throw Error('Usage: bun run scripts/search-visibility-baseline.mjs --out NEW_DIRECTORY [--local apps/web/dist]');console.log(await captureInventory({out:arg('--out'),local:args.includes('--local')?arg('--local'):undefined}));}
+export function captureArguments(args){
+ const options={};
+ for(let i=0;i<args.length;i++){
+  const flag=args[i];
+  if(!['--out','--local'].includes(flag))throw Error('Unknown argument: '+flag);
+  const value=args[++i];
+  if(!value||value.startsWith('--'))throw Error(flag+' requires a directory');
+  const key=flag.slice(2);if(key in options)throw Error('Duplicate argument: '+flag);options[key]=value;
+ }
+ if(!options.out)throw Error('Usage: bun run scripts/search-visibility-baseline.mjs --out NEW_DIRECTORY [--local apps/web/dist]');
+ return options;
+}
+if(import.meta.main)console.log(await captureInventory(captureArguments(process.argv.slice(2))));
