@@ -474,6 +474,14 @@ workaround. Old open pages may need a reload following publication.
 
 ### Public profile section snapshots
 
+After public exports complete, profile sponsorship assembly builds one office-term
+index of positions in the shared sponsorship array. Each profile looks up its
+distinct term IDs and sorts only the matched positions, retaining the global
+export order without scanning every sponsorship for every person. Repeated terms
+do not duplicate rows. A profile with votes but no matching terms still gets the
+shared legislative resources and an empty sponsorship list; empty profiles retain
+their existing empty sections. Export visibility gates and source rows are unchanged.
+
 Public person and organization pages reference content-hashed JSON under
 `/profile-data/`. Office terms, candidacies, article associations, meeting choices,
 and legislative voting/sponsorship data are exported once per build with three
@@ -503,6 +511,12 @@ publication removes their previous asset URLs. No new service/compute size or
 privileged build credentials are required.
 
 ### Public directory snapshots
+
+Organization affiliation text and election contest/candidate/question text append
+to per-record buckets in their existing input order. Buckets are joined once when
+projecting the search text; accumulated arrays are not recopied on every insertion
+or spread into a potentially very large function argument list. Public parent and
+person allowlists still apply before any relationship text enters a bucket.
 
 Anonymous people, organization and election directory controls read one
 content-hashed JSON file per directory from `/directory-data/`. People retain

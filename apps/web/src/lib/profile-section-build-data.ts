@@ -5,6 +5,28 @@ import { getBuildSupabase } from './supabase-build';
 import { emptyProfileSections, type PublicProfileSections } from './profile-sections';
 import type { LegislativeRow } from './legislation';
 
+/** Index the already-public export once; restore its global row order after
+ * joining each profile's distinct office terms. Do not reorder shared resources. */
+export function attachProfileLegislation(people:Map<string,PublicProfileSections>,resources:Record<string,LegislativeRow[]>) {
+  const sponsorships=resources.bill_sponsorships;
+  const byTerm=new Map<string,number[]>();
+  for(let position=0;position<sponsorships.length;position++) {
+    const term=sponsorships[position].office_term_id;
+    if(typeof term!=='string')continue;
+    const group=byTerm.get(term);
+    if(group)group.push(position);else byTerm.set(term,[position]);
+  }
+  for(const profile of people.values()) {
+    if(!profile.legislativeVotes.length&&!profile.officeTerms.length)continue;
+    const matches:number[]=[];
+    for(const term of new Set(profile.officeTerms.map(term=>term.id))) {
+      for(const position of byTerm.get(term)??[])matches.push(position);
+    }
+    matches.sort((a,b)=>a-b);
+    profile.legislation={...resources,bill_sponsorships:matches.map(position=>sponsorships[position])};
+  }
+}
+
 export async function loadProfileSectionBuildData(client: SupabaseClient) {
   const people = new Map<string,PublicProfileSections>(), organizations = new Map<string,PublicProfileSections>();
   const get = (map: typeof people,id: string) => { if (!map.has(id)) map.set(id,emptyProfileSections()); return map.get(id)!; };
@@ -40,10 +62,7 @@ export async function loadProfileSectionBuildData(client: SupabaseClient) {
   // Bounded workers prevent per-profile HTTP fan-out during imports/builds.
   let next=0;
   await Promise.all(Array.from({length:3},async()=>{while(next<tasks.length) await tasks[next++]();}));
-  for (const profile of people.values()) {
-    if (!profile.legislativeVotes.length && !profile.officeTerms.length) continue;
-    profile.legislation = { ...resources, bill_sponsorships: resources.bill_sponsorships.filter(row=>profile.officeTerms.some(term=>term.id===row.office_term_id)) };
-  }
+  attachProfileLegislation(people,resources);
   for (const profile of organizations.values()) profile.officeTerms.sort((a,b)=>b.starts_on.localeCompare(a.starts_on)||a.office_name.localeCompare(b.office_name)||a.person_name.localeCompare(b.person_name)||a.id.localeCompare(b.id));
   return {people,organizations};
 }

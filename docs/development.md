@@ -764,6 +764,41 @@ filter dataset. No backend fallback should conceal failed publication assets.
 
 ### Verifying static public directories
 
+Run `bun test scripts/tests/build-grouping.test.ts scripts/tests/directories.test.ts scripts/tests/profile-section-data.test.ts`
+when changing directory/profile grouping. It covers exact ordered search text,
+empty groups, public relationship filtering, reversed/repeated/multiple office
+terms, source-order sponsorship matching, empty and vote-only profiles, export
+assembly and anonymous/signed-in snapshot selection.
+
+For byte equivalence, save `directory-data/`, `profile-data/`, `people/`, `orgs/`
+and `elections/` from the old build beneath a temporary directory outside the
+repo. Rebuild with the same dataset, then run
+`BUILD_GROUPING_BASELINE_DIR=/tmp/saved-build bun test scripts/tests/build-grouping.test.ts`.
+It compares relative paths and bytes, including content hashes. The grouping
+refactor matched all 416 local snapshot/public-HTML files exactly.
+
+Synthetic CPU benchmarks compared the saved old directory assembly and old
+sponsorship filter against the new functions in one process. Five measured pairs
+alternated execution order after one warmup; exact JSON output equality was
+checked for every pair. Median times:
+
+| Synthetic workload | Before | After |
+| --- | --- | --- |
+| One organization, 10,000 public people/affiliations | 148.97 ms | 3.39 ms |
+| One organization, 20,000 public people/affiliations | 453.62 ms | 7.36 ms |
+| One election, 5,000 contests and 5,000 candidates | 115.72 ms | 2.94 ms |
+| 500 profiles, three terms each, 50,000 sponsorships | 424.60 ms | 3.89 ms |
+| 1,000 profiles, three terms each, 50,000 sponsorships | 869.32 ms | 3.92 ms |
+
+These are synthetic scaling checks, including an election stress case, not
+production timing estimates. The local full build had no bills, legislative votes
+or sponsorships; its 437-page build changed from 4.74 s to 4.37 s in one comparison.
+That does not establish production savings. Measure the release dataset separately.
+In the browser, exercise organization affiliation and election candidate searches,
+plus a profile with multiple office terms, anonymously and with a local session.
+Nonempty sponsorship assembly is covered by synthetic exports when local data
+has none. Check desktop/phone layout and console errors.
+
 Run `bun test scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts`
 and `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/people-directory-db.test.ts`, then `bun run check` and
