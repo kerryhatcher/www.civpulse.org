@@ -1,17 +1,11 @@
 import L from 'leaflet';
+import { featureTitle, valueText } from './map-feature-text';
+export { featureTitle } from './map-feature-text';
 import {
   buildCategoryColor, featureIcon, featureStyle, layerFeatureMarkerOptions,
   layerFeaturePathOptions, normalizePresentation, resolveLayerStyle, safeMapUrl,
   type LayerConfig,
 } from './layers';
-
-export function featureTitle(feature: GeoJSON.Feature, layer: LayerConfig): string {
-  const p = feature.properties ?? {};
-  const presentation = normalizePresentation(layer.presentation);
-  const title = String(p[presentation.titleProperty || 'name'] ?? layer.name);
-  const suffix = presentation.titleSuffix ? p[presentation.titleSuffix] : null;
-  return suffix ? `${title} · ${String(suffix)}` : title;
-}
 
 function appendText(root: HTMLElement, text: string, tag = 'p'): HTMLElement {
   const node = document.createElement(tag);
@@ -29,13 +23,6 @@ function appendLink(root: HTMLElement, text: string, value: unknown): void {
   link.textContent = text;
   paragraph.append(link);
   root.append(paragraph);
-}
-
-function valueText(value: unknown): string {
-  if (Array.isArray(value)) return value.map(valueText).join('\n');
-  if (value && typeof value === 'object' && 'label' in value && 'lines' in value) return `${String(value.label)}\n${valueText(value.lines)}`;
-  if (value && typeof value === 'object') return Object.entries(value).map(([key, v]) => `${key}: ${valueText(v)}`).join('\n');
-  return value == null ? '' : String(value);
 }
 
 export type RelatedFeature = (key: string, property: string, value: string) => Promise<void>;

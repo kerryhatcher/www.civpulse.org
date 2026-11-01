@@ -344,8 +344,22 @@ Signed-in map views and UUID links continue to check access to private/unlisted
 content against the backend. Private and unlisted layers are never exported.
 After making formerly public data restricted, publish promptly; cached public
 files can remain in browsers for five minutes, and downloaded copies cannot be
-recalled. External GeoJSON sources still follow their source host's update/cache
-behavior.
+recalled. Public external GeoJSON sources are also captured during publication;
+changes at their hosts appear in public slug pages only after the next successful
+build. A failed or invalid external source stops publication. Gated live UUID
+viewers retain their existing source/access behavior.
+
+Public map pages now include readable layer summaries and feature listings, with
+static continuation pages for larger layers. Maintain the layer description,
+presentation attribution/source URL/note, title property and popup fields: these
+also supply the readable information. Do not put confidential facts in a public
+feature or configure geometry/internal fields as popup details. Source-check dates
+use the feature's recorded `sourceChecked` date; boundary versions remain source
+facts, not a current-office or update-date claim. Representative names do not
+automatically create links to people with matching names. Supply verified source
+links in the existing feature/popup fields instead. Do not invent dates or
+affiliations to fill gaps. Publishing visibility changes must remove the old
+HTML continuation pages as well as geometry assets in the new static deployment.
 
 ### Publishing profile sections
 

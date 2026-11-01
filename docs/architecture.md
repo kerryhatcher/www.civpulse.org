@@ -15,6 +15,7 @@ docs/         architecture, backend, and development notes
 
 ## Hosting and rendering
 
+
 - `apps/web/public/llms.txt` is the curated AI-facing site overview, served at
   `/llms.txt` as a static text asset. It follows the [llms.txt format](https://llmstxt.org/)
   with public entry points, source/reuse guidance, and the AI connection guide.
@@ -38,6 +39,36 @@ docs/         architecture, backend, and development notes
   - `public/_redirects` only takes effect when served by Cloudflare. The Astro
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
+
+## Readable map evidence
+
+Public `/maps/<slug>/` pages prerender layer descriptions, source attribution and
+links, notes, feature counts and recorded source-check date coverage. Each layer
+previews five feature records; larger sets link to crawlable
+`/maps/<slug>/layers/<layer-id>/page/<n>/` pages of at most 25 records. These pages
+use the same `getMapBuildData()` snapshot and normalized presentation as the
+interactive map. Feature titles/text are shared with popup rendering. Only
+configured popup fields and source links enter HTML; geometry and arbitrary
+properties are not dumped. Dates are labeled as source checks/versions, never
+inferred from build time. Source names do not establish current representatives
+or justify a guessed person-profile link.
+
+The anonymous build still filters public maps/layers before requesting their
+features through the existing map-context RPC gate. Stored features inherit those
+gates; no schema/RLS changes are introduced. Restricted layers, maps and UUID
+viewer contents never enter readable pages. Public layers initially turned off
+are included because default display is not visibility. The existing signed-in
+RPC gate remains authoritative for live restricted content.
+
+External public GeoJSON is now read once per layer during the build and captured
+into the same content-hashed geometry assets as stored features. HTML and public
+Leaflet layers cannot fetch different external revisions. The original external
+URL is retained as a source credit. Local URLs resolve within Astro's public
+directory; HTTP(S) fetches have a 30-second deadline. Invalid/unavailable sources
+fail publication rather than silently omit text or geometry. Successful rebuilds
+replace the readable pages along with manifests/geometry; formerly public copies
+cannot be recalled from prior downloads. No server rendering or privileged build
+credential is added.
 
 ## Page titles and descriptions
 

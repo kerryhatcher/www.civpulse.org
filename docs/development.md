@@ -52,6 +52,24 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Readable map evidence
+
+Run `bun test scripts/tests/map-build-data.test.ts scripts/tests/map-data.test.ts scripts/tests/map-evidence.test.ts`,
+then `bun run check`, `bun run build` and
+`MAP_EVIDENCE_TEST_DIST=apps/web/dist bun test scripts/tests/map-evidence.test.ts`.
+The built-output check follows every layer continuation and compares all titles
+and ordering with the exact geometry/presentation manifest. Unit coverage checks
+public filtering, shared geometry/external reads, fail-closed source errors,
+source dates, configured-only fields and unsafe URL rejection.
+
+Browser-test a public map without JavaScript at desktop/mobile widths: read its
+credits and source dates, follow a large layer's feature pages and return to the
+map. With JavaScript, compare feature names/source notes to the map directory and
+exercise layer selection. Repeat with an actual local admin login, and confirm
+restricted map/layer content remains absent from static text even when visible
+to the administrator through a gated UUID viewer. Do not publish private fixtures
+or infer a date to make a missing-source case look complete.
+
 ### Open Exhibition visual system
 
 The shared layout uses self-hosted Anton for the Civic Pulse masthead, Barlow

@@ -1,0 +1,46 @@
+---
+import { normalizePresentation } from '../lib/layers';
+import { layerPageHref, MAP_FEATURE_PAGE_SIZE, type LayerEvidence } from '../lib/map-feature-text';
+interface Props { evidence: LayerEvidence; slug: string; page?: number }
+const { evidence, slug, page } = Astro.props;
+const { layer, rows, sourceChecks, datedFeatures } = evidence;
+const display = normalizePresentation(layer.presentation);
+const start = page ? (page - 1) * MAP_FEATURE_PAGE_SIZE : 0;
+const shown = rows.slice(start, start + (page ? MAP_FEATURE_PAGE_SIZE : 5));
+const pages = Math.ceil(rows.length / MAP_FEATURE_PAGE_SIZE);
+---
+<section class="layer-evidence" id={`layer-${layer.id}`} aria-labelledby={`layer-title-${layer.id}`}>
+  <h2 id={`layer-title-${layer.id}`}>{layer.name}</h2>
+  {layer.description && <p>{layer.description}</p>}
+  {display.attribution ? <p><strong>Source credit:</strong> {display.attribution}</p> : <p>Source credit not recorded.</p>}
+  {display.sourceUrl && <p><a href={display.sourceUrl}>Layer source</a></p>}
+  {display.note && <p class="layer-note">{display.note}</p>}
+  <p>{rows.length} public features in this published snapshot. {layer.visible_by_default === false ? 'This layer starts turned off in the interactive map.' : ''}</p>
+  {sourceChecks.length ? <p>Recorded source checks: {sourceChecks[0]}{sourceChecks.length > 1 && ` – ${sourceChecks.at(-1)}`} ({datedFeatures} of {rows.length} features). These are source-check dates, not source update dates.</p> : <p>No source-check dates recorded. A source update date is not established by this publication.</p>}
+  {shown.length ? <>
+    <p>Showing {start + 1}–{start + shown.length} of {rows.length} features.</p>
+    <ol class="feature-evidence" start={start + 1}>
+      {shown.map(row => <li>
+        <h3 data-feature-title>{row.title}</h3>
+        {row.facts.length > 0 && <dl>{row.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.href ? <a href={fact.href}>{fact.text}</a> : fact.text}</dd></div>)}</dl>}
+        {row.sourceUrl && <p><a href={row.sourceUrl}>Original feature source</a></p>}
+      </li>)}
+    </ol>
+    {!page && rows.length > shown.length && <p><a href={layerPageHref(slug, layer.id, 1)}>Browse all {rows.length} features in {layer.name}</a></p>}
+    {page && pages > 1 && <nav aria-label={`${layer.name} feature pages`}>
+      {page > 1 && <a rel="prev" href={layerPageHref(slug, layer.id, page - 1)}>← Previous page</a>}
+      <span> Page {page} of {pages} </span>
+      {page < pages && <a rel="next" href={layerPageHref(slug, layer.id, page + 1)}>Next page →</a>}
+    </nav>}
+  </> : <p>No public features are recorded in this layer.</p>}
+</section>
+<style>
+  .layer-evidence { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 1rem; }
+  .feature-evidence { padding-left: 1.5rem; }
+  .feature-evidence li { padding-block: .5rem 1rem; border-bottom: 1px solid var(--line); }
+  .feature-evidence dl { margin-block: .5rem; }
+  .feature-evidence dl > div { margin-block: .5rem; }
+  .feature-evidence dt { font-weight: 600; }
+  .feature-evidence dd { margin-left: 0; white-space: pre-line; }
+  .layer-evidence { overflow-wrap: anywhere; }
+</style>

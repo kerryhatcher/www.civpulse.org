@@ -155,6 +155,21 @@ Calendar times and election dates and deadlines are shown in Eastern Time (Ameri
 
 - [Search Civic Pulse](/search/) by name or topic, or choose a **Content type** to browse without entering a search term. Results can include people, organizations, elections, articles, maps, and events.
 - [Explore maps](/maps/) by choosing a map, then opening **Map settings** to turn layers on or off. Use **Search places, precincts or addresses** in **Places on your map**; select a place there or on the map to see its details. Selecting **Show on map** in the directory moves keyboard focus into the details; Tab reaches its actions, and Escape or the close button returns focus to the directory entry. **Copy map link** shares the current layer selection.
+
+On a public map's own page, **Read public layers, sources and features** jumps to
+readable geographic records below the interactive map. These work without
+JavaScript. Each public layer shows its recorded description, source credit,
+notes, feature count and available source-check dates. Five features preview each
+layer; **Browse all features** opens lists of up to 25, with ordinary Previous/Next
+links. Layers turned off initially are still included when public.
+
+Source-check dates describe when the source was checked, not when its boundaries
+or records changed. Boundary versions and representative names are recorded source
+facts and may describe a past period. Follow original-source links to confirm
+current information. Coverage can be incomplete, and absent dates are stated
+explicitly. These lists and the public map share the last published snapshot;
+admin edits appear after a successful publication. Restricted UUID map viewers
+do not publish readable records into their HTML.
 - Browse [people](/people/) and [organizations](/orgs/) to find profiles and related information. Each directory has its own name search. In People, combine a name or keyword search with a **Type** filter (elected official, appointed official, candidate, or other). The default **Officials and candidates first** order shows elected and appointed officials, then candidates, then other people, alphabetically within each group. You can also sort all matches by **First name** or **Last name**, A–Z or Z–A, then use **Previous** and **Next** to browse all matches in pages of 24. The result count and page number show your position. Changing search, type, or sort returns to page 1; **Clear** restores all types and officials/candidates-first order. Last-name sorting uses the final word of the saved full name, ignoring common suffixes such as Jr., Sr., II, III, and IV; compound surnames follow that final word.
 - Open [elections](/elections/) for available contests, candidates, and dates or deadlines. Select a date to open its calendar event.
   Election details use your header county (Bibb by default). Bibb includes statewide offices and known districts covering part of the county. Choose **All counties** in the header, then return to the election to see every race. Search follows the same county setting where coverage is known. A direct race link reveals that race without changing the header selection. Your own ballot depends on your address.
