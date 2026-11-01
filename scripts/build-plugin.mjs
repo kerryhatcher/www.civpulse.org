@@ -67,7 +67,7 @@ async function discoverTools(catalog = 'legacy') {
 }
 const tools = await discoverTools();
 const compactTools = await discoverTools('compact');
-assert.equal(compactTools.length, tools.length - (19 + saveResources.length + relationshipKinds.length * 3 - 2 + Object.keys(relatedReads).length - 1), 'Compact read/write definitions must match the planned replacements');
+assert.equal(compactTools.length, tools.length + 4 - (19 + saveResources.length + relationshipKinds.length * 3 - 2 + Object.keys(relatedReads).length - 1), 'Compact read/write definitions must match the planned replacements');
 assert.ok(compactTools.length <= 128);
 assert.ok(tools.length>0&&tools.length<=128, "Tool catalog must contain between 1 and 128 tools");
 for (const catalog of [tools, compactTools]) {

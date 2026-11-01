@@ -982,3 +982,21 @@ from calendar and requests too, where legacy county-change listeners must not
 reload before the summary opens. Check storage-denied navigation, mobile layout,
 and anonymous/signed-in navigation. Run `bun test scripts/tests/county-filter.test.ts`,
 `bun run check`, and `bun run build`.
+
+### Full county demographic profiles
+
+Run county-statistic DB/MCP tests from [backend notes](backend.md#county-statistics),
+then `bun run check`, `bun run build`, `bun run mcp:check`, `bun run mcp:build`,
+and `bun run plugin:build`. Validate all 159 built pages: six headlines, 59 topic
+rows, 18 age bands, race/ethnicity and poverty charts, three comparisons, sources,
+and per-county CSV/JSON. Verify every county's values join its own FIPS and Georgia
+13000, and that Bibb's imported values match the prior profile. Charts and native
+HTML topic tables must work on desktop/mobile and without chart enhancement.
+
+Test `/statistics/` searching “Bibb household income”, changing the county filter,
+pagination, no results, downloads, and console errors. Signed-out visitors cannot
+edit. On `/admin/statistics/`, load/save an existing row as the local test admin;
+verify timestamp conflict rejection, source/period/uncertainty preservation and
+live RPC updates. The static page changes only after a rebuild. Restore any
+synthetic local edit before the final build. Source suppression must never become
+zero. A missing observation must fail the build rather than hide an entire profile.

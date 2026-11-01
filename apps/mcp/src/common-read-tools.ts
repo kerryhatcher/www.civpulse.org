@@ -1,3 +1,4 @@
+import {getCountyStatisticCatalog} from './county-statistic-tools';
 import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
@@ -6,6 +7,7 @@ import type { RelatedReadCatalog } from './related-read-catalog';
 
 export type ToolCatalog = 'legacy' | 'compact';
 const civicTypes = ['organization', 'person', 'election', 'contest', 'ballot_question', 'article', 'map', 'layer', 'calendar', 'event'] as const;
+const searchTypes=[...civicTypes,'county_statistic','county_statistic_catalog'] as const;
 const uuid = z.string().uuid();
 const query = z.string().max(500).default('');
 const limit = z.number().int().min(1).max(100).default(20);
@@ -28,8 +30,8 @@ export function registerCommonReadTools(server: McpServer, supabase: SupabaseCli
     return rpc('mcp_get_record', { p_type: type, p_id: id });
   }
   if (catalog === 'compact') {
-    register('search_site', 'Search or browse ten civic types. mode=site (default) returns ranked site rows, includes past events, and supports limit/offset. mode=directory requires organization/person/map/election/event and returns the original directory rows/order; event filters require directory event mode. Directory mode has no offset. Visibility follows your account.', {
-      query: z.string().default(''), type: z.enum(civicTypes).nullish(),
+    register('search_site', 'Search civic types or structured official-source county data. type=county_statistic returns numeric observations with units, periods, provenance and uncertainty; type=county_statistic_catalog discovers the statistics catalog. mode=site (default) returns ranked site rows, includes past events, and supports limit/offset. mode=directory requires organization/person/map/election/event and returns the original directory rows/order; event filters require directory event mode. Directory mode has no offset. Visibility follows your account.', {
+      query: z.string().default(''), type: z.enum(searchTypes).nullish(),
       mode: z.enum(['site', 'directory']).default('site'),
       limit: z.number().int().min(1).max(100).optional(), offset,
       organization_id: uuid.nullish(), calendar_id: uuid.nullish(), include_past: z.boolean().optional(),
@@ -38,6 +40,8 @@ export function registerCommonReadTools(server: McpServer, supabase: SupabaseCli
       if (mode === 'site') {
         if (query.length > 500) throw new Error('Site query must be at most 500 characters');
         if (eventFilters) throw new Error('Event filters require mode=directory and type=event');
+        if(type==='county_statistic_catalog')return getCountyStatisticCatalog(supabase);
+        if(type==='county_statistic')return rpc('search_county_statistics',{p_query:query,p_limit:limit??20,p_offset:offset});
         return rpc('search_site', { p_query: query, p_type: type ?? null, p_limit: limit ?? 20, p_offset: offset });
       }
       if (!type || !['organization', 'person', 'map', 'election', 'event'].includes(type)) throw new Error('Directory mode requires type=organization, person, map, election or event; use site mode for other types');
@@ -107,9 +111,12 @@ export function registerCommonReadTools(server: McpServer, supabase: SupabaseCli
     register("get_election", "Fetch one election (with contests and key dates) by id.", { id: uuid }, ({ id }) => getRecord("election", id));
 
     // Search all ten content types, with stable pagination and relationship matches.
-    readRpc('search_site', 'Search or browse all civic content, including related names, roles and stored-layer properties. Visibility follows your account.',
-      { query, type: z.enum(['organization', 'person', 'election', 'contest', 'ballot_question', 'article', 'map', 'layer', 'calendar', 'event']).nullish(), limit, offset },
-      'search_site', input => ({ p_query: input.query, p_type: input.type ?? null, p_limit: input.limit, p_offset: input.offset }));
+    register('search_site', 'Search civic records or official-source county demographic statistics. type=county_statistic searches 59 structured Census measures per Georgia county, returning numeric values, units, periods, source URLs, uncertainty and total_count; paginate with limit/offset. type=county_statistic_catalog discovers all county/FIPS codes, indicators, definitions and official datasets. Other types retain civic search and visibility. For advanced filters and admin statistic edits use tools advertised by the compact catalog.',
+      {query,type:z.enum(searchTypes).nullish(),limit,offset}, async({query,type,limit,offset})=>{
+        if(type==='county_statistic_catalog')return getCountyStatisticCatalog(supabase);
+        if(type==='county_statistic')return rpc('search_county_statistics',{p_query:query,p_limit:limit,p_offset:offset});
+        return rpc('search_site',{p_query:query,p_type:type??null,p_limit:limit,p_offset:offset});
+      });
     for (const [plural, type] of [['calendars', 'calendar'], ['layers', 'layer'], ['articles', 'article'], ['contests', 'contest'], ['ballot_questions', 'ballot_question']]) {
       readRpc(`search_${plural}`, `Search or browse ${plural.replaceAll('_', ' ')} with pagination. Use the returned id with get_${type}.`,
         { query, limit, offset }, 'search_site', input => ({ p_query: input.query, p_type: type, p_limit: input.limit, p_offset: input.offset }));

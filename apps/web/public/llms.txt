@@ -16,7 +16,7 @@ Original Civic Pulse content is licensed under CC BY 4.0 unless otherwise noted.
 
 ## Civic information
 
-- [Bibb County community hub](https://www.civpulse.org/counties/bibb/): Curated local maps, organizations, people, elections, upcoming events, and dated Census QuickFacts demographics. County coverage is selective; Census figures are a saved snapshot.
+- [Bibb County community hub](https://www.civpulse.org/counties/bibb/): Curated local maps, organizations, people, elections, upcoming events, and 59 database-backed Census measures, charts, comparisons, and source-attributed downloads.
 - [Search Civic Pulse](https://www.civpulse.org/search/): Search public people, organizations, elections, articles, maps, events, and meeting records.
 - [People](https://www.civpulse.org/people/): Officials, candidates, affiliations, office service, and recorded votes.
 - [Organizations](https://www.civpulse.org/orgs/): Organizations and their related people, calendars, and records.
@@ -31,3 +31,16 @@ Original Civic Pulse content is licensed under CC BY 4.0 unless otherwise noted.
 
 - [Public calendar feed](https://www.civpulse.org/events.ics): iCalendar feed for subscribing to public events.
 - [Sitemap](https://www.civpulse.org/sitemap-index.xml): Discover public pages, including individual profiles.
+
+## Structured official-source county statistics
+
+- [All Georgia county summaries](https://www.civpulse.org/counties/): All 159 counties share the complete 59-measure demographic profile, 18 age bands, charts, comparisons and downloads.
+- [County statistic search and API guide](https://www.civpulse.org/statistics/): Search live observations; CSV/JSON snapshots include numeric values, units, source URLs, reference periods, checksums and uncertainty.
+- [All county statistics CSV](https://www.civpulse.org/statistics/data.csv)
+- [All county statistics JSON](https://www.civpulse.org/statistics/data.json)
+
+MCP discovery: search_site(type=county_statistic_catalog). MCP observations:
+search_site(type=county_statistic, query=...). Compact catalogs also advertise
+get_county_statistic_catalog, search_county_statistics, and admin-only statistic
+and source save tools. Georgia comparison FIPS is 13000. Paginate until total_count
+is covered; preserve availability markers, definitions, periods and uncertainty.

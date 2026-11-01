@@ -70,9 +70,9 @@ The hub is a curated starting point, not a complete county directory. Choose
 **Bibb County at a glance** shows 59 U.S. Census Bureau measures covering people,
 households and housing, income and work, education and connectivity, health, and
 geography. **See the story in the numbers** adds Age, Race & ethnicity, and Poverty
-chart tabs. Age bars use a shared 0–10% scale for 18 five-year bands. Race bars
+chart tabs. Age bars use a shared shared scale across all counties, sized to include the largest age-band share for 18 five-year bands. Race bars
 use a 0–100% scale, with Hispanic origin shown separately. Poverty dots show
-estimates and lines show their 90% confidence intervals on a 0–50% scale. Exact
+estimates and lines show their 90% confidence intervals on a shared scale that includes all counties’ confidence intervals. Exact
 values and source links accompany each chart. Arrow keys, Home, and End switch
 tabs; without JavaScript, all three charts remain visible.
 Six headline figures also lead into three percentage comparisons with
@@ -93,7 +93,7 @@ reference periods, source URLs, counts, confidence intervals, definition notes,
 and the source-check date. Expand
 **About these figures** for methodology and the source-check date. Population
 estimates, Census counts, business statistics, and ACS five-year survey figures cover different periods; survey
-figures have sampling uncertainty. These are saved figures, not live statistics.
+figures have sampling uncertainty. These figures come from structured database records when the website is built.
 Upcoming public events load when you open the page. All other Georgia counties
 have summary pages linked from the header and statewide county directory.
 
@@ -501,6 +501,21 @@ sharing. **Refresh reports** fetches the latest data without a site rebuild.
 
 ### Georgia county hubs
 
-The [Georgia county directory](/counties/) lists all 159 counties alphabetically. Open any county summary using this directory or the header county menu. Summaries show selected public local organizations, people, maps, elections, and events, with messages where records are not yet published. Each summary links its county’s Census QuickFacts profile; Bibb retains its saved demographic tables and CSV. County summaries do not imply complete local coverage. Full directory links use your saved header county preference.
+The [Georgia county directory](/counties/) lists all 159 counties alphabetically. Open any county summary using this directory or the header county menu. Summaries show selected public local organizations, people, maps, elections, and events, with messages where records are not yet published. Every summary includes the same 59 measures, six headline values, age/race/poverty charts, Georgia comparisons, topic tables, and CSV/JSON downloads as Bibb. Each measure links its official Census source and reference period. County summaries do not imply complete local coverage. Full directory links use your saved header county preference.
 
 Opening a county summary directly also selects that county for the header and subsequent directory browsing.
+
+### Search and download county statistics
+
+Every [county summary](/counties/) has a full **At a glance** profile: 59 measures
+in eight topics, with six headline figures, age/race/poverty charts and matching
+Georgia comparisons. Bibb’s existing profile layout is used for every county.
+Use **Download the data** for CSV or **Download JSON / API snapshot** for structured
+county and Georgia rows, including units, periods, source links, checksums,
+calculation inputs, ACS margins and SAIPE intervals. Estimates have uncertainty;
+unavailable/suppressed figures are labeled explicitly rather than treated as zero.
+
+[Search county statistics](/statistics/) by county, measure or source, or download
+all counties as CSV/JSON. Search and API/MCP reads use the current database; pages
+and downloadable snapshots reflect the last website rebuild. AI connections can
+read structured observations and the indicator/source catalog; see the [AI guide](/docs/ai/).

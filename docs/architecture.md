@@ -74,44 +74,46 @@ site-search and request-directory pagination. Historical archive URLs retain
 their all-county page boundaries and hide only known out-of-area entries.
 Account synchronization and a general county-assignment schema are not added.
 
-### County community hubs
+### County community hubs and statistics
 
-`/counties/bibb/` is a static community hub using the existing layout and public
-build readers. `apps/web/src/data/bibb-county.ts` explicitly curates organization
-and map slugs; name matching is not a county classification system. Elections
-are included only when their owning organization is in that selection, and people
-come from its public affiliations. The `/counties/` index lists all 159 Georgia
-counties alphabetically, using the canonical county reference for names, FIPS,
-and slugs. The dynamic static route generates 158 summaries and excludes Bibb,
-which retains its dedicated page and saved demographics. Shared multiword slugs
-use hyphens (for example, `/counties/ben-hill/`); Census QuickFacts links remove
-those hyphens to match Census geography paths. The verified coverage registry
-selects public organizations and maps; people and elections follow organizations.
-Hub maps require explicit map coverage, not organization ownership. Upcoming
-organization events appear on each hub under existing public visibility gates.
-Summaries link county-specific Census QuickFacts instead of reusing Bibb’s
-snapshot. Empty sections explicitly describe missing coverage. No county pages
-require a database migration or imply complete local coverage.
+All 159 county pages share `components/counties/CountyHub.astro` and
+`DemographicCharts.astro`. Bibb’s existing local curation and map feature remain;
+all counties use the same 59-measure profile, six headlines, three comparisons,
+18 age bands, race/ethnicity chart, three poverty intervals, and eight topic tables.
 
-The Census QuickFacts figures in that file are a manually verified snapshot,
-with a source URL, individual reference periods, indicator codes and check date.
-The snapshot contains 59 measures grouped by topic, with Georgia values for the
-same measures and vintages. Six headline measures and three percentage charts
-are selected from that snapshot. Topic tables use native HTML details/summary
-and work without JavaScript. `/counties/bibb/statistics.csv` is a prerendered
-export of the same data, including reference periods and source links; adding
-or refreshing figures requires no schema migration or live Census API request.
-The 18 detailed age bands derive percentages from the checked-in
-`bibb-age-2025.json` count snapshot of CC-EST2025-AGESEX-13 (YEAR=7). Georgia is
-the sum of its 159 counties; each geography's age counts sum to its total. Race
-and ethnicity retain QuickFacts definitions and explain overlapping categories.
-Poverty uses the 2024 SAIPE state/county file for both geographies, including
-90% confidence intervals. Per-measure source overrides keep these dataset links
-in the HTML and CSV. CSV detail fields preserve counts, intervals, and definitions.
-Update those together and rebuild when refreshing the figures. The page does
-not require a Census API key or a live Census request. Browser event reads call
-`search_events` per selected organization under existing RLS, then display only
-public events. Full directory links retain their site-wide scope.
+Postgres is the source of truth. `county_geographies`,
+`county_statistic_topics`, `county_statistic_indicators`,
+`county_statistic_sources`, and `county_statistics` normalize identities,
+definitions, units, official-source provenance, and numeric observations.
+`county_statistic_records` is a security-invoker public projection. Source files
+are official Census bulk downloads; imported Bibb values match all 59 prior
+checked-in figures. Source checksums, variables/calculations, retrieval dates,
+periods, counts, components, ACS margins and SAIPE confidence intervals survive
+in REST, MCP and downloads. No displayed values fall back to TypeScript literals.
+
+The build reads ordered anonymous pages of 500 from the public projection once,
+then joins each county to Georgia (13000). It rejects missing measures, headline
+slots, comparison periods or sources; absent data must use an explicit
+unavailable/suppressed observation, never a zero. Dev caches expire after 30
+seconds. All five tables invalidate the existing rebuild state on changes.
+Database and MCP edits are live immediately; static pages/exports update after
+rebuild. `/admin/statistics/` uses admin RLS and optimistic timestamp checks.
+
+Each county exports `statistics.csv` and `statistics.json` with its 59 rows
+and the matching 59 Georgia rows. `/statistics/data.csv` and `data.json`
+contain all 9,440 observations. `/statistics/` searches live database records
+using `search_county_statistics`; the same RPC and public projection are REST
+accessible. Both MCP catalogs expose statistics through `search_site` with
+`type=county_statistic` or `county_statistic_catalog`. The compact catalog
+also has dedicated discovery/search/admin-edit tools. See
+[county statistics](backend.md#county-statistics) and [MCP](mcp.md).
+
+The 2025 Population Estimates Program supplies population, age, sex, race and
+housing-unit figures; ACS covers 2020–2024; poverty uses 2024 SAIPE; land and Census
+counts use 2020; business sources use 2023 CBP and 2024 Nonemployer Statistics.
+Age percentages are derived from counts. Race and ethnicity overlap. Direct ACS
+estimates retain 90% margins; derived shares retain components rather than a
+fabricated margin. Figures from different periods are labeled separately.
 
 ### Profile build requests
 

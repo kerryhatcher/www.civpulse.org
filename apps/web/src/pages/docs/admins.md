@@ -458,3 +458,21 @@ requests, ownership/transfer history, management controls and private files rema
 live behind their existing permissions. Public files recheck current access when
 downloaded; private file names, storage paths and signed URLs are excluded from
 published files. Refresh publication when changing public file metadata as well.
+
+## County demographic statistics
+
+Open [County statistics](/admin/statistics/), choose a county/state and measure,
+then **Load statistic**. Edit the numeric value together with its availability,
+reference period, official dataset, variables/calculation, source components and
+uncertainty. Available observations require a numeric value; unavailable or
+suppressed observations require a blank value. Preserve zeros that are actual
+measurements. **Save statistic** checks the loaded timestamp; reload if another
+editor changed the record. Database/search/API edits are immediate; rebuild to
+publish updated pages and CSV/JSON snapshots. All 59 records and six headline
+slots must remain present for every county and Georgia before the build succeeds.
+
+Connected administrators on the compact MCP catalog can use
+`save_county_statistic` and `save_county_statistic_source`; resolve the
+catalog and read current `updated_at` first. Dataset source metadata requires
+the exact official file SHA-256 and retrieval date. Do not mix source vintages,
+copy another county’s values, remove uncertainty, or replace missing data with zero.

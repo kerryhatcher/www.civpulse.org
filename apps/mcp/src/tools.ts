@@ -1,3 +1,4 @@
+import { registerCountyStatisticTools } from './county-statistic-tools';
 import { registerCommonReadTools, type ToolCatalog } from './common-read-tools';
 import { WriteCatalog } from './write-catalog';
 import { RelatedReadCatalog } from './related-read-catalog';
@@ -33,7 +34,7 @@ const ELECTION_DATE_KIND = z.enum([
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
 export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}, sourceReaderUrl?: string, catalog: ToolCatalog = 'legacy'): McpServer {
-  const server = new McpServer({ name: "Civic Pulse", version: "1.4.0" });
+  const server = new McpServer({ name: "Civic Pulse", version: "1.5.0" });
 
   const writes = catalog === 'compact' ? new WriteCatalog() : undefined;
   const reads = catalog === 'compact' ? new RelatedReadCatalog() : undefined;
@@ -77,6 +78,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   // --- Read: search + get ------------------------------------------------
 
   registerCommonReadTools(server, supabase, catalog, reads);
+  if(catalog==='compact')registerCountyStatisticTools(server, supabase);
 
   // --- Write: organizations ---------------------------------------------
 
