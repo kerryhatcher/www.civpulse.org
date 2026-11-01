@@ -42,6 +42,7 @@ function metrics(c: Counts) {
     );
   const list = el("dl", undefined, "result-metrics");
   metric(list, "Ballots cast", n(c.ballots));
+  metric(list, "Voters", n(c.voters));
   const numerator = c.voters ?? c.ballots;
   metric(
     list,
@@ -56,6 +57,16 @@ function metrics(c: Counts) {
     "Precincts reporting",
     `${n(c.precincts_reported)} / ${n(c.precincts_total)}`,
   );
+  if (numerator != null && (c.registered == null || c.registered === 0)) {
+    const explanation = el("p",
+      c.registered == null
+        ? "Turnout percentage is unavailable because registered voters are not reported."
+        : "Turnout percentage is unavailable because the reported registered-voter count is zero.",
+      "result-time");
+    const summary = el("div");
+    summary.append(list, explanation);
+    return summary;
+  }
   return list;
 }
 function contest(c: ContestResult, title: string, open: boolean) {
