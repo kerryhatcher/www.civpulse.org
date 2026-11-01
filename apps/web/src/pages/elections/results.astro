@@ -20,6 +20,7 @@ import Layout from '../../layouts/Layout.astro';
   </fieldset>
   <label class="result-history-label"><input id="result-history" type="checkbox" /> Include earlier reports for this selection</label>
   <p id="result-status" role="status" aria-live="polite">Loading elections…</p>
+  <p id="turnout-availability" role="status" aria-live="polite">Checking Georgia SOS structured turnout availability…</p>
   <button id="result-retry" type="button" hidden>Try loading reports again</button>
   <p class="result-explainer">Each view stands on its own. County totals already include precinct and voting-method results; these reports are never added together. “Not reported” is different from zero.</p>
   <section id="reports" data-shareable-section aria-labelledby="reports-heading">

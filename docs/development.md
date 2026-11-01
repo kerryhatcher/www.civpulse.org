@@ -140,6 +140,11 @@ database rows. It checks area selection, independent voters/ballots, missing and
 zero registration, percentages, source notes, console health and horizontal
 overflow. Without the URL it skips. Screenshots are saved under `/tmp/issue-111-*.png`.
 After deployment, also check the saved WA2 and EM1 reports against live data.
+The same suite covers independent photo/PDF and structured-turnout availability:
+structured-only, photo-only, both, neither, each request failing/loading, no
+matching county rows, source provenance and all 101 fixture rows over two pages.
+Availability screenshots are saved under `/tmp/issue-106-*.png`. After deployment,
+check the November 3 results page anonymously at desktop and phone widths too.
 
 Playwright is a root devDependency for the election-report browser regression.
 For quick verification, run a throwaway Bun script from the repo

@@ -6,6 +6,7 @@ function el(tag:string,text:string){const e=document.createElement(tag);e.textCo
 export async function initStructuredTurnout(): Promise<void>{
  const election=document.querySelector<HTMLSelectElement>('#result-election')!;
  const status=document.querySelector<HTMLElement>('#turnout-status')!;
+ const availability=document.querySelector<HTMLElement>('#turnout-availability')!;
  const content=document.querySelector<HTMLElement>('#turnout-rows')!;
  const history=document.querySelector<HTMLSelectElement>('#turnout-history')!;
  const more=document.querySelector<HTMLButtonElement>('#turnout-more')!;
@@ -13,12 +14,13 @@ export async function initStructuredTurnout(): Promise<void>{
  async function load(append=false){
   const request=++generation;const id=election.value;
   more.hidden=true;if(!append){offset=0;shown=0;content.replaceChildren();}
-  if(!id){status.textContent='Choose an election to view structured turnout.';return;}
+  if(!id){status.textContent='Choose an election to view structured turnout.';availability.textContent=status.textContent;return;}
   status.textContent='Loading structured turnout…';
+  availability.textContent='Checking Georgia SOS structured turnout availability…';
   try{
    const {data,error}=await getSupabase().rpc('get_structured_turnout',{p_election_id:id,p_report_id:append?currentReport:history.value||null,p_offset:offset,p_limit:100});
    if(request!==generation)return;if(error)throw error;
-   if(data.status!=='ok'){status.textContent=data.status==='empty'?'No structured turnout reports yet. Missing data is not zero.':'Structured turnout unavailable.';history.replaceChildren();return;}
+   if(data.status!=='ok'){status.textContent=data.status==='empty'?'No structured turnout reports yet. Missing data is not zero.':'Structured turnout unavailable.';availability.textContent=status.textContent;history.replaceChildren();return;}
    currentReport=data.report.id;
    const county=selectedCounty();
    const matches=(row:{county_fips:string})=>county==='all'||row.county_fips===county;
@@ -45,7 +47,11 @@ export async function initStructuredTurnout(): Promise<void>{
    }
    offset=scanned;shown+=rows.length;more.hidden=offset>=data.total;
    status.textContent=`${shown} matching rows shown · checked ${offset} of ${data.total} source rows. These overlapping tables are separate views; never add them together. Registration and precinct denominators are not reported.`;
-  }catch{if(request===generation)status.textContent='Could not load structured turnout. Please retry Load reports.';}
+   availability.textContent=shown
+    ? 'Unofficial Georgia SOS turnout is available for the selected county scope. This is participation data, not candidate results. '
+    : 'A Georgia SOS turnout snapshot is available, but no rows match the selected county. ';
+   const link=document.createElement('a');link.href='#structured-turnout';link.textContent='View structured turnout and source details';availability.append(link);
+  }catch{if(request===generation){status.textContent='Could not load structured turnout. Please retry Refresh reports.';availability.textContent=status.textContent;}}
  }
  election.addEventListener('change',()=>{history.replaceChildren();void load();});
  window.addEventListener('countychange',()=>void load());

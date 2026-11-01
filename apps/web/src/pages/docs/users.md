@@ -386,6 +386,14 @@ reported totals changed. Each report identifies its area, counting group, ballot
 style, time and unofficial/certified status. Reports can overlap: county summaries
 already include precinct or machine ballots, so do not add them together.
 
+Photo/PDF result reports and **Georgia SOS structured turnout** have separate
+availability messages. No photo/PDF reports does not mean turnout is unavailable.
+When turnout is available, follow **View structured turnout and source details**
+near the report controls to its county rows and provenance. This unofficial
+participation data does not report candidate results or election outcomes.
+Loading and failed requests are shown separately from empty reports; use
+**Refresh reports** to retry a failed load.
+
 Turnout uses reported voters, or ballots when voters are unavailable, divided by
 the matching registered-voter count. The page labels which numerator it uses.
 The **Voters** count remains visible when registered voters are missing, including
