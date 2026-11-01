@@ -1,7 +1,7 @@
 ---
 import LegislativeCard from './LegislativeCard.astro';
 import RecordProvenance from './RecordProvenance.astro';
-import { recordSourceUrl, legislativeVoteScope } from '../lib/record-provenance';
+import { recordSourceUrl, voteDetailScope } from '../lib/record-provenance';
 import {legislativeResources} from '../lib/legislation';
 import {coverageLabel} from '../lib/legislation-display';
 import type {LegislationDetail} from '../lib/legislation-details';
@@ -14,7 +14,7 @@ const sectionLabel=(child:string)=>child==='legislative_vote_bills'&&table==='bi
 <main id="main" data-public-legislation-detail data-live-viewer={viewer}>
   <p><a href="/legislation/">All legislation</a> · <a href="/legislation/sessions/">All sessions</a> · <a href="/records/">Public record archive</a></p>
   <LegislativeCard table={table} row={row} heading="h1" />
-  {table === 'legislative_votes' && <RecordProvenance sources={recordSourceUrl(row.source_url) ? [{ label: 'Original vote source', url: String(row.source_url) }] : []} recordDate={{ label: 'Vote date (not a verification date)', value: String(row.occurred_at ?? row.occurred_on) }} note={legislativeVoteScope} />}
+  {table === 'legislative_votes' && <RecordProvenance sources={recordSourceUrl(row.source_url) ? [{ label: 'Original vote source', url: String(row.source_url) }] : []} recordDate={{ label: 'Vote date (not a verification date)', value: String(row.occurred_at ?? row.occurred_on) }} note={voteDetailScope(row.category)} />}
   <nav class="legislation-navigation" aria-label="On this record">{sections.map(section=><a href={`#${section.table}`}>{sectionLabel(section.table)}</a>)}</nav>
   {totals&&<section class="legislation-tally">
     <h2>Official result</h2>

@@ -1,4 +1,6 @@
 import {readPublicCalendar, readCalendarMonth, readPublicEvent} from '../lib/calendar-data';
+import {recordSourceUrl,meetingVoteScope} from '../lib/record-provenance';
+import {renderRecordProvenance} from '../lib/record-provenance-dom';
 import {eventsForMonth, isPublicEvent, type CalendarManifest, type EventViewResponse} from '../lib/calendar-snapshot';
 import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, type CalendarEvent } from '../lib/calendar-display';
 import {
@@ -402,16 +404,26 @@ function fillEventView(response: EventViewResponse): void {
     }
   }
 
+  fillEventProvenance(event);
   viewer.hidden = false;
 }
 
-async function fillMeetingView(id: string, snapshot?: MeetingRecord): Promise<void> {
+function fillEventProvenance(event:NonNullable<EventViewResponse['event']>,meeting?:MeetingRecord){
+  renderRecordProvenance(document.querySelector('[data-event-provenance]'),{sources:[
+    ...(recordSourceUrl(event.url)?[{label:'Recorded event source',url:event.url!}]:[]),
+    ...(recordSourceUrl(meeting?.event?.meeting_video_url)?[{label:'Recorded meeting video',url:meeting!.event!.meeting_video_url!}]:[]),
+  ],recordDate:{label:'Meeting/event date (not a verification date)',value:formatEventWhen(event,'America/New_York')},
+    note:event.is_meeting?meetingVoteScope:'This event record may be incomplete. Confirm the current event details with the named source.'});
+}
+
+async function fillMeetingView(id: string, snapshot?: MeetingRecord,event?:NonNullable<EventViewResponse['event']>): Promise<void> {
   let meeting = snapshot;
   if (!meeting) {
     const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
     if (error || !data || data.status !== 'ok') return;
     meeting = data as MeetingRecord;
   }
+  if(event)fillEventProvenance(event,meeting);
   const root = document.querySelector<HTMLElement>('[data-meeting-details]');
   if (!root) return;
   root.hidden = false;
@@ -556,7 +568,7 @@ export async function initEventViewFromUrl(): Promise<void> {
     fillEventView(response);
     if (response.event?.is_meeting) {
       if (snapshot && !snapshot.meeting) throw new Error('Missing published meeting record');
-      await fillMeetingView(response.event.id,snapshot?.meeting);
+      await fillMeetingView(response.event.id,snapshot?.meeting,response.event);
     }
 
     if (response.event && (await isCurrentUserAdmin())) {

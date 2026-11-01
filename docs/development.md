@@ -61,6 +61,13 @@ Coverage includes separate source publication/retrieval facts, unknown verificat
 invalid dates, reference-style Markdown citations, escaped raw HTML, unsafe URLs
 and public-only source selection. The built check confirms missing date metadata
 does not become a build/edit date on person/election pages.
+The CI step checks helpers; built-output and browser checks remain local release
+verification. Run `PROVENANCE_BROWSER_URL=http://127.0.0.1:4332 bun test scripts/tests/record-provenance-browser.test.ts`
+against a local static preview with local Auth configured. Synthetic RPC responses
+verify anonymous/actual signed-in UUID biography/event sources, live event date
+and source synchronization on public permalinks, meeting scope notes and denied
+viewer gates at desktop/mobile widths. Attendance-vote detail pages omit the
+profile-history exclusion note while retaining their source/date provenance.
 
 In a browser with JavaScript disabled, verify a cited biography, sourced office,
 election date source and meeting/vote context, plus explicit unknowns. Repeat at

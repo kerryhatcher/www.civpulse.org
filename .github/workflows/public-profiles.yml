@@ -23,7 +23,7 @@ jobs:
         run: bun test scripts/tests/structured-data.test.ts
       - name: Verify readable public profile evidence
         run: bun test scripts/tests/profile-evidence.test.ts
-      - name: Verify source provenance and date semantics
+      - name: Verify source provenance helpers and date semantics
         run: bun test scripts/tests/record-provenance.test.ts
       - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts scripts/tests/public-records.test.ts scripts/tests/legislation-build-data.test.ts scripts/tests/build-read.test.ts scripts/tests/legislation-directory-static.test.ts scripts/tests/legislation-details.test.ts scripts/tests/request-snapshot.test.ts
       - name: Verify unified election results and SOS feed ingestion

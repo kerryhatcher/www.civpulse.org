@@ -7,7 +7,7 @@ import { emptyProfileSections } from '../../lib/profile-sections';
 import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
 import ProfileEvidence from '../../components/ProfileEvidence.astro';
 import RecordProvenance from '../../components/RecordProvenance.astro';
-import { biographySources, legislativeVoteScope } from '../../lib/record-provenance';
+import { biographySources, biographyProvenanceNote, legislativeVoteScope } from '../../lib/record-provenance';
 import { profileSectionUrl } from "../../lib/profile-section-assets";
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
@@ -121,7 +121,7 @@ const contact = [
     </div>
 
     {person.description && <div class="prose person-bio" set:html={renderProfileDescription(person.description)} />}
-    <RecordProvenance title="Biography sources and verification" sources={biographySources(person)} note="Citations support only the claims they identify. Contact websites and related articles are not automatically biography sources; a recorded title may describe past service." />
+    <RecordProvenance title="Biography sources and verification" sources={biographySources(person)} note={biographyProvenanceNote} />
 
     {
       contact.length > 0 && (

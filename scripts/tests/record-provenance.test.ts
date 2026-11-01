@@ -1,5 +1,5 @@
 import {expect,test} from 'bun:test';
-import {biographySources,electionSources,provenanceDates,recordSourceUrl,meetingVoteScope,legislativeVoteScope} from '../../apps/web/src/lib/record-provenance';
+import {biographySources,electionSources,provenanceDates,recordSourceUrl,meetingVoteScope,legislativeVoteScope,voteDetailScope} from '../../apps/web/src/lib/record-provenance';
 import type {ElectionDetail} from '../../apps/web/src/lib/elections';
 
 test('publication and retrieval are separate source facts and never imply verification',()=>{
@@ -11,6 +11,7 @@ test('publication and retrieval are separate source facts and never imply verifi
  expect(provenanceDates(null,'2026-10-20').at(-1)?.value).toBe('Unknown');
  for(const scope of [meetingVoteScope,legislativeVoteScope]){expect(scope).toContain('not absences or opposition');expect(scope).toContain('not a participation denominator');}
  expect(legislativeVoteScope).toContain('Attendance roll calls are excluded');
+ expect(voteDetailScope('attendance')).toBeUndefined();expect(voteDetailScope('passage')).toBe(legislativeVoteScope);
 });
 
 test('biography provenance uses rendered public citations only, with safe URLs and reference links',()=>{

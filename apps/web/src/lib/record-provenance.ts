@@ -4,6 +4,9 @@ import type { Person } from './people';
 import type { ElectionDetail } from './elections';
 
 export interface ProvenanceSource { label: string; url: string }
+export const biographyProvenanceNote='Citations support only the claims they identify. Contact websites and related articles are not automatically biography sources; a recorded title may describe past service.';
+export const provenanceExplanation='Retrieval records when a source was obtained, not when its claims were verified. An edit, import or site publication timestamp is not a verification date. Check dated source notes for the scope of any claim.';
+export const voteDetailScope=(category:unknown)=>category==='attendance'?undefined:legislativeVoteScope;
 export const unknownVerification = 'Last verified: Unknown (retrieval is not verification).';
 export const unknownSourceDates = 'Source publication/retrieval dates: Not recorded in this view. Last verified: Unknown.';
 export const meetingVoteScope = 'Only recorded choices from meetings added to Civic Pulse are shown; meetings or motions may be missing. Missing choices are unknown, not absences or opposition. This list is not a participation denominator.';
