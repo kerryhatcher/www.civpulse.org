@@ -5,6 +5,8 @@ import { personStructuredData } from '../../lib/structured-data';
 import { getProfileSectionBuildData } from '../../lib/profile-section-build-data';
 import { emptyProfileSections } from '../../lib/profile-sections';
 import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
+import PersonRelationships from '../../components/PersonRelationships.astro';
+import { fetchPublicPersonRelationships, type RelatedPerson } from '../../lib/person-relationships';
 import ProfileEvidence from '../../components/ProfileEvidence.astro';
 import RecordProvenance from '../../components/RecordProvenance.astro';
 import { biographySources, biographyProvenanceNote, legislativeVoteScope } from '../../lib/record-provenance';
@@ -27,21 +29,23 @@ import {
 export async function getStaticPaths() {
   const people = await fetchPublicPeople();
   const affiliations = await fetchPublicAffiliationsByPerson(people.map(person => person.id));
+  const relationships = await fetchPublicPersonRelationships(people);
   const sections = await getProfileSectionBuildData();
 
   return people.map((person) => ({
     params: { slug: person.slug },
-    props: { person, affiliations: affiliations.get(person.id) ?? [], evidence: profileEvidence(sections.people.get(person.id) ?? emptyProfileSections(), 'people') },
+    props: { person, related: relationships.get(person.id) ?? [], affiliations: affiliations.get(person.id) ?? [], evidence: profileEvidence(sections.people.get(person.id) ?? emptyProfileSections(), 'people') },
   }));
 }
 
 interface Props {
   person: Person;
+  related: RelatedPerson[];
   affiliations: OrganizationAffiliation[];
   evidence: Record<ProfileEvidenceKey, EvidenceSection>;
 }
 
-const { person, affiliations, evidence } = Astro.props;
+const { person, affiliations, evidence, related } = Astro.props;
 const history = (key: ProfileEvidenceKey) => profileHistoryHref('people', person.slug, key);
 const image = personImageUrl(person.image_path);
 
@@ -163,6 +167,7 @@ const contact = [
       )
     }
 
+    <PersonRelationships personId={person.id} related={related} />
     <OfficeTerms personId={person.id} published={evidence.offices} historyHref={history('offices')} />
     <section data-person-legislation hidden={!evidence['legislative-votes'].rows.length} aria-label="Legislative record">
       <h2>Legislative record</h2><p>{legislativeVoteScope}</p><ProfileEvidence section={evidence['legislative-votes']} historyHref={history('legislative-votes')} />
@@ -187,6 +192,8 @@ const contact = [
   import { initPersonCandidacies } from '../../scripts/person-candidacies';
   import { initPersonVotes } from '../../scripts/person-votes';
 
+  import { initPersonRelationships } from '../../scripts/person-relationships';
+  void initPersonRelationships();
   initProfileArticles();
   initPersonCandidacies();
   initPersonVotes();

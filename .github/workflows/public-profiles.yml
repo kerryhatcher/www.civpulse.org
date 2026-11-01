@@ -27,6 +27,8 @@ jobs:
         run: bun test scripts/tests/record-provenance.test.ts
       - name: Verify Bibb topic guide public projections
         run: bun test scripts/tests/bibb-topic-hubs.test.ts
+      - name: Verify public person relationship projections
+        run: bun test scripts/tests/person-relationships.test.ts
       - name: Verify editorial correction routing
         run: bun test scripts/tests/corrections.test.ts
       - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts scripts/tests/public-records.test.ts scripts/tests/legislation-build-data.test.ts scripts/tests/build-read.test.ts scripts/tests/legislation-directory-static.test.ts scripts/tests/legislation-details.test.ts scripts/tests/request-snapshot.test.ts

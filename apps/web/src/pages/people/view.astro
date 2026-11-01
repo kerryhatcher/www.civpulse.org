@@ -1,4 +1,5 @@
 ---
+import PersonRelationships from '../../components/PersonRelationships.astro';
 import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import RecordProvenance from '../../components/RecordProvenance.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
@@ -41,6 +42,7 @@ import PersonVotes from '../../components/PersonVotes.astro';
         <div class="affiliation-list" data-person-affiliations></div>
       </section>
 
+      <PersonRelationships />
       <OfficeTerms viewer />
     <section data-person-legislation hidden aria-label="Legislative record"></section>
 

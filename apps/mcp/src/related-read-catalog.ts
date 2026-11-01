@@ -15,6 +15,7 @@ export const relatedReads = {
   get_contest_candidate: 'contest_candidate',
   list_map_layer_links: 'map_layer_links',
   get_organization_relationships: 'organization_relationships',
+  get_person_relationships: 'person_relationships',
   list_article_people: 'article_people',
   list_article_organizations: 'article_organizations',
   list_calendars: 'calendars',

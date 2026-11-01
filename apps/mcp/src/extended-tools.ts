@@ -17,7 +17,7 @@ const slug = z.string().max(120).regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 const rowId = z.string().regex(/^[1-9][0-9]*$/).refine(value => BigInt(value) <= 9223372036854775807n, 'ID exceeds bigint range');
 const geometry = z.object({ type: z.enum(['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon']), coordinates: z.array(z.unknown()) });
 
-export function registerExtendedTools(server: McpServer, supabase: SupabaseClient, user: Pick<User, 'id' | 'email'>, writes?: WriteCatalog, reads?: RelatedReadCatalog) {
+export function registerExtendedTools(server: McpServer, supabase: SupabaseClient, user: Pick<User, 'id' | 'email'>, writes?: WriteCatalog, reads?: RelatedReadCatalog, personRelationships = true) {
   const { register, readRpc, create, update, remove, relationship, ensureAdmin } = createToolkit(server, supabase, writes, reads);
   async function rpc(name: string, args: Record<string, unknown>) {
     const { data, error } = await supabase.rpc(name, args);
@@ -117,6 +117,19 @@ export function registerExtendedTools(server: McpServer, supabase: SupabaseClien
   create('organization_relationship', 'organization_relationships', 'Link two different organizations (admin only). relationship labels the related organization on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.', organizationRelationship);
   update('organization_relationship', 'organization_relationships', 'Update an organization relationship by id (admin only). Omitted fields are preserved.', organizationRelationship);
   remove('organization_relationship', 'organization_relationships', 'Delete an organization relationship from both profiles, preserving both organizations (admin only).');
+
+  // Compatibility discovery is full; buildServer enables these only for compact.
+  if (personRelationships) {
+    readRpc('get_person_relationships', 'List related people visible at both endpoints, with directional labels and source URLs. Anonymous reads require both people public; signed-in reads follow person viewer access.',
+      { person_id: uuid }, 'get_person_relationships', ({ person_id }) => ({ p_person_id: person_id }));
+    const personRelationship = {
+      person_id: uuid, related_person_id: uuid,
+      relationship: z.string().trim().min(1).max(160), reverse_relationship: z.string().trim().min(1).max(160), source_url: url.nullish(),
+    };
+    create('person_relationship', 'person_relationships', 'Link two different people (admin only). relationship labels the related person on the first profile; reverse_relationship labels the first on the related profile. One row appears on both profiles; reverse duplicate pairs are rejected.', personRelationship);
+    update('person_relationship', 'person_relationships', 'Update a person relationship by id (admin only). Omitted fields are preserved.', personRelationship);
+    remove('person_relationship', 'person_relationships', 'Delete a person relationship from both profiles, preserving both people (admin only).');
+  }
 
   const article = {
     title: z.string().trim().min(1).max(500), url, visibility: visibility.optional(),

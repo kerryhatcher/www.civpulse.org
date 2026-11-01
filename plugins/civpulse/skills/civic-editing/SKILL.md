@@ -11,7 +11,7 @@ Search for existing records and fetch their details before creating duplicates o
 
 Use create_*, update_* and delete_* for organizations, people, elections, calendars, events, maps, layers, contests, ballot questions and articles. Updates are partial: send only intended fields. Preserve visibility, dates, relationships and other metadata by omission. Use null only where the schema allows clearing. Tool schemas are authoritative for accepted enum values, required fields and limits.
 
-When the connection advertises the compact catalog, replace each create/update pair with save_<resource> and put operation=create or update plus the original fields under request. This also covers layer_feature, office and office_term. For the six relationship kinds, use save_relationship with request.relationship and request.change containing operation plus the original fields. Use delete_relationship with request.relationship and original key fields for link deletion; resource deletion keeps its separate delete_* tool. Composite links require both endpoint UUIDs; organization_relationship updates/deletes use its row id. Save tools never accept operation=delete or upsert a missing record. Creation is not generally safe to retry after an uncertain response: reconcile first. Consult the live schema and [compact guide](../../references/compact-tools.md); use only tools advertised by the current connection.
+When the connection advertises the compact catalog, replace each create/update pair with save_<resource> and put operation=create or update plus the original fields under request. This also covers layer_feature, office and office_term. For the seven relationship kinds, use save_relationship with request.relationship and request.change containing operation plus the original fields. Use delete_relationship with request.relationship and original key fields for link deletion; resource deletion keeps its separate delete_* tool. Composite links require both endpoint UUIDs; organization_relationship and person_relationship updates/deletes use its row id. Save tools never accept operation=delete or upsert a missing record. Creation is not generally safe to retry after an uncertain response: reconcile first. Consult the live schema and [compact guide](../../references/compact-tools.md); use only tools advertised by the current connection.
 
 Manage affiliations, candidacies, map-layer links and article associations with their dedicated relationship tools. Composite relationships use both endpoint IDs; updating a link changes its attributes, not endpoints. Election children inherit election visibility. List editable article associations only as an admin; other users use the profile reading lists.
 
@@ -19,7 +19,7 @@ create_article / update_article save metadata and supplied association sets atom
 
 In the compact catalog, save_article preserves those same atomic association semantics. An explicit [] still clears the corresponding association set; individual link deletion remains a separate delete_relationship call.
 
-When read_related_records is advertised, read back links with request.relation and the original keys: person_organizations for affiliations, contest_candidates or contest_candidate for candidacies, organization_relationships for reciprocal organization links, and office_terms for dated service. The article_people/article_organizations and map_layer_links selectors remain admin-only editable views. Public profile reading lists use person_articles/organization_articles instead. See the compact guide for the complete selector mapping and preserved visibility rules.
+When read_related_records is advertised, read back links with request.relation and the original keys: person_organizations for affiliations, contest_candidates or contest_candidate for candidacies, organization_relationships for reciprocal organization links, person_relationships (person_id) for reciprocal person links, and office_terms for dated service. The article_people/article_organizations and map_layer_links selectors remain admin-only editable views. Public profile reading lists use person_articles/organization_articles instead. See the compact guide for the complete selector mapping and preserved visibility rules.
 
 For user-supplied images, upload_image supports PNG/JPEG/WebP/SVG up to 2 MB. Provide base64 without a data-URL prefix, use an unambiguous relative path, and set overwrite only when replacement is intended. Save the returned path into the record’s logo_path or image_path. Deleting an image does not clear referencing records; update those separately.
 
@@ -109,3 +109,21 @@ dated membership intervals.
 For structured official-source county statistics, resolve county/FIPS, indicator and source with get_county_statistic_catalog and read the current observation with search_county_statistics. Use save_county_statistic with its exact updated_at as expected_updated_at; null creates a missing observation only. Preserve source variables, reference period, unit, uncertainty and derivation inputs; explicitly label unavailable/suppressed values instead of guessing or using zero. If a write reports concurrent changes, reread before retrying. save_county_statistic_source updates verified official dataset provenance, including exact source-file SHA-256 and retrieval date. All writes require an admin and request a static rebuild; verify through MCP and the rebuilt county page.
 
 Catalog compatibility: the original 128-tool endpoint exposes county discovery through search_site(type=county_statistic_catalog) and observations through search_site(type=county_statistic). Use dedicated get_county_statistic_catalog/search_county_statistics/save tools only when advertised by the compact catalog. Do not assume a missing dedicated tool means the data is unavailable.
+
+## Person relationships and privacy
+
+Use person_relationship with directional free-text relationship/reverse_relationship
+labels and an optional HTTP(S) source_url. A single row appears on both profiles;
+read both directions after saving. Updates/deletes use the returned row id.
+Require a reliable public source editorially before publishing family or sensitive
+associations, even though the database permits a missing source for incomplete
+records. Do not infer from names, addresses, co-attendance or shared affiliations.
+Consider civic relevance and the privacy of relatives who are not public figures;
+do not create private-relative profiles just to fill a family tree. Both endpoints
+must be public for anonymous relationship reads. Hidden links use permission-checked
+RPC reads and UUID viewers. Public changes require rebuild/publication.
+
+Person relationship tools are available in the compact catalog at
+`https://api.civpulse.org/functions/v1/mcp/v2` after the matching MCP deployment.
+The compatibility catalog remains at its existing 128-tool limit; refresh tool
+discovery and use only selectors advertised by the connected endpoint.

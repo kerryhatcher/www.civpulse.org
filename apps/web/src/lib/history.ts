@@ -4,7 +4,7 @@ export const HISTORY_TYPES: Record<string, string> = {
   organizations: 'Organizations', people: 'People', elections: 'Elections',
   offices: 'Offices', office_terms: 'Office service', contests: 'Contests',
   contest_candidates: 'Candidates', ballot_questions: 'Ballot questions',
-  person_organizations: 'Affiliations', organization_relationships: 'Organization relationships',
+  person_organizations: 'Affiliations', person_relationships: 'Person relationships', organization_relationships: 'Organization relationships',
   articles: 'Articles', article_people: 'Article people', article_organizations: 'Article organizations',
   maps: 'Maps', layers: 'Layers', layer_features: 'Geographic features', map_layers: 'Map layers',
   calendars: 'Calendars', events: 'Events and meetings', meeting_attendance: 'Meeting attendance',

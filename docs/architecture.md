@@ -982,3 +982,14 @@ review, and dated school affiliations. Existing people/affiliation rebuild
 tracking publishes those profiles. Finance search needs no static bulk export or
 server adapter. Originals remain in collector evidence. See
 [school finances](school-finances.md).
+
+## Person relationship publication
+
+Related-person lists follow the existing static profile model. A paginated anon
+read of `person_relationships` is grouped once for both directions, and both
+endpoints must occur in the public people snapshot. No hidden relationship IDs,
+names, labels or source URLs are serialized. Signed-in profiles use the
+visibility-aware RPC and replace the public list only on success. UUID viewers
+load relationships only after the parent person gate succeeds. Anonymous static
+profiles make no extra relationship RPC; no-JavaScript visitors see public links.
+The new table participates in object history and frontend rebuild tracking.

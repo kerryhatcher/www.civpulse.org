@@ -35,6 +35,7 @@ const relationships: Record<string, { create: Record<string, unknown>; update: R
   map_layer: { create: { map_id: id, layer_id: other, position: 3 }, update: { map_id: id, layer_id: other, style: null, visible_by_default: false }, delete: { map_id: id, layer_id: other } },
   contest_candidate: { create: { contest_id: id, person_id: other, is_write_in: true }, update: { contest_id: id, person_id: other, party: null, status: 'won' }, delete: { contest_id: id, person_id: other } },
   person_organization: { create: { person_id: id, organization_id: other, role: 'Mayor' }, update: { person_id: id, organization_id: other, role: 'Former mayor' }, delete: { person_id: id, organization_id: other } },
+  person_relationship: { create: { person_id: id, related_person_id: other, relationship: 'Child of', reverse_relationship: 'Parent of', source_url: 'https://example.test/source' }, update: { id, reverse_relationship: '  Updated label  ', source_url: null }, delete: { id } },
   organization_relationship: { create: { organization_id: id, related_organization_id: other, relationship: 'Board', reverse_relationship: 'District' }, update: { id, related_organization_id: other, reverse_relationship: '  Updated district  ', source_url: null }, delete: { id } },
   article_person: { create: { article_id: id, person_id: other, role: 'author' }, update: { article_id: id, person_id: other, role: '  subject  ' }, delete: { article_id: id, person_id: other } },
   article_organization: { create: { article_id: id, organization_id: other, role: 'publisher' }, update: { article_id: id, organization_id: other, role: 'mention' }, delete: { article_id: id, organization_id: other } },
@@ -86,7 +87,7 @@ for (const resource of saveResources) {
     await compare(`${operation}_${resource}`, input, false);
   });
 }
-for (const relationship of relationshipKinds) {
+for (const relationship of relationshipKinds.filter(kind => kind !== 'person_relationship')) {
   for (const operation of ['create', 'update', 'delete'] as const) test(`${operation} ${relationship} preserves keys/attributes and denies regular users`, async () => {
     await compare(`${operation}_${relationship}`, relationships[relationship][operation], true);
     await compare(`${operation}_${relationship}`, relationships[relationship][operation], false);
@@ -153,4 +154,25 @@ test('only explicit aliases are replaced; save annotations do not promise retry-
     }
     expect(tools.some(x => x.name === 'delete_person')).toBe(true);
   } finally { await compact.close(); }
+});
+
+
+test('compact-only person relationship operations preserve fields and deny non-admin writes without growing compatibility catalog', async () => {
+  const legacy = await setup('legacy');
+  try { expect((await legacy.client.listTools()).tools).toHaveLength(128); }
+  finally { await legacy.close(); }
+  for (const operation of ['create','update','delete'] as const) for (const admin of [true,false]) {
+    const compact=await setup('compact',admin);
+    try {
+      const result=await compact.client.callTool(compactWriteReplacement(operation+'_person_relationship',relationships.person_relationship[operation])!);
+      expect(Boolean(result.isError)).toBe(!admin);
+      if(!admin) expect(compact.calls).toEqual([['is_admin',undefined]]);
+      else {
+        expect(compact.calls).toContainEqual(['from','person_relationships']);
+        if(operation==='create') expect(compact.calls).toContainEqual(['insert',relationships.person_relationship.create]);
+        if(operation==='update') expect(compact.calls).toContainEqual(['update',{ reverse_relationship:'Updated label',source_url:null }]);
+        if(operation==='delete') expect(compact.calls).toContainEqual(['eq','id',id]);
+      }
+    } finally { await compact.close(); }
+  }
 });

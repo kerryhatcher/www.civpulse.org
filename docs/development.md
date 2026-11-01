@@ -1376,3 +1376,19 @@ materialization was rejected because it slowed a dense first organization page;
 the inline eligibility checks retain planner freedom. Release the migration
 through main before production application; never raise API timeouts to mask an
 export regression.
+
+### Person relationship regression checks
+
+After applying pending migrations to the local database with
+`SUPABASE_TELEMETRY_DISABLED=1 supabase migration up --local`, run:
+
+`PERSON_RELATIONSHIPS_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-relationships-db.test.ts scripts/tests/person-relationships.test.ts scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts`.
+
+DB fixtures roll back and test both-endpoint visibility, directional reads,
+constraints and admin writes. For browser QA use synthetic local public/unlisted/
+private people, rebuild for the public snapshot, verify both directions with JS
+disabled and anonymous/actual Admin sessions at desktop/mobile widths, then remove
+the fixtures and rebuild cleanly. Check labels are text-escaped, hidden names/IDs
+never enter anonymous HTML, and a failed signed-in refresh retains published links.
+Run `bun run plugin:build`, `bun run plugin:claude:sync` and
+`bun run plugin:claude:check` to keep generated tool guides/schemas synchronized.
