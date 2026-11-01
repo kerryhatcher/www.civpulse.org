@@ -7,6 +7,10 @@ import { readRows } from './profile-build-data';
 import type { DirectorySnapshot } from './directories';
 
 const text = (...values: unknown[]) => values.filter(value => value !== null && value !== undefined).join(' ');
+function appendText(groups:Map<string,string[]>,id:string,value:string) {
+  const group=groups.get(id);
+  if(group)group.push(value);else groups.set(id,[value]);
+}
 interface Candidate extends Omit<ElectionCandidate, 'person'> { contest_id: string; person_id: string }
 
 /** Anon reads plus explicit parent/child allowlists keep even search-only text public. */
@@ -44,7 +48,7 @@ export function assembleDirectoryData(records: {people:Person[];organizations:Or
   const publicElections = new Set(elections.map(election => election.id));
   const contestElection = new Map<string,string>();
   const electionText = new Map<string,string[]>();
-  const addElection = (id:string,value:string) => electionText.set(id,[...(electionText.get(id)??[]),value]);
+  const addElection = (id:string,value:string) => appendText(electionText,id,value);
   for (const contest of related.contests) {
     if (!publicElections.has(contest.election_id)) continue;
     const value = text(contest.office,contest.district,contest.seat,contest.description);
@@ -60,11 +64,11 @@ export function assembleDirectoryData(records: {people:Person[];organizations:Or
   const orgText = new Map<string,string[]>();
   for (const affiliation of related.affiliations) {
     const person = publicPeople.get(affiliation.person_id);
-    if (person && orgs.has(affiliation.organization_id)) orgText.set(affiliation.organization_id,[...(orgText.get(affiliation.organization_id)??[]),text(person.full_name,affiliation.role)]);
+    if (person && orgs.has(affiliation.organization_id)) appendText(orgText,affiliation.organization_id,text(person.full_name,affiliation.role));
   }
   return {
     people: people.map(({id,slug,full_name,kind,title,description,image_path,visibility}) => ({record:{id,slug,full_name,kind,title,description,image_path,visibility},search:text(full_name,title,description)})) satisfies DirectorySnapshot<'people'>,
-    organizations: records.organizations.map(org => ({record:{id:org.id,slug:org.slug,name:org.name,description:org.description,logo_path:org.logo_path},search:text(org.name,org.slug,org.description,org.email,org.phone,org.address_line,org.website_url,org.social_url,...(orgText.get(org.id)??[]))})) satisfies DirectorySnapshot<'organizations'>,
-    elections: elections.map(election => ({record:election,search:text(election.name,election.slug,election.kind,election.description,election.election_date,orgs.get(election.organization_id??'')?.name,...(electionText.get(election.id)??[]))})) satisfies DirectorySnapshot<'elections'>,
+    organizations: records.organizations.map(org => ({record:{id:org.id,slug:org.slug,name:org.name,description:org.description,logo_path:org.logo_path},search:text(org.name,org.slug,org.description,org.email,org.phone,org.address_line,org.website_url,org.social_url,orgText.get(org.id)?.join(' '))})) satisfies DirectorySnapshot<'organizations'>,
+    elections: elections.map(election => ({record:election,search:text(election.name,election.slug,election.kind,election.description,election.election_date,orgs.get(election.organization_id??'')?.name,electionText.get(election.id)?.join(' '))})) satisfies DirectorySnapshot<'elections'>,
   };
 }
