@@ -4,6 +4,7 @@ import {Client} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist
 import {StreamableHTTPClientTransport} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js';
 import {handleRequest} from '../../apps/mcp/src/index';
 import {MCP_UPLOAD_CHUNK_BYTES} from '../../apps/mcp/src/meeting-upload-relay';
+import {createHmac} from 'node:crypto';
 const enabled=process.env.MEETING_RELAY_INTEGRATION==='1';
 const hash=(bytes:Uint8Array)=>new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
 
@@ -14,7 +15,10 @@ test.skipIf(!enabled)('isolated real Auth/MCP/TUS transfers reported sizes, reco
  // Service credential is fixture provisioning/cleanup only, never supplied to MCP.
  const setup=createClient(url,settings.SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
  const suffix=crypto.randomUUID(),users:string[]=[],apis:any[]=[],clients:Client[]=[],sessions:any[]=[],meetings:string[]=[];let org='',cal='',maxRequestBytes=0,patches=0,losePatch=false,losePost=false,loseHead=false,loseHeadAfterPatch=false;
- const originalFetch=globalThis.fetch;
+ const originalFetch=globalThis.fetch;let expirePost=false;
+ const jwtPart=(value:unknown)=>Buffer.from(JSON.stringify(value)).toString('base64url');
+ const expiredHeader=jwtPart({alg:'HS256',typ:'JWT'}),expiredPayload=jwtPart({role:'authenticated',sub:crypto.randomUUID(),exp:Math.floor(Date.now()/1000)-120,iss:'supabase'});
+ const expiredToken=expiredHeader+'.'+expiredPayload+'.'+createHmac('sha256',settings.JWT_SECRET).update(expiredHeader+'.'+expiredPayload).digest('base64url');
  const fault=spyOn(globalThis,'fetch').mockImplementation(async(input:any,init:any)=>{
   const target=new URL(input instanceof Request?input.url:input.toString()),method=init?.method??(input instanceof Request?input.method:'GET');
   if(target.pathname.startsWith('/storage/v1/upload/resumable')){
@@ -23,6 +27,11 @@ test.skipIf(!enabled)('isolated real Auth/MCP/TUS transfers reported sizes, reco
    if(method==='HEAD'&&loseHead){loseHead=false;throw new TypeError('Synthetic HEAD receipt lost');}
    if(method==='PATCH'){patches++;const response=await originalFetch(input,init);if(loseHeadAfterPatch){loseHeadAfterPatch=false;loseHead=true;}if(losePatch){losePatch=false;throw new TypeError('Synthetic PATCH receipt lost');}return response;}
    if(method==='POST'&&losePost){losePost=false;await originalFetch(input,init);throw new TypeError('Synthetic POST receipt lost');}
+   if(method==='POST'&&expirePost){
+    expirePost=false;const headers=new Headers(init.headers);headers.set('Authorization','Bearer '+expiredToken);
+    const response=await originalFetch(input,{...init,headers});expect(response.status).toBe(400);expect(response.headers.has('Location')).toBe(false);
+    expect(await response.clone().json()).toMatchObject({statusCode:'403',code:'AccessDenied',error:'Unauthorized',message:'"exp" claim timestamp check failed'});return response;
+   }
   }
   return originalFetch(input,init);
  });
@@ -42,6 +51,24 @@ test.skipIf(!enabled)('isolated real Auth/MCP/TUS transfers reported sizes, reco
   org=(await db`insert into public.organizations(name,slug) values('Synthetic relay QA',${'relay-'+suffix}) returning id`)[0].id;
   cal=(await db`insert into public.calendars(organization_id,name,slug) values(${org},'Synthetic relay calendar',${'relay-'+suffix}) returning id`)[0].id;
   for(const visibility of ['public','private'])meetings.push((await db`insert into public.events(calendar_id,title,starts_at,is_meeting,visibility) values(${cal},'Synthetic relay meeting','2026-01-02T18:00Z',true,${visibility}) returning id`)[0].id);
+  const authBytes=new TextEncoder().encode('%PDF-1.7');
+  const authSession=await call(clients[0],'begin_meeting_attachment_upload',{meeting_id:meetings[0],provider:'relay-qa',source_key:'auth-expiry',file_name:'auth.pdf',size_bytes:authBytes.length,sha256:hash(authBytes),source_url:'https://example.test/auth.pdf'});sessions.push(authSession);
+  const authInput={action:'transfer_chunk',id:authSession.id,offset:0,data_base64:Buffer.from(authBytes).toString('base64')};
+  expirePost=true;expect((await call(clients[0],'manage_meeting_attachment_upload',authInput)).state).toBe('authentication_required');
+  expect((await db`select creating,location,next_offset::int from meeting_private.upload_relays where session_id=${authSession.id}`)[0]).toMatchObject({creating:false,location:null,next_offset:0});
+  expect((await call(clients[0],'manage_meeting_attachment_upload',authInput)).offset).toBe(authBytes.length);
+  const acquired=await apis[0].rpc('manage_meeting_upload_transfer',{p_action:'acquire',p_id:authSession.id});expect(acquired.error).toBeNull();
+  const reset={p_action:'creation_auth_rejected',p_id:authSession.id,p_lease:acquired.data.lease};
+  expect((await apis[1].rpc('manage_meeting_upload_transfer',reset)).error?.message).toContain('another administrator');
+  expect((await apis[2].rpc('manage_meeting_upload_transfer',reset)).error?.message).toContain('Admin access');
+  expect((await apis[0].rpc('manage_meeting_upload_transfer',{...reset,p_lease:crypto.randomUUID()})).error?.message).toContain('lease');
+  expect((await apis[0].rpc('manage_meeting_upload_transfer',reset)).error?.message).toContain('unlocated, empty');
+  await db`update meeting_private.upload_relays set lease_until=clock_timestamp()-interval '1 minute' where session_id=${authSession.id}`;
+  expect((await apis[0].rpc('manage_meeting_upload_transfer',reset)).error?.message).toContain('lease');
+  expect((await apis[0].rpc('manage_meeting_upload_transfer',{...reset,p_action:'release'})).error).toBeNull();
+  const authFinal=await call(clients[0],'finalize_meeting_attachment_upload',{id:authSession.id});expect(authFinal.sha256).toBe(hash(authBytes));
+  await db`delete from meeting_private.upload_relays where session_id=${authSession.id}`;
+  expect(await call(clients[0],'manage_meeting_attachment_upload',{action:'transfer_status',id:authSession.id})).toMatchObject({state:'complete',offset:authBytes.length,attachment_id:authSession.id});
   for(const [index,size] of [5179685,20968285].entries()){
    const bytes=new Uint8Array(size).fill(65+index);bytes.set(new TextEncoder().encode('%PDF-1.7\nSynthetic transport fixture\n'));
    const params={meeting_id:meetings[index],provider:'relay-qa',source_key:'original-'+size,file_name:'synthetic-'+size+'.pdf',size_bytes:size,sha256:hash(bytes),source_url:'https://example.test/synthetic.pdf'};

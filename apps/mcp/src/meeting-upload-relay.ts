@@ -32,8 +32,8 @@ export async function transferMeetingChunk(api:SupabaseClient,session:Session,co
  const publicState=(r:any,extra:Record<string,unknown>={})=>({state:r.state,offset:Number(r.offset??0),size_bytes:Number(session.size_bytes),max_chunk_bytes:MCP_UPLOAD_CHUNK_BYTES,
   ...(r.pending_chunk?{pending_chunk:{offset:Number(r.pending_chunk.chunk_offset),size_bytes:r.pending_chunk.size_bytes}}:{}),...extra});
  let current=await state('status');
- if(input.statusOnly&&current.state==='not_started')return publicState(current);
  if(session.state==='complete')return publicState(current,{state:'complete',offset:Number(session.size_bytes),attachment_id:session.id});
+ if(input.statusOnly&&current.state==='not_started')return publicState(current);
  if(session.state!=='pending'||Date.parse(session.expires_at)<=Date.now())throw Error('Upload cancelled or expired');
  current=await state('acquire');const lease=current.lease;
  const action=(name:string,extra:Record<string,unknown>={})=>state(name,{p_lease:lease,...extra});
@@ -54,6 +54,16 @@ export async function transferMeetingChunk(api:SupabaseClient,session:Session,co
    const metadata={bucketName:'meeting-attachments',objectName:session.storage_path,contentType:session.mime_type};
    let created:Response;
    try{created=await request(endpoint,{method:'POST',headers:{'Upload-Length':String(session.size_bytes),'Upload-Metadata':Object.entries(metadata).map(([k,v])=>`${k} ${btoa(v)}`).join(',')}});}catch{return publicState(current,{state:'creation_uncertain',message:'Storage creation receipt unavailable; do not blindly create another transfer.'});}
+   // Only this confirmed pre-handler expiry response proves creation did not
+   // run. Generic HTTP/auth/RLS errors, lost responses and missing Locations do
+   // not establish that and must retain the durable uncertain intent.
+   if([400,403].includes(created.status)&&!created.headers.has('Location')){
+    let rejection:any;try{rejection=await created.clone().json();}catch{/* Unknown response stays uncertain. */}
+    if(rejection?.code==='AccessDenied'&&rejection.error==='Unauthorized'&&String(rejection.statusCode)==='403'&&rejection.message==='"exp" claim timestamp check failed'){
+     try{current=await action('creation_auth_rejected');}catch{return publicState(current,{state:'creation_uncertain',message:'Storage rejected expired authentication, but its durable creation intent could not be cleared; operator reconciliation required.'});}
+     return publicState(current,{state:'authentication_required',message:'Storage rejected expired authentication before creation. Refresh your connection and retry this same session and chunk.'});
+    }
+   }
    if(created.status!==201||!created.headers.get('Location'))return publicState(current,{state:'creation_uncertain',message:`Storage creation not confirmed (${created.status}); operator reconciliation required.`});
    const location=checkedRelayLocation(created.headers.get('Location')!,endpoint);
    current=await action('location',{p_location:location.href});

@@ -275,9 +275,11 @@ dates into meetings or disabling a meeting while it has child records.
 `get_meeting` returns notes, transcript, attendance, votes and attachment metadata
 through the existing event/calendar visibility gate. Check it before uploading.
 `upload_meeting_attachment` accepts inline base64 files up to 3 MiB. For reliable,
-repeatable originals up to 25 MiB use `begin_meeting_attachment_upload`, direct
-Storage TUS chunks, `manage_meeting_attachment_upload` and
-`finalize_meeting_attachment_upload`. See [meeting imports](meeting-imports.md)
+repeatable originals up to 25 MiB, connected agents use `begin_meeting_attachment_upload`,
+`manage_meeting_attachment_upload` (`transfer_chunk`, `transfer_status`) and
+`finalize_meeting_attachment_upload`; see [connector byte transfer](#connector-authenticated-original-byte-transfer).
+Only applications holding their own user session use direct Storage TUS.
+See [meeting imports](meeting-imports.md)
 for the full contract, authentication, source identity, checksums, conflict rules,
 resumption, expiry and deliberate cleanup. JSON source projections are supported.
 The legacy inline operation creates fresh records and retains uncertain uploads

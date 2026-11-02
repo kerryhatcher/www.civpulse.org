@@ -1850,8 +1850,16 @@ Migration `20261125002100` adds private `meeting_private.upload_relays` and
 `upload_chunk_receipts`, with RLS and no client table grants. There is no relaxed
 Storage policy. The security-definer `manage_meeting_upload_transfer` RPC has
 empty search path and requires `is_admin()`; first acquisition binds the transfer
-to `auth.uid()`. Subsequent transport actions require that owner, a matching
-unexpired lease and a pending, unexpired upload session. Hash receipts reject
+to `auth.uid()`. Each action on an existing transfer requires that owner. `acquire`
+requires a pending, unexpired session. `creating`, `location`, `prepare`, `commit`
+and `creation_auth_rejected` additionally require a matching unexpired lease.
+`release` requires the owner and matching lease, including after expiry; `status`
+requires only the owner. Append-only migration `20261125002200` allows
+`creation_auth_rejected` to clear only an unlocated creation intent with offset
+zero and no chunk receipts. The relay invokes it only after a confirmed Storage
+JWT-expiry rejection before upload creation. If the caller's database auth also
+expired, the reset can fail and operator reconciliation remains necessary.
+Hash receipts reject
 changed chunk replay and retain original offsets; document bytes stay in Storage.
 Only configured-origin, metadata-matched TUS resources are used by the server.
 Locations are backend transport state, not an arbitrary client URL fetch API.

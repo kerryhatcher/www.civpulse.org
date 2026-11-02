@@ -54,8 +54,10 @@ canonical attachment. On interruption use manage_meeting_attachment_upload, then
 retry finalize with the same session ID; do not guess from filenames. Changed
 source metadata conflicts. Files remain private until normal meeting visibility
 permits their canonical attachment. No unrestricted archive copy is made.
-Cancel unfinished sessions with manage_meeting_attachment_upload (action=cancel). Terminate saved
-TUS uploads first; manage_meeting_attachment_upload (action=list_cleanup) lists expired/cancelled receipts.
+Cancel unfinished sessions with manage_meeting_attachment_upload (action=cancel).
+This records cancellation and removes completed staged objects; it does not
+terminate partial TUS resources. Private partial bytes expire in Storage.
+manage_meeting_attachment_upload (action=list_cleanup) lists expired/cancelled receipts.
 Repeat object cleanup after outstanding signed tokens and 24-hour TUS URLs expire,
 since cancellation cannot revoke already-issued Storage capabilities. Completed
 attachments are protected. Receipts remain for reconciliation. Never clean up the
@@ -154,6 +156,9 @@ Use transfer_status after uncertainty; retry the exact pending chunk at its orig
 offset so HEAD can skip accepted bytes. Changed replay bytes conflict. Transfers
 are initiating-admin-bound; wait for busy leases to expire. creation_uncertain
 requires operator reconciliation, not a new source key or blind repeated POST.
+authentication_required means a confirmed pre-creation JWT-expiry rejection was
+safely reset; refresh the connection and retry the same session/chunk. If the
+reset cannot persist, creation_uncertain still requires operator reconciliation.
 Finalize the same session and verify downloaded SHA-256. This does not publish an
 archive copy. Hosted issue #60 acceptance with captured originals remains pending
 until main-first migration/deployment and actual connected-agent verification.

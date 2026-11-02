@@ -2561,10 +2561,10 @@ async function transferMeetingChunk(api, session, context, input) {
     ...extra
   });
   let current = await state("status");
-  if (input.statusOnly && current.state === "not_started")
-    return publicState(current);
   if (session.state === "complete")
     return publicState(current, { state: "complete", offset: Number(session.size_bytes), attachment_id: session.id });
+  if (input.statusOnly && current.state === "not_started")
+    return publicState(current);
   if (session.state !== "pending" || Date.parse(session.expires_at) <= Date.now())
     throw Error("Upload cancelled or expired");
   current = await state("acquire");
@@ -2606,6 +2606,20 @@ async function transferMeetingChunk(api, session, context, input) {
         created = await request(endpoint, { method: "POST", headers: { "Upload-Length": String(session.size_bytes), "Upload-Metadata": Object.entries(metadata).map(([k, v]) => `${k} ${btoa(v)}`).join(",") } });
       } catch {
         return publicState(current, { state: "creation_uncertain", message: "Storage creation receipt unavailable; do not blindly create another transfer." });
+      }
+      if ([400, 403].includes(created.status) && !created.headers.has("Location")) {
+        let rejection;
+        try {
+          rejection = await created.clone().json();
+        } catch {}
+        if (rejection?.code === "AccessDenied" && rejection.error === "Unauthorized" && String(rejection.statusCode) === "403" && rejection.message === '"exp" claim timestamp check failed') {
+          try {
+            current = await action("creation_auth_rejected");
+          } catch {
+            return publicState(current, { state: "creation_uncertain", message: "Storage rejected expired authentication, but its durable creation intent could not be cleared; operator reconciliation required." });
+          }
+          return publicState(current, { state: "authentication_required", message: "Storage rejected expired authentication before creation. Refresh your connection and retry this same session and chunk." });
+        }
       }
       if (created.status !== 201 || !created.headers.get("Location"))
         return publicState(current, { state: "creation_uncertain", message: `Storage creation not confirmed (${created.status}); operator reconciliation required.` });
@@ -2745,7 +2759,7 @@ function registerMeetingUploadTools(server, supabase, context) {
       throw new Error(error.message);
     return data;
   }, { write: true, destructive: false, idempotent: true });
-  register("manage_meeting_attachment_upload", "Admin upload transfer/reconciliation/cleanup. action=transfer_chunk accepts id, exact byte offset and data_base64 of 1–262144 original bytes (maximum 349528 base64 characters). Server forwards caller auth internally and owns HEAD/TUS state; never supply an OAuth token or arbitrary URL. Exact replay is unchanged; changed chunk bytes conflict. transfer_status returns committed/storage offsets and pending-chunk bounds; retry the exact pending chunk after uncertainty. A lost creation Location returns creation_uncertain without another POST; operator reconciliation is required. Transfer is bound to its initiating admin. action=status retains session/checksum/stored-object metadata. action=cancel records a durable cancelled receipt then removes staged bytes; terminate saved TUS URLs first and repeat cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.", { action: z13.enum(["status", "cancel", "list_cleanup", "transfer_chunk", "transfer_status"]), id: uuid5.optional(), offset: z13.number().int().min(0).default(0), data_base64: z13.string().min(4).max(MCP_UPLOAD_BASE64_MAX).optional() }, async ({ action, id, offset, data_base64 }) => {
+  register("manage_meeting_attachment_upload", "Admin upload transfer/reconciliation/cleanup. action=transfer_chunk accepts id, exact byte offset and data_base64 of 1–262144 original bytes (maximum 349528 base64 characters). Server forwards caller auth internally and owns HEAD/TUS state; never supply an OAuth token or arbitrary URL. Exact replay is unchanged; changed chunk bytes conflict. transfer_status returns committed/storage offsets and pending-chunk bounds; retry the exact pending chunk after uncertainty. A lost creation Location returns creation_uncertain without another POST; operator reconciliation is required. Confirmed pre-creation JWT expiry returns authentication_required only if its durable intent is safely cleared; refresh the connection and retry the same session. Transfer is bound to its initiating admin. action=status retains session/checksum/stored-object metadata. action=cancel records a durable cancelled receipt and removes any completed staged object; it does not terminate partial TUS resources or revoke issued capabilities. Private partial bytes expire in Storage, and in-flight writes may require repeated cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.", { action: z13.enum(["status", "cancel", "list_cleanup", "transfer_chunk", "transfer_status"]), id: uuid5.optional(), offset: z13.number().int().min(0).default(0), data_base64: z13.string().min(4).max(MCP_UPLOAD_BASE64_MAX).optional() }, async ({ action, id, offset, data_base64 }) => {
     await ensureAdmin();
     if (action === "list_cleanup") {
       const { data, error } = await supabase.from("meeting_upload_sessions").select("*").neq("state", "complete").or(`state.eq.cancelled,expires_at.lt.${new Date().toISOString()}`).order("id").range(offset, offset + 99);

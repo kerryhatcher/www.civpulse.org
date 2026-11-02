@@ -108,9 +108,12 @@ Concurrent finalization and retry after a lost receipt return the same attachmen
 `get_meeting_attachment_url` expose the completed file through existing visibility.
 Pending bytes are admin-only, and public archive publication stays explicit/separate.
 
-Cancel unfinished sessions with `manage_meeting_attachment_upload (action=cancel)`, terminating
-any saved TUS URL first. Cancellation records a durable receipt and removes a
-completed staged object; completed canonical attachments cannot be cancelled.
+Cancel unfinished sessions with `manage_meeting_attachment_upload (action=cancel)`.
+Cancellation records a durable receipt and removes any completed staged object;
+it does not terminate partial TUS resources or revoke issued capabilities. Private
+partial bytes remain until Storage expiration. An in-flight PATCH can still finish
+an object, so repeated explicit cleanup may be required. Completed canonical
+attachments cannot be cancelled.
 `manage_meeting_attachment_upload (action=list_cleanup)` pages expired/cancelled receipts for explicit cleanup.
 Already-issued Storage tokens/TUS URLs cannot be revoked by the database state
 change. Repeat cleanup after those capabilities expire (up to 24 hours); partial
@@ -158,6 +161,13 @@ also stops byte forwarding. Leases expire after two minutes if the MCP request i
 interrupted; retry once the lease has expired. Storage partial resources/capabilities
 retain their existing expiration behavior, and cancellation still needs the existing
 explicit cleanup/reconciliation discipline. No archive publication is automatic.
+
+A narrowly confirmed pre-creation JWT-expiry rejection can return
+`authentication_required` after safely clearing its empty creation intent. Refresh
+the connection and retry the same session/chunk. Other rejection shapes, lost POST
+receipts, missing Locations, and failure to persist the reset remain
+`creation_uncertain`; do not blindly repeat creation. Completed direct-TUS sessions
+report `complete` with the final offset/attachment UUID even without relay state.
 
 Supabase's direct-client example uses 6 MiB chunks. The MCP relay deliberately uses
 smaller protocol PATCHes to stay below its transport envelope; the upstream TUS S3

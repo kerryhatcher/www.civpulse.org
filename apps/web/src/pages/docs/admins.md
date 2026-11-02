@@ -732,7 +732,12 @@ chunk at its original offset; the server skips its accepted prefix. A different
 chunk at that offset conflicts. A transfer is bound to its initiating admin.
 Wait out a busy two-minute lease before retrying. `creation_uncertain` means a
 Storage creation receipt is missing: retain the session for operator reconciliation,
-not a new source-key workaround. Finalize with the existing session ID and verify
+not a new source-key workaround. `authentication_required` means a confirmed
+pre-creation JWT-expiry rejection was safely reset: refresh the connection and
+retry the same session/chunk. Failed resets still require reconciliation.
+Cancellation removes completed staged objects but does not terminate private
+partial TUS resources or revoke capabilities; repeat explicit cleanup after expiry
+if an in-flight write finishes. Finalize with the existing session ID and verify
 the downloaded original's SHA-256. Existing meeting visibility and separate public
 archive publication remain unchanged. This release still needs the hosted connector
 acceptance check described in issue #60; local success alone does not close it.
