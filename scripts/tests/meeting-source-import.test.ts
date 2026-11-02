@@ -1,6 +1,6 @@
 import {expect,test} from 'bun:test';
 import {parseSimbliMinutes} from '../../apps/mcp/src/simbli-minutes';
-import {expandCompact} from '../../apps/mcp/src/meeting-source-import';
+import {expandCompact,registerMeetingSourceImport} from '../../apps/mcp/src/meeting-source-import';
 export const envelope=(items:any[])=>JSON.stringify([{document:{role:'Minutes',source_url:'https://example.test/minutes'},public_content:{LstItemMinutes:items}}]);
 export const syntheticMinutes=()=>envelope([
  {EncrId:'public-item-a',Title:'I. Example agenda',MeetingOnlineVotings:[{Minutes:'Motion to approve A.<br>Motion made by: Voter A<br>Voting: Voter A: Yes<br>Motion to approve B.<br>Motion made by: Voter A<br>Voting: Voter A: No',VotingHTML:[null,null,'']}]},
@@ -12,6 +12,34 @@ test('real envelope shapes: multiple text rounds and HTML named ballots, with tr
  expect(()=>parseSimbliMinutes('arbitrary prose')).toThrow('Unsupported');
  expect(()=>parseSimbliMinutes(syntheticMinutes().replace('No','Maybe'))).not.toThrow(); // unsupported block is reported, never normalized
  const escaped=parseSimbliMinutes(envelope([{EncrId:'x',Title:'Agenda',MeetingOnlineVotings:[{Minutes:'<script>Voting: Secret: Yes</script>Motion voted on with no roll call'}]}]));expect(escaped.motions).toEqual([]);expect(escaped.warnings).toHaveLength(1);
+});
+test('checked attachment reconciliation compares exact ballot identities and evidence, not equal counts',async()=>{
+ const [meeting,attachment,a,b,c,vote]=Array.from({length:6},(_,i)=>`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`);
+ const text=envelope([{EncrId:'item',Title:'Motion',MeetingOnlineVotings:[{Minutes:'Motion to approve.<br>Voting: Voter A: Yes<br>Voter B: No'}]}]);
+ const bytes=new TextEncoder().encode(text),sha=new Bun.CryptoHasher('sha256').update(bytes).digest('hex'),parsed=parseSimbliMinutes(text).motions[0];
+ const provenance={source_url:'https://example.test/minutes',document_sha256:sha},motionKey='existing-motion';
+ const expected=[a,b].map((person_id,i)=>({provider:'fixture',kind:'choice',vote_id:vote,person_id,source_key:`${motionKey}:person:${person_id}`,data:{choice:parsed.ballots[i].choice,original_text:parsed.ballots[i].text}}));
+ let ballots:any[]=[],imports=0,run:any;
+ const server:any={registerTool:(_name:any,_config:any,handler:any)=>{run=handler;}};
+ const api:any={rpc:async(name:string)=>{
+  if(name==='is_admin')return {data:true,error:null};
+  if(name==='get_meeting')return {data:{status:'ok',attachments:[{id:attachment,meeting_id:meeting,mime_type:'text/plain',size_bytes:bytes.length,storage_path:meeting+'/fixture.txt',sha256:sha}],sources:[{provider:'fixture',kind:'vote',source_key:motionKey,vote_id:vote,data:{subject:parsed.subject,description:parsed.description},provenance},...ballots]},error:null};
+  imports++;throw Error('Reconciliation must not write');
+ },storage:{from:()=>({download:async()=>({data:new Blob([bytes]),error:null})})}};
+ registerMeetingSourceImport(server,api);
+ const input={meeting_id:meeting,provider:'fixture',provenance,dry_run:true,reconcile_only:true,motions:[],attendance:[],attachment:{id:attachment,adapter:'simbli-minutes-v1',people:[{name:'Voter A',person_id:a},{name:'Voter B',person_id:b}],source_keys:{[parsed.locator]:motionKey}}};
+ const check=async(rows:any[])=>{ballots=rows;const result=await run(input);expect(result.isError).not.toBe(true);return JSON.parse(result.content[0].text).reconciliation[0];};
+ const wrong={...expected[1],person_id:c,source_key:`${motionKey}:person:${c}`,data:{choice:'yes',original_text:'Voter C: Yes'}};
+ const mismatched=await check([expected[0],wrong]);
+ expect(mismatched.status).toBe('differs');expect(mismatched.stored_ballots).toBe(mismatched.document_ballots);
+ expect(mismatched.missing_ballots).toEqual([{person_id:b,source_key:expected[1].source_key,source_name:'Voter B',choice:'no',original_text:'Voter B: No'}]);
+ expect(mismatched.unexpected_ballots).toEqual([{person_id:c,source_key:wrong.source_key,choice:'yes',original_text:'Voter C: Yes'}]);expect(mismatched.differences).toHaveLength(2);
+ expect((await check([expected[0]])).status).toBe('partial');
+ expect((await check([...expected,wrong])).status).toBe('differs');
+ expect((await check([expected[0],{...expected[1],source_key:'different-immutable-key'}])).status).toBe('differs');
+ const changed=await check([expected[0],{...expected[1],data:{choice:'yes',original_text:'Voter B: Yes'}}]);expect(changed.status).toBe('differs');
+ expect(changed.ballot_differences[0]).toMatchObject({person_id:b,source_key:expected[1].source_key,expected:{choice:'no',original_text:'Voter B: No'},stored:{choice:'yes',original_text:'Voter B: Yes'}});
+ const complete=await check([...expected].reverse());expect(complete.status).toBe('complete');expect(complete.differences).toEqual([]);expect(imports).toBe(0);
 });
 test('compact expansion stamps one provenance and retains explicit IDs/wording at 150 observations',()=>{
  const person='00000000-0000-4000-8000-000000000001',provenance={source_url:'https://example.test/minutes',document_sha256:'a'.repeat(64)};

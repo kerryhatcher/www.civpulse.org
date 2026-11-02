@@ -2602,17 +2602,36 @@ function registerMeetingSourceImport(server, supabase) {
         const differences = stored ? ["subject", "description"].filter((f) => stored.data?.[f] !== motions[i][f]) : [];
         if (stored && stored.provenance?.document_sha256 !== hash)
           differences.push("document_sha256");
-        for (const b of motions[i].ballots) {
-          const prior = storedBallots.find((s) => s.person_id === b.person_id);
-          if (prior && (prior.data?.choice !== b.choice || prior.data?.original_text !== b.text))
-            differences.push("ballot:" + b.person_id);
+        const expectedBallots = motions[i].ballots.map((b, j) => ({ person_id: b.person_id, source_key: b.source_key ?? `${motions[i].source_key}:person:${b.person_id}`, source_name: m.ballots[j].name, choice: b.choice, original_text: b.text }));
+        const matched = new Set, missingBallots = [], ballotDifferences = [];
+        for (const b of expectedBallots) {
+          const index = storedBallots.findIndex((s, j) => !matched.has(j) && s.person_id === b.person_id && s.source_key === b.source_key);
+          if (index < 0) {
+            missingBallots.push(b);
+            continue;
+          }
+          matched.add(index);
+          const prior = storedBallots[index];
+          if (prior.data?.choice !== b.choice || prior.data?.original_text !== b.original_text)
+            ballotDifferences.push({ person_id: b.person_id, source_key: b.source_key, source_name: b.source_name, expected: { choice: b.choice, original_text: b.original_text }, stored: { choice: prior.data?.choice, original_text: prior.data?.original_text } });
         }
+        const unexpectedBallots = storedBallots.filter((_, j) => !matched.has(j)).map((s) => ({ person_id: s.person_id, source_key: s.source_key, choice: s.data?.choice, original_text: s.data?.original_text }));
+        for (const b of missingBallots)
+          differences.push("missing_ballot:" + b.source_key);
+        for (const b of unexpectedBallots)
+          differences.push("unexpected_ballot:" + b.source_key);
+        for (const b of ballotDifferences)
+          differences.push("ballot:" + b.source_key);
+        const hasConflict = differences.some((d) => !d.startsWith("missing_ballot:"));
         return {
           locator: m.locator,
           source_key: motions[i].source_key,
           vote_id: stored?.vote_id ?? null,
-          status: !stored ? "missing" : differences.length ? "differs" : storedBallots.length < m.ballots.length ? "partial" : "complete",
+          status: !stored ? "missing" : hasConflict ? "differs" : missingBallots.length ? "partial" : "complete",
           differences,
+          missing_ballots: missingBallots,
+          unexpected_ballots: unexpectedBallots,
+          ballot_differences: ballotDifferences,
           stored_ballots: storedBallots.length,
           document_ballots: m.ballots.length
         };

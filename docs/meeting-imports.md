@@ -336,7 +336,14 @@ source-reported votes do not establish formal minutes approval.
 
 Start with `reconcile_only=true`. It returns document counts, exact locators,
 existing imported motion source keys/IDs and ballot counts, plus missing identity
-bindings/warnings. An already-imported provider requires `attachment.source_keys`
+bindings/warnings. Reconciliation matches each ballot's person UUID **and** immutable
+source key, not counts alone. `missing_ballots` retains exact source names, expected
+choices/text and keys; `unexpected_ballots` retains the stored person/key/choice/text;
+`ballot_differences` shows expected and stored wording/choices for matched identities.
+Only an exact identity/evidence match is `complete`; missing-only ballots are
+`partial`, and unexpected identities or changed evidence are `differs`, even when
+counts are equal. These reports do not delete or overwrite imported observations.
+An already-imported provider requires `attachment.source_keys`
 for **every** parsed motion locator before writing. Map those locators to existing
 immutable keys; use the optional `<motion locator>:<exact source name>` binding for
 existing ballot keys and `attendance:<person UUID>` for attendance keys. A genuinely

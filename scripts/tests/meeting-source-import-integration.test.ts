@@ -4,10 +4,11 @@ import {Client} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist
 import {StreamableHTTPClientTransport} from '../../apps/mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js';
 import {handleRequest} from '../../apps/mcp/src/index';
 import {syntheticMinutes} from './meeting-source-import.test';
+import {parseSimbliMinutes} from '../../apps/mcp/src/simbli-minutes';
 test.skipIf(!process.env.MEETING_SOURCE_LOCAL_STATUS)('real isolated Auth→MCP→Storage→partial immutable import, capacity and visibility',async()=>{
  const s=await Bun.file(process.env.MEETING_SOURCE_LOCAL_STATUS!).json();if(s.API_URL!=='http://127.0.0.1:54341')throw Error('Isolated API 54341 only');
  const db=new SQL('postgresql://postgres:postgres@127.0.0.1:54342/postgres'),setup=createClient(s.API_URL,s.SERVICE_ROLE_KEY,{auth:{persistSession:false}}),users:string[]=[],apis:any[]=[],clients:Client[]=[];
- const suffix=crypto.randomUUID();let org='',cal='',meeting='',privateMeeting='',person='',attachment='',path='',maxRequest=0;
+ const suffix=crypto.randomUUID();let org='',cal='',meeting='',privateMeeting='',person='',otherPerson='',attachment='',path='',maxRequest=0;
  const call=async(c:Client,args:any)=>{const r:any=await c.callTool({name:'import_meeting_source',arguments:args});if(r.isError)throw Error(r.content[0].text);return JSON.parse(r.content[0].text);};
  try{
  for(const role of ['admin','user']){
@@ -20,6 +21,7 @@ test.skipIf(!process.env.MEETING_SOURCE_LOCAL_STATUS)('real isolated Auth→MCP�
  org=(await db`insert into public.organizations(name,slug) values('Synthetic source QA',${'source-'+suffix}) returning id`)[0].id;
  cal=(await db`insert into public.calendars(organization_id,name,slug) values(${org},'Synthetic source calendar',${'source-'+suffix}) returning id`)[0].id;
  person=(await db`insert into public.people(full_name,slug) values('Synthetic source voter',${'source-'+suffix}) returning id`)[0].id;
+ otherPerson=(await db`insert into public.people(full_name,slug) values('Synthetic unexpected voter',${'unexpected-'+suffix}) returning id`)[0].id;
  meeting=(await db`insert into public.events(calendar_id,title,starts_at,is_meeting) values(${cal},'Synthetic source meeting','2026-01-01T18:00Z',true) returning id`)[0].id;
  privateMeeting=(await db`insert into public.events(calendar_id,title,starts_at,is_meeting,visibility) values(${cal},'Private synthetic source meeting','2026-01-01T18:00Z',true,'private') returning id`)[0].id;
  const provenance={source_url:'https://example.test/minutes',document_sha256:'a'.repeat(64)};
@@ -47,10 +49,20 @@ test.skipIf(!process.env.MEETING_SOURCE_LOCAL_STATUS)('real isolated Auth→MCP�
  expect(await call(clients[0],{...attached,dry_run:false})).toMatchObject({created:7,dry_run:false,rejected:0});
  expect((await call(clients[0],attached)).status).toBe('review_required');
  const evidence=await db`select payload from public.meeting_record_sources where meeting_id=${privateMeeting}`;expect(evidence).toHaveLength(7);expect(evidence.every(r=>r.payload.provenance.document_sha256===sha)).toBe(true);
+ const parsed=parseSimbliMinutes(text),wrongMotions=parsed.motions.map((m,i)=>({source_key:'wrong-motion-'+i,locator:m.locator,subject:m.subject,description:m.description,ballots:[{person_id:otherPerson,choice:'yes',text:'Voter C: Yes'}]}));
+ expect(await call(clients[0],{meeting_id:privateMeeting,provider:'wrong-identity-fixture',provenance:attached.provenance,attendance:[{source_key:'wrong-attendance',locator:parsed.motions[0].locator,person_id:otherPerson,status:'observed',evidence:'Voter C: Yes'}],motions:wrongMotions,dry_run:false})).toMatchObject({created:7,rejected:0});
+ const before=await db`select payload from public.meeting_record_sources where meeting_id=${privateMeeting} and provider='wrong-identity-fixture' order by source_key`;
+ const mismatch=await call(clients[0],{...attached,provider:'wrong-identity-fixture',reconcile_only:true,attachment:{...attached.attachment,source_keys:Object.fromEntries(parsed.motions.map((m,i)=>[m.locator,wrongMotions[i].source_key]))}});
+ for(const [i,row] of mismatch.reconciliation.entries()){
+  expect(row.status).toBe('differs');expect(row.stored_ballots).toBe(row.document_ballots);
+  expect(row.missing_ballots[0]).toMatchObject({person_id:person,source_name:'Voter A',choice:parsed.motions[i].ballots[0].choice,source_key:wrongMotions[i].source_key+':person:'+person});
+  expect(row.unexpected_ballots[0]).toMatchObject({person_id:otherPerson,choice:'yes',original_text:'Voter C: Yes',source_key:wrongMotions[i].source_key+':person:'+otherPerson});
+ }
+ expect(await db`select payload from public.meeting_record_sources where meeting_id=${privateMeeting} and provider='wrong-identity-fixture' order by source_key`).toEqual(before);
  console.log(JSON.stringify({expanded_observations:150,max_mcp_request_bytes:maxRequest,maximum_bytes:2097152}));
  }finally{
  for(const c of clients)await c.close();if(path)await setup.storage.from('meeting-attachments').remove([path]);
- if(cal)await db`delete from public.events where calendar_id=${cal}`;if(cal)await db`delete from public.calendars where id=${cal}`;if(person)await db`delete from public.people where id=${person}`;if(org)await db`delete from public.organizations where id=${org}`;
+ if(cal)await db`delete from public.events where calendar_id=${cal}`;if(cal)await db`delete from public.calendars where id=${cal}`;if(person)await db`delete from public.people where id=${person}`;if(otherPerson)await db`delete from public.people where id=${otherPerson}`;if(org)await db`delete from public.organizations where id=${org}`;
  for(const id of users)await setup.auth.admin.deleteUser(id);await db.close();
  }
 },60000);

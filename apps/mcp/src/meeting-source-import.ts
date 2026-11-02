@@ -54,10 +54,23 @@ export function registerMeetingSourceImport(server:McpServer,supabase:SupabaseCl
  const storedBallots=stored?sources.filter((s:any)=>s.kind==='choice'&&s.vote_id===stored.vote_id):[];
  const differences=stored?['subject','description'].filter(f=>stored.data?.[f]!==motions[i][f as 'subject'|'description']):[];
  if(stored&&stored.provenance?.document_sha256!==hash)differences.push('document_sha256');
- for(const b of motions[i].ballots){const prior=storedBallots.find((s:any)=>s.person_id===b.person_id);if(prior&&(prior.data?.choice!==b.choice||prior.data?.original_text!==b.text))differences.push('ballot:'+b.person_id);}
+ const expectedBallots=motions[i].ballots.map((b,j)=>({person_id:b.person_id,source_key:b.source_key??`${motions[i].source_key}:person:${b.person_id}`,source_name:m.ballots[j].name,choice:b.choice,original_text:b.text}));
+ const matched=new Set<number>(),missingBallots:any[]=[],ballotDifferences:any[]=[];
+ for(const b of expectedBallots){
+  const index=storedBallots.findIndex((s:any,j:number)=>!matched.has(j)&&s.person_id===b.person_id&&s.source_key===b.source_key);
+  if(index<0){missingBallots.push(b);continue;}
+  matched.add(index);const prior=storedBallots[index];
+  if(prior.data?.choice!==b.choice||prior.data?.original_text!==b.original_text)ballotDifferences.push({person_id:b.person_id,source_key:b.source_key,source_name:b.source_name,expected:{choice:b.choice,original_text:b.original_text},stored:{choice:prior.data?.choice,original_text:prior.data?.original_text}});
+ }
+ const unexpectedBallots=storedBallots.filter((_:any,j:number)=>!matched.has(j)).map((s:any)=>({person_id:s.person_id,source_key:s.source_key,choice:s.data?.choice,original_text:s.data?.original_text}));
+ for(const b of missingBallots)differences.push('missing_ballot:'+b.source_key);
+ for(const b of unexpectedBallots)differences.push('unexpected_ballot:'+b.source_key);
+ for(const b of ballotDifferences)differences.push('ballot:'+b.source_key);
+ const hasConflict=differences.some(d=>!d.startsWith('missing_ballot:'));
  return {locator:m.locator,source_key:motions[i].source_key,vote_id:stored?.vote_id??null,
- status:!stored?'missing':differences.length?'differs':storedBallots.length<m.ballots.length?'partial':'complete',
- differences,stored_ballots:storedBallots.length,document_ballots:m.ballots.length};
+ status:!stored?'missing':hasConflict?'differs':missingBallots.length?'partial':'complete',
+ differences,missing_ballots:missingBallots,unexpected_ballots:unexpectedBallots,ballot_differences:ballotDifferences,
+ stored_ballots:storedBallots.length,document_ballots:m.ballots.length};
  });
  const unboundExisting=sources.some((s:any)=>s.kind==='vote')&&parsed.motions.some(m=>!input.attachment!.source_keys?.[m.locator]);
  if(input.reconcile_only||missing.length||unboundExisting||warnings.length)return {status:'review_required',document,missing_people:missing,warnings,reconciliation,existing_motions:sources.filter((s:any)=>s.kind==='vote').map((s:any)=>({source_key:s.source_key,vote_id:s.vote_id,subject:s.data?.subject,ballots:sources.filter((b:any)=>b.kind==='choice'&&b.vote_id===s.vote_id).length})),reason:unboundExisting?'Bind every document motion locator to its existing source key before importing into an already imported meeting':undefined};
