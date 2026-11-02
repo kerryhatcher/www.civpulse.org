@@ -624,7 +624,7 @@ matches. The public browse projection includes only publicly visible targets.
 ## Cited meeting outcomes (compact catalog)
 
 After deployment, `/mcp/v2` advertises `set_meeting_vote_outcome`; compatibility
-`/mcp` remains at 128 tools. The compact catalog has 72 tools. The new admin tool
+`/mcp` remains at 128 tools. The compact catalog has 73 tools. The new admin tool
 requires vote UUID, supported outcome, HTTPS source URL, document SHA-256 and
 locator. It appends evidence, preserves the immutable import, and returns
 created/unchanged/conflict. Inspect the current meeting before a correction;
@@ -639,7 +639,7 @@ the main-first migration/MCP release. This source change does not deploy or back
 
 `manage_meeting_attachment_upload` now supports `transfer_chunk` and
 `transfer_status` within the existing tool. Compatibility remains 128 tools;
-compact remains 72. Begin a stable session, send original-byte chunks of at most
+compact now has 73. Begin a stable session, send original-byte chunks of at most
 256 KiB as canonical base64 with their byte offsets, reconcile status/pending chunks,
 and finalize/download-verify through existing tools. Do not extract or supply a
 general OAuth token, service key, arbitrary Storage URL or headers. The verified
@@ -647,3 +647,17 @@ request token is passed only in internal server context; it is not a tool argume
 or result. Other admins cannot take over an owner-bound transfer. See
 [meeting-imports.md](./meeting-imports.md#authenticated-mcp-byte-transfer) for
 creation uncertainty, lease retry, exact replay and hosted release checks.
+
+### Compact meeting source imports
+
+The compact catalog adds `import_meeting_source` after main-first migration/MCP
+release; legacy discovery stays at 128 tools. Use shared top-level provenance and
+nested motion ballots, or an existing attachment ID with `simbli-minutes-v1` and
+explicit exact source-name/person UUID bindings. Default dry runs return counts
+and bounded row errors. `reconcile_only` compares parsed motion locators with
+stored immutable sources; previously imported meetings require explicit existing
+source-key bindings. The server checks original attachment SHA-256 under caller
+Storage auth, not an arbitrary remote fetch. Accepted observations commit together
+with rejected rows reported; dry runs roll back all. See [meeting import details](./meeting-imports.md#compact-and-attached-simbli-imports-issue-140).
+No general bearer, service credential or signed download URL is needed in the tool
+payload. Actual hosted import acceptance remains open under #140.

@@ -1871,3 +1871,17 @@ through main before applying production SQL or deploying matching MCP code. Shar
 local 54322 is not used; tests run on isolated 54341/54342. See the
 [transfer contract](./meeting-imports.md#authenticated-mcp-byte-transfer), including
 the honest uncertain-creation limitation and pending hosted acceptance.
+
+### Compact meeting observation imports
+
+Append-only migration `20261125002300` adds an admin-only, empty-search-path wrapper
+around the existing immutable `import_meeting_records` function. It locks the
+meeting, processes at most 2,000 expanded observations / 2 MiB through the original
+per-row authority, and commits accepted observations together while returning row
+errors for rejected ones. Dry runs roll back all writes. This does not relax RLS,
+change source payloads, overwrite canonical rows, add tables, or bypass rebuild
+tracking: existing insertion triggers still run. Anonymous execution is revoked;
+ordinary authenticated users fail `is_admin()`. Apply production SQL only after
+main-first release. Tests use isolated 54341/54342; shared 54322 remains untouched.
+See [the compact/attachment contract](./meeting-imports.md#compact-and-attached-simbli-imports-issue-140)
+for checked Storage downloads, exact identity/key mapping and partial semantics.

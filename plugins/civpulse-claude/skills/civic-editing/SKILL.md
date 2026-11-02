@@ -162,3 +162,14 @@ reset cannot persist, creation_uncertain still requires operator reconciliation.
 Finalize the same session and verify downloaded SHA-256. This does not publish an
 archive copy. Hosted issue #60 acceptance with captured originals remains pending
 until main-first migration/deployment and actual connected-agent verification.
+
+For compact/attached meeting imports, use `import_meeting_source` on `/mcp/v2`
+after deployment. Start with `reconcile_only=true`, exact source-name/person UUID
+bindings and a locally verified original SHA-256. The supported adapter is
+`simbli-minutes-v1` for the labeled agenda/minutes TXT/JSON capture envelope, not
+arbitrary PDFs or live URLs. Existing imported meetings require explicit motion,
+ballot and attendance source-key reconciliation; never create replacement keys to
+bypass immutable conflicts. Default dry run rolls back all observations. A commit
+accepts valid observations in one transaction while reporting rejected rows, so
+inspect counts/errors even after success. No inferred ballots/outcomes, roster-based
+presence, general token extraction, automatic backfill or automatic publication.

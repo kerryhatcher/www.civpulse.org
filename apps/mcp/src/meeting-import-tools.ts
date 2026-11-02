@@ -2,6 +2,7 @@ import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createToolkit } from './toolkit';
+import {registerMeetingSourceImport} from './meeting-source-import';
 
 const uuid = z.string().uuid();
 const key = z.string().min(1).max(500);
@@ -22,6 +23,7 @@ const observation = z.discriminatedUnion('kind', [
 
 export function registerMeetingImportTools(server: McpServer, supabase: SupabaseClient, citedOutcomes = true) {
   const { register, readRpc } = createToolkit(server, supabase);
+  if(citedOutcomes)registerMeetingSourceImport(server,supabase);
   register('import_meeting_records', 'Validate or atomically import up to 100 sourced attendance, motion rounds and individual choices (2 MiB, admin only). Default dry_run=true. Resolve existing meeting/person UUIDs; order attendance then votes then choices. Each provider/source_key is immutable: exact replay returns canonical IDs unchanged; changed snapshots or editorial drift reject the entire batch. Omission never deletes. Use observed for presence supported only at a ballot, unknown for roster-only evidence, and choice unknown for Vote Not Recorded. Never infer ballots or outcomes from totals, unanimity or sponsorship. Preserve agenda context separately from actual motion text. See get_meeting for reconciliation.',
     { meeting_id: uuid, provider: z.string().min(1).max(100), records: z.array(observation).min(1).max(100), dry_run: z.boolean().default(true) },
     async ({ meeting_id, provider, records, dry_run }) => {
