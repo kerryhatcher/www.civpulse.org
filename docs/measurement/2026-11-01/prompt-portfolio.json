@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "language": "English",
+  "scope": "Unbranded informational civic questions; targets are for observer analysis, never inserted into the prompts.",
+  "prompts": [
+    {
+      "id": "P1",
+      "prompt": "What does the Macon-Bibb County Board of Elections do, and where can I find its official contact information? Cite sources.",
+      "target_pages": [
+        "https://www.civpulse.org/counties/bibb/elections/",
+        "https://www.civpulse.org/orgs/bibb-county-board-of-elections/"
+      ],
+      "review_rubric": "Check board role, official contact page, address, phone, hours and dates against current official sources; flag unsupported detail."
+    },
+    {
+      "id": "P2",
+      "prompt": "What is the difference between the Macon-Bibb County Board of Tax Assessors and Tax Commissioner? Cite official sources.",
+      "target_pages": [
+        "https://www.civpulse.org/counties/bibb/property-taxes/"
+      ],
+      "review_rubric": "Distinguish valuation/assessment from billing/collection; no personalized tax advice or invented deadlines."
+    },
+    {
+      "id": "P3",
+      "prompt": "What is the difference between apportionment and redistricting, and where can I find Macon-Bibb commission district maps? Cite sources.",
+      "target_pages": [
+        "https://www.civpulse.org/counties/bibb/districting/",
+        "https://www.civpulse.org/maps/commissioners/"
+      ],
+      "review_rubric": "Distinguish seat allocation from boundary drawing; official current maps, scope/date and uncertainty; no address-based district guess."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+[
+  {
+    "run_id": "chatgpt-P1-1",
+    "prompt_id": "P1",
+    "exact_prompt": "What does the Macon-Bibb County Board of Elections do, and where can I find its official contact information? Cite sources.",
+    "run_date": "2026-11-01",
+    "repeat": 1,
+    "platform": "ChatGPT web",
+    "model_label": "Instant",
+    "model_version": null,
+    "mode": "Temporary chat, Unpersonalized (UI explicitly says it ignores memory, plugins and custom instructions)",
+    "status": "render_error_at_observation",
+    "visible_message": "This response couldn’t load",
+    "attempts": 1,
+    "completed_answers": 0,
+    "cited_urls": null,
+    "factual_accuracy": null,
+    "mention": null,
+    "citation": null,
+    "recommendation": null,
+    "referral": null,
+    "note": "Failed observed rendering, not proof of a permanent platform failure or an answer with zero citations."
+  },
+  {
+    "run_id": "chatgpt-P1-2",
+    "prompt_id": "P1",
+    "exact_prompt": "What does the Macon-Bibb County Board of Elections do, and where can I find its official contact information? Cite sources.",
+    "run_date": "2026-11-01",
+    "repeat": 2,
+    "platform": "ChatGPT web",
+    "model_label": "Instant",
+    "model_version": null,
+    "mode": "Fresh Temporary chat, Unpersonalized",
+    "status": "completed_answer",
+    "attempts": 1,
+    "completed_answers": 1,
+    "resolved_cited_urls": [
+      "https://www.maconbibb.us/board-of-elections/?utm_source=chatgpt.com",
+      "https://www.maconbibb.us/board-of-elections/contact-us/?utm_source=chatgpt.com",
+      "https://mvp.sos.ga.gov/s/county-election-offices?utm_source=chatgpt.com"
+    ],
+    "additional_citation_labels": [
+      "Macon-Bibb County Government",
+      "PeachTracker — What Does the Macon-Bibb Board of Elections Do?"
+    ],
+    "citation_audit_complete": false,
+    "citation_gap": "Additional citation chips were visible; the Open PeachTracker control did not resolve a URL in the observed UI. Only resolved links are enumerated, not a full citation census.",
+    "answer_summary": "Described registration, election administration, early/absentee voting, counting/certification and public information duties; supplied agency address, phone, hours, email and official links.",
+    "factual_accuracy": {
+      "verdict": "not_auditable",
+      "answer_excerpt": null,
+      "supported_checked_items": null,
+      "checked_items": null,
+      "planned_contact_checks": [
+        "Official website URL",
+        "Office street address and suite",
+        "Office phone",
+        "Weekday office hours"
+      ],
+      "missing_evidence": [
+        "Evaluated answer excerpt or explicit claim values",
+        "Official comparison values or excerpts",
+        "Claim-level source observation dates"
+      ],
+      "note": "The initial selected-check score was withdrawn: retained categories and links alone cannot reproduce the comparison. Answer accuracy remains unknown; current source values must not be substituted for the missing observed answer."
+    },
+    "civpulse_visible_name_mention": false,
+    "civpulse_resolved_citation_count": 0,
+    "civpulse_citation_presence": null,
+    "civpulse_recommendation": false,
+    "referral": null,
+    "limits": [
+      "One completed answer; no global citation/recommendation/accuracy rate.",
+      "Logged-in browser; selected unpersonalized mode; region/version not exposed.",
+      "Browser run timestamps captured at date precision only; no account/chat identifiers retained."
+    ],
+    "answer_summary_note": "Observer paraphrase only; not a retained answer excerpt or evidence for scoring individual claims."
+  },
+  {
+    "run_id": "copilot-access-1",
+    "platform": "Microsoft Copilot web",
+    "run_date": "2026-11-01",
+    "status": "not_run_sign_in_required",
+    "observed_url": "https://copilot.com/",
+    "visible_message": "Sign into Copilot",
+    "attempts": 0,
+    "completed_answers": 0,
+    "exact_prompt": null,
+    "cited_urls": null,
+    "factual_accuracy": null,
+    "note": "No account created, login changed, subscription purchased or prompt submitted."
+  }
+]
