@@ -7,18 +7,24 @@ const uuid=z.string().uuid(),key=z.string().min(1).max(500);
 const citation=z.object({source_url:z.string().url().startsWith('https://').max(2000),document_sha256:z.string().regex(/^[a-f0-9]{64}$/)}).strict();
 const ballot=z.object({person_id:uuid,choice:z.enum(['yes','no','abstain','recused','unknown']),text:z.string().min(1).max(2000),source_key:key.optional()}).strict();
 const motion=z.object({source_key:key,locator:z.string().min(1).max(2000),subject:z.string().min(1).max(300),description:z.string().max(100000).optional(),ballots:z.array(ballot).max(100)}).strict();
+// Expanded observations contain string values and nested objects/arrays. Match
+// PostgreSQL jsonb::text delimiter spacing; key order does not change byte size.
+export function expandedJsonbBytes(value:any):number {
+ const text=(v:any):string=>Array.isArray(v)?'['+v.map(text).join(', ')+']':v!==null&&typeof v==='object'?'{'+Object.entries(v).filter(([,x])=>x!==undefined).map(([k,x])=>JSON.stringify(k)+': '+text(x)).join(', ')+'}':JSON.stringify(v);
+ return new TextEncoder().encode(text(value)).length;
+}
 export function expandCompact(provenance:z.infer<typeof citation>,attendance:any[],motions:z.infer<typeof motion>[]) {
  const rows:any[]=[];
  for(const a of attendance)rows.push({kind:'attendance',source_key:a.source_key,provenance:{...provenance,locator:a.locator},data:{person_id:a.person_id,status:a.status,evidence:a.evidence}});
  for(const m of motions){rows.push({kind:'vote',source_key:m.source_key,provenance:{...provenance,locator:m.locator},data:{subject:m.subject,...(m.description!==undefined?{description:m.description}:{})}});
  for(const b of m.ballots)rows.push({kind:'choice',source_key:b.source_key??`${m.source_key}:person:${b.person_id}`,provenance:{...provenance,locator:m.locator},data:{person_id:b.person_id,vote_source_key:m.source_key,choice:b.choice,original_text:b.text}});}
- if(rows.length<1||rows.length>2000||new TextEncoder().encode(JSON.stringify(rows)).length>2*1024*1024)throw Error('Maximum 2000 expanded observations / 2 MiB');
+ if(rows.length<1||rows.length>2000||expandedJsonbBytes(rows)>2*1024*1024)throw Error('Maximum 2000 expanded observations / 2 MiB PostgreSQL JSONB text');
  if(new Set(rows.map(r=>r.source_key)).size!==rows.length)throw Error('Duplicate source keys');
  return rows;
 }
 export function registerMeetingSourceImport(server:McpServer,supabase:SupabaseClient){
  const {register}=createToolkit(server,supabase);
- register('import_meeting_source','Admin compact or checked-attachment import/reconciliation. Default dry run. Adapter simbli-minutes-v1 reads captured public agenda/minutes JSON text, both Voting and VotingHTML. Supply exact source-name→existing person UUID bindings, never fuzzy guesses. Attachment bytes are downloaded with caller auth and SHA-256 checked. No arbitrary URL fetch. Compact payload shares provenance once and nests named ballots; 150 observations fit one call. Rows are ordered partial observations in one transaction, NOT all-or-nothing: unchanged retry is a no-op, conflicts/errors are reported without immutable overwrite. Reconcile existing sources before import; do not invent new keys to bypass conflicts. A legacy imported meeting requires explicit existing source-key bindings. Does not infer outcomes or attendance from roster/totals. No automatic publication; rebuild public pages.',{
+ register('import_meeting_source','Admin compact or checked-attachment import/reconciliation. Default dry run. Adapter simbli-minutes-v1 reads captured public agenda/minutes JSON text, both Voting and VotingHTML. Supply exact source-name→existing person UUID bindings, never fuzzy guesses. Attachment bytes are downloaded with caller auth and SHA-256 checked. No arbitrary URL fetch. Compact payload shares provenance once and nests named ballots; at most 2000 expanded attendance/motion/ballot rows and 2 MiB of PostgreSQL JSONB text. A 150-observation fixture fits one call. Rows are ordered partial observations in one transaction, NOT all-or-nothing: unchanged inline retry is a no-op, conflicts/errors are reported without immutable overwrite. Reconcile existing sources before import; do not invent new keys to bypass conflicts. A checked-attachment import into a meeting with vote sources under the same provider requires bindings for every document motion locator, including identical retries; legacy ballot keys also need explicit bindings when different from generated keys. Inline reconcile_only returns an inventory, not a comparison verdict. Does not infer outcomes or attendance from roster/totals. No automatic publication; rebuild public pages.',{
  meeting_id:uuid,provider:z.string().min(1).max(100),dry_run:z.boolean().default(true),reconcile_only:z.boolean().default(false),
  provenance:citation,
  attachment:z.object({id:uuid,adapter:z.literal(SIMBLI_ADAPTER),people:z.array(z.object({name:z.string().min(1).max(300),person_id:uuid}).strict()).max(100),
@@ -82,8 +88,8 @@ export function registerMeetingSourceImport(server:McpServer,supabase:SupabaseCl
  attendance=[...observed].map(([person_id,evidence])=>({source_key:keyFor(`attendance:${person_id}`,`simbli:attendance:${person_id}`),person_id,status:'observed' as const,...evidence}));
  attendance.push(...[...absent].map(([person_id,evidence])=>({source_key:keyFor(`attendance:${person_id}`,`simbli:attendance:${person_id}`),person_id,status:'absent' as any,...evidence})));
  }
+ if(input.reconcile_only)return {status:'inventory_only',observations:attendance.length+motions.reduce((n,m)=>n+1+m.ballots.length,0),existing:sources.length,existing_sources:sources.map((s:any)=>({kind:s.kind,source_key:s.source_key,vote_id:s.vote_id,person_id:s.person_id})),comparison_performed:false};
  const rows=expandCompact(input.provenance,attendance,motions);
- if(input.reconcile_only)return {status:'reconciled',observations:rows.length,existing:sources.length};
  const {data,error:importError}=await supabase.rpc('import_meeting_records_compact',{p_meeting_id:input.meeting_id,p_provider:input.provider,p_records:rows,p_dry_run:input.dry_run});
  if(importError)throw Error(importError.message);
  return {...data,errors:(data.errors??[]).slice(0,25),errors_truncated:(data.errors?.length??0)>25,document,warnings};

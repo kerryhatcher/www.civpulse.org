@@ -345,18 +345,31 @@ Only an exact identity/evidence match is `complete`; missing-only ballots are
 counts are equal. These reports do not delete or overwrite imported observations.
 An already-imported provider requires `attachment.source_keys`
 for **every** parsed motion locator before writing. Map those locators to existing
-immutable keys; use the optional `<motion locator>:<exact source name>` binding for
-existing ballot keys and `attendance:<person UUID>` for attendance keys. A genuinely
+immutable keys; the `<motion locator>:<exact source name>` ballot binding is required
+when an existing ballot key differs from the generated key. Use
+`attendance:<person UUID>` for attendance keys. A genuinely
 missing motion needs a stable reviewed key. Never assign a fresh key to evade an
 existing observation conflict; changed descriptions remain a reported conflict,
-not a supersede operation. Uncertain responses are reconciled by repeating the
-same request; unchanged observations retain their canonical IDs.
+not a supersede operation. After a committed attachment import, an unbound identical
+request returns `review_required`, not unchanged counts. Recover an uncertain
+response by running `reconcile_only=true`, binding every motion locator and any
+different legacy ballot keys, then repeating the request. Inline retries retain
+their existing no-op behavior. Inline `reconcile_only` can inspect an empty payload
+and returns `inventory_only` with existing sources; it performs no comparison and
+does not certify equivalence. Unchanged observations retain their canonical IDs.
 
-Read-only validation on November 2, 2026 downloaded the existing private August 20
-and July 16 captures through the authorized connector. The adapter found **7
-motions / 49 named cast ballots** and **18 motions / 129 named cast ballots**,
-respectively, with no unparsed-motion warnings. Original capture bytes were kept
-outside the repository; no production import, SQL or attachment mutation occurred.
+The combined limit is 2,000 expanded attendance/motion/ballot rows and 2 MiB of
+PostgreSQL JSONB text, including delimiter spaces; individual array maxima do not
+override it. Attachment parsing checks both Minutes and VotingHTML named evidence
+when both exist. Differing identities/choices or representations that cannot be
+aligned require review instead of silently preferring one. Unaccounted motion-like
+text after a final voting block also requires review; no missing ballot is inferred.
+
+Optional read-only checks of existing local captures validate adapter coverage,
+but equal counts do not establish unambiguous evidence. Differing Minutes and
+VotingHTML require review even in a previously checked capture. Original capture
+bytes stay outside the repository; no production import, SQL or attachment mutation
+is part of local verification.
 Synthetic integration tests cover real local Auth, MCP, Storage downloads/checksum,
 150-observation capacity, dry rollback, exact retry, partial conflicts, and private
 meeting/non-admin gates on isolated API 54341 / DB 54342. This is **Refs #140**:

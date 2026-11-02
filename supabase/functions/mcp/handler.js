@@ -2475,12 +2475,15 @@ function parseSimbliMinutes(text) {
           const blocks = [...minutes.matchAll(/\bVoting\s*:\s*/gi)];
           const segments = blocks.length ? blocks.map((m, j) => ({ description: minutes.slice(j ? blocks[j - 1].index + blocks[j - 1][0].length : 0, m.index).trim(), votes: minutes.slice(m.index + m[0].length, blocks[j + 1]?.index ?? minutes.length), suffix: `.Voting[${j}]`, reverse: false })) : html ? [{ description: minutes, votes: html, suffix: ".VotingHTML", reverse: true }] : [];
           let parsed = 0;
+          const roundStart = motions.length;
           for (const [j, s] of segments.entries()) {
             const ballots = [];
             const absences = [];
             const pattern = s.reverse ? /(?:^|\n)\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\s*:\s*([^\n]+)/gi : /(?:^|\n)\s*([^\n:]+)\s*:\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\b/gi;
             const recognized = new Set;
+            let lastNamedEnd = 0;
             for (const m of s.votes.matchAll(pattern)) {
+              lastNamedEnd = m.index + m[0].length;
               recognized.add(m[0].trim());
               const name = (s.reverse ? m[2] : m[1]).trim();
               const label = (s.reverse ? m[1] : m[2]).toLowerCase();
@@ -2493,11 +2496,30 @@ function parseSimbliMinutes(text) {
             }
             if (s.votes.split(/\n/).some((line) => /^[^:\d]+:\s*[^\d]/.test(line) && !/motion (?:made|seconded) by/i.test(line) && !recognized.has(line.trim())))
               warnings.push({ locator: path + s.suffix, reason: "Unparsed colon-delimited voting text; review required" });
+            if (j === segments.length - 1 && /\bmotion\b|\bvoted\b/i.test(s.votes.slice(lastNamedEnd)))
+              warnings.push({ locator: path + s.suffix, reason: "Motion-like text after the final voting block requires review" });
             if (ballots.length) {
               parsed++;
               motions.push({ locator: path + s.suffix, item_id: String(item.EncrId ?? ""), round: `${r}:${j}`, subject: sourceText(item.Title).slice(0, 300), description: s.description.replace(/^[^\n:]+:\s*(?:Not Present|Vote Not Recorded|Abstain(?:ed)?|Recused|Absent|Yes|No)\s*$/gmi, "").trim(), ballots, absences });
             } else
               warnings.push({ locator: path + s.suffix, reason: "Voting block has no supported named choices" });
+          }
+          if (blocks.length && html.trim()) {
+            const represented = [];
+            const recognized = new Set;
+            for (const m of html.matchAll(/(?:^|\n)\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\s*:\s*([^\n]+)/gi)) {
+              recognized.add(m[0].trim());
+              represented.push({ name: m[2].trim(), choice: choices[m[1].toLowerCase()], text: m[0].trim(), kind: ["not present", "absent"].includes(m[1].toLowerCase()) ? "absence" : "ballot" });
+            }
+            const named = (rows) => rows.map((b) => JSON.stringify([b.name, b.choice, b.kind])).sort();
+            const fromMinutes = motions.slice(roundStart).flatMap((m) => [...m.ballots.map((b) => ({ ...b, kind: "ballot" })), ...m.absences.map((b) => ({ ...b, choice: "unknown", kind: "absence" }))]);
+            if (JSON.stringify(named(represented)) !== JSON.stringify(named(fromMinutes)) || html.split(`
+`).some((line) => /^[^:\d]+:\s*[^\d]/.test(line) && !/motion (?:made|seconded) by/i.test(line) && !recognized.has(line.trim())))
+              warnings.push({ locator: path, reason: "Minutes and VotingHTML named evidence differ or cannot be aligned; reconcile both representations before import" });
+            if (/\bmotion\b|\bvoted\b/i.test(html.split(`
+`).filter((line) => !recognized.has(line.trim()) && !/motion (?:made|seconded) by/i.test(line)).join(`
+`)))
+              warnings.push({ locator: path, reason: "Unaccounted motion-like VotingHTML text requires review" });
           }
           if (!parsed && /\bmotion\b|\bvoted\b/i.test(minutes + " " + html))
             warnings.push({ locator: path, reason: "Motion-like item without parsable named roll call" });
@@ -2527,6 +2549,10 @@ var key = z12.string().min(1).max(500);
 var citation = z12.object({ source_url: z12.string().url().startsWith("https://").max(2000), document_sha256: z12.string().regex(/^[a-f0-9]{64}$/) }).strict();
 var ballot = z12.object({ person_id: uuid4, choice: z12.enum(["yes", "no", "abstain", "recused", "unknown"]), text: z12.string().min(1).max(2000), source_key: key.optional() }).strict();
 var motion = z12.object({ source_key: key, locator: z12.string().min(1).max(2000), subject: z12.string().min(1).max(300), description: z12.string().max(1e5).optional(), ballots: z12.array(ballot).max(100) }).strict();
+function expandedJsonbBytes(value) {
+  const text = (v) => Array.isArray(v) ? "[" + v.map(text).join(", ") + "]" : v !== null && typeof v === "object" ? "{" + Object.entries(v).filter(([, x]) => x !== undefined).map(([k, x]) => JSON.stringify(k) + ": " + text(x)).join(", ") + "}" : JSON.stringify(v);
+  return new TextEncoder().encode(text(value)).length;
+}
 function expandCompact(provenance, attendance, motions) {
   const rows = [];
   for (const a of attendance)
@@ -2536,15 +2562,15 @@ function expandCompact(provenance, attendance, motions) {
     for (const b of m.ballots)
       rows.push({ kind: "choice", source_key: b.source_key ?? `${m.source_key}:person:${b.person_id}`, provenance: { ...provenance, locator: m.locator }, data: { person_id: b.person_id, vote_source_key: m.source_key, choice: b.choice, original_text: b.text } });
   }
-  if (rows.length < 1 || rows.length > 2000 || new TextEncoder().encode(JSON.stringify(rows)).length > 2 * 1024 * 1024)
-    throw Error("Maximum 2000 expanded observations / 2 MiB");
+  if (rows.length < 1 || rows.length > 2000 || expandedJsonbBytes(rows) > 2 * 1024 * 1024)
+    throw Error("Maximum 2000 expanded observations / 2 MiB PostgreSQL JSONB text");
   if (new Set(rows.map((r) => r.source_key)).size !== rows.length)
     throw Error("Duplicate source keys");
   return rows;
 }
 function registerMeetingSourceImport(server, supabase) {
   const { register } = createToolkit(server, supabase);
-  register("import_meeting_source", "Admin compact or checked-attachment import/reconciliation. Default dry run. Adapter simbli-minutes-v1 reads captured public agenda/minutes JSON text, both Voting and VotingHTML. Supply exact source-name→existing person UUID bindings, never fuzzy guesses. Attachment bytes are downloaded with caller auth and SHA-256 checked. No arbitrary URL fetch. Compact payload shares provenance once and nests named ballots; 150 observations fit one call. Rows are ordered partial observations in one transaction, NOT all-or-nothing: unchanged retry is a no-op, conflicts/errors are reported without immutable overwrite. Reconcile existing sources before import; do not invent new keys to bypass conflicts. A legacy imported meeting requires explicit existing source-key bindings. Does not infer outcomes or attendance from roster/totals. No automatic publication; rebuild public pages.", {
+  register("import_meeting_source", "Admin compact or checked-attachment import/reconciliation. Default dry run. Adapter simbli-minutes-v1 reads captured public agenda/minutes JSON text, both Voting and VotingHTML. Supply exact source-name→existing person UUID bindings, never fuzzy guesses. Attachment bytes are downloaded with caller auth and SHA-256 checked. No arbitrary URL fetch. Compact payload shares provenance once and nests named ballots; at most 2000 expanded attendance/motion/ballot rows and 2 MiB of PostgreSQL JSONB text. A 150-observation fixture fits one call. Rows are ordered partial observations in one transaction, NOT all-or-nothing: unchanged inline retry is a no-op, conflicts/errors are reported without immutable overwrite. Reconcile existing sources before import; do not invent new keys to bypass conflicts. A checked-attachment import into a meeting with vote sources under the same provider requires bindings for every document motion locator, including identical retries; legacy ballot keys also need explicit bindings when different from generated keys. Inline reconcile_only returns an inventory, not a comparison verdict. Does not infer outcomes or attendance from roster/totals. No automatic publication; rebuild public pages.", {
     meeting_id: uuid4,
     provider: z12.string().min(1).max(100),
     dry_run: z12.boolean().default(true),
@@ -2654,9 +2680,9 @@ function registerMeetingSourceImport(server, supabase) {
       attendance = [...observed].map(([person_id, evidence]) => ({ source_key: keyFor(`attendance:${person_id}`, `simbli:attendance:${person_id}`), person_id, status: "observed", ...evidence }));
       attendance.push(...[...absent].map(([person_id, evidence]) => ({ source_key: keyFor(`attendance:${person_id}`, `simbli:attendance:${person_id}`), person_id, status: "absent", ...evidence })));
     }
-    const rows = expandCompact(input.provenance, attendance, motions);
     if (input.reconcile_only)
-      return { status: "reconciled", observations: rows.length, existing: sources.length };
+      return { status: "inventory_only", observations: attendance.length + motions.reduce((n, m) => n + 1 + m.ballots.length, 0), existing: sources.length, existing_sources: sources.map((s) => ({ kind: s.kind, source_key: s.source_key, vote_id: s.vote_id, person_id: s.person_id })), comparison_performed: false };
+    const rows = expandCompact(input.provenance, attendance, motions);
     const { data, error: importError } = await supabase.rpc("import_meeting_records_compact", { p_meeting_id: input.meeting_id, p_provider: input.provider, p_records: rows, p_dry_run: input.dry_run });
     if (importError)
       throw Error(importError.message);

@@ -5,6 +5,7 @@ import {StreamableHTTPClientTransport} from '../../apps/mcp/node_modules/@modelc
 import {handleRequest} from '../../apps/mcp/src/index';
 import {syntheticMinutes} from './meeting-source-import.test';
 import {parseSimbliMinutes} from '../../apps/mcp/src/simbli-minutes';
+import {expandCompact,expandedJsonbBytes} from '../../apps/mcp/src/meeting-source-import';
 test.skipIf(!process.env.MEETING_SOURCE_LOCAL_STATUS)('real isolated Auth→MCP→Storage→partial immutable import, capacity and visibility',async()=>{
  const s=await Bun.file(process.env.MEETING_SOURCE_LOCAL_STATUS!).json();if(s.API_URL!=='http://127.0.0.1:54341')throw Error('Isolated API 54341 only');
  const db=new SQL('postgresql://postgres:postgres@127.0.0.1:54342/postgres'),setup=createClient(s.API_URL,s.SERVICE_ROLE_KEY,{auth:{persistSession:false}}),users:string[]=[],apis:any[]=[],clients:Client[]=[];
@@ -27,6 +28,8 @@ test.skipIf(!process.env.MEETING_SOURCE_LOCAL_STATUS)('real isolated Auth→MCP�
  const provenance={source_url:'https://example.test/minutes',document_sha256:'a'.repeat(64)};
  const motions=Array.from({length:75},(_,i)=>({source_key:'m'+i,locator:'item '+i,subject:'Motion '+i,ballots:i<74?[{person_id:person,choice:'yes',text:'Yes: Synthetic source voter'}]:[]}));
  const args={meeting_id:meeting,provider:'compact-fixture',provenance,attendance:[{source_key:'attendance',locator:'named ballot',person_id:person,status:'observed',evidence:'Yes: Synthetic source voter'}],motions};
+ const expanded=expandCompact(provenance,args.attendance,args.motions);
+ expect((await db`select octet_length(${JSON.stringify(expanded)}::text::jsonb::text)::int bytes`)[0].bytes).toBe(expandedJsonbBytes(expanded));
  expect(await call(clients[0],args)).toMatchObject({created:150,dry_run:true,rejected:0});
  expect((await db`select * from public.meeting_record_sources where meeting_id=${meeting}`)).toHaveLength(0);
  expect(await call(clients[0],{...args,dry_run:false})).toMatchObject({created:150,rejected:0});

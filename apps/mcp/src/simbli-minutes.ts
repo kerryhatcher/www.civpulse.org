@@ -31,14 +31,15 @@ export function parseSimbliMinutes(text: string) {
         const blocks=[...minutes.matchAll(/\bVoting\s*:\s*/gi)];
         const segments=blocks.length ? blocks.map((m,j)=>({description:minutes.slice(j?blocks[j-1].index!+blocks[j-1][0].length:0,m.index).trim(),votes:minutes.slice(m.index!+m[0].length,blocks[j+1]?.index ?? minutes.length),suffix:`.Voting[${j}]`,reverse:false}))
           : html ? [{description:minutes,votes:html,suffix:'.VotingHTML',reverse:true}] : [];
-        let parsed=0;
+        let parsed=0;const roundStart=motions.length;
         for(const [j,s] of segments.entries()) {
           const ballots:Ballot[]=[]; const absences:{name:string;text:string}[]=[];
           // Anchored named choices: no roster/tally inference, no fuzzy name matching.
           const pattern=s.reverse ? /(?:^|\n)\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\s*:\s*([^\n]+)/gi
             : /(?:^|\n)\s*([^\n:]+)\s*:\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\b/gi;
-          const recognized=new Set<string>();
+          const recognized=new Set<string>();let lastNamedEnd=0;
           for(const m of s.votes.matchAll(pattern)) {
+            lastNamedEnd=m.index!+m[0].length;
             recognized.add(m[0].trim());
             const name=(s.reverse?m[2]:m[1]).trim();const label=(s.reverse?m[1]:m[2]).toLowerCase();
             if(ballots.some(b=>b.name===name)||absences.some(b=>b.name===name))throw new Error(`Duplicate named ballot at ${path}${s.suffix}`);
@@ -46,8 +47,19 @@ export function parseSimbliMinutes(text: string) {
             else ballots.push({name,choice:choices[label],text:m[0].trim()});
           }
           if(s.votes.split(/\n/).some(line=>/^[^:\d]+:\s*[^\d]/.test(line)&&!/motion (?:made|seconded) by/i.test(line)&&!recognized.has(line.trim())))warnings.push({locator:path+s.suffix,reason:'Unparsed colon-delimited voting text; review required'});
+          if(j===segments.length-1&&/\bmotion\b|\bvoted\b/i.test(s.votes.slice(lastNamedEnd)))warnings.push({locator:path+s.suffix,reason:'Motion-like text after the final voting block requires review'});
           if(ballots.length) {parsed++;motions.push({locator:path+s.suffix,item_id:String(item.EncrId??''),round:`${r}:${j}`,subject:sourceText(item.Title).slice(0,300),description:s.description.replace(/^[^\n:]+:\s*(?:Not Present|Vote Not Recorded|Abstain(?:ed)?|Recused|Absent|Yes|No)\s*$/gmi,'').trim(),ballots,absences});}
           else warnings.push({locator:path+s.suffix,reason:'Voting block has no supported named choices'});
+        }
+        if(blocks.length&&html.trim()){
+          const represented:(Ballot&{kind:string})[]=[];const recognized=new Set<string>();
+          for(const m of html.matchAll(/(?:^|\n)\s*(Yes|No|Abstain(?:ed)?|Recused|Vote Not Recorded|Not Present|Absent)\s*:\s*([^\n]+)/gi)){
+            recognized.add(m[0].trim());represented.push({name:m[2].trim(),choice:choices[m[1].toLowerCase()],text:m[0].trim(),kind:['not present','absent'].includes(m[1].toLowerCase())?'absence':'ballot'});
+          }
+          const named=(rows:(Ballot&{kind:string})[])=>rows.map(b=>JSON.stringify([b.name,b.choice,b.kind])).sort();
+          const fromMinutes=motions.slice(roundStart).flatMap(m=>[...m.ballots.map(b=>({...b,kind:'ballot'})),...m.absences.map(b=>({...b,choice:'unknown' as const,kind:'absence'}))]);
+          if(JSON.stringify(named(represented))!==JSON.stringify(named(fromMinutes))||html.split('\n').some(line=>/^[^:\d]+:\s*[^\d]/.test(line)&&!/motion (?:made|seconded) by/i.test(line)&&!recognized.has(line.trim())))warnings.push({locator:path,reason:'Minutes and VotingHTML named evidence differ or cannot be aligned; reconcile both representations before import'});
+          if(/\bmotion\b|\bvoted\b/i.test(html.split('\n').filter(line=>!recognized.has(line.trim())&&!/motion (?:made|seconded) by/i.test(line)).join('\n')))warnings.push({locator:path,reason:'Unaccounted motion-like VotingHTML text requires review'});
         }
         if(!parsed && /\bmotion\b|\bvoted\b/i.test(minutes+' '+html))warnings.push({locator:path,reason:'Motion-like item without parsable named roll call'});
       }
