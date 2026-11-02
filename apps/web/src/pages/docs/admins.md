@@ -207,6 +207,16 @@ Supply an HTTPS video URL, omit it to preserve the current value, or set it to
 recording URL while retaining separate meeting records. Supported YouTube links
 can include `t` or `start` to begin at that meeting's point in the recording.
 
+Connected administrators can also use the compact MCP `import_meeting_source`
+workflow after its main-first release: reference a checked existing TXT/JSON
+minutes attachment, supply exact source-name/person bindings, and reconcile
+existing immutable source keys before importing. Start with reconciliation and a
+dry run. Counts distinguish accepted, unchanged and rejected observations;
+a commit may accept valid rows while reporting conflicts. Never invent replacement
+source keys, infer roll calls from totals, or treat an API result as a completed
+public rebuild. This workflow does not automatically change existing imported
+wording or publish private source files.
+
 Recorded individual votes also appear in the member's profile **Meeting votes**.
 The profile links each choice back to the motion and full roll call on its meeting.
 Meeting attendance and roll-call names link to member profiles; recognized full

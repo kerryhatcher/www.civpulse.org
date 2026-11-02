@@ -284,3 +284,83 @@ Verify interruption/resumption and downloaded digests, one canonical attachment,
 unchanged provenance, private visibility and no archive copy. Do not close that
 hosted acceptance criterion from local test success. This branch performs no
 hosted upload, production SQL, backfill, deployment or source collection.
+
+## Compact and attached Simbli imports (issue #140)
+
+After migration `20261125002300` reaches main and the MCP bundle is deployed,
+`import_meeting_source` is available on the compact `/mcp/v2` catalog. The legacy
+128-tool catalog and atomic `import_meeting_records` contract remain unchanged.
+Default `dry_run=true` returns counts and up to 25 indexed errors (with an explicit
+truncation flag); successful observations are not echoed. A compact request declares
+`provenance: {source_url, document_sha256}` once, `attendance` with source key,
+locator, person UUID, status and evidence, and `motions` with source key, locator,
+subject, optional description and nested `ballots: [{person_id, choice, text}]`.
+A ballot may specify its existing `source_key`; otherwise it is deterministically
+keyed by its motion and person UUID. Resolve existing UUIDs explicitly first.
+Up to 2,000 expanded observations fit within the unchanged 2 MiB expanded JSON cap;
+a 150-observation synthetic meeting measured 14,002 bytes in one MCP request.
+
+The new RPC is **ordered partial import in one database transaction**: attendance,
+then each motion and its ballots. Each observation calls the existing immutable
+import authority; rejected observations roll back individually and appear in the
+report, while accepted observations commit together at transaction completion.
+This is not all-or-nothing validation: a changed motion can conflict while missing
+ballots for its existing source key are accepted. Check `created`, `unchanged`,
+`rejected` and errors, not HTTP success alone. The default dry run executes the same
+constraints and then rolls back **all** accepted observations. No source payload,
+canonical description or original outcome is overwritten. Existing cited outcome
+corrections remain a separate explicit operation.
+
+For an attached capture, supply `attachment: {id, adapter: "simbli-minutes-v1",
+people: [{name, person_id}]}` instead of inline attendance/motions. Names must match
+source spelling exactly, including titles. The server resolves the attachment
+under the meeting's current access gate, downloads its original bytes with the
+caller's authenticated Storage client, checks byte count and the required SHA-256,
+and checks the source URL against the captured Minutes document. It never fetches
+a caller-supplied URL. Legacy attachments may lack stored hashes; the supplied
+expected digest is still checked against the actual original, without rewriting
+attachment metadata. This adapter accepts bounded TXT/JSON captures up to 2 MiB,
+not arbitrary PDFs, raw provider HTML, or a universal Simbli export format.
+
+The versioned adapter recognizes the existing labeled capture preamble plus a JSON
+array of `{document, public_content}` entries, with exactly one `Minutes` document.
+It walks `LstItemMinutes` / `ChildMinutesLst`, preserves item/round locators and
+handles multiple `Voting:` text blocks inside one provider round plus `VotingHTML`
+named-choice arrays. It reports motion-like items and unsupported voting text;
+warnings or missing name bindings stop import for review. It does not execute HTML,
+infer outcomes from “unanimous,” or derive attendance from a roster. Explicit named
+cast choices support `observed`; explicit Not Present/Absent labels support absence
+only for people with no cast choice in the document and do not create ballots.
+“Vote Not Recorded” remains an unknown choice. Source approval labels are preserved;
+source-reported votes do not establish formal minutes approval.
+
+Start with `reconcile_only=true`. It returns document counts, exact locators,
+existing imported motion source keys/IDs and ballot counts, plus missing identity
+bindings/warnings. An already-imported provider requires `attachment.source_keys`
+for **every** parsed motion locator before writing. Map those locators to existing
+immutable keys; use the optional `<motion locator>:<exact source name>` binding for
+existing ballot keys and `attendance:<person UUID>` for attendance keys. A genuinely
+missing motion needs a stable reviewed key. Never assign a fresh key to evade an
+existing observation conflict; changed descriptions remain a reported conflict,
+not a supersede operation. Uncertain responses are reconciled by repeating the
+same request; unchanged observations retain their canonical IDs.
+
+Read-only validation on November 2, 2026 downloaded the existing private August 20
+and July 16 captures through the authorized connector. The adapter found **7
+motions / 49 named cast ballots** and **18 motions / 129 named cast ballots**,
+respectively, with no unparsed-motion warnings. Original capture bytes were kept
+outside the repository; no production import, SQL or attachment mutation occurred.
+Synthetic integration tests cover real local Auth, MCP, Storage downloads/checksum,
+150-observation capacity, dry rollback, exact retry, partial conflicts, and private
+meeting/non-admin gates on isolated API 54341 / DB 54342. This is **Refs #140**:
+post-main deployment and an authorized actual hosted attachment import/reconciliation
+remain release acceptance work. Read-only source counts and local fixtures do not
+establish that production records have been completed or public pages rebuilt.
+
+Repeat focused local verification with
+`MEETING_SOURCE_LOCAL_STATUS=/path/to/isolated-status.json bun test scripts/tests/meeting-source-import.test.ts scripts/tests/meeting-source-import-integration.test.ts`.
+The status file is private and must identify API 54341. Optionally set
+`MEETING_SOURCE_CAPTURE_ROOT` to a private folder containing the authorized original
+`issue140-aug.txt` and `issue140-jul.txt` downloads to repeat the count checks. Never
+commit those files or signed download URLs; obtaining them is a read-only source
+review, not permission to backfill production records.

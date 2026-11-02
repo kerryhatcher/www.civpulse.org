@@ -1828,6 +1828,244 @@
     }
   },
   {
+    "name": "import_meeting_source",
+    "description": "Admin compact or checked-attachment import/reconciliation. Default dry run. Adapter simbli-minutes-v1 reads captured public agenda/minutes JSON text, both Voting and VotingHTML. Supply exact source-name→existing person UUID bindings, never fuzzy guesses. Attachment bytes are downloaded with caller auth and SHA-256 checked. No arbitrary URL fetch. Compact payload shares provenance once and nests named ballots; 150 observations fit one call. Rows are ordered partial observations in one transaction, NOT all-or-nothing: unchanged retry is a no-op, conflicts/errors are reported without immutable overwrite. Reconcile existing sources before import; do not invent new keys to bypass conflicts. A legacy imported meeting requires explicit existing source-key bindings. Does not infer outcomes or attendance from roster/totals. No automatic publication; rebuild public pages.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "meeting_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "dry_run": {
+          "default": true,
+          "type": "boolean"
+        },
+        "reconcile_only": {
+          "default": false,
+          "type": "boolean"
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "source_url": {
+              "type": "string",
+              "maxLength": 2000,
+              "format": "starts_with",
+              "pattern": "^https:\\/\\/.*"
+            },
+            "document_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "source_url",
+            "document_sha256"
+          ],
+          "additionalProperties": false
+        },
+        "attachment": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "adapter": {
+              "type": "string",
+              "const": "simbli-minutes-v1"
+            },
+            "people": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  "person_id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "name",
+                  "person_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "source_keys": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          },
+          "required": [
+            "id",
+            "adapter",
+            "people"
+          ],
+          "additionalProperties": false
+        },
+        "attendance": {
+          "default": [],
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "person_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "present",
+                  "absent",
+                  "excused",
+                  "observed",
+                  "unknown"
+                ]
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            },
+            "required": [
+              "source_key",
+              "locator",
+              "person_id",
+              "status",
+              "evidence"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "motions": {
+          "default": [],
+          "maxItems": 500,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "locator": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "subject": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 100000
+              },
+              "ballots": {
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "person_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "choice": {
+                      "type": "string",
+                      "enum": [
+                        "yes",
+                        "no",
+                        "abstain",
+                        "recused",
+                        "unknown"
+                      ]
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2000
+                    },
+                    "source_key": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "person_id",
+                    "choice",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "source_key",
+              "locator",
+              "subject",
+              "ballots"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "meeting_id",
+        "provider",
+        "provenance"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "import_meeting_records",
     "description": "Validate or atomically import up to 100 sourced attendance, motion rounds and individual choices (2 MiB, admin only). Default dry_run=true. Resolve existing meeting/person UUIDs; order attendance then votes then choices. Each provider/source_key is immutable: exact replay returns canonical IDs unchanged; changed snapshots or editorial drift reject the entire batch. Omission never deletes. Use observed for presence supported only at a ballot, unknown for roster-only evidence, and choice unknown for Vote Not Recorded. Never infer ballots or outcomes from totals, unanimity or sponsorship. Preserve agenda context separately from actual motion text. See get_meeting for reconciliation.",
     "inputSchema": {
