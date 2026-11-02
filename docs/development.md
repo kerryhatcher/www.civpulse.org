@@ -1476,3 +1476,39 @@ No automation
 or paid vendor is required. This issue changes reports/tooling only, not site
 rendering or access rules. The required check/build uses explicit isolated local
 54341 credentials; shared 54322 remains unsuitable after the documented collision.
+
+### Authenticated MCP chunk-relay verification
+
+Apply unique pending migrations 021–022 only to the isolated local/preview database;
+never use shared local 54322 or production feature SQL. Run
+`bun test scripts/tests/meeting-upload-relay.test.ts` for strict base64/URL guards,
+partial-prefix replay, metadata substitution denial and error redaction. For real
+Auth/MCP/TUS verification, supply the isolated stack status JSON in
+`MEETING_RELAY_LOCAL_STATUS` and run
+`MEETING_RELAY_INTEGRATION=1 bun test scripts/tests/meeting-upload-relay-integration.test.ts`.
+The harness explicitly requires API 54341 / DB 54342. Its service credential is
+used only to create/clean local test users; MCP transfer uses the user's Auth
+session and public project key internally. Test logs never print real tokens.
+
+The follow-up verifies completed sessions without relay records and a real expired
+JWT rejection on isolated Storage's creation POST: HTTP 400, JSON `statusCode=403`,
+`code=AccessDenied`, `error=Unauthorized`, and `"exp" claim timestamp check failed`,
+with no Location. The pinned Storage v1.82.1
+[JWT pre-handler](https://github.com/supabase/storage/blob/v1.82.1/src/http/plugins/jwt.ts)
+rejects expiry before the TUS create handler. Only that exact confirmed shape (HTTP
+400/403) allows a lease-guarded reset; generic auth/RLS/server failures and missing
+receipts remain uncertain. If the reset RPC also loses auth, fail closed and
+reconcile manually. This local observation does not establish hosted behavior.
+Cancellation does not terminate partial TUS bytes; capability expiry and repeated
+explicit object cleanup remain required. Tool descriptions/generated catalogs must
+state that limit.
+
+The fixture records exact downloaded hashes for 5,179,685/20,968,285-byte synthetic
+PDF-signature byte arrays, largest MCP envelope size, canonical count and replay
+results. These are transport fixtures, not official-source or hosted-connector
+acceptance. Canonical fixture objects/rows/users are removed; an intentionally
+unconfirmed POST can leave a private partial TUS resource until Storage expiration.
+No historical/backfill objects are cleaned up. Run MCP check/build, plugin build/
+Claude sync/check, root check and explicit isolated build before review. There is
+no new web upload UI or changed web visibility rule; affected authorization is
+exercised by the real Auth/MCP integration. The added admin instructions are static.

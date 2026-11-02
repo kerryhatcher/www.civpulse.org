@@ -1,3 +1,4 @@
+import type {UploadRelayContext} from './meeting-upload-relay';
 import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
@@ -40,9 +41,9 @@ export function decodeMeetingDocument(fileName: string, base64: string) {
   return { bytes, extension, contentType };
 }
 
-export function registerMeetingTools(server: McpServer, supabase: SupabaseClient, citedOutcomes = true) {
+export function registerMeetingTools(server: McpServer, supabase: SupabaseClient, citedOutcomes = true, uploadContext?: UploadRelayContext) {
   registerMeetingImportTools(server, supabase, citedOutcomes);
-  registerMeetingUploadTools(server, supabase);
+  registerMeetingUploadTools(server, supabase, uploadContext);
   const { register, readRpc } = createToolkit(server, supabase);
   const uuid = z.string().uuid();
   readRpc('get_meeting', 'Get a meeting’s notes, transcript, attendance, votes and attachment metadata through its event/calendar visibility gate. Use this before uploading to avoid duplicates.',

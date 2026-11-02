@@ -1,3 +1,4 @@
+import type {UploadRelayContext} from './meeting-upload-relay';
 import { registerCountyStatisticTools } from './county-statistic-tools';
 import { registerCommonReadTools, type ToolCatalog } from './common-read-tools';
 import { WriteCatalog } from './write-catalog';
@@ -34,7 +35,7 @@ const ELECTION_DATE_KIND = z.enum([
 ]);
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
-export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}, sourceReaderUrl?: string, catalog: ToolCatalog = 'legacy'): McpServer {
+export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}, sourceReaderUrl?: string, catalog: ToolCatalog = 'legacy', uploadContext?: UploadRelayContext): McpServer {
   const server = new McpServer({ name: "Civic Pulse", version: "1.5.0" });
 
   const writes = catalog === 'compact' ? new WriteCatalog() : undefined;
@@ -221,7 +222,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   // The compatibility catalog is already at its 128-tool limit.
   if (catalog === 'compact') registerSchoolFinanceTools(server, supabase);
   registerExtendedTools(server, supabase, user, writes, reads, catalog === 'compact');
-  registerMeetingTools(server, supabase, catalog === 'compact');
+  registerMeetingTools(server, supabase, catalog === 'compact', uploadContext);
   registerLegislativeTools(server, supabase, sourceReaderUrl);
   registerOfficeTools(server, supabase, writes, reads);
   registerDocumentTools(server, supabase, documentContext);

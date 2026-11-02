@@ -1,3 +1,4 @@
+import {transferMeetingChunk,MCP_UPLOAD_CHUNK_BYTES,MCP_UPLOAD_BASE64_MAX,type UploadRelayContext} from './meeting-upload-relay';
 import type { McpServer } from '@modelcontextprotocol/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
@@ -23,7 +24,7 @@ export async function verifyMeetingOriginal(blob: Blob, expected: { size_bytes: 
   return hash;
 }
 
-export function registerMeetingUploadTools(server: McpServer, supabase: SupabaseClient) {
+export function registerMeetingUploadTools(server: McpServer, supabase: SupabaseClient, context?: UploadRelayContext) {
   const { register, ensureAdmin } = createToolkit(server, supabase);
   async function session(id: string) {
     await ensureAdmin();
@@ -31,7 +32,7 @@ export function registerMeetingUploadTools(server: McpServer, supabase: Supabase
     if (error) throw new Error(error.message);
     return data;
   }
-  register('begin_meeting_attachment_upload', 'Begin/reconcile an original-document upload (admin, 1–26,214,400 bytes). Stable provider/source_key returns the same 24-hour session; changed metadata conflicts. Returns a private Storage TUS endpoint, scoped x-signature token and exact metadata (also send your connected user Bearer token and public API key when required by the Storage gateway): upload original bytes directly in 6 MiB PATCH chunks, persist the TUS Location and resume using HEAD Upload-Offset. Do not send large base64 through MCP. Never set x-upsert. Finalize after upload; status reconciles uncertain responses. PDF, Office, OpenDocument, TXT, CSV and JSON projections supported. Signed token expires in 2 hours; repeat begin to refresh within session lifetime. No R2 publication.',
+  register('begin_meeting_attachment_upload', 'Begin/reconcile an original-document upload (admin, 1–26,214,400 bytes). Stable provider/source_key returns the same 24-hour session; changed metadata conflicts. Connected agents use manage_meeting_attachment_upload action=transfer_chunk with id, byte offset and at most 256 KiB of original bytes encoded as base64; transfer_status reconciles progress without exposing the caller token or TUS Location. Legacy direct-TUS endpoint/scoped x-signature metadata is also returned for applications that already possess their own user token; connected agents must not extract one. Never send a whole large file in one MCP call. Never set x-upsert. Finalize after upload; status reconciles uncertain responses. PDF, Office, OpenDocument, TXT, CSV and JSON projections supported. Signed token expires in 2 hours; repeat begin to refresh within session lifetime. No R2 publication.',
     { meeting_id: uuid, provider: z.string().min(1).max(100), source_key: z.string().min(1).max(500),
       file_name: z.string().min(1).max(255), size_bytes: z.number().int().min(1).max(MAX_DOCUMENT_BYTES), sha256: sha,
       source_url: z.string().url().startsWith('https://') },
@@ -47,6 +48,7 @@ export function registerMeetingUploadTools(server: McpServer, supabase: Supabase
       endpoint.pathname = '/storage/v1/upload/resumable'; endpoint.search = '';
       if (endpoint.hostname.endsWith('.supabase.co') && !endpoint.hostname.endsWith('.storage.supabase.co')) endpoint.hostname = endpoint.hostname.replace('.supabase.co','.storage.supabase.co');
       return { ...s, tus_endpoint: endpoint.href, headers: { 'x-signature': data.token }, chunk_size: 6 * 1024 * 1024,
+        mcp_transfer: { tool: 'manage_meeting_attachment_upload', action: 'transfer_chunk', max_chunk_bytes: MCP_UPLOAD_CHUNK_BYTES, status_action: 'transfer_status' },
         metadata: { bucketName: BUCKET, objectName: s.storage_path, contentType: s.mime_type }, token_expires_in: 7200 };
     }, { write: true, destructive: false, idempotent: true });
   register('finalize_meeting_attachment_upload', 'Verify uploaded original size, type signature and SHA-256, then atomically create one canonical meeting attachment (admin). Retry safely after timeout using the same session UUID; completed sessions return the same attachment. Missing, expired or cancelled originals are rejected. No public-archive publication.',
@@ -62,8 +64,8 @@ export function registerMeetingUploadTools(server: McpServer, supabase: Supabase
       if (error) throw new Error(error.message);
       return data;
     }, { write: true, destructive: false, idempotent: true });
-  register('manage_meeting_attachment_upload', 'Admin upload reconciliation and cleanup. action=status returns the session/checksum and stored-object state; partial offsets require HEAD on the saved TUS Location. action=cancel records a durable cancelled receipt then removes staged bytes; terminate saved TUS URLs first and repeat cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.',
-    { action: z.enum(['status','cancel','list_cleanup']), id: uuid.optional(), offset: z.number().int().min(0).default(0) }, async ({ action, id, offset }) => {
+  register('manage_meeting_attachment_upload', 'Admin upload transfer/reconciliation/cleanup. action=transfer_chunk accepts id, exact byte offset and data_base64 of 1–262144 original bytes (maximum 349528 base64 characters). Server forwards caller auth internally and owns HEAD/TUS state; never supply an OAuth token or arbitrary URL. Exact replay is unchanged; changed chunk bytes conflict. transfer_status returns committed/storage offsets and pending-chunk bounds; retry the exact pending chunk after uncertainty. A lost creation Location returns creation_uncertain without another POST; operator reconciliation is required. Confirmed pre-creation JWT expiry returns authentication_required only if its durable intent is safely cleared; refresh the connection and retry the same session. Transfer is bound to its initiating admin. action=status retains session/checksum/stored-object metadata. action=cancel records a durable cancelled receipt and removes any completed staged object; it does not terminate partial TUS resources or revoke issued capabilities. Private partial bytes expire in Storage, and in-flight writes may require repeated cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.',
+    { action: z.enum(['status','cancel','list_cleanup','transfer_chunk','transfer_status']), id: uuid.optional(), offset: z.number().int().min(0).default(0), data_base64: z.string().min(4).max(MCP_UPLOAD_BASE64_MAX).optional() }, async ({ action, id, offset, data_base64 }) => {
       await ensureAdmin();
       if (action === 'list_cleanup') {
         const { data, error } = await supabase.from('meeting_upload_sessions').select('*').neq('state','complete')
@@ -71,7 +73,10 @@ export function registerMeetingUploadTools(server: McpServer, supabase: Supabase
         if (error) throw new Error(error.message);
         return data;
       }
-      if (!id) throw new Error('id is required for status/cancel');
+      if (!id) throw new Error('id is required for session actions');
+      if (action === 'transfer_chunk' || action === 'transfer_status') {
+        return transferMeetingChunk(supabase, await session(id), context, {offset,data_base64,statusOnly:action==='transfer_status'});
+      }
       if (action === 'cancel') {
         const { data: s, error } = await supabase.rpc('cancel_meeting_upload', { p_id: id });
         if (error) throw new Error(error.message);

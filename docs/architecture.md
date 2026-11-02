@@ -1004,3 +1004,14 @@ allowlist evidence fields (excluding editor accounts), and public profile export
 include the same outcome/source history. Static HTML, profile JSON and live
 meeting/person readers use the same projection. Existing visibility and bounded
 history pagination remain in force; observation inserts trigger a frontend rebuild.
+
+## Authenticated MCP upload relay
+
+The MCP HTTP handler passes its verified caller token, configured project URL and
+public key to an internal upload context. Existing upload-management operations
+relay bounded 256 KiB chunks; no web SSR endpoint or browser token handoff is added.
+Private SQL state owns transport Location/lease/hash receipts across handler
+instances, while original bytes remain in Storage. Every server HEAD/PATCH checks
+the configured destination and exact session metadata; no arbitrary URL/headers
+are accepted from a tool caller. Existing finalization remains the public metadata
+boundary. No canonical attachment or public-archive copy is created by staging.

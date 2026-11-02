@@ -68,6 +68,10 @@ reachable by direct meeting UUID, but only admins discover them in person histor
 
 ## Original bytes and resumption
 
+Connected agents should use the authenticated MCP chunk relay described below.
+Direct TUS remains for applications already holding their own user session; never
+extract a general token from connector/browser internals to make that handoff.
+
 `begin_meeting_attachment_upload` requires meeting UUID, provider, stable source
 key, file name, exact byte count, lowercase SHA-256 and original HTTPS URL. It
 returns an immutable session UUID/path, a scoped signed upload token, TUS endpoint
@@ -104,14 +108,72 @@ Concurrent finalization and retry after a lost receipt return the same attachmen
 `get_meeting_attachment_url` expose the completed file through existing visibility.
 Pending bytes are admin-only, and public archive publication stays explicit/separate.
 
-Cancel unfinished sessions with `manage_meeting_attachment_upload (action=cancel)`, terminating
-any saved TUS URL first. Cancellation records a durable receipt and removes a
-completed staged object; completed canonical attachments cannot be cancelled.
+Cancel unfinished sessions with `manage_meeting_attachment_upload (action=cancel)`.
+Cancellation records a durable receipt and removes any completed staged object;
+it does not terminate partial TUS resources or revoke issued capabilities. Private
+partial bytes remain until Storage expiration. An in-flight PATCH can still finish
+an object, so repeated explicit cleanup may be required. Completed canonical
+attachments cannot be cancelled.
 `manage_meeting_attachment_upload (action=list_cleanup)` pages expired/cancelled receipts for explicit cleanup.
 Already-issued Storage tokens/TUS URLs cannot be revoked by the database state
 change. Repeat cleanup after those capabilities expire (up to 24 hours); partial
 TUS data expires in Storage. Keep receipts and never delete objects from the paused
 historical backfill as part of this workflow.
+
+## Authenticated MCP byte transfer
+
+After migration `20261125002100` and the matching MCP deployment, connected agents
+can transfer original bytes entirely through existing tools:
+
+1. Call `begin_meeting_attachment_upload` with the stable meeting/provider/source
+   identity, exact byte count and original SHA-256. Retain the returned session ID.
+2. Split original bytes into **at most 262,144 bytes (256 KiB)** per call. Send
+   `manage_meeting_attachment_upload(action=transfer_chunk,id,offset,data_base64)`.
+   Offset is a byte offset, not a base64/string offset. Standard canonical base64
+   has at most 349,528 characters; no data URL or whitespace. Never send the whole
+   large file in one tool request. Source bytes must not be re-encoded/reformatted.
+3. Use returned committed `offset` for the next chunk. After an uncertain MCP
+   response, call `transfer_status`. If a `pending_chunk` is reported, resend
+   that **exact original chunk at its original offset**; the server reconciles
+   its already-accepted prefix using HEAD and sends only the remainder. Conflicting
+   replay bytes fail. Retrying committed chunks returns unchanged, without PATCH.
+4. At the original byte count, call `finalize_meeting_attachment_upload(id)`.
+   Existing download/type/size/SHA-256 verification and atomic canonical receipt
+   remain in force. Retry the same session after a lost finalization response.
+   Download through `get_meeting_attachment_url` and independently compare SHA-256.
+
+The server uses the caller's verified MCP authentication internally with the
+project's public key; agents do not supply/export a bearer or service key. It
+persists a private, initiating-admin-bound TUS Location, a two-minute lease and
+chunk hash/length receipts. No document bytes are stored in Postgres. It validates
+configured Storage origin/path, disallows redirects, and checks HEAD length and
+bucket/object/MIME metadata against the exact session before forwarding bytes.
+Raw Locations, leases and auth headers are not returned by the MCP relay; errors
+do not echo upstream bodies/headers. Another administrator cannot take over a
+claimed transfer. Existing admin finalization/attachment permissions are unchanged.
+
+If an internal Storage POST response loses its Location, the durable creation
+intent produces `creation_uncertain` and prevents blind duplicate POSTs. This is
+an explicit **operator-reconciliation limitation**, not automatic creation recovery:
+keep the receipt, inspect Storage/transfer diagnostics, and do not invent a source
+key or export a token to bypass it. A missing/expired TUS resource or failed HEAD
+also stops byte forwarding. Leases expire after two minutes if the MCP request is
+interrupted; retry once the lease has expired. Storage partial resources/capabilities
+retain their existing expiration behavior, and cancellation still needs the existing
+explicit cleanup/reconciliation discipline. No archive publication is automatic.
+
+A narrowly confirmed pre-creation JWT-expiry rejection can return
+`authentication_required` after safely clearing its empty creation intent. Refresh
+the connection and retry the same session/chunk. Other rejection shapes, lost POST
+receipts, missing Locations, and failure to persist the reset remain
+`creation_uncertain`; do not blindly repeat creation. Completed direct-TUS sessions
+report `complete` with the final offset/attachment UUID even without relay state.
+
+Supabase's direct-client example uses 6 MiB chunks. The MCP relay deliberately uses
+smaller protocol PATCHes to stay below its transport envelope; the upstream TUS S3
+store supports persisted incomplete parts. Local Storage tests verify this path;
+**hosted connector/S3 behavior remains a release acceptance check**, not a claim
+established by the local filesystem-backed fixture.
 
 ## Release and verification
 
@@ -201,3 +263,24 @@ not a current guarantee that those minutes remain unavailable. Real backfill and
 publication remain release follow-ups requiring source review, not feature SQL.
 
 Tracked release/source-review follow-up: [#168](https://github.com/kerryhatcher/www.civpulse.org/issues/168).
+
+### Issue #60 local verification and hosted acceptance gap
+
+The isolated real Auth → MCP HTTP → PostgREST/RLS → Storage TUS relay test uses
+deterministic PDF-signature transport fixtures of exactly **5,179,685** and
+**20,968,285** bytes. Downloaded SHA-256 matches, with one canonical attachment
+per session. Maximum serialized MCP request measured **349,748 bytes**, below
+2 MiB; 100 bounded PATCHes transfer both fixtures. Tests cover lost PATCH/HEAD
+receipts, exact/conflicting replays, owner/non-admin denial, private meeting and
+cross-meeting download gates, uncertain POST blocking and finalization replay.
+These fixtures are not the captured official PDFs and establish no source facts.
+
+After main-first migration/MCP release, issue #60 still requires an **actual hosted
+connector-only** run with the captured originals: 5,179,685 bytes / SHA-256
+`e711a9a80b7f2b93f55e265f89e2cc8621cb849b8a4d81c522c7f9cb1471cfe7`
+and 20,968,285 bytes / SHA-256
+`782c470ac434f651eb14ffd633513a2dd971058e152e0860c7bd1fd8f0e67b41`.
+Verify interruption/resumption and downloaded digests, one canonical attachment,
+unchanged provenance, private visibility and no archive copy. Do not close that
+hosted acceptance criterion from local test success. This branch performs no
+hosted upload, production SQL, backfill, deployment or source collection.
