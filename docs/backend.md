@@ -1843,3 +1843,23 @@ validation and null-safe public-history privacy follow-ups. Apply only after mai
 then deploy the matching MCP source and rebuild static content. Never feature-apply
 to production or repair migration history. See [meeting-imports.md](./meeting-imports.md)
 for citation/correction semantics and the explicitly pending real-data backfill.
+
+## MCP meeting-upload relay state
+
+Migration `20261125002100` adds private `meeting_private.upload_relays` and
+`upload_chunk_receipts`, with RLS and no client table grants. There is no relaxed
+Storage policy. The security-definer `manage_meeting_upload_transfer` RPC has
+empty search path and requires `is_admin()`; first acquisition binds the transfer
+to `auth.uid()`. Subsequent transport actions require that owner, a matching
+unexpired lease and a pending, unexpired upload session. Hash receipts reject
+changed chunk replay and retain original offsets; document bytes stay in Storage.
+Only configured-origin, metadata-matched TUS resources are used by the server.
+Locations are backend transport state, not an arbitrary client URL fetch API.
+
+These private receipts are not public civic evidence and do not trigger history or
+frontend rebuilds. Existing canonical attachment creation still triggers normal
+history/rebuild tracking and retains exact source/checksum verification. Release
+through main before applying production SQL or deploying matching MCP code. Shared
+local 54322 is not used; tests run on isolated 54341/54342. See the
+[transfer contract](./meeting-imports.md#authenticated-mcp-byte-transfer), including
+the honest uncertain-creation limitation and pending hosted acceptance.

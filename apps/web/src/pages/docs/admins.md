@@ -218,8 +218,10 @@ updates the voting record immediately without a site rebuild.
 An administrator connected through [Civic Pulse MCP](/docs/ai/) can set
 `is_meeting: true` on an event, save meeting notes or a transcript, and upload
 meeting originals using resumable upload sessions. Use
-`begin_meeting_attachment_upload`, transfer original bytes directly through
-Storage TUS, then `finalize_meeting_attachment_upload`. The limit is 25 MiB;
+`begin_meeting_attachment_upload`, then `manage_meeting_attachment_upload` with
+`action=transfer_chunk` for bounded 256 KiB original-byte chunks, then
+`finalize_meeting_attachment_upload`. Authentication is forwarded internally;
+do not extract a connector token for direct Storage TUS. The limit is 25 MiB;
 inline `upload_meeting_attachment` is limited to 3 MiB. Sessions retain source
 identity and SHA-256 so an interrupted response can be reconciled using
 `manage_meeting_attachment_upload`. JSON public-source projections are supported.
@@ -714,3 +716,23 @@ show the effective result, original recorded outcome and source evidence; privat
 records retain their existing gates. Rebuild and recheck meeting/person pages and
 published JSON before closing a correction report. No real outcome backfill is
 included; review and publish source-supported batches after the release.
+
+## Original documents through a connected agent
+
+Use `begin_meeting_attachment_upload`, then the same session's
+`manage_meeting_attachment_upload` with `action=transfer_chunk`, `id`, byte
+`offset` and `data_base64` for at most **256 KiB of original bytes**. Keep the
+original byte count/hash and exact bytes; do not send an entire large PDF in one
+call. No general bearer/service key is needed in tool arguments. The server uses
+the connected caller's authentication internally; do not copy browser/connector
+tokens or manually supply a TUS Location.
+
+After an interrupted response, use `transfer_status`. Retry an exact pending
+chunk at its original offset; the server skips its accepted prefix. A different
+chunk at that offset conflicts. A transfer is bound to its initiating admin.
+Wait out a busy two-minute lease before retrying. `creation_uncertain` means a
+Storage creation receipt is missing: retain the session for operator reconciliation,
+not a new source-key workaround. Finalize with the existing session ID and verify
+the downloaded original's SHA-256. Existing meeting visibility and separate public
+archive publication remain unchanged. This release still needs the hosted connector
+acceptance check described in issue #60; local success alone does not close it.

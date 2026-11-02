@@ -44,7 +44,7 @@ jobs:
           '
       - run: bun run db:seed-user
       - run: bun run mcp:check
-      - run: bun test scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
+      - run: bun test scripts/tests/meeting-upload-relay.test.ts scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
         env:
           MEETING_IMPORT_INTEGRATION: '1'
       - name: Verify cited meeting outcome observations

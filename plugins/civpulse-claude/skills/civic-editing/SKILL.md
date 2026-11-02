@@ -43,10 +43,11 @@ pagination and provenance; read back both it and get_meeting after import.
 For original meeting files, use begin_meeting_attachment_upload with a stable
 provider/source_key, exact size and SHA-256. The maximum is 26,214,400 bytes (25 MiB).
 PDF, Office, OpenDocument, TXT, CSV and JSON source projections are supported.
-Upload directly to the returned Storage TUS endpoint in 6 MiB chunks, using the
-scoped x-signature token plus the connected user's Bearer token and public API
-key where the gateway requires them. Persist the TUS Location; resume via HEAD
-Upload-Offset and PATCH, without x-upsert. These byte transfers bypass MCP JSON.
+Connected agents use manage_meeting_attachment_upload action=transfer_chunk with
+bounded 256 KiB original-byte chunks; transfer_status reconciles offsets. Never
+extract a general connector Bearer token. Direct 6 MiB Storage TUS is retained
+only for applications already possessing their own authenticated session; that
+legacy path persists the TUS Location and uses HEAD/PATCH without x-upsert.
 Sessions last 24 hours; repeat begin to refresh the two-hour upload signature.
 Call finalize_meeting_attachment_upload to verify original bytes and create one
 canonical attachment. On interruption use manage_meeting_attachment_upload, then
@@ -141,3 +142,18 @@ public correction_reason. Stale IDs do not overwrite. Never invent import source
 keys to bypass conflicts. Observation/correction fields are public where the vote
 is public: exclude account details and private notes. Rebuild/publication is needed
 for public snapshots. This release does not perform a real-data backfill.
+
+## Transfer original bytes without extracting an OAuth token
+
+When the live schema advertises it, begin_meeting_attachment_upload returns
+mcp_transfer guidance. Call manage_meeting_attachment_upload action=transfer_chunk
+with session id, byte offset and canonical data_base64 for at most 262144 original
+bytes (349528 base64 characters). Never send the whole large PDF, a general bearer,
+service key, arbitrary URL or headers. Server-owned TUS state forwards caller auth.
+Use transfer_status after uncertainty; retry the exact pending chunk at its original
+offset so HEAD can skip accepted bytes. Changed replay bytes conflict. Transfers
+are initiating-admin-bound; wait for busy leases to expire. creation_uncertain
+requires operator reconciliation, not a new source key or blind repeated POST.
+Finalize the same session and verify downloaded SHA-256. This does not publish an
+archive copy. Hosted issue #60 acceptance with captured originals remains pending
+until main-first migration/deployment and actual connected-agent verification.

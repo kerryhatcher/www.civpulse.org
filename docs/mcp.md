@@ -632,3 +632,16 @@ import keys. See [the source contract](./meeting-imports.md#cited-outcome-observ
 Run `bun run plugin:build`, `bun run plugin:claude:sync` and
 `bun run plugin:claude:check` after tool changes; refresh client discovery after
 the main-first migration/MCP release. This source change does not deploy or backfill.
+
+## Connector-authenticated original byte transfer
+
+`manage_meeting_attachment_upload` now supports `transfer_chunk` and
+`transfer_status` within the existing tool. Compatibility remains 128 tools;
+compact remains 72. Begin a stable session, send original-byte chunks of at most
+256 KiB as canonical base64 with their byte offsets, reconcile status/pending chunks,
+and finalize/download-verify through existing tools. Do not extract or supply a
+general OAuth token, service key, arbitrary Storage URL or headers. The verified
+request token is passed only in internal server context; it is not a tool argument
+or result. Other admins cannot take over an owner-bound transfer. See
+[meeting-imports.md](./meeting-imports.md#authenticated-mcp-byte-transfer) for
+creation uncertainty, lease retry, exact replay and hosted release checks.

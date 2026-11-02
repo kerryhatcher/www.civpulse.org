@@ -5351,7 +5351,7 @@
   },
   {
     "name": "begin_meeting_attachment_upload",
-    "description": "Begin/reconcile an original-document upload (admin, 1–26,214,400 bytes). Stable provider/source_key returns the same 24-hour session; changed metadata conflicts. Returns a private Storage TUS endpoint, scoped x-signature token and exact metadata (also send your connected user Bearer token and public API key when required by the Storage gateway): upload original bytes directly in 6 MiB PATCH chunks, persist the TUS Location and resume using HEAD Upload-Offset. Do not send large base64 through MCP. Never set x-upsert. Finalize after upload; status reconciles uncertain responses. PDF, Office, OpenDocument, TXT, CSV and JSON projections supported. Signed token expires in 2 hours; repeat begin to refresh within session lifetime. No R2 publication.",
+    "description": "Begin/reconcile an original-document upload (admin, 1–26,214,400 bytes). Stable provider/source_key returns the same 24-hour session; changed metadata conflicts. Connected agents use manage_meeting_attachment_upload action=transfer_chunk with id, byte offset and at most 256 KiB of original bytes encoded as base64; transfer_status reconciles progress without exposing the caller token or TUS Location. Legacy direct-TUS endpoint/scoped x-signature metadata is also returned for applications that already possess their own user token; connected agents must not extract one. Never send a whole large file in one MCP call. Never set x-upsert. Finalize after upload; status reconciles uncertain responses. PDF, Office, OpenDocument, TXT, CSV and JSON projections supported. Signed token expires in 2 hours; repeat begin to refresh within session lifetime. No R2 publication.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5434,7 +5434,7 @@
   },
   {
     "name": "manage_meeting_attachment_upload",
-    "description": "Admin upload reconciliation and cleanup. action=status returns the session/checksum and stored-object state; partial offsets require HEAD on the saved TUS Location. action=cancel records a durable cancelled receipt then removes staged bytes; terminate saved TUS URLs first and repeat cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.",
+    "description": "Admin upload transfer/reconciliation/cleanup. action=transfer_chunk accepts id, exact byte offset and data_base64 of 1–262144 original bytes (maximum 349528 base64 characters). Server forwards caller auth internally and owns HEAD/TUS state; never supply an OAuth token or arbitrary URL. Exact replay is unchanged; changed chunk bytes conflict. transfer_status returns committed/storage offsets and pending-chunk bounds; retry the exact pending chunk after uncertainty. A lost creation Location returns creation_uncertain without another POST; operator reconciliation is required. Transfer is bound to its initiating admin. action=status retains session/checksum/stored-object metadata. action=cancel records a durable cancelled receipt then removes staged bytes; terminate saved TUS URLs first and repeat cleanup after capabilities expire. Completed attachments are protected. action=list_cleanup lists up to 100 expired/cancelled receipts. No existing backfill attachments are deleted automatically.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5443,7 +5443,9 @@
           "enum": [
             "status",
             "cancel",
-            "list_cleanup"
+            "list_cleanup",
+            "transfer_chunk",
+            "transfer_status"
           ]
         },
         "id": {
@@ -5456,6 +5458,11 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 9007199254740991
+        },
+        "data_base64": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 349528
         }
       },
       "required": [
