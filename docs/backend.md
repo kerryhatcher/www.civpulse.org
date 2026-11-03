@@ -2009,3 +2009,13 @@ revision/currency/unit/period/grain, only with a source-asserted disjoint-row ba
 No collectors, inferred payment links or automatic stubs. See [the version-1 contract](./obligations.md)
 for bounded atomic acceptance, corrections/cancellations, source scope, read APIs,
 exports, RLS/history/rebuild gates and main-first release instructions.
+
+## Professional-service fee and per-diem reports
+
+Separate immutable `service_fee_reports` / `service_fee_observations` retain raw
+recipient/description/category, exact signed strings, reviewed typed recipient links,
+classification review and source provenance. Admin-only versioned acceptance and
+visibility-aware browsing follow the obligation report pattern; original-category
+sums are scoped by revision/currency/period/grain only for source-asserted disjoint
+rows. Hidden people are excluded before raw payloads/counts/sums/audit. Receipt does
+not create employment or office service. See [service-fees.md](./service-fees.md).

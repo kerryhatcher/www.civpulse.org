@@ -1550,6 +1550,159 @@
     }
   },
   {
+    "name": "accept_service_fee_report",
+    "description": "Admin version-1 complete bounded service-fee report acceptance, default dry run; 1–100 rows/1 MiB atomic. Preserve raw payer/recipient labels, source grain, signed decimal strings, currency/unit/period and full provenance. Reviewed existing person/org recipients only; unresolved recipients private/unlinked. No payments/contract/balance inference or automatic stubs. Exact retry unchanged; corrections/cancellations append explicit latest supersession with reason. See docs/service-fees.md.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "report": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        },
+        "rows": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "dry_run": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "version",
+        "provider",
+        "report",
+        "rows"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "browse_service_fees",
+    "description": "Read/search/detail source service-fees, not payments. Optional organization/year/recipient/query/observation/history filters; bounded pages. Hidden-person rows are excluded entirely from public counts, raw names, links and sums. Exact visible sums only per source-asserted disjoint report revision/currency/unit/period/grain; never combine report groups/history or infer balances.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "organization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 9999
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "query": {
+          "default": "",
+          "type": "string",
+          "maxLength": 200
+        },
+        "recipient_kind": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "person",
+                "organization"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recipient_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observation_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "history": {
+          "default": false,
+          "type": "boolean"
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "limit": {
+          "default": 50,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "get_layer_geojson",
     "description": "Get stored layer geometry. Non-admin callers must provide a visible map containing this layer.",
     "inputSchema": {

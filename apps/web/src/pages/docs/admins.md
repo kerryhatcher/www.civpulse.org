@@ -803,3 +803,17 @@ with supporting citations link payments; no vendor-total matching or inferred
 balance. Recheck public/admin/detail/history/download views, especially private
 people (raw names and amounts must be absent publicly), then publish static context
 or visibility changes. No production obligations are backfilled by this release.
+
+### Accepting professional-service fee reports
+
+Use compact MCP `accept_service_fee_report` version1 with default dry run before
+explicit publication. Review existing organization and typed recipient UUIDs; retain
+raw names, descriptions/categories and distinct source row keys. Uncertain identities
+stay private/unlinked; classification review is separate from raw category. Do not
+create employee affiliations, office service or guessed professions. Preserve exact
+signed decimal strings, reporting grain, source evidence and unknown dates. A complete
+bounded report is atomic (100rows/1MiB); exact retries are unchanged and corrections
+must explicitly supersede the latest report with a reason. No collector/backfill is
+included. See the repository’s `docs/service-fees.md` contract. Public category sums
+need source-backed disjointness and must not be added to payroll/payments without
+reconciliation. Deploy the released migration before matching MCP/web code.

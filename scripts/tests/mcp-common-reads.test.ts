@@ -82,13 +82,13 @@ test('compact catalog replaces only planned reads/writes; all other schemas rema
   }
   const legacy = await catalog('legacy'), compact = await catalog('compact');
   expect(legacy).toHaveLength(128);
-  expect(compact).toHaveLength(79);
+  expect(compact).toHaveLength(81);
   expect(new Set(compact.map(tool => tool.name)).size).toBe(compact.length);
   // Account for deliberate v2-only tools as well as consolidated legacy tools:
   // a matching count alone must not hide a missing tool or accidental addition.
   const legacyNames = new Set(legacy.map(tool => tool.name));
   expect(compact.filter(tool => !legacyNames.has(tool.name)).map(tool => tool.name).sort()).toEqual([
-    'accept_obligation_report', 'accept_officeholder_observations', 'accept_user_fee_report', 'browse_obligations', 'browse_user_fees', 'delete_relationship', 'get_civic_record', 'get_county_statistic_catalog', 'import_meeting_source', 'read_officeholder_observations', 'read_related_records',
+    'accept_obligation_report', 'accept_officeholder_observations', 'accept_service_fee_report', 'accept_user_fee_report', 'browse_obligations', 'browse_service_fees', 'browse_user_fees', 'delete_relationship', 'get_civic_record', 'get_county_statistic_catalog', 'import_meeting_source', 'read_officeholder_observations', 'read_related_records',
     'save_article', 'save_ballot_question', 'save_calendar', 'save_contest', 'save_county_statistic',
     'save_county_statistic_source', 'save_election', 'save_event', 'save_layer', 'save_layer_feature',
     'save_map', 'save_office', 'save_office_term', 'save_organization', 'save_person', 'save_relationship',

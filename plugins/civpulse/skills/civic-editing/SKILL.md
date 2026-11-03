@@ -203,3 +203,13 @@ not payments/contract values; only source-supported IDs/citations link payments.
 Disjoint-row sums stay per visible filtered report group; never combine revisions,
 overlapping grains or cash payments. Hidden people must be absent from raw public
 rows, totals, detail, audit and exports. No collector or production import authorized.
+
+For professional-service fees, per diem and related expenses, use compact
+`accept_service_fee_report` version1 (default dry run) and `browse_service_fees`.
+Preserve source row identity, raw recipient/description/category, exact signed
+strings, period/unit/grain and provenance. Reviewed existing typed recipients only;
+unresolved links stay private/unlinked. Classification review is separate from raw
+category. No receipt creates employment, office service or a guessed profession.
+Category totals need source-backed disjointness and cannot be added to payroll or
+payments without reconciliation. Corrections explicitly supersede the latest report.
+See the owning repository’s `docs/service-fees.md` contract; no collector/backfill.

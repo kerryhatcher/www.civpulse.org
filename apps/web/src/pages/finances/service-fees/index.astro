@@ -1,0 +1,14 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout title="Professional-service fees and per diem" description="Search source-backed reported professional-service fees and per diem by organization, year and recipient, with exact amounts, source scope and amendment history.">
+ <main id="main" class="finance-page"><p><a href="/finances/">Public finances</a> / Service fees</p>
+ <div class="page-intro"><h1>Professional-service fees and per diem</h1><p>These source-reported professional-service fees, per diem and related expenses are separate from employee salary and ordinary payment transactions. Descriptions do not establish an employment relationship, profession or service dates.</p></div>
+ <form class="calendar-filters" data-service-fee-form role="search" aria-label="Search service fees"><label class="field"><span>Reporting organization</span><select name="organization"><option value="">All reporting organizations</option></select></label><label class="field"><span>Reported year</span><input type="number" name="year" min="1000" max="9999" placeholder="All years including unknown" /></label><label class="field field-wide"><span>Recipient, organization, description or category</span><input type="search" name="q" maxlength="200" /></label><label class="field"><span><input type="checkbox" name="history" /> Include superseded reports</span></label><button type="submit">Search service fees</button></form>
+ <p>Missing coverage is not zero, deletion or misconduct. These records may overlap payroll or payment datasets. Do not combine their totals without source-backed reconciliation establishing non-overlap, or add overlapping revisions.</p>
+ <p data-service-fee-status class="status" role="status" aria-live="polite">Loading reported service-fees…</p><section data-service-fee-totals aria-label="Scoped report comparisons"></section><div data-service-fee-results></div>
+ <nav class="finance-actions" aria-label="ServiceFee result pages"><button type="button" data-service-fee-previous hidden>Previous</button><button type="button" data-service-fee-next hidden>Next</button><button type="button" data-service-fee-csv hidden>Download observation page (CSV)</button><button type="button" data-service-fee-json hidden>Download page and scoped totals (JSON)</button></nav>
+ <noscript><p>Enable JavaScript to search added reports, or consult <a href="https://open.ga.gov/openga/service-fee/index">Open Georgia's original fee and expense reporting</a>. This link does not establish county-wide coverage.</p></noscript></main>
+</Layout>
+<script>import{initServiceFees}from'../../../scripts/service-fees';void initServiceFees();</script>
+<style>:global([data-service-fee-results]),:global([data-service-fee-totals]){overflow-wrap:anywhere;min-width:0;} :global([data-service-fee-results] article),:global([data-service-fee-totals] article){border:1px solid var(--line,#aaa);padding:1rem;margin-block:1rem;}</style>

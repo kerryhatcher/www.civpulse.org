@@ -704,3 +704,16 @@ source review supports disjoint rows. Do not add cards/revisions or obligations 
 payments together. Unknown coverage is not zero or misconduct. Exact observation
 and typed vendor links retain scope. CSV exports observation rows only; JSON also
 includes explicitly scoped report-group totals. Neither export is a complete ledger.
+
+### Professional-service fees and per diem
+
+[Browse reported fees, per diem and expenses](/finances/service-fees/) by reporting
+organization, year, recipient or original description/category. Profile links scope
+the same records to reviewed recipients. Include superseded reports for history;
+source details preserve retrieval, publication, checksum, locator and coverage.
+Category totals include matching visible rows only where source evidence supports
+addition, separately by report revision/currency/period/grain. They may overlap
+payroll or ordinary payment datasets: do not combine totals without reconciliation.
+Receipts do not establish employment, profession or service dates. Missing coverage
+is not zero. CSV exports the displayed observation page; JSON also carries separate
+scoped category totals. Enable JavaScript for live reporting.
