@@ -1983,3 +1983,16 @@ a fingerprint of the complete visible exported set. Static consumers require it
 unchanged across pagination and fail on drift; it is not a persisted DB snapshot.
 Superseded-only history remains reachable through the same gated reader, and
 superseded request responses cannot overwrite newer filters or downloaded pages.
+
+## User-fee reports
+
+Migrations `20261125002800`–`20261125002900` add fee-specific stable identities, immutable source
+report versions and observations with separate structured rates and reported
+collections. It reuses organizations and provenance/acceptance patterns rather
+than treating fees as outgoing payments. Bounded admin acceptance is atomic,
+exact-decimal strings stay strings, and corrections explicitly supersede the
+latest report. RLS and public readers/audit descriptors enforce report visibility
+for the whole revision chain. No automatic stubs, collectors, production source
+rows or current-effectiveness claims are added. See [the version-1 contract](./user-fees.md)
+for source fields, scalar/range/tier/text rates, missing periods, exact collections,
+read/search filters, exports and main-first release instructions.

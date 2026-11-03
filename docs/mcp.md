@@ -675,3 +675,18 @@ the complete batch. No people/terms are created automatically. A roster observat
 is not a term boundary, election outcome or current-office label. Original source
 verification, identity review and confidence are separate fields. Read back source,
 precision, conflicts and supersession history, then publish public profile snapshots.
+
+### User fees
+
+Compact tools `accept_user_fee_report` and `browse_user_fees` implement the
+[version-1 fee contract](./user-fees.md); compact becomes 77 tools, legacy remains
+128. Acceptance requires admin, defaults to dry run and atomically validates a
+complete bounded source report (1–100 observations / 1 MiB). Resolve an existing
+organization UUID, preserve reported labels and explicit identity-review status,
+and retain source SHA/retrieval/publication/page/coverage. Structured rates and
+separate collections use exact decimal strings, never floats. Unknown collections
+are null; authority is not a current-effectiveness declaration. Changed reports
+require the latest supersedes_id and public correction_reason; no immutable
+observation is overwritten. Browse supports organization/year/fee/query/history
+and bounded pagination with the same public/ordinary-user privacy gates. No
+collector, automatic stub creation, transaction estimates or production import.

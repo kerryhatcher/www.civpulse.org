@@ -770,3 +770,19 @@ roll back the whole batch. Corrections require the latest observation ID and a
 public reason; immutable history is retained. Publish and check both person and
 organization views after acceptance or visibility changes. The FY2022 ACFR cited
 in issue #147 is not imported or newly verified by this feature.
+
+### Accepting sourced fee reports
+
+After main-first release, use compact MCP `accept_user_fee_report` version 1; this
+feature has no collector or separate browser editor. Resolve the exact existing
+charging organization UUID and preserve its raw source label/review status. Never
+infer a body from a similar name or create duplicate curated organizations. Retain
+source URL, actual retrieval timestamp, checksum, publication date when known,
+page/table/row locators and coverage. Preserve scalar/range/tier/text fee structures,
+source units, authority citations, effective-date uncertainty and collections as
+separate exact decimal strings/null. An authority citation is not a claim of current
+effectiveness. Dry-run the complete bounded report, then explicitly accept; errors
+roll back the whole batch. Exact replay is unchanged; amendments need the current
+report ID and public correction reason. Read back public/admin views and history,
+check units and missing collections, and publish static context/visibility changes
+through the existing workflow. No real fee records are backfilled by this release.

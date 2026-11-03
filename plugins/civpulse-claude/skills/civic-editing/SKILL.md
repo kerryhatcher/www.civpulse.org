@@ -182,3 +182,13 @@ fuzzy matched or automatically created. Snapshots do not create service interval
 term boundaries or current-office status. Source evidence, identity review and
 confidence are distinct. Whole batches roll back on a conflict/error; exact replay
 is unchanged and corrections require the current supersedes_id plus a public reason.
+
+User-fee schedules use compact `accept_user_fee_report` version 1 and
+`browse_user_fees` (docs/user-fees.md). Resolve an existing organization UUID and
+preserve raw labels/identity-review status. Default dry-run validates one complete
+bounded report atomically; changed stable reports need latest supersedes_id and
+correction_reason. Rates may be scalar/range/tiered/text/unknown with exact decimal
+strings and units; collections are a separate string/null measure. Never infer
+transactions, total incompatible units, or treat legal citations as current fee
+applicability. Preserve source URL/hash/retrieval/publication/locators, unknown dates
+and coverage. No collectors, production backfills or automatic stubs are authorized.

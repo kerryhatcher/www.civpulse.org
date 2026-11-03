@@ -1,0 +1,22 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout title="Reported user fees and collections" description="Explore source-backed government fee schedules, reported collections and authorization citations by organization and reporting year.">
+ <main id="main" class="finance-page">
+ <p><a href="/finances/">Public finances</a> / User fees</p>
+ <div class="page-intro"><h1>Reported user fees and collections</h1><p>Compare source-reported rates, collections and authorizations. These are separate measures. An authority citation does not establish that a fee is currently effective.</p></div>
+ <form class="calendar-filters" data-fee-form role="search" aria-label="Search user fees">
+ <label class="field"><span>Organization</span><select name="organization"><option value="">All reporting organizations</option></select></label>
+ <label class="field"><span>Reported year</span><input type="number" name="year" min="1000" max="9999" placeholder="All years, including unknown" /></label>
+ <label class="field field-wide"><span>Fee, purpose or organization</span><input type="search" name="q" maxlength="200" /></label>
+ <label class="field"><span><input type="checkbox" name="history" /> Include superseded reports</span></label>
+ <button type="submit">Search user fees</button></form>
+ <p class="body-note">Missing collections and dates are unknown, not zero. Do not estimate customers or transactions by dividing collections by a rate. Different currencies, units, tiers, exemptions and reporting grains may not be comparable. Coverage is limited to added reports; no comprehensive county dataset is implied.</p>
+ <p data-fee-status class="status" role="status" aria-live="polite">Loading reported fees…</p>
+ <div data-fee-results></div>
+ <nav class="finance-actions" aria-label="Fee result pages"><button type="button" data-fee-previous hidden>Previous</button><button type="button" data-fee-next hidden>Next</button><button type="button" data-fee-csv hidden>Download this page (CSV)</button><button type="button" data-fee-json hidden>Download this page (JSON)</button></nav>
+ <noscript><p>Enable JavaScript to search source-backed fee observations. Original government reporting resources include <a href="https://open.ga.gov/openga/reportHome/financialReport">Open Georgia financial reports</a>; this link does not establish local fee coverage or current effectiveness.</p></noscript>
+ </main>
+</Layout>
+<script>import {initUserFees} from '../../../scripts/user-fees';void initUserFees();</script>
+<style>:global([data-fee-results]){overflow-wrap:anywhere;} :global([data-fee-results] table){width:100%;} :global([data-fee-results] td),:global([data-fee-results] th){vertical-align:top;text-align:left;padding:.5rem;white-space:normal;} :global([data-fee-results] article){margin-block:1.5rem;padding:1rem;border:1px solid var(--line,#aaa);} :global([data-fee-results] dl){display:grid;gap:.4rem;}</style>
