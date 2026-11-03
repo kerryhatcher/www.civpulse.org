@@ -144,3 +144,18 @@ warnings/errors. An extension UI briefly blocked sign-in automation; checks resu
 after the user dismissed it. Canonical synthetic reports, organizations, person and
 Auth user were removed (zero remain); protected audit history naturally remains.
 The final build uses the isolated backend after cleanup, not production data.
+
+### Recipient filter and payer review follow-up
+
+Append-only migration `20261125003300` applies a recipient-kind filter even without
+an individual recipient UUID; the ID is an additional narrowing predicate. Counts
+and category sums use the same filtered visible rows. Admin-only rows remain
+subject to the existing role gates. The report CHECK now requires a non-null
+review assertion for both reviewed linked payers and unresolved restricted payers;
+missing manifest keys cannot pass via SQL NULL semantics. Applied migration 031
+is unchanged. The follow-up does not import sources or rewrite reports.
+
+Run the isolated DB regression and `scripts/tests/service-fee-mcp.test.ts` for
+kind-only filters, exact sums, missing review keys and MCP RPC/argument mapping.
+A concurrent isolated workflow already owned version 032; this unapplied follow-up
+was assigned 033 without altering that workflow, migration history or shared DB.
