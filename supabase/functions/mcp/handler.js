@@ -2180,7 +2180,7 @@ function registerOfficeTools(server, supabase, writes, reads) {
       organization_id: z10.string().uuid().optional(),
       as_of: z10.string().date().optional(),
       history: z10.boolean().default(false),
-      offset: z10.number().int().min(0).default(0),
+      offset: z10.number().int().min(0).max(2147483647).default(0),
       limit: z10.number().int().min(1).max(100).default(50)
     }, async (input) => {
       const { data, error } = await supabase.rpc("read_officeholder_observations", { p_person_id: input.person_id ?? null, p_organization_id: input.organization_id ?? null, p_as_of: input.as_of ?? null, p_history: input.history, p_offset: input.offset, p_limit: input.limit });

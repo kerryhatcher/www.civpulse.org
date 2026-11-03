@@ -1,5 +1,5 @@
 import {test,expect} from 'bun:test';import {SQL} from 'bun';
-import {observationDate,observationSummary,type OfficeholderObservation} from '../../apps/web/src/lib/officeholder-observations';
+import {observationDate,observationSummary,observationMatches,observationSource,type OfficeholderObservation} from '../../apps/web/src/lib/officeholder-observations';
 test('linked observations never imply corroboration regardless of review status',()=>{
  for(const review_status of ['reviewed','unresolved','conflicting']){
   const summary=observationSummary({revision:1,superseded:false,payload:{reported_person:'Synthetic person',reported_office:'Chair',role:'Chair',reported_organization:'Historical authority',precision:'day',as_of:'2018-01-01',review_status,office_term_id:'2020-2023-term'}} as OfficeholderObservation);
@@ -25,8 +25,11 @@ test.skipIf(!process.env.OFFICEHOLDER_DATABASE_URL)('immutable observations, cor
  const read=async(history=false,asof:string|null=null)=>(await tx`select public.read_officeholder_observations(${p.id},null,${asof}::date,${history},0,50) data`)[0].data;
  expect(await accept([row],true)).toMatchObject({created:1,dry_run:true});expect((await read()).total).toBe(0);
  const first=await accept([row]);expect(first.created).toBe(1);expect((await accept([row])).unchanged).toBe(1);
+ await tx.unsafe('reset role');const [afterFirst]=await tx`select revision from public.frontend_rebuild_state where id`;expect(Number(afterFirst.revision)).toBeGreaterThan(Number(before.revision));await tx.unsafe('set local role authenticated');
+ for(const source_url of ['https://example.test:abc','https://example.test:65536','https://:443','https://user@example.test'])expect((await accept([{...row,source_key:source_url,source_url}])).status).toBe('rejected');
  expect((await accept([{...row,role:'Changed'}])).status).toBe('conflict');
- const corrected={...row,role:'Corrected reported chair label',supersedes_id:first.ids[0],correction_reason:'Reviewed exact source row'};const correction=await accept([corrected]);expect(correction.created).toBe(1);expect((await accept([corrected])).unchanged).toBe(1);
+ const beforeCorrection=(await tx`select public.export_public_officeholder_observations(0,100) data`)[0].data;
+ const corrected={...row,role:'Corrected reported chair label',supersedes_id:first.ids[0],correction_reason:'Reviewed exact source row'};const correction=await accept([corrected]);expect(correction.created).toBe(1);const afterCorrection=(await tx`select public.export_public_officeholder_observations(0,100) data`)[0].data;expect(afterCorrection.total).toBe(beforeCorrection.total);expect(afterCorrection.snapshot).not.toBe(beforeCorrection.snapshot);expect((await accept([corrected])).unchanged).toBe(1);
  expect((await read()).total).toBe(1);expect((await read(true)).total).toBe(2);expect((await accept([{...corrected,role:'Stale correction'}])).status).toBe('conflict');
  for(const [precision,date]of[['year','2021-01-01'],['unknown',null]])expect((await accept([{...row,source_key:precision,precision,as_of:date,person_id:null,office_id:null,office_term_id:null,review_status:'unresolved'}])).created).toBe(1);
  expect((await accept([{...row,source_key:'bad-year',precision:'year'}])).status).toBe('rejected');
@@ -46,13 +49,16 @@ test.skipIf(!process.env.OFFICEHOLDER_DATABASE_URL)('immutable observations, cor
  await tx.unsafe('savepoint denied');try{await accept([row]);throw Error('Expected denial');}catch(e){expect((e as any).errno).toBe('42501');}finally{await tx.unsafe('rollback to savepoint denied');}}
  await tx.unsafe('set local role authenticated');await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
  expect((await accept([{...corrected,visibility:'private',supersedes_id:correction.ids[0],correction_reason:'Restrict disputed identity pending review'}])).created).toBe(1);
+ const restrictedExport=(await tx`select public.export_public_officeholder_observations(0,100) data`)[0].data;expect(restrictedExport.rows.filter((r:any)=>r.payload.organization_id===org.id)).toHaveLength(3);expect(restrictedExport.rows.some((r:any)=>r.source_key==='report:2022:roster:1')).toBe(false);
  await tx`select set_config('request.jwt.claim.sub',${user},true)`;
  expect((await read(true)).rows.every((r:any)=>r.source_key!=='report:2022:roster:1')).toBe(true);
  expect((await tx`select public.get_object_history('officeholder_observations',${first.ids[0]}) data`)[0].data.revisions).toHaveLength(0);
  await tx.unsafe('reset role');await tx`update public.people set visibility='private' where id=${p.id}`;
  await tx.unsafe('set local role authenticated');await tx`select set_config('request.jwt.claim.sub',${user},true)`;expect((await read(true)).total).toBe(0);
  await tx.unsafe('reset role');expect((await tx`select * from public.office_terms where id=${term.id}`)[0]).toEqual(term);
- expect(Number((await tx`select revision from public.frontend_rebuild_state where id`)[0].revision)).toBeGreaterThan(Number(before.revision));expect(await tx`select * from audit.objects where table_name='officeholder_observations'`).toHaveLength(1);
+ expect(await tx`select * from audit.objects where table_name='officeholder_observations'`).toHaveLength(1);
  throw rollback;
  });}catch(e){if(e!==rollback)throw e;}finally{await sql.close();}
 });
+
+test('UUID projection is case independent and source links parse safely',()=>{const r={payload:{person_id:'ABC-DEF',organization_id:'AAA-BBB'}} as any;expect(observationMatches(r,'abc-def','aaa-bbb')).toBe(true);expect(observationMatches(r,undefined,'ccc')).toBe(false);expect(observationSource('https://example.test:abc')).toBeUndefined();expect(observationSource('https://example.test:443/report')).toBe('https://example.test/report');});

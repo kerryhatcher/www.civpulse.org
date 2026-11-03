@@ -1976,3 +1976,10 @@ feature migrations only on isolated API 54341 / DB 54342; main-first production
 release and separately reviewed source acceptance remain follow-up work.
 
 Observation audit descriptors also apply nested visibility and current-chain visibility. A restricted latest correction suppresses older revisions from public history; direct RPC history and global/parent audit reads must not reveal private source payloads.
+
+Review follow-up `20261125002700` validates source URL authorities/ports on insert;
+renderers also parse HTTPS links before exposing them. Public export pages include
+a fingerprint of the complete visible exported set. Static consumers require it
+unchanged across pagination and fail on drift; it is not a persisted DB snapshot.
+Superseded-only history remains reachable through the same gated reader, and
+superseded request responses cannot overwrite newer filters or downloaded pages.
