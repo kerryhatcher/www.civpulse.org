@@ -10,8 +10,10 @@ const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZ
   <div class="sos-controls">
     <label> SOS reporting area<select data-sos-jurisdiction aria-label="SOS reporting area"><option value="">Choose a reporting area</option></select></label>
     <label>{inline ? 'Find an unmapped source race or choice' : 'Find a contest or choice'}<input data-sos-search type="search" /></label>
+    <button data-sos-sound type="button" aria-describedby="sos-sound-help" aria-pressed="true" title="Soft ding after changed results; starts after you interact with this page.">Update sound: on</button>
     <button data-sos-refresh type="button">Refresh SOS results</button>
   </div>
+  <p id="sos-sound-help" class="body-note">Update sound starts after you interact with this page. Your browser remembers when you mute it.</p>
   <p data-sos-status role="status" aria-live="polite">Checking for SOS results…</p>
   <p data-sos-times class="body-note"></p>
   <p><a data-sos-source href="https://results.sos.ga.gov/" target="_blank" rel="noopener noreferrer">Georgia Secretary of State source</a></p>

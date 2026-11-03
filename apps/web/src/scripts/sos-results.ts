@@ -1,3 +1,5 @@
+import { sosResultsFingerprint } from "../lib/sos-results-change";
+import { createSosResultsSound } from "./sos-results-sound";
 import { getSupabase } from "../lib/supabase";
 import { selectedCounty } from "./county-filter";
 import { clearInlineSos, renderInlineSos } from "./sos-ballot";
@@ -56,6 +58,8 @@ export async function initSosResults(
   )!;
   const search = root.querySelector<HTMLInputElement>("[data-sos-search]")!;
   const refresh = root.querySelector<HTMLButtonElement>("[data-sos-refresh]")!;
+  const sound = createSosResultsSound(root.querySelector<HTMLButtonElement>("[data-sos-sound]")!);
+  let appliedFingerprint: string | undefined;
   const status = root.querySelector<HTMLElement>("[data-sos-status]")!;
   const times = root.querySelector<HTMLElement>("[data-sos-times]")!;
   const content = root.querySelector<HTMLElement>("[data-sos-content]")!;
@@ -294,13 +298,20 @@ export async function initSosResults(
           source.href = result.pointer.source_url;
       }
       if (result.pointer && result.scope) {
+        const fingerprint = sosResultsFingerprint(result.scope);
+        const resultsChanged = appliedFingerprint !== fingerprint;
+        const notify = appliedFingerprint !== undefined && !!view && view.scope.jurisdiction.id === chosen &&
+          result.scope.jurisdiction.id === chosen && resultsChanged;
         const changed =
+          resultsChanged ||
           !view ||
           mappingChanged ||
           view.pointer.snapshot_id !== result.pointer.snapshot_id ||
           view.scope.jurisdiction.id !== result.scope.jurisdiction.id;
         view = { pointer: result.pointer, scope: result.scope };
         if (changed) render();
+        appliedFingerprint = fingerprint;
+        if (notify) sound.play();
         status.textContent =
           health?.status === "delayed"
             ? "Collection delayed. Showing the latest published SOS results; browser checks continue automatically."
@@ -334,6 +345,7 @@ export async function initSosResults(
     }
   }
   const change = () => {
+    appliedFingerprint = undefined;
     chosen = area.value;
     void load();
   };
@@ -362,6 +374,7 @@ export async function initSosResults(
   window.addEventListener("online", refreshNow);
   window.addEventListener("offline", offline);
   dispose = () => {
+    sound.dispose();
     stopped = true;
     generation++;
     clearTimeout(timer);
