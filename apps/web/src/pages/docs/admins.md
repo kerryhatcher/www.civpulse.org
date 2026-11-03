@@ -751,3 +751,22 @@ if an in-flight write finishes. Finalize with the existing session ID and verify
 the downloaded original's SHA-256. Existing meeting visibility and separate public
 archive publication remain unchanged. This release still needs the hosted connector
 acceptance check described in issue #60; local success alone does not close it.
+
+### Historical roster observations
+
+Use the compact MCP `accept_officeholder_observations` version-1 contract after
+main-first release; this release has no separate web roster editor or collector.
+Resolve the historical organization and exact existing office/person IDs; preserve
+reported spelling, role, district/seat and source labels independently. Leave an
+ambiguous name unlinked and unresolved rather than guessing or duplicating a
+curated person. Record original/indexed-copy/unverified evidence status honestly,
+including original-source availability, SHA-256, retrieval date and exact page/row.
+Identity review does not mean the original was independently verified. A June 30
+roster establishes no January 1 start, December 31 end, election, appointment or
+current-office status. Use year/unknown precision when appropriate. Link existing
+corroborating terms without changing them; flag contradictions, acting/interim
+roles and predecessor organizations explicitly. Dry-run first; conflicts/errors
+roll back the whole batch. Corrections require the latest observation ID and a
+public reason; immutable history is retained. Publish and check both person and
+organization views after acceptance or visibility changes. The FY2022 ACFR cited
+in issue #147 is not imported or newly verified by this feature.

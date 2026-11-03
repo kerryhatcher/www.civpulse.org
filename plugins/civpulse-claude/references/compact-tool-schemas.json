@@ -3182,6 +3182,99 @@
     }
   },
   {
+    "name": "read_officeholder_observations",
+    "description": "Read bounded dated roster observations for an existing person or organization. Snapshots do not establish term boundaries or current officeholders. Optional exact day/year context and supersession history; same public-only visibility for ordinary signed-in users.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "person_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "organization_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "history": {
+          "default": false,
+          "type": "boolean"
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "default": 50,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "accept_officeholder_observations",
+    "description": "Admin version-1 dated roster evidence acceptance, default dry run; up to 100 immutable rows / 1 MiB atomically. Preserve reported labels; exact reviewed UUID reconciliation, day/year/unknown precision and source URL/SHA/retrieval/locator required. No fuzzy matching or people/term creation. Changed stable identities require latest supersedes_id and correction_reason; no overwrite. See docs/backend.md for row contract.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "rows": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "dry_run": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "version",
+        "provider",
+        "rows"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "get_public_document",
     "description": "Get a published public document and its public meeting links. Admins can also inspect pending/withdrawn publication metadata.",
     "inputSchema": {
