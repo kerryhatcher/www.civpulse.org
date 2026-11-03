@@ -3049,3 +3049,16 @@ body { background: var(--canvas); }
 .finance-page details { border-top: 1px solid var(--line); padding-block: 1rem; }
 .finance-page summary { cursor: pointer; font-weight: 600; }
 .finance-page [data-finance-provenance] { overflow-wrap: anywhere; max-width: 75ch; }
+
+/* Vote counts stay comparable across candidate, question and source rows. */
+.candidate-text { flex: 1; }
+.vote-metrics { display: block; min-width: 0; margin-top: .6rem; color: var(--ink); font-size: .875rem; font-variant-numeric: tabular-nums; }
+.vote-metrics-values { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; font-weight: 600; }
+.vote-metrics-label, .vote-metrics-source { color: var(--muted); font-weight: 400; }
+.vote-metrics-source { display: block; margin-top: .3rem; font-size: .75rem; }
+.vote-share-track { display: block; height: .5rem; margin-top: .45rem; background: var(--line); overflow: hidden; border-radius: 2px; }
+.vote-share-fill { display: block; height: 100%; background: var(--ink); }
+.sos-source-choices td, .sos-contest td { min-width: 11rem; }
+.ballot-question-choices > li { display: block; }
+.ballot-question-choices > li + li { margin-top: 1rem; }
+@media (max-width: 480px) { .sos-source-choices td, .sos-contest td { min-width: 8rem; } .vote-metrics-values { gap: .2rem .5rem; } }

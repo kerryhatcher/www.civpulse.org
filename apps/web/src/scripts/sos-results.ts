@@ -1,3 +1,4 @@
+import { buildVoteMetrics } from "./vote-metrics";
 import { sosResultsFingerprint } from "../lib/sos-results-change";
 import { createSosResultsSound } from "./sos-results-sound";
 import { getSupabase } from "../lib/supabase";
@@ -7,7 +8,6 @@ import type { SosContestMapping } from "../lib/sos-ballot";
 import {
   createPublicSosReader,
   readRpcSos,
-  sourceCount,
   sourceStatus,
   type SosView,
   type SosObject,
@@ -144,7 +144,7 @@ export async function initSosResults(
       );
       const head = el("thead"),
         tr = el("tr");
-      for (const label of ["Candidate / choice", "Votes"]) {
+      for (const label of ["Candidate / choice", "Vote share / votes"]) {
         const th = el("th", label);
         th.scope = "col";
         tr.append(th);
@@ -161,7 +161,8 @@ export async function initSosResults(
               : "Unnamed source choice",
           );
         name.scope = "row";
-        row.append(name, el("td", sourceCount(choice.voteCount)));
+        const metrics = el("td"); metrics.append(buildVoteMetrics(choice.voteCount, choices.map(option => option.voteCount)));
+        row.append(name, metrics);
         body.append(row);
       }
       table.append(body);
@@ -347,6 +348,15 @@ export async function initSosResults(
   const change = () => {
     appliedFingerprint = undefined;
     chosen = area.value;
+    // Previous-area values cannot remain visible while the next area is loading.
+    view = undefined;
+    content.replaceChildren();
+    times.textContent = "";
+    root.querySelector<HTMLElement>("[data-sos-fallback]")?.setAttribute("hidden", "");
+    if (inline) {
+      clearInlineSos();
+      window.dispatchEvent(new Event("sosballotchange"));
+    }
     void load();
   };
   const filter = () => render();

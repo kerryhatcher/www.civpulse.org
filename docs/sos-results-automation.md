@@ -343,3 +343,20 @@ API behavior was verified against [Bun S3 documentation](https://bun.sh/docs/run
 and [Cloudflare R2 S3 conditional operations](https://developers.cloudflare.com/r2/api/s3/api/).
 The latter documents atomic conditional PutObject headers; do not substitute an
 unconditional overwrite, cached CDN ETag read, or DB-only stale check.
+
+### Ballot vote metrics
+
+Static and runtime ballot rows share `lib/vote-metrics.ts`: vote share is the
+choice count divided by the sum of every source choice within that contest and
+selected reporting scope. Counts must be nonnegative safe integers and the sum
+must remain safe. Any missing or invalid choice makes the share unavailable;
+known individual counts remain readable. An entirely reported zero contest has
+zero shares. Unmapped candidates/options always retain an unavailable metrics
+row; clearing/changing a scope replaces old annotations with that empty state.
+Additional source choices use the full contest denominator, never only the
+unmapped subset. These shares do not measure turnout or declare winners.
+
+Photo/PDF ballot rows retain valid explicit source totals. When no total is supplied,
+a choice sum is used only if every curated candidate ID or question-option label
+is present in that report; partial reports keep their known counts while shares
+and the total remain unavailable. No other county/style report fills the gap.

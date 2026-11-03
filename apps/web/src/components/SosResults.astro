@@ -1,5 +1,6 @@
 ---
-import { sourceCount, sourceStatus, type SosView, type SosObject } from '../lib/sos-results-reader';
+import VoteMetrics from './VoteMetrics.astro';
+import { sourceStatus, type SosView, type SosObject } from '../lib/sos-results-reader';
 interface Props { electionId?: string; publicAssets?: boolean; fallback?: SosView | null; inline?: boolean }
 const { electionId, publicAssets = false, fallback, inline = false } = Astro.props;
 const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
@@ -22,8 +23,8 @@ const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZ
     <p class="body-note">Published page snapshot · {fallback.scope.jurisdiction.name} · Source reported {stamp(fallback.pointer.source_created_at)} · Published {stamp(fallback.pointer.published_at)}. {fallback.truncated ? 'First 20 source contests in this page snapshot.' : 'This is the published page snapshot.'}</p>
     <p>{sourceStatus(fallback.scope.jurisdiction.reportingStatuses)}</p>
     {!inline && fallback.scope.items.map(item => <details class="sos-contest"><summary>{String(item.data.name)}</summary>
-      <table><caption>{fallback.scope.jurisdiction.name} · {String(item.data.name)}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Votes</th></tr></thead>
-        <tbody>{(item.data.ballotOptions as SosObject[]).map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td>{sourceCount(choice.voteCount)}</td></tr>)}</tbody>
+      <table><caption>{fallback.scope.jurisdiction.name} · {String(item.data.name)}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Vote share / votes</th></tr></thead>
+        <tbody>{(item.data.ballotOptions as SosObject[]).map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td><VoteMetrics count={choice.voteCount} counts={(item.data.ballotOptions as SosObject[]).map(option => option.voteCount)} /></td></tr>)}</tbody>
       </table>
     </details>)}
   </div>}

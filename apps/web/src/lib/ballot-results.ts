@@ -1,5 +1,5 @@
 import { GEORGIA_COUNTIES } from "./county-scope";
-import type { Counts, ResultReport } from "./election-results";
+import type { Counts, ResultReport, ContestResult } from "./election-results";
 
 /** One current county overview per exact ballot style. Never roll up overlapping reports. */
 export function ballotResultReports(
@@ -54,4 +54,24 @@ export function choicePercent(
   return total != null && total > 0 && votes >= 0 && votes <= total
     ? `${((100 * votes) / total).toFixed(2)}%`
     : "Not reported";
+}
+
+/** Infer a choice denominator only when the report covers the curated ballot. */
+export function ballotChoiceTotal(
+  result: ContestResult,
+  expected: { personIds?: string[]; choiceLabels?: string[] },
+): number | null {
+  const valid = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+  if (result.total_votes != null) return valid(result.total_votes) ? result.total_votes : null;
+  const people = expected.personIds ?? [], labels = expected.choiceLabels ?? [];
+  if (!people.length && !labels.length) return null;
+  if (!people.every(id => result.choices.some(choice => choice.person_id === id)) ||
+      !labels.every(label => result.choices.some(choice => choice.label === label))) return null;
+  let total = 0;
+  for (const choice of result.choices) {
+    if (!valid(choice.votes)) return null;
+    total += choice.votes;
+    if (!Number.isSafeInteger(total)) return null;
+  }
+  return total;
 }

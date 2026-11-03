@@ -1,10 +1,10 @@
+import { buildVoteMetrics } from "./vote-metrics";
 import {
   mappedSosItem,
   mappedSosChoice,
   type SosContestMapping,
 } from "../lib/sos-ballot";
 import {
-  sourceCount,
   sourceStatus,
   type SosObject,
   type SosView,
@@ -18,6 +18,9 @@ export function clearInlineSos() {
   document
     .querySelectorAll("[data-sos-inline-runtime]")
     .forEach((node) => node.remove());
+  document.querySelectorAll<HTMLElement>("[data-sos-metrics-slot]").forEach(slot => {
+    slot.replaceChildren(buildVoteMetrics());
+  });
   document
     .querySelectorAll<HTMLElement>("[data-sos-ballot-fallback]")
     .forEach((node) => {
@@ -52,16 +55,11 @@ export function renderInlineSos(
     note.dataset.sosInlineScope = "";
     return note;
   };
-  const count = (choice: SosObject | undefined) => {
-    const node = el(
-      "span",
-      `${sourceCount(choice?.voteCount)}${choice?.voteCount != null ? " votes" : ""} · SOS, ${view.scope.jurisdiction.name}`,
-    );
-    node.className = "sos-inline-count";
-    node.dataset.sosInlineRuntime = "";
+  const count = (choice: SosObject | undefined, choices: SosObject[]) => {
+    const node = buildVoteMetrics(choice?.voteCount, choices.map(option => option.voteCount), `SOS, ${view.scope.jurisdiction.name}`);
     return node;
   };
-  const table = (choices: SosObject[], extra = false) => {
+  const table = (choices: SosObject[], extra = false, allChoices = choices) => {
     const table = el("table");
     table.className = "sos-source-choices";
     table.dataset.sosInlineRuntime = "";
@@ -73,7 +71,7 @@ export function renderInlineSos(
     );
     const head = el("thead"),
       header = el("tr");
-    for (const label of ["Candidate / choice", "Votes"]) {
+    for (const label of ["Candidate / choice", "Vote share / votes"]) {
       const cell = el("th", label);
       cell.scope = "col";
       header.append(cell);
@@ -90,7 +88,8 @@ export function renderInlineSos(
             : "Unnamed source choice",
         );
       name.scope = "row";
-      row.append(name, el("td", sourceCount(choice.voteCount)));
+      const metrics = el("td"); metrics.append(count(choice, allChoices));
+      row.append(name, metrics);
       body.append(row);
     }
     table.append(body);
@@ -122,7 +121,11 @@ export function renderInlineSos(
         );
         const target =
           profile.querySelector<HTMLElement>(".candidate-text") ?? profile;
-        operations.push(() => target.append(count(choice)));
+        operations.push(() => {
+          let slot = target.querySelector<HTMLElement>("[data-sos-metrics-slot]");
+          if (!slot) { slot = el("span"); slot.dataset.sosMetricsSlot = ""; target.append(slot); }
+          slot.replaceChildren(count(choice, match.item.data.ballotOptions as SosObject[]));
+        });
       }
     } else {
       for (const label of card.querySelectorAll<HTMLElement>(
@@ -134,7 +137,11 @@ export function renderInlineSos(
           undefined,
           label.dataset.sosChoiceLabel,
         );
-        operations.push(() => label.append(count(choice)));
+        operations.push(() => {
+          let slot = label.querySelector<HTMLElement>("[data-sos-metrics-slot]");
+          if (!slot) { slot = el("span"); slot.dataset.sosMetricsSlot = ""; label.append(slot); }
+          slot.replaceChildren(count(choice, match.item.data.ballotOptions as SosObject[]));
+        });
       }
     }
     const extra = (match.item.data.ballotOptions as SosObject[]).filter(
@@ -143,7 +150,7 @@ export function renderInlineSos(
     );
     operations.push(() => {
       card.append(evidence(match.item.data));
-      if (extra.length) card.append(table(extra, true));
+      if (extra.length) card.append(table(extra, true, match.item.data.ballotOptions as SosObject[]));
     });
   }
   const sourceCards = document.createDocumentFragment();

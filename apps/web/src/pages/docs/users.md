@@ -584,19 +584,27 @@ and precinct denominators are not inferred. Reports update live after an import.
 
 ### Share an election section
 
+Every ballot candidate and question option shows a vote-share bar, percentage,
+and total votes. Before counts are available, these say **Not available** with an
+empty bar. A reported zero stays **0**; a complete all-zero contest shows **0.00%**.
+SOS shares use every reported choice in the same race and selected reporting area,
+including choices without profile links. If any choice count is missing or invalid,
+the percentage stays unavailable while known vote totals remain visible. Changing
+reporting area clears the previous area's numbers until the new results load.
+
 An election has one detail page throughout its life. Before results are published,
 each race lists its candidates and each question lists its response choices.
 When a county overview report becomes available, that same race shows recorded
 choice votes and vote shares, its source status and timestamp, and precincts
 reporting (including the reporting percentage when a denominator is supplied).
 Candidate names in result tables link to their profiles. Candidates absent from
-a partial report remain visible with “Not reported” counts. Results load live;
+a partial report remain visible with “Not available” counts. Results load live;
 use **Refresh results** to check for a newer saved report without leaving the page.
 
 Results follow the county selected in the header. **All counties** shows separate
 county and ballot-style tables, never a combined total. Vote share describes the
-recorded choice votes, not turnout. A zero count stays zero; missing reporting
-counts or zero denominators do not produce a percentage. Results do not declare
+recorded choice votes, not turnout. A zero count stays zero; missing choice counts leave vote share unavailable.
+Precinct reporting percentages require a positive precinct denominator. Results do not declare
 a winner or change a candidate’s status. **Source reports and history** opens the
 more detailed reporting views. Turnout charts and the ballot remain on this page.
 

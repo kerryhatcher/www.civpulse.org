@@ -1,9 +1,11 @@
 ---
 import { mappedSosItem, mappedSosChoice, type SosContestMapping } from '../lib/sos-ballot';
-import { sourceCount, type SosView } from '../lib/sos-results-reader';
+import type { SosView, SosObject } from '../lib/sos-results-reader';
+import VoteMetrics from './VoteMetrics.astro';
 interface Props { view?: SosView | null; mappings?: SosContestMapping[]; contestId?: string; questionId?: string; personId?: string; choiceLabel?: string }
 const { view, mappings = [], contestId, questionId, personId, choiceLabel } = Astro.props;
 const match = mappedSosItem(view, mappings, contestId ? 'contest' : 'question', (contestId ?? questionId)!);
 const choice = match && mappedSosChoice(match.item, match.mapping, personId, choiceLabel);
+const counts = match ? (match.item.data.ballotOptions as SosObject[]).map(option => option.voteCount) : [];
 ---
-{match && <span class="sos-inline-count" data-sos-ballot-fallback>{sourceCount(choice?.voteCount)}{choice?.voteCount != null ? ' votes' : ''} · SOS, {view!.scope.jurisdiction.name}</span>}
+<span data-sos-metrics-slot><VoteMetrics count={choice?.voteCount} counts={counts} source={match ? `SOS, ${view!.scope.jurisdiction.name}` : undefined} fallback /></span>
