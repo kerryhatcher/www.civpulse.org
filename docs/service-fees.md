@@ -131,3 +131,16 @@ anonymous and mobile views, then canonical records/Auth users are removed.
 Compact MCP adds accept/browse tools: 81 compact /128 legacy. Regenerate both plugin
 packages. Refs #152 leaves deployment and separately reviewed production acceptance
 open. No collector, real data import, production migration or deployment is included.
+
+November 3, 2026 local verification: 25 affected tests/273 assertions passed;
+`bun run check` reported263files without errors/warnings/hints. MCP/plugin validation
+reported128legacy/81compact; isolated security advisors found no issues. Rendered
+Chrome checks at the default desktop viewport and390×844 mobile verified category
+search, separate original/amended25/30USD groups, downloaded CSV/JSON scope and no
+hidden recipient raw names/UUIDs. Actual local Admin saw5latest rows versus3anonymous;
+private recipient viewer/profile links scoped correctly, and sign-out removed that
+recipient’s results. Mobile populated content/scroll widths both343px; no app console
+warnings/errors. An extension UI briefly blocked sign-in automation; checks resumed
+after the user dismissed it. Canonical synthetic reports, organizations, person and
+Auth user were removed (zero remain); protected audit history naturally remains.
+The final build uses the isolated backend after cleanup, not production data.
