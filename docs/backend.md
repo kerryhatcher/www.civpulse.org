@@ -2068,3 +2068,33 @@ checks actual role grants and row guards with rolled-back fixtures. It rejects a
 hosted endpoint and any enabled feeds or poll Vault target. Browser transport
 fixtures verify the existing session/admin gate and exact RPC sequence; they do
 not replace database authorization tests or production acceptance.
+
+### SOS source STOP and durable recovery
+
+Migration `20261125003800_sos_download_stop` prevents fresh job claims outside
+`starts_at <= database clock < ends_at`. Immediately before a new upstream GET,
+collectors call service-only `authorize_sos_results_download(job_id,lease_id)`
+with the current fenced lease. Its schema-version-1 response binds job, election,
+source URL, database `server_now`, and `ends_at`. Late preflight, expired lease,
+disabled feed, nonpublic election or changed source fails closed. The Bun reference
+and Rust collector validate this binding and subtract the entire monotonic RPC
+round trip plus a conservative precision margin from the remaining end deadline;
+the active download is cancelled at that deadline. Existing null-end feeds retain
+the normal 180-second download limit; deployment acceptance still requires an
+explicit finite end. The single Supabase Cron HEAD coordinator is unchanged.
+
+STOP prevents new upstream source downloads. Already archived imports with both
+snapshot and receipt, and committed pointer recovery, may drain after the window
+ends. Renew/stage/publish/failure-acknowledgement/pointer RPCs retain existing
+lease and visibility guards without a new window check. Recovery must use
+the exact archived original and never fall back to fresh upstream bytes. This
+avoids wedging durable staging or leaving a committed publication undiscoverable.
+Apply the migration from reviewed main before deploying either updated collector;
+missing authorization RPC support fails closed before a fresh GET.
+
+Rollback-only local coverage:
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-loopback-db> bun test scripts/tests/sos-download-stop-db.test.ts`.
+It verifies exact start/end boundaries, closed queued retries, late preflight,
+role/table access, lease/source/publicity guards, archived staging and pointer drain.
+Collector recovery tests reject any fresh-authorization RPC during archive replay
+and assert zero such calls across interrupted replay and pointer acknowledgement.

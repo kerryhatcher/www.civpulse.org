@@ -28,12 +28,15 @@ export function retrySeconds(value: string | null, now = Date.now()): number {
   const n = /^\d+$/.test(value) ? Number(value) : Math.ceil((Date.parse(value) - now) / 1000);
   return Number.isFinite(n) ? Math.max(1, Math.min(n, 3600)) : 60;
 }
-export async function download(url: string, path: string, validators: { etag?: string | null; last_modified?: string | null }, fetcher: typeof fetch = fetch) {
+export async function download(url: string, path: string, validators: { etag?: string | null; last_modified?: string | null }, fetcher: typeof fetch = fetch, authorizationSignal?: AbortSignal) {
+  const signal = AbortSignal.any([AbortSignal.timeout(180_000), ...(authorizationSignal ? [authorizationSignal] : [])]);
+  signal.throwIfAborted();
   if (!SOS_URL.test(url)) throw Error("Invalid SOS source URL");
   const headers = new Headers({ "Accept": "application/json", "Accept-Encoding": "identity" });
   if (validators.etag) headers.set("If-None-Match", validators.etag);
   else if (validators.last_modified) headers.set("If-Modified-Since", validators.last_modified);
-  const response = await fetcher(url, { headers, redirect: "error", cache: "no-store", signal: AbortSignal.timeout(180_000) });
+  const response = await fetcher(url, { headers, redirect: "error", cache: "no-store", signal });
+  signal.throwIfAborted();
   const receipt = { etag: response.headers.get("etag"), last_modified: response.headers.get("last-modified"), retrieved_at: new Date().toISOString() };
   if (response.status === 304) return { unchanged: true as const, ...receipt };
   if (!response.ok) throw new SourceHttpError(response.status, retrySeconds(response.headers.get("retry-after")));
@@ -42,8 +45,15 @@ export async function download(url: string, path: string, validators: { etag?: s
   const writer = Bun.file(path).writer();
   const hash = new Bun.CryptoHasher("sha256");
   let bytes = 0;
+  const reader = response.body.getReader();
+  const cancel = () => { void reader.cancel(signal.reason).catch(() => {}); };
+  signal.addEventListener("abort", cancel, { once: true });
   try {
-    for await (const chunk of response.body) {
+    signal.throwIfAborted();
+    while (true) {
+      const { done, value: chunk } = await reader.read();
+      signal.throwIfAborted();
+      if (done) break;
       bytes += chunk.byteLength;
       if (bytes > MAX_DOWNLOAD) throw Error("SOS download exceeds 512 MiB");
       hash.update(chunk); writer.write(chunk);
@@ -52,7 +62,7 @@ export async function download(url: string, path: string, validators: { etag?: s
     const length = response.headers.get("content-length");
     if (length && !response.headers.get("content-encoding") && bytes !== Number(length)) throw Error("Truncated SOS download");
     if (!bytes) throw Error("Empty SOS download");
-  } finally { await writer.end(); }
+  } finally { signal.removeEventListener("abort", cancel); await reader.cancel().catch(() => {}); reader.releaseLock(); await writer.end(); }
   return { unchanged: false as const, ...receipt, bytes, sha256: hash.digest("hex") };
 }
 
