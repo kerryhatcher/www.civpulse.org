@@ -35,12 +35,14 @@ export async function initBallotResults(electionId: string): Promise<void> {
   const refresh = root.querySelector<HTMLButtonElement>(
     "[data-ballot-results-refresh]",
   )!;
+  const errorStatus = document.querySelector<HTMLElement>("[data-ballot-results-error]");
   refresh.hidden = false;
   const cards = [
     ...document.querySelectorAll<HTMLElement>(".contest-card[id]"),
   ];
   let reports: ResultReport[] = [];
   let stopped = false, generation = 0;
+  let fingerprint: string | undefined;
   const originals = new Map<HTMLElement, boolean>();
   for (const card of cards)
     for (const list of card.querySelectorAll<HTMLElement>(
@@ -240,15 +242,25 @@ export async function initBallotResults(electionId: string): Promise<void> {
     try {
       const incoming = await readElectionReports(electionId, force);
       if (stopped || request !== generation) return;
+      const nextFingerprint = JSON.stringify(incoming);
+      const changed = nextFingerprint !== fingerprint;
+      if (errorStatus) errorStatus.hidden = true;
       reports = incoming;
-      render();
-      if (force)
+      fingerprint = nextFingerprint;
+      if (changed) render();
+      if (force && changed)
         window.dispatchEvent(
           new CustomEvent("electionreportschange", { detail: { electionId } }),
         );
     } catch {
       if (stopped || request !== generation) return;
-      reset();
+      if (fingerprint === undefined) reset();
+      if (errorStatus) {
+        errorStatus.textContent = fingerprint === undefined
+          ? "Photo/PDF results are temporarily unavailable. The ballot remains available; updates retry automatically."
+          : "Photo/PDF result updates are temporarily unavailable. Showing the last loaded reports; updates retry automatically.";
+        errorStatus.hidden = false;
+      }
       summary.textContent =
         "Results could not be loaded. The ballot is still available. Select Refresh results to try again.";
     } finally {

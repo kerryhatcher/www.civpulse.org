@@ -21,7 +21,7 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
     const request = ++generation;
     section!.hidden = false;
     retry.hidden = true;
-    body.hidden = true;
+    if (!map) body.hidden = true;
     status.textContent = 'Loading precinct turnout…';
     try {
       const url = section!.dataset.boundariesUrl;
@@ -38,8 +38,15 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       if (request !== generation) return;
       const choices = [...new Set(reports.filter(r => r.scope.county === 'Bibb' && r.scope.unit_type === 'precinct' && r.scope.counting_group === 'all').map(r => r.scope.ballot_style))].sort();
       if (!choices.length) choices.push('all');
+      const previousStyle = styles.value;
+      const previousView = map ? { center: map.getCenter(), zoom: map.getZoom() } : undefined;
+      let previousPopup: string | undefined;
+      map?.eachLayer(layer => {
+        const feature = (layer as Leaflet.GeoJSON & { feature?: GeoJSON.Feature }).feature;
+        if (layer.isPopupOpen?.()) previousPopup = String(feature?.properties?.precinctid);
+      });
       styles.replaceChildren(...choices.map(value => { const option = el('option', value === 'all' ? 'All ballot styles' : value); option.value = value; return option; }));
-      styles.value = choices.includes('all') ? 'all' : choices[0];
+      styles.value = choices.includes(previousStyle) ? previousStyle : choices.includes('all') ? 'all' : choices[0];
       styles.disabled = choices.length < 2;
       resize?.disconnect();
       map?.remove();
@@ -52,7 +59,7 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       resize = new ResizeObserver(() => {
         if (!canvas.clientWidth || !canvas.clientHeight) return;
         map?.invalidateSize({ pan: false });
-        if (polygons) map?.fitBounds(polygons.getBounds(), { padding: [12, 12], animate: false });
+        if (polygons && !previousView) map?.fitBounds(polygons.getBounds(), { padding: [12, 12], animate: false });
       });
       resize.observe(canvas);
       function render() {
@@ -91,6 +98,11 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       }
       styles.onchange = render;
       render();
+      if (previousView) map.setView(previousView.center, previousView.zoom, { animate: false });
+      if (previousPopup) map.eachLayer(layer => {
+        const feature = (layer as Leaflet.GeoJSON & { feature?: GeoJSON.Feature }).feature;
+        if (String(feature?.properties?.precinctid) === previousPopup) layer.openPopup();
+      });
     } catch {
       if (request !== generation) return;
       resize?.disconnect();

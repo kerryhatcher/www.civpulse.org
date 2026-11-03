@@ -7,6 +7,7 @@ const { electionId } = Astro.props;
   <button data-ballot-results-refresh type="button" hidden>Refresh results</button>
   <noscript><p>Enable JavaScript to display available results alongside the ballot.</p></noscript>
 </div>
+<p data-ballot-results-error hidden class="body-note" role="status"></p>
 <style is:global>
   .ballot-results-status { display:none; align-items:baseline; flex-wrap:wrap; gap:.5rem 1rem; margin-block:1rem 1.5rem; }
   .ballot-results-status p { flex:1 1 28rem; margin:0; }

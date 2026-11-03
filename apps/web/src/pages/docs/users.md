@@ -753,3 +753,5 @@ includes explicitly scoped report-group totals. Neither export is a complete led
 Dates and deadlines appear after the ballot on election detail pages. On public election pages, Sources and verification follows the dates at the bottom. The section links at the top still provide direct access.
 
 Turnout charts check for new published data every 30 seconds while the page is visible and online. Election Day in-person turnout appears as its own source-reported ballot style when available; it is never inferred from candidate votes or added to overlapping early-voting and absentee reports. If an update fails, the last loaded report remains visible with a notice.
+
+Automatic photo/PDF report checks preserve the displayed results during a temporary connection failure. Unchanged reports leave the precinct map untouched; new reports retain its selected ballot style, zoom, and open precinct popup when that precinct is still available.
