@@ -2086,3 +2086,5 @@ Rollback-only local coverage:
 `ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-loopback-db> bun test scripts/tests/sos-download-stop-db.test.ts`.
 It verifies exact start/end boundaries, closed queued retries, late preflight,
 role/table access, lease/source/publicity guards, archived staging and pointer drain.
+Collector recovery tests reject any fresh-authorization RPC during archive replay
+and assert zero such calls across interrupted replay and pointer acknowledgement.

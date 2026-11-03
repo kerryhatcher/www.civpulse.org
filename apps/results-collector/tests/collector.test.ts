@@ -144,6 +144,7 @@ test("complete pipeline recovers an acknowledgement crash without reimport or po
   calls.length = 0; failAck = false;
   expect((await runJob({ ...job, phase }, rpc, store, fetcher(() => { throw Error("must resume outbox"); }))).status).toBe("current");
   expect(calls).not.toContain("stage_sos_results_job");
+  expect(calls).not.toContain("authorize_sos_results_download");
   expect(store.objects.get(pointerKey)!.etag).toBe(firstEtag);
 });
 test("staging resumes from archived bytes when upstream changes and retains original receipt", async () => {
@@ -152,8 +153,10 @@ test("staging resumes from archived bytes when upstream changes and retains orig
   const receipt = { sha256, bytes: source.length, raw_key: rawKey, raw_url: store.url(rawKey), retrieved_at: "2026-11-03T10:01:00Z", source_url: sourceUrl, etag: '"old"', last_modified: null };
   await store.put(rawKey, source, {});
   let first = true, usedReceipt: any;
+  const calls: string[] = [];
   const rpc = async (name: string, args: any = {}) => {
-    if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true;
+    calls.push(name);
+    if (name === "renew_sos_results_job") return true;
     if (name === "begin_sos_results_job") { usedReceipt = args.p_receipt; return { snapshot_id: snapshot, receipt, published: false }; }
     if (name === "authorize_sos_results_download") throw Error("archive must not authorize fresh source");
     if (name === "stage_sos_results_job" && first) { first = false; throw Error("staging crash"); }
@@ -162,7 +165,9 @@ test("staging resumes from archived bytes when upstream changes and retains orig
   const resumed = { ...job, snapshot_id: snapshot, receipt };
   const noUpstream = fetcher(() => { throw Error("source changed; do not fetch it"); });
   await expect(runJob(resumed, rpc, store, noUpstream)).rejects.toThrow("staging crash");
+  expect(calls).not.toContain("authorize_sos_results_download");
   expect((await runJob(resumed, rpc, store, noUpstream)).status).toBe("published");
+  expect(calls).not.toContain("authorize_sos_results_download");
   expect(usedReceipt.retrieved_at).toBe(receipt.retrieved_at);
   const manifest = JSON.parse(store.objects.get(`elections/${election}/revisions/${snapshot}/manifest.json`)!.body);
   expect(manifest.retrieved_at).toBe(receipt.retrieved_at); expect(manifest.source_sha256).toBe(sha256);
