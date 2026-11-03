@@ -1,5 +1,13 @@
 import {test,expect} from 'bun:test';import {SQL} from 'bun';
-import {observationDate} from '../../apps/web/src/lib/officeholder-observations';
+import {observationDate,observationSummary,type OfficeholderObservation} from '../../apps/web/src/lib/officeholder-observations';
+test('linked observations never imply corroboration regardless of review status',()=>{
+ for(const review_status of ['reviewed','unresolved','conflicting']){
+  const summary=observationSummary({revision:1,superseded:false,payload:{reported_person:'Synthetic person',reported_office:'Chair',role:'Chair',reported_organization:'Historical authority',precision:'day',as_of:'2018-01-01',review_status,office_term_id:'2020-2023-term'}} as OfficeholderObservation);
+  expect(summary).toContain(`Review: ${review_status}`);
+  expect(summary).toContain('Linked to an existing service interval; does not change or confirm it.');
+  expect(summary).not.toMatch(/corroborat/i);
+ }
+});
 test('observation date labels never imply interval or current status',()=>{expect(observationDate({precision:'year',as_of:'2022-01-01'} as any)).toBe('Observed in 2022 (year precision; day unknown)');expect(observationDate({precision:'unknown',as_of:null} as any)).toBe('As-of date unknown');});
 test.skipIf(!process.env.OFFICEHOLDER_DATABASE_URL)('immutable observations, corrections, precision, visibility, interval preservation and rebuilds',async()=>{
  const sql=new SQL(process.env.OFFICEHOLDER_DATABASE_URL!);if(!process.env.OFFICEHOLDER_DATABASE_URL!.includes('127.0.0.1:54342/'))throw Error('Isolated database only');const rollback=new Error('rollback fixture');

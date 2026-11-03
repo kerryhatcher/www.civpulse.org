@@ -1941,7 +1941,9 @@ an original PDF. No automated source download or verification is implied.
 A reviewed row requires exact existing person and office UUIDs. The office must
 belong to its recorded historical organization; a corroborating term must match
 that person and office. A dated observation outside its linked term must be marked
-conflicting after review. Existing verified intervals are never changed, including
+conflicting after review. Displayed interval links are neutral: linkage does not
+confirm or corroborate a service interval, including for unresolved or conflicting
+evidence. Existing verified intervals are never changed, including
 nonconsecutive or overlapping service; observations do not fill gaps. Use the
 existing organization relationship model for sourced predecessor/successor links,
 not automatic consolidation or inherited membership. Different roles/rounds/years
