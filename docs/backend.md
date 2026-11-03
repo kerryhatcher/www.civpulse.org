@@ -2037,3 +2037,24 @@ revision/currency/unit/period/grain, only with a source-asserted disjoint-row ba
 No collectors, inferred payment links or automatic stubs. See [the version-1 contract](./obligations.md)
 for bounded atomic acceptance, corrections/cancellations, source scope, read APIs,
 exports, RLS/history/rebuild gates and main-first release instructions.
+
+
+### Paused SOS feed window administration
+
+Migration `20261125003600_sos_results_feed_window` adds the authenticated,
+admin-only `configure_sos_results_feed_window(p_election_id,p_starts_at,p_ends_at)`.
+It requires an existing paused feed, public election, exact saved source binding,
+and explicit finite ordered timestamps. It locks the election/feed and updates
+only the polling window. The existing four-argument pause operation remains
+unchanged so emergency pause still works after source/visibility changes.
+No service-role key is exposed to browser code and no raw table write grant is
+added. The static elections admin uses the normal authenticated Supabase client:
+create/pause, set cadence, set the window, verify saved responses, and only then
+permit a separate acceptance-gated activation action. Merge this append-only
+migration to main before production application or shipping its UI controls.
+
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-loopback-db> bun test scripts/tests/sos-feed-window-db.test.ts`
+checks actual role grants and row guards with rolled-back fixtures. It rejects a
+hosted endpoint and any enabled feeds or poll Vault target. Browser transport
+fixtures verify the existing session/admin gate and exact RPC sequence; they do
+not replace database authorization tests or production acceptance.

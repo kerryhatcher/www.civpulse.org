@@ -833,3 +833,37 @@ with supporting citations link payments; no vendor-total matching or inferred
 balance. Recheck public/admin/detail/history/download views, especially private
 people (raw names and amounts must be absent publicly), then publish static context
 or visibility changes. No production obligations are backfilled by this release.
+
+
+### Configure automatic SOS collection while paused
+
+In [Elections admin](/admin/elections/), use **Automatic SOS results** after saving
+an official source URL with the existing election form. Select the existing
+election and review the displayed UUID, election date, public visibility, and
+exact saved URL. This tool never infers identity or changes the saved source URL.
+
+Enter explicit UTC start/end timestamps ending in `Z` and including seconds.
+Convert local times deliberately: a local midnight and UTC midnight differ.
+Choose hourly or five-minute initial polling, optionally with a UTC transition
+to five-minute polling inside the window. Check the identity review box and use
+**Configure paused feed**. This pauses/creates the feed, saves cadence and its
+window through authenticated admin RPCs, and verifies the saved values. It does
+not start collection. A partial failure leaves activation unavailable; refresh,
+review the saved health/settings, and try again.
+
+Only after controlled import, public readback, monitoring and recovery acceptance
+is complete, check the acceptance box and use **Activate reviewed feed**. This is
+a separate explicit action. Changing identity/settings or a conflicting health
+read invalidates the review. **Pause selected feed** remains available without a
+valid source/window so an existing feed can still be stopped after its source or
+visibility changes. Pausing preserves the last results and evidence; in-flight
+work may finish. Stopping a worker alone does not pause the source coordinator.
+
+Health displays saved window, current cadence/transition, next check, last
+successful check, pending age anchor and revision. A source with unchanged counts
+is normal. Retry pending or quarantined work only after resolving its cause; the
+database refuses a job with an active lease. **Abandon uncommitted job…** requires
+confirmation and ends only an uncommitted job without deleting evidence. A
+committed pointer must be repaired and retried. See the
+[collection operations guide](https://github.com/kerryhatcher/www.civpulse.org/blob/main/docs/sos-results-automation.md)
+for main-first release, acceptance, replay and rollback requirements.

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import AdminTabs from '../../components/AdminTabs.astro';
+import SosResultsAdmin from '../../components/SosResultsAdmin.astro';
 ---
 
 <Layout
@@ -104,6 +105,8 @@ import AdminTabs from '../../components/AdminTabs.astro';
         <h2 id="election-list-title">Elections</h2>
         <div class="org-list" data-election-list></div>
       </section>
+
+      <SosResultsAdmin />
 
       <form class="org-form" data-question-form>
         <h2 data-question-form-title>Add a ballot question</h2>

@@ -1581,3 +1581,35 @@ gesture, with a browser-local mute toggle and silent handling of blocked audio.
 Run `bun test scripts/tests/sos-results-change.test.ts` for comparison coverage,
 and the sound regression in `scripts/tests/sos-results-browser.test.ts` with
 `SOS_RESULTS_TEST_URL` pointed at the local development server.
+
+
+### Automatic-results admin controls
+
+Run `bun run check`, `bun run build`, and the isolated window RPC regression:
+
+```sh
+ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54402/postgres bun test scripts/tests/sos-feed-window-db.test.ts
+```
+
+The test rejects nonloopback databases, enabled fixtures and configured poll Vault
+targets. It rolls back fixture users/elections/feeds and, when the disposable DB
+lags this branch, installs the feature helper only inside that rolled-back test
+transaction. Never point it at production or use it to apply hosted migrations.
+
+For rendered access/admin flow QA, start Astro with explicit local public client
+settings, then run:
+
+```sh
+PUBLIC_SUPABASE_URL=http://127.0.0.1:59991 PUBLIC_SUPABASE_ANON_KEY=sos-admin-browser-public-fixture ASTRO_DEV_BACKGROUND=1 bun run dev:web --host 127.0.0.1 --port 4337
+SOS_ADMIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-admin-browser.test.ts
+```
+
+The suite uses real Chromium and the real page/client code with synthetic SDK
+sessions and intercepted loopback HTTP boundaries. It reads no real browser
+session or service credential and makes no hosted database or collection writes.
+Anonymous sign-in redirection, ordinary-user denial, paused configuration,
+verified responses, explicit activation/pause, source-change invalidation,
+recovery/abandon confirmation, console health and desktop/mobile layout are
+covered. Browser plugin was unavailable during implementation, so regular
+Playwright was used. CI installs bundled Chromium; local Chrome can be selected
+with `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome`. Screenshots stay outside the repository.
