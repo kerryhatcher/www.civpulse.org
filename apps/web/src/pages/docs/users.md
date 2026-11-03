@@ -468,24 +468,23 @@ is available, so combining calendars does not hide the meeting details.
 Election pages show live Georgia SOS votes inside **What's on the ballot**,
 next to the existing candidate profiles and ballot choices when an editor has
 reviewed the exact source-ID mapping. Profile links and party labels stay visible;
-a candidate absent from the source remains listed with **Not reported**. Source
+a candidate absent from the source remains listed with **Not available**. Source
 races without a reviewed match appear as explicitly labeled **Georgia SOS source
-race** cards in the same ballot list, without guessed person links. Choose an
-**SOS reporting area** in **Ballot result updates**. Source areas are separate from the
-site county filter; only the verified Bibb source area is initially selected
-when viewing Bibb. The separate reports page retains its source-result browser.
+race** cards in the same ballot list, without guessed person links. Results follow
+the county selected in the header. The ballot automatically matches that county
+to a published source area by its exact name. **All counties** uses an explicitly
+statewide source if one is available; overlapping county totals are never added.
+If no source area matches, vote counts remain unavailable. Results check in the
+background while the page is visible, and resume when you return or reconnect.
+The results detail page retains reporting-area selection, search and refresh controls.
 
-Visible pages check about every 30 seconds. Checks pause in hidden tabs and
-resume when you return or reconnect. **Refresh SOS results** checks immediately.
-
-**Update sound** is on by default: after you interact with the page, a soft ding
-announces changed source results successfully displayed for your selected reporting
-area. Initial loading, unchanged checks, publication timestamps, searching and
+The compact **Update sound** button near the ballot heading mutes or enables a
+soft sound for changed results. Initial loads, unchanged results and
 switching reporting areas stay silent. Select **Update sound: on** to mute; this
 browser remembers your preference. Browsers may require another interaction to
-allow audio. The visible results and status messages work with sound muted.
-Source report time, publication time, successful source check (when available),
-and browser check time have separate labels. An unchanged report is normal;
+allow audio. Results remain readable with sound muted. The results detail page labels
+source report time, publication time, successful source check (when available),
+and browser check time separately. An unchanged report is normal;
 **Collection delayed**, **paused**, and **offline** messages explain interruptions
 while preserving the last successful results. Zero votes remain zero; unavailable
 counts and source reporting statuses are stated explicitly. These labels do not
@@ -584,6 +583,12 @@ and precinct denominators are not inferred. Reports update live after an import.
 
 ### Share an election section
 
+Candidates appear in a full-width vertical list within each race on every screen size.
+In partisan races, bars use the candidate’s recorded party: Republican red,
+Democratic blue, and independent or other parties yellow. Written party labels
+remain visible. Nonpartisan races, questions, and source choices without a reviewed
+candidate link use neutral bars; color does not indicate a winner.
+
 Every ballot candidate and question option shows a vote-share bar, percentage,
 and total votes. Before counts are available, these say **Not available** with an
 empty bar. A reported zero stays **0**; a complete all-zero contest shows **0.00%**.
@@ -599,7 +604,7 @@ choice votes and vote shares, its source status and timestamp, and precincts
 reporting (including the reporting percentage when a denominator is supplied).
 Candidate names in result tables link to their profiles. Candidates absent from
 a partial report remain visible with “Not available” counts. Results load live;
-use **Refresh results** to check for a newer saved report without leaving the page.
+new saved reports appear automatically while the page is visible.
 
 Results follow the county selected in the header. **All counties** shows separate
 county and ballot-style tables, never a combined total. Vote share describes the
@@ -608,7 +613,7 @@ Precinct reporting percentages require a positive precinct denominator. Results 
 a winner or change a candidate’s status. **Source reports and history** opens the
 more detailed reporting views. Turnout charts and the ballot remain on this page.
 
-Use **Dates**, **Results & turnout**, and **What’s on the ballot** near the top of a published election page to jump directly to that section. A highlighted **Turnout at a glance** summary follows the county selected in the header and shows reported ballot counts with a collection timestamp. These are unofficial cumulative counts, not candidate results. The full turnout charts and precinct map appear before the long ballot list. Missing turnout is stated explicitly; overlapping source views are never added together.
+Use **Results & turnout**, **What’s on the ballot**, and **Dates & deadlines** near the top of a published election page to jump directly to that section. Turnout charts follow these links directly, without a summary banner or introductory description. These are unofficial cumulative counts, not candidate results. Source reports remain accessible from the turnout charts. The full turnout charts and precinct map appear before the long ballot list. The precinct map displays the boundary layer’s attribution and any explanatory note. Missing turnout is stated explicitly; overlapping source views are never added together.
 
 Use **Link** beside a section heading, then copy the browser address (or use
 **Copy link address** on that link). Election detail pages support
@@ -744,3 +749,9 @@ source review supports disjoint rows. Do not add cards/revisions or obligations 
 payments together. Unknown coverage is not zero or misconduct. Exact observation
 and typed vendor links retain scope. CSV exports observation rows only; JSON also
 includes explicitly scoped report-group totals. Neither export is a complete ledger.
+
+Dates and deadlines appear after the ballot on election detail pages. On public election pages, Sources and verification follows the dates at the bottom. The section links at the top still provide direct access.
+
+Turnout charts check for new published data every 30 seconds while the page is visible and online. Election Day in-person turnout appears as its own source-reported ballot style when available; it is never inferred from candidate votes or added to overlapping early-voting and absentee reports. If an update fails, the last loaded report remains visible with a notice.
+
+Automatic photo/PDF report checks preserve the displayed results during a temporary connection failure. Unchanged reports leave the precinct map untouched; new reports retain its selected ballot style, zoom, and open precinct popup when that precinct is still available.

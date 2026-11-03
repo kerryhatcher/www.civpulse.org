@@ -1,3 +1,4 @@
+import { candidatePartyTone } from "../lib/candidate-party";
 import { buildVoteMetrics } from "./vote-metrics";
 import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
@@ -193,10 +194,12 @@ function showViewerStatus(root: HTMLElement, text: string, signIn = false): void
 
 function buildCandidateCard(
   candidate: ElectionContest['candidates'][number],
+  partisan: boolean,
 ): HTMLElement {
   const link = document.createElement('a');
   link.className = 'candidate-card';
   link.dataset.candidateId = candidate.person.id;
+  link.dataset.partyTone = candidatePartyTone(candidate.party, partisan);
   link.href = personHref(candidate.person);
 
   const image = personImageUrl(candidate.person.image_path);
@@ -274,7 +277,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
   if (contest.candidates.length > 0) {
     const list = document.createElement('div');
     list.className = 'candidate-list';
-    list.append(...contest.candidates.map(buildCandidateCard));
+    list.append(...contest.candidates.map(candidate => buildCandidateCard(candidate, contest.partisan)));
     card.append(list);
   } else {
     const empty = document.createElement('p');
@@ -388,12 +391,6 @@ function fillElectionView(response: ElectionViewResponse): void {
     } else {
       org.hidden = true;
     }
-  }
-
-  const description = document.querySelector<HTMLElement>('[data-election-description]');
-  if (description) {
-    description.textContent = election.description ?? '';
-    description.hidden = !election.description;
   }
 
   const dates = response.dates ?? [];

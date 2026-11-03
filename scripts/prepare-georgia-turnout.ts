@@ -32,9 +32,9 @@ const document={schema_version:1,provider:'georgia-sos-turnout',election_id:bund
   return {table:mapping.table,object_id:d.object_id,source_title:d.source_title,as_of_label:label,as_of:asOf,as_of_timezone:'America/New_York',rows:d.rows.map((row:any,index:number)=>{
    const county=counties.find(c=>c.name.toUpperCase()===row.dimensions.County.toUpperCase());if(!county)throw new Error('Unresolved county');
    const style=row.dimensions['Ballot Style']??(mapping.table==='early'?'Early In-Person':'Absentee');
-   if(!['Early In-Person','Absentee'].includes(style))throw new Error('Unknown ballot style');
+   if(!['Early In-Person','Absentee','Election Day In-Person'].includes(style))throw new Error('Unknown ballot style');
    if(Object.keys(row.measures).sort().join()!==Object.keys(mapping.measures).sort().join())throw new Error('Row measure schema changed');
-   return {county_fips:county.fips,county_label:row.dimensions.County,ballot_style:style,counting_group:style==='Early In-Person'?'advance':'absentee_mail',
+   return {county_fips:county.fips,county_label:row.dimensions.County,ballot_style:style,counting_group:style==='Early In-Person'?'advance':style==='Absentee'?'absentee_mail':'election_day',
     locator:`${d.object_id}: normalized row ${index+1}; County=${row.dimensions.County}${mapping.table==='turnout'?`; Ballot Style=${style}`:''}`,
     measures:Object.fromEntries(Object.entries(mapping.measures).map(([source,key])=>[key,row.measures[source]]))};
   })};

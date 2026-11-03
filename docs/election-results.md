@@ -237,7 +237,7 @@ Read `operation={action:"read_turnout",election_id:"<UUID>"}` first. Call
 `operation={action:"import_turnout",document:"<exact file text>",sha256:"<printed hash>",expected_report_id:null,dry_run:true}`.
 After successful validation, use `dry_run:false` with the same document and hash.
 A replacement must supply the current report UUID. All three tables are one
-bounded batch: at most 636 source rows / 2 MiB, validated before any report write
+bounded batch: at most 795 source rows / 2 MiB, validated before any report write
 and committed atomically. There is no partial resume offset: retry the entire
 unchanged request after an uncertain response. Exact evidence replay is a no-op;
 identical tables at a later capture also reuse the current report. The election
@@ -255,6 +255,22 @@ safe nonnegative integers, ratios are fractions in [0,1], and unavailable values
 remain null. Suppressed rows are absent, never synthesized zeros. No registration
 or precinct denominators are inferred. These records are always unofficial and
 turnout-only, including before election day; they contain no candidate votes.
+
+After migration `20261125003700_structured_turnout_election_day`, the existing
+`turnout` view (`QDFdpV`) also accepts exact source label `Election Day In-Person`
+paired with `counting_group:"election_day"` and its single `turnout` measure.
+The other pairs remain `Early In-Person`/`advance` and `Absentee`/`absentee_mail`.
+Election Day rows are forbidden in the early and absentee views. This permits
+159 additional county rows while retaining all previous evidence requirements.
+Import only values actually reported in that source view; do not derive Election
+Day values by subtraction or add overlapping views. Absent rows stay absent,
+null stays unavailable, and a source-reported zero stays zero. Merge this migration
+to main before applying it in production or accepting the additional style there.
+
+`ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54342/postgres
+bun test scripts/tests/structured-turnout-election-day.test.ts` exercises the
+795-row contract, invalid combinations, unchanged evidence guards, public paging,
+history and private-election visibility in a rolled-back local transaction.
 
 Readback returns report UUID, predecessor, exact document hash, source/app/capture
 references, 100 history metadata entries and up to 100 source rows per page.

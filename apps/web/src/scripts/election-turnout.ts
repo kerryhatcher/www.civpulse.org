@@ -1,5 +1,5 @@
 import { getSupabase } from '../lib/supabase';
-import { readTurnoutSnapshot, turnoutByCounty, turnoutSummary, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
+import { readTurnoutSnapshot, turnoutByCounty, type TurnoutCell, type TurnoutPage, type TurnoutRow } from '../lib/election-turnout';
 import { selectedCounty } from './county-filter';
 
 const measureLabels: Record<string, string> = {
@@ -45,7 +45,10 @@ function chart(title: string, rows: TurnoutRow[], values: { label: string; cell:
   return figure;
 }
 
+let stopPolling: (() => void) | undefined;
+
 export async function initElectionTurnout(electionId: string): Promise<void> {
+  stopPolling?.();
   const section = document.querySelector<HTMLElement>('[data-election-turnout]');
   if (!section) return;
   const status = section.querySelector<HTMLElement>('[data-turnout-status]')!;
@@ -55,11 +58,13 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
   const retry = section.querySelector<HTMLButtonElement>('[data-turnout-retry]')!;
   const reports = section.querySelector<HTMLAnchorElement>('[data-turnout-reports]')!;
   reports.href = `/elections/results/?id=${encodeURIComponent(electionId)}`;
-  const summary = document.querySelector<HTMLElement>('[data-turnout-summary]');
   let snapshot: TurnoutPage | undefined;
+  let stopped = false;
+  let loading = false;
+  let fingerprint = "";
   function render() {
     if (!snapshot) return;
-    if (summary) summary.textContent = turnoutSummary(snapshot, selectedCounty());
+
     charts.replaceChildren();
     for (const group of turnoutByCounty(snapshot.rows, selectedCounty())) {
       const county = el('section');
@@ -83,23 +88,35 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
     }
     if (!charts.childElementCount) charts.append(el('p', 'No turnout is reported for the county selected in the header. Choose another county or All counties to explore available reports.'));
   }
-  async function load() {
+  async function load(background = false) {
+    if (stopped || loading) return;
+    loading = true;
     retry.hidden = true;
-    body.hidden = true;
-    status.hidden = false;
-    status.textContent = 'Loading turnout…';
-    if (summary) summary.textContent = 'Loading reported turnout…';
+    if (!background) {
+      body.hidden = true;
+      status.hidden = false;
+      status.textContent = 'Loading turnout…';
+    }
+
     try {
-      snapshot = await readTurnoutSnapshot(async (reportId, offset) => {
+      const incoming = await readTurnoutSnapshot(async (reportId, offset) => {
         const { data, error } = await getSupabase().rpc('get_structured_turnout', {
           p_election_id: electionId, p_report_id: reportId, p_offset: offset, p_limit: 100,
         });
         if (error) throw error;
         return data as TurnoutPage;
       });
+      if (stopped) return;
+      const nextFingerprint = JSON.stringify(incoming);
+      if (background && nextFingerprint === fingerprint) {
+        status.hidden = true;
+        return;
+      }
+      snapshot = incoming;
+      fingerprint = nextFingerprint;
       if (snapshot.status !== 'ok' || !snapshot.rows.length) {
-        if (summary) summary.textContent = turnoutSummary(snapshot, selectedCounty());
-        section!.hidden = !summary;
+
+        section!.hidden = true;
         status.textContent = 'No structured turnout has been published for this election yet.';
         return;
       }
@@ -112,13 +129,33 @@ export async function initElectionTurnout(electionId: string): Promise<void> {
       body.hidden = false;
       section!.hidden = false;
     } catch {
+      if (stopped) return;
       section!.hidden = false;
-      status.textContent = 'Turnout could not be loaded. Try again.';
-      if (summary) summary.textContent = 'Turnout could not be loaded. Use the turnout section to retry or open source reports.';
+      status.hidden = false;
+      status.textContent = background && snapshot?.status === 'ok'
+        ? 'Turnout updates are temporarily unavailable. Showing the last loaded report.'
+        : 'Turnout could not be loaded. Try again.';
+
       retry.hidden = false;
+    } finally {
+      loading = false;
     }
   }
-  retry.onclick = () => { void load(); };
+  retry.onclick = () => { void load(snapshot?.status === 'ok'); };
   window.addEventListener('countychange', render);
+  const refresh = () => {
+    if (!document.hidden && navigator.onLine) void load(true);
+  };
+  const timer = setInterval(refresh, 30000);
+  document.addEventListener('visibilitychange', refresh);
+  window.addEventListener('online', refresh);
+  stopPolling = () => {
+    stopped = true;
+    clearInterval(timer);
+    retry.onclick = null;
+    window.removeEventListener('countychange', render);
+    document.removeEventListener('visibilitychange', refresh);
+    window.removeEventListener('online', refresh);
+  };
   await load();
 }

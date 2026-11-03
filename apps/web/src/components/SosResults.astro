@@ -5,13 +5,14 @@ interface Props { electionId?: string; publicAssets?: boolean; fallback?: SosVie
 const { electionId, publicAssets = false, fallback, inline = false } = Astro.props;
 const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
 ---
-<section class:list={['sos-results', { 'sos-results-inline': inline }]} data-sos-results data-sos-inline={String(inline)} data-election-id={electionId} data-public-assets={String(publicAssets)} aria-labelledby="sos-results-title">
+<section class:list={['sos-results', { 'sos-results-inline': inline }]} data-sos-results data-sos-inline={String(inline)} data-election-id={electionId} data-public-assets={String(publicAssets)} data-fallback-scope-id={fallback?.scope.jurisdiction.id} data-fallback-scope-name={fallback?.scope.jurisdiction.name} aria-labelledby="sos-results-title">
+  {inline && <button data-sos-sound type="button" aria-pressed="true" title="Play a soft sound when results change">Update sound: on</button>}
   {inline ? <h3 id="sos-results-title">Ballot result updates</h3> : <h2 id="sos-results-title">Georgia SOS candidate &amp; question results</h2>}
   <p class="body-note">{inline ? 'Georgia SOS votes appear with the ballot candidates and choices below. Source races without a reviewed ballot match appear as labeled race cards in the same list. ' : ''}Source results remain separate from photo/PDF reports and early-voting turnout. Each reporting area stands alone; overlapping totals are never added together. These labels do not establish a winner or certification.</p>
   <div class="sos-controls">
     <label> SOS reporting area<select data-sos-jurisdiction aria-label="SOS reporting area"><option value="">Choose a reporting area</option></select></label>
     <label>{inline ? 'Find an unmapped source race or choice' : 'Find a contest or choice'}<input data-sos-search type="search" /></label>
-    <button data-sos-sound type="button" aria-describedby="sos-sound-help" aria-pressed="true" title="Soft ding after changed results; starts after you interact with this page.">Update sound: on</button>
+    {!inline && <button data-sos-sound type="button" aria-describedby="sos-sound-help" aria-pressed="true" title="Soft ding after changed results; starts after you interact with this page.">Update sound: on</button>}
     <button data-sos-refresh type="button">Refresh SOS results</button>
   </div>
   <p id="sos-sound-help" class="body-note">Update sound starts after you interact with this page. Your browser remembers when you mute it.</p>
@@ -33,7 +34,10 @@ const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZ
 <style is:global>
   .sos-results { margin-block:2rem; padding-block:1.5rem; border-block:1px solid var(--line); }
   .sos-results h2 { margin-top:0; }
-  .sos-results-inline { border:0; margin-block:1rem 1.5rem; padding:0; }
+  .sos-results-inline { display:contents; }
+  .sos-results-inline[hidden] { display:none; }
+  .sos-results-inline > :not([data-sos-sound]) { display:none !important; }
+  .sos-results-inline > [data-sos-sound] { display:inline-flex; min-height:44px; margin-block:0 1rem; padding:.5rem .75rem; font-size:.875rem; }
   .sos-inline-count { display:block; margin-top:.35rem; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); }
   .sos-inline-count[hidden], [data-sos-ballot-fallback][hidden] { display:none; }
   .sos-source-choices { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }

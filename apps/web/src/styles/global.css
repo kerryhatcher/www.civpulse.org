@@ -2068,7 +2068,7 @@ textarea::placeholder {
 
 .candidate-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   margin-top: 16px;
 }
@@ -3057,8 +3057,17 @@ body { background: var(--canvas); }
 .vote-metrics-label, .vote-metrics-source { color: var(--muted); font-weight: 400; }
 .vote-metrics-source { display: block; margin-top: .3rem; font-size: .75rem; }
 .vote-share-track { display: block; height: .5rem; margin-top: .45rem; background: var(--line); overflow: hidden; border-radius: 2px; }
-.vote-share-fill { display: block; height: 100%; background: var(--ink); }
+.vote-share-fill { display: block; height: 100%; background: var(--candidate-bar-color, var(--ink)); }
 .sos-source-choices td, .sos-contest td { min-width: 11rem; }
 .ballot-question-choices > li { display: block; }
 .ballot-question-choices > li + li { margin-top: 1rem; }
 @media (max-width: 480px) { .sos-source-choices td, .sos-contest td { min-width: 8rem; } .vote-metrics-values { gap: .2rem .5rem; } }
+
+/* Party color supplements the written curated party label; neutral remains the default. */
+:root { --result-republican: #c62e34; --result-democratic: #165bc4; --result-other: #947000; }
+[data-party-tone="republican"] { --candidate-bar-color: var(--result-republican); }
+[data-party-tone="democratic"] { --candidate-bar-color: var(--result-democratic); }
+[data-party-tone="other"] { --candidate-bar-color: var(--result-other); }
+@media (prefers-color-scheme: dark) {
+  :root { --result-republican: #ff797d; --result-democratic: #78aaff; --result-other: #edcb50; }
+}
