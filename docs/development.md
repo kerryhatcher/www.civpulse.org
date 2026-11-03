@@ -58,6 +58,25 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Automatic SOS results
+
+Run `bun run results:check` and `bun run results:test`, then
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-local-db> bun test scripts/tests/sos-automation-db.test.ts scripts/tests/sos-results-db.test.ts`.
+The HTTP collector integration uses actual local Auth/PostgREST with synthetic
+source/R2 boundaries: save local `supabase status -o json` privately and set
+`SOS_RESULTS_LOCAL_STATUS=<status-file> bun test scripts/tests/sos-collector-integration.test.ts`.
+It rejects nonlocal endpoints and removes only its own fixtures. Never commit
+the status file or print its keys. CI runs this against its disposable stack.
+
+For browser QA, set `SOS_RESULTS_TEST_URL` to an Astro dev server and optionally
+`SOS_RESULTS_PUBLIC_PATH` to a synthetic public election slug, then run
+`bun test scripts/tests/sos-results-browser.test.ts`. The tests cover desktop/light,
+mobile/dark, automatic updates, corrections, retained focus/filter/disclosures,
+offline/error last-good data, selected-scope downloads and stale responses.
+Also exercise anonymous and signed-in access against real local Auth and run
+`bun run check` and `bun run build`. Follow the [runbook](sos-results-automation.md)
+for feed measurements, container setup, cache/CORS checks, and main-first release.
+
 ### Editorial policy and corrections
 
 Run `bun test scripts/tests/corrections.test.ts`, check/build and

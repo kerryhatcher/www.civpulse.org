@@ -6,6 +6,8 @@ import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.as
 import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
 import BallotResults from '../../components/BallotResults.astro';
+import SosResults from '../../components/SosResults.astro';
+import { publicSosFallback } from '../../lib/sos-results-build';
 import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
 import RecordProvenance from '../../components/RecordProvenance.astro';
@@ -44,6 +46,7 @@ interface Props {
 
 const { detail } = Astro.props;
 const { election, organization, contests, dates, ballot_questions } = detail;
+const sosFallback = await publicSosFallback(election.id);
 
 function initials(name: string): string {
   return name
@@ -139,6 +142,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
     <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
       <p><a href={`/elections/results/?id=${election.id}`}>Election results, turnout reports &amp; source details →</a></p>
+      <SosResults electionId={election.id} publicAssets fallback={sosFallback} />
       <ElectionTurnout electionId={election.id} />
       <ElectionPrecinctTurnout electionId={election.id} />
     </section>
@@ -223,6 +227,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
   import { initElectionPrecinctTurnout } from '../../scripts/precinct-turnout';
   import { initElectionTurnout } from '../../scripts/election-turnout';
   import { initBallotResults } from '../../scripts/ballot-results';
+  import { initSosResults } from '../../scripts/sos-results';
   import { restoreSectionAnchorAfter } from '../../scripts/section-anchors';
 
   const turnout = document.querySelector<HTMLElement>('[data-election-turnout]');
@@ -230,6 +235,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
     restoreSectionAnchorAfter(Promise.allSettled([
       initElectionTurnout(turnout.dataset.electionId),
       initBallotResults(turnout.dataset.electionId),
+      initSosResults(turnout.dataset.electionId, true),
       initElectionPrecinctTurnout(turnout.dataset.electionId),
     ]));
   }

@@ -1,6 +1,7 @@
 import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
 import { initBallotResults } from './ballot-results';
+import { initSosResults } from './sos-results';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
 import { matchesCounty } from '../lib/county-scope';
@@ -502,6 +503,7 @@ export async function initElectionViewFromUrl(): Promise<void> {
   const turnoutReady = response.election ? Promise.allSettled([
     initElectionTurnout(response.election.id),
     initBallotResults(response.election.id),
+    initSosResults(response.election.id),
     initElectionPrecinctTurnout(response.election.id),
   ]) : Promise.resolve();
 

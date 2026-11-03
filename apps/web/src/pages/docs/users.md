@@ -465,6 +465,28 @@ is available, so combining calendars does not hide the meeting details.
 
 ## Election results and turnout
 
+Public election pages also show **Georgia SOS candidate & question results**
+when an automatic source publication is available. Choose an **SOS reporting
+area** and search its contests or choices. Source areas are separate from the
+site county filter; only the verified Bibb source area is initially selected
+when viewing Bibb. Source contest and choice names are retained without guessed
+person-profile links. Existing ballot candidates remain available below.
+
+Visible pages check about every 30 seconds. Checks pause in hidden tabs and
+resume when you return or reconnect. **Refresh SOS results** checks immediately.
+Source report time, publication time, successful source check (when available),
+and browser check time have separate labels. An unchanged report is normal;
+**Collection delayed**, **paused**, and **offline** messages explain interruptions
+while preserving the last successful results. Zero votes remain zero; unavailable
+counts and source reporting statuses are stated explicitly. These labels do not
+declare winners or certification. SOS results, photo/PDF reports and turnout are
+separate evidence and are never added together.
+
+Without JavaScript, public election pages retain a bounded published snapshot
+of up to 20 Bibb source contests when available. Its dated label describes the
+page publication, not a live update. UUID viewers load permitted source results
+through the election access gate and do not embed restricted results in HTML.
+
 Open [Election results and turnout](/elections/results/) from the Elections page,
 choose an election and load its reports. **Show earlier reports** reveals how
 reported totals changed. Each report identifies its area, counting group, ballot

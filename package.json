@@ -49,7 +49,9 @@
     "kb:dev": "bun run --cwd apps/kb dev",
     "mcp:build": "bun run scripts/build-mcp.mjs",
     "rebuild:check": "bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/rebuild-frontend/handler.ts",
-    "rebuild:test": "bun test scripts/tests/frontend-rebuild.test.ts"
+    "rebuild:test": "bun test scripts/tests/frontend-rebuild.test.ts",
+    "results:check": "bun run --cwd apps/results-collector check && bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/poll-election-results/handler.ts",
+    "results:test": "bun test apps/results-collector/tests supabase/functions/poll-election-results/handler.test.ts scripts/tests/sos-results.test.ts scripts/tests/sos-results-reader.test.ts"
   },
   "devDependencies": {
     "playwright": "^1.64.1",

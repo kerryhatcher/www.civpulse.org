@@ -34,9 +34,12 @@ jurisdiction labels as statewide, retaining the May party questions in Bibb's vi
 ## Georgia SOS results JSON feeds
 
 Each election has an optional `results_json_url`, editable in Elections admin.
-Leave it null until SOS publishes the exact URL; the November 3, 2026 URL has
-not been supplied. Do not derive a URL from the election name or import a past
-feed as its results. The database accepts only HTTPS SOS Georgia export URLs.
+Leave it null until SOS publishes the exact URL. The November 3, 2026 page now
+links to `https://results.sos.ga.gov/cdn/results/Georgia/export-11032026GeneralAndSpecialElection.json`.
+This was verified from its Media Export link on November 3; configure the exact
+existing election through the release procedure, not a guessed election ID.
+Do not derive a URL from the election name or import a past feed as its results.
+The database accepts only HTTPS SOS Georgia export URLs.
 
 The three supplied examples use `electionDate`, `electionName`, `createdAt`,
 statewide `results`, and county `localResults`. May's feed is approximately
@@ -77,12 +80,19 @@ a jurisdiction index is supplied. Pin `snapshot_id` while paging; the manifest
 contains each jurisdiction's item count. Exact UUID reads permit public/unlisted
 elections; private elections require an admin. These are public SOS aggregates,
 independent of editorial candidate visibility. Raw tables have RLS, admin SELECT,
-and no direct API write grants. Imports do not trigger static frontend rebuilds.
+and no direct API write grants. Automated publication marks meaningful results
+changes for the existing static rebuild coordinator.
 
-This is a storage and manual refresh foundation. Scheduled fetching, Realtime
-subscriptions/push notifications and integration into visitor result charts are
-future work. Saving the URL alone starts no fetch. Existing photo/PDF and turnout
-imports/readers remain separate and retain their current behavior.
+The [automatic collection runbook](sos-results-automation.md) extends this foundation
+with five-minute signed Supabase polling, a durable Bun collector, exact JSON
+archives in R2, and a stable `latest.json` pointer to compact immutable assets.
+Saving the URL alone starts no fetch: feed configuration defaults to disabled.
+Public pages check for new revisions about every 30 seconds and update the
+separate SOS source-results section without waiting for a rebuild or refresh.
+UUID viewers retain the gated RPC reader. Source race/choice IDs are not matched
+to editorial profiles by name. Photo/PDF and structured-turnout imports remain
+separate. Public slug pages also include up to 20 Bibb contests as a bounded
+build-time fallback; subsequent rebuilds replace that snapshot.
 
 Merge `20261125000400_sos_results_feeds` and
 `20261125000500_attach_known_sos_results_urls` to main before applying in production.

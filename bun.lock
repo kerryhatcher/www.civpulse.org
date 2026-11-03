@@ -49,6 +49,13 @@
         "wrangler": "^4.151.3",
       },
     },
+    "apps/results-collector": {
+      "name": "@civpulse/results-collector",
+      "devDependencies": {
+        "@types/bun": "1.4.4",
+        "typescript": "5.9.3",
+      },
+    },
     "apps/web": {
       "name": "@civpulse/web",
       "version": "0.0.1",
@@ -160,6 +167,8 @@
     "@civpulse/mcp": ["@civpulse/mcp@workspace:apps/mcp"],
 
     "@civpulse/media": ["@civpulse/media@workspace:apps/media"],
+
+    "@civpulse/results-collector": ["@civpulse/results-collector@workspace:apps/results-collector"],
 
     "@civpulse/web": ["@civpulse/web@workspace:apps/web"],
 
@@ -1218,6 +1227,8 @@
     "@bruits/satteri-wasm32-wasi/@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
 
     "@bruits/satteri-wasm32-wasi/@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.5", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || ^2.0.0-alpha.4", "@emnapi/runtime": "^1.7.1 || ^2.0.0-alpha.4" } }, "sha512-HshSvXzmBxNzqejd3k/KemgQ3hdREUYFRRrgxOZ+gPljDIsO2SDZrVZMd4Z/HsxudQbE62OVyVFE8z9BCurfjA=="],
+
+    "@civpulse/results-collector/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "@civpulse/web/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 

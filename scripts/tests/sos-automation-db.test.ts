@@ -1,0 +1,105 @@
+import { expect, test } from 'bun:test';
+import { SQL } from 'bun';
+const url = process.env.ELECTION_RESULTS_TEST_DATABASE_URL;
+
+test.skipIf(!url)('SOS automation fences leases and publishes complete snapshots once', async () => {
+ const db = new SQL(url!), rollback = Error('rollback');
+ try { await db.begin(async tx => {
+  const id=crypto.randomUUID(), source='https://results.sos.ga.gov/cdn/results/Georgia/export-Test.json';
+  await tx`insert into public.elections(id,slug,name,election_date,results_json_url) values(${id},${id},'Test','2026-11-03',${source})`;
+  await tx`insert into public.sos_automation_feeds(election_id,source_url,enabled) values(${id},${source},true)`;
+  const [poll]=await tx`select public.claim_sos_results_poll() r`;
+  expect(poll.r.election_id).toBe(id);
+  await tx`select public.finish_sos_results_poll(${id},${poll.r.lease_id},true,null)`;
+  const [claimed]=await tx`select public.claim_sos_results_job() r`; const j=claimed.r;
+  expect((await tx`select public.claim_sos_results_job() r`)[0].r).toBeNull();
+  const hash='a'.repeat(64), fingerprint='b'.repeat(64);
+  const header={electionDate:'2026-11-03',electionName:'Test',createdAt:'2026-11-03T00:00:00Z'};
+  const scopes=[{id:'011',name:'Bibb',reportingStatuses:null,item_count:1}];
+  const receipt={raw_key:`elections/${id}/raw/${hash}.json`,bytes:100,retrieved_at:'2026-11-03T00:00:00Z'};
+  const begin=()=>tx`select public.begin_sos_results_job(${j.job_id},${j.lease_id},${hash},${JSON.stringify(header)}::text::jsonb,${JSON.stringify(scopes)}::text::jsonb,${JSON.stringify(receipt)}::text::jsonb) r`;
+  const snapshot=(await begin())[0].r.snapshot_id;
+  expect((await begin())[0].r.receipt).toEqual(receipt);
+  const manifest=`elections/${id}/revisions/${snapshot}/manifest.json`;
+  const publish=()=>tx`select public.publish_sos_results_job(${j.job_id},${j.lease_id},${snapshot},${fingerprint},${manifest}) r`;
+  const fails=async(fn:()=>Promise<unknown>,message:string)=>{ await tx.unsafe('savepoint test_error'); try { await fn(); throw Error('Expected failure'); } catch (e) { expect(String(e)).toContain(message); } finally { await tx.unsafe('rollback to savepoint test_error'); } };
+  await fails(publish,'Incomplete snapshot');
+  const items=[{jurisdiction_index:0,item_index:0,data:{id:'1',name:'Race',ballotOptions:[{id:'a',name:'Choice'}]}}];
+  await tx`select public.stage_sos_results_job(${j.job_id},${j.lease_id},${snapshot},${JSON.stringify(items)}::text::jsonb)`;
+  const before=(await tx`select revision from public.frontend_rebuild_state where id`)[0].revision;
+  expect((await publish())[0].r).toBe('1');
+  expect(BigInt((await tx`select revision from public.frontend_rebuild_state where id`)[0].revision)).toBe(BigInt(before)+1n);
+  expect((await tx`select public.confirm_sos_results_pointer(${j.job_id},${j.lease_id}) r`)[0].r.revision).toBe('1');
+  await tx`select public.complete_sos_results_pointer(${j.job_id},${j.lease_id},'1')`;
+  await fails(()=>tx`select public.renew_sos_results_job(${j.job_id},${j.lease_id})`,'Expired job lease');
+  // A later receipt with identical semantic results advances history but not rebuild revision.
+  await tx`insert into public.sos_automation_jobs(election_id) values(${id})`;
+  const [secondClaim]=await tx`select public.claim_sos_results_job() r`; const k=secondClaim.r;
+  const hash2='c'.repeat(64), header2={...header,createdAt:'2026-11-03T00:00:01Z'};
+  const receipt2={...receipt,raw_key:`elections/${id}/raw/${hash2}.json`};
+  const [second]=await tx`select public.begin_sos_results_job(${k.job_id},${k.lease_id},${hash2},${JSON.stringify(header2)}::text::jsonb,${JSON.stringify(scopes)}::text::jsonb,${JSON.stringify(receipt2)}::text::jsonb) r`;
+  await tx`select public.stage_sos_results_job(${k.job_id},${k.lease_id},${second.r.snapshot_id},${JSON.stringify(items)}::text::jsonb)`;
+  const buildRevision=(await tx`select revision from public.frontend_rebuild_state where id`)[0].revision;
+  const nextPath=`elections/${id}/revisions/${second.r.snapshot_id}/manifest.json`;
+  expect((await tx`select public.publish_sos_results_job(${k.job_id},${k.lease_id},${second.r.snapshot_id},${fingerprint},${nextPath}) r`)[0].r).toBe('2');
+  expect((await tx`select revision from public.frontend_rebuild_state where id`)[0].revision).toBe(buildRevision);
+  await tx`update public.sos_automation_jobs set lease_until=clock_timestamp()-interval '1 second' where id=${k.job_id}`;
+  await fails(()=>tx`select public.complete_sos_results_pointer(${k.job_id},${k.lease_id},'2')`,'Expired job lease');
+  await tx.unsafe('set local role service_role');
+  const [reclaimed]=await tx`select public.claim_sos_results_job() r`;
+  expect(reclaimed.r.lease_id).not.toBe(k.lease_id);
+  await fails(()=>tx`select public.confirm_sos_results_pointer(${k.job_id},${k.lease_id})`,'Expired job lease');
+  await tx`select public.complete_sos_results_pointer(${k.job_id},${reclaimed.r.lease_id},'2')`;
+  await tx.unsafe('reset role');
+  const admin=crypto.randomUUID(); await tx`insert into auth.users(id,email) values(${admin},${admin+'@example.test'})`;
+  await tx`insert into public.admins(user_id) values(${admin})`;
+  await tx.unsafe('set local role authenticated');
+  await tx`select set_config('request.jwt.claim.sub',${crypto.randomUUID()},true)`;
+  await fails(()=>tx`select public.configure_sos_results_feed(${id},false)`,'Admin access required');
+  await fails(()=>tx`select public.recover_sos_results_job(${id},'retry')`,'Admin access required');
+  await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
+  expect((await tx`select public.configure_sos_results_feed(${id},false) r`)[0].r.enabled).toBe(false);
+  await tx.unsafe('reset role');
+  await tx`update public.elections set visibility='unlisted' where id=${id}`;
+  await tx.unsafe('set local role anon');
+  expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('missing');
+  await tx.unsafe('reset role');
+  await tx`update public.elections set visibility='private' where id=${id}`;
+  await tx.unsafe('set local role authenticated');
+  expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('missing');
+  await tx.unsafe('reset role');
+  await tx`update public.elections set visibility='public' where id=${id}`;
+  await tx.unsafe('set local role anon');
+  expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.current_revision).toBe('2');
+  await fails(()=>tx`select public.claim_sos_results_job()`,'permission denied');
+  throw rollback;
+ }); } catch (e) { if(e!==rollback) throw e; } finally { await db.close(); }
+}, 30000);
+
+test.skipIf(!url)('automation adopts a previously admin-published snapshot', async () => {
+ const db=new SQL(url!), rollback=Error('rollback');
+ try { await db.begin(async tx=>{
+  const id=crypto.randomUUID(), admin=crypto.randomUUID(),source='https://results.sos.ga.gov/cdn/results/Georgia/export-Adoption.json';
+  await tx`insert into auth.users(id,email) values(${admin},${admin+'@example.test'})`;
+  await tx`insert into public.admins(user_id) values(${admin})`;
+  await tx`insert into public.elections(id,slug,name,election_date,results_json_url) values(${id},${id},'Adoption','2026-11-03',${source})`;
+  const hash='d'.repeat(64), header={electionDate:'2026-11-03',electionName:'Adoption',createdAt:'2026-11-03T00:00:00Z'};
+  const scopes=[{id:'011',name:'Bibb',reportingStatuses:null,item_count:1}];
+  const items=[{jurisdiction_index:0,item_index:0,data:{id:'1',name:'Race',ballotOptions:[{id:'a',name:'Choice'}]}}];
+  await tx.unsafe('set local role authenticated'); await tx`select set_config('request.jwt.claim.sub',${admin},true)`;
+  const [manual]=await tx`select public.begin_sos_results(${id},${source},${hash},${JSON.stringify(header)}::text::jsonb,${JSON.stringify(scopes)}::text::jsonb) r`;
+  await tx`select public.stage_sos_results(${manual.r},${JSON.stringify(items)}::text::jsonb)`;
+  await tx`select public.publish_sos_results(${manual.r},null)`;
+  await tx`select public.configure_sos_results_feed(${id},true)`;
+  await tx.unsafe('reset role'); await tx`insert into public.sos_automation_jobs(election_id) values(${id})`;
+  await tx.unsafe('set local role service_role'); const [claim]=await tx`select public.claim_sos_results_job() r`; const j=claim.r;
+  const receipt={raw_key:`elections/${id}/raw/${hash}.json`,bytes:100,retrieved_at:'2026-11-03T00:00:00Z'};
+  const [begin]=await tx`select public.begin_sos_results_job(${j.job_id},${j.lease_id},${hash},${JSON.stringify(header)}::text::jsonb,${JSON.stringify(scopes)}::text::jsonb,${JSON.stringify(receipt)}::text::jsonb) r`;
+  expect(begin.r.snapshot_id).toBe(manual.r); expect(begin.r.published).toBe(false);
+  await tx`select public.stage_sos_results_job(${j.job_id},${j.lease_id},${manual.r},${JSON.stringify(items)}::text::jsonb)`;
+  const path=`elections/${id}/revisions/${manual.r}/manifest.json`;
+  expect((await tx`select public.publish_sos_results_job(${j.job_id},${j.lease_id},${manual.r},${'e'.repeat(64)},${path}) r`)[0].r).toBe('1');
+  expect((await tx`select public.confirm_sos_results_pointer(${j.job_id},${j.lease_id}) r`)[0].r.snapshot_id).toBe(manual.r);
+  throw rollback;
+ }); } catch(e){if(e!==rollback)throw e;}finally{await db.close();}
+},30000);
