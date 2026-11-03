@@ -872,3 +872,8 @@ Development and test results acceptance uses a separately configured frontend
 with its matching isolated Supabase project and reviewed public files origin.
 The production files origin remains the default. Selecting a test origin does
 not activate collection or change any election's visibility.
+
+Automatic SOS source checks identify the CivicPulse collector explicitly in the
+request User-Agent, including its version and repository link. This client
+identification does not enable a feed or change the reviewed source URL, cadence
+or stop window.

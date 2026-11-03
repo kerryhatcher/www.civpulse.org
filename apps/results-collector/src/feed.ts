@@ -32,7 +32,7 @@ export async function download(url: string, path: string, validators: { etag?: s
   const signal = AbortSignal.any([AbortSignal.timeout(180_000), ...(authorizationSignal ? [authorizationSignal] : [])]);
   signal.throwIfAborted();
   if (!SOS_URL.test(url)) throw Error("Invalid SOS source URL");
-  const headers = new Headers({ "Accept": "application/json", "Accept-Encoding": "identity" });
+  const headers = new Headers({ "User-Agent": "CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)", "Accept": "application/json", "Accept-Encoding": "identity" });
   if (validators.etag) headers.set("If-None-Match", validators.etag);
   else if (validators.last_modified) headers.set("If-Modified-Since", validators.last_modified);
   const response = await fetcher(url, { headers, redirect: "error", cache: "no-store", signal });

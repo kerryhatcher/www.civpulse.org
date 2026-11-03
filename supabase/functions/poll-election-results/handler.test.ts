@@ -19,6 +19,9 @@ describe('election poll', () => {
         if (url.endsWith('/claim_sos_results_poll')) { if (claimed) return Response.json(null); claimed = true; return Response.json(feed); }
         if (url.endsWith('/finish_sos_results_poll')) { calls.push(JSON.parse(String(init?.body))); return Response.json(null); }
         expect(init?.method).toBe('HEAD');
+        expect(new Headers(init?.headers).get('User-Agent')).toBe('CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)');
+        expect(String(input)).toBe(feed.source_url);
+        expect(init?.redirect).toBe('error');
         expect(new Headers(init?.headers).get('If-None-Match')).toBe('"old"');
         return new Response(null, { status, headers: etag ? { ETag: etag } : {} });
       }) as typeof fetch;
@@ -26,4 +29,26 @@ describe('election poll', () => {
       expect(calls).toEqual([{ p_election_id: 'e', p_lease_id: 'l', p_changed: changed, p_error: error }]);
     });
   }
+});
+
+test('source HEAD carries honest identity on the actual loopback HTTP request', async () => {
+  const observed: { method: string; agent: string | null; validator: string | null }[] = [];
+  const source = Bun.serve({ hostname: '127.0.0.1', port: 0, fetch(request) {
+    observed.push({ method: request.method, agent: request.headers.get('user-agent'), validator: request.headers.get('if-none-match') });
+    return new Response(null, { status: 304 });
+  } });
+  let claimed = false;
+  const fetcher = (async (input: string | URL | Request, init?: RequestInit) => {
+    const url = String(input);
+    if (url.endsWith('/verify_sos_poll_signature')) return Response.json(true);
+    if (url.endsWith('/claim_sos_results_poll')) { if (claimed) return Response.json(null); claimed = true; return Response.json(feed); }
+    if (url.endsWith('/finish_sos_results_poll')) return Response.json(null);
+    expect(url).toBe(feed.source_url);
+    // Only the synthetic source transport boundary is redirected to loopback.
+    return fetch(source.url, init);
+  }) as typeof fetch;
+  try {
+    expect((await handlePoll(signed(), env, fetcher)).status).toBe(200);
+    expect(observed).toEqual([{ method: 'HEAD', agent: 'CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)', validator: '"old"' }]);
+  } finally { source.stop(true); }
 });
