@@ -32,11 +32,14 @@ test.skipIf(!url)('one coordinator gates cadence, immediate activation, transiti
       await tx.unsafe('reset role');
       await tx`update public.sos_automation_feeds set last_attempt_at=now()-interval '20 minutes' where election_id=${id}`;
       const previousAttempt = (await tx`select last_attempt_at::text t from public.sos_automation_feeds where election_id=${id}`)[0].t;
-      // Exact requested phase boundary is independent of when activation occurs.
+      // Fixed-date assertions need a fixed ordered window too: a wall-clock
+      // start after 22:00 would correctly postpone eligibility beyond this test.
+      // Set both bounds together so this remains valid before/after election day.
       await tx.unsafe('savepoint fixed_cadence_boundary');
-      await tx`update public.sos_automation_feeds set poll_transition_at='2026-11-03T22:00:00Z',last_attempt_at='2026-11-03T21:30:00Z',poll_requested_at=null where election_id=${id}`;
+      await tx`update public.sos_automation_feeds set starts_at='2026-11-03T18:00:00Z',ends_at='2026-11-04T00:00:00Z',poll_transition_at='2026-11-03T22:00:00Z',last_attempt_at='2026-11-03T21:30:00Z',poll_requested_at=null where election_id=${id}`;
       expect((await tx`select frontend_private.sos_poll_interval(f,'2026-11-03T21:59:59Z') n from public.sos_automation_feeds f where election_id=${id}`)[0].n).toBe(3600);
       expect((await tx`select frontend_private.sos_poll_interval(f,'2026-11-03T22:00:00Z') n from public.sos_automation_feeds f where election_id=${id}`)[0].n).toBe(300);
+      expect((await tx`select frontend_private.sos_poll_next_at(f,'2026-11-03T21:59:59Z')>'2026-11-03T21:59:59Z'::timestamptz pending from public.sos_automation_feeds f where election_id=${id}`)[0].pending).toBe(true);
       expect((await tx`select frontend_private.sos_poll_next_at(f,'2026-11-03T22:00:00Z')='2026-11-03T22:00:00Z'::timestamptz due from public.sos_automation_feeds f where election_id=${id}`)[0].due).toBe(true);
       await tx.unsafe('rollback to savepoint fixed_cadence_boundary');
       // pg_net sends only committed queue rows: this savepoint is always rolled
