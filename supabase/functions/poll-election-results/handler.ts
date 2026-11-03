@@ -23,7 +23,7 @@ export async function handlePoll(request: Request, env: PollEnv, fetcher: typeof
       let error: string | null = null;
       try {
         if (!/^https:\/\/results\.sos\.ga\.gov\/cdn\/results\/Georgia\/export-[A-Za-z0-9_-]+\.json$/.test(feed.source_url)) throw Error('Invalid source');
-        const headers = new Headers();
+        const headers = new Headers({ 'User-Agent': 'CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)' });
         if (feed.etag) headers.set('If-None-Match', feed.etag);
         if (feed.last_modified) headers.set('If-Modified-Since', feed.last_modified);
         const response = await fetcher(feed.source_url, { method: 'HEAD', headers, redirect: 'error', signal: AbortSignal.timeout(15_000) });

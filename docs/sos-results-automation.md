@@ -369,3 +369,11 @@ published jurisdiction name (optional County suffix), never a derived source ID.
 All counties uses only an explicit statewide source; missing or ambiguous matches
 leave metrics unavailable. Photo/PDF reads refresh every 30 seconds while visible
 and online. Scope/source evidence remains inside race cards.
+
+The coordinator's source HEAD checks and reference collector's source GETs send
+`CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)` as
+an explicit, honest User-Agent. This matches the Rust collector's application
+identity and avoids relying on different Edge/Bun default client headers. It
+does not change source admission, redirects, deadlines, polling windows or the
+single scheduling coordinator. Regression tests inspect the actual request
+headers supplied to each fetch boundary without contacting the official source.

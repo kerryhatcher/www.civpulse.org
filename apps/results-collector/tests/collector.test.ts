@@ -67,6 +67,7 @@ test("byte-exact download hashes BOM, conditionals, 304, HTTP errors, Retry-Afte
   const dir = await directory(), file = `${dir}/raw.json`, bytes = new TextEncoder().encode("\uFEFF" + JSON.stringify(fixture()));
   let opts: RequestInit | undefined;
   const actual = await download(sourceUrl, file, { etag: '"source"' }, (async (_url: unknown, options: RequestInit) => { opts = options; return new Response(bytes, { headers: { etag: '"next"' } }); }) as unknown as typeof fetch);
+  expect(new Headers(opts?.headers).get("User-Agent")).toBe("CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)");
   expect(opts?.redirect).toBe("error"); expect(new Headers(opts?.headers).get("If-None-Match")).toBe('"source"');
   expect(actual).toMatchObject({ sha256: new Bun.CryptoHasher("sha256").update(bytes).digest("hex"), bytes: bytes.length });
   expect(new Uint8Array(await Bun.file(file).arrayBuffer())).toEqual(bytes);
