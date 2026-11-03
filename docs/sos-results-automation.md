@@ -1,8 +1,9 @@
 # Georgia SOS collection operations
 
 The static Astro site stays static. Supabase Cron authenticates the small
-`poll-election-results` Edge Function every five minutes; it performs HEAD checks
-and queues durable Postgres jobs. The Bun container in `apps/results-collector`
+`poll-election-results` Edge Function through one five-minute Cron heartbeat.
+Postgres gates actual HEAD checks by the configured feed cadence and window, then
+queues durable jobs; a heartbeat with no due feed makes no HTTP request. The Bun container in `apps/results-collector`
 claims those jobs, downloads and validates the export, archives source bytes in
 the existing **civpulse-files** R2 bucket, stages bounded batches, uploads and
 verifies immutable public projections, commits the database revision, then
@@ -33,6 +34,51 @@ choice IDs remain scoped to their source parents. There are no automatic person
 creations, fuzzy name matches, cross-jurisdiction ID equivalences or inferred
 winners. State, county, precinct and method totals are overlapping scopes and
 are never added together by the collector.
+
+## Poll cadence and immediate activation
+
+The existing `sos-results-poll` Cron entry remains `*/5 * * * *`; do not add a
+second scheduler. `claim_sos_results_poll` and the authenticated invocation both
+check the same database due time. Default cadence remains five minutes for existing
+clients. An administrator can configure a paused feed with
+`configure_sos_results_poll_cadence(p_election_id,p_interval_seconds,p_transition_at,p_after_interval_seconds)`.
+Both intervals are 300–86,400 seconds in five-minute increments. There is a bounded
+one-minute eligibility allowance for Cron/network jitter; the single five-minute
+heartbeat determines the actual recurring checks. Skipped heartbeats do not change
+`last_attempt_at` or manufacture successful source checks.
+
+For the approved November rollout, first save the reviewed existing election and
+exact export URL, then create/configure its feed disabled. Configure initial
+interval **3,600 seconds**, transition **2026-11-03T22:00:00Z**, and subsequent
+interval **300 seconds**. Keep the feed and production collector disabled during
+implementation and controlled acceptance. At actual activation use the existing
+four-argument `configure_sos_results_feed` with the reviewed UUID,
+`p_enabled:true`, `p_starts_at` equal to actual activation, and exclusive
+`p_ends_at:2026-11-11T00:00:00Z`. If activation happens after 22:00Z, the effective
+cadence is immediately five minutes; there is no replay of missed hourly checks.
+The transition itself becomes due even if a pre-transition hourly check was recent.
+
+A false-to-true activation records `poll_requested_at` separately from real
+`last_attempt_at` and immediately queues the existing authenticated coordinator
+through pg_net when its Vault URL/token are configured. Inspect the returned
+`poll_request_id` and verify the actual source check and resulting durable work;
+an ID alone proves only that a request was queued. Repeating an already-enabled
+configuration does not enqueue another activation request. When Vault is absent,
+configuration stays compatible with isolated setups: the request remains durably
+due and the returned ID is null. A real production activation requires working
+Vault credentials before enabling and must not accept that null result as success.
+No migration in this feature enables a feed or installs production secrets.
+
+Both public `get_sos_results_health` and service-only
+`get_sos_collection_health` add effective `poll_interval_seconds`, transition,
+window, `source_checks_expected`, `source_check_expected_since`, and
+`next_poll_at` fields. Existing fields and caller grants are retained. The
+freshness anchor accounts for activation and a cadence transition without changing
+source-check provenance. Source-check delay uses `max(900,2*interval+300)` seconds:
+normal hourly silence stays healthy, while the five-minute phase uses a 15-minute
+threshold. Errors and stalled pending work still mark delays; job stall handling
+remains 15 minutes. Disabled, future-window, and expired feeds are paused, with
+`source_checks_expected:false`; unchanged vote counts are never an alarm.
 
 ## Container and resource envelope
 
@@ -208,7 +254,7 @@ after each change.
    invocation returns without making an HTTP request. This merge alone enables
    no feed and provisions no worker host or secrets.
 
-Expected freshness is the five-minute polling cadence plus ingestion, source/CDN
+Expected freshness is the effective configured polling cadence plus ingestion, source/CDN
 propagation and up to 30 seconds of browser polling. This is not instantaneous.
 
 ## Health, pause, replay and retention

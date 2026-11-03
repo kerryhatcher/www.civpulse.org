@@ -1575,6 +1575,16 @@ visibility-gated reader. It also permits an equal source timestamp only when the
 current automation-owned snapshot has the same semantic fingerprint. Mapping
 changes to public elections mark the frontend dirty; mappings are not R2 assets.
 
+Migration `20261125003500_sos_results_poll_cadence` keeps the same single
+five-minute Cron heartbeat but gates real source checks with per-feed initial and
+post-transition intervals. Admins configure cadence only while paused through
+`configure_sos_results_poll_cadence`; the original four-argument feed RPC remains
+compatible. Actual activation records an immediate request separately from true
+source-check timestamps and queues the existing signed coordinator when Vault is
+ready. Both public and service health readers expose effective cadence/window and
+use cadence-aware freshness without weakening visibility or service-only grants.
+No feed, production credential, or additional Cron schedule is activated by SQL.
+
 Private evidence and immutable, scoped election reports support agent-assisted OCR
 imports and turnout tracking. Admin-only imports validate identity, vote totals,
 source presence and predecessor IDs; public reads inherit election visibility.

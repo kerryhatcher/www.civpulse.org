@@ -17,8 +17,10 @@ docs/         architecture, backend, and development notes
 
 ### Live election results
 
-Georgia SOS collection is scheduled every five minutes by Supabase Cron and an
-authenticated polling Edge Function. A separate Bun container claims durable
+Georgia SOS collection uses one five-minute Supabase Cron heartbeat and an
+authenticated polling Edge Function. Postgres gates actual source checks by a
+reviewed per-feed cadence/transition and explicit window; activation requests an
+immediate check through that same coordinator. A separate Bun container claims durable
 database jobs, archives exact source JSON in `civpulse-files`, stages validated
 snapshots, and publishes compact immutable state/county assets. The well-known
 `latest.json` pointer advances with conditional writes after database publication.
