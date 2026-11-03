@@ -274,6 +274,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
     void load(true);
   };
   window.addEventListener("ballotscopechange", render);
+  window.addEventListener("countychange", render);
   window.addEventListener("sosballotchange", render);
   const timer = setInterval(() => {
     if (!stopped && !document.hidden && navigator.onLine && !refresh.disabled) void load(true);
@@ -287,6 +288,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
     root.removeAttribute("aria-busy");
     reset();
     window.removeEventListener("ballotscopechange", render);
+    window.removeEventListener("countychange", render);
     window.removeEventListener("sosballotchange", render);
   };
   await load();

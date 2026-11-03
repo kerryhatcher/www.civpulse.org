@@ -6,7 +6,7 @@ import { initBallotResults } from './ballot-results';
 import { initSosResults } from './sos-results';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
-import { matchesCounty } from '../lib/county-scope';
+import { jurisdictionCounties, matchesCounty } from '../lib/county-scope';
 import { orderElections, searchDirectory } from '../lib/directories';
 import { historyLink } from '../lib/history';
 import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
@@ -251,6 +251,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
   card.className = 'contest-card';
   card.id = `contest-${contest.id}`;
   card.dataset.bibbRelevant = String(isBibbContest(contest));
+  card.dataset.countyCoverage = jurisdictionCounties(`${contest.office} ${contest.district ?? ''}`).join(',');
 
   const header = document.createElement('header');
   header.className = 'contest-heading';
@@ -295,6 +296,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   card.className = 'contest-card ballot-question';
   card.id = `question-${question.id}`;
   card.dataset.bibbRelevant = String(isBibbJurisdiction(question.jurisdiction));
+  card.dataset.countyCoverage = jurisdictionCounties(question.jurisdiction).join(',');
   const header = document.createElement('header'); header.className = 'contest-heading';
   const title = document.createElement('h3'); title.textContent = question.title;
   const meta = document.createElement('span'); meta.className = 'contest-meta';
@@ -437,36 +439,31 @@ function fillElectionView(response: ElectionViewResponse): void {
 export async function initElectionScope(): Promise<void> {
   if (!document.querySelector('[data-election-scope]')) return;
   const cards = [...document.querySelectorAll<HTMLElement>('[data-bibb-relevant]')];
-  let index;
-  try { index = await readCountyIndex(); } catch { return; }
-  const countyIndex = index;
+  let countyIndex: Awaited<ReturnType<typeof readCountyIndex>> | undefined;
+  let indexFailed = false;
   const empty = document.querySelector<HTMLElement>('[data-election-scope-empty]');
-  const linked = document.querySelector<HTMLElement>('[data-election-linked-race]');
-  function linkedRace() {
-    return /^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)
-      ? cards.find(card => `#${card.id}` === window.location.hash) : undefined;
-  }
   function apply() {
-    const target = linkedRace();
-    let revealed = false;
+    const county = selectedCounty();
     for (const card of cards) {
       const [kind, ...parts] = card.id.split('-');
-      const relevant = selectedCounty() === 'all' || (selectedCounty() === '13021' ? card.dataset.bibbRelevant === 'true'
-        : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), selectedCounty()));
-      card.hidden = !relevant && card !== target;
-      if (!relevant && card === target) revealed = true;
+      const coverage = card.dataset.countyCoverage?.split(',').filter(Boolean);
+      const relevant = county === 'all' || (county === '13021' ? card.dataset.bibbRelevant === 'true'
+        : !!countyIndex && (coverage?.length ? coverage.includes(county)
+          : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), county)));
+      card.hidden = !relevant;
     }
-    if (linked) linked.hidden = !revealed;
-    if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
+    if (empty) {
+      empty.hidden = cards.length === 0 || cards.some(card => !card.hidden) || (!countyIndex && !indexFailed && county !== 'all' && county !== '13021');
+      empty.textContent = indexFailed && county !== 'all' && county !== '13021'
+        ? 'County filtering could not load. Reload this page to try again.'
+        : 'No races or ballot questions are recorded for this area yet.';
+    }
     window.dispatchEvent(new Event('ballotscopechange'));
   }
-  function revealLinkedRace() {
-    apply();
-    linkedRace()?.scrollIntoView();
-  }
   window.addEventListener('countychange', apply);
-  revealLinkedRace();
-  window.addEventListener('hashchange', revealLinkedRace);
+  apply();
+  try { countyIndex = await readCountyIndex(); } catch { indexFailed = true; }
+  apply();
 }
 
 /** Viewer for any election uuid (public, unlisted, or private). */

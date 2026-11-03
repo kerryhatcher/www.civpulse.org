@@ -259,13 +259,16 @@ export async function initSosResults(
         return;
       }
       const old = area.value;
+      const jurisdictions = selectedCounty() === "all"
+        ? result.pointer.jurisdictions
+        : result.pointer.jurisdictions.filter(j => j.id === automaticSosScope(selectedCounty(), result.pointer!.jurisdictions));
       if (
         [...area.options].map((o) => o.value).join("|") !==
-        ["", ...result.pointer.jurisdictions.map((j) => j.id)].join("|")
+        ["", ...jurisdictions.map((j) => j.id)].join("|")
       ) {
         area.replaceChildren(
           new Option("Choose a reporting area", ""),
-          ...result.pointer.jurisdictions.map((j) => new Option(j.name, j.id)),
+          ...jurisdictions.map((j) => new Option(j.name, j.id)),
         );
         area.value = old;
       }
@@ -360,7 +363,6 @@ export async function initSosResults(
     void load();
   };
   const countyChange = () => {
-    if (!inline) return;
     initialSelection = true;
     area.value = "";
     change();

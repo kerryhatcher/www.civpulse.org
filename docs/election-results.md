@@ -370,9 +370,16 @@ existing election and reporting query parameters.
 `restoreSectionAnchorAfter` re-aligns an initial hash after the page’s initial
 runtime reads finish, including turnout charts above the map. It respects hidden
 or unavailable sections, malformed fragments, changed hashes and visitor input;
-it does not override someone who has started scrolling or navigating. Existing
-contest/question links still reveal their linked races through election scope.
+it does not override someone who has started scrolling or navigating. Contest/question links respect the selected county; an out-of-county target
+remains hidden. If county coverage cannot load, non-Bibb county ballots remain
+hidden with a reload notice instead of displaying the default Bibb ballot.
 
 The UUID viewer’s optional admin-edit lookup runs independently of turnout and
 anchor readiness. A delayed or failed role lookup cannot postpone the shared
 section’s alignment; the edit link stays hidden unless admin access is confirmed.
+
+County selection also constrains the SOS reporting-area menu on the standalone
+results viewer. All counties allows manual area exploration; a specific county
+allows only its unique matching SOS jurisdiction. The Bibb-only precinct map
+starts hidden and appears for Bibb or All counties, with request generation and
+disposal guards preventing delayed loads from restoring it in another county.

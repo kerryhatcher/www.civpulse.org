@@ -78,6 +78,10 @@ For browser QA, set `SOS_RESULTS_TEST_URL` to an Astro dev server and optionally
 `bun test scripts/tests/sos-results-browser.test.ts`. The tests cover desktop/light,
 mobile/dark, automatic updates, corrections, retained focus/filter/disclosures,
 offline/error last-good data, selected-scope downloads and stale responses.
+With the same dev-server environment, run
+`bun test scripts/tests/precinct-county-browser.test.ts scripts/tests/election-scope-browser.test.ts`
+for county switching, delayed map loads, viewer reinitialization, out-of-county
+ballot links and unavailable county coverage.
 Also exercise anonymous and signed-in access against real local Auth and run
 `bun run check` and `bun run build`. Follow the [runbook](sos-results-automation.md)
 for feed measurements, container setup, cache/CORS checks, and main-first release.
