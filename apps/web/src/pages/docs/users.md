@@ -465,6 +465,31 @@ is available, so combining calendars does not hide the meeting details.
 
 ## Election results and turnout
 
+Election pages show live Georgia SOS votes inside **What's on the ballot**,
+next to the existing candidate profiles and ballot choices when an editor has
+reviewed the exact source-ID mapping. Profile links and party labels stay visible;
+a candidate absent from the source remains listed with **Not reported**. Source
+races without a reviewed match appear as explicitly labeled **Georgia SOS source
+race** cards in the same ballot list, without guessed person links. Choose an
+**SOS reporting area** in **Ballot result updates**. Source areas are separate from the
+site county filter; only the verified Bibb source area is initially selected
+when viewing Bibb. The separate reports page retains its source-result browser.
+
+Visible pages check about every 30 seconds. Checks pause in hidden tabs and
+resume when you return or reconnect. **Refresh SOS results** checks immediately.
+Source report time, publication time, successful source check (when available),
+and browser check time have separate labels. An unchanged report is normal;
+**Collection delayed**, **paused**, and **offline** messages explain interruptions
+while preserving the last successful results. Zero votes remain zero; unavailable
+counts and source reporting statuses are stated explicitly. These labels do not
+declare winners or certification. SOS results, photo/PDF reports and turnout are
+separate evidence and are never added together.
+
+Without JavaScript, public election pages retain a bounded published snapshot
+of up to 20 Bibb source contests in the ballot when available. Its dated label describes the
+page publication, not a live update. UUID viewers load permitted source results
+through the election access gate and do not embed restricted results in HTML.
+
 Open [Election results and turnout](/elections/results/) from the Elections page,
 choose an election and load its reports. **Show earlier reports** reveals how
 reported totals changed. Each report identifies its area, counting group, ballot

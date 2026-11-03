@@ -1,0 +1,15 @@
+---
+import { mappedSosItem, type SosContestMapping } from '../lib/sos-ballot';
+import { sourceCount, sourceStatus, type SosView, type SosItem, type SosObject } from '../lib/sos-results-reader';
+interface Props { view?: SosView | null; mappings?: SosContestMapping[]; contestId?: string; questionId?: string; sourceItem?: SosItem }
+const { view, mappings = [], contestId, questionId, sourceItem } = Astro.props;
+const match = contestId || questionId ? mappedSosItem(view, mappings, contestId ? 'contest' : 'question', (contestId ?? questionId)!) : null;
+const item = sourceItem ?? match?.item;
+const choices = item ? item.data.ballotOptions as SosObject[] : [];
+const extras = match ? choices.filter(choice => !match.mapping.choices.some(mapped => mapped.source_choice_id === choice.id)) : choices;
+const date = view ? new Date(view.pointer.source_created_at).toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' }) : '';
+---
+{view && item && <div data-sos-ballot-fallback data-sos-inline-scope>
+  <p class="body-note">Georgia SOS · {view.scope.jurisdiction.name} · Source reported {date} · {sourceStatus(item.data.reportingStatus ?? view.scope.jurisdiction.reportingStatuses)}. Published page snapshot.</p>
+  {extras.length > 0 && <table class="sos-source-choices"><caption>{match ? 'Additional SOS choices without a reviewed candidate mapping' : 'Georgia SOS source choices'} · {view.scope.jurisdiction.name}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Votes</th></tr></thead><tbody>{extras.map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td>{sourceCount(choice.voteCount)}</td></tr>)}</tbody></table>}
+</div>}

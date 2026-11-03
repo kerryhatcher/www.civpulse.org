@@ -1,0 +1,56 @@
+---
+import { sourceCount, sourceStatus, type SosView, type SosObject } from '../lib/sos-results-reader';
+interface Props { electionId?: string; publicAssets?: boolean; fallback?: SosView | null; inline?: boolean }
+const { electionId, publicAssets = false, fallback, inline = false } = Astro.props;
+const stamp = (value: string) => new Date(value).toLocaleString('en-US', { timeZone: 'America/New_York', timeZoneName: 'short' });
+---
+<section class:list={['sos-results', { 'sos-results-inline': inline }]} data-sos-results data-sos-inline={String(inline)} data-election-id={electionId} data-public-assets={String(publicAssets)} aria-labelledby="sos-results-title">
+  {inline ? <h3 id="sos-results-title">Ballot result updates</h3> : <h2 id="sos-results-title">Georgia SOS candidate &amp; question results</h2>}
+  <p class="body-note">{inline ? 'Georgia SOS votes appear with the ballot candidates and choices below. Source races without a reviewed ballot match appear as labeled race cards in the same list. ' : ''}Source results remain separate from photo/PDF reports and early-voting turnout. Each reporting area stands alone; overlapping totals are never added together. These labels do not establish a winner or certification.</p>
+  <div class="sos-controls">
+    <label> SOS reporting area<select data-sos-jurisdiction aria-label="SOS reporting area"><option value="">Choose a reporting area</option></select></label>
+    <label>{inline ? 'Find an unmapped source race or choice' : 'Find a contest or choice'}<input data-sos-search type="search" /></label>
+    <button data-sos-refresh type="button">Refresh SOS results</button>
+  </div>
+  <p data-sos-status role="status" aria-live="polite">Checking for SOS results…</p>
+  <p data-sos-times class="body-note"></p>
+  <p><a data-sos-source href="https://results.sos.ga.gov/" target="_blank" rel="noopener noreferrer">Georgia Secretary of State source</a></p>
+  <div data-sos-content></div>
+  {fallback && <div data-sos-fallback>
+    <p class="body-note">Published page snapshot · {fallback.scope.jurisdiction.name} · Source reported {stamp(fallback.pointer.source_created_at)} · Published {stamp(fallback.pointer.published_at)}. {fallback.truncated ? 'First 20 source contests in this page snapshot.' : 'This is the published page snapshot.'}</p>
+    <p>{sourceStatus(fallback.scope.jurisdiction.reportingStatuses)}</p>
+    {!inline && fallback.scope.items.map(item => <details class="sos-contest"><summary>{String(item.data.name)}</summary>
+      <table><caption>{fallback.scope.jurisdiction.name} · {String(item.data.name)}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Votes</th></tr></thead>
+        <tbody>{(item.data.ballotOptions as SosObject[]).map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td>{sourceCount(choice.voteCount)}</td></tr>)}</tbody>
+      </table>
+    </details>)}
+  </div>}
+  <noscript><p>Automatic updates need JavaScript. Reload this public election page after a new site publication for a newer page snapshot.</p></noscript>
+</section>
+<style is:global>
+  .sos-results { margin-block:2rem; padding-block:1.5rem; border-block:1px solid var(--line); }
+  .sos-results h2 { margin-top:0; }
+  .sos-results-inline { border:0; margin-block:1rem 1.5rem; padding:0; }
+  .sos-inline-count { display:block; margin-top:.35rem; font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink); }
+  .sos-inline-count[hidden], [data-sos-ballot-fallback][hidden] { display:none; }
+  .sos-source-choices { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+  .sos-source-choices caption { text-align:left; color:var(--muted); padding-block:.75rem; }
+  .sos-source-choices th, .sos-source-choices td { padding:.65rem .5rem; border-bottom:1px solid var(--line); text-align:right; }
+  .sos-source-choices th:first-child { text-align:left; overflow-wrap:anywhere; }
+  .sos-source-choices tbody th { font-weight:400; }
+  .sos-results .body-note { max-width:75ch; }
+  .sos-controls { display:flex; align-items:end; flex-wrap:wrap; gap:1rem; margin-block:1.25rem; }
+  .sos-controls label { display:grid; gap:.4rem; flex:1 1 15rem; font-weight:600; min-width:0; }
+  .sos-controls select, .sos-controls input { width:100%; min-width:0; min-height:44px; }
+  .sos-controls button { min-height:44px; }
+  .sos-contest { border-top:1px solid var(--line); }
+  .sos-contest > summary { cursor:pointer; padding:1rem .25rem; font-weight:600; overflow-wrap:anywhere; }
+  .sos-contest table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; margin-block:.75rem 1rem; }
+  .sos-contest caption { text-align:left; color:var(--muted); padding-bottom:.5rem; }
+  .sos-contest th, .sos-contest td { padding:.65rem .5rem; border-bottom:1px solid var(--line); text-align:right; }
+  .sos-contest th:first-child { text-align:left; overflow-wrap:anywhere; }
+  .sos-contest tbody th { font-weight:400; }
+  .sos-contest td { white-space:nowrap; }
+  .sos-results [data-sos-times], .sos-results [data-sos-status] { max-width:75ch; }
+  @media(max-width:480px) { .sos-controls { display:grid; grid-template-columns:minmax(0,1fr); } .sos-contest th, .sos-contest td { padding:.65rem .25rem; } }
+</style>

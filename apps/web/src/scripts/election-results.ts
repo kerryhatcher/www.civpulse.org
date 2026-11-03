@@ -1,4 +1,5 @@
 import { getSupabase } from "../lib/supabase";
+import { initSosResults, stopSosResults } from './sos-results';
 import { selectedCounty } from './county-filter';
 import { GEORGIA_COUNTIES } from '../lib/county-scope';
 import {
@@ -291,6 +292,7 @@ export async function initElectionResults() {
     render();
   }
   async function choose() {
+    stopSosResults();
     const request = ++generation;
     rows = [];
     reports.replaceChildren();
@@ -310,6 +312,7 @@ export async function initElectionResults() {
       if (ee) throw ee;
       if (e?.status !== "ok")
         throw Error("Election unavailable or access restricted.");
+      void initSosResults(select.value);
       titles.clear();
       for (const c of e.contests ?? [])
         titles.set(

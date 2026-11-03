@@ -1,6 +1,7 @@
 ---
 import SectionLink from '../../components/SectionLink.astro';
 import Layout from '../../layouts/Layout.astro';
+import SosResults from '../../components/SosResults.astro';
 ---
 <Layout title="Election results & turnout" description="Sourced election reports and Georgia turnout, with reporting history.">
  <main id="main" class="results-page">
@@ -9,6 +10,7 @@ import Layout from '../../layouts/Layout.astro';
    <label for="result-election">Election</label>
    <div class="result-election-controls"><select id="result-election" required><option value="">Choose an election</option></select><button type="submit">Refresh reports</button></div>
   </form>
+  <SosResults />
   <fieldset id="result-filters" data-shareable-section disabled>
    <legend>Explore a report <SectionLink target="result-filters" label="report filters" /></legend>
    <div class="result-filter-grid">
@@ -24,7 +26,7 @@ import Layout from '../../layouts/Layout.astro';
   <button id="result-retry" type="button" hidden>Try loading reports again</button>
   <p class="result-explainer">Each view stands on its own. County totals already include precinct and voting-method results; these reports are never added together. “Not reported” is different from zero.</p>
   <section id="reports" data-shareable-section aria-labelledby="reports-heading">
-   <h2 id="reports-heading">Election reports <SectionLink target="reports" label="election reports" /></h2>
+   <h2 id="reports-heading">Photo/PDF election reports <SectionLink target="reports" label="election reports" /></h2>
    <div id="result-reports"></div>
   </section>
   <section id="structured-turnout" data-shareable-section aria-labelledby="turnout-heading">

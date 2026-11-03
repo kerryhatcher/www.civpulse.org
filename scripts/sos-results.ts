@@ -40,7 +40,7 @@ export function prepareSosResults(text: string, electionDate: string) {
       !label(scope.id) ||
       ids.has(scope.id) ||
       !label(scope.name) ||
-      !Array.isArray(scope.reportingStatuses) ||
+      !(scope.reportingStatuses === null || Array.isArray(scope.reportingStatuses)) ||
       !Array.isArray(scope.ballotItems) ||
       scope.ballotItems.length > 99999
     )

@@ -15,6 +15,20 @@ docs/         architecture, backend, and development notes
 
 ## Hosting and rendering
 
+### Live election results
+
+Georgia SOS collection is scheduled every five minutes by Supabase Cron and an
+authenticated polling Edge Function. A separate Bun container claims durable
+database jobs, archives exact source JSON in `civpulse-files`, stages validated
+snapshots, and publishes compact immutable state/county assets. The well-known
+`latest.json` pointer advances with conditional writes after database publication.
+Public election pages poll that pointer; UUID viewers use the visibility-gated
+RPC. The static Astro hosting model is unchanged. Meaningful result changes also
+invalidate the existing 20-minute rebuild coordinator, updating bounded public
+HTML fallbacks independently of browser updates. Collection ships disabled until
+the documented main-first release and deployment checks are complete. See the
+[collection runbook](sos-results-automation.md).
+
 
 - `apps/web/public/llms.txt` is the curated AI-facing site overview, served at
   `/llms.txt` as a static text asset. It follows the [llms.txt format](https://llmstxt.org/)

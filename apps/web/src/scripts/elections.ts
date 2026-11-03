@@ -1,6 +1,7 @@
 import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
 import { initBallotResults } from './ballot-results';
+import { initSosResults } from './sos-results';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
 import { matchesCounty } from '../lib/county-scope';
@@ -300,7 +301,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   }
   const label = document.createElement('p'); label.className = 'body-note'; label.dataset.ballotChoiceLabel = ''; label.textContent = 'Response choices'; card.append(label);
   const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
-  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; choices.append(item); }
+  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; item.dataset.sosChoiceLabel = choice; choices.append(item); }
   card.append(choices);
   if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
     const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);
@@ -502,6 +503,7 @@ export async function initElectionViewFromUrl(): Promise<void> {
   const turnoutReady = response.election ? Promise.allSettled([
     initElectionTurnout(response.election.id),
     initBallotResults(response.election.id),
+    initSosResults(response.election.id),
     initElectionPrecinctTurnout(response.election.id),
   ]) : Promise.resolve();
 

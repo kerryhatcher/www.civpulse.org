@@ -432,3 +432,8 @@ entrypoint = "./functions/publish/index.ts"
 [functions.rebuild-frontend]
 verify_jwt = false
 entrypoint = "./functions/rebuild-frontend/index.ts"
+
+# The cron request is verified by the dedicated Vault-backed HMAC RPC.
+[functions.poll-election-results]
+verify_jwt = false
+entrypoint = "./functions/poll-election-results/index.ts"

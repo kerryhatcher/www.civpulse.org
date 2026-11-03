@@ -548,6 +548,27 @@ the entire request must be atomic. Neither mode needs ad hoc SQL or a service ke
 
 ## Election results and turnout
 
+Live Georgia SOS results appear inside **What's on the ballot** on public and
+UUID election pages. Reviewed mappings identify the election, source jurisdiction,
+contest and choice IDs explicitly before a count is placed with an existing
+candidate profile or question choice. Candidate links and party labels remain;
+missing source choices never remove a curated candidate. Unmapped source races
+remain labeled source race cards in the same ballot list, without profile links.
+Results use automatic public source publications independently of saved photo/PDF
+reports and structured turnout. Names are not matched automatically. Review
+any discrepancies against the preserved ballot rather than removing candidates
+or assuming statewide and county IDs are interchangeable.
+
+Open public election pages check for new source revisions about every 30 seconds
+without a site rebuild. The bounded, readable public page snapshot updates on
+rebuild. Collection, source report, publication and browser-check times have
+different meanings. An unchanged source report is not a collection failure.
+Private and unlisted UUID viewers continue through gated database reads; their
+metadata and results must not be exported to the public files bucket. Publishing
+public archive files is durable and cannot recall earlier downloads after a
+visibility change. See the repository's `docs/election-results.md` for collection
+setup, pause/resume, recovery and release verification.
+
 Use the Civic Pulse **Election results and turnout** skill with an authenticated
 admin AI agent. Attach original tape photographs or printed summaries, including
 headers, and specify the election and reporting area. The agent uploads private

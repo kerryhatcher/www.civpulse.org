@@ -1557,6 +1557,24 @@ under the same timeout. This keeps action imports from blocking archive builds.
 
 ## Election result snapshots
 
+Migration `20261125003200_sos_results_automation` adds disabled-by-default feed
+configuration, durable jobs, service-only leased ingestion/publication RPCs,
+five-minute signed Cron polling, and public-safe collection health. Administrators
+configure or recover feeds through explicit admin RPCs; raw tables have no API
+write grants. Nullable SOS reporting statuses remain unknown. Published snapshots
+are immutable, and revisions can lower counts. Exact evidence receipts and
+meaningful-data fingerprints serve different purposes. Atomic activation records
+the pointer-publication work and marks a meaningful results change for rebuilding;
+R2 publication is retried separately with conditional writes. See
+[operations and release](sos-results-automation.md) before enabling any feed.
+
+Migration `20261125003300` prevents manual publication from advancing a feed
+after automation has been enabled or produced a revision. Migration
+`20261125003400` adds reviewed SOS-to-ballot mappings through admin RPCs and a
+visibility-gated reader. It also permits an equal source timestamp only when the
+current automation-owned snapshot has the same semantic fingerprint. Mapping
+changes to public elections mark the frontend dirty; mappings are not R2 assets.
+
 Private evidence and immutable, scoped election reports support agent-assisted OCR
 imports and turnout tracking. Admin-only imports validate identity, vote totals,
 source presence and predecessor IDs; public reads inherit election visibility.
