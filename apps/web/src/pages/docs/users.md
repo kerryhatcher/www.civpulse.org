@@ -477,6 +477,13 @@ when viewing Bibb. The separate reports page retains its source-result browser.
 
 Visible pages check about every 30 seconds. Checks pause in hidden tabs and
 resume when you return or reconnect. **Refresh SOS results** checks immediately.
+
+**Update sound** is on by default: after you interact with the page, a soft ding
+announces changed source results successfully displayed for your selected reporting
+area. Initial loading, unchanged checks, publication timestamps, searching and
+switching reporting areas stay silent. Select **Update sound: on** to mute; this
+browser remembers your preference. Browsers may require another interaction to
+allow audio. The visible results and status messages work with sound muted.
 Source report time, publication time, successful source check (when available),
 and browser check time have separate labels. An unchanged report is normal;
 **Collection delayed**, **paused**, and **offline** messages explain interruptions

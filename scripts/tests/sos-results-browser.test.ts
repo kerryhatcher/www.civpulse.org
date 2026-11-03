@@ -553,3 +553,62 @@ test.skipIf(!base || !publicPath)(
     }
   },
 );
+
+test.skipIf(!base)("result sound rings only after applied semantic changes and remembers mute", async () => {
+  const page = await browser.newPage();
+  let revision = '1', votes: number | null = 125, fail = false;
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    (window as any).__tones = 0;
+    class FakeAudioContext {
+      state = 'running'; currentTime = 0; destination = {};
+      resume() { return Promise.resolve(); }
+      close() { return Promise.resolve(); }
+      createOscillator() {
+        return { type: '', frequency: { value: 0 }, connect() {}, disconnect() {}, start() { (window as any).__tones++; }, stop() {}, onended: null };
+      }
+      createGain() { return { gain: { setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {}, disconnect() {} }; }
+    }
+    window.AudioContext = FakeAudioContext as any;
+  });
+  await fixture(page, args => fail ? { status: 'missing' } : rpcResult(args, revision, votes));
+  const tones = () => page.evaluate(() => (window as any).__tones);
+  const refresh = async () => {
+    await page.locator('[data-sos-refresh]').click();
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+  };
+  try {
+    await page.goto(`${base}/elections/results/?id=${id}`);
+    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+    expect(await tones()).toBe(0);
+    revision = '2'; votes = 124;
+    await page.evaluate(() => window.dispatchEvent(new Event('online')));
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+    expect(await tones()).toBe(0); // Changed data before any trusted gesture stays silent.
+    await refresh(); // Trusted interaction unlocks without playing a preview.
+    expect(await tones()).toBe(0);
+    revision = '3'; await refresh(); // New snapshot with unchanged counts.
+    expect(await tones()).toBe(0);
+    votes = 100; revision = '4'; await refresh();
+    expect(await tones()).toBe(2); // Two partials, one soft bell.
+    await page.locator('[data-sos-search]').fill('Alpha');
+    expect(await tones()).toBe(2);
+    await page.locator('[data-sos-jurisdiction]').selectOption('013');
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+    expect(await tones()).toBe(2);
+    fail = true; revision = '5'; votes = 99; await refresh();
+    expect(await tones()).toBe(2);
+    fail = false; await refresh();
+    expect(await tones()).toBe(4);
+    await page.locator('[data-sos-sound]').click();
+    expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
+    revision = '6'; votes = 98; await refresh();
+    expect(await tones()).toBe(4);
+    await page.reload();
+    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+    expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
+    expect(await tones()).toBe(0);
+    expect(errors).toEqual([]);
+  } finally { await page.close(); }
+}, 60000);

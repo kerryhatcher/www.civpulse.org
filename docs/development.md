@@ -1563,3 +1563,16 @@ empty profiles. The rendered fixture must report all seven assertions passing.
 The history probe uses the same permission-checked reader; it adds no unrestricted
 existence endpoint. Check real person/organization rendering and console health
 as well; fixture API behavior is not a substitute for real-Auth visibility tests.
+
+### SOS result update sound
+
+The browser synthesizes a quiet two-partial Web Audio bell after a complete selected
+SOS scope is successfully applied and its canonical source data changed. The
+comparison ignores publication IDs, ordering indexes and timestamps; it retains
+source counts (including unknown versus zero), labels and reporting statuses.
+Initial loads, area changes, search, mapping-only edits, unchanged revisions and
+failed or superseded requests do not ring. Audio unlocks on a trusted pointer/key
+gesture, with a browser-local mute toggle and silent handling of blocked audio.
+Run `bun test scripts/tests/sos-results-change.test.ts` for comparison coverage,
+and the sound regression in `scripts/tests/sos-results-browser.test.ts` with
+`SOS_RESULTS_TEST_URL` pointed at the local development server.
