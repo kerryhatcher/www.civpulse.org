@@ -360,3 +360,12 @@ Photo/PDF ballot rows retain valid explicit source totals. When no total is supp
 a choice sum is used only if every curated candidate ID or question-option label
 is present in that report; partial reports keep their known counts while shares
 and the total remain unavailable. No other county/style report fills the gap.
+
+The main election ballot runs SOS and photo/PDF readers in the background, without
+their technical control banners. The compact sound toggle remains visible; the
+results detail page retains explicit reporting-area/search/refresh controls.
+Inline SOS scopes match the selected Georgia county to an exact normalized
+published jurisdiction name (optional County suffix), never a derived source ID.
+All counties uses only an explicit statewide source; missing or ambiguous matches
+leave metrics unavailable. Photo/PDF reads refresh every 30 seconds while visible
+and online. Scope/source evidence remains inside race cards.

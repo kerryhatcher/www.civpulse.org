@@ -1671,6 +1671,16 @@ admin-only. No Storage policies or photo/PDF rules change. See
 [election results](election-results.md#structured-georgia-sos-aggregates-schema-v1)
 for contracts, bounds, correction semantics and main-before-production release.
 
+Migration `20261125003700_structured_turnout_election_day` extends schema v1's
+existing `turnout` table (`QDFdpV`) with exact source style
+`Election Day In-Person`, counting group `election_day`, and the existing
+`turnout` measure. It remains forbidden in the early and absentee tables.
+The maximum becomes 795 source rows (159 counties × five rows across the three
+views). Missing rows and null values stay unavailable; no Election Day value,
+statewide total or cross-view sum is inferred. All checksum, source identity,
+time, authorization, immutable revision and visibility guards remain in force.
+Merge the migration to main before production application.
+
 ### Public legislative detail projection
 
 Full static bill/vote/session details reuse `export_public_legislation_page`
@@ -2061,7 +2071,7 @@ not replace database authorization tests or production acceptance.
 
 ### SOS source STOP and durable recovery
 
-Migration `20261125003700_sos_download_stop` prevents fresh job claims outside
+Migration `20261125003800_sos_download_stop` prevents fresh job claims outside
 `starts_at <= database clock < ends_at`. Immediately before a new upstream GET,
 collectors call service-only `authorize_sos_results_download(job_id,lease_id)`
 with the current fenced lease. Its schema-version-1 response binds job, election,

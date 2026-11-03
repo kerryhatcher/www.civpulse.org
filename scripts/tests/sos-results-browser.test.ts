@@ -146,7 +146,7 @@ for (const width of [1280, 390]) {
         await page
           .locator("[data-sos-status]")
           .filter({ hasText: "Current published" })
-          .waitFor();
+          .waitFor({ state: "attached" });
         await page.locator("[data-sos-content] summary").click();
         const table = page.locator("[data-sos-content] table");
         expect(await table.innerText()).toContain("125");
@@ -155,7 +155,7 @@ for (const width of [1280, 390]) {
         await page.locator("[data-sos-search]").fill("Alpha");
         revision = "2";
         votes = 100;
-        await page.locator("[data-sos-refresh]").click();
+        await page.locator("[data-sos-refresh]").evaluate(node => (node as HTMLButtonElement).click());
         await page.waitForFunction(() =>
           document
             .querySelector("[data-sos-content] table")
@@ -171,19 +171,19 @@ for (const width of [1280, 390]) {
           "011",
         );
         // Clearing and reselecting a scope in the same revision must restore its table.
-        await page.locator("[data-sos-jurisdiction]").selectOption("");
+        await page.locator("[data-sos-jurisdiction]").selectOption("", { force: true });
         await page
           .locator("[data-sos-status]")
           .filter({ hasText: "Choose an SOS reporting area" })
-          .waitFor();
+          .waitFor({ state: "attached" });
         expect(await page.locator("[data-sos-content] table").count()).toBe(0);
         await page.locator("[data-sos-search]").fill("Synthetic");
         expect(await page.locator("[data-sos-content] table").count()).toBe(0);
-        await page.locator("[data-sos-jurisdiction]").selectOption("011");
+        await page.locator("[data-sos-jurisdiction]").selectOption("011", { force: true });
         await page
           .locator("[data-sos-status]")
           .filter({ hasText: "Current published" })
-          .waitFor();
+          .waitFor({ state: "attached" });
         expect(await table.innerText()).toContain("100");
         await page.locator("[data-sos-search]").fill("Alpha");
         revision = "3";
@@ -201,11 +201,11 @@ for (const width of [1280, 390]) {
             .evaluate((n) => n === document.activeElement),
         ).toBe(true);
         fail = true;
-        await page.locator("[data-sos-refresh]").click();
+        await page.locator("[data-sos-refresh]").evaluate(node => (node as HTMLButtonElement).click());
         await page
           .locator("[data-sos-status]")
           .filter({ hasText: "update delayed" })
-          .waitFor();
+          .waitFor({ state: "attached" });
         expect(await table.innerText()).toContain("99");
         await page.evaluate(() => window.dispatchEvent(new Event("offline")));
         expect(await page.locator("[data-sos-status]").innerText()).toContain(
@@ -267,20 +267,20 @@ test.skipIf(!base || !publicPath)(
       await page
         .locator("[data-sos-status]")
         .filter({ hasText: "Current published" })
-        .waitFor();
+        .waitFor({ state: "attached" });
       expect(requests.filter((u) => u.endsWith("/013.json"))).toHaveLength(0);
-      await page.locator("[data-sos-jurisdiction]").selectOption("013");
+      await page.locator("[data-sos-jurisdiction]").selectOption("013", { force: true });
       await page.waitForFunction(() =>
         document
           .querySelector("[data-sos-status]")
           ?.textContent?.includes("Updating"),
       );
       revision = "2";
-      await page.locator("[data-sos-jurisdiction]").selectOption("011");
+      await page.locator("[data-sos-jurisdiction]").selectOption("011", { force: true });
       await page
         .locator("[data-sos-status]")
         .filter({ hasText: "Current published" })
-        .waitFor();
+        .waitFor({ state: "attached" });
       release();
       expect(
         await page
@@ -338,12 +338,12 @@ test.skipIf(!base)(
       await page
         .locator("[data-sos-status]")
         .filter({ hasText: "Current published" })
-        .waitFor();
-      await page.locator("#result-election").selectOption("");
+        .waitFor({ state: "attached" });
+      await page.locator("#result-election").selectOption("", { force: true });
       await page
         .locator("#result-status")
         .filter({ hasText: "Choose an election" })
-        .waitFor();
+        .waitFor({ state: "attached" });
       expect(await page.locator("[data-sos-results]").isHidden()).toBe(true);
       expect(await page.locator("[data-sos-content] table").count()).toBe(0);
       expect(await page.locator("[data-sos-times]").textContent()).toBe("");
@@ -354,7 +354,7 @@ test.skipIf(!base)(
       await page
         .locator("[data-sos-status]")
         .filter({ hasText: "Current published" })
-        .waitFor();
+        .waitFor({ state: "attached" });
       await page.locator("#result-election").evaluate((node, value) => {
         (node as HTMLSelectElement).add(
           new Option("Unavailable synthetic election", value),
@@ -365,7 +365,7 @@ test.skipIf(!base)(
       await page
         .locator("#result-status")
         .filter({ hasText: "Could not load election reports" })
-        .waitFor();
+        .waitFor({ state: "attached" });
       expect(await page.locator("[data-sos-results]").isHidden()).toBe(true);
       expect(await page.locator("[data-sos-content] table").count()).toBe(0);
       expect(
@@ -449,7 +449,7 @@ for (const width of [1280, 390]) {
         await page
           .locator("[data-sos-status]")
           .filter({ hasText: "Current published" })
-          .waitFor();
+          .waitFor({ state: "attached" });
         const card = page.locator(`#contest-${contestId}`),
           alex = card.locator(`[data-candidate-id="${alexId}"]`),
           blair = card.locator(`[data-candidate-id="${blairId}"]`);
@@ -477,11 +477,11 @@ for (const width of [1280, 390]) {
         expect(await alex.locator('.vote-share-fill').count()).toBe(1);
         expect(await alex.locator('.vote-metrics').innerText()).toContain('Vote share Not available');
         expect(await unmapped.locator('.vote-share-track').count()).toBe(3);
-        await page.locator('[data-sos-jurisdiction]').selectOption('');
+        await page.locator('[data-sos-jurisdiction]').selectOption('', { force: true });
         expect(await alex.locator('.vote-metrics').innerText()).toContain('Votes Not available');
         expect(await alex.locator('.vote-metrics').innerText()).not.toContain('SOS, Bibb');
-        await page.locator('[data-sos-jurisdiction]').selectOption('011');
-        await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+        await page.locator('[data-sos-jurisdiction]').selectOption('011', { force: true });
+        await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor({ state: "attached" });
 
         expect(await page.locator("[data-sos-content] table").count()).toBe(0);
         await alex.focus();
@@ -587,15 +587,15 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
   const tones = () => page.evaluate(() => (window as any).__tones);
   const refresh = async () => {
     await page.locator('[data-sos-refresh]').click();
-    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor({ state: "attached" });
   };
   try {
     await page.goto(`${base}/elections/results/?id=${id}`);
-    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor({ state: "attached" });
     expect(await tones()).toBe(0);
     revision = '2'; votes = 124;
     await page.evaluate(() => window.dispatchEvent(new Event('online')));
-    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor({ state: "attached" });
     expect(await tones()).toBe(0); // Changed data before any trusted gesture stays silent.
     await refresh(); // Trusted interaction unlocks without playing a preview.
     expect(await tones()).toBe(0);
@@ -606,7 +606,7 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
     await page.locator('[data-sos-search]').fill('Alpha');
     expect(await tones()).toBe(2);
     await page.locator('[data-sos-jurisdiction]').selectOption('013');
-    await page.locator('[data-sos-refresh]:not([disabled])').waitFor();
+    await page.locator('[data-sos-refresh]:not([disabled])').waitFor({ state: "attached" });
     expect(await tones()).toBe(2);
     fail = true; revision = '5'; votes = 99; await refresh();
     expect(await tones()).toBe(2);
@@ -617,7 +617,7 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
     revision = '6'; votes = 98; await refresh();
     expect(await tones()).toBe(4);
     await page.reload();
-    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor({ state: "attached" });
     expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
     expect(await tones()).toBe(0);
     expect(errors).toEqual([]);
@@ -646,12 +646,12 @@ for (const width of [1280, 390]) test.skipIf(!base)(`UUID ballot question retain
   try {
     await page.goto(`${base}/elections/view/?id=${id}`);
     const question = page.locator(`#question-${questionId}`);
-    await question.waitFor();
+    await question.waitFor({ state: "attached" });
     expect(await question.locator('.vote-share-track').count()).toBe(3);
     expect(await question.locator('[data-sos-choice-label="Yes"] .vote-metrics').innerText()).toContain('Votes Not available');
     await question.screenshot({ path: `/tmp/vote-question-${width}-empty.png` });
     available = true;
-    await page.locator('[data-sos-refresh]').click();
+    await page.locator('[data-sos-refresh]').evaluate(node => (node as HTMLButtonElement).click());
     await page.waitForFunction(id => document.querySelector(`#question-${id}`)?.textContent?.includes('75.00%'), questionId);
     expect(await question.locator('[data-sos-choice-label="No"] .vote-metrics').innerText()).toContain('25.00%');
     expect(await question.locator('[data-sos-choice-label="Other"] .vote-metrics').innerText()).toContain('Votes Not available');

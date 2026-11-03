@@ -5,7 +5,7 @@ test.skipIf(!url)('fresh GET authorization uses database window, role and lease;
  const origin=new URL(url!);if(!['127.0.0.1','localhost','[::1]'].includes(origin.hostname))throw Error('Isolated local database required');
  const db=new SQL(url!),rollback=Error('rollback');
  try{await db.begin(async tx=>{
-  if(!(await tx`select to_regprocedure('public.authorize_sos_results_download(uuid,uuid)') r`)[0].r)await tx.unsafe(await Bun.file('supabase/migrations/20261125003700_sos_download_stop.sql').text());
+  if(!(await tx`select to_regprocedure('public.authorize_sos_results_download(uuid,uuid)') r`)[0].r)await tx.unsafe(await Bun.file('supabase/migrations/20261125003800_sos_download_stop.sql').text());
   await tx`update public.sos_automation_feeds set enabled=false`;
   const election=crypto.randomUUID(),source='https://results.sos.ga.gov/cdn/results/Georgia/export-StopFixture.json';
   await tx`insert into public.elections(id,slug,name,election_date,results_json_url) values(${election},${election},'Stop fixture','2026-11-03',${source})`;
