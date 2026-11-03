@@ -1512,3 +1512,29 @@ No historical/backfill objects are cleaned up. Run MCP check/build, plugin build
 Claude sync/check, root check and explicit isolated build before review. There is
 no new web upload UI or changed web visibility rule; affected authorization is
 exercised by the real Auth/MCP integration. The added admin instructions are static.
+
+### Officeholder observation follow-up checks
+
+Run `OFFICEHOLDER_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54342/postgres
+bun test scripts/tests/officeholder-observations-db.test.ts scripts/tests/officeholder-export.test.ts
+scripts/tests/mcp-common-reads.test.ts` against the isolated stack. Migration
+`20261125002700` is append-only: source authorities reject malformed ports and
+credentials. Rendering additionally uses a URL parser to omit unusable legacy
+sources. UUID profile matching is case-independent without rewriting raw labels.
+
+Each public export page includes a content-derived fingerprint of its complete
+visible latest-revision set (including display slugs). The build compares this
+across pages and fails rather than publish mixed pages after a correction or
+visibility change, even if the total is unchanged. This is an unchanged-dataset
+check, not a cross-request PostgreSQL transaction or a claim that edits are locked.
+The fingerprint includes only already-public exported data.
+
+Browser regression fixture `scripts/tests/fixtures/officeholder-observation-ui.ts`
+bundles the actual enhancement module with a synthetic RPC boundary. Serve it
+locally with that module's `getSupabase` import replaced by
+`{rpc:(...args)=>window.fixtureRPC(...args)}`. It verifies superseded-only history
+controls, later requests winning over earlier successes/errors, and hiding truly
+empty profiles. The rendered fixture must report all seven assertions passing.
+The history probe uses the same permission-checked reader; it adds no unrestricted
+existence endpoint. Check real person/organization rendering and console health
+as well; fixture API behavior is not a substitute for real-Auth visibility tests.

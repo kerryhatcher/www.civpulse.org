@@ -173,3 +173,12 @@ bypass immutable conflicts. Default dry run rolls back all observations. A commi
 accepts valid observations in one transaction while reporting rejected rows, so
 inspect counts/errors even after success. No inferred ballots/outcomes, roster-based
 presence, general token extraction, automatic backfill or automatic publication.
+
+Historical rosters use compact `accept_officeholder_observations(version=1,
+provider,rows,dry_run=true)` and `read_officeholder_observations`. Read the version-1
+row contract in docs/backend.md. Preserve immutable reported names/roles and exact
+reviewed organization/person/office links; unknown IDs remain unresolved, never
+fuzzy matched or automatically created. Snapshots do not create service intervals,
+term boundaries or current-office status. Source evidence, identity review and
+confidence are distinct. Whole batches roll back on a conflict/error; exact replay
+is unchanged and corrections require the current supersedes_id plus a public reason.

@@ -1885,3 +1885,101 @@ ordinary authenticated users fail `is_admin()`. Apply production SQL only after
 main-first release. Tests use isolated 54341/54342; shared 54322 remains untouched.
 See [the compact/attachment contract](./meeting-imports.md#compact-and-attached-simbli-imports-issue-140)
 for checked Storage downloads, exact identity/key mapping and partial semantics.
+
+## Historical officeholder observations (version 1)
+
+Migrations `20261125002400` through `20261125002600` add immutable roster evidence,
+not a new kind of service term. Apply from main before deploying matching web/MCP
+code. No real roster is seeded and no source PDF is certified by this change.
+Organizations/offices are public entities in the current schema; observations have
+explicit public/unlisted/private visibility and require a public linked person for
+non-admin reads. Ordinary sign-in never grants private/unlisted observation access.
+Unresolved raw names can be retained on an organization with no person link, labeled
+unresolved; the API creates no profiles, terms, elections or appointment events.
+Editors may separately create a review-flagged profile through existing supported
+workflows only after deciding an unresolved identity warrants a profile. Never fuzzy
+match, silently merge curated people, or turn a raw roster label into a verified ID.
+
+`accept_officeholder_observations(p_version=1,p_provider,p_rows,p_dry_run=true)`
+is admin-only. A batch has 1–100 rows / 1 MiB, is atomic, and defaults to a real
+constraint-checked rollback. A conflict or field error rolls back the whole batch;
+exact replay returns unchanged IDs. Stable provider/source_key identifies one
+reported observation. A changed row requires the latest `supersedes_id` and a
+nonempty public `correction_reason`. Corrections append a new immutable revision;
+old payloads remain. Concurrent retries serialize by stable source identity.
+Example row (synthetic UUIDs must be replaced with exact reviewed existing IDs):
+
+```json
+{
+  "source_key": "report:2022:roster:row-1",
+  "reported_person": "Example, Alex",
+  "reported_organization": "Historical Authority",
+  "reported_office": "Chair", "role": "Chair pro tempore",
+  "capacity": "acting", "selection_basis": "unknown",
+  "as_of": "2022-06-30", "precision": "day",
+  "organization_id": "00000000-0000-4000-8000-000000000001",
+  "person_id": null, "office_id": null, "office_term_id": null,
+  "source_url": "https://example.test/report.pdf",
+  "document_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "retrieved_on": "2026-11-01", "locator": "Printed viii / PDF page 16 / row 1",
+  "evidence_status": "indexed_copy_unverified", "review_status": "unresolved",
+  "confidence": "uncertain", "visibility": "private"
+}
+```
+
+Reported labels, source URL/hash/retrieval date and locator are required. Optional
+`seat`/`district` preserve source labels, independent of reviewed office metadata.
+`capacity` is substantive/acting/interim/unspecified; `selection_basis` is
+ elected/appointed/unknown, asserted only with evidence. `precision` is day/year/
+unknown. Year uses January 1 only as a sorting bound and displays just the year;
+unknown requires null `as_of`. Retrieval must be a known date, never a verification
+or service date. Evidence is original_verified/indexed_copy_unverified/unverified;
+review is reviewed/unresolved/conflicting; confidence is supported/uncertain/
+unassessed. These are separate assertions: reviewed identity links do not certify
+an original PDF. No automated source download or verification is implied.
+
+A reviewed row requires exact existing person and office UUIDs. The office must
+belong to its recorded historical organization; a corroborating term must match
+that person and office. A dated observation outside its linked term must be marked
+conflicting after review. Displayed interval links are neutral: linkage does not
+confirm or corroborate a service interval, including for unresolved or conflicting
+evidence. Existing verified intervals are never changed, including
+nonconsecutive or overlapping service; observations do not fill gaps. Use the
+existing organization relationship model for sourced predecessor/successor links,
+not automatic consolidation or inherited membership. Different roles/rounds/years
+need distinct stable source identities; corrections must not manufacture new keys.
+
+`read_officeholder_observations(p_person_id,p_organization_id,p_as_of,p_history,
+p_offset,p_limit)` requires a parent, with pages of at most 100. Day filters match
+only that exact observation date; year-precision rows match the same year as context
+and explicitly do not establish service on that day. Unknown dates are excluded
+from date filters and retained in unfiltered history. No snapshot persists until a
+next snapshot. Default reads show latest revisions, optional history includes
+superseded rows through the same visibility gates. Missing coverage is not absence,
+zero, deletion, a full roster, or a current-office determination.
+
+`export_public_officeholder_observations` is a bounded, public-only latest-revision
+projection even for an admin caller. Static profiles share one in-flight paged
+snapshot, validate completeness, and refresh in dev. Runtime profiles use the same
+public rules, with admin-only restricted evidence. JSON downloads identify the
+parent, filter, offset, limit and total and contain only the displayed page, not a
+complete office history. Browser source/label text is escaped, not rendered HTML.
+New rows participate in audit capture and frontend rebuild invalidation. Public
+profiles need publication after edits or visibility corrections. Source history
+remains in the acceptance/read model; original service terms remain authoritative
+for their documented intervals.
+
+The FY2022 ACFR example in #147 remains indexed-copy evidence with original origin
+unverified until an editor actually re-verifies it. This feature does not import
+that roster, certify June 30 membership, or claim a production deployment. Test
+feature migrations only on isolated API 54341 / DB 54342; main-first production
+release and separately reviewed source acceptance remain follow-up work.
+
+Observation audit descriptors also apply nested visibility and current-chain visibility. A restricted latest correction suppresses older revisions from public history; direct RPC history and global/parent audit reads must not reveal private source payloads.
+
+Review follow-up `20261125002700` validates source URL authorities/ports on insert;
+renderers also parse HTTPS links before exposing them. Public export pages include
+a fingerprint of the complete visible exported set. Static consumers require it
+unchanged across pagination and fail on drift; it is not a persisted DB snapshot.
+Superseded-only history remains reachable through the same gated reader, and
+superseded request responses cannot overwrite newer filters or downloaded pages.

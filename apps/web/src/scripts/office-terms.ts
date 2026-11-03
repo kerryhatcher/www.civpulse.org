@@ -1,3 +1,4 @@
+import {loadOfficeholderObservations} from './officeholder-observations';
 import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
 import { unknownSourceDates, recordSourceUrl } from '../lib/record-provenance';
 import { getPublicProfileSnapshot } from "../lib/profile-section-data";
@@ -10,6 +11,7 @@ import { getSupabase } from '../lib/supabase';
 export async function loadOfficeTerms(personId?: string, organizationId?: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-office-terms]');
   if (!root) return;
+  void loadOfficeholderObservations(personId,organizationId);
   if (personId) void loadPersonLegislation(personId);
   const status = root.querySelector<HTMLElement>('[data-office-status]')!;
   const groups = root.querySelector<HTMLElement>('[data-office-groups]')!;

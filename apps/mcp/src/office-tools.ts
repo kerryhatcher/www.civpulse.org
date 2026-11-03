@@ -35,6 +35,15 @@ export function registerOfficeTools(server: McpServer, supabase: SupabaseClient,
     return data;
   });
 
+  if(writes){
+    register('read_officeholder_observations','Read bounded dated roster observations for an existing person or organization. Snapshots do not establish term boundaries or current officeholders. Optional exact day/year context and supersession history; same public-only visibility for ordinary signed-in users.',{
+      person_id:z.string().uuid().optional(),organization_id:z.string().uuid().optional(),as_of:z.string().date().optional(),history:z.boolean().default(false),offset:z.number().int().min(0).max(2147483647).default(0),limit:z.number().int().min(1).max(100).default(50)
+    },async input=>{const {data,error}=await supabase.rpc('read_officeholder_observations',{p_person_id:input.person_id??null,p_organization_id:input.organization_id??null,p_as_of:input.as_of??null,p_history:input.history,p_offset:input.offset,p_limit:input.limit});if(error)throw Error(error.message);return data;});
+    register('accept_officeholder_observations','Admin version-1 dated roster evidence acceptance, default dry run; up to 100 immutable rows / 1 MiB atomically. Preserve reported labels; exact reviewed UUID reconciliation, day/year/unknown precision and source URL/SHA/retrieval/locator required. No fuzzy matching or people/term creation. Changed stable identities require latest supersedes_id and correction_reason; no overwrite. See docs/backend.md for row contract.',{
+      version:z.literal(1),provider:z.string().min(1).max(100),rows:z.array(z.record(z.string(),z.unknown())).min(1).max(100),dry_run:z.boolean().default(true)
+    },async input=>{const {data,error}=await supabase.rpc('accept_officeholder_observations',{p_version:input.version,p_provider:input.provider,p_rows:input.rows,p_dry_run:input.dry_run});if(error)throw Error(error.message);return data;},{write:true,destructive:false,idempotent:true});
+  }
+
   const office = {
     organization_id: z.string().uuid(),
     name: z.string().trim().min(1).max(160),

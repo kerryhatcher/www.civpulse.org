@@ -624,7 +624,7 @@ matches. The public browse projection includes only publicly visible targets.
 ## Cited meeting outcomes (compact catalog)
 
 After deployment, `/mcp/v2` advertises `set_meeting_vote_outcome`; compatibility
-`/mcp` remains at 128 tools. The compact catalog has 73 tools. The new admin tool
+`/mcp` remains at 128 tools. The compact catalog has 75 tools. The new admin tool
 requires vote UUID, supported outcome, HTTPS source URL, document SHA-256 and
 locator. It appends evidence, preserves the immutable import, and returns
 created/unchanged/conflict. Inspect the current meeting before a correction;
@@ -639,7 +639,7 @@ the main-first migration/MCP release. This source change does not deploy or back
 
 `manage_meeting_attachment_upload` now supports `transfer_chunk` and
 `transfer_status` within the existing tool. Compatibility remains 128 tools;
-compact now has 73. Begin a stable session, send original-byte chunks of at most
+compact now has 75. Begin a stable session, send original-byte chunks of at most
 256 KiB as canonical base64 with their byte offsets, reconcile status/pending chunks,
 and finalize/download-verify through existing tools. Do not extract or supply a
 general OAuth token, service key, arbitrary Storage URL or headers. The verified
@@ -661,3 +661,17 @@ Storage auth, not an arbitrary remote fetch. Accepted observations commit togeth
 with rejected rows reported; dry runs roll back all. See [meeting import details](./meeting-imports.md#compact-and-attached-simbli-imports-issue-140).
 No general bearer, service credential or signed download URL is needed in the tool
 payload. Actual hosted import acceptance remains open under #140.
+
+### Historical officeholder snapshots
+
+The compact catalog adds `accept_officeholder_observations` (admin, version 1,
+100 rows / 1 MiB, default dry run) and `read_officeholder_observations` (gated,
+paginated person/organization evidence with optional as-of/history). Legacy stays
+128 tools; compact is now 75. See [the row contract](./backend.md#historical-officeholder-observations-version-1).
+Accept raw reported labels separately from exact reviewed existing person/office/
+organization/term links. Replays are unchanged; corrections explicitly supersede
+the latest immutable revision with a public reason. A conflict/error rolls back
+the complete batch. No people/terms are created automatically. A roster observation
+is not a term boundary, election outcome or current-office label. Original source
+verification, identity review and confidence are separate fields. Read back source,
+precision, conflicts and supersession history, then publish public profile snapshots.

@@ -667,3 +667,16 @@ publication or whole-record verification date. A committee motion's passage does
 not establish full-commission adoption; missing outcomes remain unknown and are
 not inferred from yes/no totals or provider codes. Public changes appear after a
 rebuild; signed-in/shared views can update sooner.
+
+### Dated officeholder evidence
+
+Person and organization profiles may show **Dated officeholder observations**
+beside documented service intervals. These are source-reported snapshots, not a
+complete roster or a claim about who holds office today. Exact dates, year-only
+observations and unknown dates are labeled separately. Filtering a day includes
+exact observations plus clearly labeled same-year context; it never carries an
+older snapshot forward. Check the source/page, evidence status, identity review
+and confidence. Indexed-copy evidence is not a verified original. Include
+superseded observations to see corrections; missing coverage is not absence.
+**Download this observation page (JSON)** exports only the displayed filtered page,
+with its parent/filter/pagination scope, not a full service history.

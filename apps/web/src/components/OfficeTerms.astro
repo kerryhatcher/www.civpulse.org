@@ -1,4 +1,5 @@
 ---
+import OfficeholderObservations from './OfficeholderObservations.astro';
 import ProfileEvidence from './ProfileEvidence.astro';
 import type { EvidenceSection } from '../lib/profile-evidence';
 interface Props { personId?: string; organizationId?: string; viewer?: boolean; published?: EvidenceSection; historyHref?: string }
@@ -17,3 +18,5 @@ const { personId, organizationId, viewer = false, published, historyHref } = Ast
     ))}
   </div>
 </section>
+
+<OfficeholderObservations personId={personId} organizationId={organizationId} viewer={viewer} />
