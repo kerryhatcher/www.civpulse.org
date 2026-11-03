@@ -1270,6 +1270,133 @@
     }
   },
   {
+    "name": "accept_user_fee_report",
+    "description": "Admin version-1 fee report acceptance, default dry run, atomic 1–100 observations/1 MiB. Stable report/fee/row source identities, original labels, reviewed existing org UUID for public reports (unresolved raw org labels stay unlinked/private), source URL/SHA/retrieval/publication/locator/coverage required. Rates are structured scalar/range/tiered/text/unknown with decimal strings and explicit units; collections separate string/null. Authority is not current effectiveness. Exact replay unchanged; amendments explicitly name latest supersedes_id and correction_reason. No collectors/stubs or inferred transactions. See docs/user-fees.md.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "report": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        },
+        "rows": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "dry_run": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "version",
+        "provider",
+        "report",
+        "rows"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "browse_user_fees",
+    "description": "Read source-backed fee schedules and separate collections; filter organization/year/fee/query/history and paginate. Public projections exclude restricted report chains for ordinary sign-in. Missing collections are unknown, not zero; never divide collections by rates to estimate transactions.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "organization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 9999
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fee_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "query": {
+          "default": "",
+          "type": "string",
+          "maxLength": 200
+        },
+        "history": {
+          "default": false,
+          "type": "boolean"
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "default": 50,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "get_layer_geojson",
     "description": "Get stored layer geometry. Non-admin callers must provide a visible map containing this layer.",
     "inputSchema": {

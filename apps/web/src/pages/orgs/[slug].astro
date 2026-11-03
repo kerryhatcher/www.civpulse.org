@@ -94,6 +94,7 @@ const contact = [
   breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Organizations', href: '/orgs/' }, { name: org.name, href: Astro.url.pathname }]}
 >
   <main id="main" data-profile-snapshot={await profileSectionUrl("organizations",org.id)}>
+    <p><a href={`/finances/fees/?organization=${org.id}`}>Browse reported user fees for this organization</a></p>
     {org.slug === 'bibb-county-board-of-education' && <p><a href="/finances/">Search this organization's school payroll and payments</a></p>}
     <div class="org-header">
       {

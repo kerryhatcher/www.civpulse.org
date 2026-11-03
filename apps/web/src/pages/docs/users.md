@@ -680,3 +680,15 @@ and confidence. Indexed-copy evidence is not a verified original. Include
 superseded observations to see corrections; missing coverage is not absence.
 **Download this observation page (JSON)** exports only the displayed filtered page,
 with its parent/filter/pagination scope, not a full service history.
+
+### Government user fees
+
+Open [Reported user fees and collections](/finances/fees/) to search an organization,
+reported year, fee name or purpose. Organization profiles also link to their fee
+filter. Read each rate's units and tiers separately from **Reported collections**;
+missing collections are unknown, not zero. Do not divide collections by a rate to
+estimate customers or transactions. Authority citations and source-supplied effective
+dates do not establish that a fee applies today. Check the report's source, dates,
+evidence status and coverage limitations. Include superseded reports or follow a
+fee's history link to inspect amendments and unit changes. CSV/JSON downloads cover
+only the displayed filtered page, not every report or a complete county fee inventory.
