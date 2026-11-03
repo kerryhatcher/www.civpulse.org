@@ -2,13 +2,13 @@
 interface Props { electionId?: string }
 const { electionId } = Astro.props;
 ---
-<div class="ballot-results-status" data-ballot-results data-election-id={electionId}>
+<div hidden class="ballot-results-status" data-ballot-results data-election-id={electionId}>
   <p data-ballot-results-summary role="status" aria-live="polite"></p>
   <button data-ballot-results-refresh type="button" hidden>Refresh results</button>
   <noscript><p>Enable JavaScript to display available results alongside the ballot.</p></noscript>
 </div>
 <style is:global>
-  .ballot-results-status { display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem 1rem; margin-block:1rem 1.5rem; }
+  .ballot-results-status { display:none; align-items:baseline; flex-wrap:wrap; gap:.5rem 1rem; margin-block:1rem 1.5rem; }
   .ballot-results-status p { flex:1 1 28rem; margin:0; }
   .ballot-results-status button { min-height:44px; }
   .ballot-results { margin-top:1.25rem; }
@@ -25,7 +25,7 @@ const { electionId } = Astro.props;
   .ballot-result-scope .result-name { display:block; }
   .ballot-result-scope .result-candidate-meta { display:block; color:var(--muted); font-size:.85rem; margin-top:.2rem; }
   .ballot-result-scope .result-track { display:block; height:4px; background:var(--surface-soft); margin-top:.4rem; }
-  .ballot-result-scope .result-fill { display:block; height:100%; background:var(--ink); }
+  .ballot-result-scope .result-fill { display:block; height:100%; background:var(--candidate-bar-color, var(--ink)); }
   .ballot-result-source { color:var(--muted); font-size:.9rem; }
   .ballot-result-scope a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
   @media(max-width:480px) {

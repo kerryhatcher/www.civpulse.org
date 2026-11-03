@@ -18,7 +18,7 @@ export const structuredTurnout = z.object({
   source_title:z.string().min(1).max(300),as_of_label:z.string().max(200),
   as_of:z.string().datetime({offset:true}).nullable(),as_of_timezone:z.literal('America/New_York'),
   rows:z.array(z.object({county_fips:z.string().regex(/^13\d{3}$/),county_label:z.string().min(1).max(100),
-   ballot_style:z.string().min(1).max(100),counting_group:z.enum(['advance','absentee_mail']),
+   ballot_style:z.string().min(1).max(100),counting_group:z.enum(['advance','absentee_mail','election_day']),
    locator:z.string().min(1).max(500), measures:z.record(z.string(),cell),
   }).strict()).max(1000),
  }).strict()).length(3),
@@ -28,11 +28,16 @@ export const structuredTurnout = z.object({
 export function parseStructuredTurnout(document:string) {
  if(new TextEncoder().encode(document).length>2*1024*1024) throw new Error('JSON evidence exceeds 2 MiB');
  const data=structuredTurnout.parse(JSON.parse(document));
+ if(data.tables.reduce((n,t)=>n+t.rows.length,0)>795)throw new Error('Import requires at most 795 source rows');
  const seen=new Set<string>();
  for(const table of data.tables){
   if(seen.has(table.table))throw new Error('Duplicate table');seen.add(table.table);
   if(table.object_id!==({early:'7cc869cd-2124-43be-82f4-1c8d394dc6d8',absentee:'CTgPMg',turnout:'QDFdpV'}[table.table]))throw new Error('Object identity mismatch');
   for(const row of table.rows){
+   const groups:Record<string,string>={'Early In-Person':'advance',Absentee:'absentee_mail','Election Day In-Person':'election_day'};
+   if(!Object.hasOwn(groups,row.ballot_style)||groups[row.ballot_style]!==row.counting_group
+    ||(table.table==='early'&&row.ballot_style!=='Early In-Person')
+    ||(table.table==='absentee'&&row.ballot_style!=='Absentee'))throw new Error('Invalid ballot style/counting group');
    const names=turnoutMeasureNames[table.table];
    if(Object.keys(row.measures).sort().join()!==[...names].sort().join())throw new Error('Measure schema changed');
    for(const [key,cell] of Object.entries(row.measures))if(cell.value!==null && (key==='acceptance_ratio'?cell.value>1:!Number.isSafeInteger(cell.value)))throw new Error('Invalid count or ratio');

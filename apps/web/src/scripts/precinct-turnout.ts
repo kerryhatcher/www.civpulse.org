@@ -46,7 +46,8 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       body.hidden = false;
       map = L.map(canvas, { zoomSnap: 0.25, scrollWheelZoom: false, zoomAnimation: !matchMedia('(prefers-reduced-motion: reduce)').matches });
       // Plain county map keeps the percentage fill readable and needs no tile requests.
-      map.attributionControl.addAttribution('Macon-Bibb County Government IT GIS');
+      const attribution = section!.dataset.boundariesAttribution ?? 'Macon-Bibb County Government IT GIS';
+      map.attributionControl.addAttribution(attribution.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!));
       let polygons: Leaflet.GeoJSON | undefined;
       resize = new ResizeObserver(() => {
         if (!canvas.clientWidth || !canvas.clientHeight) return;

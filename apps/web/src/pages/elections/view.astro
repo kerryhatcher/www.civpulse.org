@@ -28,16 +28,6 @@ import Layout from '../../layouts/Layout.astro';
         <a class="button-link org-edit-link" data-election-edit-link hidden>Edit election</a>
       </header>
 
-      <div class="prose election-description" data-election-description hidden></div>
-
-      <section id="dates-and-deadlines" data-shareable-section class="election-dates" data-election-dates-section hidden>
-        <h2>Dates &amp; deadlines <SectionLink target="dates-and-deadlines" label="dates and deadlines" /></h2>
-        <div class="election-date-groups" data-election-dates></div>
-        <p class="body-note">
-          Every date is also on the <a href="/calendar/">community calendar</a>.
-        </p>
-      </section>
-
       <ElectionTurnout />
       <ElectionPrecinctTurnout />
 
@@ -47,6 +37,14 @@ import Layout from '../../layouts/Layout.astro';
         <BallotResults />
         <SosResults inline />
         <div class="contest-list" data-election-contests data-sos-ballot-list></div>
+      </section>
+
+      <section id="dates-and-deadlines" data-shareable-section class="election-dates" data-election-dates-section hidden>
+        <h2>Dates &amp; deadlines <SectionLink target="dates-and-deadlines" label="dates and deadlines" /></h2>
+        <div class="election-date-groups" data-election-dates></div>
+        <p class="body-note">
+          Every date is also on the <a href="/calendar/">community calendar</a>.
+        </p>
       </section>
 
       <p class="org-back">

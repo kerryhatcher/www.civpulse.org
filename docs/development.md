@@ -1624,3 +1624,11 @@ validation. Only those three exact HTTPS origins are accepted; paths, trailing
 slashes, credentials, query strings, fragments, and explicit ports are rejected.
 Use the matching isolated Supabase public URL/anon key. This setting does not
 start collection, configure a feed, or grant access to private election data.
+
+### Complete local election demonstration
+
+The synthetic `issue187-synthetic-results` local fixture uses the clearly labeled
+[illustrative source page](/demo-election-source.html) for its invented dates,
+question wording and vote counts. It is demo content, not official election
+information. The local-only Bun seed script is `/tmp/issue187-complete-ballot.ts`
+and targets Postgres at `127.0.0.1:54342`; it must never run against production.

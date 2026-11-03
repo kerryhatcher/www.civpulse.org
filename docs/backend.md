@@ -1671,6 +1671,16 @@ admin-only. No Storage policies or photo/PDF rules change. See
 [election results](election-results.md#structured-georgia-sos-aggregates-schema-v1)
 for contracts, bounds, correction semantics and main-before-production release.
 
+Migration `20261125003700_structured_turnout_election_day` extends schema v1's
+existing `turnout` table (`QDFdpV`) with exact source style
+`Election Day In-Person`, counting group `election_day`, and the existing
+`turnout` measure. It remains forbidden in the early and absentee tables.
+The maximum becomes 795 source rows (159 counties × five rows across the three
+views). Missing rows and null values stay unavailable; no Election Day value,
+statewide total or cross-view sum is inferred. All checksum, source identity,
+time, authorization, immutable revision and visibility guards remain in force.
+Merge the migration to main before production application.
+
 ### Public legislative detail projection
 
 Full static bill/vote/session details reuse `export_public_legislation_page`

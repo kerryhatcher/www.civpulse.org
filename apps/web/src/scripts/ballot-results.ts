@@ -24,7 +24,9 @@ const timestamp = (v: string) =>
     timeZoneName: "short",
   });
 
+let stopPolling: (() => void) | undefined;
 export async function initBallotResults(electionId: string): Promise<void> {
+  stopPolling?.();
   const root = document.querySelector<HTMLElement>("[data-ballot-results]");
   if (!root) return;
   const summary = root.querySelector<HTMLElement>(
@@ -38,6 +40,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
     ...document.querySelectorAll<HTMLElement>(".contest-card[id]"),
   ];
   let reports: ResultReport[] = [];
+  let stopped = false, generation = 0;
   const originals = new Map<HTMLElement, boolean>();
   for (const card of cards)
     for (const list of card.querySelectorAll<HTMLElement>(
@@ -117,6 +120,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
           )
         : null;
       if (profile) {
+        row.dataset.partyTone = profile.dataset.partyTone ?? "neutral";
         const link = el("a", choice.label, "result-name");
         link.href = profile.href;
         name.append(link);
@@ -196,6 +200,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
     return block;
   }
   function render() {
+    if (stopped) return;
     reset();
     const selected = ballotResultReports(reports, selectedCounty());
     let races = 0;
@@ -227,23 +232,30 @@ export async function initBallotResults(electionId: string): Promise<void> {
       : "No additional photo/PDF county overview results are displayed for this county view. Any available SOS votes appear with the ballot below.";
   }
   async function load(force = false) {
+    if (stopped) return;
+    const request = ++generation;
     refresh.disabled = true;
     summary.textContent = "Loading available results…";
     root!.setAttribute("aria-busy", "true");
     try {
-      reports = await readElectionReports(electionId, force);
+      const incoming = await readElectionReports(electionId, force);
+      if (stopped || request !== generation) return;
+      reports = incoming;
       render();
       if (force)
         window.dispatchEvent(
           new CustomEvent("electionreportschange", { detail: { electionId } }),
         );
     } catch {
+      if (stopped || request !== generation) return;
       reset();
       summary.textContent =
         "Results could not be loaded. The ballot is still available. Select Refresh results to try again.";
     } finally {
-      refresh.disabled = false;
-      root!.removeAttribute("aria-busy");
+      if (!stopped && request === generation) {
+        refresh.disabled = false;
+        root!.removeAttribute("aria-busy");
+      }
     }
   }
   refresh.onclick = () => {
@@ -251,5 +263,19 @@ export async function initBallotResults(electionId: string): Promise<void> {
   };
   window.addEventListener("ballotscopechange", render);
   window.addEventListener("sosballotchange", render);
+  const timer = setInterval(() => {
+    if (!stopped && !document.hidden && navigator.onLine && !refresh.disabled) void load(true);
+  }, 30000);
+  stopPolling = () => {
+    stopped = true;
+    generation++;
+    clearInterval(timer);
+    refresh.onclick = null;
+    refresh.disabled = false;
+    root.removeAttribute("aria-busy");
+    reset();
+    window.removeEventListener("ballotscopechange", render);
+    window.removeEventListener("sosballotchange", render);
+  };
   await load();
 }

@@ -1,3 +1,4 @@
+import { automaticSosScope } from "../lib/sos-auto-scope";
 import { buildVoteMetrics } from "./vote-metrics";
 import { sosResultsFingerprint } from "../lib/sos-results-change";
 import { createSosResultsSound } from "./sos-results-sound";
@@ -65,6 +66,10 @@ export async function initSosResults(
   const content = root.querySelector<HTMLElement>("[data-sos-content]")!;
   const source = root.querySelector<HTMLAnchorElement>("[data-sos-source]")!;
   const inline = root.dataset.sosInline === "true";
+  if (inline && root.dataset.fallbackScopeId && automaticSosScope(selectedCounty(), [{ id: root.dataset.fallbackScopeId, name: root.dataset.fallbackScopeName ?? "" }]) !== root.dataset.fallbackScopeId) {
+    clearInlineSos();
+    root.querySelector<HTMLElement>("[data-sos-fallback]")?.setAttribute("hidden", "");
+  }
   let mappings: SosContestMapping[] = [];
   source.href = "https://results.sos.ga.gov/";
   area.replaceChildren(new Option("Choose a reporting area", ""));
@@ -266,12 +271,7 @@ export async function initSosResults(
       }
       if (initialSelection) {
         initialSelection = false;
-        // The verified SOS Bibb ID is explicit; all other source areas remain a user choice.
-        chosen =
-          selectedCounty() === "13021" &&
-          result.pointer.jurisdictions.some((j) => j.id === "011")
-            ? "011"
-            : "";
+        chosen = automaticSosScope(selectedCounty(), result.pointer.jurisdictions);
         area.value = chosen;
         if (chosen) result = await read(chosen);
       }
@@ -359,6 +359,12 @@ export async function initSosResults(
     }
     void load();
   };
+  const countyChange = () => {
+    if (!inline) return;
+    initialSelection = true;
+    area.value = "";
+    change();
+  };
   const filter = () => render();
   const refreshNow = () => {
     void load();
@@ -378,6 +384,7 @@ export async function initSosResults(
       "Offline. Showing the last available SOS results; checks resume when you reconnect.";
   };
   area.addEventListener("change", change);
+  window.addEventListener("countychange", countyChange);
   search.addEventListener("input", filter);
   refresh.addEventListener("click", refreshNow);
   document.addEventListener("visibilitychange", visibility);
@@ -389,6 +396,7 @@ export async function initSosResults(
     generation++;
     clearTimeout(timer);
     area.removeEventListener("change", change);
+    window.removeEventListener("countychange", countyChange);
     search.removeEventListener("input", filter);
     refresh.removeEventListener("click", refreshNow);
     document.removeEventListener("visibilitychange", visibility);
