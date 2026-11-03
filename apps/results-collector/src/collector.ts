@@ -43,6 +43,25 @@ export async function writeAssets(store: Store, electionId: string, snapshotId: 
   await immutable(store, key, text, jsonHash(text));
   return { key, manifest };
 }
+/** Database-clock authorization is required immediately before every new GET. */
+export async function freshDownload(job: Job, rpc: Rpc, path: string, fetcher: typeof fetch = fetch) {
+  const started = performance.now();
+  const authorization = await rpc("authorize_sos_results_download", { p_job_id: job.job_id, p_lease_id: job.lease_id });
+  const elapsed = performance.now() - started;
+  if (authorization?.schema_version !== 1 || authorization.job_id !== job.job_id || authorization.election_id !== job.election_id || authorization.source_url !== job.source_url || typeof authorization.server_now !== "string") throw Error("Invalid source download authorization");
+  const serverNow = Date.parse(authorization.server_now);
+  if (!Number.isFinite(serverNow)) throw Error("Invalid source download authorization");
+  let remaining = 180_000;
+  if (authorization.ends_at !== null) {
+    if (typeof authorization.ends_at !== "string") throw Error("Invalid source download authorization");
+    const endsAt = Date.parse(authorization.ends_at);
+    if (!Number.isFinite(endsAt)) throw Error("Invalid source download authorization");
+    // Subtract the entire monotonic RPC round trip. Never trust client wall time.
+    remaining = Math.min(remaining, Math.floor(endsAt - serverNow - elapsed - 1));
+    if (remaining <= 0) throw Error("Source collection window closed");
+  }
+  return download(job.source_url, path, job, fetcher, AbortSignal.timeout(remaining));
+}
 export async function runJob(job: Job, rpc: Rpc, store: Store, fetcher: typeof fetch = fetch) {
   const args = { p_job_id: job.job_id, p_lease_id: job.lease_id };
   let leaseLost = false, renewal: Promise<unknown> = Promise.resolve();
@@ -74,7 +93,7 @@ export async function runJob(job: Job, rpc: Rpc, store: Store, fetcher: typeof f
         } finally { await writer.end(); }
         if (hash.digest("hex") !== job.receipt.sha256 || bytes !== job.receipt.bytes) throw Error("Archived source checksum mismatch");
         downloaded = { ...job.receipt, unchanged: false as const, sha256: job.receipt.sha256 as string, bytes, etag: job.receipt.etag as string | null, last_modified: job.receipt.last_modified as string | null, retrieved_at: job.receipt.retrieved_at as string };
-      } else downloaded = await download(job.source_url, path, job, fetcher);
+      } else downloaded = await freshDownload(job, rpc, path, fetcher);
       await renew();
       if (downloaded.unchanged) {
         await rpc("unchanged_sos_results_job", { ...args, p_etag: downloaded.etag ?? job.etag ?? null, p_last_modified: downloaded.last_modified ?? job.last_modified ?? null });

@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { download, prepare, retrySeconds, MAX_DOWNLOAD, readFeed, canonical } from "../src/feed";
-import { runJob, writeAssets, type Job } from "../src/collector";
+import { freshDownload, runJob, writeAssets, type Job } from "../src/collector";
 import { immutable, publishPointer, POINTER_CACHE, type Pointer, type Store } from "../src/storage";
 
 const election = "00000000-0000-4000-8000-000000000001", snapshot = "00000000-0000-4000-8000-000000000002";
@@ -112,9 +112,9 @@ test("pointer never regresses across expired worker, stale CAS and publication c
 });
 test("failed asset upload never commits DB snapshot and 304 only updates health", async () => {
   const calls: string[] = [], store = new MemoryStore();
-  const rpc = async (name: string) => { calls.push(name); if (name === "renew_sos_results_job") return true; if (name === "begin_sos_results_job") return { snapshot_id: snapshot, receipt: {} }; return null; };
+  const rpc = async (name: string) => { calls.push(name); if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true; if (name === "begin_sos_results_job") return { snapshot_id: snapshot, receipt: {} }; return null; };
   await runJob(job, rpc, store, fetcher(() => new Response(null, { status: 304 })));
-  expect(calls).toEqual(["renew_sos_results_job", "unchanged_sos_results_job"]);
+  expect(calls).toEqual(["authorize_sos_results_download", "renew_sos_results_job", "unchanged_sos_results_job"]);
   calls.length = 0; store.put = async () => new Response("", { status: 503 });
   await expect(runJob(job, rpc, store, fetcher(() => new Response(JSON.stringify(fixture()))))).rejects.toThrow("PUT");
   expect(calls).not.toContain("publish_sos_results_job"); expect(calls).toContain("fail_sos_results_job");
@@ -123,16 +123,16 @@ test("crash after DB commit retries outbox without source re-download or staging
   const store = new MemoryStore(), manifestKey = `elections/${election}/revisions/${snapshot}/manifest.json`;
   await store.put(manifestKey, JSON.stringify({ schema_version: 1, election_id: election, snapshot_id: snapshot, jurisdictions: [] }), {});
   const calls: string[] = [];
-  const rpc = async (name: string) => { calls.push(name); if (name === "renew_sos_results_job") return true; if (name === "confirm_sos_results_pointer") return { revision: "9007199254740993", snapshot_id: snapshot, manifest_key: manifestKey, published_at: "2026-11-03T10:05:00Z" }; return null; };
+  const rpc = async (name: string) => { calls.push(name); if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true; if (name === "confirm_sos_results_pointer") return { revision: "9007199254740993", snapshot_id: snapshot, manifest_key: manifestKey, published_at: "2026-11-03T10:05:00Z" }; return null; };
   const result = await runJob({ ...job, phase: "pointer" }, rpc, store, fetcher(() => { throw Error("must not download"); }));
-  expect(result.revision).toBe("9007199254740993"); expect(calls).toContain("complete_sos_results_pointer"); expect(calls).not.toContain("begin_sos_results_job");
+  expect(result.revision).toBe("9007199254740993"); expect(calls).toContain("complete_sos_results_pointer"); expect(calls).not.toContain("begin_sos_results_job"); expect(calls).not.toContain("authorize_sos_results_download");
 });
 test("complete pipeline recovers an acknowledgement crash without reimport or pointer regression", async () => {
   const store = new MemoryStore(), calls: string[] = [];
   let phase = "import", receipt: any, failAck = true;
   const rpc = async (name: string, args: any = {}) => {
     calls.push(name);
-    if (name === "renew_sos_results_job") return true;
+    if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true;
     if (name === "begin_sos_results_job") { receipt ??= args.p_receipt; return { snapshot_id: snapshot, receipt, published: false }; }
     if (name === "publish_sos_results_job") { phase = "pointer"; return "1"; }
     if (name === "confirm_sos_results_pointer") return { snapshot_id: snapshot, revision: "1", manifest_key: `elections/${election}/revisions/${snapshot}/manifest.json`, published_at: "2026-11-03T10:02:00Z" };
@@ -153,8 +153,9 @@ test("staging resumes from archived bytes when upstream changes and retains orig
   await store.put(rawKey, source, {});
   let first = true, usedReceipt: any;
   const rpc = async (name: string, args: any = {}) => {
-    if (name === "renew_sos_results_job") return true;
+    if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true;
     if (name === "begin_sos_results_job") { usedReceipt = args.p_receipt; return { snapshot_id: snapshot, receipt, published: false }; }
+    if (name === "authorize_sos_results_download") throw Error("archive must not authorize fresh source");
     if (name === "stage_sos_results_job" && first) { first = false; throw Error("staging crash"); }
     if (name === "confirm_sos_results_pointer") return { snapshot_id: snapshot, revision: "1", manifest_key: `elections/${election}/revisions/${snapshot}/manifest.json`, published_at: "2026-11-03T10:02:00Z" };
   };
@@ -168,7 +169,37 @@ test("staging resumes from archived bytes when upstream changes and retains orig
 });
 test("already published bytes skip staging/assets and do not query a completed lease", async () => {
   const calls: string[] = [], store = new MemoryStore();
-  const rpc = async (name: string, args: any = {}) => { calls.push(name); if (name === "renew_sos_results_job") return true; if (name === "begin_sos_results_job") return { snapshot_id: snapshot, receipt: args.p_receipt, published: true }; if (name === "confirm_sos_results_pointer") throw Error("lease is done"); };
+  const rpc = async (name: string, args: any = {}) => { calls.push(name); if (name === "authorize_sos_results_download") return authorization(); if (name === "renew_sos_results_job") return true; if (name === "begin_sos_results_job") return { snapshot_id: snapshot, receipt: args.p_receipt, published: true }; if (name === "confirm_sos_results_pointer") throw Error("lease is done"); };
   expect((await runJob(job, rpc, store, fetcher(() => new Response(JSON.stringify(fixture()))))).status).toBe("unchanged_published");
   expect(calls).not.toContain("stage_sos_results_job"); expect(calls).not.toContain("confirm_sos_results_pointer");
+});
+
+function authorization(end: string | null = null) { return { schema_version: 1, job_id: job.job_id, election_id: job.election_id, source_url: job.source_url, server_now: "2026-11-03T10:00:00Z", ends_at: end }; }
+test("closed or invalid download authorization never starts a fresh GET", async () => {
+  let calls = 0;
+  const get = fetcher(() => { calls++; return new Response("must not fetch"); });
+  const file = (await directory()) + "/raw.json";
+  await expect(freshDownload(job, async () => { throw Error("Source collection window closed"); }, file, get)).rejects.toThrow("window closed");
+  for (const invalid of [null, {}, { ...authorization(), schema_version: 2 }, { ...authorization(), job_id: "other" }, { ...authorization(), election_id: "other" }, { ...authorization(), source_url: "https://other.invalid" }, { ...authorization(), server_now: "invalid" }, { ...authorization(), ends_at: undefined }, authorization("2026-11-03T10:00:00Z")]) {
+    await expect(freshDownload(job, async () => invalid, file, get)).rejects.toThrow();
+  }
+  expect(calls).toBe(0);
+});
+test("whole RPC elapsed is subtracted before GET; legacy null end keeps normal bound", async () => {
+  let calls = 0;
+  const file = (await directory()) + "/raw.json", get = fetcher(() => { calls++; return new Response(null, { status: 304 }); });
+  await expect(freshDownload(job, async () => { await Bun.sleep(30); return authorization("2026-11-03T10:00:00.010Z"); }, file, get)).rejects.toThrow("window closed");
+  expect(calls).toBe(0);
+  expect((await freshDownload(job, async () => authorization(), file, get)).unchanged).toBe(true);
+  expect(calls).toBe(1);
+});
+test("finite database deadline cancels an in-flight response body", async () => {
+  let cancelled = false, signal: AbortSignal | undefined;
+  const file = (await directory()) + "/raw.json";
+  const get = (async (_url: unknown, options: RequestInit) => {
+    signal = options.signal as AbortSignal;
+    return new Response(new ReadableStream({ start(controller) { controller.enqueue(new TextEncoder().encode("{")); }, cancel() { cancelled = true; } }));
+  }) as unknown as typeof fetch;
+  await expect(freshDownload(job, async () => authorization("2026-11-03T10:00:00.050Z"), file, get)).rejects.toThrow();
+  expect(signal?.aborted).toBe(true); expect(cancelled).toBe(true);
 });
