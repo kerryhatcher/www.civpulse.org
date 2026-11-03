@@ -12,6 +12,12 @@ export async function handlePoll(request: Request, env: PollEnv, fetcher: typeof
   const rpc = async (name: string, args: object = {}) => {
     const response = await fetcher(`${url}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(args), signal: AbortSignal.timeout(10_000) });
     if (!response.ok) throw Error('Database request failed');
+    // Only this SQL void RPC may succeed without a JSON representation.
+    // Claims and signature verification must still reject missing/malformed JSON.
+    if (name === 'finish_sos_results_poll') {
+      const body = await response.text();
+      return body === '' ? null : JSON.parse(body);
+    }
     return response.json();
   };
   try {
