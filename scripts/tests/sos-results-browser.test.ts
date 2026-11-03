@@ -562,8 +562,8 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
   await page.addInitScript(() => {
     (window as any).__tones = 0;
     class FakeAudioContext {
-      state = 'running'; currentTime = 0; destination = {};
-      resume() { return Promise.resolve(); }
+      state = 'suspended'; currentTime = 0; destination = {};
+      resume() { this.state = 'running'; return Promise.resolve(); }
       close() { return Promise.resolve(); }
       createOscillator() {
         return { type: '', frequency: { value: 0 }, connect() {}, disconnect() {}, start() { (window as any).__tones++; }, stop() {}, onended: null };

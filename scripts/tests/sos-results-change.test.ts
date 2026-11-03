@@ -7,6 +7,7 @@ test('semantic fingerprints ignore transport, timestamps, object keys and orderi
   b.snapshot_id = 'b'; b.jurisdiction.url = '/b'; b.items[0].item_index = 4;
   b.items[0].data.createdAt = 'new';
   (b.items[0].data.ballotOptions as unknown[]).reverse();
+  b.items[0].data = Object.fromEntries(Object.entries(b.items[0].data).reverse());
   expect(sosResultsFingerprint(a)).toBe(sosResultsFingerprint(b));
 });
 test('counts, unknown versus zero, source corrections and reporting statuses change fingerprint', () => {
