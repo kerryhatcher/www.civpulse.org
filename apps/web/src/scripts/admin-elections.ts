@@ -1,5 +1,6 @@
 import { historyLink } from '../lib/history';
 import { initBallotQuestionAdmin } from './admin-ballot-questions';
+import { initSosResultsAdmin } from './admin-sos-results';
 import {
   CANDIDATE_STATUS_LABELS,
   ELECTION_COLUMNS,
@@ -152,6 +153,7 @@ export async function initElectionAdmin(): Promise<void> {
   }
 
   panel.hidden = false;
+  initSosResultsAdmin();
 
   // --- Element references ------------------------------------------------
 
