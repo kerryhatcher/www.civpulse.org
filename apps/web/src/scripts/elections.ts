@@ -6,7 +6,7 @@ import { initBallotResults } from './ballot-results';
 import { initSosResults } from './sos-results';
 import { readDirectory } from './directory-data';
 import { selectedCounty, readCountyIndex } from './county-filter';
-import { matchesCounty } from '../lib/county-scope';
+import { jurisdictionCounties, matchesCounty } from '../lib/county-scope';
 import { orderElections, searchDirectory } from '../lib/directories';
 import { historyLink } from '../lib/history';
 import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
@@ -251,6 +251,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
   card.className = 'contest-card';
   card.id = `contest-${contest.id}`;
   card.dataset.bibbRelevant = String(isBibbContest(contest));
+  card.dataset.countyCoverage = jurisdictionCounties(`${contest.office} ${contest.district ?? ''}`).join(',');
 
   const header = document.createElement('header');
   header.className = 'contest-heading';
@@ -295,6 +296,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   card.className = 'contest-card ballot-question';
   card.id = `question-${question.id}`;
   card.dataset.bibbRelevant = String(isBibbJurisdiction(question.jurisdiction));
+  card.dataset.countyCoverage = jurisdictionCounties(question.jurisdiction).join(',');
   const header = document.createElement('header'); header.className = 'contest-heading';
   const title = document.createElement('h3'); title.textContent = question.title;
   const meta = document.createElement('span'); meta.className = 'contest-meta';
@@ -444,8 +446,10 @@ export async function initElectionScope(): Promise<void> {
     const county = selectedCounty();
     for (const card of cards) {
       const [kind, ...parts] = card.id.split('-');
+      const coverage = card.dataset.countyCoverage?.split(',').filter(Boolean);
       const relevant = county === 'all' || (county === '13021' ? card.dataset.bibbRelevant === 'true'
-        : !!countyIndex && matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), county));
+        : !!countyIndex && (coverage?.length ? coverage.includes(county)
+          : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), county)));
       card.hidden = !relevant;
     }
     if (empty) {

@@ -8,13 +8,13 @@ let browser: Browser;
 beforeAll(async () => { if (base) browser = await chromium.launch({ channel: 'chrome', headless: true }); });
 afterAll(async () => { await browser?.close(); });
 
-for (const failed of [false, true]) {
-  test.skipIf(!base)(`ballot county scope ${failed ? 'fails closed without its index' : 'does not reveal an out-of-county deep link'}`, async () => {
+for (const scenario of ['indexed', 'missing', 'failed'] as const) {
+  test.skipIf(!base)(`ballot county scope ${scenario}`, async () => {
     const page = await browser.newPage();
     await page.addInitScript(() => sessionStorage.setItem('civicpulse.county', '13121'));
-    await page.route('**/county-data.json', route => failed
+    await page.route('**/county-data.json', route => scenario === 'failed'
       ? route.fulfill({ status: 503, body: 'unavailable' })
-      : route.fulfill({ json: { [`ballot_question:${questionId}`]: ['13021'] } }));
+      : route.fulfill({ json: scenario === 'indexed' ? { [`ballot_question:${questionId}`]: ['13021'] } : {} }));
     await page.route('**/rest/v1/rpc/**', route => {
       const rpc = new URL(route.request().url()).pathname.split('/').pop();
       return route.fulfill({ json: rpc === 'get_election' ? {
@@ -28,7 +28,7 @@ for (const failed of [false, true]) {
       await card.waitFor({ state: 'attached' });
       await page.locator('[data-election-scope-empty]').waitFor({ state: 'visible' });
       expect(await card.isHidden()).toBe(true);
-      expect(await page.locator('[data-election-scope-empty]').innerText()).toContain(failed ? 'County filtering could not load' : 'No races or ballot questions');
+      expect(await page.locator('[data-election-scope-empty]').innerText()).toContain(scenario === 'failed' ? 'County filtering could not load' : 'No races or ballot questions');
     } finally { await page.close(); }
   }, 30000);
 }
