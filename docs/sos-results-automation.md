@@ -377,3 +377,16 @@ identity and avoids relying on different Edge/Bun default client headers. It
 does not change source admission, redirects, deadlines, polling windows or the
 single scheduling coordinator. Regression tests inspect the actual request
 headers supplied to each fetch boundary without contacting the official source.
+
+### Poll completion response handling
+
+`finish_sos_results_poll` returns SQL `void`. The coordinator accepts a successful
+empty response (including HTTP 204 or HTTP 200 with no body) for this RPC only,
+as well as the existing JSON `null` representation. It records completion once
+and continues the bounded claim loop; it never retries a committed finish because
+there is no response JSON. Signature verification and claims still require valid
+JSON, so empty or malformed responses fail closed. This prevents a completed
+queue transition from being misreported as an Edge Function failure. The observed
+production symptom was a 502 after successful queueing; the exact upstream HTTP
+status/body was not captured, so an empty finish response is a protocol-compatible
+reproduction rather than a claim that production returned 204.

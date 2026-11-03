@@ -52,3 +52,42 @@ test('source HEAD carries honest identity on the actual loopback HTTP request', 
     expect(observed).toEqual([{ method: 'HEAD', agent: 'CivicPulse-results-collector/0.1.0 (+https://github.com/CivicPulse/updaters)', validator: '"old"' }]);
   } finally { source.stop(true); }
 });
+
+for (const finishStatus of [204, 200]) {
+  for (const sourceStatus of [200, 304]) {
+    test(`empty finish ${finishStatus} after HEAD ${sourceStatus} continues claiming exactly once`, async () => {
+      let claims = 0; const finishes: unknown[] = []; let heads = 0;
+      const fetcher = (async (input: string | URL | Request, init?: RequestInit) => {
+        const url = String(input);
+        if (url.endsWith('/verify_sos_poll_signature')) return Response.json(true);
+        if (url.endsWith('/claim_sos_results_poll')) return Response.json(++claims === 1 ? feed : null);
+        if (url.endsWith('/finish_sos_results_poll')) {
+          finishes.push(JSON.parse(String(init?.body)));
+          return new Response(null, { status: finishStatus });
+        }
+        expect(url).toBe(feed.source_url); expect(init?.method).toBe('HEAD'); heads++;
+        return new Response(null, { status: sourceStatus, headers: sourceStatus === 200 ? { ETag: '"new"' } : {} });
+      }) as typeof fetch;
+      expect((await handlePoll(signed(), env, fetcher)).status).toBe(200);
+      expect(claims).toBe(2); expect(heads).toBe(1);
+      expect(finishes).toEqual([{ p_election_id: 'e', p_lease_id: 'l', p_changed: sourceStatus === 200, p_error: null }]);
+    });
+  }
+}
+
+for (const name of ['verify_sos_poll_signature', 'claim_sos_results_poll']) {
+  for (const body of [null, '', 'not JSON']) {
+    test(`${name} rejects ${body === null ? '204' : JSON.stringify(body)} without source or finish calls`, async () => {
+      const calls: string[] = [];
+      const fetcher = (async (input: string | URL | Request) => {
+        const url = String(input); calls.push(url);
+        if (url.endsWith('/' + name)) return new Response(body, { status: body === null ? 204 : 200 });
+        if (url.endsWith('/verify_sos_poll_signature')) return Response.json(true);
+        throw Error('Unexpected source or finish call');
+      }) as typeof fetch;
+      expect((await handlePoll(signed(), env, fetcher)).status).toBe(502);
+      expect(calls.length).toBe(name === 'verify_sos_poll_signature' ? 1 : 2);
+      expect(calls.every(url => !url.includes('/finish_sos_results_poll') && !url.startsWith('https://results.sos'))).toBe(true);
+    });
+  }
+}
