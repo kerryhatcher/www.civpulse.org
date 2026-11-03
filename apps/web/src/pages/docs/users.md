@@ -755,3 +755,9 @@ Dates and deadlines appear after the ballot on election detail pages. On public 
 Turnout charts check for new published data every 30 seconds while the page is visible and online. Election Day in-person turnout appears as its own source-reported ballot style when available; it is never inferred from candidate votes or added to overlapping early-voting and absentee reports. If an update fails, the last loaded report remains visible with a notice.
 
 Automatic photo/PDF report checks preserve the displayed results during a temporary connection failure. Unchanged reports leave the precinct map untouched; new reports retain its selected ballot style, zoom, and open precinct popup when that precinct is still available.
+
+Election result totals and turnout follow the county selected in the header.
+The Bibb precinct map appears only for Bibb or All counties. A county without
+results never substitutes another county’s totals. In the results viewer,
+choose All counties in the header to explore other SOS reporting areas. Shared
+race links also respect the current county selection.

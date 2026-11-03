@@ -11,7 +11,7 @@ const precincts = snapshot.assets.filter(asset => asset.path.startsWith('maps/')
   .flatMap(asset => (JSON.parse(asset.body) as PublicMapManifest).layers)
   .find(layer => layer.presentation?.key === 'voting-precincts');
 ---
-<section id="precinct-turnout" data-shareable-section class="precinct-turnout" data-precinct-turnout data-election-id={electionId} data-boundaries-url={precincts?.source_url} data-boundaries-attribution={precincts?.presentation?.attribution ?? "Macon-Bibb County Government IT GIS"} aria-labelledby="precinct-turnout-title" hidden={!electionId}>
+<section id="precinct-turnout" data-shareable-section class="precinct-turnout" data-precinct-turnout data-election-id={electionId} data-boundaries-url={precincts?.source_url} data-boundaries-attribution={precincts?.presentation?.attribution ?? "Macon-Bibb County Government IT GIS"} aria-labelledby="precinct-turnout-title" hidden>
   <h2 id="precinct-turnout-title">Bibb County precinct turnout <SectionLink target="precinct-turnout" label="Bibb County precinct turnout" /></h2>
   {precincts?.presentation?.note && <p class="body-note">{precincts.presentation.note}</p>}
   <p>Darker precincts mean a higher share of registered voters participated. Select a precinct for exact counts. Gray means the percentage is not reported.</p>

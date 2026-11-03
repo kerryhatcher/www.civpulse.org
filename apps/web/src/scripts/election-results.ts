@@ -339,7 +339,8 @@ export async function initElectionResults() {
         status.textContent = `Loading reports… ${loaded.length} received.`;
       }
       const county = GEORGIA_COUNTIES.find(item => item.fips === selectedCounty());
-      rows = county ? loaded.filter(row => row.scope.county.toLowerCase() === county.name.toLowerCase()) : loaded;
+      const countyName = (name: string) => name.trim().replace(/\s+county$/i, '').toLowerCase();
+      rows = county ? loaded.filter(row => countyName(row.scope.county) === countyName(county.name)) : loaded;
       const old = area.value;
       area.replaceChildren();
       const areas = [

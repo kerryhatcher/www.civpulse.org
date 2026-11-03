@@ -1,11 +1,15 @@
 import { readElectionReports } from '../lib/election-report-reader';
 import { precinctTurnout, turnoutRate, turnoutFill } from '../lib/precinct-turnout';
+import { selectedCounty } from './county-filter';
 import type * as Leaflet from 'leaflet';
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, text: string) {
   const node = document.createElement(tag); node.textContent = text; return node;
 }
 const number = (value: number | null | undefined) => value == null ? 'Not reported' : value.toLocaleString('en-US');
+let dispose: (() => void) | undefined;
 export async function initElectionPrecinctTurnout(electionId: string): Promise<void> {
+  dispose?.();
+  dispose = undefined;
   const section = document.querySelector<HTMLElement>('[data-precinct-turnout]');
   if (!section) return;
   const status = section.querySelector<HTMLElement>('[data-precinct-status]')!;
@@ -17,7 +21,11 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
   let map: Leaflet.Map | undefined;
   let resize: ResizeObserver | undefined;
   let generation = 0;
+  let stopped = false;
+  const matchesCounty = () => ['13021', 'all'].includes(selectedCounty());
+  const current = (request: number) => !stopped && request === generation && matchesCounty();
   async function load(refresh = false) {
+    if (stopped || !matchesCounty()) { section!.hidden = true; return; }
     const request = ++generation;
     section!.hidden = false;
     retry.hidden = true;
@@ -27,15 +35,15 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
       const url = section!.dataset.boundariesUrl;
       if (!url) { status.textContent = 'Public precinct boundaries are not available for this map.'; return; }
       const reports = await readElectionReports(electionId, refresh);
-      if (request !== generation) return;
+      if (!current(request)) return;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Precinct boundaries unavailable');
       const geometry = await response.json() as GeoJSON.FeatureCollection;
-      if (request !== generation) return;
+      if (!current(request)) return;
       if (!geometry.features?.length || geometry.features.some(f => f.properties?.county !== 'Bibb' || !f.properties?.precinctid)) throw new Error('Unexpected precinct boundaries');
       geometry.features.sort((a, b) => String(a.properties!.precinctid).localeCompare(String(b.properties!.precinctid), 'en', { numeric: true }));
       const { default: L } = await import('leaflet');
-      if (request !== generation) return;
+      if (!current(request)) return;
       const choices = [...new Set(reports.filter(r => r.scope.county === 'Bibb' && r.scope.unit_type === 'precinct' && r.scope.counting_group === 'all').map(r => r.scope.ballot_style))].sort();
       if (!choices.length) choices.push('all');
       const previousStyle = styles.value;
@@ -104,7 +112,7 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
         if (String(feature?.properties?.precinctid) === previousPopup) layer.openPopup();
       });
     } catch {
-      if (request !== generation) return;
+      if (!current(request)) return;
       resize?.disconnect();
       map?.remove(); map = undefined;
       body.hidden = true;
@@ -113,8 +121,26 @@ export async function initElectionPrecinctTurnout(electionId: string): Promise<v
     }
   }
   retry.onclick = () => { void load(true); };
-  window.addEventListener('electionreportschange', event => {
+  const reportsChanged = (event: Event) => {
     if ((event as CustomEvent<{electionId:string}>).detail?.electionId === electionId) void load();
-  });
+  };
+  const countyChanged = () => {
+    ++generation;
+    section.hidden = !matchesCounty();
+    if (!section.hidden) void load();
+  };
+  window.addEventListener('electionreportschange', reportsChanged);
+  window.addEventListener('countychange', countyChanged);
+  dispose = () => {
+    stopped = true;
+    ++generation;
+    section.hidden = true;
+    retry.onclick = null;
+    styles.onchange = null;
+    window.removeEventListener('electionreportschange', reportsChanged);
+    window.removeEventListener('countychange', countyChanged);
+    resize?.disconnect();
+    map?.remove();
+  };
   await load();
 }

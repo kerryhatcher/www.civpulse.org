@@ -437,36 +437,29 @@ function fillElectionView(response: ElectionViewResponse): void {
 export async function initElectionScope(): Promise<void> {
   if (!document.querySelector('[data-election-scope]')) return;
   const cards = [...document.querySelectorAll<HTMLElement>('[data-bibb-relevant]')];
-  let index;
-  try { index = await readCountyIndex(); } catch { return; }
-  const countyIndex = index;
+  let countyIndex: Awaited<ReturnType<typeof readCountyIndex>> | undefined;
+  let indexFailed = false;
   const empty = document.querySelector<HTMLElement>('[data-election-scope-empty]');
-  const linked = document.querySelector<HTMLElement>('[data-election-linked-race]');
-  function linkedRace() {
-    return /^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)
-      ? cards.find(card => `#${card.id}` === window.location.hash) : undefined;
-  }
   function apply() {
-    const target = linkedRace();
-    let revealed = false;
+    const county = selectedCounty();
     for (const card of cards) {
       const [kind, ...parts] = card.id.split('-');
-      const relevant = selectedCounty() === 'all' || (selectedCounty() === '13021' ? card.dataset.bibbRelevant === 'true'
-        : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), selectedCounty()));
-      card.hidden = !relevant && card !== target;
-      if (!relevant && card === target) revealed = true;
+      const relevant = county === 'all' || (county === '13021' ? card.dataset.bibbRelevant === 'true'
+        : !!countyIndex && matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), county));
+      card.hidden = !relevant;
     }
-    if (linked) linked.hidden = !revealed;
-    if (empty) empty.hidden = cards.length === 0 || cards.some(card => !card.hidden);
+    if (empty) {
+      empty.hidden = cards.length === 0 || cards.some(card => !card.hidden) || (!countyIndex && !indexFailed && county !== 'all' && county !== '13021');
+      empty.textContent = indexFailed && county !== 'all' && county !== '13021'
+        ? 'County filtering could not load. Reload this page to try again.'
+        : 'No races or ballot questions are recorded for this area yet.';
+    }
     window.dispatchEvent(new Event('ballotscopechange'));
   }
-  function revealLinkedRace() {
-    apply();
-    linkedRace()?.scrollIntoView();
-  }
   window.addEventListener('countychange', apply);
-  revealLinkedRace();
-  window.addEventListener('hashchange', revealLinkedRace);
+  apply();
+  try { countyIndex = await readCountyIndex(); } catch { indexFailed = true; }
+  apply();
 }
 
 /** Viewer for any election uuid (public, unlisted, or private). */

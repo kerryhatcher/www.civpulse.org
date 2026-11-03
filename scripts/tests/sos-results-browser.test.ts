@@ -269,6 +269,8 @@ test.skipIf(!base || !publicPath)(
         .filter({ hasText: "Current published" })
         .waitFor({ state: "attached" });
       expect(requests.filter((u) => u.endsWith("/013.json"))).toHaveLength(0);
+      await page.evaluate(() => { sessionStorage.setItem("civicpulse.county", "all"); window.dispatchEvent(new Event("countychange")); });
+      await page.locator("[data-sos-jurisdiction] option[value=\"013\"]").waitFor({ state: "attached" });
       await page.locator("[data-sos-jurisdiction]").selectOption("013", { force: true });
       await page.waitForFunction(() =>
         document
@@ -605,6 +607,8 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
     expect(await tones()).toBe(2); // Two partials, one soft bell.
     await page.locator('[data-sos-search]').fill('Alpha');
     expect(await tones()).toBe(2);
+    await page.evaluate(() => { sessionStorage.setItem('civicpulse.county', 'all'); window.dispatchEvent(new Event('countychange')); });
+    await page.locator('[data-sos-jurisdiction] option[value=\"013\"]').waitFor({ state: 'attached' });
     await page.locator('[data-sos-jurisdiction]').selectOption('013');
     await page.locator('[data-sos-refresh]:not([disabled])').waitFor({ state: "attached" });
     expect(await tones()).toBe(2);
@@ -616,6 +620,7 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
     expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
     revision = '6'; votes = 98; await refresh();
     expect(await tones()).toBe(4);
+    await page.evaluate(() => sessionStorage.setItem('civicpulse.county', '13021'));
     await page.reload();
     await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor({ state: "attached" });
     expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
@@ -660,3 +665,21 @@ for (const width of [1280, 390]) test.skipIf(!base)(`UUID ballot question retain
     expect(await page.locator('body').evaluate(node => node.scrollWidth <= innerWidth)).toBe(true);
   } finally { await page.close(); }
 }, 60000);
+
+test.skipIf(!base)('SOS reporting areas cannot override the header county', async () => {
+  const page = await browser.newPage();
+  await fixture(page, args => rpcResult(args));
+  try {
+    await page.goto(`${base}/elections/results/?id=${id}`);
+    await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor({ state: 'attached' });
+    expect(await page.locator('[data-sos-jurisdiction] option').evaluateAll(options => options.map(o => (o as HTMLOptionElement).value))).toEqual(['', '011']);
+    await page.evaluate(() => { sessionStorage.setItem('civicpulse.county', '13121'); window.dispatchEvent(new Event('countychange')); });
+    await page.waitForFunction(() => document.querySelectorAll('[data-sos-jurisdiction] option').length === 1);
+    expect(await page.locator('[data-sos-content] table').count()).toBe(0);
+    await page.evaluate(() => { sessionStorage.setItem('civicpulse.county', 'all'); window.dispatchEvent(new Event('countychange')); });
+    await page.locator('[data-sos-jurisdiction] option[value=\"013\"]').waitFor({ state: 'attached' });
+    await page.locator('[data-sos-jurisdiction]').selectOption('013');
+    await page.locator('[data-sos-content] table').waitFor({ state: 'attached' });
+    expect(await page.locator('[data-sos-content]').innerText()).toContain('Synthetic source race');
+  } finally { await page.close(); }
+}, 30000);
