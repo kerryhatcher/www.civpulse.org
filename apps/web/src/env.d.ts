@@ -1,6 +1,8 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
+  /** Exact allowlisted public election-results asset origin; defaults to production. */
+  readonly PUBLIC_RESULTS_FILES_ORIGIN?: string;
   /** Supabase project URL, e.g. http://127.0.0.1:54321. */
   readonly PUBLIC_SUPABASE_URL: string;
   /** Supabase publishable/anon key. Never a service-role key. */

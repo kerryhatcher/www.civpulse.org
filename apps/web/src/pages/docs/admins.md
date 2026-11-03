@@ -867,3 +867,8 @@ confirmation and ends only an uncommitted job without deleting evidence. A
 committed pointer must be repaired and retried. See the
 [collection operations guide](https://github.com/kerryhatcher/www.civpulse.org/blob/main/docs/sos-results-automation.md)
 for main-first release, acceptance, replay and rollback requirements.
+
+Development and test results acceptance uses a separately configured frontend
+with its matching isolated Supabase project and reviewed public files origin.
+The production files origin remains the default. Selecting a test origin does
+not activate collection or change any election's visibility.
