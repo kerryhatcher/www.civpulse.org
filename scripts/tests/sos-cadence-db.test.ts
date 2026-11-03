@@ -86,6 +86,37 @@ test.skipIf(!url)('one coordinator gates cadence, immediate activation, transiti
       expect((await tx`select public.claim_sos_results_poll() r`)[0].r).toBeNull();
       expect((await tx`select frontend_private.invoke_sos_results_poll() r`)[0].r).toBeNull();
       expect((await tx`select last_attempt_at::text t from public.sos_automation_feeds where election_id=${id}`)[0].t).toBe(silentAttempt);
+      // Hourly source silence does not hide an old publication behind fresh lease renewals.
+      const pendingLease = crypto.randomUUID();
+      const pendingJob = (await tx`insert into public.sos_automation_jobs(election_id,state,created_at,updated_at,lease_id,lease_until) values(${id},'importing',now()-interval '20 minutes',now()-interval '1 minute',${pendingLease},now()+interval '1 minute') returning id`)[0].id;
+      await tx.unsafe('set local role service_role');
+      expect((await tx`select public.renew_sos_results_job(${pendingJob},${pendingLease}) renewed`)[0].renewed).toBe(true);
+      await tx.unsafe('set local role anon');
+      health = (await tx`select public.get_sos_results_health(${id}) r`)[0].r;
+      expect(health.status).toBe('delayed');
+      expect(health.poll_interval_seconds).toBe(3600);
+      expect(Date.parse(health.pending_since)).toBeLessThan(Date.now()-15*60*1000);
+      await fails(()=>tx`select public.get_sos_collection_health()`, 'permission denied');
+      await tx.unsafe('set local role authenticated');
+      expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('delayed');
+      await tx.unsafe('set local role service_role');
+      const backlog = (await tx`select public.get_sos_collection_health() r`)[0].r.find((row:any)=>row.election_id===id);
+      expect(backlog.job_state).toBe('importing');
+      expect(Date.parse(backlog.job_created_at)).toBe(Date.parse(health.pending_since));
+      expect(Date.parse(backlog.job_updated_at)).toBeGreaterThan(Date.now()-60*1000);
+      expect(backlog.poll_interval_seconds).toBe(3600);
+      await tx.unsafe('reset role');
+      await tx`update public.sos_automation_jobs set state='pointer' where election_id=${id} and state<>'done'`;
+      expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('delayed');
+      // A genuinely recent job queues normally; an independently stale update still delays.
+      await tx`update public.sos_automation_jobs set state='queued',created_at=now()-interval '2 minutes',updated_at=now() where election_id=${id} and state<>'done'`;
+      await tx.unsafe('set local role anon');
+      expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('queued');
+      await tx.unsafe('reset role');
+      await tx`update public.sos_automation_jobs set updated_at=now()-interval '16 minutes' where election_id=${id} and state<>'done'`;
+      expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('delayed');
+      await tx`delete from public.sos_automation_jobs where election_id=${id}`;
+      expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('healthy');
       await tx`update public.sos_automation_feeds set last_attempt_at=now()-interval '126 minutes' where election_id=${id}`;
       expect((await tx`select public.get_sos_results_health(${id}) r`)[0].r.status).toBe('delayed');
       // Transition is due even when the most recent hourly check was recent.

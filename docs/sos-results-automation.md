@@ -76,8 +76,12 @@ window, `source_checks_expected`, `source_check_expected_since`, and
 freshness anchor accounts for activation and a cadence transition without changing
 source-check provenance. Source-check delay uses `max(900,2*interval+300)` seconds:
 normal hourly silence stays healthy, while the five-minute phase uses a 15-minute
-threshold. Errors and stalled pending work still mark delays; job stall handling
-remains 15 minutes. Disabled, future-window, and expired feeds are paused, with
+threshold. Publication backlog independently becomes delayed after 15 minutes
+from the unfinished job’s original `created_at`, even while its lease renews.
+Stalled `updated_at` also has a separate 15-minute threshold. The service health
+response exposes `job_created_at` alongside `job_updated_at` so monitoring can
+distinguish backlog age from lease/progress freshness. Disabled, future-window,
+and expired feeds are paused, with
 `source_checks_expected:false`; unchanged vote counts are never an alarm.
 
 ## Container and resource envelope

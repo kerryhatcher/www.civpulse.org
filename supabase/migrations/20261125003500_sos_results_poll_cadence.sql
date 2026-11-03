@@ -117,7 +117,7 @@ begin
 end $$;
 
 create or replace function public.get_sos_collection_health() returns jsonb language sql stable security definer set search_path='' as $$
- select coalesce(jsonb_agg(jsonb_build_object('election_id',f.election_id,'enabled',f.enabled,'last_attempt_at',f.last_attempt_at,'last_success_at',f.last_success_at,'last_error',f.last_error,'current_revision',f.current_revision::text,'job_id',j.id,'job_state',j.state,'job_attempts',j.attempts,'job_updated_at',j.updated_at,'next_attempt_at',j.next_attempt_at,
+ select coalesce(jsonb_agg(jsonb_build_object('election_id',f.election_id,'enabled',f.enabled,'last_attempt_at',f.last_attempt_at,'last_success_at',f.last_success_at,'last_error',f.last_error,'current_revision',f.current_revision::text,'job_id',j.id,'job_state',j.state,'job_attempts',j.attempts,'job_created_at',j.created_at,'job_updated_at',j.updated_at,'next_attempt_at',j.next_attempt_at,
  'poll_interval_seconds',frontend_private.sos_poll_interval(f,now()),'poll_transition_at',f.poll_transition_at,'starts_at',f.starts_at,'ends_at',f.ends_at,
  'source_check_expected_since',frontend_private.sos_poll_expected_since(f,now()),
  'source_checks_expected',f.enabled and e.visibility='public' and coalesce(e.results_json_url=f.source_url,false) and (f.starts_at is null or f.starts_at<=now()) and (f.ends_at is null or f.ends_at>now()),
@@ -132,8 +132,9 @@ begin
  select * into j from public.sos_automation_jobs where election_id=f.election_id and state<>'done';
  cadence:=frontend_private.sos_poll_interval(f,now()); anchor:=frontend_private.sos_poll_expected_since(f,now());
  expected:=f.enabled and (f.starts_at is null or f.starts_at<=now()) and (f.ends_at is null or f.ends_at>now());
+ -- Publication age is independent of source cadence and the renewing lease heartbeat.
  status:=case when not expected then 'paused'
- when f.last_error is not null or (anchor is not null and anchor<now()-make_interval(secs=>greatest(900,2*cadence+300))) or (j.id is not null and j.updated_at<now()-interval '15 minutes') then 'delayed'
+ when f.last_error is not null or (anchor is not null and anchor<now()-make_interval(secs=>greatest(900,2*cadence+300))) or (j.id is not null and (j.created_at<now()-interval '15 minutes' or j.updated_at<now()-interval '15 minutes')) then 'delayed'
  when j.id is not null then 'queued' else 'healthy' end;
  return jsonb_build_object('status',status,'enabled',f.enabled,'last_attempt_at',f.last_attempt_at,'last_success_at',f.last_success_at,'pending_since',j.created_at,'current_revision',f.current_revision::text,'snapshot_id',f.current_snapshot_id,
  'poll_interval_seconds',cadence,'poll_transition_at',f.poll_transition_at,'starts_at',f.starts_at,'ends_at',f.ends_at,'source_checks_expected',expected,'source_check_expected_since',anchor,'next_poll_at',frontend_private.sos_poll_next_at(f,now()));
