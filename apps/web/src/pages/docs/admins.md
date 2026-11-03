@@ -786,3 +786,20 @@ roll back the whole batch. Exact replay is unchanged; amendments need the curren
 report ID and public correction reason. Read back public/admin views and history,
 check units and missing collections, and publish static context/visibility changes
 through the existing workflow. No real fee records are backfilled by this release.
+
+### Accepting obligation reports
+
+Use compact MCP `accept_obligation_report` version 1 after main-first release;
+there is no collector or separate browser editor. Resolve existing payer and
+person/organization vendor IDs from evidence, preserving raw labels and repeated
+source observations. Unresolved identities stay private/unlinked, never guessed
+or automatically stubbed. Retain exact signed decimal strings, source measure/
+currency/unit/period/grain, original URL/hash/retrieval/publication/locators and
+coverage. Default to not additive; assert disjoint rows only when the source proves
+no overlapping subtotal/cumulative observations. Dry-run complete bounded reports;
+errors roll back all rows. Corrections/cancellations require latest report ID and a
+public reason, preserving originals rather than zeroing amounts. Only source IDs
+with supporting citations link payments; no vendor-total matching or inferred
+balance. Recheck public/admin/detail/history/download views, especially private
+people (raw names and amounts must be absent publicly), then publish static context
+or visibility changes. No production obligations are backfilled by this release.

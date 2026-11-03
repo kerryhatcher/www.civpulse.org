@@ -1,0 +1,14 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout title="Reported obligations and commitments" description="Search source-backed reported government obligations by organization, year and vendor, with exact amounts, source scope and amendment history.">
+ <main id="main" class="finance-page"><p><a href="/finances/">Public finances</a> / Obligations</p>
+ <div class="page-intro"><h1>Reported obligations and commitments</h1><p>These source-reported commitments are not completed payments, original contract values or inferred unpaid balances. A row may be a source summary, not a complete contract.</p></div>
+ <form class="calendar-filters" data-obligation-form role="search" aria-label="Search obligations"><label class="field"><span>Reporting organization</span><select name="organization"><option value="">All reporting organizations</option></select></label><label class="field"><span>Reported year</span><input type="number" name="year" min="1000" max="9999" placeholder="All years including unknown" /></label><label class="field field-wide"><span>Vendor, payer, contract or PO</span><input type="search" name="q" maxlength="200" /></label><label class="field"><span><input type="checkbox" name="history" /> Include superseded reports</span></label><button type="submit">Search obligations</button></form>
+ <p>Missing coverage is not zero, deletion or misconduct. Do not add obligations to payments, subtract unrelated vendor totals to infer balances, or combine overlapping report revisions.</p>
+ <p data-obligation-status class="status" role="status" aria-live="polite">Loading reported obligations…</p><section data-obligation-totals aria-label="Scoped report comparisons"></section><div data-obligation-results></div>
+ <nav class="finance-actions" aria-label="Obligation result pages"><button type="button" data-obligation-previous hidden>Previous</button><button type="button" data-obligation-next hidden>Next</button><button type="button" data-obligation-csv hidden>Download observation page (CSV)</button><button type="button" data-obligation-json hidden>Download page and scoped totals (JSON)</button></nav>
+ <noscript><p>Enable JavaScript to search added reports, or consult <a href="https://open.ga.gov/openga/obligation/index">Open Georgia's original obligation reporting</a>. This link does not establish county-wide coverage.</p></noscript></main>
+</Layout>
+<script>import{initObligations}from'../../../scripts/obligations';void initObligations();</script>
+<style>:global([data-obligation-results]),:global([data-obligation-totals]){overflow-wrap:anywhere;min-width:0;} :global([data-obligation-results] article),:global([data-obligation-totals] article){border:1px solid var(--line,#aaa);padding:1rem;margin-block:1rem;}</style>
