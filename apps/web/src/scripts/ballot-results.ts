@@ -1,6 +1,7 @@
 import { readElectionReports } from "../lib/election-report-reader";
 import {
   ballotResultReports,
+  ballotChoiceTotal,
   choicePercent,
   precinctReporting,
 } from "../lib/ballot-results";
@@ -48,6 +49,14 @@ export async function initBallotResults(electionId: string): Promise<void> {
       card.querySelector("[data-inline-results]")?.remove();
     for (const [list, hidden] of originals) list.hidden = hidden;
   }
+  function resultTrack(percent?: string) {
+    const track = el("span", undefined, "result-track");
+    track.setAttribute("aria-hidden", "true");
+    const fill = el("span", undefined, "result-fill");
+    fill.style.width = percent ?? "0%";
+    track.append(fill);
+    return track;
+  }
   function resultBlock(
     card: HTMLElement,
     report: ResultReport,
@@ -91,9 +100,11 @@ export async function initBallotResults(electionId: string): Promise<void> {
     thead.append(head);
     table.append(thead);
     const body = el("tbody");
-    // Percentages use only the choices in this report, never ballots cast or registration.
-    const total =
-      result.total_votes ?? result.choices.reduce((sum, c) => sum + c.votes, 0);
+    // Missing curated choices prevent an inferred complete-contest denominator.
+    const total = ballotChoiceTotal(result, {
+      personIds: [...card.querySelectorAll<HTMLElement>("a[data-candidate-id]")].map(profile => profile.dataset.candidateId!),
+      choiceLabels: [...card.querySelectorAll<HTMLElement>("[data-sos-choice-label]")].map(choice => choice.dataset.sosChoiceLabel!),
+    });
     for (const choice of [...result.choices].sort(
       (a, b) => b.votes - a.votes || a.label.localeCompare(b.label),
     )) {
@@ -124,16 +135,9 @@ export async function initBallotResults(electionId: string): Promise<void> {
             "result-candidate-meta",
           ),
         );
-      const percent = choicePercent(choice.votes, total);
-      if (percent !== "Not reported") {
-        const track = el("span", undefined, "result-track");
-        track.setAttribute("aria-hidden", "true");
-        const fill = el("span", undefined, "result-fill");
-        fill.style.width = percent;
-        track.append(fill);
-        name.append(track);
-      }
-      row.append(name, el("td", number(choice.votes)), el("td", percent));
+      const percent = choice.votes === 0 && total === 0 ? "0.00%" : choicePercent(choice.votes, total);
+      name.append(resultTrack(percent === "Not reported" ? undefined : percent));
+      row.append(name, el("td", number(choice.votes)), el("td", percent === "Not reported" ? "Not available" : percent));
       body.append(row);
     }
     // A partial source must not remove ballot candidates whose votes are unavailable.
@@ -152,8 +156,8 @@ export async function initBallotResults(electionId: string): Promise<void> {
         profile.querySelector(".candidate-name")?.textContent ?? "Candidate",
       );
       link.href = profile.href;
-      name.append(link);
-      row.append(name, el("td", "Not reported"), el("td", "Not reported"));
+      name.append(link, resultTrack());
+      row.append(name, el("td", "Not available"), el("td", "Not available"));
       body.append(row);
     }
     for (const item of card.querySelectorAll(".ballot-question-choices li")) {
@@ -165,8 +169,8 @@ export async function initBallotResults(electionId: string): Promise<void> {
       const row = el("tr"),
         name = el("th");
       name.scope = "row";
-      name.append(el("span", label, "result-name"));
-      row.append(name, el("td", "Not reported"), el("td", "Not reported"));
+      name.append(el("span", label, "result-name"), resultTrack());
+      row.append(name, el("td", "Not available"), el("td", "Not available"));
       body.append(row);
     }
     table.append(body);
@@ -174,7 +178,7 @@ export async function initBallotResults(electionId: string): Promise<void> {
     block.append(
       el(
         "p",
-        `${number(total)} recorded choice votes. Percentages describe votes for these choices, not voter turnout.`,
+        `${total === null ? "Total choice votes: Not available." : `${number(total)} recorded choice votes.`} Percentages describe votes for these choices, not voter turnout.`,
         "body-note",
       ),
     );

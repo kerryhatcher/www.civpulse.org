@@ -1,6 +1,7 @@
 ---
+import VoteMetrics from './VoteMetrics.astro';
 import { mappedSosItem, type SosContestMapping } from '../lib/sos-ballot';
-import { sourceCount, sourceStatus, type SosView, type SosItem, type SosObject } from '../lib/sos-results-reader';
+import { sourceStatus, type SosView, type SosItem, type SosObject } from '../lib/sos-results-reader';
 interface Props { view?: SosView | null; mappings?: SosContestMapping[]; contestId?: string; questionId?: string; sourceItem?: SosItem }
 const { view, mappings = [], contestId, questionId, sourceItem } = Astro.props;
 const match = contestId || questionId ? mappedSosItem(view, mappings, contestId ? 'contest' : 'question', (contestId ?? questionId)!) : null;
@@ -11,5 +12,5 @@ const date = view ? new Date(view.pointer.source_created_at).toLocaleString('en-
 ---
 {view && item && <div data-sos-ballot-fallback data-sos-inline-scope>
   <p class="body-note">Georgia SOS · {view.scope.jurisdiction.name} · Source reported {date} · {sourceStatus(item.data.reportingStatus ?? view.scope.jurisdiction.reportingStatuses)}. Published page snapshot.</p>
-  {extras.length > 0 && <table class="sos-source-choices"><caption>{match ? 'Additional SOS choices without a reviewed candidate mapping' : 'Georgia SOS source choices'} · {view.scope.jurisdiction.name}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Votes</th></tr></thead><tbody>{extras.map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td>{sourceCount(choice.voteCount)}</td></tr>)}</tbody></table>}
+  {extras.length > 0 && <table class="sos-source-choices"><caption>{match ? 'Additional SOS choices without a reviewed candidate mapping' : 'Georgia SOS source choices'} · {view.scope.jurisdiction.name}</caption><thead><tr><th scope="col">Candidate / choice</th><th scope="col">Vote share / votes</th></tr></thead><tbody>{extras.map(choice => <tr><th scope="row">{String(choice.name ?? 'Unnamed source choice')}</th><td><VoteMetrics count={choice.voteCount} counts={choices.map(option => option.voteCount)} /></td></tr>)}</tbody></table>}
 </div>}

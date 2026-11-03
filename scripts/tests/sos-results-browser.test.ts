@@ -150,7 +150,7 @@ for (const width of [1280, 390]) {
         await page.locator("[data-sos-content] summary").click();
         const table = page.locator("[data-sos-content] table");
         expect(await table.innerText()).toContain("125");
-        expect(await table.innerText()).toContain("Not reported");
+        expect(await table.innerText()).toContain("Not available");
         expect(await table.locator("a").count()).toBe(0);
         await page.locator("[data-sos-search]").fill("Alpha");
         revision = "2";
@@ -462,11 +462,11 @@ for (const width of [1280, 390]) {
           1,
         );
         expect(
-          await alex.locator(".sos-inline-count:visible").innerText(),
-        ).toContain("125 votes");
+          await alex.locator(".vote-metrics:visible").innerText(),
+        ).toContain("Votes 125");
         expect(
-          await blair.locator(".sos-inline-count:visible").innerText(),
-        ).toContain("0 votes");
+          await blair.locator(".vote-metrics:visible").innerText(),
+        ).toContain("Votes 0");
         const unmapped = page.locator(
           '#ballot [data-sos-source-contest="unmapped-source-race"]',
         );
@@ -474,6 +474,15 @@ for (const width of [1280, 390]) {
           "georgia sos source race",
         );
         expect(await unmapped.locator("a").count()).toBe(0);
+        expect(await alex.locator('.vote-share-fill').count()).toBe(1);
+        expect(await alex.locator('.vote-metrics').innerText()).toContain('Vote share Not available');
+        expect(await unmapped.locator('.vote-share-track').count()).toBe(3);
+        await page.locator('[data-sos-jurisdiction]').selectOption('');
+        expect(await alex.locator('.vote-metrics').innerText()).toContain('Votes Not available');
+        expect(await alex.locator('.vote-metrics').innerText()).not.toContain('SOS, Bibb');
+        await page.locator('[data-sos-jurisdiction]').selectOption('011');
+        await page.locator('[data-sos-status]').filter({ hasText: 'Current published' }).waitFor();
+
         expect(await page.locator("[data-sos-content] table").count()).toBe(0);
         await alex.focus();
         revision = "2";
@@ -482,9 +491,9 @@ for (const width of [1280, 390]) {
           ({ c, p }) =>
             document
               .querySelector(
-                `#contest-${c} [data-candidate-id="${p}"] [data-sos-inline-runtime]`,
+                `#contest-${c} [data-candidate-id="${p}"]  .vote-metrics`,
               )
-              ?.textContent?.includes("100 votes"),
+              ?.textContent?.includes("Votes 100"),
           { c: contestId, p: alexId },
         );
         expect(
@@ -494,8 +503,8 @@ for (const width of [1280, 390]) {
         expect(await alex.locator(".candidate-meta").innerText()).toBe(party);
         expect(await blair.isVisible()).toBe(true);
         expect(
-          await blair.locator(".sos-inline-count:visible").innerText(),
-        ).toContain("Not reported");
+          await blair.locator(".vote-metrics:visible").innerText(),
+        ).toContain("Not available");
         expect(await card.locator(".candidate-list").isVisible()).toBe(true);
         expect(
           await page
@@ -533,18 +542,20 @@ test.skipIf(!base || !publicPath)(
       expect(
         await card
           .locator(
-            '[data-candidate-id="18700000-0000-4000-8000-000000000111"] .sos-inline-count',
+            '[data-candidate-id="18700000-0000-4000-8000-000000000111"] .vote-metrics',
           )
           .innerText(),
-      ).toContain("125 votes");
+      ).toContain("Votes 125");
       expect(
         await card
           .locator(
-            '[data-candidate-id="18700000-0000-4000-8000-000000000112"] .sos-inline-count',
+            '[data-candidate-id="18700000-0000-4000-8000-000000000112"] .vote-metrics',
           )
           .innerText(),
-      ).toContain("100 votes");
+      ).toContain("Votes 100");
       expect(await card.locator("a[data-candidate-id]").count()).toBe(2);
+      expect(await card.locator('.vote-metrics').first().innerText()).toContain('55.56%');
+      expect(await card.locator('.vote-share-track').count()).toBe(2);
       expect(
         await page.locator("#results-and-turnout [data-sos-results]").count(),
       ).toBe(0);
@@ -610,5 +621,42 @@ test.skipIf(!base)("result sound rings only after applied semantic changes and r
     expect(await page.locator('[data-sos-sound]').getAttribute('aria-pressed')).toBe('false');
     expect(await tones()).toBe(0);
     expect(errors).toEqual([]);
+  } finally { await page.close(); }
+}, 60000);
+
+for (const width of [1280, 390]) test.skipIf(!base)(`UUID ballot question retains unavailable metrics then updates known shares at ${width}px`, async () => {
+  const page = await browser.newPage({ viewport: { width, height: 900 } });
+  const questionId = '18700000-0000-4000-8000-000000000201';
+  let available = false;
+  await fixture(page, args => {
+    if (!available) return { status: 'empty' };
+    const value = rpcResult(args);
+    value.items = args.p_jurisdiction_index === undefined ? [] : [{ jurisdiction_index: 0, item_index: 0, data: {
+      id: 'question-source', name: 'Synthetic question', ballotOptions: [
+        { id: 'yes', name: 'Yes', voteCount: 75 }, { id: 'no', name: 'No', voteCount: 25 },
+      ],
+    } }] as any;
+    return value;
+  });
+  await page.route('**/rest/v1/rpc/get_election', route => route.fulfill({ json: {
+    status: 'ok', election: { id, name: 'Synthetic ballot metrics', election_date: '2026-11-03', kind: 'general', visibility: 'public' }, contests: [], dates: [],
+    ballot_questions: [{ id: questionId, title: 'Synthetic question', question_text: 'Synthetic question wording', jurisdiction: 'Bibb', choices: ['Yes', 'No', 'Other'] }],
+  } }));
+  await page.route('**/rest/v1/rpc/get_sos_results_mappings', route => route.fulfill({ json: { status: 'ok', mappings: [{ jurisdiction_id: '011', source_contest_id: 'question-source', question_id: questionId, choices: [{ source_choice_id: 'yes', choice_label: 'Yes' }, { source_choice_id: 'no', choice_label: 'No' }] }] } }));
+  try {
+    await page.goto(`${base}/elections/view/?id=${id}`);
+    const question = page.locator(`#question-${questionId}`);
+    await question.waitFor();
+    expect(await question.locator('.vote-share-track').count()).toBe(3);
+    expect(await question.locator('[data-sos-choice-label="Yes"] .vote-metrics').innerText()).toContain('Votes Not available');
+    await question.screenshot({ path: `/tmp/vote-question-${width}-empty.png` });
+    available = true;
+    await page.locator('[data-sos-refresh]').click();
+    await page.waitForFunction(id => document.querySelector(`#question-${id}`)?.textContent?.includes('75.00%'), questionId);
+    expect(await question.locator('[data-sos-choice-label="No"] .vote-metrics').innerText()).toContain('25.00%');
+    expect(await question.locator('[data-sos-choice-label="Other"] .vote-metrics').innerText()).toContain('Votes Not available');
+    expect(await question.locator('[data-sos-choice-label="Yes"] .vote-share-fill').evaluate(node => (node as HTMLElement).style.width)).toBe('75%');
+    await question.screenshot({ path: `/tmp/vote-question-${width}-known.png` });
+    expect(await page.locator('body').evaluate(node => node.scrollWidth <= innerWidth)).toBe(true);
   } finally { await page.close(); }
 }, 60000);

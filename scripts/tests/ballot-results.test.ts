@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import {
   ballotResultReports,
+  ballotChoiceTotal,
   precinctReporting,
   choicePercent,
 } from "../../apps/web/src/lib/ballot-results";
@@ -72,4 +73,23 @@ test("reporting percentages retain missing/zero data and respect contest denomin
   expect(choicePercent(5, 10)).toBe("50.00%");
   expect(choicePercent(0, 0)).toBe("Not reported");
   expect(choicePercent(1, null)).toBe("Not reported");
+});
+
+test("choice sums require complete curated coverage but explicit source totals remain authoritative", () => {
+  const partial = { choices: [{ person_id: "alex", label: "Alex", votes: 60 }] };
+  const expected = { personIds: ["alex", "blair"] };
+  expect(ballotChoiceTotal(partial, expected)).toBeNull();
+  expect(ballotChoiceTotal({ ...partial, total_votes: 100 }, expected)).toBe(100);
+  expect(ballotChoiceTotal({ ...partial, total_votes: 0 }, expected)).toBe(0);
+  expect(ballotChoiceTotal({ ...partial, choices: [...partial.choices, { person_id: "blair", label: "Blair", votes: 40 }] }, expected)).toBe(100);
+  const question = { choices: [{ label: "Yes", votes: 0 }] };
+  expect(ballotChoiceTotal(question, { choiceLabels: ["Yes", "No"] })).toBeNull();
+  expect(ballotChoiceTotal({ choices: [...question.choices, { label: "No", votes: 0 }] }, { choiceLabels: ["Yes", "No"] })).toBe(0);
+  expect(ballotChoiceTotal(question, { choiceLabels: ["yes"] })).toBeNull();
+  expect(ballotChoiceTotal(partial, {})).toBeNull();
+  for (const votes of [-1, NaN, Infinity, 0.5, Number.MAX_SAFE_INTEGER + 1]) {
+    expect(ballotChoiceTotal({ choices: [{ label: "Yes", votes }] }, { choiceLabels: ["Yes"] })).toBeNull();
+    expect(ballotChoiceTotal({ ...partial, total_votes: votes }, expected)).toBeNull();
+  }
+  expect(ballotChoiceTotal({ choices: [{ label: "Yes", votes: Number.MAX_SAFE_INTEGER }, { label: "No", votes: 1 }] }, { choiceLabels: ["Yes", "No"] })).toBeNull();
 });

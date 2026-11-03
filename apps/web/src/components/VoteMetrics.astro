@@ -1,0 +1,11 @@
+---
+import { voteMetrics } from '../lib/vote-metrics';
+interface Props { count?: unknown; counts?: unknown[]; source?: string; fallback?: boolean }
+const { count, counts = [], source, fallback = false } = Astro.props;
+const metrics = voteMetrics(count, counts);
+---
+<span class="vote-metrics" data-sos-ballot-fallback={fallback ? '' : undefined}>
+  <span class="vote-metrics-values"><span><span class="vote-metrics-label">Vote share </span>{metrics.percentLabel}</span><span><span class="vote-metrics-label">Votes </span>{metrics.votesLabel}</span></span>
+  <span class="vote-share-track" aria-hidden="true"><span class="vote-share-fill" style={`width:${metrics.percent ?? 0}%`}></span></span>
+  {source && <span class="vote-metrics-source">{source}</span>}
+</span>

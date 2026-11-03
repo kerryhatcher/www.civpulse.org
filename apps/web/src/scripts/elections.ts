@@ -1,3 +1,4 @@
+import { buildVoteMetrics } from "./vote-metrics";
 import { initElectionPrecinctTurnout } from './precinct-turnout';
 import { initElectionTurnout } from './election-turnout';
 import { initBallotResults } from './ballot-results';
@@ -237,6 +238,7 @@ function buildCandidateCard(
     .join(' · ');
   text.append(meta);
 
+  const metrics = document.createElement("span"); metrics.dataset.sosMetricsSlot = ""; metrics.append(buildVoteMetrics()); text.append(metrics);
   link.append(text);
   return link;
 }
@@ -301,7 +303,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   }
   const label = document.createElement('p'); label.className = 'body-note'; label.dataset.ballotChoiceLabel = ''; label.textContent = 'Response choices'; card.append(label);
   const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
-  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; item.dataset.sosChoiceLabel = choice; choices.append(item); }
+  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; item.dataset.sosChoiceLabel = choice; const metrics = document.createElement("span"); metrics.dataset.sosMetricsSlot = ""; metrics.append(buildVoteMetrics()); item.append(metrics); choices.append(item); }
   card.append(choices);
   if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
     const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);
