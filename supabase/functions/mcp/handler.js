@@ -487,7 +487,7 @@ var structuredTurnout = z6.object({
       county_fips: z6.string().regex(/^13\d{3}$/),
       county_label: z6.string().min(1).max(100),
       ballot_style: z6.string().min(1).max(100),
-      counting_group: z6.enum(["advance", "absentee_mail"]),
+      counting_group: z6.enum(["advance", "absentee_mail", "election_day"]),
       locator: z6.string().min(1).max(500),
       measures: z6.record(z6.string(), cell)
     }).strict()).max(1000)
@@ -497,6 +497,8 @@ function parseStructuredTurnout(document) {
   if (new TextEncoder().encode(document).length > 2 * 1024 * 1024)
     throw new Error("JSON evidence exceeds 2 MiB");
   const data = structuredTurnout.parse(JSON.parse(document));
+  if (data.tables.reduce((n, t) => n + t.rows.length, 0) > 795)
+    throw new Error("Import requires at most 795 source rows");
   const seen = new Set;
   for (const table of data.tables) {
     if (seen.has(table.table))
@@ -505,6 +507,9 @@ function parseStructuredTurnout(document) {
     if (table.object_id !== { early: "7cc869cd-2124-43be-82f4-1c8d394dc6d8", absentee: "CTgPMg", turnout: "QDFdpV" }[table.table])
       throw new Error("Object identity mismatch");
     for (const row of table.rows) {
+      const groups = { "Early In-Person": "advance", Absentee: "absentee_mail", "Election Day In-Person": "election_day" };
+      if (!Object.hasOwn(groups, row.ballot_style) || groups[row.ballot_style] !== row.counting_group || table.table === "early" && row.ballot_style !== "Early In-Person" || table.table === "absentee" && row.ballot_style !== "Absentee")
+        throw new Error("Invalid ballot style/counting group");
       const names = turnoutMeasureNames[table.table];
       if (Object.keys(row.measures).sort().join() !== [...names].sort().join())
         throw new Error("Measure schema changed");
@@ -566,7 +571,7 @@ var operation = z7.discriminatedUnion("action", [
 ]);
 function registerElectionResultTools(server, supabase) {
   const { register } = createToolkit(server, supabase);
-  register("manage_election_results", "Structured Georgia SOS JSON: import_turnout accepts sanitized schema-v1 document text plus exact UTF-8 SHA-256, maximum 2 MiB / 636 rows in one atomic transaction, dry_run defaults true; read_turnout returns paged typed measures, provenance and history. Preserve unavailable values, source as-of separately from capture, county FIPS, original styles and all absentee measures. Never add overlapping views. JSON evidence is immutable in Postgres; no image upload is needed. Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero.", { operation }, async ({ operation: input }) => {
+  register("manage_election_results", "Structured Georgia SOS JSON: import_turnout accepts sanitized schema-v1 document text plus exact UTF-8 SHA-256, maximum 2 MiB / 795 rows in one atomic transaction, dry_run defaults true; read_turnout returns paged typed measures, provenance and history. Preserve unavailable values, source as-of separately from capture, county FIPS, original styles and all absentee measures. Election Day In-Person/election_day is accepted only as source-reported turnout rows in QDFdpV; never infer it from totals. Never add overlapping views. JSON evidence is immutable in Postgres; no image upload is needed. Admin election result workflow: upload original JPEG/PNG/PDF base64 (10 MiB, SHA-256 dedup), view a private original, read paginated scoped snapshots/history, or import a complete cumulative report (dry_run=true by default). The agent performs OCR; uploading does not extract votes. Resolve printed election date, tabulator/precinct, ballot style and candidate/question UUIDs. Same scope+timestamp+snapshot is a no-op even for different photos; conflicting OCR rejects. Newer reports require expected_report_id and retain history. Never add county summaries to tapes or successive reports. Unknown metrics stay null; unreadable choices block saving. Printed total_votes excludes separately printed unresolved write-ins. Preserve election versus contest turnout denominators. Certification requires explicit support, not tape boilerplate. Future elections accept turnout only. Sources retain private crop/page locators and transcription. Empty reports means not reported, not zero.", { operation }, async ({ operation: input }) => {
     if (input.action === "import_turnout") {
       parseStructuredTurnout(input.document);
       const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input.document)))).map((v) => v.toString(16).padStart(2, "0")).join("");
