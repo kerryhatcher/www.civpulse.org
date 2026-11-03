@@ -167,6 +167,7 @@ const contact = [
       )
     }
 
+    <section aria-label="Professional-service reporting"><h2>Reported fees and per diem</h2><p><a href={`/finances/service-fees/?recipient_kind=person&recipient=${person.id}`}>Browse reviewed recipient observations</a>. A receipt does not establish employment, profession or service dates. Missing reports are not zero receipts.</p></section>
     <PersonRelationships personId={person.id} related={related} />
     <OfficeTerms personId={person.id} published={evidence.offices} historyHref={history('offices')} />
     <section data-person-legislation hidden={!evidence['legislative-votes'].rows.length} aria-label="Legislative record">

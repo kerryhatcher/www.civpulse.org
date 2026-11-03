@@ -8,7 +8,7 @@ test('compact cited-outcome tool validates citations, retains conflict results a
   const server=buildServer(api,{id},{},undefined,'compact'),client=new Client({name:'outcomes-test',version:'1'}),[a,b]=InMemoryTransport.createLinkedPair();
   try{
    await server.connect(a);await client.connect(b);
-   const tools=(await client.listTools()).tools;expect(tools).toHaveLength(79);const tool=tools.find(t=>t.name==='set_meeting_vote_outcome')!;expect(tool.annotations).toMatchObject({readOnlyHint:false,idempotentHint:true});
+   const tools=(await client.listTools()).tools;expect(tools).toHaveLength(81);const tool=tools.find(t=>t.name==='set_meeting_vote_outcome')!;expect(tool.annotations).toMatchObject({readOnlyHint:false,idempotentHint:true});
    const input={vote_id:id,outcome:'passed',source_url:'https://example.test/minutes.pdf',document_sha256:'a'.repeat(64),locator:'Page 3',supersedes_id:id,correction_reason:'Correct motion cited'};
    const result:any=await client.callTool({name:'set_meeting_vote_outcome',arguments:input});
    expect(Boolean(result.isError)).toBe(!admin);

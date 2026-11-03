@@ -380,6 +380,7 @@ export async function initPersonViewFromUrl(): Promise<void> {
   status.hidden = true;
   fillPersonView(response);
   if (response.person) {
+    const serviceFees=document.querySelector<HTMLElement>('[data-service-fee-profile]');const serviceLink=serviceFees?.querySelector<HTMLAnchorElement>('[data-service-fee-profile-link]');if(serviceFees&&serviceLink){serviceLink.href='/finances/service-fees/?recipient_kind=person&recipient='+response.person.id;serviceFees.hidden=false;}
     void loadPersonRelationships(response.person.id);
     void loadOfficeTerms(response.person.id);
     void loadPersonCandidacies(response.person.id);

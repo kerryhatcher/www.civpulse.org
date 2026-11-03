@@ -704,3 +704,9 @@ contract values and balances are separate measures, never inferred. Sum only
 source-asserted disjoint matching visible rows per report group, never overlapping
 revisions or payments. Hidden people are excluded from raw evidence and totals,
 including detail/audit paths. No collectors, production backfills or automatic stubs.
+
+Professional-service fees/per diem use compact-only `accept_service_fee_report`
+(admin, default dry run) and `browse_service_fees`. The compact catalog now has81
+tools; legacy remains128. See [service-fees.md](./service-fees.md) for exact signed
+amounts, separate classification review, immutable source identity and category sum
+scope. No receipt creates employment or office service.
