@@ -301,7 +301,7 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   }
   const label = document.createElement('p'); label.className = 'body-note'; label.dataset.ballotChoiceLabel = ''; label.textContent = 'Response choices'; card.append(label);
   const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
-  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; choices.append(item); }
+  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; item.dataset.sosChoiceLabel = choice; choices.append(item); }
   card.append(choices);
   if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
     const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);

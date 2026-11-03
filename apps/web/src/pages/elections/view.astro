@@ -38,7 +38,6 @@ import Layout from '../../layouts/Layout.astro';
         </p>
       </section>
 
-      <SosResults />
       <ElectionTurnout />
       <ElectionPrecinctTurnout />
 
@@ -46,7 +45,8 @@ import Layout from '../../layouts/Layout.astro';
         <h2>What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
         <ElectionScope />
         <BallotResults />
-        <div class="contest-list" data-election-contests></div>
+        <SosResults inline />
+        <div class="contest-list" data-election-contests data-sos-ballot-list></div>
       </section>
 
       <p class="org-back">

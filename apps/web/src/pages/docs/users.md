@@ -465,12 +465,15 @@ is available, so combining calendars does not hide the meeting details.
 
 ## Election results and turnout
 
-Public election pages also show **Georgia SOS candidate & question results**
-when an automatic source publication is available. Choose an **SOS reporting
-area** and search its contests or choices. Source areas are separate from the
+Election pages show live Georgia SOS votes inside **What's on the ballot**,
+next to the existing candidate profiles and ballot choices when an editor has
+reviewed the exact source-ID mapping. Profile links and party labels stay visible;
+a candidate absent from the source remains listed with **Not reported**. Source
+races without a reviewed match appear as explicitly labeled **Georgia SOS source
+race** cards in the same ballot list, without guessed person links. Choose an
+**SOS reporting area** in **Ballot result updates**. Source areas are separate from the
 site county filter; only the verified Bibb source area is initially selected
-when viewing Bibb. Source contest and choice names are retained without guessed
-person-profile links. Existing ballot candidates remain available below.
+when viewing Bibb. The separate reports page retains its source-result browser.
 
 Visible pages check about every 30 seconds. Checks pause in hidden tabs and
 resume when you return or reconnect. **Refresh SOS results** checks immediately.
@@ -483,7 +486,7 @@ declare winners or certification. SOS results, photo/PDF reports and turnout are
 separate evidence and are never added together.
 
 Without JavaScript, public election pages retain a bounded published snapshot
-of up to 20 Bibb source contests when available. Its dated label describes the
+of up to 20 Bibb source contests in the ballot when available. Its dated label describes the
 page publication, not a live update. UUID viewers load permitted source results
 through the election access gate and do not embed restricted results in HTML.
 

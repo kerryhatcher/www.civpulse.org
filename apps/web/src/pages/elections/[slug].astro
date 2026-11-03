@@ -7,7 +7,9 @@ import ElectionTurnout from '../../components/ElectionTurnout.astro';
 import ElectionScope from '../../components/ElectionScope.astro';
 import BallotResults from '../../components/BallotResults.astro';
 import SosResults from '../../components/SosResults.astro';
-import { publicSosFallback } from '../../lib/sos-results-build';
+import SosInlineCount from '../../components/SosInlineCount.astro';
+import SosBallotEvidence from '../../components/SosBallotEvidence.astro';
+import { publicSosFallback, publicSosMappings } from '../../lib/sos-results-build';
 import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
 import RecordProvenance from '../../components/RecordProvenance.astro';
@@ -47,6 +49,10 @@ interface Props {
 const { detail } = Astro.props;
 const { election, organization, contests, dates, ballot_questions } = detail;
 const sosFallback = await publicSosFallback(election.id);
+const sosMappings = sosFallback ? await publicSosMappings(election.id) : [];
+const unmappedSourceItems = sosFallback?.scope.items.filter(item => !sosMappings.some(m =>
+  m.jurisdiction_id === sosFallback.scope.jurisdiction.id && m.source_contest_id === item.data.id
+  && (contests.some(c => c.id === m.contest_id) || ballot_questions.some(q => q.id === m.question_id)))) ?? [];
 
 function initials(name: string): string {
   return name
@@ -142,7 +148,6 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 
     <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
       <p><a href={`/elections/results/?id=${election.id}`}>Election results, turnout reports &amp; source details →</a></p>
-      <SosResults electionId={election.id} publicAssets fallback={sosFallback} />
       <ElectionTurnout electionId={election.id} />
       <ElectionPrecinctTurnout electionId={election.id} />
     </section>
@@ -151,9 +156,10 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       <h2 id="election-contests-title">What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
       <ElectionScope />
       <BallotResults electionId={election.id} />
+      <SosResults electionId={election.id} publicAssets fallback={sosFallback} inline />
       {
-        contests.length > 0 || ballot_questions.length > 0 ? (
-          <div class="contest-list">
+        contests.length > 0 || ballot_questions.length > 0 || sosFallback ? (
+          <div class="contest-list" data-sos-ballot-list>
             {contests.map((contest) => (
               <article class="contest-card" id={`contest-${contest.id}`} data-bibb-relevant={String(isBibbContest(contest))} hidden={!isBibbContest(contest)}>
                 <header class="contest-heading">
@@ -193,6 +199,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                             <span class="candidate-meta">
                               {[party, CANDIDATE_STATUS_LABELS[status]].filter(Boolean).join(' · ')}
                             </span>
+                            <SosInlineCount view={sosFallback} mappings={sosMappings} contestId={contest.id} personId={person.id} />
                           </span>
                         </a>
                       );
@@ -201,14 +208,20 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                 ) : (
                   <p class="status">No candidates listed yet.</p>
                 )}
+                <SosBallotEvidence view={sosFallback} mappings={sosMappings} contestId={contest.id} />
               </article>
             ))}
-            {ballot_questions.map(question => <BallotQuestion question={question} />)}
+            {ballot_questions.map(question => <BallotQuestion question={question} sosView={sosFallback} sosMappings={sosMappings} />)}
+            {unmappedSourceItems.map(item => <article class="contest-card" data-sos-ballot-fallback>
+              <header class="contest-heading"><h3>{String(item.data.name)}</h3><span class="contest-meta">Georgia SOS source race · {sosFallback!.scope.jurisdiction.name}</span></header>
+              <p class="body-note">This source race has no reviewed link to the curated ballot. Source choices are shown without guessed profile links.</p>
+              <SosBallotEvidence view={sosFallback} sourceItem={item} />
+            </article>)}
           </div>
         ) : (
-          <div class="empty-state">
+          <div class="contest-list" data-sos-ballot-list><div class="empty-state">
             <p>No races or ballot questions have been published for this election yet.</p>
-          </div>
+          </div></div>
         )
       }
     </section>

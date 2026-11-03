@@ -23,7 +23,9 @@ Confirm the existing Civic Pulse election UUID and date through the admin record
 save that exact URL using the existing Elections editor. No identity is inferred
 from a label or from the source URL alone. `configure_sos_results_feed` requires
 an existing public election with a saved exact SOS URL; it does not change that
-URL. Unlisted/private elections never enter the public archive pipeline.
+URL. Only public elections are admitted to the archive pipeline. Later visibility
+changes cannot recall public objects or cancel an upload already in flight; see
+the retention guidance below.
 
 Null `reportingStatuses` is valid source evidence and remains null. Zero counts
 stay zero; absent/null counts stay unknown. Source jurisdiction, contest and
@@ -66,6 +68,10 @@ in `apps/web`, frontend build variables, source control or cron request headers.
 
 `bun run apps/results-collector/src/main.ts once` processes at most one claimed
 job; `health` calls the service-only operational reader without claiming work.
+The image runs that read-only health command every minute, allowing 70 seconds
+for its 60-second database request deadline and marking the container unhealthy
+after three failed checks. This checks database connectivity and RPC access;
+the host's monitoring must still inspect collection errors and publication lag.
 The default `run` process checks the durable queue every 15 seconds, renews a
 five-minute fenced lease every 30 seconds, and stops taking work on SIGTERM.
 Database lease checks protect every staged/published mutation. Queue claiming
@@ -84,6 +90,11 @@ contests and choices are validated. Each source item must fit the existing
 Larger source/schema changes need explicit review instead of silently dropping
 records. Source generation time must match the election and cannot be in the
 future. Database publication rejects older/conflicting source timestamps.
+An equal timestamp is accepted only when the latest snapshot is owned by
+automation and its semantic fingerprint matches. A different fingerprint at
+the same timestamp is a conflict; an older timestamp is always rejected. Where
+the prior snapshot was published manually and has no known fingerprint, an
+equal-time replacement cannot establish equivalence and is rejected.
 
 HTTP 304 records a successful unchanged check. HTTP 429/5xx, malformed JSON,
 checksum failures and unavailable assets preserve the last working publication.
@@ -139,6 +150,28 @@ public-only aggregates; expose ETag and Cache-Control if browser inspection need
 them. Verify the actual custom-domain response, CDN rules and browser request;
 object metadata alone does not establish CORS or override a conflicting cache
 rule. Never enable collection before this acceptance check.
+
+## Reviewed ballot mappings
+
+After checking the official source and Civic Pulse ballot record, an administrator
+can call `put_sos_results_mapping` with `p_election_id`, `p_jurisdiction_id`,
+`p_source_contest_id`, exactly one of `p_contest_id` or `p_question_id`, and
+`p_choices`. For a contest, each choice is
+`{"source_choice_id":"<SOS choice ID>","person_id":"<existing candidate UUID>"}`;
+for a question it is `{"source_choice_id":"<SOS choice ID>","choice_label":"<existing question choice>"}`.
+Use the exact source IDs within the selected jurisdiction and review each link;
+the RPC validates election ownership, candidate membership, question choices and
+duplicate targets, but cannot decide whether the source IDs describe the same
+real-world race or person. No fuzzy matching or person creation occurs.
+
+`get_sos_results_mappings(p_election_id)` reads the links under the SOS election
+visibility gate. Private elections require an admin; unlisted elections require
+their UUID. For nonadmins, links to nonpublic people are omitted. Mappings are
+stored in Postgres and are never included in public R2 source assets. Use
+`delete_sos_results_mapping` with the election, jurisdiction and source contest
+IDs to remove a reviewed link. A changed public mapping requests a static rebuild;
+an unchanged save does not. Verify the selected jurisdiction and visible ballot
+after each change.
 
 ## Main-first release and controlled acceptance
 
@@ -201,7 +234,9 @@ not an automatic rewrite of existing job identity.
 
 Retain published raw files, manifests, projections and immutable DB snapshots
 indefinitely as correction evidence. Public files cannot be recalled from prior
-downloads if an election later becomes restricted. Initially retain abandoned
+downloads if an election later becomes restricted. The visibility check controls
+admission and later database reads; it cannot retract objects already uploaded or
+stop an upload already in flight at the instant visibility changes. Initially retain abandoned
 raw uploads/staging too; they remain outside public discovery. Review unused
 objects and abandoned unpublished staging after 30 days, while paused, against
 both current pointers and every durable job/snapshot receipt before proposing a

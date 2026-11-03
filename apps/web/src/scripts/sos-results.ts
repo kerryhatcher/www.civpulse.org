@@ -1,5 +1,7 @@
 import { getSupabase } from "../lib/supabase";
 import { selectedCounty } from "./county-filter";
+import { clearInlineSos, renderInlineSos } from "./sos-ballot";
+import type { SosContestMapping } from "../lib/sos-ballot";
 import {
   createPublicSosReader,
   readRpcSos,
@@ -24,6 +26,22 @@ let dispose: (() => void) | undefined;
 export function stopSosResults() {
   dispose?.();
   dispose = undefined;
+  const root = document.querySelector<HTMLElement>("[data-sos-results]");
+  if (!root) return;
+  root.hidden = true;
+  if (root.dataset.sosInline === "true") {
+    clearInlineSos();
+    window.dispatchEvent(new Event("sosballotchange"));
+  }
+  root.querySelector("[data-sos-content]")?.replaceChildren();
+  const times = root.querySelector<HTMLElement>("[data-sos-times]");
+  if (times) times.textContent = "";
+  const status = root.querySelector<HTMLElement>("[data-sos-status]");
+  if (status) status.textContent = "Choose an election to view SOS results.";
+  // A stopped reader must not restore evidence belonging to its former election.
+  root
+    .querySelector<HTMLElement>("[data-sos-fallback]")
+    ?.setAttribute("hidden", "");
 }
 export async function initSosResults(
   electionId: string,
@@ -32,6 +50,7 @@ export async function initSosResults(
   dispose?.();
   const root = document.querySelector<HTMLElement>("[data-sos-results]");
   if (!root) return;
+  root.hidden = false;
   const area = root.querySelector<HTMLSelectElement>(
     "[data-sos-jurisdiction]",
   )!;
@@ -41,6 +60,9 @@ export async function initSosResults(
   const times = root.querySelector<HTMLElement>("[data-sos-times]")!;
   const content = root.querySelector<HTMLElement>("[data-sos-content]")!;
   const source = root.querySelector<HTMLAnchorElement>("[data-sos-source]")!;
+  const inline = root.dataset.sosInline === "true";
+  let mappings: SosContestMapping[] = [];
+  source.href = "https://results.sos.ga.gov/";
   area.replaceChildren(new Option("Choose a reporting area", ""));
   search.value = "";
   content.replaceChildren();
@@ -52,7 +74,8 @@ export async function initSosResults(
     timer: ReturnType<typeof setTimeout> | undefined;
   let chosen = "",
     checked = "",
-    failures = 0;
+    failures = 0,
+    initialSelection = true;
   const rpc = async (args: Record<string, unknown>) => {
     const { data, error } = await getSupabase().rpc("get_sos_results", args);
     if (error) throw error;
@@ -60,6 +83,13 @@ export async function initSosResults(
   };
   function render() {
     if (!view) return;
+    if (inline) {
+      renderInlineSos(view, mappings, search.value.trim().toLocaleLowerCase());
+      root!
+        .querySelector<HTMLElement>("[data-sos-fallback]")
+        ?.setAttribute("hidden", "");
+      return;
+    }
     const open = new Set(
       [
         ...content.querySelectorAll<HTMLDetailsElement>(
@@ -229,7 +259,8 @@ export async function initSosResults(
         );
         area.value = old;
       }
-      if (!chosen) {
+      if (initialSelection) {
+        initialSelection = false;
         // The verified SOS Bibb ID is explicit; all other source areas remain a user choice.
         chosen =
           selectedCounty() === "13021" &&
@@ -240,6 +271,19 @@ export async function initSosResults(
         if (chosen) result = await read(chosen);
       }
       if (request !== generation || stopped) return;
+      let mappingChanged = false;
+      if (inline && result.scope) {
+        const { data, error } = await getSupabase().rpc(
+          "get_sos_results_mappings",
+          { p_election_id: electionId },
+        );
+        if (request !== generation || stopped) return;
+        if (error || data?.status !== "ok" || !Array.isArray(data.mappings))
+          throw Error("Reviewed ballot mappings unavailable");
+        mappingChanged =
+          JSON.stringify(mappings) !== JSON.stringify(data.mappings);
+        mappings = data.mappings;
+      }
       checked = new Date().toISOString();
       failures = 0;
       if (result.pointer) {
@@ -252,6 +296,7 @@ export async function initSosResults(
       if (result.pointer && result.scope) {
         const changed =
           !view ||
+          mappingChanged ||
           view.pointer.snapshot_id !== result.pointer.snapshot_id ||
           view.scope.jurisdiction.id !== result.scope.jurisdiction.id;
         view = { pointer: result.pointer, scope: result.scope };
@@ -265,6 +310,11 @@ export async function initSosResults(
                 ? "A source update is being collected. Showing the latest published SOS results; browser checks continue automatically."
                 : "Current published SOS results. Automatic checks run about every 30 seconds; an unchanged source report is normal.";
       } else {
+        view = undefined;
+        if (inline) {
+          clearInlineSos();
+          window.dispatchEvent(new Event("sosballotchange"));
+        }
         content.replaceChildren();
         status.textContent = chosen
           ? "No SOS results for this reporting area. Choose another source area."

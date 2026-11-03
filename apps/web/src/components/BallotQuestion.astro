@@ -2,8 +2,12 @@
 import ObjectHistoryLink from './ObjectHistoryLink.astro';
 import { isBibbJurisdiction } from '../lib/election-scope';
 import type { BallotQuestion } from '../lib/elections';
-interface Props { question: BallotQuestion }
-const { question } = Astro.props;
+import SosInlineCount from './SosInlineCount.astro';
+import SosBallotEvidence from './SosBallotEvidence.astro';
+import type { SosView } from '../lib/sos-results-reader';
+import type { SosContestMapping } from '../lib/sos-ballot';
+interface Props { question: BallotQuestion; sosView?: SosView | null; sosMappings?: SosContestMapping[] }
+const { question, sosView, sosMappings } = Astro.props;
 ---
 <article class="contest-card ballot-question" id={`question-${question.id}`} data-bibb-relevant={String(isBibbJurisdiction(question.jurisdiction))} hidden={!isBibbJurisdiction(question.jurisdiction)}>
   <header class="contest-heading">
@@ -13,7 +17,8 @@ const { question } = Astro.props;
   <p class="ballot-question-text">{question.question_text}</p>
   {question.description && <p class="contest-description">{question.description}</p>}
   <p class="body-note" data-ballot-choice-label>Response choices</p>
-  <ul class="ballot-question-choices">{question.choices.map(choice => <li>{choice}</li>)}</ul>
+  <ul class="ballot-question-choices">{question.choices.map(choice => <li data-sos-choice-label={choice}>{choice}<SosInlineCount view={sosView} mappings={sosMappings} questionId={question.id} choiceLabel={choice} /></li>)}</ul>
+  <SosBallotEvidence view={sosView} mappings={sosMappings} questionId={question.id} />
   {question.source_url && /^https?:\/\//i.test(question.source_url) && <p><a href={question.source_url} target="_blank" rel="noopener noreferrer">Official source ↗</a></p>}
 <ObjectHistoryLink table="ballot_questions" id={question.id} />
 </article>

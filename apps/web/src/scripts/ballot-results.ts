@@ -157,7 +157,10 @@ export async function initBallotResults(electionId: string): Promise<void> {
       body.append(row);
     }
     for (const item of card.querySelectorAll(".ballot-question-choices li")) {
-      const label = item.textContent?.trim() ?? "";
+      const label =
+        (item as HTMLElement).dataset.sosChoiceLabel ??
+        item.textContent?.trim() ??
+        "";
       if (result.choices.some((c) => c.label === label)) continue;
       const row = el("tr"),
         name = el("th");
@@ -194,6 +197,9 @@ export async function initBallotResults(electionId: string): Promise<void> {
     let races = 0;
     for (const card of cards) {
       if (card.hidden) continue;
+      // Reviewed SOS coverage keeps the original profile cards and their live counts.
+      // Photo/PDF evidence remains available independently on the reports page.
+      if (card.querySelector("[data-sos-inline-scope]:not([hidden])")) continue;
       const id = card.id.replace(/^(contest|question)-/, "");
       const matches = selected.flatMap((report) =>
         report.snapshot.contests
@@ -213,8 +219,8 @@ export async function initBallotResults(electionId: string): Promise<void> {
       races++;
     }
     summary.textContent = races
-      ? `Results are shown alongside ${races} ballot races and questions for the selected county view. Each county and ballot style is reported separately.`
-      : "No county overview results have been published for this county view yet. The ballot remains available below.";
+      ? `Photo/PDF results are shown alongside ${races} ballot races and questions for the selected county view. Each county and ballot style is reported separately.`
+      : "No additional photo/PDF county overview results are displayed for this county view. Any available SOS votes appear with the ballot below.";
   }
   async function load(force = false) {
     refresh.disabled = true;
@@ -240,5 +246,6 @@ export async function initBallotResults(electionId: string): Promise<void> {
     void load(true);
   };
   window.addEventListener("ballotscopechange", render);
+  window.addEventListener("sosballotchange", render);
   await load();
 }

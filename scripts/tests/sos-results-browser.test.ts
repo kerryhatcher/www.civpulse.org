@@ -70,36 +70,38 @@ async function fixture(page: Page, read: (args: any) => any) {
     const data =
       rpc === "get_sos_results"
         ? await read(route.request().postDataJSON())
-        : rpc === "get_sos_results_health"
-          ? {
-              status: "healthy",
-              current_revision: "1",
-              last_success_at: "2026-11-03T23:02:00Z",
-            }
-          : rpc === "search_elections"
-            ? [
-                {
-                  id,
-                  name: "Synthetic live SOS QA",
-                  election_date: "2026-11-03",
-                },
-              ]
-            : rpc === "get_election"
-              ? {
-                  status: "ok",
-                  election: {
+        : rpc === "get_sos_results_mappings"
+          ? { status: "ok", mappings: [] }
+          : rpc === "get_sos_results_health"
+            ? {
+                status: "healthy",
+                current_revision: "1",
+                last_success_at: "2026-11-03T23:02:00Z",
+              }
+            : rpc === "search_elections"
+              ? [
+                  {
                     id,
                     name: "Synthetic live SOS QA",
-                    visibility: "public",
+                    election_date: "2026-11-03",
                   },
-                  contests: [],
-                  ballot_questions: [],
-                }
-              : rpc === "get_election_results"
-                ? { status: "ok", reports: [] }
-                : rpc === "get_structured_turnout"
-                  ? { status: "empty" }
-                  : false;
+                ]
+              : rpc === "get_election"
+                ? {
+                    status: "ok",
+                    election: {
+                      id,
+                      name: "Synthetic live SOS QA",
+                      visibility: "public",
+                    },
+                    contests: [],
+                    ballot_questions: [],
+                  }
+                : rpc === "get_election_results"
+                  ? { status: "ok", reports: [] }
+                  : rpc === "get_structured_turnout"
+                    ? { status: "empty" }
+                    : false;
     await route.fulfill({ json: data });
   });
 }
@@ -168,6 +170,22 @@ for (const width of [1280, 390]) {
         expect(await page.locator("[data-sos-jurisdiction]").inputValue()).toBe(
           "011",
         );
+        // Clearing and reselecting a scope in the same revision must restore its table.
+        await page.locator("[data-sos-jurisdiction]").selectOption("");
+        await page
+          .locator("[data-sos-status]")
+          .filter({ hasText: "Choose an SOS reporting area" })
+          .waitFor();
+        expect(await page.locator("[data-sos-content] table").count()).toBe(0);
+        await page.locator("[data-sos-search]").fill("Synthetic");
+        expect(await page.locator("[data-sos-content] table").count()).toBe(0);
+        await page.locator("[data-sos-jurisdiction]").selectOption("011");
+        await page
+          .locator("[data-sos-status]")
+          .filter({ hasText: "Current published" })
+          .waitFor();
+        expect(await table.innerText()).toContain("100");
+        await page.locator("[data-sos-search]").fill("Alpha");
         revision = "3";
         votes = 99;
         await page.locator("[data-sos-content] summary").focus();
@@ -264,12 +282,15 @@ test.skipIf(!base || !publicPath)(
         .filter({ hasText: "Current published" })
         .waitFor();
       release();
-      await page.locator("[data-sos-content] summary").click();
-      expect(await page.locator("[data-sos-content]").innerText()).toContain(
-        "99",
-      );
       expect(
-        await page.locator("[data-sos-content]").innerText(),
+        await page
+          .locator('#ballot [data-sos-source-contest="source-race-011"]')
+          .innerText(),
+      ).toContain("99");
+      expect(
+        await page
+          .locator('#ballot [data-sos-source-contest="source-race-011"]')
+          .innerText(),
       ).not.toContain("Synthetic second county");
       expect(await page.locator("[data-sos-jurisdiction]").inputValue()).toBe(
         "011",
@@ -282,4 +303,253 @@ test.skipIf(!base || !publicPath)(
     }
   },
   60000,
+);
+
+test.skipIf(!base)(
+  "clearing an election or failing its admission removes prior SOS evidence",
+  async () => {
+    const page = await browser.newPage();
+    const unavailableId = "18700000-0000-4000-8000-000000000099";
+    let sosRequests = 0;
+    await fixture(page, (args) => {
+      sosRequests++;
+      return rpcResult(args);
+    });
+    await page.route("**/rest/v1/rpc/get_election", async (route) => {
+      const requested = route.request().postDataJSON().p_id;
+      await route.fulfill({
+        json:
+          requested === unavailableId
+            ? { status: "missing" }
+            : {
+                status: "ok",
+                election: {
+                  id,
+                  name: "Synthetic live SOS QA",
+                  visibility: "public",
+                },
+                contests: [],
+                ballot_questions: [],
+              },
+      });
+    });
+    try {
+      await page.goto(`${base}/elections/results/?id=${id}`);
+      await page
+        .locator("[data-sos-status]")
+        .filter({ hasText: "Current published" })
+        .waitFor();
+      await page.locator("#result-election").selectOption("");
+      await page
+        .locator("#result-status")
+        .filter({ hasText: "Choose an election" })
+        .waitFor();
+      expect(await page.locator("[data-sos-results]").isHidden()).toBe(true);
+      expect(await page.locator("[data-sos-content] table").count()).toBe(0);
+      expect(await page.locator("[data-sos-times]").textContent()).toBe("");
+      expect(
+        await page.locator("[data-sos-status]").textContent(),
+      ).not.toContain("Current");
+      await page.locator("#result-election").selectOption(id);
+      await page
+        .locator("[data-sos-status]")
+        .filter({ hasText: "Current published" })
+        .waitFor();
+      await page.locator("#result-election").evaluate((node, value) => {
+        (node as HTMLSelectElement).add(
+          new Option("Unavailable synthetic election", value),
+        );
+      }, unavailableId);
+      const before = sosRequests;
+      await page.locator("#result-election").selectOption(unavailableId);
+      await page
+        .locator("#result-status")
+        .filter({ hasText: "Could not load election reports" })
+        .waitFor();
+      expect(await page.locator("[data-sos-results]").isHidden()).toBe(true);
+      expect(await page.locator("[data-sos-content] table").count()).toBe(0);
+      expect(
+        await page.locator("[data-sos-status]").textContent(),
+      ).not.toContain("Current");
+      expect(sosRequests).toBe(before);
+    } finally {
+      await page.close();
+    }
+  },
+  60000,
+);
+
+for (const width of [1280, 390]) {
+  test.skipIf(!base || !publicPath)(
+    `public ballot keeps mapped profiles and updates inline SOS votes at ${width}px`,
+    async () => {
+      const page = await browser.newPage({
+        viewport: { width, height: 900 },
+        colorScheme: width === 390 ? "dark" : "light",
+      });
+      const errors: string[] = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      page.on("console", (message) => {
+        if (message.type() === "error") errors.push(message.text());
+      });
+      let revision = "1";
+      const contestId = "18700000-0000-4000-8000-000000000101",
+        alexId = "18700000-0000-4000-8000-000000000111",
+        blairId = "18700000-0000-4000-8000-000000000112";
+      await fixture(page, () => ({ status: "empty" }));
+      await page.route("**/rest/v1/rpc/get_sos_results_mappings", (route) =>
+        route.fulfill({
+          json: {
+            status: "ok",
+            mappings: [
+              {
+                jurisdiction_id: "011",
+                source_contest_id: "source-race-011",
+                contest_id: contestId,
+                question_id: null,
+                choices: [
+                  { source_choice_id: "first", person_id: alexId },
+                  { source_choice_id: "second", person_id: blairId },
+                ],
+              },
+            ],
+          },
+        }),
+      );
+      await page.route(
+        "https://files.civpulse.org/elections/**",
+        async (route) => {
+          if (route.request().url().endsWith("/latest.json")) {
+            const value = pointer(revision);
+            value.jurisdictions.forEach((j) => {
+              j.item_count = 2;
+            });
+            return route.fulfill({ json: value });
+          }
+          const value = scope(revision, "011", revision === "1" ? 125 : 100);
+          if (revision !== "1")
+            value.items[0].data.ballotOptions =
+              value.items[0].data.ballotOptions.filter(
+                (c) => c.id !== "second",
+              );
+          value.items.push({
+            ...scope(revision).items[0],
+            item_index: 1,
+            data: {
+              ...scope(revision).items[0].data,
+              id: "unmapped-source-race",
+              name: "Unmapped synthetic source race",
+            },
+          });
+          await route.fulfill({ json: value });
+        },
+      );
+      try {
+        await page.goto(`${base}${publicPath}`);
+        await page
+          .locator("[data-sos-status]")
+          .filter({ hasText: "Current published" })
+          .waitFor();
+        const card = page.locator(`#contest-${contestId}`),
+          alex = card.locator(`[data-candidate-id="${alexId}"]`),
+          blair = card.locator(`[data-candidate-id="${blairId}"]`);
+        const href = await alex.getAttribute("href"),
+          party = await alex.locator(".candidate-meta").innerText();
+        expect(
+          await page.locator("#results-and-turnout [data-sos-results]").count(),
+        ).toBe(0);
+        expect(await page.locator("#ballot [data-sos-results]").count()).toBe(
+          1,
+        );
+        expect(
+          await alex.locator(".sos-inline-count:visible").innerText(),
+        ).toContain("125 votes");
+        expect(
+          await blair.locator(".sos-inline-count:visible").innerText(),
+        ).toContain("0 votes");
+        const unmapped = page.locator(
+          '#ballot [data-sos-source-contest="unmapped-source-race"]',
+        );
+        expect((await unmapped.innerText()).toLowerCase()).toContain(
+          "georgia sos source race",
+        );
+        expect(await unmapped.locator("a").count()).toBe(0);
+        expect(await page.locator("[data-sos-content] table").count()).toBe(0);
+        await alex.focus();
+        revision = "2";
+        await page.evaluate(() => window.dispatchEvent(new Event("online")));
+        await page.waitForFunction(
+          ({ c, p }) =>
+            document
+              .querySelector(
+                `#contest-${c} [data-candidate-id="${p}"] [data-sos-inline-runtime]`,
+              )
+              ?.textContent?.includes("100 votes"),
+          { c: contestId, p: alexId },
+        );
+        expect(
+          await alex.evaluate((node) => node === document.activeElement),
+        ).toBe(true);
+        expect(await alex.getAttribute("href")).toBe(href);
+        expect(await alex.locator(".candidate-meta").innerText()).toBe(party);
+        expect(await blair.isVisible()).toBe(true);
+        expect(
+          await blair.locator(".sos-inline-count:visible").innerText(),
+        ).toContain("Not reported");
+        expect(await card.locator(".candidate-list").isVisible()).toBe(true);
+        expect(
+          await page
+            .locator("body")
+            .evaluate((node) => node.scrollWidth <= innerWidth),
+        ).toBe(true);
+        expect(errors).toEqual([]);
+        await page.addStyleTag({
+          content: "astro-dev-toolbar{display:none !important}",
+        });
+        await page.evaluate(() =>
+          window.scrollTo({ top: 0, behavior: "instant" }),
+        );
+        await page.screenshot({
+          path: `/tmp/issue187-inline-ballot-${width}.png`,
+          fullPage: true,
+        });
+      } finally {
+        await page.close();
+      }
+    },
+    60000,
+  );
+}
+
+test.skipIf(!base || !publicPath)(
+  "public page snapshot places SOS counts inside candidate cards without JavaScript",
+  async () => {
+    const page = await browser.newPage({ javaScriptEnabled: false });
+    try {
+      await page.goto(`${base}${publicPath}`);
+      const card = page.locator(
+        "#ballot #contest-18700000-0000-4000-8000-000000000101",
+      );
+      expect(
+        await card
+          .locator(
+            '[data-candidate-id="18700000-0000-4000-8000-000000000111"] .sos-inline-count',
+          )
+          .innerText(),
+      ).toContain("125 votes");
+      expect(
+        await card
+          .locator(
+            '[data-candidate-id="18700000-0000-4000-8000-000000000112"] .sos-inline-count',
+          )
+          .innerText(),
+      ).toContain("100 votes");
+      expect(await card.locator("a[data-candidate-id]").count()).toBe(2);
+      expect(
+        await page.locator("#results-and-turnout [data-sos-results]").count(),
+      ).toBe(0);
+    } finally {
+      await page.close();
+    }
+  },
 );

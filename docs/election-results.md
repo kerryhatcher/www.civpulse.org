@@ -60,7 +60,10 @@ bun run scripts/sos-results.ts <election-UUID> --apply
 ```
 
 The first command downloads and validates without writing. The second stages
-bounded batches and atomically publishes the complete snapshot. Missing URLs
+bounded batches and atomically publishes the complete snapshot when automation
+has not taken ownership of the feed. Once a feed is enabled or has an automated
+revision, use the collector even if the feed is paused; a manual DB-only publish
+would leave the public pointer behind. Missing URLs
 return `awaiting_url`; HTTP errors leave the current snapshot intact. Redirects
 are rejected, downloads are limited to 256 MiB, and source dates must match the
 election. The exact download SHA-256 is a collector receipt; Postgres validates
@@ -69,9 +72,11 @@ reassemble and verify the original document hash. Source JSON is stored as JSONB
 not byte-for-byte original formatting. No service-role/browser credential is added.
 
 Identical downloads are no-ops. Interrupted staging can be resumed by rerunning
-the same feed; conflicting staged items reject. Only a newer source timestamp
-can replace the current snapshot, with an explicit expected-current ID checked
-under an election lock. Revisions may lower counts. Historical published
+the same feed; conflicting staged items reject. Manual imports require a newer
+source timestamp and an explicit expected-current ID checked under an election
+lock. Automated imports also accept an equal source timestamp when the current
+automation-owned snapshot has the same semantic fingerprint; equal-time changed
+results and older source timestamps reject. Revisions may lower counts. Historical published
 snapshots are immutable; abandoned staging remains admin-only for diagnosis.
 
 `get_sos_results(election_id, snapshot_id?, jurisdiction_index?, offset?, limit?)`
@@ -87,10 +92,16 @@ The [automatic collection runbook](sos-results-automation.md) extends this found
 with five-minute signed Supabase polling, a durable Bun collector, exact JSON
 archives in R2, and a stable `latest.json` pointer to compact immutable assets.
 Saving the URL alone starts no fetch: feed configuration defaults to disabled.
-Public pages check for new revisions about every 30 seconds and update the
-separate SOS source-results section without waiting for a rebuild or refresh.
-UUID viewers retain the gated RPC reader. Source race/choice IDs are not matched
-to editorial profiles by name. Photo/PDF and structured-turnout imports remain
+Public pages check for new revisions about every 30 seconds and update SOS votes
+inside **What's on the ballot**, alongside the existing candidates and choices,
+without waiting for a rebuild or refresh. Unmapped source races remain labeled
+race cards in that ballot list; the dedicated reports page keeps a source browser.
+UUID viewers retain the gated RPC reader. Administrators can review explicit
+jurisdiction, source race and source choice mappings to existing ballot contests,
+question choices and candidates; no names are matched automatically. The reader
+omits nonpublic people for nonadmins and never places mappings in R2. See the
+[mapping procedure](sos-results-automation.md#reviewed-ballot-mappings).
+Photo/PDF and structured-turnout imports remain
 separate. Public slug pages also include up to 20 Bibb contests as a bounded
 build-time fallback; subsequent rebuilds replace that snapshot.
 
