@@ -4,6 +4,7 @@ import { registerCommonReadTools, type ToolCatalog } from './common-read-tools';
 import { WriteCatalog } from './write-catalog';
 import { RelatedReadCatalog } from './related-read-catalog';
 import { registerElectionResultTools } from "./election-result-tools";
+import {registerObligationTools} from './obligation-tools';
 import {registerUserFeeTools} from './user-fee-tools';
 import { registerSchoolFinanceTools } from './school-finance-tools';
 import { registerLegislativeTools } from './legislative-tools';
@@ -221,7 +222,7 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
 
   registerElectionResultTools(server, supabase);
   // The compatibility catalog is already at its 128-tool limit.
-  if (catalog === 'compact') {registerSchoolFinanceTools(server, supabase);registerUserFeeTools(server,supabase);}
+  if (catalog === 'compact') {registerSchoolFinanceTools(server, supabase);registerUserFeeTools(server,supabase);registerObligationTools(server,supabase);}
   registerExtendedTools(server, supabase, user, writes, reads, catalog === 'compact');
   registerMeetingTools(server, supabase, catalog === 'compact', uploadContext);
   registerLegislativeTools(server, supabase, sourceReaderUrl);

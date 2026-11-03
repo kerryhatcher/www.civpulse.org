@@ -1996,3 +1996,16 @@ for the whole revision chain. No automatic stubs, collectors, production source
 rows or current-effectiveness claims are added. See [the version-1 contract](./user-fees.md)
 for source fields, scalar/range/tier/text rates, missing periods, exact collections,
 read/search filters, exports and main-first release instructions.
+
+## Obligation reports
+
+Migration `20261125003000` reuses immutable report/provenance and decimal/HTTPS
+validation patterns for source obligations, not payments, original contract values
+or inferred balances. Reviewed existing payer/vendor links are separate from raw
+labels; unresolved identities stay unlinked/private. Hidden-person observations are
+excluded completely before public detail/search/count/sum/export and audit history.
+Exact signed sums are optional, visible/filter-scoped and separated per report
+revision/currency/unit/period/grain, only with a source-asserted disjoint-row basis.
+No collectors, inferred payment links or automatic stubs. See [the version-1 contract](./obligations.md)
+for bounded atomic acceptance, corrections/cancellations, source scope, read APIs,
+exports, RLS/history/rebuild gates and main-first release instructions.

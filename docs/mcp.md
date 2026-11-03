@@ -690,3 +690,17 @@ require the latest supersedes_id and public correction_reason; no immutable
 observation is overwritten. Browse supports organization/year/fee/query/history
 and bounded pagination with the same public/ordinary-user privacy gates. No
 collector, automatic stub creation, transaction estimates or production import.
+
+### Obligation reporting
+
+Compact `accept_obligation_report` version 1 defaults to dry run and atomically
+accepts one complete bounded report (1–100 rows / 1 MiB); `browse_obligations`
+supports organization/year/vendor/query/detail/history and pagination. Compact is
+79 tools; legacy remains 128. See [the contract](./obligations.md). Preserve exact
+signed strings, raw labels, source currency/unit/period/grain, provenance and
+coverage. Resolve existing payer/vendor IDs explicitly; unresolved remains private/
+unlinked. Changed reports require latest supersession and public reason. Payments,
+contract values and balances are separate measures, never inferred. Sum only
+source-asserted disjoint matching visible rows per report group, never overlapping
+revisions or payments. Hidden people are excluded from raw evidence and totals,
+including detail/audit paths. No collectors, production backfills or automatic stubs.

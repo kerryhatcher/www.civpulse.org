@@ -692,3 +692,15 @@ dates do not establish that a fee applies today. Check the report's source, date
 evidence status and coverage limitations. Include superseded reports or follow a
 fee's history link to inspect amendments and unit changes. CSV/JSON downloads cover
 only the displayed filtered page, not every report or a complete county fee inventory.
+
+### Reported obligations
+
+[Reported obligations and commitments](/finances/obligations/) lets you filter
+payer organization, year or vendor and inspect source observations/history. An
+obligation is not proof of cash paid, a complete contract or an unpaid balance.
+Read the source's currency, units, dates, grain and coverage. Separate comparison
+cards show only matching visible amounts within one report revision, and only when
+source review supports disjoint rows. Do not add cards/revisions or obligations and
+payments together. Unknown coverage is not zero or misconduct. Exact observation
+and typed vendor links retain scope. CSV exports observation rows only; JSON also
+includes explicitly scoped report-group totals. Neither export is a complete ledger.

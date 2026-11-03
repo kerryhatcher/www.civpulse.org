@@ -82,13 +82,13 @@ test('compact catalog replaces only planned reads/writes; all other schemas rema
   }
   const legacy = await catalog('legacy'), compact = await catalog('compact');
   expect(legacy).toHaveLength(128);
-  expect(compact).toHaveLength(77);
+  expect(compact).toHaveLength(79);
   expect(new Set(compact.map(tool => tool.name)).size).toBe(compact.length);
   // Account for deliberate v2-only tools as well as consolidated legacy tools:
   // a matching count alone must not hide a missing tool or accidental addition.
   const legacyNames = new Set(legacy.map(tool => tool.name));
   expect(compact.filter(tool => !legacyNames.has(tool.name)).map(tool => tool.name).sort()).toEqual([
-    'accept_officeholder_observations', 'accept_user_fee_report', 'browse_user_fees', 'delete_relationship', 'get_civic_record', 'get_county_statistic_catalog', 'import_meeting_source', 'read_officeholder_observations', 'read_related_records',
+    'accept_obligation_report', 'accept_officeholder_observations', 'accept_user_fee_report', 'browse_obligations', 'browse_user_fees', 'delete_relationship', 'get_civic_record', 'get_county_statistic_catalog', 'import_meeting_source', 'read_officeholder_observations', 'read_related_records',
     'save_article', 'save_ballot_question', 'save_calendar', 'save_contest', 'save_county_statistic',
     'save_county_statistic_source', 'save_election', 'save_event', 'save_layer', 'save_layer_feature',
     'save_map', 'save_office', 'save_office_term', 'save_organization', 'save_person', 'save_relationship',
@@ -113,4 +113,10 @@ test('officeholder pagination rejects values outside PostgreSQL integer range',a
  const server=buildServer({rpc:async()=>({data:{rows:[]},error:null})} as never,{id},{},undefined,'compact');
  const client=new Client({name:'officeholder-offset',version:'1'});const [a,b]=InMemoryTransport.createLinkedPair();
  try{await server.connect(a);await client.connect(b);const tool=(await client.listTools()).tools.find(t=>t.name==='read_officeholder_observations')!;expect((tool.inputSchema.properties!.offset as any).maximum).toBe(2147483647);expect((await client.callTool({name:tool.name,arguments:{person_id:id,offset:2147483648}})).isError).toBe(true);}finally{await client.close();await server.close();}
+});
+
+test('obligation pagination rejects values outside PostgreSQL integer range',async()=>{
+ let calls=0;const server=buildServer({rpc:async()=>{calls++;return {data:{rows:[]},error:null};}} as never,{id},{},undefined,'compact');
+ const client=new Client({name:'obligation-offset',version:'1'});const [a,b]=InMemoryTransport.createLinkedPair();
+ try{await server.connect(a);await client.connect(b);const tool=(await client.listTools()).tools.find(t=>t.name==='browse_obligations')!;expect((tool.inputSchema.properties!.offset as any).maximum).toBe(2147483647);expect((await client.callTool({name:tool.name,arguments:{offset:2147483648}})).isError).toBe(true);expect(calls).toBe(0);}finally{await client.close();await server.close();}
 });

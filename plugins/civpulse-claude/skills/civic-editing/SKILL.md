@@ -192,3 +192,14 @@ strings and units; collections are a separate string/null measure. Never infer
 transactions, total incompatible units, or treat legal citations as current fee
 applicability. Preserve source URL/hash/retrieval/publication/locators, unknown dates
 and coverage. No collectors, production backfills or automatic stubs are authorized.
+
+Obligation reports use compact `accept_obligation_report` version 1 / `browse_obligations`
+(docs/obligations.md). Default dry-run is atomic (1–100 rows / 1 MiB). Preserve raw
+payer/vendor labels, exact signed strings, currency/unit/period/grain and full source
+provenance/coverage. Resolve existing typed person/org IDs explicitly; unresolved
+stays private/unlinked without automatic stubs. Amendments/cancellations supersede
+latest immutable reports with a reason, never infer zero balances. Commitments are
+not payments/contract values; only source-supported IDs/citations link payments.
+Disjoint-row sums stay per visible filtered report group; never combine revisions,
+overlapping grains or cash payments. Hidden people must be absent from raw public
+rows, totals, detail, audit and exports. No collector or production import authorized.
