@@ -31,6 +31,8 @@ Select **Civpulse shared local backend** in the chat's Environment picker.
 The versioned configuration is `.codex/environments/environment.toml`.
 Its setup runs `bun run worktree:setup`: installs the locked dependencies and
 reads the original checkout's running Supabase with `supabase status -o env`.
+When a Podman Docker shim cannot initialize its local runtime, setup retries
+against the configured `DOCKER_HOST` Unix socket using temporary runtime state.
 Only the local API URL and anon key are written to the worktree's gitignored
 `apps/web/.env.local`. Existing `.env` files are preserved; `.env.local` takes
 precedence for these two settings. Rerunning setup refreshes those settings.
@@ -38,7 +40,11 @@ precedence for these two settings. Rerunning setup refreshes those settings.
 Start the backend once with `bun run db:start` in the original checkout, then
 use the environment's **Start web** action (`bun run dev:worktree`) in each
 worktree. This starts only Astro and leaves the shared backend running.
-If the backend is stopped, setup explains where to start it and can be rerun.
+If the backend is stopped or its container socket is inaccessible, setup still
+installs dependencies and explains where to start the backend. It does not
+refresh `.env.local` in that case; start the backend and ensure the container
+socket is accessible, then rerun setup before using the site. Any existing
+`.env.local` is left unchanged.
 Astro selects an available port; use the URL printed by that worktree.
 
 All worktrees share database rows, Auth users, and schema. Run backend lifecycle,
