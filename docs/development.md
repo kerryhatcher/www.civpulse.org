@@ -61,7 +61,12 @@ worktrees so Codex can discover them there.
 ### Automatic SOS results
 
 Run `bun run results:check` and `bun run results:test`, then
-`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-local-db> bun test scripts/tests/sos-automation-db.test.ts scripts/tests/sos-results-db.test.ts`.
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-local-db> bun test scripts/tests/sos-automation-db.test.ts scripts/tests/sos-results-db.test.ts scripts/tests/sos-cadence-db.test.ts`.
+The cadence test checks hourly silence/delay, the exact transition boundary,
+late activation, unchanged attempt provenance, freshly renewed old publication
+backlog versus recent queued work, separate stale-update detection, end-exclusive
+pausing, and a signed
+activation pg_net queue entry that is rolled back before any outbound request.
 The HTTP collector integration uses actual local Auth/PostgREST with synthetic
 source/R2 boundaries: save local `supabase status -o json` privately and set
 `SOS_RESULTS_LOCAL_STATUS=<status-file> bun test scripts/tests/sos-collector-integration.test.ts`.

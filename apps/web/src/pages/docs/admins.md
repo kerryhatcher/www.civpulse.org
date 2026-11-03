@@ -569,6 +569,15 @@ public archive files is durable and cannot recall earlier downloads after a
 visibility change. See the repository's `docs/election-results.md` for collection
 setup, pause/resume, recovery and release verification.
 
+Automatic source-check cadence and its explicit start/end window are operator
+configuration. The November rollout checks immediately at accepted activation,
+then hourly until November 3 at 22:00 UTC, and every five minutes afterward until
+the exclusive November 11 at 00:00 UTC stop. An activation after the transition
+starts directly in the five-minute phase. The database retains one coordinator
+schedule; saving a results URL or publishing the website does not activate it.
+Production stays disabled until controlled acceptance is recorded. Normal hourly
+silence is healthy, and unchanged counts do not signal a collection failure.
+
 Use the Civic Pulse **Election results and turnout** skill with an authenticated
 admin AI agent. Attach original tape photographs or printed summaries, including
 headers, and specify the election and reporting area. The agent uploads private
