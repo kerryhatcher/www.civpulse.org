@@ -114,3 +114,9 @@ test('officeholder pagination rejects values outside PostgreSQL integer range',a
  const client=new Client({name:'officeholder-offset',version:'1'});const [a,b]=InMemoryTransport.createLinkedPair();
  try{await server.connect(a);await client.connect(b);const tool=(await client.listTools()).tools.find(t=>t.name==='read_officeholder_observations')!;expect((tool.inputSchema.properties!.offset as any).maximum).toBe(2147483647);expect((await client.callTool({name:tool.name,arguments:{person_id:id,offset:2147483648}})).isError).toBe(true);}finally{await client.close();await server.close();}
 });
+
+test('obligation pagination rejects values outside PostgreSQL integer range',async()=>{
+ let calls=0;const server=buildServer({rpc:async()=>{calls++;return {data:{rows:[]},error:null};}} as never,{id},{},undefined,'compact');
+ const client=new Client({name:'obligation-offset',version:'1'});const [a,b]=InMemoryTransport.createLinkedPair();
+ try{await server.connect(a);await client.connect(b);const tool=(await client.listTools()).tools.find(t=>t.name==='browse_obligations')!;expect((tool.inputSchema.properties!.offset as any).maximum).toBe(2147483647);expect((await client.callTool({name:tool.name,arguments:{offset:2147483648}})).isError).toBe(true);expect(calls).toBe(0);}finally{await client.close();await server.close();}
+});

@@ -158,3 +158,13 @@ exclusion, atomic dry-run/retry/amendment/cancellation behavior, invalid source 
 links, non-additive coverage, row caps, CSV scope and rebuild invalidation. Browser QA
 uses separate disposable local fixtures, actual admin Auth and public/mobile views;
 remove those canonical records/Auth users and rerun a clean build afterward.
+
+### Review regression checks
+
+Superseded observation permalinks include `history=1`, so following a row from
+history retains the mode needed to read that revision. Current observations keep
+the default latest-revision URL. The read RPC still applies all report/person
+visibility gates; a history link never grants access. Compact MCP pagination
+rejects offsets above PostgreSQL's integer maximum before issuing an RPC.
+The isolated regression covers a private latest report hiding an earlier
+otherwise-public observation's audit history, separately from row-level privacy.
