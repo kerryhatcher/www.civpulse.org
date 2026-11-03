@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import {
   createPublicSosReader,
+  resultsFilesOrigin,
   readRpcSos,
   sourceCount,
   sourceStatus,
@@ -170,4 +171,13 @@ test("bounded build fallback ends after twenty pinned source items", async () =>
   expect(result.scope?.items).toHaveLength(20);
   expect(result.truncated).toBe(true);
   expect(calls).toHaveLength(3);
+});
+
+
+test("public files origin accepts only exact reviewed deployment origins", () => {
+  expect(resultsFilesOrigin()).toBe("https://files.civpulse.org");
+  for (const host of ["files", "files-dev", "files-test"])
+    expect(resultsFilesOrigin(`https://${host}.civpulse.org`)).toBe(`https://${host}.civpulse.org`);
+  for (const value of ["", "http://files-test.civpulse.org", "https://files-test.civpulse.org/", "https://files-test.civpulse.org:443", "https://files-test.civpulse.org?x=1", "https://files-test.civpulse.org#x", "https://user@files-test.civpulse.org", "https://files-test.civpulse.org.evil.test", "https://FILES-TEST.civpulse.org", "https://example.org"])
+    expect(() => resultsFilesOrigin(value)).toThrow("Invalid public results files origin");
 });

@@ -35,7 +35,14 @@ export interface SosView {
   truncated?: boolean;
 }
 export type SosRpc = (args: Record<string, unknown>) => Promise<any>;
-const FILES = "https://files.civpulse.org";
+/** Build-time public asset routing. Never accept arbitrary origins or URL decorations. */
+export function resultsFilesOrigin(value?: string): string {
+  const origin = value ?? "https://files.civpulse.org";
+  if (!["https://files.civpulse.org", "https://files-dev.civpulse.org", "https://files-test.civpulse.org"].includes(origin))
+    throw Error("Invalid public results files origin");
+  return origin;
+}
+const FILES = resultsFilesOrigin(import.meta.env?.PUBLIC_RESULTS_FILES_ORIGIN);
 const object = (v: unknown): v is SosObject =>
   !!v && typeof v === "object" && !Array.isArray(v);
 const text = (v: unknown): v is string => typeof v === "string" && v.length > 0;

@@ -35,6 +35,7 @@ jobs:
       - run: bunx playwright install --with-deps chromium
       - name: Verify anonymous, user and admin SOS controls with isolated transport fixtures
         env:
+          PUBLIC_RESULTS_FILES_ORIGIN: https://files-test.civpulse.org
           PUBLIC_SUPABASE_URL: http://127.0.0.1:59991
           PUBLIC_SUPABASE_ANON_KEY: sos-admin-browser-public-fixture
           ASTRO_DEV_BACKGROUND: '1'
@@ -48,3 +49,4 @@ jobs:
           done
           curl -fsS http://127.0.0.1:4337/admin/elections/ > /dev/null
           SOS_ADMIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-admin-browser.test.ts
+          SOS_RESULTS_ORIGIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-results-origin-browser.test.ts

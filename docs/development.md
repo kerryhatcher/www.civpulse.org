@@ -1613,3 +1613,14 @@ recovery/abandon confirmation, console health and desktop/mobile layout are
 covered. Browser plugin was unavailable during implementation, so regular
 Playwright was used. CI installs bundled Chromium; local Chrome can be selected
 with `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome`. Screenshots stay outside the repository.
+
+### Isolated results asset origins
+
+Set `PUBLIC_RESULTS_FILES_ORIGIN=https://files-test.civpulse.org` (or the exact
+`https://files-dev.civpulse.org`) before starting/building an isolated frontend.
+The default remains `https://files.civpulse.org`. The public reader uses this
+same origin for pointer fetches, selected scope fetches, and immutable asset URL
+validation. Only those three exact HTTPS origins are accepted; paths, trailing
+slashes, credentials, query strings, fragments, and explicit ports are rejected.
+Use the matching isolated Supabase public URL/anon key. This setting does not
+start collection, configure a feed, or grant access to private election data.
