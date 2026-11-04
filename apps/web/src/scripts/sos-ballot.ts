@@ -5,7 +5,6 @@ import {
   type SosContestMapping,
 } from "../lib/sos-ballot";
 import {
-  sourceStatus,
   type SosObject,
   type SosView,
 } from "../lib/sos-results-reader";
@@ -41,20 +40,6 @@ export function renderInlineSos(
   const scroll = window.scrollY;
   const covered = new Set<string>();
   const operations: Array<() => void> = [];
-  const stamp = new Date(view.pointer.source_created_at).toLocaleString(
-    "en-US",
-    { timeZone: "America/New_York", timeZoneName: "short" },
-  );
-  const evidence = (item: SosObject) => {
-    const note = el(
-      "p",
-      `Georgia SOS · ${view.scope.jurisdiction.name} · Source reported ${stamp} · ${sourceStatus(item.reportingStatus ?? view.scope.jurisdiction.reportingStatuses)}.`,
-    );
-    note.className = "body-note";
-    note.dataset.sosInlineRuntime = "";
-    note.dataset.sosInlineScope = "";
-    return note;
-  };
   const count = (choice: SosObject | undefined, choices: SosObject[]) => {
     const node = buildVoteMetrics(choice?.voteCount, choices.map(option => option.voteCount), `SOS, ${view.scope.jurisdiction.name}`);
     return node;
@@ -149,7 +134,6 @@ export function renderInlineSos(
         !match.mapping.choices.some((c) => c.source_choice_id === choice.id),
     );
     operations.push(() => {
-      card.append(evidence(match.item.data));
       if (extra.length) card.append(table(extra, true, match.item.data.ballotOptions as SosObject[]));
     });
   }
@@ -185,7 +169,7 @@ export function renderInlineSos(
       "This source race has no reviewed link to the curated ballot. Source choices are shown without guessed profile links.",
     );
     note.className = "body-note";
-    card.append(note, evidence(item.data), table(choices));
+    card.append(note, table(choices));
     sourceCards.append(card);
   }
   // Candidate anchors and metadata stay in place. Only complete result annotations swap.
