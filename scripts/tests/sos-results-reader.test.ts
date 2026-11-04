@@ -1,4 +1,6 @@
 import { expect, test } from "bun:test";
+import { readPublicSosFallback } from "../../apps/web/src/lib/sos-results-build";
+import { mappedSosChoice, mappedSosItem, type SosContestMapping } from "../../apps/web/src/lib/sos-ballot";
 import {
   createPublicSosReader,
   resultsFilesOrigin,
@@ -139,7 +141,7 @@ test("restricted RPC reader pins every page, preserves corrections, and rechecks
     }),
   ).rejects.toThrow("restricted");
 });
-test("bounded build fallback ends after twenty pinned source items", async () => {
+test("explicit preview reads may stop after twenty pinned source items", async () => {
   const calls: any[] = [];
   const result = await readRpcSos(
     async (args) => {
@@ -171,6 +173,55 @@ test("bounded build fallback ends after twenty pinned source items", async () =>
   expect(result.scope?.items).toHaveLength(20);
   expect(result.truncated).toBe(true);
   expect(calls).toHaveLength(3);
+});
+
+function staticBallotFixture(count = 27, available = count) {
+  const calls: Record<string, unknown>[] = [];
+  const sourceIds = [...Array.from({length:20}, (_, i) => `earlier-${i}`), 'HD149', 'SOIL', 'SQ1', 'SQ2', 'SQ3', 'HB1537', 'HB1538'];
+  const rpc = async (args: Record<string, unknown>) => {
+    calls.push(args);
+    const offset = Number(args.p_offset ?? 0);
+    return {
+      status:'ok',snapshot_id:'pinned-static-snapshot',header:{createdAt:pointer().source_created_at},
+      source_url:pointer().source_url,published_at:pointer().published_at,
+      jurisdictions:[{...pointer().jurisdictions[0],item_count:count}],
+      items:args.p_jurisdiction_index === undefined ? [] : Array.from({length:Math.max(0,Math.min(10,available-offset))}, (_, n) => ({
+        jurisdiction_index:0,item_index:offset+n,
+        data:{id:sourceIds[offset+n] ?? `item-${offset+n}`,name:`Synthetic ballot ${offset+n}`,ballotOptions:[{id:'choice',name:offset+n >= 22 ? 'Yes' : 'Candidate',voteCount:offset+n === 20 ? 0 : offset+n+1}]},
+      })),
+    };
+  };
+  return {calls,rpc};
+}
+
+test('static ballot fallback includes all 27 source items and mapped counts for the last two races and five questions', async () => {
+  const fixture = staticBallotFixture();
+  const view = await readPublicSosFallback(fixture.rpc,id);
+  expect(view?.scope.items).toHaveLength(27);
+  expect(view?.truncated).toBe(false);
+  expect(fixture.calls.slice(1).map(call => call.p_offset)).toEqual([0,10,20]);
+  expect(fixture.calls.slice(1).every(call => call.p_snapshot_id === 'pinned-static-snapshot' && call.p_jurisdiction_index === 0)).toBe(true);
+  const tailIds = ['HD149','SOIL','SQ1','SQ2','SQ3','HB1537','HB1538'];
+  for (const [index, sourceId] of tailIds.entries()) {
+    const question = index >= 2;
+    const mapping: SosContestMapping = {jurisdiction_id:'011',source_contest_id:sourceId,...(question ? {question_id:`question-${sourceId}`} : {contest_id:`contest-${sourceId}`}),choices:[{source_choice_id:'choice',...(question ? {choice_label:'Yes'} : {person_id:`person-${sourceId}`})}]};
+    // Use the same mapping functions as the prerendered SosInlineCount component.
+    const match = mappedSosItem(view,[mapping],question ? 'question' : 'contest',(question ? 'question-' : 'contest-')+sourceId);
+    expect(match).not.toBeNull();
+    const choice = mappedSosChoice(match!.item,match!.mapping,question ? undefined : `person-${sourceId}`,question ? 'Yes' : undefined);
+    expect(sourceCount(choice?.voteCount)).toBe(index === 0 ? '0' : String(index+21));
+  }
+});
+
+test('static ballot fallback rejects a missing final item instead of publishing a partial scope', async () => {
+  await expect(readPublicSosFallback(staticBallotFixture(27,26).rpc,id)).rejects.toThrow('Incomplete SOS scope');
+});
+
+test('static ballot fallback keeps the 10,000-item safety bound and fails when the declared scope exceeds it', async () => {
+  const fixture = staticBallotFixture(10001);
+  await expect(readPublicSosFallback(fixture.rpc,id)).rejects.toThrow('Incomplete SOS scope');
+  expect(fixture.calls).toHaveLength(1001);
+  expect(fixture.calls.at(-1)?.p_offset).toBe(9990);
 });
 
 

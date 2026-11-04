@@ -309,7 +309,7 @@ export async function readRpcSos(
     )
       break;
   }
-  // A build preview is deliberately bounded; runtime readers require a complete source scope.
+  // Explicit preview reads may be partial; complete runtime/static ballot reads retain scope-count validation.
   const validationPointer =
     limit < 10000
       ? {
