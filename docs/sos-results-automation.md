@@ -203,6 +203,28 @@ rule. Never enable collection before this acceptance check.
 
 ## Reviewed ballot mappings
 
+The elections admin includes a reviewed JSON batch editor (1,000 rows / 2 MiB),
+using the existing authenticated RPCs below. Validation pins one source snapshot,
+reads only the requested scopes, and resolves the complete gated `get_election`
+ballot, avoiding directory pagination limits on candidate names. Public source
+assets use the fixed configured results origin; restricted elections retain the
+gated paginated RPC. Source and target identities are displayed for human review;
+the editor never infers a match. Existing replaced links appear in the preview.
+Writes run sequentially, stop on first error and are followed by saved readback.
+Partial batches retain prior accepted rows; unchanged retries are idempotent.
+Immediately before the write loop, the editor rereads the canonical ballot and
+the latest source snapshot, pinning that snapshot while reading the selected
+scopes. It compares the reviewed election binding, offices/question wording,
+candidate identities and source race/option IDs, labels, party and contest type.
+Identity changes require a new preview and approval. New source revisions that
+change only counts or reporting remain valid; a snapshot ID itself is not a
+mapping identity. This is an optimistic preflight, not a transactional lock across
+the batch: another edit or publication can still occur after the check. Mappings
+intentionally persist across publications, and the RPC continues checking ballot
+ownership and choice membership on each write. Verify the current public ballot
+after saving rather than treating the preview as an atomic snapshot reservation.
+No RLS, database grants, source collection, or public asset contracts change.
+
 After checking the official source and Civic Pulse ballot record, an administrator
 can call `put_sos_results_mapping` with `p_election_id`, `p_jurisdiction_id`,
 `p_source_contest_id`, exactly one of `p_contest_id` or `p_question_id`, and

@@ -166,7 +166,7 @@ export function validateScope(
   }
   return value as unknown as SosScope;
 }
-async function json(url: string, fetcher: typeof fetch, cache: RequestCache) {
+export async function fetchSosJson(url: string, fetcher: typeof fetch, cache: RequestCache) {
   const response = await fetcher(url, {
     cache,
     signal: AbortSignal.timeout(15000),
@@ -209,7 +209,7 @@ export function createPublicSosReader(fetcher: typeof fetch = fetch) {
     jurisdictionId: string,
     forceScope = false,
   ): Promise<{ pointer: SosPointer | null; scope: SosScope | null }> => {
-    const data = await json(
+    const data = await fetchSosJson(
       `${FILES}/elections/${electionId}/latest.json`,
       fetcher,
       "no-store",
@@ -238,7 +238,7 @@ export function createPublicSosReader(fetcher: typeof fetch = fetch) {
     let scope = forceScope ? undefined : scopes.get(key);
     if (!scope) {
       scope = validateScope(
-        await json(
+        await fetchSosJson(
           new URL(jurisdiction.url!, FILES).href,
           fetcher,
           "force-cache",
