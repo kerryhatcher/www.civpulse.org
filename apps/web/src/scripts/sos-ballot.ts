@@ -134,7 +134,11 @@ export function renderInlineSos(
         !match.mapping.choices.some((c) => c.source_choice_id === choice.id),
     );
     operations.push(() => {
-      if (extra.length) card.append(table(extra, true, match.item.data.ballotOptions as SosObject[]));
+      const scope = el("div");
+      scope.dataset.sosInlineRuntime = "";
+      scope.dataset.sosInlineScope = "";
+      if (extra.length) scope.append(table(extra, true, match.item.data.ballotOptions as SosObject[]));
+      card.append(scope);
     });
   }
   const sourceCards = document.createDocumentFragment();
