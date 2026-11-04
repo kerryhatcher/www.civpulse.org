@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, expect, test } from 'bun:test';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright';
 
 const base = process.env.SOS_ADMIN_TEST_URL;
@@ -17,28 +19,35 @@ beforeAll(async () => {
 afterAll(async () => { await browser?.close(); });
 
 type Call = { name: string; args: Record<string, any>; authorization: string | undefined };
-async function fixture(role: 'anon' | 'user' | 'admin', width = 1280, mappingCount = 2) {
+async function fixture(role: 'anon' | 'user' | 'admin', width = 1280, mappingCount = 2, visibility: 'public' | 'private' | 'unlisted' = 'public') {
   const context = await browser.newContext({ viewport: { width, height: 950 } });
   const page = await context.newPage();
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(`${message.text()} (${message.location().url})`); });
   const calls: Call[] = [];
-  let election = { id, slug: 'synthetic-admin-fixture', name: 'Synthetic administration fixture', election_date: '2026-11-03', kind: 'general', visibility: 'public', results_json_url: source, description: null, organization_id: null };
+  let election = { id, slug: 'synthetic-admin-fixture', name: 'Synthetic administration fixture', election_date: '2026-11-03', kind: 'general', visibility, results_json_url: source, description: null, organization_id: null };
   let feed: any = null;
   let mismatchWindow = false;
   const question = '03600000-0000-4000-8000-000000000004';
   const snapshot = '03600000-0000-4000-8000-000000000005';
-  const questionIds = [question, actor, '03600000-0000-4000-8000-000000000006'];
   const rowNumbers = Array.from({length:mappingCount}, (_, index) => index + 1);
+  const questionIds = rowNumbers.map(n => n === 1 ? question : n === 2 ? actor : `03600000-0000-4000-8000-${String(n+3).padStart(12,'0')}`);
+  const ballotQuestions = rowNumbers.map(n => ({id:questionIds[n-1],title:`Curated question ${n}`,question_text:`Verified full wording ${n}`,choices:['Yes','No']}));
+  const sourceItems: any[] = rowNumbers.map(n => ({jurisdiction_index:0,item_index:n-1,data:{id:`Q${n}`,name:`Official question ${n}`,type:'question',voteFor:1,ballotOptions:[{id:`Y${n}`,name:'Yes',politicalParty:'fixture-party',voteCount:0},{id:`N${n}`,name:'No',voteCount:null}]}}));
   const mappings: any[] = [];
   const mappingReadbacks: any[][] = [];
+  const sourceRequests: string[] = [];
+  let sourceSnapshot = snapshot, sourceRevision = 1;
   let mappingFailure = 0;
-  const assetBase = `https://files-test.civpulse.org/elections/${id}/revisions/${snapshot}`;
-  await page.route('https://files-test.civpulse.org/**', route => route.fulfill({ json: route.request().url().endsWith('/latest.json') ? {
-    schema_version:1,election_id:id,snapshot_id:snapshot,revision:'1',source_url:source,published_at:starts,source_created_at:starts,
-    jurisdictions:[{id:'011',name:'Bibb County',url:`${assetBase}/counties/011.json`,item_count:mappingCount}],
-  } : {schema_version:1,election_id:id,snapshot_id:snapshot,jurisdiction:{id:'011',name:'Bibb County'},items:rowNumbers.map(n => ({jurisdiction_index:0,item_index:n-1,data:{id:`Q${n}`,name:`Official question ${n}`,ballotOptions:[{id:`Y${n}`,name:'Yes',voteCount:0},{id:`N${n}`,name:'No',voteCount:null}]}}))} }));
+  await page.route('https://files-test.civpulse.org/**', route => {
+    sourceRequests.push(route.request().url());
+    const assetBase = `https://files-test.civpulse.org/elections/${id}/revisions/${sourceSnapshot}`;
+    return route.fulfill({ json: route.request().url().endsWith('/latest.json') ? {
+      schema_version:1,election_id:id,snapshot_id:sourceSnapshot,revision:String(sourceRevision),source_url:source,published_at:starts,source_created_at:starts,
+      jurisdictions:[{id:'011',name:'Bibb County',url:`${assetBase}/counties/011.json`,item_count:mappingCount}],
+    } : {schema_version:1,election_id:id,snapshot_id:sourceSnapshot,jurisdiction:{id:'011',name:'Bibb County'},items:sourceItems} });
+  });
   const user = { id: actor, aud: 'authenticated', role: 'authenticated', email: 'synthetic-admin@example.test', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' };
   const token = `${btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))}.${btoa(JSON.stringify({ sub: actor, role: 'authenticated', aud: 'authenticated', iat: 1, exp: Math.floor(Date.now() / 1000) + 3600 }))}.synthetic-fixture-signature`;
   if (role !== 'anon') await context.addInitScript(({ token, user }) => {
@@ -67,7 +76,10 @@ async function fixture(role: 'anon' | 'user' | 'admin', width = 1280, mappingCou
       return route.fulfill({ json: visible ? { status: feed.enabled ? 'healthy' : 'paused', ...feed, current_revision: '9007199254740993', pending_since: null, last_success_at: null, next_poll_at: null } : { status: 'missing' } });
     }
     if (role !== 'admin') throw Error('A denied fixture unexpectedly attempted an administrative mutation');
-    if (name === 'get_election') return route.fulfill({json:{status:'ok',election,contests:[],ballot_questions:rowNumbers.map(n => ({id:questionIds[n-1],title:`Curated question ${n}`,question_text:`Verified full wording ${n}`,choices:['Yes','No']}))}});
+    if (name === 'get_election') return route.fulfill({json:{status:'ok',election,contests:[],ballot_questions:ballotQuestions}});
+    if (name === 'get_sos_results') return route.fulfill({json:args.p_snapshot_id ? {
+      status:'ok',snapshot_id:sourceSnapshot,items:sourceItems.slice(args.p_offset,args.p_offset+args.p_limit),
+    } : {status:'ok',snapshot_id:sourceSnapshot,source_url:election.results_json_url,jurisdictions:[{id:'011',name:'Bibb County',item_count:mappingCount}]}});
     if (name === 'get_sos_results_mappings') {
       mappingReadbacks.push(structuredClone(mappings));
       return route.fulfill({json:{status:'ok',mappings}});
@@ -99,7 +111,11 @@ async function fixture(role: 'anon' | 'user' | 'admin', width = 1280, mappingCou
     throw Error(`Unexpected RPC: ${name}`);
   });
   await page.goto(`${base}/admin/elections/`);
-  return { page, context, errors, calls, token, setMismatch: () => { mismatchWindow = true; }, feed: () => feed, failMapping: (n:number) => {mappingFailure=n;}, question, questionIds, mappingReadbacks };
+  return { page, context, errors, calls, token, setMismatch: () => { mismatchWindow = true; }, feed: () => feed, failMapping: (n:number) => {mappingFailure=n;}, question, questionIds, mappingReadbacks, sourceRequests,
+    changeQuestion: () => {ballotQuestions[0].question_text = 'Changed by another administrator';},
+    changeElection: (field: 'election_date' | 'results_json_url') => {election[field] = field === 'election_date' ? '2026-11-04' : 'https://results.sos.ga.gov/cdn/results/Georgia/export-OtherElection.json';},
+    advanceSource: (mutate: (items: any[]) => void) => {mutate(sourceItems);sourceSnapshot='03600000-0000-4000-8000-000000000007';sourceRevision++;},
+  };
 }
 async function configure(page: Page) {
   await page.locator('[data-sos-election]').selectOption(id);
@@ -189,6 +205,72 @@ for (const mappingCount of [2,3]) test.skipIf(!base)(`mapping batch preserves th
   } finally {await f.context.close();}
 },30_000);
 
+for (const change of ['question','election_date','results_json_url','source_name','source_party','source_membership'] as const) test.skipIf(!base)(`mapping save rechecks changed ${change} before any write`, async () => {
+  const f = await fixture('admin');
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = [{jurisdiction_id:'011',source_contest_id:'Q1',question_id:f.question,choices:[{source_choice_id:'Y1',choice_label:'Yes'}]}];
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows));
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 1 mappings'}).waitFor();
+    if (change === 'question') f.changeQuestion();
+    else if (change === 'election_date' || change === 'results_json_url') f.changeElection(change);
+    else f.advanceSource(items => {
+      if (change === 'source_name') items[0].data.name = 'Changed official question';
+      else if (change === 'source_party') items[0].data.ballotOptions[0].politicalParty = 'changed-party';
+      else items[0].data.ballotOptions.push({id:'new-option',name:'New choice',voteCount:0});
+    });
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-save]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'0/1 mappings verified'}).waitFor();
+    expect(await f.page.locator('[data-mapping-status]').textContent()).toContain('changed');
+    expect(f.calls.filter(call => call.name === 'put_sos_results_mapping')).toHaveLength(0);
+    expect(f.calls.filter(call => call.name === 'get_election')).toHaveLength(2);
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    expect(f.errors).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
+
+test.skipIf(!base)('a new source snapshot with only vote changes preserves reviewed identities and can save', async () => {
+  const f = await fixture('admin');
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = [{jurisdiction_id:'011',source_contest_id:'Q1',question_id:f.question,choices:[{source_choice_id:'Y1',choice_label:'Yes'}]}];
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows));
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 1 mappings'}).waitFor();
+    f.advanceSource(items => {items[0].data.ballotOptions[0].voteCount = 42;});
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-save]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'1/1 mappings verified'}).waitFor();
+    expect(f.sourceRequests.filter(url => url.endsWith('/latest.json'))).toHaveLength(2);
+    expect(f.sourceRequests.some(url => url.includes('/03600000-0000-4000-8000-000000000007/'))).toBe(true);
+    expect(f.calls.filter(call => call.name === 'put_sos_results_mapping')).toHaveLength(1);
+    expect(f.errors).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
+
+test.skipIf(!base)('private mapping preview pins and paginates its gated source snapshot without public asset reads', async () => {
+  const f = await fixture('admin',1280,11,'private');
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = [{jurisdiction_id:'011',source_contest_id:'Q1',question_id:f.question,choices:[{source_choice_id:'Y1',choice_label:'Yes'}]}];
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows));
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 1 mappings'}).waitFor();
+    const reads = f.calls.filter(call => call.name === 'get_sos_results');
+    expect(reads.map(call => call.args)).toEqual([
+      {p_election_id:id},
+      {p_election_id:id,p_snapshot_id:'03600000-0000-4000-8000-000000000005',p_jurisdiction_index:0,p_offset:0,p_limit:10},
+      {p_election_id:id,p_snapshot_id:'03600000-0000-4000-8000-000000000005',p_jurisdiction_index:0,p_offset:10,p_limit:10},
+    ]);
+    expect(reads.every(call => call.authorization === `Bearer ${f.token}`)).toBe(true);
+    expect(f.sourceRequests).toEqual([]);
+    expect(f.calls.filter(call => call.name === 'put_sos_results_mapping')).toHaveLength(0);
+    expect(f.errors).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
+
 for (const role of ['anon', 'user'] as const) test.skipIf(!base)(`${role} cannot reach SOS administrative controls or issue mutations`, async () => {
   const f = await fixture(role);
   try {
@@ -218,7 +300,7 @@ for (const width of [1280, 390]) test.skipIf(!base)(`admin verifies paused confi
     expect(await f.page.locator('[data-sos-activate]').isDisabled()).toBe(true);
     await f.page.locator('[name=sos_accepted]').check();
     expect(await f.page.locator('[data-sos-activate]').isEnabled()).toBe(true);
-    await f.page.locator('[data-sos-admin]').screenshot({ path: `/tmp/sos-admin-${width}.png` });
+    await f.page.locator('[data-sos-admin]').screenshot({ path: join(tmpdir(),`sos-admin-${width}.png`) });
     expect(await f.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await f.page.getByRole('button', { name: 'Activate reviewed feed', exact: true }).click();
     await f.page.locator('[data-sos-message]').filter({ hasText: 'Reviewed feed activated' }).waitFor();

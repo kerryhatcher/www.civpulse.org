@@ -1,6 +1,6 @@
 import type { Election, ElectionDetail } from '../lib/elections';
 import type { SosContestMapping } from '../lib/sos-ballot';
-import { describeMappingBatch, parseMappingBatch, sameMapping, type MappingSource } from '../lib/sos-mapping-admin';
+import { describeMappingBatch, mappingReviewIdentity, parseMappingBatch, reviewedElectionIdentity, sameMapping, type MappingSource } from '../lib/sos-mapping-admin';
 import { fetchSosJson, resultsFilesOrigin, validatePointer, validateScope } from '../lib/sos-results-reader';
 import { getSupabase } from '../lib/supabase';
 
@@ -19,7 +19,7 @@ export function initSosMappingsAdmin(): void {
   const description = root.querySelector<HTMLElement>('[data-mapping-preview-text]')!;
   const supabase = getSupabase();
   let elections: Election[] = [], busy = false, version = 0;
-  let prepared: { election: Election; rows: SosContestMapping[]; input: string; summary: string } | null = null;
+  let prepared: { election: Election; rows: SosContestMapping[]; input: string; summary: string; identity: string } | null = null;
   function render(): void {
     select.disabled = busy; input.disabled = busy; file.disabled = busy;
     preview.disabled = busy || !select.value || !input.value;
@@ -34,6 +34,41 @@ export function initSosMappingsAdmin(): void {
   }
   async function json(url: string): Promise<unknown> {
     return fetchSosJson(url, fetch, 'no-store');
+  }
+  async function loadSources(election: Election, rows: SosContestMapping[]): Promise<{ snapshot: string; scopes: Map<string, MappingSource> }> {
+    const scopes = new Map<string, MappingSource>();
+    const ids = [...new Set(rows.map(row => row.jurisdiction_id))];
+    let snapshot: string;
+    if (election.visibility === 'public') {
+      const origin = resultsFilesOrigin(import.meta.env.PUBLIC_RESULTS_FILES_ORIGIN);
+      const pointer = validatePointer(await json(`${origin}/elections/${election.id}/latest.json`), election.id);
+      if (pointer.source_url !== election.results_json_url) throw Error('Published source URL differs from the saved election source.');
+      snapshot = pointer.snapshot_id;
+      for (const [index, id] of ids.entries()) {
+        status.textContent = `Validating source jurisdiction ${index + 1}/${ids.length}…`;
+        const jurisdiction = pointer.jurisdictions.find(j => j.id === id);
+        if (!jurisdiction?.url) throw Error(`Source jurisdiction ${id} is unavailable.`);
+        const scope = validateScope(await json(jurisdiction.url), pointer, id);
+        scopes.set(id, { name:scope.jurisdiction.name, items:scope.items });
+      }
+    } else {
+      const meta = await rpc('get_sos_results', { p_election_id:election.id });
+      if (meta?.status !== 'ok' || meta.source_url !== election.results_json_url || !Array.isArray(meta.jurisdictions)) throw Error('Source snapshot unavailable or source URL changed.');
+      snapshot = meta.snapshot_id;
+      for (const id of ids) {
+        const index = meta.jurisdictions.findIndex((j: any) => j.id === id);
+        const jurisdiction = meta.jurisdictions[index];
+        if (!jurisdiction || !Number.isInteger(jurisdiction.item_count) || jurisdiction.item_count < 0 || jurisdiction.item_count > 10000) throw Error(`Source jurisdiction ${id} is unavailable.`);
+        const items: MappingSource['items'] = [];
+        for (let offset = 0; offset < jurisdiction.item_count; offset += 10) {
+          const page = await rpc('get_sos_results', { p_election_id:election.id,p_snapshot_id:snapshot,p_jurisdiction_index:index,p_offset:offset,p_limit:10 });
+          if (page?.status !== 'ok' || page.snapshot_id !== snapshot || !Array.isArray(page.items) || page.items.length !== Math.min(10,jurisdiction.item_count-offset)) throw Error('Incomplete pinned source snapshot.');
+          items.push(...page.items);
+        }
+        scopes.set(id, { name:jurisdiction.name, items });
+      }
+    }
+    return { snapshot, scopes };
   }
   select.addEventListener('change', invalidate);
   input.addEventListener('input', invalidate);
@@ -53,45 +88,15 @@ export function initSosMappingsAdmin(): void {
     try {
       const rows = parseMappingBatch(input.value);
       const ballot = await rpc('get_election', { p_id:election.id });
-      if (ballot?.status !== 'ok' || ballot.election?.id !== election.id) throw Error('Election unavailable.');
-      const scopes = new Map<string, MappingSource>();
+      if (ballot?.status !== 'ok' || ballot.election?.id !== election.id || reviewedElectionIdentity(ballot.election) !== reviewedElectionIdentity(election)) throw Error('Election details changed or are unavailable. Refresh and validate again.');
+      const { snapshot, scopes } = await loadSources(election, rows);
       const ids = [...new Set(rows.map(row => row.jurisdiction_id))];
-      let snapshot: string;
-      if (election.visibility === 'public') {
-        const origin = resultsFilesOrigin(import.meta.env.PUBLIC_RESULTS_FILES_ORIGIN);
-        const pointer = validatePointer(await json(`${origin}/elections/${election.id}/latest.json`), election.id);
-        if (pointer.source_url !== election.results_json_url) throw Error('Published source URL differs from the saved election source.');
-        snapshot = pointer.snapshot_id;
-        for (const [index, id] of ids.entries()) {
-          status.textContent = `Validating source jurisdiction ${index + 1}/${ids.length}…`;
-          const jurisdiction = pointer.jurisdictions.find(j => j.id === id);
-          if (!jurisdiction?.url) throw Error(`Source jurisdiction ${id} is unavailable.`);
-          const scope = validateScope(await json(jurisdiction.url), pointer, id);
-          scopes.set(id, { name:scope.jurisdiction.name, items:scope.items });
-        }
-      } else {
-        const meta = await rpc('get_sos_results', { p_election_id:election.id });
-        if (meta?.status !== 'ok' || meta.source_url !== election.results_json_url || !Array.isArray(meta.jurisdictions)) throw Error('Source snapshot unavailable or source URL changed.');
-        snapshot = meta.snapshot_id;
-        for (const id of ids) {
-          const index = meta.jurisdictions.findIndex((j: any) => j.id === id);
-          const jurisdiction = meta.jurisdictions[index];
-          if (!jurisdiction || !Number.isInteger(jurisdiction.item_count) || jurisdiction.item_count < 0 || jurisdiction.item_count > 10000) throw Error(`Source jurisdiction ${id} is unavailable.`);
-          const items: MappingSource['items'] = [];
-          for (let offset = 0; offset < jurisdiction.item_count; offset += 10) {
-            const page = await rpc('get_sos_results', { p_election_id:election.id,p_snapshot_id:snapshot,p_jurisdiction_index:index,p_offset:offset,p_limit:10 });
-            if (page?.status !== 'ok' || page.snapshot_id !== snapshot || !Array.isArray(page.items) || page.items.length !== Math.min(10,jurisdiction.item_count-offset)) throw Error('Incomplete pinned source snapshot.');
-            items.push(...page.items);
-          }
-          scopes.set(id, { name:jurisdiction.name, items });
-        }
-      }
       const existing = await rpc('get_sos_results_mappings', { p_election_id:election.id });
       if (existing?.status !== 'ok' || !Array.isArray(existing.mappings)) throw Error('Existing mapping readback unavailable.');
       const replaced = existing.mappings.filter((saved: SosContestMapping) => rows.some(row => row.jurisdiction_id === saved.jurisdiction_id && row.source_contest_id === saved.source_contest_id && !sameMapping(row,saved)));
       const summary = `${election.name} · ${election.election_date} · ${election.visibility}\nElection ${election.id}\nSource snapshot ${snapshot}\n${rows.length} mappings across ${ids.length} jurisdictions\n\n${describeMappingBatch(rows, ballot as ElectionDetail, scopes)}\n\nExisting links replaced (${replaced.length}):\n${JSON.stringify(replaced,null,2)}`;
       if (token !== version) return;
-      prepared = { election, rows, input:input.value, summary }; description.textContent = summary; details.hidden = false;
+      prepared = { election, rows, input:input.value, summary, identity:mappingReviewIdentity(rows, ballot as ElectionDetail, scopes) }; description.textContent = summary; details.hidden = false;
       status.textContent = `Validated ${rows.length} mappings. Review every link and check the approval box before saving. No changes saved.`;
     } catch (error) { if (token === version) status.textContent = error instanceof Error ? error.message : 'Validation failed.'; }
     finally { busy = false; render(); }
@@ -101,6 +106,11 @@ export function initSosMappingsAdmin(): void {
     const batch = prepared, token = version;
     busy = true; render(); let accepted = 0, failure = '';
     try {
+      status.textContent = 'Rechecking reviewed ballot and source identities…';
+      const ballot = await rpc('get_election', { p_id:batch.election.id });
+      if (ballot?.status !== 'ok' || ballot.election?.id !== batch.election.id || reviewedElectionIdentity(ballot.election) !== reviewedElectionIdentity(batch.election)) throw Error('Reviewed election details changed. Refresh and validate again.');
+      const { scopes } = await loadSources(batch.election, batch.rows);
+      if (mappingReviewIdentity(batch.rows, ballot as ElectionDetail, scopes) !== batch.identity) throw Error('Reviewed ballot or source identities changed. Validate and review again before saving.');
       for (const row of batch.rows) {
         if (token !== version) throw Error('Election details changed. Validate again before continuing.');
         status.textContent = `Saving mapping ${accepted + 1}/${batch.rows.length}. Keep this page open…`;

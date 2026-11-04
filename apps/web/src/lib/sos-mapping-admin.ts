@@ -1,4 +1,4 @@
-import type { ElectionDetail } from './elections';
+import type { Election, ElectionDetail } from './elections';
 import type { SosContestMapping } from './sos-ballot';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -31,6 +31,28 @@ export function parseMappingBatch(input: string): SosContestMapping[] {
 }
 
 export type MappingSource = { name: string; items: Array<{ data: Record<string, any> }> };
+export function reviewedElectionIdentity(election: Election): string {
+  return JSON.stringify([election.id,election.name,election.election_date,election.kind,election.visibility,election.results_json_url ?? null]);
+}
+
+/** Identity-only preflight: ordinary results revisions do not invalidate a reviewed link. */
+export function mappingReviewIdentity(rows: SosContestMapping[], ballot: ElectionDetail, sources: Map<string, MappingSource>): string {
+  // Reuse exact membership validation before reading the selected identities.
+  describeMappingBatch(rows, ballot, sources);
+  const fields = (value: Record<string, any>, names: string[]) => names.map(name => value[name] ?? null);
+  const ordered = <T extends unknown[]>(values: T[]) => values.sort((a,b) => String(a[0]) < String(b[0]) ? -1 : String(a[0]) > String(b[0]) ? 1 : 0);
+  return JSON.stringify([reviewedElectionIdentity(ballot.election), rows.map(row => {
+    const scope = sources.get(row.jurisdiction_id)!;
+    const source = scope.items.find(item => item.data.id === row.source_contest_id)!.data;
+    const target = row.contest_id ? ballot.contests.find(contest => contest.id === row.contest_id)! : ballot.ballot_questions.find(question => question.id === row.question_id)!;
+    const sourceIdentity = [row.jurisdiction_id,scope.name,fields(source,['id','name','type','contestType','voteFor','politicalParty']),ordered(source.ballotOptions.map((option: Record<string, any>) => fields(option,['id','name','type','politicalParty'])))];
+    const targetIdentity = 'office' in target
+      ? ['contest',fields(target,['id','office','district','seat','partisan']),ordered(target.candidates.map(candidate => [candidate.person.id,candidate.person.full_name,candidate.person.visibility ?? null,candidate.party ?? null,candidate.is_write_in ?? false]))]
+      : ['question',fields(target,['id','title','question_text','jurisdiction']),[...target.choices].sort()];
+    return [sourceIdentity,targetIdentity];
+  })]);
+}
+
 /** Resolve identities only: an administrator must review real-world equivalence. */
 export function describeMappingBatch(rows: SosContestMapping[], ballot: ElectionDetail, sources: Map<string, MappingSource>): string {
   return rows.map((row, index) => {

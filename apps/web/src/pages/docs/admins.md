@@ -849,6 +849,13 @@ and complete ballot targets. Review the real office/district, question wording,
 candidate identity and all choices against the official source. Names alone do
 not establish equivalence. Review the displayed links and any existing mappings
 being replaced, check the approval box, then **Save reviewed mappings**.
+Before saving, the editor rereads the current ballot and source identities.
+Changed office details, question wording, source labels, party or choice
+membership require a fresh preview and approval. A newer source snapshot with
+only vote/reporting changes does not invalidate the reviewed links. This check
+does not lock other administrators or publications during a long batch; inspect
+the current ballot after saving. Saved links intentionally continue across
+results revisions.
 Changes to the election or JSON invalidate approval. No names are matched and no
 people or votes are created. Omitted mappings remain untouched.
 
