@@ -1,0 +1,12 @@
+<section class="org-form" data-sos-mappings aria-labelledby="sos-mappings-title">
+  <h2 id="sos-mappings-title">Reviewed SOS ballot mappings</h2>
+  <p>Link collected SOS choices to existing candidates and ballot questions. Review the jurisdiction, office, district, question wording and each choice against the official source. Matching names alone is insufficient. No people or votes are created.</p>
+  <label class="field"><span>Mapping election</span><select data-mapping-election><option value="">Select an election…</option></select></label>
+  <label class="field"><span>Mapping JSON file</span><input type="file" accept="application/json,.json" data-mapping-file /></label>
+  <label class="field"><span>Reviewed mapping JSON</span><textarea data-mapping-json rows="8" maxlength="2097152" spellcheck="false"></textarea><small>Array of 1–1,000 rows, maximum 2 MiB. Each row: jurisdiction_id, source_contest_id, exactly one contest_id or question_id, and choices. Each choice: source_choice_id and person_id (candidate UUID) or choice_label (question response). Existing links in the batch are replaced; omitted links remain unchanged.</small></label>
+  <button type="button" data-mapping-preview>Validate and preview mappings</button>
+  <p data-mapping-status class="status" role="status" aria-live="polite">Select an election and prepare explicit mappings.</p>
+  <details data-mapping-details hidden><summary>Verified source and target links</summary><pre data-mapping-preview-text style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+  <label class="calendar-check"><input type="checkbox" data-mapping-reviewed disabled /><span>I reviewed every source jurisdiction, race and choice against the existing ballot record and approve replacing the links in this batch.</span></label>
+  <button type="button" data-mapping-save disabled>Save reviewed mappings</button>
+</section>

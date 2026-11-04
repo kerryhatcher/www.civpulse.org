@@ -835,6 +835,30 @@ people (raw names and amounts must be absent publicly), then publish static cont
 or visibility changes. No production obligations are backfilled by this release.
 
 
+### Review candidate and question result mappings
+
+In **Elections → Reviewed SOS ballot mappings**, select the election and upload
+or paste a JSON array (at most 1,000 mappings / 2 MiB). Each row has exact
+`jurisdiction_id`, `source_contest_id`, either `contest_id` or `question_id`,
+and `choices`. A choice has `source_choice_id` plus either candidate `person_id`
+or the question's exact `choice_label`. IDs are scoped to that election and
+jurisdiction. Existing people/candidacies/questions must already exist.
+
+Choose **Validate and preview mappings** to resolve the pinned source snapshot
+and complete ballot targets. Review the real office/district, question wording,
+candidate identity and all choices against the official source. Names alone do
+not establish equivalence. Review the displayed links and any existing mappings
+being replaced, check the approval box, then **Save reviewed mappings**.
+Changes to the election or JSON invalidate approval. No names are matched and no
+people or votes are created. Omitted mappings remain untouched.
+
+The batch saves sequentially through the authenticated administrator RPC; it is
+not atomic. A failure stops further writes. The status reports exact saved
+readback counts and acknowledged requests; an interrupted request may have
+committed. Revalidate before retrying. Identical saves are idempotent. Check
+the public ballot in the relevant county after saving; mappings load live, while
+static fallback content may await the ordinary rebuild.
+
 ### Configure automatic SOS collection while paused
 
 In [Elections admin](/admin/elections/), use **Automatic SOS results** after saving
