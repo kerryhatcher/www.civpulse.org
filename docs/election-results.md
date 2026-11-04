@@ -102,8 +102,12 @@ question choices and candidates; no names are matched automatically. The reader
 omits nonpublic people for nonadmins and never places mappings in R2. See the
 [mapping procedure](sos-results-automation.md#reviewed-ballot-mappings).
 Photo/PDF and structured-turnout imports remain
-separate. Public slug pages also include up to 20 Bibb contests as a bounded
-build-time fallback; subsequent rebuilds replace that snapshot.
+separate. Public slug pages include the complete Bibb source scope as their
+build-time fallback, including races and ballot questions after the first 20
+items. Reads pin one snapshot and page ten items at a time, retaining the
+10,000-item safety cap and declared scope-count validation. An incomplete scope
+fails the build instead of publishing missing counts as unknown. Subsequent
+rebuilds replace that snapshot; browser updates remain live.
 
 Merge `20261125000400_sos_results_feeds` and
 `20261125000500_attach_known_sos_results_urls` to main before applying in production.

@@ -252,7 +252,15 @@ export function createPublicSosReader(fetcher: typeof fetch = fetch) {
     return { pointer, scope };
   };
 }
-/** UUID viewers use the existing visibility gate, pinning every page to one snapshot. */
+/**
+ * Read a visibility-gated election scope, pinning pages of at most ten items to
+ * the snapshot returned by the metadata request. The default 10,000-item bound
+ * retains declared scope-count validation, so incomplete or oversized scopes
+ * fail instead of supplying partial ballot counts. An explicit lower limit
+ * permits a partial preview and reports whether the result is truncated.
+ * Metadata is always refetched; a previous complete scope may be reused only
+ * when its snapshot and jurisdiction still match.
+ */
 export async function readRpcSos(
   rpc: SosRpc,
   electionId: string,
@@ -309,7 +317,7 @@ export async function readRpcSos(
     )
       break;
   }
-  // A build preview is deliberately bounded; runtime readers require a complete source scope.
+  // Explicit preview reads may be partial; complete runtime/static ballot reads retain scope-count validation.
   const validationPointer =
     limit < 10000
       ? {
