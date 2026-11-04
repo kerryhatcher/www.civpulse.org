@@ -175,6 +175,7 @@ test("explicit preview reads may stop after twenty pinned source items", async (
   expect(calls).toHaveLength(3);
 });
 
+/** Model pinned ten-item RPC pages, optionally withholding declared items to test completeness failures. */
 function staticBallotFixture(count = 27, available = count) {
   const calls: Record<string, unknown>[] = [];
   const sourceIds = [...Array.from({length:20}, (_, i) => `earlier-${i}`), 'HD149', 'SOIL', 'SQ1', 'SQ2', 'SQ3', 'HB1537', 'HB1538'];
