@@ -17,7 +17,7 @@ beforeAll(async () => {
 afterAll(async () => { await browser?.close(); });
 
 type Call = { name: string; args: Record<string, any>; authorization: string | undefined };
-async function fixture(role: 'anon' | 'user' | 'admin', width = 1280) {
+async function fixture(role: 'anon' | 'user' | 'admin', width = 1280, mappingCount = 2) {
   const context = await browser.newContext({ viewport: { width, height: 950 } });
   const page = await context.newPage();
   const errors: string[] = [];
@@ -27,6 +27,18 @@ async function fixture(role: 'anon' | 'user' | 'admin', width = 1280) {
   let election = { id, slug: 'synthetic-admin-fixture', name: 'Synthetic administration fixture', election_date: '2026-11-03', kind: 'general', visibility: 'public', results_json_url: source, description: null, organization_id: null };
   let feed: any = null;
   let mismatchWindow = false;
+  const question = '03600000-0000-4000-8000-000000000004';
+  const snapshot = '03600000-0000-4000-8000-000000000005';
+  const questionIds = [question, actor, '03600000-0000-4000-8000-000000000006'];
+  const rowNumbers = Array.from({length:mappingCount}, (_, index) => index + 1);
+  const mappings: any[] = [];
+  const mappingReadbacks: any[][] = [];
+  let mappingFailure = 0;
+  const assetBase = `https://files-test.civpulse.org/elections/${id}/revisions/${snapshot}`;
+  await page.route('https://files-test.civpulse.org/**', route => route.fulfill({ json: route.request().url().endsWith('/latest.json') ? {
+    schema_version:1,election_id:id,snapshot_id:snapshot,revision:'1',source_url:source,published_at:starts,source_created_at:starts,
+    jurisdictions:[{id:'011',name:'Bibb County',url:`${assetBase}/counties/011.json`,item_count:mappingCount}],
+  } : {schema_version:1,election_id:id,snapshot_id:snapshot,jurisdiction:{id:'011',name:'Bibb County'},items:rowNumbers.map(n => ({jurisdiction_index:0,item_index:n-1,data:{id:`Q${n}`,name:`Official question ${n}`,ballotOptions:[{id:`Y${n}`,name:'Yes',voteCount:0},{id:`N${n}`,name:'No',voteCount:null}]}}))} }));
   const user = { id: actor, aud: 'authenticated', role: 'authenticated', email: 'synthetic-admin@example.test', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' };
   const token = `${btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))}.${btoa(JSON.stringify({ sub: actor, role: 'authenticated', aud: 'authenticated', iat: 1, exp: Math.floor(Date.now() / 1000) + 3600 }))}.synthetic-fixture-signature`;
   if (role !== 'anon') await context.addInitScript(({ token, user }) => {
@@ -55,6 +67,18 @@ async function fixture(role: 'anon' | 'user' | 'admin', width = 1280) {
       return route.fulfill({ json: visible ? { status: feed.enabled ? 'healthy' : 'paused', ...feed, current_revision: '9007199254740993', pending_since: null, last_success_at: null, next_poll_at: null } : { status: 'missing' } });
     }
     if (role !== 'admin') throw Error('A denied fixture unexpectedly attempted an administrative mutation');
+    if (name === 'get_election') return route.fulfill({json:{status:'ok',election,contests:[],ballot_questions:rowNumbers.map(n => ({id:questionIds[n-1],title:`Curated question ${n}`,question_text:`Verified full wording ${n}`,choices:['Yes','No']}))}});
+    if (name === 'get_sos_results_mappings') {
+      mappingReadbacks.push(structuredClone(mappings));
+      return route.fulfill({json:{status:'ok',mappings}});
+    }
+    if (name === 'put_sos_results_mapping') {
+      if (mappingFailure && calls.filter(c => c.name === name).length === mappingFailure) return route.fulfill({status:400,json:{message:'Synthetic rejected row'}});
+      const row = {jurisdiction_id:args.p_jurisdiction_id,source_contest_id:args.p_source_contest_id,contest_id:args.p_contest_id,question_id:args.p_question_id,choices:args.p_choices};
+      const index = mappings.findIndex(m => m.jurisdiction_id === row.jurisdiction_id && m.source_contest_id === row.source_contest_id);
+      if (index < 0) mappings.push(row); else mappings[index] = row;
+      return route.fulfill({body:''});
+    }
     if (name === 'configure_sos_results_feed') {
       if (!feed) feed = { election_id: id, source_url: election.results_json_url, starts_at: args.p_starts_at, ends_at: args.p_ends_at, poll_interval_seconds: 300, poll_transition_at: null, enabled: false };
       feed.enabled = args.p_enabled;
@@ -75,7 +99,7 @@ async function fixture(role: 'anon' | 'user' | 'admin', width = 1280) {
     throw Error(`Unexpected RPC: ${name}`);
   });
   await page.goto(`${base}/admin/elections/`);
-  return { page, context, errors, calls, token, setMismatch: () => { mismatchWindow = true; }, feed: () => feed };
+  return { page, context, errors, calls, token, setMismatch: () => { mismatchWindow = true; }, feed: () => feed, failMapping: (n:number) => {mappingFailure=n;}, question, questionIds, mappingReadbacks };
 }
 async function configure(page: Page) {
   await page.locator('[data-sos-election]').selectOption(id);
@@ -87,6 +111,83 @@ async function configure(page: Page) {
   await page.getByRole('button', { name: 'Configure paused feed', exact: true }).click();
   await page.locator('[data-sos-health]').filter({ hasText: 'Status: paused' }).waitFor();
 }
+
+test.skipIf(!base)('mapping file review requires explicit approval, invalidates edited JSON and verifies saved readback', async () => {
+  const f = await fixture('admin',390);
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = [{jurisdiction_id:'011',source_contest_id:'Q1',question_id:f.question,choices:[{source_choice_id:'Y1',choice_label:'Yes'},{source_choice_id:'N1',choice_label:'No'}]}];
+    await f.page.locator('[data-mapping-file]').setInputFiles({name:'reviewed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(rows))});
+    await f.page.locator('[data-mapping-status]').filter({hasText:'File loaded'}).waitFor();
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 1 mappings'}).waitFor();
+    expect(await f.page.locator('[data-mapping-preview-text]').textContent()).toContain('Verified full wording');
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    expect(f.calls.filter(c => c.name === 'put_sos_results_mapping')).toHaveLength(0);
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows)+' ');
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 1 mappings'}).waitFor();
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-save]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'1/1 mappings verified'}).waitFor();
+    expect(f.calls.filter(c => c.name === 'put_sos_results_mapping')[0].authorization).toBe(`Bearer ${f.token}`);
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    expect(f.errors).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
+
+test.skipIf(!base)('mapping batch stops on a rejected row and reports the committed partial readback', async () => {
+  const f = await fixture('admin');
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = [1,2].map(n => ({jurisdiction_id:'011',source_contest_id:`Q${n}`,question_id:n === 1 ? f.question : actor,choices:[{source_choice_id:`Y${n}`,choice_label:'Yes'}]}));
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows));
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'Validated 2 mappings'}).waitFor();
+    f.failMapping(1);
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-save]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:'0/2 mappings verified'}).waitFor();
+    expect(f.calls.filter(c => c.name === 'put_sos_results_mapping')).toHaveLength(1);
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    // The rejected fixture HTTP response intentionally produces a browser network diagnostic.
+    expect(f.errors.filter(e => !e.startsWith('Failed to load resource:'))).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
+
+for (const mappingCount of [2,3]) test.skipIf(!base)(`mapping batch preserves the first commit after a later rejection (1/${mappingCount})`, async () => {
+  const f = await fixture('admin',1280,mappingCount);
+  try {
+    await f.page.locator('[data-mapping-election]').selectOption(id);
+    const rows = Array.from({length:mappingCount}, (_, index) => {
+      const n = index + 1;
+      return {jurisdiction_id:'011',source_contest_id:`Q${n}`,question_id:f.questionIds[index],choices:[{source_choice_id:`Y${n}`,choice_label:'Yes'}]};
+    });
+    await f.page.locator('[data-mapping-json]').fill(JSON.stringify(rows));
+    await f.page.locator('[data-mapping-preview]').click();
+    await f.page.locator('[data-mapping-status]').filter({hasText:`Validated ${mappingCount} mappings`}).waitFor();
+    expect(f.mappingReadbacks).toEqual([[]]);
+    f.failMapping(2);
+    await f.page.locator('[data-mapping-reviewed]').check();
+    await f.page.locator('[data-mapping-save]').click();
+    const status = f.page.locator('[data-mapping-status]');
+    await status.filter({hasText:`1/${mappingCount} mappings verified in saved readback`}).waitFor();
+    expect(await status.textContent()).toContain('Request rejected: put_sos_results_mapping');
+    expect(await status.textContent()).not.toContain('Synthetic rejected row');
+    expect(await status.textContent()).toContain('1 requests acknowledged. Earlier accepted rows remain saved');
+    const writes = f.calls.filter(c => c.name === 'put_sos_results_mapping');
+    expect(writes.map(c => c.args.p_source_contest_id)).toEqual(['Q1','Q2']);
+    expect(writes.every(c => c.authorization === `Bearer ${f.token}`)).toBe(true);
+    expect(f.calls.at(-1)?.name).toBe('get_sos_results_mappings');
+    expect(f.mappingReadbacks).toEqual([[],[{...rows[0],contest_id:null}]]);
+    expect(await f.page.locator('[data-mapping-save]').isDisabled()).toBe(true);
+    expect(await f.page.locator('[data-mapping-reviewed]').isChecked()).toBe(false);
+    // The rejected fixture HTTP response intentionally produces a browser network diagnostic.
+    expect(f.errors.filter(e => !e.startsWith('Failed to load resource:'))).toEqual([]);
+  } finally {await f.context.close();}
+},30_000);
 
 for (const role of ['anon', 'user'] as const) test.skipIf(!base)(`${role} cannot reach SOS administrative controls or issue mutations`, async () => {
   const f = await fixture(role);
