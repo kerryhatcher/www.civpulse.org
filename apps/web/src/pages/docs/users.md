@@ -761,3 +761,5 @@ The Bibb precinct map appears only for Bibb or All counties. A county without
 results never substitutes another county’s totals. In the results viewer,
 choose All counties in the header to explore other SOS reporting areas. Shared
 race links also respect the current county selection.
+
+Inline election results show vote totals and shares without a repeated source timestamp or reporting-status line on each race.
