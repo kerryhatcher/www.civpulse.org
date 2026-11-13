@@ -1,0 +1,1294 @@
+{
+  "checked_on": "2026-10-25",
+  "scope": "Existing 23 calendars and their imported source families. New local Mobilize listings limited to Macon and Houston County; future-year academic PDFs and farther-away Mobilize areas were not added.",
+  "summary": {
+    "created": 86,
+    "updated": 46,
+    "records_read_back": 132,
+    "created_field_mismatches": 0
+  },
+  "created": [
+    {
+      "id": "f31da6da-5f28-44ae-905e-d8d4a0efa67d",
+      "title": "DownTown Trunk or Treat with the Macon-Bibb Dems! | VOLUNTEERS NEEDED!",
+      "calendar_id": "acaa7d84-2532-4795-9649-7ce87beb26b7",
+      "starts_at": "2026-10-31T19:30:00+00:00",
+      "ends_at": "2026-10-31T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1072125/"
+    },
+    {
+      "id": "4eb53477-9142-433e-8601-12f06d80db27",
+      "title": "R&B IN THE PARK/ W Macon-Bibb Dems | VOLUNTEERS NEEDED!",
+      "calendar_id": "acaa7d84-2532-4795-9649-7ce87beb26b7",
+      "starts_at": "2026-11-01T19:00:00+00:00",
+      "ends_at": "2026-11-01T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1072140/"
+    },
+    {
+      "id": "604bf7d1-bd3d-4b5e-9fcd-b2b97eb69dde",
+      "title": "Trunk or Treat with the Macon-Bibb Dems! | VOLUNTEERS NEEDED!",
+      "calendar_id": "acaa7d84-2532-4795-9649-7ce87beb26b7",
+      "starts_at": "2026-10-29T20:00:00+00:00",
+      "ends_at": "2026-10-29T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1072032/"
+    },
+    {
+      "id": "c786c3de-673b-4831-ac47-8c32546c5180",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-25T22:00:00+00:00",
+      "ends_at": "2026-10-26T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "7a1bf2fe-b7f2-470f-aab8-145bc0042bcb",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T14:00:00+00:00",
+      "ends_at": "2026-10-31T17:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "60509f06-9fc2-4d86-803d-948631cf302f",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T17:00:00+00:00",
+      "ends_at": "2026-10-31T20:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "a864ce80-6293-4cae-bb80-2e75da50a5fc",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T20:00:00+00:00",
+      "ends_at": "2026-10-31T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "54204546-8b68-453b-a104-ce275cb44e2f",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T22:00:00+00:00",
+      "ends_at": "2026-11-01T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "b4e04085-3b23-446c-b7d7-54be66727f8f",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T15:00:00+00:00",
+      "ends_at": "2026-11-01T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "8928f1e0-ecb7-4d40-915f-15da83fa5534",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T18:00:00+00:00",
+      "ends_at": "2026-11-01T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "65084094-1bac-4f2d-b258-0a5385597e8a",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T21:00:00+00:00",
+      "ends_at": "2026-11-01T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "0d3d6be4-3a56-42cf-aa57-3829449c425e",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T23:00:00+00:00",
+      "ends_at": "2026-11-02T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "363540ef-a4c9-4c65-becf-682ab69a7172",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T15:00:00+00:00",
+      "ends_at": "2026-11-02T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "9dc33924-689f-402a-bb06-7b19fc18bf95",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T18:00:00+00:00",
+      "ends_at": "2026-11-02T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "f81f9def-2bda-445f-a6be-ea9c8be5b34b",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T21:00:00+00:00",
+      "ends_at": "2026-11-02T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "34512de6-068a-4cc5-87ff-3dfc25b607b6",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T23:00:00+00:00",
+      "ends_at": "2026-11-03T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "ac937f4f-6ad3-470d-96db-7b459dfb457d",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T12:00:00+00:00",
+      "ends_at": "2026-11-03T15:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "8c9705b6-81e8-4b6b-87d7-fc4290ad5c1a",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T15:00:00+00:00",
+      "ends_at": "2026-11-03T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "362e90b4-b675-4ae1-b23c-5529fc0eb05a",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T18:00:00+00:00",
+      "ends_at": "2026-11-03T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "7da985ca-d50f-443f-b4ec-81814b5e7cfb",
+      "title": "Get Out the Vote in Macon!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T21:00:00+00:00",
+      "ends_at": "2026-11-03T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029579/"
+    },
+    {
+      "id": "406e517f-a6c2-4bfe-bea3-ee65b5e98c81",
+      "title": "Canvass Walk Club w/ Dr. Kelly Esti!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-29T20:00:00+00:00",
+      "ends_at": "2026-10-29T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1072812/"
+    },
+    {
+      "id": "ad01924e-a635-484d-8aa2-dcc7f0619dc5",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-25T22:00:00+00:00",
+      "ends_at": "2026-10-26T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "79160014-5f33-4daa-ab64-37f98a0090fe",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T14:00:00+00:00",
+      "ends_at": "2026-10-31T17:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "eabdb3ae-0ee7-48e1-a889-8c582bcbe763",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T17:00:00+00:00",
+      "ends_at": "2026-10-31T20:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "c3222df6-2254-4b1c-b9de-0228c5722b14",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T20:00:00+00:00",
+      "ends_at": "2026-10-31T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "eb99cda6-75cb-415d-b612-101464b108de",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T22:00:00+00:00",
+      "ends_at": "2026-11-01T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "873e15cb-63eb-4316-9d0c-5311e9f7c677",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T15:00:00+00:00",
+      "ends_at": "2026-11-01T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "29158775-20cf-4471-a728-18f83279771c",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T18:00:00+00:00",
+      "ends_at": "2026-11-01T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "db608c5c-8339-4122-8780-97f568e99486",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T21:00:00+00:00",
+      "ends_at": "2026-11-01T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "963369f4-30ea-419b-87a9-5674862da51a",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T23:00:00+00:00",
+      "ends_at": "2026-11-02T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "df27d490-fe43-4cf6-88cf-fe50860ab7e3",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T15:00:00+00:00",
+      "ends_at": "2026-11-02T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "6da5f9ec-f286-49f6-ab33-087a703c03a8",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T18:00:00+00:00",
+      "ends_at": "2026-11-02T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "baf9e0b6-b9c4-4c4e-bdc8-8c951a6640f1",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T21:00:00+00:00",
+      "ends_at": "2026-11-02T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "0d391edf-0452-471d-876f-3aa5ae368285",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T23:00:00+00:00",
+      "ends_at": "2026-11-03T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "c61f528f-0763-4aa5-be79-9edfbed37a4e",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T12:00:00+00:00",
+      "ends_at": "2026-11-03T15:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "70b0b512-f60c-4b83-9ba5-e4f0c1886b27",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T15:00:00+00:00",
+      "ends_at": "2026-11-03T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "806ccbd3-ce08-4ab7-9aad-d97d58d95c11",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T18:00:00+00:00",
+      "ends_at": "2026-11-03T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "a67c4d97-dfdf-47e2-b925-769b2f7e25f3",
+      "title": "Get Out the Vote in Soutwest Georgia!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T21:00:00+00:00",
+      "ends_at": "2026-11-03T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029583/"
+    },
+    {
+      "id": "28e0e2f2-eb55-46f7-a9f6-3e87ef5efd1e",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-25T22:00:00+00:00",
+      "ends_at": "2026-10-26T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "edad7673-68ef-40e6-a857-7b78990898b1",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T14:00:00+00:00",
+      "ends_at": "2026-10-31T17:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "c5fc18d4-fb5a-488b-9658-831a952a5e25",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T17:00:00+00:00",
+      "ends_at": "2026-10-31T20:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "d2d50078-769d-4b3c-86c8-c371a0c2e97a",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T20:00:00+00:00",
+      "ends_at": "2026-10-31T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "b768d72d-7d7d-48af-ada4-7b9271abfb75",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T22:00:00+00:00",
+      "ends_at": "2026-11-01T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "4ed744ba-d643-4579-b4a6-aa782d0851b9",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T15:00:00+00:00",
+      "ends_at": "2026-11-01T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "c6ff6ce5-9796-4290-b41f-a53bee23dee3",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T18:00:00+00:00",
+      "ends_at": "2026-11-01T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "af8211d1-8369-4f20-8a90-6f26a6f9816e",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T21:00:00+00:00",
+      "ends_at": "2026-11-01T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "2b6f9cd9-441b-4658-b876-32562ee614c0",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T23:00:00+00:00",
+      "ends_at": "2026-11-02T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "9f49bcfd-905f-4df2-984d-abafc8a7bfd4",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T15:00:00+00:00",
+      "ends_at": "2026-11-02T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "8e8986a0-490d-4f57-a074-ff30ab8a2cf1",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T18:00:00+00:00",
+      "ends_at": "2026-11-02T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "e6bdab4b-f933-4701-9e8c-0a366695a17f",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T21:00:00+00:00",
+      "ends_at": "2026-11-02T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "f99cb720-ba62-4222-a365-9aab848a204c",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T23:00:00+00:00",
+      "ends_at": "2026-11-03T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "fd0c02d1-8c0e-49a8-bbd8-95f601b639ad",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T12:00:00+00:00",
+      "ends_at": "2026-11-03T15:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "bedb2e20-0929-4088-ab02-41e7a8fcf906",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T15:00:00+00:00",
+      "ends_at": "2026-11-03T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "194b6754-09e3-42a5-a8f8-d3c414ec0c64",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T18:00:00+00:00",
+      "ends_at": "2026-11-03T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "079a2730-022c-4dbd-a489-a1dcb24655dd",
+      "title": "Get Out the Vote in Warner Robbins!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T21:00:00+00:00",
+      "ends_at": "2026-11-03T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029571/"
+    },
+    {
+      "id": "a9b2ea32-3453-42a4-8ec9-c6b40ebec186",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-25T22:00:00+00:00",
+      "ends_at": "2026-10-26T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "bca03a10-f550-449f-88f9-3f204ff4cd4a",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T14:00:00+00:00",
+      "ends_at": "2026-10-31T17:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "d798f77b-d1a1-4687-bd28-471a56f94379",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T17:00:00+00:00",
+      "ends_at": "2026-10-31T20:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "fd4cd601-a8a5-44f3-aede-61cabf5521fa",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T20:00:00+00:00",
+      "ends_at": "2026-10-31T22:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "10c8bd6a-13b2-4a52-951a-6528c5a05d40",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-10-31T22:00:00+00:00",
+      "ends_at": "2026-11-01T00:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "2cb9071d-b6e4-4de4-a9a3-ffb5b02b2e95",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T15:00:00+00:00",
+      "ends_at": "2026-11-01T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "5f2b1a98-fa76-43ae-ad13-ef6459b5f07e",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T18:00:00+00:00",
+      "ends_at": "2026-11-01T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "e24141b5-396a-4650-997c-13fa24bf9cc5",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T21:00:00+00:00",
+      "ends_at": "2026-11-01T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "83548e2a-b471-4d10-a834-1644ba6b48bd",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-01T23:00:00+00:00",
+      "ends_at": "2026-11-02T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "4bdc411b-09a9-438d-81a2-9d5ec929fff5",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T15:00:00+00:00",
+      "ends_at": "2026-11-02T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "b38a7e46-e0a9-4d73-9aee-a63d2a21f8d4",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T18:00:00+00:00",
+      "ends_at": "2026-11-02T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "f360d3f3-ad18-4e5e-ae7b-3bc7b513a590",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T21:00:00+00:00",
+      "ends_at": "2026-11-02T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "75460a63-e37b-435f-b690-a1d9efb9e1d8",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-02T23:00:00+00:00",
+      "ends_at": "2026-11-03T01:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "83e1625f-da12-4c1f-8147-a349365e21bc",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T12:00:00+00:00",
+      "ends_at": "2026-11-03T15:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "6a90654c-a713-4412-97e2-3032a5c89b89",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T15:00:00+00:00",
+      "ends_at": "2026-11-03T18:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "7f1c9f4d-a3f6-468b-ad91-9867eec8a7ad",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T18:00:00+00:00",
+      "ends_at": "2026-11-03T21:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "0a426ce4-4191-4718-8275-33b0f5edc70a",
+      "title": "Get Out the Vote in House District 147!",
+      "calendar_id": "6d76ee79-8ed8-495a-a1d4-f8611366fcd0",
+      "starts_at": "2026-11-03T21:00:00+00:00",
+      "ends_at": "2026-11-03T23:00:00+00:00",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1029577/"
+    },
+    {
+      "id": "e6b92f97-c63c-484a-8405-c81ba5025307",
+      "title": "Fire and Police Pension Board Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-11-03T14:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2463/files"
+    },
+    {
+      "id": "b6d8e033-9584-4481-b432-36338c5d3a92",
+      "title": "Macon Pension Plan Division A Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-11-03T16:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2475/files"
+    },
+    {
+      "id": "ab74d6ff-61b2-462a-9121-416a126435de",
+      "title": "Macon-Bibb County Pension Board Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-11-03T18:30:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2487/files"
+    },
+    {
+      "id": "3604dcff-0a42-4cc3-833f-a1b8b60927a6",
+      "title": "Macon-Bibb County 401/457 Defined Contribution Plan",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-11-03T18:45:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2503/files"
+    },
+    {
+      "id": "fe0e6ca8-546a-462d-a3d1-ebdeed457d24",
+      "title": "Fire and Police Pension Board Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-12-01T14:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2464/files"
+    },
+    {
+      "id": "e5e4b000-d8dd-4bee-884b-ddef381b2765",
+      "title": "Macon Pension Plan Division A Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-12-01T16:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2476/files"
+    },
+    {
+      "id": "cdf344b6-af95-4aa6-a8a1-51274f0a99d1",
+      "title": "Macon-Bibb County Pension Board Meeting",
+      "calendar_id": "79e5fbf3-38c0-4196-9415-10a6a0f3b1dc",
+      "starts_at": "2026-12-01T18:30:00+00:00",
+      "ends_at": null,
+      "source_url": "https://maconbibbcoga.portal.civicclerk.com/event/2488/files"
+    },
+    {
+      "id": "a88b67cf-539d-4036-bdfe-361f1d86d8ad",
+      "title": "Macon Soils Inc. - Board of Directors Meeting",
+      "calendar_id": "24c8b6d8-e927-47be-8082-00756c6a5060",
+      "starts_at": "2026-12-03T19:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://macon-water.community.diligentoneplatform.com/Portal/MeetingInformation.aspx?Org=Cal&id=274"
+    },
+    {
+      "id": "17da7d29-404a-497e-8db2-5dc2a1661249",
+      "title": "Engineering Committee Meeting",
+      "calendar_id": "24c8b6d8-e927-47be-8082-00756c6a5060",
+      "starts_at": "2026-11-05T19:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://macon-water.community.diligentoneplatform.com/Portal/MeetingInformation.aspx?Org=Cal&id=277"
+    },
+    {
+      "id": "09591c27-fd47-4d74-bc12-004e6a8a431f",
+      "title": "Finance Committee Meeting",
+      "calendar_id": "24c8b6d8-e927-47be-8082-00756c6a5060",
+      "starts_at": "2026-11-05T19:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://macon-water.community.diligentoneplatform.com/Portal/MeetingInformation.aspx?Org=Cal&id=278"
+    },
+    {
+      "id": "2fc99092-4a02-4c20-8991-c42fcc5c9e37",
+      "title": "Pension Committee Meeting",
+      "calendar_id": "24c8b6d8-e927-47be-8082-00756c6a5060",
+      "starts_at": "2026-11-05T19:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://macon-water.community.diligentoneplatform.com/Portal/MeetingInformation.aspx?Org=Cal&id=280"
+    },
+    {
+      "id": "ddc2ae87-e50b-4aae-b22a-b33e3f99b430",
+      "title": "Macon Water Authority Board Meeting",
+      "calendar_id": "24c8b6d8-e927-47be-8082-00756c6a5060",
+      "starts_at": "2026-11-05T21:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://macon-water.community.diligentoneplatform.com/Portal/MeetingInformation.aspx?Org=Cal&id=281"
+    },
+    {
+      "id": "a3f44a77-8613-42d0-a7d1-d005a5e1268b",
+      "title": "Absentee ballot request deadline — November general election",
+      "calendar_id": "67e74a71-3959-4d5c-afa3-3d2dd3137a6b",
+      "starts_at": "2026-10-23T04:00:00+00:00",
+      "ends_at": "2026-10-24T04:00:00+00:00",
+      "source_url": "https://georgia.gov/georgia-general-election-2026"
+    },
+    {
+      "id": "b8b14dd3-ff66-447b-8b2e-8fde6b7c20f7",
+      "title": "Absentee ballot return deadline — November general election",
+      "calendar_id": "67e74a71-3959-4d5c-afa3-3d2dd3137a6b",
+      "starts_at": "2026-11-04T00:00:00+00:00",
+      "ends_at": null,
+      "source_url": "https://georgia.gov/events/2026-11-03/election-day-general-election"
+    }
+  ],
+  "updated": [
+    {
+      "id": "34b28ce3-b9d6-4b88-8312-a915ab857736",
+      "title": "Maker Monday",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154909&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "c7c2f521-6149-424c-9a5b-b73b7b02ffca",
+      "title": "Teen Advisory Board",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192153857&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "c9aa6831-ca7c-4ff0-80be-4c6f04705be8",
+      "title": "Movie Day",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154908&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "da069208-58cb-420f-8280-5bbb1b6a48ae",
+      "title": "Teen/Tween Time",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192153930&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "42eb9c98-9ab7-44b6-9a44-238a23e03058",
+      "title": "Teen Guitar Lessons",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154907&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "edd026d8-ec1e-4d44-b914-2cbb029cf272",
+      "title": "Teen Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154906&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "91c2d14b-19d0-4269-98a7-43b80de042aa",
+      "title": "Teen Study Time",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155200&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "947a1434-2ddf-4173-b9d8-92159fa118bd",
+      "title": "Teen Craft and Crunch",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155049&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "a69abb9f-5d37-464f-9cf9-b318ade6cf1c",
+      "title": "Teen/YA Video Game and Craft Night",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155132&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "b8a6508d-c5b3-48fe-8cdf-9e151b6c2219",
+      "title": "Anime Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154904&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "dfe7a4c3-39f9-4850-888b-1c2e80803eef",
+      "title": "Maker Monday",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154903&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "587d004f-5ca6-4f09-b85e-5aa9061d10ea",
+      "title": "Movie Day",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154902&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "7a85f18e-c9a5-49a3-82af-1e7835923cb4",
+      "title": "Teen Lounge",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154112&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "0d100dce-8f8a-4427-865f-78c69e5afd28",
+      "title": "Teen Guitar Lessons",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154901&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "521fc3ad-aa16-4eca-8cdc-eacb014216d9",
+      "title": "Make & Mingle: Book Bedazzling",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192153856&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "ba49198b-8c44-4463-9921-567787765a9e",
+      "title": "Teen Study Time",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155194&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "d883208a-b34a-404f-9e12-e2f722f8129c",
+      "title": "Teen Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154900&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "2bd37b72-52aa-4482-88c4-ef7229442dee",
+      "title": "Teen Studio",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154323&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "1c6c254f-057b-4237-b8e2-9ac4436a85fa",
+      "title": "Anime Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154899&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "33032ca4-4a60-4664-9863-5b5dd416c530",
+      "title": "Maker Monday",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154898&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "f24c2c51-cf3d-40de-a0ec-f816e45f3526",
+      "title": "Lego Building",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155045&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "a98a2007-a8a3-4c6f-8eb2-fe813a3e2f36",
+      "title": "Movie Day",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154897&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "40e03dea-f496-46de-b5bf-c808ce0b69c4",
+      "title": "Teen Guitar Lessons",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154896&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "0d0c0bf2-b057-4ad3-b57f-215095802b65",
+      "title": "Manga Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192153855&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "14731d22-aafc-4c84-9342-c18255a10fbe",
+      "title": "Teen Study Time",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155190&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "baf5a0de-ebef-4b1d-b1bc-8fe31e99736b",
+      "title": "Teen Craft and Crunch",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192155048&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "f85bbd82-69e4-4b81-a741-388a025be2d1",
+      "title": "Teen Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154895&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "919e6cef-1c67-46ba-8a2f-8e11a6fc9217",
+      "title": "Anime Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154893&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "9527bfbd-bb9e-473d-8b82-935c3545ee44",
+      "title": "Brain Break Cafe",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192153854&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "5520ed5a-ce90-48d3-b4ad-69afc8bd1cbf",
+      "title": "Maker Monday",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154892&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "a8b4c555-33b3-46ad-a868-4c9c5d63b48b",
+      "title": "Teen Halloween Party",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191663806&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "0daedfd7-c792-4b29-b500-2a50eecb5af1",
+      "title": "Teen Guitar Lessons",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192013295&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "57c27af2-4de0-4387-8fcf-74b85dea8917",
+      "title": "Teen Study Time",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191663063&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "57904ea4-13f4-461a-8f02-3e96c852dc22",
+      "title": "Teen Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191663805&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "460aff18-bcf0-4085-880d-aab9cb46c0a7",
+      "title": "Anime Club",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191663802&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "8f532053-4403-4872-959a-7b1773c92d62",
+      "title": "Maker Monday",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191663801&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "142de4e9-770a-4ef0-9680-26331b22c8a8",
+      "title": "Lego Building",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191664042&crd=mgrl",
+      "changes": {
+        "calendar_id": {
+          "before": "7a02bd28-d25c-413d-9c40-3a3e470a0f9f",
+          "after": "8ea64005-9c1b-4b52-86bb-cf85b00aa87a"
+        }
+      }
+    },
+    {
+      "id": "e0aff781-e711-4a6d-985b-e0513b88ddc6",
+      "title": "Macon- Bibb Democrats: Events Subcommittee",
+      "source_url": "https://www.mobilize.us/democraticpartyofgeorgia26/event/1061527/",
+      "changes": {
+        "starts_at": {
+          "before": "2026-10-26T22:00:00+00:00",
+          "after": "2026-10-26T23:00:00+00:00"
+        },
+        "ends_at": {
+          "before": "2026-10-26T23:00:00+00:00",
+          "after": "2026-10-27T00:00:00+00:00"
+        }
+      }
+    },
+    {
+      "id": "b8c3b3db-1f36-4e23-8249-361145093af8",
+      "title": "Garden Smarter with Master Gardeners: Using and Caring for Hand Gardening Tools",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=192154010&crd=mgrl",
+      "changes": {
+        "title": {
+          "before": "Making Your Own Gardening Tools with Master Gardeners",
+          "after": "Garden Smarter with Master Gardeners: Using and Caring for Hand Gardening Tools"
+        },
+        "description": {
+          "before": "Have you ever wanted to create your own homemade Gardening tools? Join as Master Gardeners will be…\n\nSaved from the public MGRLS CalendarWiz calendar on October 15, 2026. Confirm registration, age requirements and any changes in the source listing.",
+          "after": "A hands-on class led by Master Gardeners covering tool cleaning and sharpening, tools that make gardening easier, and gardening gift ideas.\n\nSource listing checked October 25, 2026. Confirm registration and any changes with the library."
+        }
+      }
+    },
+    {
+      "id": "13267364-92ec-48f3-a333-f6a03579220e",
+      "title": "3D Printing Class",
+      "source_url": "https://www.calendarwiz.com/calendars/popup.php?op=view&id=191662617&crd=mgrl",
+      "changes": {
+        "description": {
+          "before": "Patrons will learn about 3D printers and how to use one in this lesson.\n\nSaved from the public MGRLS CalendarWiz calendar on October 15, 2026. Confirm registration, age requirements and any changes in the source listing.",
+          "after": "Patrons will learn about 3D printers and how to use one in this lesson.\n\nPreviously imported from the public MGRLS calendar. On October 25, 2026, the original listing reported that the event may have been moved or deleted and no longer appeared on the October calendar. Unlisted pending clarification; cancellation has not been confirmed."
+        },
+        "visibility": {
+          "before": "public",
+          "after": "unlisted"
+        }
+      }
+    },
+    {
+      "id": "4ae11c11-6252-46ea-b42b-aa0b42f6f926",
+      "title": "Voter registration deadline",
+      "source_url": "https://sos.ga.gov/sites/default/files/forms/2026%20Short%20Calendar%20.pdf",
+      "changes": {
+        "starts_at": {
+          "before": "2026-10-05T16:00:00+00:00",
+          "after": "2026-10-05T04:00:00+00:00"
+        },
+        "ends_at": {
+          "before": null,
+          "after": "2026-10-06T04:00:00+00:00"
+        },
+        "url": {
+          "before": null,
+          "after": "https://sos.ga.gov/sites/default/files/forms/2026%20Short%20Calendar%20.pdf"
+        }
+      }
+    },
+    {
+      "id": "b7e2be09-e36c-4509-89e0-ab64e3be6f63",
+      "title": "Advance in-person voting",
+      "source_url": "https://georgia.gov/vote-early-person",
+      "changes": {
+        "description": {
+          "before": "Early voting for the November 3, 2026 general election.",
+          "after": "Advance voting for the November 3 general election runs October 13–30, inclusive. This calendar span does not mean polling locations are open continuously. Confirm daily hours, weekend availability, and locations with your county election office or Georgia My Voter Page.\n\nOfficial state source checked October 25, 2026."
+        },
+        "starts_at": {
+          "before": "2026-10-13T16:00:00+00:00",
+          "after": "2026-10-13T04:00:00+00:00"
+        },
+        "ends_at": {
+          "before": "2026-10-30T16:00:00+00:00",
+          "after": "2026-10-31T04:00:00+00:00"
+        },
+        "url": {
+          "before": null,
+          "after": "https://georgia.gov/vote-early-person"
+        }
+      }
+    },
+    {
+      "id": "03b0a952-5dbd-4295-ac6d-69b38f01ab79",
+      "title": "Federal runoff registration deadline",
+      "source_url": "https://sos.ga.gov/sites/default/files/forms/2026%20Short%20Calendar%20.pdf",
+      "changes": {
+        "description": {
+          "before": "Registration deadline for the December 1, 2026 federal runoff.",
+          "after": "Federal-contest registration deadline for a December 1 runoff, if needed. The Secretary of State lists October 5 as the general runoff registration deadline and November 2 for federal contests. Check your eligibility and registration with election officials.\n\nOfficial Secretary of State calendar checked October 25, 2026."
+        },
+        "starts_at": {
+          "before": "2026-11-02T17:00:00+00:00",
+          "after": "2026-11-02T05:00:00+00:00"
+        },
+        "ends_at": {
+          "before": null,
+          "after": "2026-11-03T05:00:00+00:00"
+        },
+        "url": {
+          "before": null,
+          "after": "https://sos.ga.gov/sites/default/files/forms/2026%20Short%20Calendar%20.pdf"
+        }
+      }
+    },
+    {
+      "id": "25a86aaa-1fce-4e87-bad0-14ecef78a793",
+      "title": "Election day - November 3, 2026 General Election",
+      "source_url": "https://georgia.gov/events/2026-11-03/election-day-general-election",
+      "changes": {
+        "url": {
+          "before": null,
+          "after": "https://georgia.gov/events/2026-11-03/election-day-general-election"
+        }
+      }
+    },
+    {
+      "id": "6886568f-3a38-49e0-ae2e-5b575c6bf166",
+      "title": "Advance in-person voting — runoff, if needed",
+      "source_url": "https://georgia.gov/events/2026-11-23/general-election-runoff-early-voting",
+      "changes": {
+        "title": {
+          "before": "Advance in-person voting",
+          "after": "Advance in-person voting — runoff, if needed"
+        },
+        "description": {
+          "before": "Early voting for the December 1, 2026 general election runoff.",
+          "after": "Advance voting before the December 1 runoff, if needed. The Secretary of State says voting begins as soon as possible, but no later than November 23, and ends November 25. This span shows the November 23–25 window; check with your county for any earlier start, daily hours, and locations. It does not mean locations are open continuously.\n\nOfficial state sources checked October 25, 2026. Calendar summary: https://sos.ga.gov/sites/default/files/forms/2026%20Short%20Calendar%20.pdf"
+        },
+        "starts_at": {
+          "before": "2026-11-23T17:00:00+00:00",
+          "after": "2026-11-23T05:00:00+00:00"
+        },
+        "ends_at": {
+          "before": "2026-11-25T17:00:00+00:00",
+          "after": "2026-11-26T05:00:00+00:00"
+        },
+        "url": {
+          "before": null,
+          "after": "https://georgia.gov/events/2026-11-23/general-election-runoff-early-voting"
+        }
+      }
+    },
+    {
+      "id": "53bfaf1f-99e5-45e8-ab5f-70ed0c78febe",
+      "title": "Election day — December 1, 2026 General Election Runoff, if needed",
+      "source_url": "https://georgia.gov/georgia-election-guide",
+      "changes": {
+        "title": {
+          "before": "Election day - December 1, 2026 General Election Runoff",
+          "after": "Election day — December 1, 2026 General Election Runoff, if needed"
+        },
+        "description": {
+          "before": "Polls open 7:00 a.m. - 7:00 p.m.",
+          "after": "General election runoff, if needed. Polls are scheduled for 7 a.m.–7 p.m. Eastern. Confirm whether your ballot has a runoff and use your assigned polling location."
+        },
+        "url": {
+          "before": null,
+          "after": "https://georgia.gov/georgia-election-guide"
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Two embedded MGDSA Google calendars returned 404. Existing records were retained; this is not proof of cancellation.",
+    "One past CalendarWiz record was unlisted because its detail page explicitly reported moved/deleted; cancellation was not asserted.",
+    "All-day CalendarWiz 23:59 source ends were retained as next-midnight exclusive ends.",
+    "CalendarWiz teen records were moved to the Teens/ Young Adults calendar. The separate event category metadata is not writable through the current MCP tool and was preserved.",
+    "The school academic source remains revised March 19, 2026; its existing 2026–27 dates did not change.",
+    "Duplicate government packet and pre-commission source entries were not imported as additional occurrences."
+  ],
+  "publishing": {
+    "build_uuid": "fcfdefdd-4406-4941-9813-cf8ea8242364",
+    "commit": "4e595a3c1784050f3587daf3adfad3656697e34c",
+    "outcome": "success",
+    "feed_url": "https://www.civpulse.org/events.ics",
+    "new_event_uids_verified": 86,
+    "unlisted_event_absent": true,
+    "public_feed_events": 1062,
+    "console_errors": 0
+  }
+}
