@@ -1,0 +1,40 @@
+{
+  "name": "Bibb County Flock & ALPR Cameras",
+  "slug": "bibb-alpr-cameras",
+  "description": "Reported automated license plate reader (ALPR) locations in Bibb County, Georgia, separated into Flock Safety, Genetec and Motorola Solutions layers. 154 OpenStreetMap locations from the FlockHopper / deflock-data daily GeoJSON, retrieved October 23, 2026.",
+  "visibility": "public",
+  "base_map": "osm",
+  "view_options": {
+    "fitBounds": true,
+    "note": "Bibb County, Georgia only. Community-reported locations; completeness and current operating status are not verified. Snapshot retrieved October 23, 2026; no automatic refresh.",
+    "snapshotId": "bibb-alpr-2026-10-23",
+    "downloads": [
+      {
+        "label": "FlockHopper data pipeline & documentation",
+        "url": "https://github.com/flockhopper3/deflock-data"
+      },
+      {
+        "label": "OpenStreetMap attribution & ODbL license",
+        "url": "https://www.openstreetmap.org/copyright"
+      }
+    ]
+  },
+  "id": "a2eb1103-725a-410e-ba00-791aba8e5987",
+  "layers": [
+    {
+      "id": "d8f7a202-50ee-4768-bc9d-c57144cb6d74",
+      "name": "Bibb ALPR — Flock Safety",
+      "count": 148
+    },
+    {
+      "id": "d8980e70-1c5b-4d10-9110-81582f4ce3fc",
+      "name": "Bibb ALPR — Genetec",
+      "count": 5
+    },
+    {
+      "id": "e930b660-be3c-4fe3-b344-212761634f54",
+      "name": "Bibb ALPR — Motorola Solutions",
+      "count": 1
+    }
+  ]
+}
