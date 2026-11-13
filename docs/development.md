@@ -1654,3 +1654,13 @@ history; do not reset a shared database or blindly mark versions applied.
 `cf:dev` now requires a running local Supabase backend and passes its URL and anon
 key explicitly to Wrangler. It fails before starting Wrangler if local status is
 unavailable, so deployed production vars cannot silently receive local test visits.
+
+Secret-scan CI checks historical commits as well as the current tree. Three exact
+historical false positives from PR 208 (two example.com test credentials and an
+organization UUID interpreted as a Privacy token) are matched by detector, path,
+and SHA-256 in `scripts/filter-secret-findings.mjs`. Verified or changed findings
+still block; no test directory or detector is excluded. The scanner image is
+pinned by digest and scanner errors still fail the job.
+
+The lockfile also updates transitive `hono` and `@hono/node-server` packages to
+patched releases without changing their parent MCP SDK or dependency ranges.
