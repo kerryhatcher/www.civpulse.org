@@ -1650,3 +1650,7 @@ Production history was verified to contain main's migrations and was unchanged.
 Never mark the main migrations applied on that preview: they still need to run.
 For another old checkout, inspect both version and name before reconciling its
 history; do not reset a shared database or blindly mark versions applied.
+
+`cf:dev` now requires a running local Supabase backend and passes its URL and anon
+key explicitly to Wrangler. It fails before starting Wrangler if local status is
+unavailable, so deployed production vars cannot silently receive local test visits.

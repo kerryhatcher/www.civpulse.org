@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "check": "astro check && bunx tsc -p worker/tsconfig.json",
     "deploy": "bun run ../../scripts/check-migrations.mjs && astro build && wrangler deploy",
-    "cf:dev": "astro build && wrangler dev",
+    "cf:dev": "astro build && bun ../../scripts/dev-worker.mjs",
     "astro": "astro"
   },
   "dependencies": {
