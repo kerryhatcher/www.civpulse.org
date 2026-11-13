@@ -27,6 +27,10 @@ Calendar times are shown in the America/New_York time zone. **Subscribe to calen
 
 If a search shows nothing, try a shorter term, another content type, or fewer calendar or map filters. Some records have not been added yet.
 
+### Read an official’s profile
+
+Open a person from the [People directory](/people/) to read a brief summary of their public role and, when verified, professional background. Summaries use official organization, government, campaign, or publisher sources; some sources provide only a roster listing, so those profiles contain only confirmed role details. Journalist summaries may describe their outlet, reporting topics, or past contributions. A dated role or byline does not establish current employment. Check the profile’s official website and linked organizations for current information.
+
 ## Accounts and access
 
 You do not need an account to browse public information. To create one, [create an account](/signup/) with your email and a password of at least eight characters. Complete the security check and confirm your email if prompted. After signing in, [Your account](/account/) shows your account details and lets you sign out. A regular account currently gives you the same content access as a public visitor.
@@ -34,3 +38,24 @@ You do not need an account to browse public information. To create one, [create 
 **Unlisted** records can be opened with a direct link but do not appear in public listings or search. **Private** records require admin access. If a link says an admin account is required, signing in with a regular account will not open it.
 
 Information may change. Confirm important meeting, voting, or service details with the organization that published them.
+
+## Bibb County ALPR camera map
+
+Open the [Bibb County Flock & ALPR Cameras map](/maps/view/?id=a2eb1103-725a-410e-ba00-791aba8e5987)
+to explore reported camera locations in Bibb County, Georgia. Toggle Flock
+Safety, Genetec and Motorola Solutions independently in **Map settings**. Select
+a point or use the places directory to see its reported details and original
+OpenStreetMap record. This October 23, 2026 snapshot contains 154 locations;
+it does not refresh automatically or establish current operating status.
+
+## Civic Pulse short links
+
+Shared links beginning with `https://www.civpulse.org/l/` redirect to a destination
+chosen by a Civic Pulse admin. Scanning a Civic Pulse QR code opens the same short
+URL. The destination may change while the shared URL and printed QR code stay the
+same. No account or JavaScript is required to follow a short link.
+
+A paused or unknown link displays a not-found message. A temporary service error
+asks you to try again. Link owners can see aggregate redirect counts and the last
+visit time, including repeated visits and bots; these statistics do not store
+your IP address, browser identity, or cookies.

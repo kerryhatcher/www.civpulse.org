@@ -1,0 +1,50 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="Short links admin" description="Manage editable Civic Pulse short links and QR codes.">
+  <main id="main">
+    <div class="page-intro"><h1>Short links</h1><p>Create a lasting link and QR code. Update the destination whenever you need to.</p></div>
+    <AdminTabs />
+    <p class="status" data-admin-gate>Checking access…</p>
+    <div class="prose" data-admin-denied hidden><p>Your account does not have admin access. <a href="/signin/?next=/admin/links/">Sign in with an admin account</a>.</p></div>
+    <div class="admin-panel" data-admin-panel data-short-origin={Astro.site?.origin} hidden>
+      <form class="org-form" data-link-form>
+        <h2 data-form-heading>Create a short link</h2>
+        <input type="hidden" name="id" />
+        <label class="field"><span>Label *</span><input name="title" required maxlength="160" placeholder="Community newsletter" /></label>
+        <label class="field"><span>Destination URL *</span><input name="target_url" type="text" inputmode="url" required maxlength="4000" placeholder="https://www.kerryhatcher.com" /><small>A bare domain uses HTTPS. The destination can change while the short link stays the same.</small></label>
+        <label class="field"><span>Status</span><select name="active"><option value="true">Active</option><option value="false">Paused</option></select></label>
+        <div class="org-form-actions"><button class="button-link" type="submit">Save short link</button><button type="button" data-new-link hidden>Create another</button></div>
+        <p class="auth-message" data-link-message role="status" aria-live="polite"></p>
+      </form>
+      <section class="org-form" data-link-details hidden aria-labelledby="link-details-heading">
+        <h2 id="link-details-heading">Link &amp; QR code</h2>
+        <a data-short-url target="_blank" rel="noopener noreferrer"></a>
+        <div class="org-form-actions"><button type="button" data-copy-link>Copy short URL</button><button type="button" data-refresh-stats>Refresh usage</button></div>
+        <p data-link-stats role="status" aria-live="polite"></p>
+        <p class="status">Redirect counts include repeat requests and bots; they are not unique people. HEAD previews are excluded.</p>
+        <img data-qr-preview width="256" height="256" alt="QR code for the saved Civic Pulse short link" hidden />
+        <div class="org-form-actions"><a class="button-link" data-qr-png hidden>Download PNG</a><a class="button-link" data-qr-svg hidden>Download SVG</a></div>
+        <p data-qr-message role="status"></p>
+      </section>
+      <section aria-labelledby="links-heading">
+        <h2 id="links-heading">Saved short links</h2>
+        <form class="org-form" data-link-search><label class="field"><span>Find by label, code, or destination</span><input type="search" name="query" maxlength="160" /></label><button type="submit">Search</button></form>
+        <p data-list-message role="status" aria-live="polite"></p>
+        <div class="org-list" data-link-list></div>
+        <div class="org-form-actions"><button type="button" data-previous disabled>Previous</button><button type="button" data-next disabled>Next</button></div>
+      </section>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initLinksAdmin } from '../../scripts/admin-links';
+  void initLinksAdmin();
+</script>
+<style>
+  [data-short-url], [data-link-list] { overflow-wrap: anywhere; }
+  [data-link-list] :global(.org-row) { grid-template-columns: 1fr auto; }
+  [data-qr-preview] { max-width: 100%; height: auto; background: white; }
+  .org-form-actions { flex-wrap: wrap; }
+</style>

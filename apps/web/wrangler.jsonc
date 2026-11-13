@@ -1,6 +1,7 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "civpulse-web-new",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   "routes": [
     {
@@ -14,6 +15,13 @@
   ],
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/l/*"],
     "not_found_handling": "404-page"
-  }
+  },
+  "vars": {
+    "PUBLIC_SUPABASE_URL": "https://drzcrodqflzkzzbqsags.supabase.co",
+    "PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_RaV0tnG5xJ2sBxFAarnxJg_TpPCL5fA"
+  },
+  "observability": { "enabled": true }
 }
