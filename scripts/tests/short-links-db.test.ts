@@ -18,6 +18,11 @@ test.skipIf(!databaseUrl)('short links protect metadata, editing and counts whil
       await tx`select set_config('request.jwt.claim.sub', ${admin}, true)`;
       const [link] = await tx`select * from public.save_short_link(null, 'Short link QA', 'https://www.kerryhatcher.com/', true)`;
       expect(link.code).toMatch(/^[a-f0-9]{8}$/);
+      expect((await tx`select public.count_short_link_redirect(${link.code}, 'https://changed.example/') as counted`)[0].counted).toBe(false);
+      expect((await tx`select public.count_short_link_redirect(${link.code}, ${link.target_url}) as counted`)[0].counted).toBe(true);
+      await tx.unsafe('reset role');
+      await tx`delete from public.short_link_stats where link_id=${link.id}`;
+      await tx.unsafe('set local role authenticated');
       const denied = async (run: () => Promise<unknown>, code: string) => {
         await tx.unsafe('savepoint denied');
         try { await run(); throw new Error('Expected rejection'); }

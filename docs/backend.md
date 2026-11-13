@@ -2098,3 +2098,8 @@ It verifies exact start/end boundaries, closed queued retries, late preflight,
 role/table access, lease/source/publicity guards, archived staging and pointer drain.
 Collector recovery tests reject any fresh-authorization RPC during archive replay
 and assert zero such calls across interrupted replay and pointer acknowledgement.
+
+Short-link Workers resolve without counting, validate the destination, then call
+`count_short_link_redirect(code, target_url)` for GET requests. The function
+locks the active row and counts only if its destination still matches; edits or
+pauses during resolution fail closed without counting an obsolete destination.

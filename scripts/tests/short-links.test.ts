@@ -26,16 +26,17 @@ test('normalizes domains and rejects unsafe destinations and loops', () => {
   }
 });
 test('returns an uncached 302 and counts GET but not HEAD', async () => {
-  fetchMock = spyOn(globalThis, 'fetch').mockImplementation(async () => Response.json('https://www.kerryhatcher.com/'));
+  fetchMock = spyOn(globalThis, 'fetch').mockImplementation(async url => Response.json(String(url).endsWith('count_short_link_redirect') ? true : 'https://www.kerryhatcher.com/'));
   const get = await request('/l/abcd1234?unused=yes');
   expect(get.status).toBe(302);
   expect(get.headers.get('location')).toBe('https://www.kerryhatcher.com/');
   expect(get.headers.get('cache-control')).toBe('no-store');
-  expect(JSON.parse(fetchMock.mock.calls[0][1].body).p_count).toBe(true);
+  expect(JSON.parse(fetchMock.mock.calls[0][1].body).p_count).toBe(false);
+  expect(JSON.parse(fetchMock.mock.calls[1][1].body).p_target_url).toBe('https://www.kerryhatcher.com/');
   const head = await request('/l/abcd1234/', 'HEAD');
   expect(head.status).toBe(302);
   expect(await head.text()).toBe('');
-  expect(JSON.parse(fetchMock.mock.calls[1][1].body).p_count).toBe(false);
+  expect(JSON.parse(fetchMock.mock.calls[2][1].body).p_count).toBe(false);
 });
 test('missing and paused links return 404, malformed paths and writes never resolve', async () => {
   fetchMock = spyOn(globalThis, 'fetch').mockResolvedValue(Response.json(null));
@@ -57,4 +58,14 @@ test('database errors and unsafe targets fail closed with 503', async () => {
   const head = await request('/l/abcd1234', 'HEAD');
   expect(head.status).toBe(503);
   expect(await head.text()).toBe('');
+});
+
+test('unsafe destinations are never counted and changed destinations fail closed', async () => {
+  consoleMock = spyOn(console, 'error').mockImplementation(() => {});
+  fetchMock = spyOn(globalThis, 'fetch').mockResolvedValue(Response.json('javascript:alert(1)'));
+  expect((await request()).status).toBe(503);
+  expect(fetchMock).toHaveBeenCalledTimes(1);
+  expect(JSON.parse(fetchMock.mock.calls[0][1].body).p_count).toBe(false);
+  fetchMock.mockImplementation(async url => Response.json(String(url).endsWith('count_short_link_redirect') ? false : 'https://example.com/'));
+  expect((await request()).status).toBe(503);
 });
