@@ -13,6 +13,7 @@ const request = (path = '/l/abcd1234', method = 'GET') => worker.fetch(new Reque
 
 test('normalizes domains and rejects unsafe destinations and loops', () => {
   expect(normalizeTargetUrl(' www.kerryhatcher.com ')).toBe('https://www.kerryhatcher.com/');
+  expect(normalizeTargetUrl('example.com:8080/page')).toBe('https://example.com:8080/page');
   expect(normalizeTargetUrl('https://example.com/a?q=1#details')).toBe('https://example.com/a?q=1#details');
   expect(() => normalizeTargetUrl('https://www.civpulse.org./l/abcd1234')).toThrow();
   expect(shortLinkUrl('https://www.civpulse.org', 'abcd1234')).toBe('https://www.civpulse.org/l/abcd1234');
