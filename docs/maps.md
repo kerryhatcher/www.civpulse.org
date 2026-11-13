@@ -176,3 +176,10 @@ Source periods are preserved: attendance zones are labeled 2025–26, legislativ
 boundaries use their 2026/120th Congress vintage, and the bus schedule covers
 June 7–October 31, 2026. These labels do not imply live schedules or current
 address-level voting/enrollment assignments.
+
+To refresh existing snapshot layers after moving their source files, run
+`bun --env-file=apps/web/.env scripts/import-maps.mjs --refresh-source-links`.
+This checks every published URL with HEAD before writing, then updates only
+`presentation.sourceUrl` on matching snapshots. Visibility, geometry and other
+administrator edits are retained. The elementary source link deliberately serves
+the original evidence; its repaired import geometry is documented above.
