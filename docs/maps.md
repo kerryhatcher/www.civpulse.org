@@ -74,7 +74,9 @@ make repeat runs preserve later administrator edits, visibility and geometry.
 Unrelated maps with colliding slugs are rejected before writes. Individual layer
 imports and map/link saves are atomic. If a later import fails, fix its cause and
 rerun; previously completed imports are retained. No automatic source refresh is
-configured.
+configured. Existing layers retain their stored source links; changing the manifest
+does not update them. Review and update those links separately after verifying
+the corresponding R2 objects are available.
 
 `scripts/data/maps/manifest.json` records source URLs, counts, hashes, original
 styles, preset selections, and repairs. Compressed GeoJSON snapshots stay under
