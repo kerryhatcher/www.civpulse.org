@@ -154,3 +154,6 @@ dist/
 # Cloudflare Wrangler
 .wrangler/
 .dev.vars
+
+# Claude Code worktrees
+/.claude/worktrees/
