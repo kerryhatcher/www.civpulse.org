@@ -1,0 +1,153 @@
+{
+  "person_id": "8514c662-f904-439a-b740-99ce53e4c68b",
+  "member_id": 4942,
+  "retrieved_at": "2026-10-26T18:13:48.634Z",
+  "scope": "Published Georgia floor votes for Josh McLaurin, House District 51 and Senate District 14, 2019–2026. Attendance excluded. Single-member partial roll calls. Outcomes not reported by source API; no outcome inferred from tallies. Bill identifiers retained in questions; no fabricated bill introduction dates or bill records.",
+  "sessions": [
+    {
+      "id": 27,
+      "name": "2019-2020 Regular Session",
+      "chamber": "house",
+      "official_nonattendance_flag_count": 715,
+      "attendance_flagged_excluded": 79,
+      "imported_choices": 715,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/house?session=27"
+    },
+    {
+      "id": 1027,
+      "name": "2020 Special Session",
+      "chamber": "house",
+      "official_nonattendance_flag_count": 2,
+      "attendance_flagged_excluded": 1,
+      "imported_choices": 2,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/house?session=1027"
+    },
+    {
+      "id": 1029,
+      "name": "2021-2022 Regular Session",
+      "chamber": "house",
+      "official_nonattendance_flag_count": 840,
+      "attendance_flagged_excluded": 79,
+      "imported_choices": 838,
+      "excluded": [
+        {
+          "id": 19022,
+          "session_id": 1029,
+          "reason": "Conflicting duplicate official choices for member ID 4942",
+          "source_url": "https://www.legis.ga.gov/api/Vote/detail/19022"
+        },
+        {
+          "id": 19029,
+          "session_id": 1029,
+          "reason": "Conflicting duplicate official choices for member ID 4942",
+          "source_url": "https://www.legis.ga.gov/api/Vote/detail/19029"
+        }
+      ],
+      "source_url": "https://www.legis.ga.gov/votes/house?session=1029"
+    },
+    {
+      "id": 1030,
+      "name": "2021 Special Session",
+      "chamber": "house",
+      "official_nonattendance_flag_count": 9,
+      "attendance_flagged_excluded": 13,
+      "imported_choices": 9,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/house?session=1030"
+    },
+    {
+      "id": 1031,
+      "name": "2023-2024 Regular Session",
+      "chamber": "senate",
+      "official_nonattendance_flag_count": 827,
+      "attendance_flagged_excluded": 75,
+      "imported_choices": 827,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/senate?session=1031"
+    },
+    {
+      "id": 1032,
+      "name": "2023 Special Session",
+      "chamber": "senate",
+      "official_nonattendance_flag_count": 16,
+      "attendance_flagged_excluded": 4,
+      "imported_choices": 16,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/senate?session=1032"
+    },
+    {
+      "id": 1033,
+      "name": "2025-2026 Regular Session",
+      "chamber": "senate",
+      "official_nonattendance_flag_count": 911,
+      "attendance_flagged_excluded": 79,
+      "imported_choices": 911,
+      "excluded": [],
+      "source_url": "https://www.legis.ga.gov/votes/senate?session=1033"
+    },
+    {
+      "id": 1034,
+      "name": "2026 Special Session",
+      "chamber": "senate",
+      "official_nonattendance_flag_count": 26,
+      "attendance_flagged_excluded": 2,
+      "imported_choices": 24,
+      "excluded": [
+        {
+          "id": 26648,
+          "session_id": 1034,
+          "reason": "Attendance despite false isRollCall flag",
+          "source_url": "https://www.legis.ga.gov/api/Vote/detail/26648"
+        },
+        {
+          "id": 26676,
+          "session_id": 1034,
+          "reason": "Attendance despite false isRollCall flag",
+          "source_url": "https://www.legis.ga.gov/api/Vote/detail/26676"
+        }
+      ],
+      "source_url": "https://www.legis.ga.gov/votes/senate?session=1034"
+    }
+  ],
+  "excluded": [
+    {
+      "id": 19022,
+      "session_id": 1029,
+      "reason": "Conflicting duplicate official choices for member ID 4942",
+      "source_url": "https://www.legis.ga.gov/api/Vote/detail/19022"
+    },
+    {
+      "id": 19029,
+      "session_id": 1029,
+      "reason": "Conflicting duplicate official choices for member ID 4942",
+      "source_url": "https://www.legis.ga.gov/api/Vote/detail/19029"
+    },
+    {
+      "id": 26648,
+      "session_id": 1034,
+      "reason": "Attendance despite false isRollCall flag",
+      "source_url": "https://www.legis.ga.gov/api/Vote/detail/26648"
+    },
+    {
+      "id": 26676,
+      "session_id": 1034,
+      "reason": "Attendance despite false isRollCall flag",
+      "source_url": "https://www.legis.ga.gov/api/Vote/detail/26676"
+    }
+  ],
+  "choice_counts": {
+    "yes": 2517,
+    "no": 735,
+    "not_voting": 14,
+    "excused": 76
+  },
+  "membership_reconciliation": "Existing offices belong to district organizations rather than chamber organizations. No membership rows or office edits were made; each choice includes an explicit membership review note backed by the official member ID, chamber, district and dated service. First attempted batch rolled back atomically with Office belongs to another legislature; no rows were saved by that attempt.",
+  "verification": {
+    "anonymous_api_verified_choices": 3342,
+    "elapsed_ms": 2724,
+    "first_date": "2019-01-14",
+    "last_date": "2026-06-23"
+  }
+}

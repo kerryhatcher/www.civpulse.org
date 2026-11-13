@@ -1,0 +1,83 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AdminTabs from "../../components/AdminTabs.astro";
+---
+
+<Layout
+  title="Legislation admin"
+  description="Manage sessions, bills, sponsorship and voting records."
+>
+  <main id="main">
+    <div class="page-intro">
+      <h1>Legislative records</h1>
+      <p>
+        Record legislation across sessions, from introduction to committee and
+        floor votes.
+      </p>
+    </div>
+    <AdminTabs />
+    <p data-admin-gate role="status">
+      Checking access…
+    </p>
+    <div data-admin-denied hidden>
+      <p>Admin access is required.</p>
+    </div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <p>
+        <a href="/docs/admins/#legislative-records">
+          Setup and recording guide
+        </a>{" "}
+        · <a href="/legislation/">Browse legislation</a>
+      </p>
+      <details class="legislation-editor">
+        <summary>Import legislative records</summary>
+        <form class="org-form" data-legislative-import>
+          <p>Choose a normalized JSON array of table and data records, with parents before children. Every record needs source_system and source_id. Existing provider IDs update saved records. Each batch saves atomically; earlier batches remain saved if a later batch stops.</p>
+          <label class="field"><span>Legislative import file</span><input type="file" accept="application/json,.json" required /></label>
+          <p data-import-status role="status" aria-live="polite">Choose a normalized JSON import file.</p>
+          <button type="submit" disabled>Import records</button>
+        </form>
+      </details>
+      <label class="field">
+        <span>Record type</span>
+        <select data-resource></select>
+      </label>
+      <section aria-labelledby="saved-records-title">
+        <h2 id="saved-records-title">Saved records</h2>
+        <form class="legislation-admin-search" data-record-search>
+          <label class="field"><span>Search this record type</span><input name="query" type="search" maxlength="500" /></label>
+          <button type="submit">Search</button>
+          <button type="reset">Clear</button>
+        </form>
+        <p data-message role="status" aria-live="polite"></p>
+        <div class="org-list" data-records></div>
+        <div class="org-form-actions">
+          <button data-previous>Previous</button>
+          <span data-page></span>
+          <button data-next>Next</button>
+        </div>
+      </section>
+      <details data-editor class="legislation-editor">
+      <summary>Add or edit a record</summary>
+      <form class="org-form" data-legislation-form>
+        <h2 data-form-heading>Add record</h2>
+        <p>Fields marked * are required. Use the source’s exact wording for the question being voted on.</p>
+        <div data-fields></div>
+        <p data-form-message role="status" aria-live="polite"></p>
+        <div class="org-form-actions">
+          <button type="submit" class="button-link">
+            Save record
+          </button>
+          <button type="button" data-cancel>
+            Cancel
+          </button>
+        </div>
+      </form>
+      </details>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initLegislationAdmin } from "../../scripts/admin-legislation";
+  void initLegislationAdmin();
+</script>

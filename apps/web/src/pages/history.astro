@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { HISTORY_TYPES } from '../lib/history';
+---
+<Layout title="Change history" description="Follow changes to Civic Pulse records over time.">
+  <main id="main" class="history-page">
+    <div class="page-intro">
+      <p class="org-eyebrow">Transparency</p><h1>Change history</h1>
+      <p>See what changed, when, and who made the edit. Open a revision to compare its earlier and later values.</p>
+    </div>
+    <p data-history-access role="status">Checking access…</p>
+    <form class="org-form history-filter" data-history-filter>
+      <label class="field"><span>Record type</span><select name="type"><option value="">All types (admins)</option>{Object.entries(HISTORY_TYPES).map(([value,label]) => <option value={value}>{label}</option>)}</select></label>
+      <label class="field"><span>Record ID</span><input name="id" autocomplete="off" placeholder="Record UUID or relationship key" /><small>Use “View history” on a record to fill this automatically. Admins can leave this blank to browse all changes.</small></label>
+      <button type="submit" class="button-link">Show history</button>
+    </form>
+    <p class="status">History starts when change tracking is enabled. Earlier edits cannot be reconstructed. Related record changes appear in their owning record’s history.</p>
+    <p data-history-status role="status" aria-live="polite"></p>
+    <ol class="history-list" data-history-list></ol>
+    <button class="button-link" data-history-more hidden>Load older changes</button>
+  </main>
+</Layout>
+<script>
+  import { initHistory } from '../scripts/history';
+  void initHistory();
+</script>

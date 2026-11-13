@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createProfileFetch } from './profile-fetch';
 
 let client: SupabaseClient | undefined;
 
@@ -16,6 +17,6 @@ export function getSupabase(): SupabaseClient {
     );
   }
 
-  client ??= createClient(url, anonKey);
+  client ??= createClient(url, anonKey, { global: { fetch: createProfileFetch(url) } });
   return client;
 }

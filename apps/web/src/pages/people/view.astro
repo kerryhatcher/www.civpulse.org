@@ -1,8 +1,12 @@
 ---
+import PersonRelationships from '../../components/PersonRelationships.astro';
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import RecordProvenance from '../../components/RecordProvenance.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
+import PersonVotes from '../../components/PersonVotes.astro';
 ---
 
 <Layout title="Person" description="View a shared Civic Pulse person record.">
@@ -26,6 +30,7 @@ import PersonCandidacies from '../../components/PersonCandidacies.astro';
       </div>
 
       <div class="prose person-bio" data-person-bio hidden></div>
+      <div data-person-provenance><RecordProvenance title="Biography sources and verification" /></div>
 
       <div class="org-contact" data-person-contact-section hidden>
         <h2>Contact</h2>
@@ -37,7 +42,11 @@ import PersonCandidacies from '../../components/PersonCandidacies.astro';
         <div class="affiliation-list" data-person-affiliations></div>
       </section>
 
+      <PersonRelationships />
       <OfficeTerms viewer />
+    <section data-person-legislation hidden aria-label="Legislative record"></section>
+
+      <PersonVotes />
       <PersonCandidacies />
       <ProfileArticles />
 
@@ -45,6 +54,7 @@ import PersonCandidacies from '../../components/PersonCandidacies.astro';
         <a href="/people/">← All people</a>
       </p>
     </article>
+  <ObjectHistoryLink feedback table="people" />
   </main>
 </Layout>
 

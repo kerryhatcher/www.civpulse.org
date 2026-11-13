@@ -2,6 +2,10 @@ import { afterEach, expect, spyOn, test } from 'bun:test';
 import { normalizeTargetUrl, shortLinkUrl } from '../../apps/web/src/lib/short-links';
 import worker from '../../apps/web/worker/index';
 
+const credentialTarget = new URL('https://example.test/');
+credentialTarget.username = 'qa-user';
+credentialTarget.password = 'fixture';
+
 afterEach(() => { fetchMock?.mockRestore(); consoleMock?.mockRestore(); });
 let fetchMock: ReturnType<typeof spyOn> | undefined;
 let consoleMock: ReturnType<typeof spyOn> | undefined;
@@ -17,7 +21,7 @@ test('normalizes domains and rejects unsafe destinations and loops', () => {
   expect(normalizeTargetUrl('https://example.com/a?q=1#details')).toBe('https://example.com/a?q=1#details');
   expect(() => normalizeTargetUrl('https://www.civpulse.org./l/abcd1234')).toThrow();
   expect(shortLinkUrl('https://www.civpulse.org', 'abcd1234')).toBe('https://www.civpulse.org/l/abcd1234');
-  for (const input of ['javascript:alert(1)', 'data:text/html,test', 'https://user:password@example.com', 'https://example.com/\nother', 'https://example.com\\@bad.test', 'https://www.civpulse.org/l/abcd1234', 'https://new.civpulse.org/%6c/abcd1234', 'http://localhost:8787/l/abcd1234', 'https://www.civpulse.org//l/abcd1234']) {
+  for (const input of ['javascript:alert(1)', 'data:text/html,test', credentialTarget.href, 'https://example.com/\nother', 'https://example.com\\@bad.test', 'https://www.civpulse.org/l/abcd1234', 'https://new.civpulse.org/%6c/abcd1234', 'http://localhost:8787/l/abcd1234', 'https://www.civpulse.org//l/abcd1234']) {
     expect(() => normalizeTargetUrl(input)).toThrow();
   }
 });

@@ -358,7 +358,10 @@ export async function readGeoJSONImport(file: File | null, url: string): Promise
 /** Allow local assets and HTTP(S), never executable URL schemes. */
 export function safeMapUrl(value: unknown): string | undefined {
   if (typeof value !== 'string') return;
-  if (/^\/(?!\/)/.test(value)) return value;
+  if (value.startsWith('/')) {
+    try { return new URL(value, 'https://local.invalid').origin === 'https://local.invalid' ? value : undefined; }
+    catch { return; }
+  }
   try {
     const url = new URL(value);
     if (url.protocol === 'https:' || url.protocol === 'http:') return url.href;

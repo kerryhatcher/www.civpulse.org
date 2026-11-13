@@ -1,0 +1,31 @@
+name: MCP function
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - run: bun run mcp:check
+      - run: bun run georgia:check
+      - run: bun run scripts/build-mcp.mjs --check
+      - run: bun test scripts/tests/mcp-common-reads.test.ts
+      - run: bun test scripts/tests/mcp-compact-writes.test.ts
+      - run: bun test scripts/tests/mcp-related-reads.test.ts
+      - name: Verify school finance parsing and MCP contracts
+        run: bun test scripts/tests/school-finances.test.ts scripts/tests/school-finances-mcp.test.ts
+      - run: bun test scripts/tests/mcp-handler.test.ts scripts/tests/mcp-urls.test.ts scripts/tests/mcp-meeting-documents.test.ts scripts/tests/mcp-legislation.test.ts scripts/tests/mcp-offices.test.ts scripts/tests/georgia-source.test.ts scripts/tests/georgia-reader.test.ts scripts/tests/election-results-mcp.test.ts
+      - run: bun run plugin:build
+      - run: bun run plugin:claude:check

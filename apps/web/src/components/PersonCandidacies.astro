@@ -1,13 +1,18 @@
 ---
+import ProfileEvidence from './ProfileEvidence.astro';
+import type { EvidenceSection } from '../lib/profile-evidence';
 interface Props {
   personId?: string;
+  published?: EvidenceSection;
+  historyHref?: string;
 }
-const { personId } = Astro.props;
+const { personId, published, historyHref } = Astro.props;
 ---
 
 <section class="person-candidacies" data-person-candidacies data-person-id={personId} hidden={!personId} aria-labelledby="person-candidacies-title">
   <h2 id="person-candidacies-title">Election candidacies</h2>
-  <p class="status" data-candidacies-status role="status" aria-live="polite">Loading candidacies…</p>
+  {published && <ProfileEvidence section={published} historyHref={historyHref} />}
+  <p class="status" data-candidacies-status role="status" aria-live="polite" hidden={!!published}>Loading candidacies…</p>
   <div data-candidacy-groups hidden>
     <section aria-labelledby="current-candidacies-title">
       <h3 id="current-candidacies-title">Current candidacies</h3>

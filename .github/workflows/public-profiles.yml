@@ -1,0 +1,36 @@
+name: Public profile snapshots
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Public profile snapshot tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - name: Verify public structured data projections and escaping
+        run: bun test scripts/tests/structured-data.test.ts
+      - name: Verify readable public profile evidence
+        run: bun test scripts/tests/profile-evidence.test.ts
+      - name: Verify source provenance helpers and date semantics
+        run: bun test scripts/tests/record-provenance.test.ts
+      - name: Verify Bibb topic guide public projections
+        run: bun test scripts/tests/bibb-topic-hubs.test.ts
+      - name: Verify public person relationship projections
+        run: bun test scripts/tests/person-relationships.test.ts
+      - name: Verify editorial correction routing
+        run: bun test scripts/tests/corrections.test.ts
+      - run: bun test scripts/tests/profile-sections.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts scripts/tests/public-records.test.ts scripts/tests/legislation-build-data.test.ts scripts/tests/build-read.test.ts scripts/tests/legislation-directory-static.test.ts scripts/tests/legislation-details.test.ts scripts/tests/request-snapshot.test.ts
+      - name: Verify unified election results and SOS feed ingestion
+        run: bun test scripts/election-scope.test.ts scripts/tests/ballot-results.test.ts scripts/tests/election-report-reader.test.ts scripts/tests/election-results-view.test.ts scripts/tests/election-turnout.test.ts scripts/tests/sos-results.test.ts

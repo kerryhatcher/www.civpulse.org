@@ -1,0 +1,75 @@
+---
+import { getLegislationDirectoryAssets } from '../../lib/legislation-directory-assets';
+const {url:directoryUrl} = await getLegislationDirectoryAssets();
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Legislation"
+  description="Follow bills, legislative sessions and recorded votes."
+>
+  <main data-legislation-directory={directoryUrl} id="main" data-legislation-browser>
+    <div class="page-intro">
+      <h1>Legislation</h1>
+      <p>
+        Follow bills across legislative sessions, with sponsorships, committee
+        and floor votes, and media coverage.
+      </p>
+    </div>
+    <p>
+      <a href="/legislation/sessions/">Browse sessions</a>
+      · <a href="/records/bills/page/1/">Published bill archive</a>
+      · <a href="/records/votes/page/1/">Published vote archive</a>
+    </p>
+    <form class="org-form legislation-filters" data-search>
+      <label class="field">
+        <span>Search bills</span>
+        <input name="query" type="search" maxlength="500" />
+      </label>
+      <label class="field">
+        <span>Jurisdiction</span>
+        <select name="jurisdiction">
+          <option value="">All jurisdictions</option>
+          <option value="federal">Federal</option>
+          <option value="state">State</option>
+          <option value="unspecified">Not yet classified</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>State</span>
+        <select name="state" disabled>
+          <option value="">All recorded states</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Legislative term</span>
+        <select name="term_id">
+          <option value="">All terms</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Sort by</span>
+        <select name="sort">
+          <option value="newest">Introduced: newest first</option>
+          <option value="oldest">Introduced: oldest first</option>
+          <option value="title_asc">Title: A–Z</option>
+          <option value="title_desc">Title: Z–A</option>
+        </select>
+      </label>
+      <button class="button-link">Search</button>
+    </form>
+    <p>Coverage includes records added to Civic Pulse, not every bill introduced.
+      If a state has no results, its bills may not have been added yet.</p>
+    <p role="status" aria-live="polite" data-status>
+      Loading…
+    </p>
+    <div class="org-list" data-results></div>
+    <button data-more hidden>
+      Load more
+    </button>
+  </main>
+</Layout>
+<script>
+  import { initLegislationBrowse } from "../../scripts/legislation";
+  void initLegislationBrowse();
+</script>

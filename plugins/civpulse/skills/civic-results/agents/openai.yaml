@@ -1,0 +1,5 @@
+interface:
+  display_name: "Election results and turnout"
+  short_description: "Read result photos, reconcile duplicates, and save sourced totals"
+policy:
+  allow_implicit_invocation: true

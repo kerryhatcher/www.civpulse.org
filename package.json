@@ -2,7 +2,9 @@
   "name": "civpulse",
   "private": true,
   "type": "module",
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "worktree:setup": "bun run scripts/setup-worktree.mjs",
     "dev:worktree": "ASTRO_DEV_BACKGROUND=1 bun run dev:web",
@@ -13,16 +15,21 @@
     "preview": "bun run --cwd apps/web preview",
     "check": "bun run --cwd apps/web check",
     "check:migrations": "bun run scripts/check-migrations.mjs",
+    "publish:test": "bun test scripts/tests/publish-handler.test.ts",
+    "publish:check": "bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/publish/handler.ts",
     "mcp:check": "bun run --cwd apps/mcp check",
+    "georgia:check": "bun run --cwd apps/georgia-source check",
+    "georgia:test": "bun test scripts/tests/georgia-source.test.ts scripts/tests/georgia-reader.test.ts",
+    "georgia:deploy": "bun run georgia:check && bun run georgia:test && bun run --cwd apps/georgia-source deploy",
     "mcp:test": "bun run scripts/test-mcp-auth.mjs",
-    "mcp:deploy": "bun run check:migrations && bun run --cwd apps/mcp deploy",
+    "mcp:deploy": "bun run check:migrations && bun run mcp:check && bun run mcp:build && SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions deploy mcp --project-ref drzcrodqflzkzzbqsags",
     "deploy": "bun run --cwd apps/web deploy",
     "supabase": "supabase",
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:migrate": "supabase migration up",
     "db:reset": "supabase db reset",
-    "db:push": "supabase db push",
+    "db:push": "bun run scripts/push-production-migrations.mjs",
     "db:status": "supabase status",
     "db:seed-user": "bun run scripts/seed-test-user.mjs",
     "secret:scan": "bun run scripts/secret-scan.mjs",
@@ -32,12 +39,28 @@
     "check:pins": "bun run scripts/check-action-pins.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "plugin:build": "bun run scripts/build-plugin.mjs",
+    "plugin:claude:sync": "bun run scripts/build-claude-plugin.mjs",
+    "plugin:claude:check": "bun run scripts/build-claude-plugin.mjs --check",
     "media:check": "bun run --cwd apps/media check",
     "media:test": "bun run --cwd apps/media test",
-    "media:deploy": "bun run --cwd apps/media deploy"
+    "media:deploy": "bun run --cwd apps/media deploy",
+    "kb:check": "bun run --cwd apps/kb check",
+    "kb:test": "bun run --cwd apps/kb test",
+    "kb:dev": "bun run --cwd apps/kb dev",
+    "mcp:build": "bun run scripts/build-mcp.mjs",
+    "rebuild:check": "bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/rebuild-frontend/handler.ts",
+    "rebuild:test": "bun test scripts/tests/frontend-rebuild.test.ts",
+    "results:check": "bun run --cwd apps/results-collector check && bun run --cwd apps/web tsc --noEmit --strict --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom ../../supabase/functions/poll-election-results/handler.ts",
+    "results:test": "bun test apps/results-collector/tests supabase/functions/poll-election-results/handler.test.ts scripts/tests/sos-results.test.ts scripts/tests/sos-results-reader.test.ts scripts/tests/sos-ballot.test.ts scripts/tests/sos-mapping-admin.test.ts scripts/tests/sos-results-change.test.ts"
   },
   "devDependencies": {
+    "playwright": "^1.64.1",
+    "sax": "1.6.1",
     "supabase": "^2.121.0",
     "wrangler": "^4.152.0"
+  },
+  "overrides": {
+    "body-parser": "2.4.0",
+    "undici@7": "7.30.1"
   }
 }

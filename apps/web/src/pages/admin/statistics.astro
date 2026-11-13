@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="County statistics admin" description="Edit structured county demographic records and provenance.">
+ <main id="main">
+  <div class="page-intro"><h1>County statistics</h1><p>Edit official-source statistics. Database/API changes are immediate; county pages and downloads update after a website rebuild. Keep the source, period, uncertainty and calculation inputs aligned.</p></div>
+  <AdminTabs />
+  <p class="status" data-admin-gate>Checking access…</p>
+  <div data-admin-denied hidden><p>Admin access required. <a href="/signin/?next=/admin/statistics/">Sign in</a>.</p></div>
+  <div data-admin-panel hidden>
+   <form class="org-form" data-statistic-select><h2>Choose an observation</h2><label class="field"><span>County or state</span><select name="county_fips" required></select></label><label class="field"><span>Measure</span><select name="indicator_code" required></select></label><button type="submit">Load statistic</button></form>
+   <form class="org-form" data-statistic-edit hidden>
+    <h2 data-statistic-heading>Edit statistic</h2>
+    <label class="field"><span>Value</span><input name="value" type="number" step="any" /></label>
+    <label class="field"><span>Availability</span><select name="status"><option value="available">Available</option><option value="suppressed">Suppressed</option><option value="unavailable">Unavailable</option></select></label>
+    <label class="field"><span>Reference period</span><input name="period" required maxlength="200" /></label>
+    <label class="field"><span>Official source dataset</span><select name="source_id" required></select></label>
+    <label class="field"><span>Source variables / calculation</span><input name="source_variables" required maxlength="2000" /></label>
+    <div class="field-grid"><label class="field"><span>Numerator</span><input name="numerator" type="number" step="any" /></label><label class="field"><span>Denominator</span><input name="denominator" type="number" step="any" min="0.000001" /></label></div>
+    <div class="field-grid"><label class="field"><span>Margin of error</span><input name="margin_of_error" type="number" step="any" min="0" /></label><label class="field"><span>Confidence level (%)</span><input name="confidence_level" type="number" step="any" min="0.001" max="99.999" /></label></div>
+    <div class="field-grid"><label class="field"><span>Confidence interval lower bound</span><input name="lower_bound" type="number" step="any" /></label><label class="field"><span>Confidence interval upper bound</span><input name="upper_bound" type="number" step="any" /></label></div>
+    <label class="field"><span>Detail / availability note</span><textarea name="detail" rows="2" maxlength="4000"></textarea></label>
+    <label class="field"><span>Source components (JSON object)</span><textarea name="components" rows="6" required></textarea></label>
+    <button class="button-link" type="submit">Save statistic</button>
+   </form>
+   <p class="status" data-statistic-admin-status role="status"></p>
+  </div>
+ </main>
+</Layout>
+<script>import {initStatisticAdmin} from '../../scripts/admin-statistics';void initStatisticAdmin();</script>

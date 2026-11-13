@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-01T23:01:52.571Z",
+  "origin": "https://www.civpulse.org",
+  "inventory_semantics": "Production sitemap-listed canonical candidates, not proof of indexing or exhaustive database/public content.",
+  "documents": [
+    {
+      "url": "https://www.civpulse.org/sitemap-index.xml",
+      "status": 200,
+      "observed_at": "2026-11-01T23:01:52.657Z",
+      "sha256": "be877d6ab4ce0596e6f2f2b8d403a6c484d011b909cdeb93a0e04053ccc9d0fc",
+      "bytes": 255,
+      "kind": "index",
+      "entries": 2
+    },
+    {
+      "url": "https://www.civpulse.org/sitemap-0.xml",
+      "status": 200,
+      "observed_at": "2026-11-01T23:01:53.387Z",
+      "sha256": "6a1aa3c6c3b0ecca806f625a3465400e09c11e13b9d5168d14587d083ea48e9d",
+      "bytes": 4492696,
+      "kind": "urlset",
+      "entries": 45000
+    },
+    {
+      "url": "https://www.civpulse.org/sitemap-1.xml",
+      "status": 200,
+      "observed_at": "2026-11-01T23:01:53.780Z",
+      "sha256": "058330a8bbb2afd8cfa944ec9feafe5c647c1326c50d5fa38fd5e3d8d671342c",
+      "bytes": 882914,
+      "kind": "urlset",
+      "entries": 9097
+    }
+  ],
+  "unique_url_count": 54097,
+  "category_counts": {
+    "home": 1,
+    "about": 1,
+    "calendar": 1,
+    "counties": 164,
+    "docs": 4,
+    "documents": 1,
+    "editorial": 1,
+    "elections": 13,
+    "finances": 1,
+    "legislation": 2,
+    "maps": 1130,
+    "orgs": 3826,
+    "people": 9107,
+    "records/": 1,
+    "records/bills": 20141,
+    "records/events": 3797,
+    "records/requests": 1,
+    "records/sessions": 26,
+    "records/votes": 15877,
+    "requests": 1,
+    "statistics": 1
+  },
+  "current_code_noindex_mismatches": [],
+  "local_comparison": {
+    "scope": "Non-production isolated local build; different database/content corpus. This is not a deployment diff or missing-page count.",
+    "observed_at": "2026-11-01T23:17:02.794Z",
+    "build_source_base_commit": "31e1728af54d23a9f455e88b980fbf5a25d6d111",
+    "database_scope": "Isolated local API 54341 / DB 54342, explicit public build environment; no shared DB use.",
+    "local_url_count": 443,
+    "production_only_count": 53655,
+    "local_only_count": 1
+  },
+  "inventory_file": "expected-public-urls.csv.gz",
+  "inventory_csv_sha256": "e4d197f457a8f6e5e5d0f30dcbf16618656a32ea8cca5f518fbc8327eaead837"
+}

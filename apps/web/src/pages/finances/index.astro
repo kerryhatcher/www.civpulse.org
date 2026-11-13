@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Bibb school finances" description="Search Bibb County school payroll, travel and reported payment summaries, with fiscal years and original source references.">
+  <main id="main" class="finance-page">
+    <p><a href="/finances/obligations/">Browse reported obligations and commitments</a></p>
+    <p><a href="/finances/fees/">Browse reported government user fees and collections</a></p>
+    <p><a href="/counties/bibb/">Bibb County</a> / Public finances</p>
+    <div class="page-intro">
+      <h1>Bibb school finances</h1>
+      <p>Explore payroll, travel and payments reported by the Bibb County Board of Education to Open Georgia. Choose a dataset and fiscal year, then search a name, recipient or job title.</p>
+    </div>
+    <form class="calendar-filters" data-finance-form role="search" aria-label="Search school finances">
+      <label class="field"><span>Dataset</span><select name="dataset"><option value="payments">Payments</option><option value="payroll">Payroll &amp; travel</option></select></label>
+      <label class="field"><span>Fiscal year</span><select name="year"><option value="">Latest available</option></select></label>
+      <label class="field field-wide"><span>Search names or titles</span><input type="search" name="q" maxlength="200" placeholder="Recipient, employee name or job title" /></label>
+      <label class="field"><span>Sort by</span><select name="sort"><option value="amount">Largest amount</option><option value="name">Name A–Z</option></select></label>
+      <button class="button-link" type="submit">Search finances</button>
+    </form>
+    <p data-finance-person-scope hidden>Showing payroll linked to one source profile. <a data-finance-clear-person href="/finances/?dataset=payroll">Browse all school payroll</a>.</p>
+    <p data-finance-status class="status" role="status" aria-live="polite">Loading published school finances…</p>
+    <p data-finance-explanation class="body-note">Payment rows are reported summaries, not individual invoices. SALARY and BENEFITS entries overlap payroll; never add the two datasets together.</p>
+    <section data-finance-summary hidden aria-labelledby="finance-summary-title">
+      <h2 id="finance-summary-title">Reported figures</h2>
+      <p data-finance-totals></p>
+      <p data-finance-period class="body-note"></p>
+    </section>
+    <div class="finance-table-scroll" tabindex="0" role="region" aria-label="School finance results; scroll horizontally on smaller screens">
+      <table class="finance-table" data-finance-table hidden><caption data-finance-caption></caption><thead></thead><tbody></tbody></table>
+    </div>
+    <nav class="finance-actions" aria-label="Finance result pages">
+      <button type="button" data-finance-previous hidden>Previous</button>
+      <button type="button" data-finance-next hidden>Next</button>
+      <button type="button" data-finance-download hidden>Download this page as CSV</button>
+    </nav>
+    <details data-finance-source hidden>
+      <summary>Source and reporting details</summary>
+      <div data-finance-provenance></div>
+    </details>
+    <noscript><p>Enable JavaScript to search the published records, or visit <a href="https://open.ga.gov/">Open Georgia</a> for the original exports.</p></noscript>
+  </main>
+</Layout>
+<script>
+  import { initSchoolFinances } from '../../scripts/school-finances';
+  void initSchoolFinances();
+</script>

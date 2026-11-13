@@ -40,6 +40,13 @@ export function groupEvents(events: EventRecord[]): CalendarEvent[] {
       item = { ...event, memberships: [], categories: [] };
       grouped.set(key, item);
     }
+    // A shared imported occurrence may have its meeting record on only one
+    // calendar copy. Link to that copy so grouping does not hide the record.
+    if (event.is_meeting && !item.is_meeting) {
+      const updated = item.updated_at;
+      Object.assign(item, event);
+      if (updated && updated > (item.updated_at ?? '')) item.updated_at = updated;
+    }
     if (!item.memberships.some(calendar => calendar.id === event.calendar_id)) item.memberships.push({ id: event.calendar_id, name: event.calendar_name, organization_id: event.organization_id, organization_name: event.organization_name });
     if (event.category && !item.categories.includes(event.category)) item.categories.push(event.category);
     if ((event.updated_at ?? '') > (item.updated_at ?? '')) item.updated_at = event.updated_at;

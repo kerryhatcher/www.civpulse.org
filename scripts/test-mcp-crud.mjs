@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 
 /** Runs with real OAuth user tokens against the local Worker and Supabase. */
-export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
+export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl, apiKey }) {
   const cleanup = [];
   const needle = `McpCrud${crypto.randomUUID().replaceAll('-', '')}`;
   const admin = async (name, input = {}) => value(adminToken, name, input);
@@ -66,6 +66,34 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     await admin('update_event', { id: event.id, visibility: 'public' });
     assert.equal((await reader('get_event', { id: event.id })).event.location, 'Partial event edit');
     assert.ok((await reader('search_events', { query: needle, include_past: true })).some(row => row.id === event.id));
+    // Exercise the real Storage/RLS boundary, not just the upload schema.
+    const uploadInput = { meeting_id: event.id, file_name: 'archived-transcript.txt', data_base64: Buffer.from('Archived test transcript.').toString('base64') };
+    assert.ok((await tool(adminToken, 'upload_meeting_attachment', uploadInput)).isError, 'Ordinary events cannot accept meeting files');
+    await denied('update_event', { id: event.id, is_meeting: true });
+    await admin('update_event', { id: event.id, is_meeting: true, meeting_notes: 'Archive provenance', meeting_transcript: 'Test transcript' });
+    assert.equal((await reader('get_meeting', { id: event.id })).event.meeting_transcript, 'Test transcript');
+    await denied('upload_meeting_attachment', uploadInput);
+    const attachment = await admin('upload_meeting_attachment', uploadInput);
+    const attachmentPath = (await admin('get_meeting', { id: event.id })).attachments.find(item => item.id === attachment.id).storage_path;
+    cleanup.push(async () => {
+      const deleted = await fetch(`${apiUrl}/storage/v1/object/meeting-attachments`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prefixes: [attachmentPath] }),
+      });
+      assert.ok(deleted.ok, 'Remove the local test Storage object');
+    });
+    const downloadInput = { meeting_id: event.id, attachment_id: attachment.id };
+    const signed = await reader('get_meeting_attachment_url', downloadInput);
+    assert.equal(signed.expires_in, 60);
+    assert.equal(await (await fetch(signed.url)).text(), 'Archived test transcript.');
+    assert.equal((await reader('get_meeting_attachment_url', { ...downloadInput, attachment_id: crypto.randomUUID() })).status, 'missing');
+    await admin('update_event', { id: event.id, visibility: 'private' });
+    assert.equal((await reader('get_meeting', { id: event.id })).status, 'private');
+    assert.equal((await reader('get_meeting_attachment_url', downloadInput)).status, 'missing');
+    await admin('update_event', { id: event.id, visibility: 'public', meeting_notes: null });
+    const preserved = (await reader('get_meeting', { id: event.id })).event;
+    assert.equal(preserved.meeting_notes, null);
+    assert.equal(preserved.meeting_transcript, 'Test transcript');
     const person = await create('create_person', { slug: `${needle.toLowerCase()}-person`, full_name: `${needle} person`, visibility: 'private' });
     const secondPerson = await create('create_person', { slug: `${needle.toLowerCase()}-other`, full_name: `${needle} other`, visibility: 'unlisted' });
     await admin('update_person', { id: person.id, description: 'Partial person edit' });
@@ -73,6 +101,39 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     await admin('update_person', { id: person.id, visibility: 'public' });
     assert.equal((await reader('get_person', { id: person.id })).person.description, 'Partial person edit');
     assert.ok((await reader('search_people', { query: needle })).some(row => row.id === person.id));
+    const officeInput = { organization_id: org.id, name: `${needle} office`, district: 'District 4' };
+    await denied('create_office', officeInput);
+    const office = await admin('create_office', officeInput);
+    // Office deletion is intentionally outside MCP; local fixture cleanup uses
+    // the same authenticated Data API after all dependent terms are removed.
+    cleanup.push(async () => {
+      const result = await fetch(`${apiUrl}/rest/v1/offices?id=eq.${office.id}`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}` },
+      });
+      assert.ok(result.ok);
+    });
+    await denied('update_office', { id: office.id, description: 'Denied' });
+    await admin('update_office', { id: office.id, description: 'Documented seat' });
+    assert.ok((await reader('list_offices', { organization_id: org.id })).some(row => row.id === office.id));
+    const termInput = { office_id: office.id, person_id: person.id, selection_method: 'elected', starts_on: '2021-01-01', source_url: 'https://example.test/tenure' };
+    await denied('create_office_term', termInput);
+    const officeTerm = await admin('create_office_term', termInput);
+    cleanup.push(async () => {
+      const result = await fetch(`${apiUrl}/rest/v1/office_terms?id=eq.${officeTerm.id}`, {
+        method: 'DELETE', headers: { apikey: apiKey, Authorization: `Bearer ${adminToken}` },
+      });
+      assert.ok(result.ok);
+    });
+    assert.ok((await reader('get_office_terms', { person_id: person.id })).some(row => row.id === officeTerm.id));
+    await denied('update_office_term', { id: officeTerm.id, ends_on: '2024-12-31' });
+    await admin('update_office_term', { id: officeTerm.id, ends_on: '2024-12-31' });
+    assert.equal((await reader('get_office_terms', { person_id: person.id }))[0].ends_on, '2024-12-31');
+    assert.ok((await tool(adminToken, 'create_office_term', termInput)).isError, 'Duplicate service starts are rejected');
+    assert.ok((await tool(adminToken, 'update_office_term', { id: officeTerm.id, ends_on: '2020-12-31' })).isError, 'Invalid service ranges are rejected');
+    await admin('update_person', { id: person.id, visibility: 'private' });
+    assert.deepEqual(await reader('get_office_terms', { person_id: person.id }), []);
+    assert.ok((await admin('get_office_terms', { person_id: person.id })).some(row => row.id === officeTerm.id));
+    await admin('update_person', { id: person.id, visibility: 'public' });
     const affiliation = await link('person_organization', { person_id: person.id, organization_id: org.id, role: 'Candidate' }, { role: 'Member' });
     assert.ok((await reader('list_person_organizations', { person_id: person.id })).organizations.some(row => row.id === org.id && row.role === 'Member'));
 
@@ -88,6 +149,10 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     const mapLayers = await reader('get_map_layers', { map_id: map.id });
     assert.equal(mapLayers.find(row => row.id === remoteLayer.id).style.color, '#abcdef');
     assert.ok((await reader('get_map', { id: map.id })).layers.some(row => row.id === remoteLayer.id));
+    await admin('update_map', { id: map.id, visibility: 'private' });
+    assert.ok(!JSON.stringify(await reader('get_map_layers', { map_id: map.id })).includes(remoteLayer.id), 'Related layers must not bypass a private containing map');
+    assert.ok(JSON.stringify(await admin('get_map_layers', { map_id: map.id })).includes(remoteLayer.id));
+    await admin('update_map', { id: map.id, visibility: 'public' });
     assert.ok((await reader('search_maps', { query: needle })).some(row => row.id === map.id));
     assert.ok((await reader('search_layers', { query: needle })).some(row => row.id === remoteLayer.id));
     await denied('list_map_layer_links', { map_id: map.id });
@@ -139,6 +204,13 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.ok((await reader('list_contests', { election_id: election.id })).contests.some(row => row.id === contest.id));
     assert.ok((await reader('search_contests', { query: needle })).some(row => row.id === contest.id));
     assert.ok(JSON.stringify(await reader('get_person_candidacies', { person_id: person.id })).includes(election.id));
+    await admin('update_election', { id: election.id, visibility: 'private' });
+    for (const [name, args] of [['list_contests', { election_id: election.id }], ['list_contest_candidates', { contest_id: contest.id }], ['get_contest_candidate', candidate]]) {
+      assert.ok(!JSON.stringify(await reader(name, args)).includes(name === 'list_contests' ? contest.id : person.id), `${name} must preserve the private election gate`);
+    }
+    assert.ok(!JSON.stringify(await reader('get_person_candidacies', { person_id: person.id })).includes(election.id));
+    assert.ok(JSON.stringify(await admin('list_contests', { election_id: election.id })).includes(contest.id));
+    await admin('update_election', { id: election.id, visibility: 'public' });
     const question = await create('create_ballot_question', { election_id: election.id, title: `${needle} question`, question_text: 'Should the test fixture pass?' });
     await admin('update_ballot_question', { id: question.id, choices: ['For', 'Against'] });
     assert.deepEqual((await reader('get_ballot_question', { id: question.id })).ballot_question.choices, ['For', 'Against']);
@@ -156,11 +228,18 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.equal(articleRead.people[0].person_id, person.id);
     assert.equal(articleRead.organizations[0].organization_id, org.id);
     assert.equal((await reader('get_article', { id: article.id })).status, 'missing');
+    for (const [name, args] of [['get_person_articles', { person_id: person.id }], ['get_organization_articles', { organization_id: org.id }]]) {
+      assert.ok(!JSON.stringify(await reader(name, args)).includes(article.id), 'Unlisted articles must remain undiscoverable through related reading lists');
+    }
     await admin('update_article', { id: article.id, visibility: 'public' });
     assert.ok(!('people' in await reader('get_article', { id: article.id })), 'Do not expose admin-only association sets');
     assert.ok((await reader('search_articles', { query: needle })).some(row => row.id === article.id));
     assert.ok((await reader('get_person_articles', { person_id: person.id })).some(row => row.id === article.id));
     assert.ok((await reader('get_organization_articles', { organization_id: org.id })).some(row => row.id === article.id));
+    await admin('update_person', { id: person.id, visibility: 'private' });
+    assert.ok(!JSON.stringify(await reader('get_person_articles', { person_id: person.id })).includes(article.id), 'Related reading lists must retain private person visibility');
+    assert.deepEqual((await reader('list_person_organizations', { person_id: person.id })).organizations, []);
+    await admin('update_person', { id: person.id, visibility: 'public' });
     const invalidArticle = await tool(adminToken, 'update_article', { id: article.id, title: 'Must roll back', people: [{ person_id: crypto.randomUUID() }] });
     assert.ok(invalidArticle.isError);
     assert.equal((await admin('get_article', { id: article.id })).article.title, articleInput.title, 'Article metadata must roll back with invalid links');
@@ -182,9 +261,12 @@ export async function runCrudSuite({ adminToken, readerToken, tool, apiUrl }) {
     assert.notEqual(`${page1[0].entity_type}:${page1[0].id}`, `${page2[0].entity_type}:${page2[0].id}`);
 
     const profile = await reader('get_my_profile');
-    await reader('update_my_profile', { display_name: `${needle} reader` });
-    assert.equal((await reader('get_my_profile')).display_name, `${needle} reader`);
-    await reader('update_my_profile', { display_name: profile.display_name });
+    await denied('update_my_profile', { display_name: `${needle} reader` });
+    assert.equal((await reader('get_my_profile')).display_name, profile.display_name);
+    const adminProfile = await admin('get_my_profile');
+    await admin('update_my_profile', { display_name: `${needle} admin` });
+    assert.equal((await admin('get_my_profile')).display_name, `${needle} admin`);
+    await admin('update_my_profile', { display_name: adminProfile.display_name });
     const path = `${profile.id}/${needle}.svg`;
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><rect width="1" height="1"/></svg>';
     const image = { bucket: 'person-images', path, content_type: 'image/svg+xml', data_base64: Buffer.from(svg).toString('base64') };

@@ -1,6 +1,14 @@
+import { renderProfileDescription } from '../lib/profile-description';
+import {biographyCitations,biographyProvenanceNote} from '../lib/record-provenance';
+import {renderRecordProvenance} from '../lib/record-provenance-dom';
+import { readDirectory } from './directory-data';
+import { filterCounty, selectedCounty } from './county-filter';
+import { browsePeople, orderPeople, type DirectoryPerson } from '../lib/directories';
+import { loadPersonRelationships } from './person-relationships';
 import { loadOfficeTerms } from './office-terms';
 import { loadProfileArticles } from './profile-articles';
 import { loadPersonCandidacies } from './person-candidacies';
+import { loadPersonVotes } from './person-votes';
 import {
   personHref,
   personImageUrl,
@@ -31,7 +39,7 @@ function visibilityLabel(visibility: PersonVisibility): string {
   return PERSON_VISIBILITY_LABELS[visibility] ?? 'Public';
 }
 
-function renderCard(person: Person): HTMLElement {
+function renderCard(person: DirectoryPerson): HTMLElement {
   const card = document.createElement('a');
   card.className = 'org-card person-card';
   card.href = personHref(person);
@@ -79,120 +87,106 @@ function renderCard(person: Person): HTMLElement {
   return card;
 }
 
-/** Public people directory. Search uses `search_people`, which widens to
- * unlisted/private records for admins. */
+/** Public discovery uses static data; signed-in discovery stays permission-checked. */
 export function initPeopleSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-person-search]');
-  const initial = document.querySelector<HTMLElement>('[data-person-initial]');
+  const kind = document.querySelector<HTMLSelectElement>('[data-person-kind]');
+  const sort = document.querySelector<HTMLSelectElement>('[data-person-sort]');
   const results = document.querySelector<HTMLElement>('[data-person-search-results]');
   const status = document.querySelector<HTMLElement>('[data-person-search-status]');
+  const previous = document.querySelector<HTMLButtonElement>('[data-person-previous]');
+  const next = document.querySelector<HTMLButtonElement>('[data-person-next]');
+  const pagination = document.querySelector<HTMLElement>('[data-person-pagination]');
+  const pageLabel = document.querySelector<HTMLElement>('[data-person-page]');
+  const initial = document.querySelector<HTMLElement>('[data-person-initial]');
   const empty = document.querySelector<HTMLElement>('[data-person-search-empty]');
   const note = document.querySelector<HTMLElement>('[data-person-search-note]');
-  if (!input || !results) return;
-
-  const inputEl = input;
-  const resultsEl = results;
+  if (!input || !kind || !sort || !results || !status || !previous || !next || !pagination || !pageLabel) return;
+  const ui = { input, kind, sort, results, status, previous, next, pagination, pageLabel };
   const supabase = getSupabase();
-  let signedIn = false;
-  let timer: number | undefined;
+  const pageSize = 24;
+  let page = 0;
   let requestId = 0;
+  let timer: number | undefined;
 
-  /** Signed in: list everything the user may see. Signed out: static public list. */
-  async function listAccessible(): Promise<void> {
-    if (!signedIn) {
-      requestId += 1;
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.hidden = true;
+  async function load(focus = false): Promise<void> {
+    const id = ++requestId;
+    ui.previous.disabled = ui.next.disabled = true;
+    ui.results.setAttribute('aria-busy', 'true');
+    ui.status.hidden = false;
+    ui.status.textContent = 'Loading people…';
+    try {
+      const snapshot = await readDirectory('people');
+      const rankAcrossPages = ui.sort.value === 'civic_first';
+      const needsAll = selectedCounty() !== 'all' || rankAcrossPages;
+      const rpcSort = rankAcrossPages ? 'first_asc' : ui.sort.value;
+      let { data, error } = snapshot ? {data: browsePeople(snapshot, ui.input.value.trim(), ui.kind.value, ui.sort.value, page * pageSize, pageSize),error:null} : needsAll ? {data:null,error:null} : await supabase.rpc('browse_people', {
+        p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
+        p_sort: rpcSort, p_limit: pageSize, p_offset: page * pageSize,
+      });
+      if (!snapshot && needsAll && !error) {
+        const all: Person[] = [];
+        for (let offset = 0; ; offset += 100) {
+          const result = await supabase.rpc('browse_people', {
+            p_query: ui.input.value.trim(), p_kind: ui.kind.value || null,
+            p_sort: rpcSort, p_limit: 100, p_offset: offset,
+          });
+          if (id !== requestId) return;
+          if (result.error) throw result.error;
+          const response = result.data as { people: Person[]; total: number };
+          all.push(...response.people);
+          if (all.length >= response.total || !response.people.length) break;
+        }
+        const scoped = orderPeople(await filterCounty(all, 'person'), ui.sort.value);
+        data = { people: scoped.slice(page * pageSize, (page + 1) * pageSize), total: scoped.length };
+      }
+      if (id !== requestId) return;
+      if (error) throw error;
+      const response = data as { people: Person[]; total: number };
+      const pages = Math.max(1, Math.ceil(response.total / pageSize));
+      if (page >= pages) { page = pages - 1; void load(focus); return; }
+      ui.results.replaceChildren(...response.people.map(renderCard));
+      ui.results.hidden = response.people.length === 0;
+      if (initial) initial.hidden = true;
+      if (empty) empty.hidden = response.people.length > 0;
+      ui.status.textContent = response.total === 0 ? '0 people found' :
+        `Showing ${page * pageSize + 1}–${page * pageSize + response.people.length} of ${response.total} people`;
+      ui.pageLabel.textContent = `Page ${page + 1} of ${pages}`;
+      ui.pagination.hidden = response.total === 0;
+      ui.previous.disabled = page === 0;
+      ui.next.disabled = page + 1 >= pages;
+      if (focus) { ui.status.tabIndex = -1; ui.status.focus(); }
+    } catch (error) {
+      if (id !== requestId) return;
+      ui.results.replaceChildren();
+      ui.results.hidden = true;
+      if (initial) initial.hidden = true;
       if (empty) empty.hidden = true;
-      if (initial) initial.hidden = false;
-      return;
-    }
-
-    const id = ++requestId;
-    if (status) {
-      status.textContent = 'Loading people…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_people', { p_query: '', p_limit: 50 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.textContent = `Could not load people: ${error.message}`;
-      return;
-    }
-
-    const people = (data ?? []) as unknown as Person[];
-    resultsEl.replaceChildren(...people.map(renderCard));
-    resultsEl.hidden = people.length === 0;
-    if (empty) empty.hidden = people.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${people.length} ${
-        people.length === 1 ? 'person' : 'people'
-      } available (includes unlisted and private)`;
+      ui.pagination.hidden = true;
+      ui.status.textContent = `Could not load people. Try searching again. ${error instanceof Error ? error.message : ''}`;
+    } finally {
+      if (id === requestId) ui.results.removeAttribute('aria-busy');
     }
   }
 
-  async function search(query: string): Promise<void> {
-    const id = ++requestId;
-    if (status) {
-      status.textContent = 'Searching…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_people', { p_query: query, p_limit: 24 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.textContent = `Search failed: ${error.message}`;
-      return;
-    }
-
-    const people = (data ?? []) as unknown as Person[];
-    resultsEl.replaceChildren(...people.map(renderCard));
-    resultsEl.hidden = people.length === 0;
-    if (empty) empty.hidden = people.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${people.length} result${people.length === 1 ? '' : 's'}`;
-    }
-  }
-
-  function update(): void {
-    const query = inputEl.value.trim();
-
-    if (!query) {
-      void listAccessible();
-      return;
-    }
-
-    if (initial) initial.hidden = true;
+  function update(delay = 0): void {
     window.clearTimeout(timer);
-    timer = window.setTimeout(() => void search(query), 200);
+    ++requestId; // Invalidate in-flight responses as soon as criteria change.
+    page = 0;
+    ui.previous.disabled = ui.next.disabled = true;
+    timer = window.setTimeout(() => void load(), delay);
   }
-
-  inputEl.addEventListener('input', update);
-
-  inputEl.closest('form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    window.clearTimeout(timer);
-    const query = inputEl.value.trim();
-    if (query) void search(query);
-    else void listAccessible();
-  });
-
-  void supabase.auth.getSession().then(({ data: { session } }) => {
-    signedIn = Boolean(session);
-    if (signedIn && note) note.hidden = false;
-    if (signedIn) void listAccessible();
+  ui.input.addEventListener('input', () => update(200));
+  ui.kind.addEventListener('change', () => update());
+  window.addEventListener('countychange', () => update());
+  ui.sort.addEventListener('change', () => update());
+  ui.input.closest('form')?.addEventListener('submit', event => { event.preventDefault(); update(); });
+  ui.input.closest('form')?.addEventListener('reset', () => update());
+  ui.previous.addEventListener('click', () => { page--; void load(true); });
+  ui.next.addEventListener('click', () => { page++; void load(true); });
+  void supabase.auth.getSession().then(async () => {
+    if (note) note.hidden = !(await isCurrentUserAdmin());
+    update();
   });
 }
 
@@ -297,9 +291,10 @@ function fillPersonView(response: PersonViewResponse): void {
 
   const bio = document.querySelector<HTMLElement>('[data-person-bio]');
   if (bio) {
-    bio.textContent = person.description ?? '';
+    bio.innerHTML = renderProfileDescription(person.description ?? '');
     bio.hidden = !person.description;
   }
+  renderRecordProvenance(document.querySelector('[data-person-provenance]'),{title:'Biography sources and verification',sources:biographyCitations(person.description),note:biographyProvenanceNote});
 
   const contactSection = document.querySelector<HTMLElement>('[data-person-contact-section]');
   const contact = document.querySelector<HTMLElement>('[data-person-contact]');
@@ -385,8 +380,10 @@ export async function initPersonViewFromUrl(): Promise<void> {
   status.hidden = true;
   fillPersonView(response);
   if (response.person) {
+    void loadPersonRelationships(response.person.id);
     void loadOfficeTerms(response.person.id);
     void loadPersonCandidacies(response.person.id);
+  void loadPersonVotes(response.person.id);
     void loadProfileArticles('person', response.person.id);
   }
 

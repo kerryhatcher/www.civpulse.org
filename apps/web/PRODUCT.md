@@ -8,7 +8,7 @@ web
 
 ## Product Purpose
 
-Civic Pulse helps people explore Macon–Bibb civic places, districts, services, and community events.
+Civic Pulse helps residents find people, organizations, elections, community events, maps, and public records. Initial coverage centers on Bibb County, Georgia; the Civic Pulse identity accommodates later geographic expansion.
 
 ## Capabilities and Constraints
 
@@ -16,7 +16,7 @@ The approved map recreation includes 17 presets and 24 reusable layers, with sou
 
 ## Brand Commitments
 
-Preserve Civic Pulse's existing visual identity and the source maps' colors, icons, historical records, and data-version notes. Use Impeccable for design work.
+The user approved the Open Exhibition redesign: monumental condensed typography, ultramarine surfaces, paper reading areas, lime selected topics, and a numbered civic topic index. Follow the browser/system appearance preference automatically, with a dark navy variation of the same exhibition system. Keep location context separate from the expandable Civic Pulse name. Preserve source maps' colors, icons, historical records, and data-version notes. Use Impeccable for design work.
 
 ## Evidence on Hand
 

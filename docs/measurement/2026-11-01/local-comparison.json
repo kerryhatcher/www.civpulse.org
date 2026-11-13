@@ -1,0 +1,12 @@
+{
+  "scope": "Non-production isolated local build; different database/content corpus. This is not a deployment diff or missing-page count.",
+  "observed_at": "2026-11-01T23:17:02.794Z",
+  "build_source_base_commit": "31e1728af54d23a9f455e88b980fbf5a25d6d111",
+  "database_scope": "Isolated local API 54341 / DB 54342, explicit public build environment; no shared DB use.",
+  "local_url_count": 443,
+  "production_only_count": 53655,
+  "local_only_count": 1,
+  "local_only_urls": [
+    "https://www.civpulse.org/orgs/macon-water-authority-district-1/"
+  ]
+}

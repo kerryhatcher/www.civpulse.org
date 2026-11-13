@@ -1,0 +1,36 @@
+---
+import {legislativeResources,type LegislativeRow} from '../lib/legislation';
+import {legislativeTitle,legislativeDate,humanize,relationLabel,coverageLabel} from '../lib/legislation-display';
+import {historyUrl} from '../lib/history';
+interface Props {table:string; row:LegislativeRow; heading?:'h1'|'h3'; omit?:string[]}
+const {table,row,heading='h3',omit=[]}=Astro.props;
+const Heading=heading;
+const primary:Record<string,string>={bill_sponsorships:omit.includes('office_term_id')?'bill_id':'office_term_id',legislative_vote_choices:'office_term_id',bill_positions:'person_id',article_bills:'article_id',legislative_vote_bills:omit.includes('vote_id')?'bill_id':'vote_id',bill_relationships:'related_bill_id',legislative_event_links:'event_id'};
+const field=primary[table];
+const label=legislativeTitle(table,row,omit);
+const href=heading==='h1'?undefined:row.links?.record??(field?row.links?.[field]:undefined);
+const hidden=new Set([...omit,field,'title','name','question','summary','description','source_status','source_url','text_url','source_id','source_system','retrieved_at','visibility','numbering_context','sequence','status','outcome','role','position','choice','coverage','reported_yes','reported_no','reported_other','membership_review_note',...(row.occurred_at?['occurred_on']:[]),...(['bills','bill_versions','legislative_sessions'].includes(table)?['identifier']:[]),...(row.choice?['source_choice']:[])]);
+const labels:Record<string,string>={occurred_on:'Date',occurred_at:'Date & time',introduced_on:'Introduced',published_on:'Published',starts_on:'From',ends_on:'Through',body_id:'Chamber or committee',term_id:'Legislative term',office_term_id:'Office service',source_role:'Role in source',threshold:'Required to pass',identifier:table==='legislative_votes'?'Vote number':'Identifier'};
+const metadata=legislativeResources[table].fields.filter(f=>!hidden.has(f.name) && row[f.name]!=null && row[f.name]!=='' && (!f.reference||relationLabel(row,f.name)));
+const service=field==='office_term_id'?relationLabel(row,field).split(' · ').slice(1).map(part=>/^\d{4}-\d{2}-\d{2}$/.test(part)?'From '+legislativeDate(part):part).join(' · '):'';
+---
+<article class={heading==='h1'?'legislation-heading':'org-card legislation-record'}>
+  <Heading>{href?<a href={href}>{label}</a>:label}</Heading>
+  <div class="legislation-states">
+    {['status','outcome','role','position','choice'].filter(key=>row[key]).map(key=><span class:list={['legislation-badge',{'legislation-choice':key==='choice'}]}>{key==='choice'?`Voted ${row.source_choice||humanize(row.choice)}`:key==='outcome'?`Result: ${humanize(row.outcome).toLowerCase()}`:humanize(row[key])}</span>)}
+  </div>
+  {row.summary&&<p>{String(row.summary)}</p>}
+  {row.source_status&&<p class="legislation-status">{String(row.source_status)}</p>}
+  {row.description&&table!=='bill_actions'&&<p>{String(row.description)}</p>}
+  {table==='legislative_votes'&&row.category==='cloture'&&<p>Cloture is a vote to limit debate on the stated question. It is not final passage of the bill.</p>}
+  <dl class="legislation-meta">
+    {service&&<div><dt>Office service</dt><dd>{service}</dd></div>}
+    {metadata.map(f=><div><dt>{labels[f.name]??humanize(f.label)}</dt><dd>{f.reference?(row.links?.[f.name]?<a href={row.links[f.name]}>{relationLabel(row,f.name)}</a>:relationLabel(row,f.name)):f.type==='date'||f.type==='timestamptz'?legislativeDate(row[f.name],f.type==='timestamptz'):humanize(row[f.name])}</dd></div>)}
+  </dl>
+  {row.coverage&&heading!=='h1'&&<p>{coverageLabel(row.coverage)}</p>}
+  <div class="legislation-links">
+    {row.text_url&&<a href={String(row.text_url)}>Read bill text</a>}
+    {row.source_url&&row.source_url!==row.text_url&&<a href={String(row.source_url)}>View source</a>}
+    <a href={historyUrl(table,row.id)}>View history</a>
+  </div>
+</article>

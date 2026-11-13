@@ -1,3 +1,4 @@
+import type { MeetingOutcome } from './meeting-outcomes';
 export interface MeetingRecord {
   status: 'ok' | 'missing' | 'private';
   event?: {
@@ -5,21 +6,23 @@ export interface MeetingRecord {
     title: string;
     meeting_notes: string | null;
     meeting_transcript: string | null;
+    meeting_video_url: string | null;
+    meeting_video_start_seconds: number | null;
   };
   attendance?: {
     person_id: string;
     full_name: string;
     slug: string;
-    status: 'present' | 'absent' | 'excused';
+    status: 'present' | 'absent' | 'excused' | 'observed' | 'unknown';
     note: string | null;
   }[];
-  votes?: {
+  votes?: (MeetingOutcome & {
     id: string;
     subject: string;
     description: string | null;
     outcome: string | null;
     choices: { person_id: string; full_name: string; choice: string }[];
-  }[];
+  })[];
   attachments?: {
     id: string;
     file_name: string;
@@ -56,3 +59,7 @@ export const MEETING_FILE_TYPES: Record<string, string> = {
   ods: 'application/vnd.oasis.opendocument.spreadsheet',
   odp: 'application/vnd.oasis.opendocument.presentation',
 };
+
+export function meetingAttendanceLabel(status: string): string {
+  return status === 'observed' ? 'Observed at a ballot only' : status === 'unknown' ? 'Attendance unknown' : status;
+}

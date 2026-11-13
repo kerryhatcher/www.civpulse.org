@@ -3,9 +3,12 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Search" description="Search Civic Pulse people, elections, articles, organizations, maps, and community events.">
   <main id="main">
+    <p><a href="/statistics/">Search county demographic statistics and official-source data</a></p>
     <div class="page-intro">
       <h1>Search Civic Pulse</h1>
-      <p>Find people, organizations, elections, races, ballot questions, articles, maps, layers, calendars, and events.</p>
+      <p>For school salaries, travel and recipient payments, <a href="/finances/">search Bibb school finances</a>.</p>
+      <p>Find people, organizations, elections, races, ballot questions, articles, maps, layers, calendars, and events. Meeting results also match recorded notes, transcripts, and motion details.</p>
+      <p>To search the contents of published meeting files, visit the <a href="/documents/">public document archive</a>.</p>
     </div>
     <form class="calendar-filters site-search-form" action="/search/" role="search" data-site-search-form>
       <label class="field field-wide"><span>Search</span><input type="search" name="q" maxlength="500" placeholder="Name, office, topic, or article URL…" data-site-search-input /></label>
@@ -18,8 +21,9 @@ import Layout from '../layouts/Layout.astro';
         <option value="calendar">Calendars</option><option value="event">Events</option>
       </select></label>
       <button class="button-link" type="submit">Search</button>
+      <button type="reset">Clear search</button>
     </form>
-    <p class="body-note" data-site-search-access>Search shows public content. Admins can also search unlisted and private content.</p>
+    <p class="body-note" data-site-search-access>Search public civic information. Your county selection also applies.</p>
     <p class="status" role="status" aria-live="polite" data-site-search-status>Enter a search or choose a content type to browse.</p>
     <div class="org-grid site-search-results" data-site-search-results></div>
     <div class="site-search-pagination" aria-label="Search result pages">

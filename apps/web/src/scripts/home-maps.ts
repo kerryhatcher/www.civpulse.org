@@ -1,8 +1,9 @@
 import L from 'leaflet';
-import { fetchLayerGeoJSON, type LayerConfig } from '../lib/layers';
+import { filterCounty } from './county-filter';
+import { fetchLayerGeoJSON } from '../lib/layers';
 import { createGeoJSONLayer } from '../lib/map-rendering';
 import type { MapConfig } from '../lib/maps';
-import { getSupabase } from '../lib/supabase';
+import { fetchMapLayers } from '../lib/map-data';
 
 const HOME_CENTER: L.LatLngExpression = [32.8407, -83.6324];
 const HOME_ZOOM = 8;
@@ -33,10 +34,9 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
   map.on('resize', fitPreview);
   setTimeout(() => map.invalidateSize(), 0);
 
-  void getSupabase()
-    .rpc('get_map_layers', { p_map_id: config.id })
-    .then(async ({ data }) => {
-      const layers = ((data ?? []) as unknown as LayerConfig[])
+  void fetchMapLayers(config, true)
+    .then(async (data) => {
+      const layers = data
         .filter((layer) => layer.visible_by_default !== false);
       // Assign panes before downloading so stacking follows the map's order.
       await Promise.all(layers.map(async (layer, index) => {
@@ -56,10 +56,10 @@ function renderPreview(container: HTMLElement, config: MapConfig): void {
           });
       }));
       fitPreview();
-    });
+    }).catch(() => { container.textContent = 'Preview unavailable. Open the map to try again.'; });
 }
 
-export function initHomeMaps(): void {
+export async function initHomeMaps(): Promise<void> {
   const carousel = document.querySelector<HTMLElement>('[data-map-carousel]');
   const script = document.querySelector<HTMLScriptElement>('[data-home-maps]');
   if (!carousel || !script) return;
@@ -71,8 +71,17 @@ export function initHomeMaps(): void {
     return;
   }
   if (maps.length === 0) return;
-
   const byId = new Map(maps.map((map) => [map.id, map]));
+  const catalog = maps;
+  try { maps = await filterCounty(catalog, 'map'); } catch { return; }
+  function applyScope() {
+    const ids = new Set(maps.map(map => map.id));
+    for (const preview of carousel!.querySelectorAll<HTMLElement>('[data-map-preview]')) {
+      const slide = preview.closest<HTMLElement>('.map-slide');
+      if (slide) slide.hidden = !ids.has(preview.dataset.mapId ?? '');
+    }
+  }
+  applyScope();
   const viewport = carousel.querySelector<HTMLElement>('[data-carousel-viewport]');
   const previews = [...carousel.querySelectorAll<HTMLElement>('[data-map-preview]')];
 
@@ -97,13 +106,6 @@ export function initHomeMaps(): void {
   const count = carousel.querySelector<HTMLElement>('[data-carousel-count]');
   const scroller = viewport ?? carousel;
 
-  if (maps.length <= 1) {
-    prev?.remove();
-    next?.remove();
-    if (count) count.textContent = '';
-    return;
-  }
-
   const AUTOPLAY_MS = 5000;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let autoplay: number | undefined;
@@ -118,6 +120,7 @@ export function initHomeMaps(): void {
   }
 
   function goTo(index: number): void {
+    if (!maps.length) return;
     const wrapped = ((index % maps.length) + maps.length) % maps.length;
     scroller.scrollTo({
       left: wrapped * slideWidth(),
@@ -130,11 +133,11 @@ export function initHomeMaps(): void {
     const index = currentIndex() + 1;
     if (prev) prev.disabled = scroller.scrollLeft <= 2;
     if (next) next.disabled = scroller.scrollLeft >= max - 2;
-    if (count) count.textContent = `${Math.min(index, maps.length)} / ${maps.length}`;
+    if (count) count.textContent = maps.length ? `${Math.min(index, maps.length)} / ${maps.length}` : 'No maps match this county.';
   }
 
   function startAutoplay(): void {
-    if (reduceMotion || autoplay !== undefined || document.hidden || !inView) return;
+    if (maps.length < 2 || reduceMotion || autoplay !== undefined || document.hidden || !inView) return;
     autoplay = window.setInterval(() => goTo(currentIndex() + 1), AUTOPLAY_MS);
   }
 
@@ -158,6 +161,11 @@ export function initHomeMaps(): void {
     restartAutoplay();
   });
   scroller.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('countychange', () => {
+    void filterCounty(catalog, 'map').then(scoped => {
+      maps = scoped; applyScope(); scroller.scrollLeft = 0; update(); restartAutoplay();
+    });
+  });
   window.addEventListener('resize', update);
 
   // Pause while the visitor is interacting, then resume when they leave.

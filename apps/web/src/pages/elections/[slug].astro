@@ -1,7 +1,23 @@
 ---
+import { candidatePartyTone } from "../../lib/candidate-party";
+import SectionLink from '../../components/SectionLink.astro';
+import { electionPageTitle, recordDescription } from '../../lib/page-metadata';
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
+import ElectionPrecinctTurnout from '../../components/ElectionPrecinctTurnout.astro';
+import ElectionTurnout from '../../components/ElectionTurnout.astro';
+import ElectionScope from '../../components/ElectionScope.astro';
+import BallotResults from '../../components/BallotResults.astro';
+import SosResults from '../../components/SosResults.astro';
+import SosInlineCount from '../../components/SosInlineCount.astro';
+import SosBallotEvidence from '../../components/SosBallotEvidence.astro';
+import { publicSosFallback, publicSosMappings } from '../../lib/sos-results-build';
+import { isBibbContest } from '../../lib/election-scope';
 import Layout from '../../layouts/Layout.astro';
+import RecordProvenance from '../../components/RecordProvenance.astro';
+import { electionSources } from '../../lib/record-provenance';
 import BallotQuestion from '../../components/BallotQuestion.astro';
 import { formatEventWhen } from '../../lib/calendars';
+import { CALENDAR_ZONE } from '../../lib/calendar-display';
 import {
   fetchPublicElections,
   fetchElectionDetail,
@@ -33,6 +49,11 @@ interface Props {
 
 const { detail } = Astro.props;
 const { election, organization, contests, dates, ballot_questions } = detail;
+const sosFallback = await publicSosFallback(election.id);
+const sosMappings = sosFallback ? await publicSosMappings(election.id) : [];
+const unmappedSourceItems = sosFallback?.scope.items.filter(item => !sosMappings.some(m =>
+  m.jurisdiction_id === sosFallback.scope.jurisdiction.id && m.source_contest_id === item.data.id
+  && (contests.some(c => c.id === m.contest_id) || ballot_questions.some(q => q.id === m.question_id)))) ?? [];
 
 function initials(name: string): string {
   return name
@@ -51,10 +72,11 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
 ---
 
 <Layout
-  title={election.name}
+  title={electionPageTitle(election.name, election.election_date, formatElectionDate(election.election_date))}
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Elections', href: '/elections/' }, { name: election.name, href: Astro.url.pathname }]}
   description={
-    election.description ??
-    `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}.`
+    recordDescription(election.name, election.description,
+      `${ELECTION_KIND_LABELS[election.kind]} on ${formatElectionDate(election.election_date)}. Explore published contests, candidates, ballot questions and key dates.`)
   }
 >
   <main id="main">
@@ -79,44 +101,27 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
       </a>
     </div>
 
-    {election.description && <div class="prose election-description"><p>{election.description}</p></div>}
+    <nav class="election-section-nav" aria-label="Election sections">
+      <a href="#results-and-turnout">Results &amp; turnout</a>
+      <a href="#ballot">What's on the ballot</a>
+      {dateGroups.length > 0 && <a href="#dates-and-deadlines">Dates &amp; deadlines</a>}
+    </nav>
 
-    {
-      dateGroups.length > 0 && (
-        <section class="election-dates" aria-labelledby="election-dates-title">
-          <h2 id="election-dates-title">Dates &amp; deadlines</h2>
-          <div class="election-date-groups">
-            {dateGroups.map((group) => (
-              <div class="election-date-group">
-                <h3>{group.label}</h3>
-                <ul class="election-date-list">
-                  {group.dates.map((date) => (
-                    <li class="election-date-item">
-                      <a class="election-date-when" href={`/calendar/view/?id=${date.id}`}>
-                        {formatEventWhen(date)}
-                      </a>
-                      <span class="election-date-title">{date.title}</span>
-                      {date.location && <span class="election-date-location">{date.location}</span>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <p class="body-note">
-            Every date is also on the <a href="/calendar/">community calendar</a>.
-          </p>
-        </section>
-      )
-    }
+    <section id="results-and-turnout" data-shareable-section aria-label="Results and turnout">
+      <ElectionTurnout electionId={election.id} />
+      <ElectionPrecinctTurnout electionId={election.id} />
+    </section>
 
-    <section class="election-contests" aria-labelledby="election-contests-title">
-      <h2 id="election-contests-title">What's on the ballot</h2>
+    <section id="ballot" data-shareable-section class="election-contests" aria-labelledby="election-contests-title">
+      <h2 id="election-contests-title">What's on the ballot <SectionLink target="ballot" label="what’s on the ballot" /></h2>
+      <ElectionScope />
+      <BallotResults electionId={election.id} />
+      <SosResults electionId={election.id} publicAssets fallback={sosFallback} inline />
       {
-        contests.length > 0 || ballot_questions.length > 0 ? (
-          <div class="contest-list">
+        contests.length > 0 || ballot_questions.length > 0 || sosFallback ? (
+          <div class="contest-list" data-sos-ballot-list>
             {contests.map((contest) => (
-              <article class="contest-card">
+              <article class="contest-card" id={`contest-${contest.id}`} data-bibb-relevant={String(isBibbContest(contest))} hidden={!isBibbContest(contest)}>
                 <header class="contest-heading">
                   <h3>
                     {contest.office}
@@ -133,7 +138,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                     {contest.candidates.map(({ person, party, status, is_write_in }) => {
                       const image = personImageUrl(person.image_path);
                       return (
-                        <a class="candidate-card" href={personHref(person)}>
+                        <a class="candidate-card" data-candidate-id={person.id} data-party-tone={candidatePartyTone(party, contest.partisan)} href={personHref(person)}>
                           {image ? (
                             <img
                               class="candidate-image"
@@ -154,6 +159,7 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                             <span class="candidate-meta">
                               {[party, CANDIDATE_STATUS_LABELS[status]].filter(Boolean).join(' · ')}
                             </span>
+                            <SosInlineCount view={sosFallback} mappings={sosMappings} contestId={contest.id} personId={person.id} />
                           </span>
                         </a>
                       );
@@ -162,26 +168,87 @@ const dateGroups = ELECTION_DATE_KIND_ORDER.map((kind: ElectionDateKind) => ({
                 ) : (
                   <p class="status">No candidates listed yet.</p>
                 )}
+                <SosBallotEvidence view={sosFallback} mappings={sosMappings} contestId={contest.id} />
               </article>
             ))}
-            {ballot_questions.map(question => <BallotQuestion question={question} />)}
+            {ballot_questions.map(question => <BallotQuestion question={question} sosView={sosFallback} sosMappings={sosMappings} />)}
+            {unmappedSourceItems.map(item => <article class="contest-card" data-sos-ballot-fallback>
+              <header class="contest-heading"><h3>{String(item.data.name)}</h3><span class="contest-meta">Georgia SOS source race · {sosFallback!.scope.jurisdiction.name}</span></header>
+              <p class="body-note">This source race has no reviewed link to the curated ballot. Source choices are shown without guessed profile links.</p>
+              <SosBallotEvidence view={sosFallback} sourceItem={item} />
+            </article>)}
           </div>
         ) : (
-          <div class="empty-state">
+          <div class="contest-list" data-sos-ballot-list><div class="empty-state">
             <p>No races or ballot questions have been published for this election yet.</p>
-          </div>
+          </div></div>
         )
       }
     </section>
 
+    {
+      dateGroups.length > 0 && (
+        <section id="dates-and-deadlines" data-shareable-section class="election-dates" aria-labelledby="election-dates-title">
+          <h2 id="election-dates-title">Dates &amp; deadlines <SectionLink target="dates-and-deadlines" label="dates and deadlines" /></h2>
+          <p class="body-note">All times are Eastern Time (America/New_York).</p>
+          <div class="election-date-groups">
+            {dateGroups.map((group) => (
+              <div class="election-date-group">
+                <h3>{group.label}</h3>
+                <ul class="election-date-list">
+                  {group.dates.map((date) => (
+                    <li class="election-date-item">
+                      <a class="election-date-when" href={`/calendar/view/?id=${date.id}`}>
+                        {formatEventWhen(date, CALENDAR_ZONE)}
+                      </a>
+                      <span class="election-date-title">{date.title}</span>
+                      {date.location && <span class="election-date-location">{date.location}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p class="body-note">
+            Every date is also on the <a href="/calendar/">community calendar</a>.
+          </p>
+        </section>
+      )
+    }
+
+    <RecordProvenance sources={electionSources(detail)} recordDate={{ label: 'Election date (not a verification date)', value: formatElectionDate(election.election_date) }} note="Named sources below support their particular dates or ballot questions, not necessarily the entire election summary. A source publication or retrieval date is not recorded separately here." />
+
     <p class="org-back">
       <a href="/elections/">← All elections</a>
     </p>
+  <ObjectHistoryLink feedback table="elections" id={election.id} />
   </main>
 </Layout>
 
 <script>
   import { initAdminEditLink } from '../../scripts/auth';
+  import { initElectionScope } from '../../scripts/elections';
 
+  import { initElectionPrecinctTurnout } from '../../scripts/precinct-turnout';
+  import { initElectionTurnout } from '../../scripts/election-turnout';
+  import { initBallotResults } from '../../scripts/ballot-results';
+  import { initSosResults } from '../../scripts/sos-results';
+  import { restoreSectionAnchorAfter } from '../../scripts/section-anchors';
+
+  const turnout = document.querySelector<HTMLElement>('[data-election-turnout]');
+  if (turnout?.dataset.electionId) {
+    restoreSectionAnchorAfter(Promise.allSettled([
+      initElectionTurnout(turnout.dataset.electionId),
+      initBallotResults(turnout.dataset.electionId),
+      initSosResults(turnout.dataset.electionId, true),
+      initElectionPrecinctTurnout(turnout.dataset.electionId),
+    ]));
+  }
   void initAdminEditLink();
+  initElectionScope();
 </script>
+
+<style>
+  .election-section-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; margin-block: 1rem; }
+  .election-section-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+</style>

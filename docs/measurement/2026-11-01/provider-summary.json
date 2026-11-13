@@ -1,0 +1,490 @@
+{
+  "schema_version": 1,
+  "baseline_date": "2026-11-01",
+  "captured_at": "2026-11-01T23:12:09.155Z",
+  "privacy": "Public aggregate baseline only. No credentials, account emails, other websites, GA4 raw paths/query strings, HTP job/website UUIDs or private inspection links retained.",
+  "properties": {
+    "website": "www.civpulse.org",
+    "google": {
+      "connected": true,
+      "search_scope_available": true,
+      "analytics_scope_available": true,
+      "search_console": [
+        {
+          "permissionLevel": "siteOwner",
+          "siteUrl": "sc-domain:civpulse.org"
+        }
+      ],
+      "ga4_property_id": "560854378"
+    },
+    "bing": {
+      "connected": true,
+      "verified_sites": [
+        {
+          "IsVerified": true,
+          "Url": "https://civpulse.org/"
+        }
+      ],
+      "selected_site_url": "https://civpulse.org/",
+      "scope_note": "Bing selected the apex property; Google reports below filter www. These scopes are not interchangeable."
+    }
+  },
+  "google_search": {
+    "source": "HTP latest saved selected 28-day Search Console snapshot",
+    "snapshot_id": 2231,
+    "fetched_at": "2026-11-01T22:37:06.246497+00:00",
+    "site_url": "sc-domain:civpulse.org",
+    "start_date": "2026-10-04",
+    "end_date": "2026-10-31",
+    "measurement": {
+      "anonymized_queries": "excluded_from_query_dimensions",
+      "data_state": "final",
+      "date_timezone": "America/Los_Angeles",
+      "filters": {
+        "hostname": "www.civpulse.org"
+      },
+      "latest_observed_date": "2026-10-30",
+      "observed_at": "2026-11-01T22:37:06.195Z",
+      "provider_completeness": "not_guaranteed",
+      "search_type": "web",
+      "source": "google_search_console",
+      "version": 1
+    },
+    "summary": {
+      "collection": {
+        "anonymized_queries": "not_applicable",
+        "coverage": "bounded_top_rows",
+        "data_state": "final",
+        "dimensions": [],
+        "page_size": 1,
+        "requests": 1,
+        "returned_rows": 1,
+        "row_limit": 1,
+        "truncated": false
+      },
+      "responseAggregationType": "byPage",
+      "rows": [
+        {
+          "clicks": 0,
+          "ctr": 0,
+          "impressions": 0,
+          "position": 0
+        }
+      ]
+    },
+    "returned_daily": [
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-25"
+        ],
+        "position": 0
+      },
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-26"
+        ],
+        "position": 0
+      },
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-27"
+        ],
+        "position": 0
+      },
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-28"
+        ],
+        "position": 0
+      },
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-29"
+        ],
+        "position": 0
+      },
+      {
+        "clicks": 0,
+        "ctr": 0,
+        "impressions": 0,
+        "keys": [
+          "2026-10-30"
+        ],
+        "position": 0
+      }
+    ],
+    "query_rows": 0,
+    "page_rows": 0,
+    "query_page_rows": 0,
+    "collection": {
+      "anonymized_queries": "excluded",
+      "coverage": "bounded_top_rows",
+      "data_state": "final",
+      "dimensions": [
+        "query"
+      ],
+      "page_size": 1000,
+      "requests": 1,
+      "returned_rows": 0,
+      "row_limit": 5000,
+      "truncated": false
+    },
+    "previous_period_comparison": {
+      "available": false,
+      "reason": "period_freshness_unconfirmed"
+    },
+    "indexed_url_total": null,
+    "ctr_interpretation": "Not meaningful with zero impressions; provider reports numeric 0. Position 0 is not a ranking observation.",
+    "coverage_note": "Latest observed date is Oct 30 within a requested period ending Oct 31. Empty query/page rows and provider final state do not prove complete site/search coverage."
+  },
+  "analytics": {
+    "source": "HTP latest saved selected GA4 snapshot",
+    "snapshot_id": 2222,
+    "fetched_at": "2026-11-01T22:19:03.259844+00:00",
+    "property_id": "560854378",
+    "start_date": "2026-10-04",
+    "end_date": "2026-10-31",
+    "measurement": {
+      "filters": {
+        "hostname": "www.civpulse.org"
+      },
+      "observed_at": "2026-11-01T22:19:03.191Z",
+      "provider_completeness": "not_guaranteed",
+      "source": "google_analytics",
+      "version": 1
+    },
+    "timezone": "America/Los_Angeles",
+    "summary": {
+      "activeUsers": 20,
+      "sessions": 87,
+      "screenPageViews": 969,
+      "engagementRate": 0.6666666666666666,
+      "averageSessionDuration": 788.3874594367816
+    },
+    "channels": [
+      {
+        "channel": "Direct",
+        "sessions": 79,
+        "activeUsers": 12
+      },
+      {
+        "channel": "Organic Search",
+        "sessions": 6,
+        "activeUsers": 6
+      },
+      {
+        "channel": "Organic Social",
+        "sessions": 2,
+        "activeUsers": 2
+      }
+    ],
+    "pages": {
+      "provider_row_count": 330,
+      "returned_rows": 10,
+      "raw_rows_retained": false,
+      "reason": "pagePathPlusQueryString can contain private viewer IDs; public baseline stores coverage counts only."
+    },
+    "ai_referrals": null,
+    "ai_referral_gap": "Saved report has channel groups, not sessionSource/sessionMedium/referrer. Direct is not an AI label. Organic Search is not equivalent to GSC clicks."
+  },
+  "bing": {
+    "source": "HTP latest saved Bing snapshot",
+    "snapshot_id": 7,
+    "fetched_at": "2026-11-01T03:12:01.993516+00:00",
+    "selected_site_url": "https://civpulse.org/",
+    "sitemaps": [
+      {
+        "url": "https://www.civpulse.org/sitemap-0.xml",
+        "type": "Sitemap",
+        "status": "Success",
+        "url_count": 35297,
+        "last_crawled": "2026-10-26",
+        "submitted": "2026-10-26"
+      },
+      {
+        "url": "https://www.civpulse.org/sitemap-index.xml",
+        "type": "Sitemap Index",
+        "status": "Success",
+        "url_count": 35297,
+        "last_crawled": "2026-10-26",
+        "submitted": "2026-10-26"
+      }
+    ],
+    "traffic_rows": [
+      {
+        "date": "2026-10-28",
+        "clicks": 0,
+        "impressions": 0
+      },
+      {
+        "date": "2026-10-29",
+        "clicks": 0,
+        "impressions": 5
+      }
+    ],
+    "query_rows": [
+      {
+        "date": "2026-10-30",
+        "clicks": 0,
+        "impressions": 1,
+        "average_impression_position": 8
+      },
+      {
+        "date": "2026-10-30",
+        "clicks": 0,
+        "impressions": 1,
+        "average_impression_position": 9
+      },
+      {
+        "date": "2026-10-30",
+        "clicks": 0,
+        "impressions": 1,
+        "average_impression_position": 4
+      }
+    ],
+    "private_query_text_retained": false,
+    "page_row_count": 0,
+    "crawl_row_count": 0,
+    "issue_row_count": 0,
+    "section_errors": {
+      "crawl": null,
+      "issues": null,
+      "pages": null,
+      "queries": null,
+      "sitemaps": null,
+      "traffic": null
+    },
+    "indexed_url_total": null,
+    "note": "Only returned rows, with different dates across sections. Do not add query impressions to traffic impressions, infer missing days as zero, or interpret empty crawl/issues arrays as a passing full-site audit."
+  },
+  "google_ui": {
+    "observed_date": "2026-11-01",
+    "site_url": "sc-domain:civpulse.org",
+    "access": "Owned property opened successfully in existing authenticated browser; account identity omitted.",
+    "sitemaps": [
+      {
+        "url": "https://www.civpulse.org/sitemap-0.xml",
+        "submitted": "2026-10-26",
+        "last_read": "2026-10-31",
+        "status": "Success",
+        "discovered_pages": 35388
+      },
+      {
+        "url": "https://www.civpulse.org/sitemap-index.xml",
+        "submitted": "2026-10-26",
+        "last_read": "2026-10-31",
+        "status": "Success",
+        "discovered_pages": 35388
+      }
+    ],
+    "indexing_report": {
+      "status": "Processing data, please check again in a day or so",
+      "indexed": null,
+      "not_indexed": null
+    },
+    "note": "Discovered sitemap pages are not indexed totals; do not sum index and child counts. No sitemap submitted, indexing requested or settings changed."
+  },
+  "field_performance": [
+    {
+      "snapshot_id": 2141,
+      "fetched_at": "2026-11-01T21:15:52.168615+00:00",
+      "available": false,
+      "formFactor": "PHONE",
+      "measurement": {
+        "device": "PHONE",
+        "mode": "field",
+        "scope": "origin",
+        "semantics_version": 1,
+        "target": "https://www.civpulse.org"
+      },
+      "origin": "https://www.civpulse.org",
+      "reason": "insufficient_data"
+    },
+    {
+      "snapshot_id": 2143,
+      "fetched_at": "2026-11-01T21:16:02.105878+00:00",
+      "available": false,
+      "formFactor": "DESKTOP",
+      "measurement": {
+        "device": "DESKTOP",
+        "mode": "field",
+        "scope": "origin",
+        "semantics_version": 1,
+        "target": "https://www.civpulse.org"
+      },
+      "origin": "https://www.civpulse.org",
+      "reason": "insufficient_data"
+    }
+  ],
+  "lab_performance": [
+    {
+      "snapshot_id": 2151,
+      "fetched_at": "2026-11-01T21:17:34.040218+00:00",
+      "kind": "pagespeed",
+      "url": "https://www.civpulse.org/",
+      "strategy": "mobile",
+      "measurement": {
+        "device": "mobile",
+        "metrics": {
+          "cumulative-layout-shift": 0.08391605342061256,
+          "first-contentful-paint": 902,
+          "largest-contentful-paint": 902,
+          "total-blocking-time": 0
+        },
+        "mode": "lab",
+        "sample_count": 1,
+        "scope": "url",
+        "semantics_version": 1,
+        "target": "https://www.civpulse.org/"
+      },
+      "analysisUTCTimestamp": "2026-11-01T21:17:27.445Z",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-01T21:17:27.445Z",
+      "categories": {
+        "accessibility": {
+          "title": "Accessibility",
+          "score": 1
+        },
+        "best-practices": {
+          "title": "Best Practices",
+          "score": 1
+        },
+        "performance": {
+          "title": "Performance",
+          "score": 0.98
+        },
+        "seo": {
+          "title": "SEO",
+          "score": 1
+        }
+      },
+      "metrics": {
+        "first-contentful-paint": {
+          "title": "First Contentful Paint",
+          "numericValue": 902,
+          "numericUnit": "millisecond",
+          "displayValue": "0.9 s"
+        },
+        "largest-contentful-paint": {
+          "title": "Largest Contentful Paint",
+          "numericValue": 902,
+          "numericUnit": "millisecond",
+          "displayValue": "0.9 s"
+        },
+        "total-blocking-time": {
+          "title": "Total Blocking Time",
+          "numericValue": 0,
+          "numericUnit": "millisecond",
+          "displayValue": "0 ms"
+        },
+        "cumulative-layout-shift": {
+          "title": "Cumulative Layout Shift",
+          "numericValue": 0.08391605342061256,
+          "numericUnit": "unitless",
+          "displayValue": "0.084"
+        },
+        "speed-index": {
+          "title": "Speed Index",
+          "numericValue": 902,
+          "numericUnit": "millisecond",
+          "displayValue": "0.9 s"
+        }
+      }
+    },
+    {
+      "snapshot_id": 2142,
+      "fetched_at": "2026-11-01T21:16:01.831937+00:00",
+      "kind": "pagespeed",
+      "url": "https://www.civpulse.org/",
+      "strategy": "desktop",
+      "measurement": {
+        "device": "desktop",
+        "metrics": {
+          "cumulative-layout-shift": 0.07701044155972259,
+          "first-contentful-paint": 245.5,
+          "largest-contentful-paint": 245.5,
+          "total-blocking-time": 0
+        },
+        "mode": "lab",
+        "sample_count": 1,
+        "scope": "url",
+        "semantics_version": 1,
+        "target": "https://www.civpulse.org/"
+      },
+      "analysisUTCTimestamp": "2026-11-01T21:15:54.136Z",
+      "lighthouseVersion": "13.6.0",
+      "fetchTime": "2026-11-01T21:15:54.136Z",
+      "categories": {
+        "accessibility": {
+          "title": "Accessibility",
+          "score": 1
+        },
+        "best-practices": {
+          "title": "Best Practices",
+          "score": 1
+        },
+        "performance": {
+          "title": "Performance",
+          "score": 0.99
+        },
+        "seo": {
+          "title": "SEO",
+          "score": 1
+        }
+      },
+      "metrics": {
+        "first-contentful-paint": {
+          "title": "First Contentful Paint",
+          "numericValue": 245.5,
+          "numericUnit": "millisecond",
+          "displayValue": "0.2 s"
+        },
+        "largest-contentful-paint": {
+          "title": "Largest Contentful Paint",
+          "numericValue": 245.5,
+          "numericUnit": "millisecond",
+          "displayValue": "0.2 s"
+        },
+        "total-blocking-time": {
+          "title": "Total Blocking Time",
+          "numericValue": 0,
+          "numericUnit": "millisecond",
+          "displayValue": "0 ms"
+        },
+        "cumulative-layout-shift": {
+          "title": "Cumulative Layout Shift",
+          "numericValue": 0.07701044155972259,
+          "numericUnit": "unitless",
+          "displayValue": "0.077"
+        },
+        "speed-index": {
+          "title": "Speed Index",
+          "numericValue": 517.9671301038572,
+          "numericUnit": "millisecond",
+          "displayValue": "0.5 s"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Backlink dataset unavailable in selected sources.",
+    "CrUX origin data is insufficient, not a Core Web Vitals pass.",
+    "One lab homepage observation per device is not field performance or a site-wide grade.",
+    "No provider collection, bindings, paid service or recurring automation was changed."
+  ]
+}

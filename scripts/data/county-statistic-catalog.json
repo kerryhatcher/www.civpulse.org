@@ -1,0 +1,538 @@
+[
+  {
+    "id": "population",
+    "title": "Population & people",
+    "note": "Population estimates describe residents, not registered voters. Age groups below do not cover every age.",
+    "position": 0,
+    "indicators": [
+      {
+        "code": "PST045225",
+        "label": "Population",
+        "period": "July 1, 2025 estimate",
+        "position": 0,
+        "headline_position": 0,
+        "unit": "count"
+      },
+      {
+        "code": "POP010220",
+        "label": "2020 Census population",
+        "period": "April 1, 2020 Census",
+        "position": 1,
+        "headline_position": null,
+        "unit": "count"
+      },
+      {
+        "code": "PST120225",
+        "label": "Population change",
+        "period": "April 2020 estimates base to July 2025",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE295225",
+        "label": "Residents under 18",
+        "period": "July 1, 2025 estimate",
+        "position": 3,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE775225",
+        "label": "Residents age 65+",
+        "period": "July 1, 2025 estimate",
+        "position": 4,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "SEX255225",
+        "label": "Female residents",
+        "period": "July 1, 2025 estimate",
+        "position": 5,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "POP645224",
+        "label": "Foreign-born residents",
+        "period": "2020–2024 ACS",
+        "position": 6,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "VET605224",
+        "label": "Veterans",
+        "period": "2020–2024 ACS",
+        "position": 7,
+        "headline_position": null,
+        "unit": "count"
+      }
+    ]
+  },
+  {
+    "id": "age",
+    "title": "Age breakdown",
+    "note": "These 18 age bands cover all residents without overlap. Percentages are calculated from Census population counts and rounded to one decimal; they may not sum to exactly 100%. Georgia counts sum all 159 counties in the same Vintage 2025 release.",
+    "position": 1,
+    "indicators": [
+      {
+        "code": "AGE04_TOT",
+        "label": "Ages 0–4",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 0,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE59_TOT",
+        "label": "Ages 5–9",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 1,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE1014_TOT",
+        "label": "Ages 10–14",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE1519_TOT",
+        "label": "Ages 15–19",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 3,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE2024_TOT",
+        "label": "Ages 20–24",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 4,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE2529_TOT",
+        "label": "Ages 25–29",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 5,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE3034_TOT",
+        "label": "Ages 30–34",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 6,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE3539_TOT",
+        "label": "Ages 35–39",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 7,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE4044_TOT",
+        "label": "Ages 40–44",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 8,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE4549_TOT",
+        "label": "Ages 45–49",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 9,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE5054_TOT",
+        "label": "Ages 50–54",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 10,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE5559_TOT",
+        "label": "Ages 55–59",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 11,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE6064_TOT",
+        "label": "Ages 60–64",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 12,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE6569_TOT",
+        "label": "Ages 65–69",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 13,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE7074_TOT",
+        "label": "Ages 70–74",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 14,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE7579_TOT",
+        "label": "Ages 75–79",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 15,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE8084_TOT",
+        "label": "Ages 80–84",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 16,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "AGE85PLUS_TOT",
+        "label": "Age 85+",
+        "period": "July 1, 2025 estimate · share of all residents",
+        "position": 17,
+        "headline_position": null,
+        "unit": "percent"
+      }
+    ]
+  },
+  {
+    "id": "race-ethnicity",
+    "title": "Race & ethnicity",
+    "note": "Hispanic or Latino is an ethnicity and can include people of any race. The six race categories include Hispanic residents; White alone, not Hispanic or Latino is a subset of White alone. Do not add all eight rows together. “Alone” means one reported race.",
+    "position": 2,
+    "indicators": [
+      {
+        "code": "RHI125225",
+        "label": "White alone",
+        "period": "July 1, 2025 estimate",
+        "position": 0,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI225225",
+        "label": "Black or African American alone",
+        "period": "July 1, 2025 estimate",
+        "position": 1,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI325225",
+        "label": "American Indian and Alaska Native alone",
+        "period": "July 1, 2025 estimate",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI425225",
+        "label": "Asian alone",
+        "period": "July 1, 2025 estimate",
+        "position": 3,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI525225",
+        "label": "Native Hawaiian and Other Pacific Islander alone",
+        "period": "July 1, 2025 estimate",
+        "position": 4,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI625225",
+        "label": "Two or more races",
+        "period": "July 1, 2025 estimate",
+        "position": 5,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI725225",
+        "label": "Hispanic or Latino, any race",
+        "period": "July 1, 2025 estimate",
+        "position": 6,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "RHI825225",
+        "label": "White alone, not Hispanic or Latino",
+        "period": "July 1, 2025 estimate",
+        "position": 7,
+        "headline_position": null,
+        "unit": "percent"
+      }
+    ]
+  },
+  {
+    "id": "poverty",
+    "title": "Poverty",
+    "note": "2024 Small Area Income and Poverty Estimates (SAIPE) are model-based estimates of people below the official poverty threshold for their family size and composition. Rates use the population for whom poverty status is determined. Child groups overlap; do not add the rates. The ranges shown are 90% confidence intervals. These annual estimates use a different method from ACS five-year estimates.",
+    "position": 3,
+    "indicators": [
+      {
+        "code": "SAIPE-2024-ALL",
+        "label": "People in poverty, all ages",
+        "period": "2024 SAIPE",
+        "position": 0,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "SAIPE-2024-UNDER18",
+        "label": "Children under 18 in poverty",
+        "period": "2024 SAIPE",
+        "position": 1,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "SAIPE-2024-AGE5-17",
+        "label": "Related children ages 5–17 in families in poverty",
+        "period": "2024 SAIPE",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      }
+    ]
+  },
+  {
+    "id": "housing",
+    "title": "Households & housing",
+    "note": "Home values describe owner-occupied homes. Rent is median gross monthly rent, not the price of a new rental listing.",
+    "position": 4,
+    "indicators": [
+      {
+        "code": "HSD410224",
+        "label": "Households",
+        "period": "2020–2024 ACS",
+        "position": 0,
+        "headline_position": 2,
+        "unit": "count"
+      },
+      {
+        "code": "HSD310224",
+        "label": "People per household",
+        "period": "2020–2024 ACS",
+        "position": 1,
+        "headline_position": null,
+        "unit": "ratio"
+      },
+      {
+        "code": "HSG010225",
+        "label": "Housing units",
+        "period": "July 1, 2025 estimate",
+        "position": 2,
+        "headline_position": null,
+        "unit": "count"
+      },
+      {
+        "code": "HSG445224",
+        "label": "Owner-occupied homes",
+        "period": "2020–2024 ACS · occupied housing units",
+        "position": 3,
+        "headline_position": 3,
+        "unit": "percent"
+      },
+      {
+        "code": "HSG495224",
+        "label": "Median home value",
+        "period": "2020–2024 ACS · owner-occupied homes",
+        "position": 4,
+        "headline_position": null,
+        "unit": "usd"
+      },
+      {
+        "code": "HSG860224",
+        "label": "Median monthly rent",
+        "period": "2020–2024 ACS · gross rent",
+        "position": 5,
+        "headline_position": null,
+        "unit": "usd"
+      },
+      {
+        "code": "HSG650224",
+        "label": "Monthly owner costs with mortgage",
+        "period": "2020–2024 ACS · median",
+        "position": 6,
+        "headline_position": null,
+        "unit": "usd"
+      }
+    ]
+  },
+  {
+    "id": "income",
+    "title": "Income, work & business",
+    "note": "Income figures are in 2024 dollars. Establishments and employment count local workplaces and jobs, not only county residents.",
+    "position": 5,
+    "indicators": [
+      {
+        "code": "INC110224",
+        "label": "Median household income",
+        "period": "2020–2024 ACS · in 2024 dollars",
+        "position": 0,
+        "headline_position": 1,
+        "unit": "usd"
+      },
+      {
+        "code": "INC910224",
+        "label": "Per capita income",
+        "period": "2020–2024 ACS · in 2024 dollars",
+        "position": 1,
+        "headline_position": null,
+        "unit": "usd"
+      },
+      {
+        "code": "LFE046224",
+        "label": "Civilian labor force participation",
+        "period": "2020–2024 ACS · residents age 16+",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "LFE305224",
+        "label": "Mean commute to work",
+        "period": "2020–2024 ACS · workers age 16+",
+        "position": 3,
+        "headline_position": null,
+        "unit": "minutes"
+      },
+      {
+        "code": "EST211223",
+        "label": "Employer establishments",
+        "period": "2023 County Business Patterns",
+        "position": 4,
+        "headline_position": null,
+        "unit": "count"
+      },
+      {
+        "code": "BZA110223",
+        "label": "Employment at employer establishments",
+        "period": "2023 County Business Patterns",
+        "position": 5,
+        "headline_position": null,
+        "unit": "count"
+      },
+      {
+        "code": "NES010224",
+        "label": "Nonemployer establishments",
+        "period": "2024 Nonemployer Statistics",
+        "position": 6,
+        "headline_position": null,
+        "unit": "count"
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "title": "Education & connectivity",
+    "note": "Education percentages describe adults age 25 and older. Computer and broadband percentages describe households.",
+    "position": 6,
+    "indicators": [
+      {
+        "code": "EDU635224",
+        "label": "High school graduate or higher",
+        "period": "2020–2024 ACS · adults age 25+",
+        "position": 0,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "EDU685224",
+        "label": "Bachelor’s degree or higher",
+        "period": "2020–2024 ACS · adults age 25+",
+        "position": 1,
+        "headline_position": 4,
+        "unit": "percent"
+      },
+      {
+        "code": "COM100224",
+        "label": "Households with a computer",
+        "period": "2020–2024 ACS",
+        "position": 2,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "INT250224",
+        "label": "Broadband subscription",
+        "period": "2020–2024 ACS · households",
+        "position": 3,
+        "headline_position": 5,
+        "unit": "percent"
+      },
+      {
+        "code": "POP815224",
+        "label": "Language other than English at home",
+        "period": "2020–2024 ACS · residents age 5+",
+        "position": 4,
+        "headline_position": null,
+        "unit": "percent"
+      }
+    ]
+  },
+  {
+    "id": "health-geography",
+    "title": "Health & geography",
+    "note": "Disability estimates cover residents under age 65. Density and land area use 2020 Census geography.",
+    "position": 7,
+    "indicators": [
+      {
+        "code": "DIS010224",
+        "label": "Residents under 65 with a disability",
+        "period": "2020–2024 ACS",
+        "position": 0,
+        "headline_position": null,
+        "unit": "percent"
+      },
+      {
+        "code": "POP060220",
+        "label": "Population per square mile",
+        "period": "2020 Census",
+        "position": 1,
+        "headline_position": null,
+        "unit": "density"
+      },
+      {
+        "code": "LND110220",
+        "label": "Land area",
+        "period": "2020 Census",
+        "position": 2,
+        "headline_position": null,
+        "unit": "square_miles"
+      }
+    ]
+  }
+]

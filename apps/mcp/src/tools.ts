@@ -1,5 +1,18 @@
+import type {UploadRelayContext} from './meeting-upload-relay';
+import { registerCountyStatisticTools } from './county-statistic-tools';
+import { registerCommonReadTools, type ToolCatalog } from './common-read-tools';
+import { WriteCatalog } from './write-catalog';
+import { RelatedReadCatalog } from './related-read-catalog';
+import { registerElectionResultTools } from "./election-result-tools";
+import {registerObligationTools} from './obligation-tools';
+import {registerUserFeeTools} from './user-fee-tools';
+import { registerSchoolFinanceTools } from './school-finance-tools';
+import { registerLegislativeTools } from './legislative-tools';
+import { registerOfficeTools } from './office-tools';
 import { createToolkit, ok, fail } from "./toolkit";
 import { registerExtendedTools } from "./extended-tools";
+import { registerMeetingTools } from "./meeting-tools";
+import { registerDocumentTools, type DocumentContext } from "./document-tools";
 import { McpServer } from "@modelcontextprotocol/server";
 import { type SupabaseClient, type User } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -24,10 +37,12 @@ const ELECTION_DATE_KIND = z.enum([
 ]);
 const PERSON_KIND = z.enum(["elected_official", "appointed_official", "candidate", "other"]);
 
-export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">): McpServer {
-  const server = new McpServer({ name: "Civic Pulse", version: "1.2.0" });
+export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "email">, documentContext: DocumentContext = {}, sourceReaderUrl?: string, catalog: ToolCatalog = 'legacy', uploadContext?: UploadRelayContext): McpServer {
+  const server = new McpServer({ name: "Civic Pulse", version: "1.5.0" });
 
-  const { register, readRpc, getRpc, create, update, remove, ensureAdmin } = createToolkit(server, supabase);
+  const writes = catalog === 'compact' ? new WriteCatalog() : undefined;
+  const reads = catalog === 'compact' ? new RelatedReadCatalog() : undefined;
+  const { register, create, update, remove, ensureAdmin } = createToolkit(server, supabase, writes);
 
   // --- Identity ----------------------------------------------------------
 
@@ -66,72 +81,8 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
 
   // --- Read: search + get ------------------------------------------------
 
-  readRpc(
-    "search_organizations",
-    "Full-text search of community organizations.",
-    { query: z.string().default(""), limit: z.number().int().min(1).max(50).default(20) },
-    "search_organizations",
-    ({ query, limit }) => ({ p_query: query, p_limit: limit }),
-  );
-  readRpc(
-    "search_maps",
-    "Full-text search of maps.",
-    { query: z.string().default(""), limit: z.number().int().min(1).max(100).default(20) },
-    "search_maps",
-    ({ query, limit }) => ({ p_query: query, p_limit: limit }),
-  );
-  readRpc(
-    "search_events",
-    "Search calendar events. Regular users see public listings; only admins can discover unlisted and private events.",
-    {
-      query: z.string().default(""),
-      organization_id: z.string().uuid().nullish(),
-      calendar_id: z.string().uuid().nullish(),
-      include_past: z.boolean().default(false),
-      limit: z.number().int().min(1).max(100).default(50),
-    },
-    "search_events",
-    ({ query, organization_id, calendar_id, include_past, limit }) => ({
-      p_query: query,
-      p_organization_id: organization_id ?? null,
-      p_calendar_id: calendar_id ?? null,
-      p_include_past: include_past,
-      p_limit: limit,
-    }),
-  );
-  readRpc(
-    "search_people",
-    "Full-text search of people (officials, candidates).",
-    { query: z.string().default(""), limit: z.number().int().min(1).max(50).default(20) },
-    "search_people",
-    ({ query, limit }) => ({ p_query: query, p_limit: limit }),
-  );
-  readRpc(
-    "search_elections",
-    "Full-text search of elections.",
-    { query: z.string().default(""), limit: z.number().int().min(1).max(100).default(50) },
-    "search_elections",
-    ({ query, limit }) => ({ p_query: query, p_limit: limit }),
-  );
-  readRpc(
-    "list_calendars",
-    "List calendars the caller can see, optionally for one organization.",
-    { organization_id: z.string().uuid().nullish() },
-    "list_calendars",
-    ({ organization_id }) => ({ p_organization_id: organization_id ?? null }),
-  );
-
-  register("get_map", "Fetch one map with visible layers and their effective styles.", { id: z.string().uuid() }, async ({ id }) => {
-    const result = await supabase.rpc("get_map", { p_id: id });
-    if (result.error) throw new Error(result.error.message);
-    if (result.data?.status !== "ok") return result.data;
-    const layers = await supabase.rpc("get_map_layers", { p_map_id: id });
-    if (layers.error) throw new Error(layers.error.message);
-    return { ...result.data, layers: layers.data };
-  });
-  getRpc("get_event", "Fetch one event (with calendar + organization) by id.", "get_event");
-  getRpc("get_person", "Fetch one person (with affiliations) by id.", "get_person");
-  getRpc("get_election", "Fetch one election (with contests and key dates) by id.", "get_election");
+  registerCommonReadTools(server, supabase, catalog, reads);
+  if(catalog==='compact')registerCountyStatisticTools(server, supabase);
 
   // --- Write: organizations ---------------------------------------------
 
@@ -183,11 +134,23 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   // --- Write: events -----------------------------------------------------
 
   const eventShape = {
+    meeting_video_start_seconds: z.number().int().min(0).max(2147483647).nullish()
+      .describe('Optional recording start offset in whole seconds. Overrides URL timestamps. Null uses the URL/default start; zero starts at the beginning. Separate meetings can share a video URL with different offsets.'),
     calendar_id: z.string().uuid(),
     title: z.string(),
     starts_at: z.string().describe("ISO 8601 timestamp"),
     ends_at: z.string().nullish(),
     all_day: z.boolean().optional(),
+    is_meeting: z.boolean().optional(),
+    meeting_notes: z.string().nullish(),
+    meeting_transcript: z.string().nullish(),
+    meeting_video_url: z.string().url().max(2048).regex(/^https:\/\/[^\s]+$/, 'Use an HTTPS video URL').nullish()
+      .refine(value => {
+        if (value == null) return true;
+        try { const url = new URL(value); return !url.username && !url.password && !url.port; }
+        catch { return false; }
+      }, 'Use a video URL without credentials or a custom port')
+      .describe('Recording URL. YouTube/Vimeo show an embedded player; other hosts show a link. Separate meetings may share the same recording. Use null to clear.'),
     location: z.string().nullish(),
     url: z.string().nullish(),
     description: z.string().nullish(),
@@ -195,11 +158,11 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
     election_id: z.string().uuid().nullish(),
     election_date_kind: ELECTION_DATE_KIND.nullish(),
   };
-  create("event", "events", "Create a calendar event (admin only).", eventShape, "id, title, starts_at");
+  create("event", "events", "Create a calendar event (admin only). Set is_meeting=true to add a video URL, notes, a transcript or document attachments.", eventShape, "id, title, starts_at");
   update(
     "event",
     "events",
-    "Update a calendar event (admin only).",
+    "Update a calendar event (admin only). Set is_meeting=true to enable a video URL, meeting records and document attachments. Omitted fields are preserved.",
     { ...eventShape, calendar_id: eventShape.calendar_id.optional(), title: eventShape.title.optional(), starts_at: eventShape.starts_at.optional() },
     "id, title, starts_at",
   );
@@ -257,6 +220,15 @@ export function buildServer(supabase: SupabaseClient, user: Pick<User, "id" | "e
   );
   remove("election", "elections", "Delete an election (admin only).");
 
-  registerExtendedTools(server, supabase, user);
+  registerElectionResultTools(server, supabase);
+  // The compatibility catalog is already at its 128-tool limit.
+  if (catalog === 'compact') {registerSchoolFinanceTools(server, supabase);registerUserFeeTools(server,supabase);registerObligationTools(server,supabase);}
+  registerExtendedTools(server, supabase, user, writes, reads, catalog === 'compact');
+  registerMeetingTools(server, supabase, catalog === 'compact', uploadContext);
+  registerLegislativeTools(server, supabase, sourceReaderUrl);
+  registerOfficeTools(server, supabase, writes, reads);
+  registerDocumentTools(server, supabase, documentContext);
+  writes?.register(server);
+  reads?.register(server);
   return server;
 }

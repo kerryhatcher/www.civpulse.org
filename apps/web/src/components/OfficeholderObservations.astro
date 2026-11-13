@@ -1,0 +1,22 @@
+---
+import {publicOfficeholderObservations} from '../lib/officeholder-observation-build-data';
+import {observationSummary,observationSource,type OfficeholderObservation} from '../lib/officeholder-observations';
+interface Props {personId?:string;organizationId?:string;viewer?:boolean}
+const {personId,organizationId,viewer=false}=Astro.props;
+let rows:OfficeholderObservation[]=[];
+if(personId||organizationId)rows=await publicOfficeholderObservations(personId,organizationId);
+---
+<section class="person-candidacies" data-officeholder-observations data-person-id={personId} data-organization-id={organizationId} hidden={viewer||!rows.length}>
+ <h2>Dated officeholder observations</h2>
+ <p>Source-reported snapshots, separate from the service intervals above. These entries do not establish term boundaries, election results or current officeholders. Missing coverage is not absence. A year-only observation does not establish service on a particular day.</p>
+ <form data-observation-filter hidden><label>As-of date <input type="date" name="as_of" /></label> <label><input type="checkbox" name="history" /> Include superseded observations</label> <button type="submit">Filter observations</button></form>
+ <p data-observation-status role="status">{rows.length} recorded observations on this page.</p>
+ <ul class="profile-article-list" data-observation-list>{rows.map(row=><li><p>{observationSummary(row)}</p>{observationSource(row.payload.source_url)&&<a href={observationSource(row.payload.source_url)} rel="noopener noreferrer">Source</a>}{row.person_slug && <> · <a href={`/people/${row.person_slug}/`}>Reviewed person profile</a></>} · <a href={`/orgs/${row.organization_slug}/`}>Recorded organization</a><p>Document SHA-256: <code>{row.payload.document_sha256}</code></p></li>)}</ul>
+ <button type="button" data-observation-next hidden>Next observations</button>
+ <button type="button" data-observation-export hidden>Download this observation page (JSON)</button>
+</section>
+<style>
+ :global([data-officeholder-observations]) { min-width: 0; overflow-wrap: anywhere; }
+ :global([data-officeholder-observations] button), :global([data-officeholder-observations] input) { max-width: 100%; box-sizing: border-box; white-space: normal; }
+ :global([data-observation-filter]:not([hidden])) { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+</style>

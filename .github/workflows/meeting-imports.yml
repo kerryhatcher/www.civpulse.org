@@ -1,0 +1,99 @@
+name: Meeting imports and originals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Reserve local Supabase ports
+        # Keep outbound checkout/image-pull connections off the stack's fixed ports.
+        run: |
+          reserved_ports=$(sysctl -n net.ipv4.ip_local_reserved_ports)
+          sudo sysctl -w "net.ipv4.ip_local_reserved_ports=${reserved_ports:+${reserved_ports},}54320-54329"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - name: Start local Supabase
+        run: |
+          if ! bun run db:start; then
+            sudo ss -tanp '( sport >= :54320 and sport <= :54329 )'
+            docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+            exit 1
+          fi
+      - name: Configure local public client
+        run: |
+          bun -e '
+            const result = Bun.spawnSync(["bun", "run", "supabase", "status", "-o", "json"], {stdout:"pipe", stderr:"pipe"});
+            if(result.exitCode) throw new Error("Local Supabase status failed");
+            const status=JSON.parse(new TextDecoder().decode(result.stdout));
+            if(status.API_URL!=="http://127.0.0.1:54321") throw new Error("Local API required");
+            await Bun.write("apps/web/.env.local", `PUBLIC_SUPABASE_URL="${status.API_URL}"\nPUBLIC_SUPABASE_ANON_KEY="${status.ANON_KEY}"\n`);
+          '
+      - run: bun run db:seed-user
+      - run: bun run mcp:check
+      - run: bun test scripts/tests/meeting-upload-relay.test.ts scripts/tests/mcp-meeting-documents.test.ts scripts/tests/meeting-import-integration.test.ts
+        env:
+          MEETING_IMPORT_INTEGRATION: '1'
+      - name: Verify cited meeting outcome observations
+        run: bun test scripts/tests/meeting-outcomes-db.test.ts scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts
+        env:
+          MEETING_OUTCOMES_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - name: Verify person relationship visibility and admin constraints
+        run: bun test scripts/tests/person-relationships-db.test.ts
+        env:
+          PERSON_RELATIONSHIPS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - name: Verify calendar exports and public record access
+        run: bun test scripts/tests/calendar-db.test.ts scripts/tests/calendar-snapshot-db.test.ts scripts/tests/public-records-db.test.ts scripts/tests/vote-choice-browse-db.test.ts scripts/tests/bill-child-browse-db.test.ts scripts/tests/public-legislation-export-db.test.ts scripts/tests/legislation-directory-db.test.ts scripts/tests/legislation-details-db.test.ts scripts/tests/request-snapshot-db.test.ts scripts/tests/records-requests-db.test.ts
+        env:
+          LEGISLATION_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          CALENDAR_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          RECORDS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          PUBLIC_RECORDS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+
+      - name: Verify election results and evidence
+        run: bun test scripts/tests/election-results-db.test.ts scripts/tests/structured-turnout-db.test.ts scripts/tests/structured-turnout-integration.test.ts scripts/tests/election-results-integration.test.ts scripts/tests/sos-results-db.test.ts
+        env:
+          ELECTION_RESULTS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          ELECTION_RESULTS_INTEGRATION: '1'
+      - name: Verify admin-only voter roll history
+        run: bun test scripts/tests/voter-roll-history-db.test.ts
+        env:
+          VOTER_ROLL_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - name: Verify SOS collection and publication
+        run: |
+          bun test scripts/tests/sos-automation-db.test.ts scripts/tests/sos-cadence-db.test.ts scripts/tests/sos-feed-window-db.test.ts scripts/tests/sos-download-stop-db.test.ts
+          bun run supabase status -o json > /tmp/sos-local-status.json
+          SOS_RESULTS_LOCAL_STATUS=/tmp/sos-local-status.json bun test scripts/tests/sos-collector-integration.test.ts
+        env:
+          ELECTION_RESULTS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - name: Verify structured county statistics and MCP discovery
+        run: bun test scripts/tests/county-statistics-db.test.ts scripts/tests/county-statistics-mcp.test.ts
+        env:
+          COUNTY_STATISTICS_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+          COUNTY_STATISTICS_MCP_INTEGRATION: '1'
+
+      - name: Verify public profile exports at payroll scale
+        run: bun test scripts/tests/profile-vote-export-db.test.ts scripts/tests/profile-sections-db.test.ts scripts/tests/profile-related-export-db.test.ts
+        env:
+          PROFILE_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+
+      - name: Verify school finance publication and employee profiles
+        run: bun test scripts/tests/school-finances-db.test.ts scripts/tests/school-finance-recipients-db.test.ts scripts/tests/school-finance-payroll-links-db.test.ts
+        env:
+          FINANCE_TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:54322/postgres
+      - run: bun run mcp:build && bun run plugin:build
+      - if: always()
+        run: bun run db:stop

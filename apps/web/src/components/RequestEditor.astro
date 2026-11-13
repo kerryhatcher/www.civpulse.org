@@ -1,0 +1,53 @@
+---
+import { REQUEST_STAGES, REQUEST_OUTCOMES, UPDATE_KINDS } from '../lib/records-requests';
+---
+<div data-request-editor hidden>
+ <form data-request-form class="org-form">
+  <h2>Request details</h2>
+  <label class="field"><span>Title *</span><input name="title" maxlength="300" required /></label>
+  <label class="field"><span>What records are requested?</span><textarea name="description" rows="7" maxlength="50000"></textarea></label>
+  <div class="request-fields">
+   <label class="field"><span>Request type</span><select name="request_type"><option value="orr">Open Records Request (ORR)</option><option value="foia">Freedom of Information Act (FOIA)</option><option value="other">Other records request</option></select></label>
+   <label class="field"><span>Reference number</span><input name="reference_number" maxlength="200" /></label>
+   <label class="field"><span>Target organization</span><select name="target_organization_id"><option value="">None selected</option></select></label>
+   <label class="field"><span>Requesting / source organization</span><select name="source_organization_id"><option value="">None selected</option></select></label>
+  </div>
+  <p>Choose at least one organization. The requesting organization is separate from the private account owner.</p>
+  <div class="request-fields">
+   <label class="field"><span>Stage</span><select name="stage">{Object.entries(REQUEST_STAGES).map(([v,l])=><option value={v}>{l}</option>)}</select></label>
+   <label class="field"><span>Outcome</span><select name="outcome"><option value="">Not assessed</option>{Object.entries(REQUEST_OUTCOMES).map(([v,l])=><option value={v}>{l}</option>)}</select></label>
+   <label class="field"><span>Submitted on</span><input name="submitted_on" type="date" /></label>
+   <label class="field"><span>Next follow-up</span><input name="next_follow_up_on" type="date" /></label>
+   <label class="field"><span>Visibility</span><select name="visibility"><option value="private">Private — owner and admins</option><option value="unlisted">Unlisted — anyone with the link</option><option value="public">Public — listed for everyone</option></select></label>
+  </div>
+  <p>Publishing shares the details, timeline, fees and links. Files marked private and account ownership remain private. Saving does not send a request to an organization.</p>
+  <button type="submit" class="button-link">Save request</button>
+ </form>
+ <div data-request-existing hidden>
+  <details class="request-section" open><summary>Add a timeline update</summary>
+   <form data-update-form class="org-form">
+    <div class="request-fields"><label class="field"><span>Date</span><input name="occurred_on" type="date" required /></label><label class="field"><span>Update type</span><select name="kind">{Object.entries(UPDATE_KINDS).filter(([v])=>v!=='stage').map(([v,l])=><option value={v}>{l}</option>)}</select></label></div>
+    <label class="field"><span>What happened? *</span><textarea name="body" rows="4" maxlength="20000" required></textarea></label><button type="submit" class="button-link">Add update</button>
+   </form>
+  </details>
+  <details class="request-section"><summary>Record a fee or payment</summary>
+   <form data-fee-form class="org-form">
+    <p>Record each separate estimate, bill or payment once. If an estimate is replaced, remove the old entry before adding the revised amount. All amounts are in USD.</p>
+    <div class="request-fields"><label class="field"><span>Fee type</span><select name="kind"><option value="estimated">Estimated</option><option value="billed">Billed</option><option value="paid">Paid</option></select></label><label class="field"><span>Amount (USD) *</span><input name="amount" type="number" min="0" max="9999999999.99" step="0.01" required /></label><label class="field"><span>Fee date</span><input name="occurred_on" type="date" required /></label></div>
+    <label class="field"><span>Fee note / invoice reference</span><textarea name="note" rows="2" maxlength="2000"></textarea></label><button type="submit" class="button-link">Record fee</button>
+   </form>
+  </details>
+  <details class="request-section"><summary>Attach files and links</summary>
+   <form data-file-form class="org-form"><h3>Upload a file</h3><p>Images, PDFs, Office / OpenDocument files, text and CSV. Maximum 25 MB per file. Upload redacted copies before sharing with visitors.</p>
+    <label class="field"><span>File *</span><input name="file" type="file" accept=".pdf,.txt,.csv,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp,.png,.jpg,.jpeg,.webp,.gif" required /></label>
+    <label class="field"><span>File access</span><select name="is_private"><option value="true">Private — owner and admins only</option><option value="false">Share with everyone who can view the request</option></select></label><button class="button-link" type="submit">Upload file</button>
+   </form>
+   <form data-link-form class="org-form"><h3>Add a related link</h3><label class="field"><span>Link title *</span><input name="title" required maxlength="300" /></label><label class="field"><span>Web address *</span><input name="url" type="url" required maxlength="4000" placeholder="https://" /></label><button type="submit" class="button-link">Add link</button></form>
+  </details>
+  <details class="request-section"><summary>Private ownership and transfer history</summary>
+   <p data-request-owner></p><p>Only the current owner and admins can see account IDs and this history. Transferring gives the new owner access to private files and removes the previous owner's access unless they are an admin.</p>
+   <form data-transfer-form class="org-form"><label class="field"><span>New owner's user ID *</span><input name="to_user_id" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" /></label><p>Ask the recipient to copy their user ID from their Account page.</p><label class="field"><span>Reason for transfer *</span><textarea name="reason" maxlength="1000" required></textarea></label><button type="submit">Transfer ownership</button></form>
+   <ol data-transfer-list class="request-timeline"></ol>
+  </details>
+ </div>
+</div>

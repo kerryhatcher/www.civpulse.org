@@ -1,5 +1,16 @@
 # Supabase backend
 
+## Voter registration snapshots
+
+The [admin-only voter roll model](voter-rolls.md) stores immutable full-county
+SOS imports and original per-voter rows, keyed by SOS registration number.
+Completed snapshots provide field changes, county-scoped absence and reappearance
+history. Staging files cannot establish absence. Tables and RPCs require an
+administrator and never feed public profiles, search, audit history or build
+exports. The model is implemented separately from a future file importer/UI;
+no production import is included. Follow the main-before-production migration
+rule and the synthetic local verification documented there.
+
 The backend lives in [`supabase/`](../supabase): Postgres migrations, Auth
 configuration, and local development settings. The frontend uses
 `@supabase/supabase-js` with the public anon key from `apps/web/src/lib/supabase.ts`.
@@ -75,6 +86,40 @@ Verify permissions, reciprocal labels, uniqueness, foreign keys and cleanup with
 Fixtures roll back. The append-only migration seeds 19 source-backed relationships
 by existing slugs; empty development databases skip absent endpoints.
 
+Person-to-person links use `person_relationships`: two people, free-text directional
+labels (1–160 characters), optional validated HTTP(S) `source_url`, and one row
+UUID. An unordered-pair unique index rejects reverse duplicates; self-links,
+empty labels and missing endpoints are rejected. Deleting a person cascades their
+links, preserving the other person. No real family relationships are seeded.
+
+Only admins write. Direct reads expose public/public links (admins can also edit
+hidden links). `get_person_relationships(p_person_id)` is a security-definer RPC
+with empty search path and explicit execution grants. It normalizes labels and
+requires **both** endpoints public for anonymous callers, including when the
+owner is an unlisted UUID. Ordinary signed-in viewers may read public and unlisted
+endpoints; private endpoints require an admin, matching `get_person`. Hidden
+targets link to the UUID viewer. This does
+not make unlisted people publicly discoverable. Anonymous paginated build reads
+and a second public-person allowlist produce static related-person lists.
+Signed-in enhancement replaces that list only after a successful permission-checked
+read; failures retain published evidence. History tracks both endpoint visibility
+gates, and relationship writes mark the frontend rebuild dependency dirty.
+
+Validate locally with
+`PERSON_RELATIONSHIPS_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-relationships-db.test.ts`.
+Fixtures and the validation/visibility follow-up schema changes roll back. Labels
+must contain a non-whitespace character; source URLs require an HTTP(S) host
+(case-insensitive scheme), with no whitespace, credentials or backslashes.
+Release migrations `20261125001500` and `20261125001600` through GitHub main
+before production application, then deploy the matching MCP tools and rebuild the
+static site. No feature-branch production SQL or migration-history repair.
+
+
+Person relationship tools are available in the compact catalog at
+`https://api.civpulse.org/functions/v1/mcp/v2` after the matching MCP deployment.
+The compatibility catalog remains at its existing 128-tool limit; refresh tool
+discovery and use only selectors advertised by the connected endpoint.
+
 Migrations are append-only files in `supabase/migrations/`.
 
 `profiles`:
@@ -109,7 +154,9 @@ Migrations are append-only files in `supabase/migrations/`.
   visibility.
 - `public.elections` — `slug`, `name`, `election_date` (required), `kind`,
   `description`, `organization_id` (optional administering body), `visibility`,
-  timestamps.
+  nullable `results_json_url` (Georgia SOS HTTPS export), timestamps. Source feed
+  snapshots/items use admin-only staging RPCs and visibility-aware paged reads;
+  see [SOS results JSON feeds](election-results.md#georgia-sos-results-json-feeds).
 - `public.contests` — a race within an election: `election_id` (required),
   `office`, `district`, `seat`, `description`, `partisan`, `position`,
   timestamps.
@@ -329,6 +376,13 @@ attachment deletes its object and metadata. Deleting a meeting cascades metadata
 but may leave its Storage objects for later cleanup.
 
 ### Calendar/event visibility
+
+The explicit public document archive adds a separate catalog, deduplicated files
+and many-to-many meeting links. All catalog tables have RLS and revoked direct
+Data API access; publication RPCs check `is_admin()`. Public projections omit
+pending/withdrawn documents and hidden meeting relationships. Catalog and link
+changes participate in civic audit history. Publication does not inherit future
+meeting visibility changes. See [public-documents.md](./public-documents.md).
 
 Calendars and events each have `public | unlisted | private`, the same rules as
 maps and layers. An event is only visible when **both** it and its owning
@@ -570,7 +624,11 @@ A repeatable shape, used for organizations, maps, and layers:
 
 1. Create a Supabase project.
 2. Link this repo: `supabase link --project-ref <ref>`.
-3. Push migrations: `bun run db:push`.
+3. Merge migrations to GitHub `main`. Production normally applies them through
+   the Supabase GitHub integration. For a manual production push, use the guarded
+   `bun run db:push --dry-run`, then `bun run db:push` from a clean, current
+   `main` checkout; this command is pinned to the Civic Pulse production project.
+   See [production migration guards](./development.md#guarding-production-migration-pushes).
 4. In the Supabase dashboard, set the Auth site URL to `https://www.civpulse.org`
    and add the production redirect URLs.
 5. Add `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` to the Cloudflare
@@ -663,7 +721,7 @@ lists immediately; new public person/organization pages still require a rebuild.
 
 ### Authenticated MCP content operations
 
-The MCP Worker forwards the verified user token; it never uses service-role
+The MCP Edge Function forwards the verified user token; it never uses service-role
 credentials. The append-only mcp_content_tools migration adds authenticated-only
 RPCs without changing RLS. `mcp_get_record` follows the caller's role-based discovery
 rules and returns article association sets only to admins. `mcp_layer_features`
@@ -962,6 +1020,91 @@ already use future timestamps, apply these locally with
 Verify with `SOS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/organization-sos-db.test.ts` (fixtures roll back).
 
+## Records requests (ORR / FOIA)
+
+`records_requests` holds publishable details, two optional organization links
+(target and source; at least one required), three-way visibility, stage, outcome,
+manual dates and a full-text search vector. `records_request_owners` and
+`records_request_transfers` hold private account ownership and append-only
+transfer history. Auth-user foreign keys restrict deletion while referenced.
+
+The update, link, fee and file tables are children of the request. Fee amounts
+use `numeric(12,2)` USD and separate estimated/billed/paid categories; they are
+not combined into one total. Timeline entries are dated independently of the
+current stage. Stage and outcome changes automatically append a status entry.
+
+All tables enable RLS and revoke Data API access. Explicit security-definer RPCs
+with empty search paths expose projections and enforce access. Creation checks
+`is_admin()`; subsequent mutations allow the assigned owner or an admin. Every
+mutation locks the parent before checking access, serializing it with transfers.
+Clients cannot update owners or rewrite history directly. `get_records_request`
+omits ownership/history unless authorized and returns the same unavailable state
+for nonexistent and unauthorized private IDs. `search_records_requests` lists
+public rows or, explicitly, rows managed by the caller, with stage/organization
+filters, FTS and bounded pagination. Unlisted access is via UUID viewer only.
+
+The private `records-request-files` bucket accepts common document/image MIME
+types up to 25 MB. Immutable UUID object paths are scoped to a managed request.
+Metadata defaults to private; shared files inherit request visibility. Storage
+SELECT allows managers to manage objects, while visitors can only sign a known,
+permitted path (`storage.allow_only_operation('object.sign')`), not enumerate
+unlisted files. Signed downloads last 60 seconds and can remain usable for that
+period after visibility/ownership changes. Removing metadata revokes new access
+before object cleanup; failed cleanup leaves an inaccessible orphan for admin
+maintenance. Never put confidential files in the public profile-media bucket.
+
+Verify with `RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/records-requests-db.test.ts`.
+The transaction rolls back its fixtures, covering anonymous, non-owner, owner,
+admin, transfers, fee validation, private metadata and file enumeration.
+
+## Civic object audit history
+
+The `20261119000000_object_history` migration installs row triggers on the 23
+civic tables registered in `audit.objects`: organizations, people, elections,
+contests, candidates, ballot questions, offices/terms, affiliations and organization
+relationships, articles/associations, maps/layers/features/memberships,
+calendars/events, and meeting attendance/votes/choices/attachments. Account/Auth
+and admin membership records are deliberately excluded. Add new civic tables and
+all visibility-bearing references to this registry in an append-only migration.
+The registry's parent graph must remain acyclic; relationship key columns must
+match the table's primary key.
+
+`audit.revisions` stores immutable before/after JSON, operation, monotonic revision
+ID, transaction ID, wall-clock time, `auth.uid()` and a snapshot of the editor's
+display name. It has no foreign keys to content or users, so deletions preserve
+evidence. Derived search documents and automatic `updated_at` changes are omitted;
+no-op saves create no revision. Tracking is transactional and includes cascades;
+rolled-back edits leave no revision. SQL/service-role imports without an end-user
+JWT are truthfully attributed to System / import. There is no historical backfill.
+
+Both audit tables have RLS and the `audit` schema is inaccessible to API roles.
+Neither regular users nor admins have direct mutation/read access. The sole read
+API is `get_object_history(p_table, p_object_id, p_before, p_limit)`; it checks
+`is_admin()` in a security-definer function with an empty search path. Admins can
+browse all changes or filter by table/object. Other callers must supply an object.
+Composite object keys are canonical JSON objects containing their primary-key
+columns; ordinary objects use UUIDs, geographic features use bigint strings.
+A GIN subjects index associates relationship changes with every owning/referenced
+object; the feed uses descending revision-ID cursor pagination (default 25,
+maximum 100), avoiding offset drift from new edits.
+
+Public access requires both snapshots to have been public at edit time and every
+referenced object to remain public now. A hidden-to-public transition is omitted
+because its before snapshot contains hidden data. A deleted object uses its latest
+public deletion as a tombstone; deletion of a hidden object never releases older
+public snapshots. Cascading deletes with missing parents may be conservatively
+admin-only. Historical references are checked as well as current ones, preventing
+an old relationship from exposing a now-hidden person or election. Public payloads
+omit editor UUIDs and private meeting storage paths. Display names are public
+attribution; account emails are never used as fallback names. Full before/after
+payloads, including storage paths, remain available to admins. Only trusted
+registry table names enter dynamic SQL. Helpers have no public EXECUTE privileges.
+
+Run `HISTORY_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/history-db.test.ts` for transactional access regression
+checks. Normal database owners can change schema/data as usual; this is an
+application-level append-only audit log, not an external tamper-proof ledger.
+
 ## Short links
 
 `short_links` stores an immutable generated eight-character hexadecimal code,
@@ -992,3 +1135,966 @@ basic usage indicators, not fraud-resistant analytics. No visitor PII is stored.
 Verification: `SHORT_LINKS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
 bun test scripts/tests/short-links.test.ts scripts/tests/short-links-db.test.ts`.
 Permission fixtures roll back; the concurrent-count fixture is deleted afterward.
+
+## Person voting records
+
+`get_person_votes(p_person_id, p_offset = 0, p_limit = 21)` is a runtime,
+security-definer read RPC with an empty search path and explicit execute grants
+for anon/authenticated. It returns recorded choices with motion details and
+meeting metadata, newest meetings first, then meeting ID, motion position and
+vote ID. Limits are clamped to 1–50; negative offsets become zero. Profiles request
+21 rows and display 20, retaining one lookahead row to offer the next page.
+
+Public and unlisted people can be read by ID; private people require an admin.
+For non-admins, the event, calendar and linked election must all be public and
+the event must still be a meeting. Unlisted meetings stay out of profile discovery.
+Admins can see all three visibility levels. No vote rows are prerendered.
+An index on choices `(person_id, meeting_id, vote_id)` supports the person lookup.
+
+Meeting vote articles have stable `vote-<UUID>` anchors. Participant links use
+the visibility-aware UUID person viewer. Name linking only considers visible
+attendance and roll-call participants, uses text nodes rather than HTML, and
+leaves ambiguous shortened names unlinked.
+
+### Meeting video URLs
+
+`events.meeting_video_start_seconds` is an optional nonnegative integer offset
+(0–2,147,483,647). It is meeting-only metadata with the same visibility and admin
+writes as the URL. Null preserves the URL/default start; an explicit zero overrides
+a URL timestamp. The admin editor accepts seconds, MM:SS or HH:MM:SS and saves
+seconds. MCP event writes expose the nullable integer and preserve it when omitted.
+YouTube iframe `start` parameters and Vimeo `#t=<seconds>s` fragments, plus the
+external watch links, use the explicit offset without modifying the stored URL.
+Unsupported providers retain their original link and display the selected time
+for manual seeking. No start times are inferred from scheduled event times.
+
+`events.meeting_video_url` is nullable HTTPS text (maximum 2,048 characters),
+allowed only when `is_meeting` is true. It inherits existing event/calendar
+visibility and admin write policies. `get_event`/`get_meeting` return it at
+runtime; no private URL is embedded in static HTML. The meeting editor and MCP
+event writes can set or clear it. The migration copies explicitly labeled
+YouTube/Vimeo "Meeting recording:" URLs from existing descriptions, preserving
+the descriptions and allowing multiple meetings to share one URL.
+
+The browser parses URLs and reconstructs iframe URLs only for exact YouTube and
+Vimeo hosts with valid video IDs. Other valid HTTPS URLs get an external link.
+It never accepts iframe HTML. Players have descriptive titles, fullscreen,
+responsive 16:9 sizing, lazy loading, and no autoplay parameter. YouTube uses its
+[privacy-enhanced embed host](https://support.google.com/youtube/answer/171780)
+and supported start times; Vimeo preserves unlisted-video
+[privacy hashes](https://developer.vimeo.com/player/sdk/basics). A visible original
+link remains available when providers restrict embedding.
+
+### Meeting text in site search
+
+`search_site` includes meeting notes, transcripts, and each motion's subject,
+description and outcome in an event's related search text. Both English full-text
+matching/ranking and literal substring matching (including identifiers such as
+`FSS-2`) use that text. It is derived from live meeting records; edits and deleted
+motions require no reindex or rebuild. Only events still marked as meetings
+contribute meeting text. Existing event, calendar and linked-election visibility
+gates apply before matching: anonymous and ordinary signed-in users discover only
+public content; admins can also discover unlisted/private records. Search returns
+the meeting once with its existing event link, regardless of how many motions
+match. It does not publish or copy meeting files to the public archive.
+
+## People directory pagination
+
+`browse_people(p_query, p_kind, p_sort, p_limit, p_offset)` returns a JSON object
+with `people` (directory card fields only) and an exact `total` after visibility,
+keyword and type filtering. This security-definer RPC sets an empty search path;
+anonymous and ordinary authenticated accounts see public rows, while
+`is_admin()` permits hidden rows. Counts use the same visibility rule. Existing
+`search_people` callers remain unchanged. Directory search matches full-name
+substrings or the person's name/title/description full-text vector.
+
+Sorting accepts `first_asc`, `first_desc`, `last_asc`, and `last_desc`. Full names
+are stored as one field: first-name order uses the full name; last-name order
+uses its final word after removing common generational suffixes. Full name and
+UUID break ties deterministically before offset/limit. Limits clamp to 1–100
+(default 24), offsets to zero or higher; query length is bounded at 500.
+The browser resets pagination when criteria change and ignores stale responses.
+Apply the migration before deploying the frontend. No hidden rows enter static HTML.
+
+Run `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/people-directory-db.test.ts` for pagination, sorting,
+filtering, and visibility checks. Fixtures roll back.
+
+## Legislative records
+
+Legislative history is independent of calendar meeting attendance. `legislative_terms`
+represents a Congress or state legislative cycle; `legislative_sessions` represents
+regular/special/extraordinary sessions within it. `legislative_bodies` types existing
+organizations as legislatures, chambers, committees or subcommittees and identifies
+their legislature. Dated `legislative_body_memberships` references existing office
+terms. The term is not an individual's period of office.
+
+`bills` covers bills and resolutions, with unique `(term_id, numbering_context,
+identifier)`. Use a shared numbering context for carryover between annual sessions;
+use a separate context when a special session restarts numbering. The introducing
+session remains unchanged when later sessions record actions. Versions, amendments,
+actions, companion/reintroduction relationships, sponsorship intervals, documented
+positions and article associations are independent child records. Withdraw a sponsor
+by setting `ends_on`; a position is sourced independently of formal sponsorship.
+
+`legislative_votes` stores the exact question, body/session, date, method, category,
+reported result/totals and coverage (`complete`, `partial`, `no_individual_record`).
+`legislative_vote_bills` connects a vote to one or several bills and optional versions,
+amendments/actions. Individual choices reference the office term held at the time;
+a person cannot receive two choices in the same vote. Missing records are unknown,
+not absences. Voice votes cannot have individual choices. Unknown membership or
+year-only service boundaries require an explicit review note. The normalized choice
+and original source wording are both retained. Do not infer endorsements from
+procedural votes, or calculate participation rates from an incomplete denominator.
+
+All new tables have RLS, admin-only direct access, source provider/ID uniqueness,
+source URLs, retrieval timestamps and civic audit triggers. Foreign keys restrict
+deletion of referenced history. Identity/context/start dates cannot be reassigned;
+reconcile dependent records explicitly to correct them. Service end dates can be
+recorded without deleting prior votes, but cannot precede recorded participation.
+`browse_legislation` returns bounded, paginated rows and exact totals after recursive
+visibility checks on all referenced objects. Its resource list is fixed; private
+helpers are inaccessible to API roles. Known unlisted objects can be fetched by UUID;
+explicit bill/person context permits their child records, not unrelated discovery.
+Ordinary authenticated accounts have the same public visibility as anonymous users.
+`get_person_legislative_record` filters by session, body and vote category and returns
+historical office labels, choices and visible bill associations.
+
+Profile vote cards use `get_person_legislative_bill_groups` with the same service,
+vote and choice visibility gates. It groups by visible bill UUID before paging,
+counts the person's matching choices, and returns the latest matching vote per
+bill. A vote affecting multiple bills contributes once to each bill; a vote with
+no visible bill association remains an individual entry. Ordering uses date,
+exact time when recorded, then vote UUID to break ties deterministically.
+Filters apply before counting and selecting the latest vote. The original
+per-vote RPC remains unchanged. Profile groups exclude votes classified as
+`attendance` before counting, choosing the latest vote, or paginating, including
+when a category filter explicitly requests attendance. Source vote/choice records,
+direct UUID viewers, and `get_person_legislative_record` remain unchanged for
+research and auditing. This applies to every person profile, including the UUID
+viewer. Release `20261123140000_profile_votes_exclude_attendance` through main
+before deploying the frontend. Public profile snapshots use the same attendance
+exclusion in `groupProfileVotes`, both when publishing initial/page assets and
+when filtering the published history in the browser. Raw snapshot vote rows are
+preserved for auditing. Release the append-only
+`20261123080000_person_legislative_bill_groups` migration through main before
+deploying the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-bill-groups-db.test.ts`;
+the test rolls back its migration and fixtures.
+
+`import_legislation` is an admin-only, atomic normalized import (at most 100 rows or
+2 MB). Supply `{table, data}` entries in parent-first order. Every `data` needs
+`source_system` and `source_id`; repeated keys patch the existing record. Explicit
+UUIDs may connect new records in the same bundle; mismatched UUID/provider mappings
+are rejected. Omitted fields retain defaults on insert and existing values on update.
+Imports use the caller's JWT/RLS and never a browser service key.
+Repeated imports preserve an existing `attendance` vote category even when a stale
+payload supplies a legislative category; other supplied metadata still updates.
+This protection runs in the normalized database importer, covering UI, MCP, and
+direct RPC imports. Explicit admin edits can still correct an erroneous attendance
+classification. The Georgia adapter recognizes reviewed vote ID 21003 as attendance
+in list and detail results despite its misleading source caption/flag; the review
+is documented in the 2023 Senate journal, pp. 421–422. Other second-reading records
+are not classified by that caption alone. Release
+`20261123150000_preserve_import_attendance` through main before deploying the
+updated MCP adapter. Verify with the attendance import database regression test
+and `scripts/tests/georgia-source.test.ts`.
+
+Provider-specific
+harvesting and identity reconciliation are deliberately separate from this normalized
+endpoint; name-only person matching is not supported. No live federal/state bulk
+feed is enabled by these migrations.
+
+The migrations follow the repository's existing future-dated migration sequence;
+the original CLI-created timestamps were moved after their audit/schema dependencies
+before application. Subsequent local refinements are separate append-only migrations.
+Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-db.test.ts`.
+
+Legislative display metadata is resolved by the private `legislative_private.details`
+helper after the existing recursive visibility gate. It provides readable action
+and bill labels, person viewer links for historical office service, and organization
+slug links for chambers. It does not add a new public lookup endpoint or change
+visibility rules. The append-only `legislative_display_details` migration keeps
+execution revoked from public, anonymous and authenticated callers.
+
+Legislative browsing searches related display labels (including members, bills, and articles) after materializing visibility-approved rows, preserving hidden-record protections.
+
+The October 26, 2026 Josh McLaurin backfill uses official Georgia member ID 4942
+and existing dated House District 51 / Senate District 14 office terms. Its
+normalized import and audit report live under `docs/research/josh-mclaurin-legislative-*`.
+It covers eight published regular/special session datasets, with 3,342 member
+choices and partial roll-call coverage. Published official totals are retained;
+`not_reported` outcomes avoid inferring a disposition from Yea/Nay counts. Bill
+identifiers remain in question labels; bill introduction dates and bill rows are
+not fabricated. Two 2021 House source records with contradictory duplicate member
+choices are excluded pending source correction, along with attendance records.
+The source adapter adds an `attendance` indicator for attendance captions even
+when Georgia's `isRollCall` flag is false, and flags multiple choices for an explicit
+member ID as `member_identity_conflict`.
+
+Large person histories use a private `visible_vote_ids` helper to resolve shared
+session, body and optional event visibility once. The profile endpoint resolves
+dated service once, counts only permitted choices, pages those choices, and
+hydrates bill labels only for the returned page. The vote directory shares the
+same helper. Private/unlisted parent gates and explicit UUID contexts are
+preserved; no private helper is executable by API roles.
+
+The hosted compatibility migration runs only when the existing legislative
+endpoint is already installed. Fresh resets skip it; the applied bill-group
+(`20261123080000`) and bill-browsing (`20261123090000`) migrations supply the
+visibility helper and optimized profile/directory reads. The redundant,
+production-unapplied `legislative_history_read_performance` file was removed
+after a version collision; the applied files and migration history are retained.
+The database regression uses these current definitions with 3,500 choices and a
+three-second statement timeout, then rolls back.
+
+## Query performance and foreign-key coverage
+
+The append-only `20261123070000_query_performance_indexes` migration adds covering
+indexes for the seven advisor-reported foreign keys on map layers, meeting
+attendance, meeting vote choices and records-request transfers. Existing indexes
+remain intact. It uses five-second lock and sixty-second statement timeouts so
+an unexpected blocker fails the migration instead of holding up live edits.
+
+`search_site` materializes text after selecting the requested entity type, then
+builds the combined search vector once before matching and ranking. Empty queries
+skip relationship-text and vector construction. Search results, rank/order,
+meeting-text matching and visibility gates remain unchanged; there is no stale
+search cache to invalidate. `get_layer_geojson_page` checks the requested map/layer
+membership directly instead of fetching/sorting the entire map's layer list.
+Public/unlisted/private semantics, paging, totals and geometry precision remain
+unchanged. Both RPCs retain security-definer/empty-search-path configuration and
+existing execute grants.
+
+Run `PERFORMANCE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/query-performance-db.test.ts` against local Supabase. It
+compares before/after results for anonymous, ordinary authenticated and admin
+callers, including hidden meetings and a map/layer visibility matrix, then rolls
+back its migration and fixtures. The CLI-created migration timestamp was moved
+after the existing future-dated dependency sequence before application.
+
+Release through the normal PR/main Supabase integration; never apply this SQL to
+production from a feature branch. Check advisors and compare representative RPC
+timings after release. Index storage fits within the existing disk allowance;
+there is no instance resize or new paid service.
+
+### Legislation directory capacity and prefiling
+
+`legislation_bill_browse_performance` resolves the visible legislative terms,
+sessions, chambers, bills and votes once per query. Bill and vote-to-bill listing
+and profile grouping reuse those sets instead of recursively walking the same
+parents for every row. Bill keyword search joins readable context labels directly;
+record details are generated for the result page. Public/unlisted/private rules,
+direct UUID/context behavior, totals, ordering and pagination are preserved.
+Private helpers remain uncallable by API roles and all public reads keep their
+empty-search-path security-definer configuration.
+
+Bills and resolutions may have sourced filing dates before the session opens.
+`legislative_prefiling` allows that date while retaining the session's upper bound,
+finite-date validation, immutable historical context and term/body agreement.
+Votes and actions still must occur within their session. Do not shift an official
+filing date or the session's start date to make an import pass validation.
+
+Verify both append-only migrations with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-browse-performance-db.test.ts`.
+The test compares previous and optimized visibility results, exercises anonymous,
+ordinary signed-in and admin callers with 4,000 bills/links under a five-second
+statement timeout, and rolls back its migrations and fixtures. Merge to main
+before applying through the guarded production migration workflow.
+
+The bill directory uses `browse_bills` for jurisdiction (federal/state/unclassified),
+state name, term, keyword and sort criteria before pagination, with exact filtered
+totals and deterministic date/title ordering. It retains recursive bill visibility;
+ordinary signed-in users have the same discovery access as anonymous visitors.
+Jurisdiction and optional state name belong to legislative terms. Existing terms
+are unclassified unless a recognized Congress/Georgia General Assembly slug matches;
+new imports and admin edits should supply this metadata explicitly. State terms
+require a state name; federal/unclassified terms must leave it empty. This does
+not enable a bulk data feed. Apply `legislation_directory` on main before deploying
+the frontend. Verify with `LEGISLATION_TEST_DATABASE_URL` and
+`bun test scripts/tests/legislation-directory-db.test.ts` (fixtures roll back).
+
+The follow-up Georgia bill backfill imported 3,813 bills/resolutions and 4,890
+associations for 3,292 of Josh McLaurin's recorded votes. Fifty votes have no
+measure reference in the official source and remain unlinked. Anonymous API
+verification checked every imported field and confirmed all 3,342 original member
+choices were unchanged. See
+[the import audit](research/josh-mclaurin-bills-backfill-2026-10-26.json).
+
+## Public profile build export
+
+`export_public_profile_rows(p_section, p_offset=0, p_limit=500)` is a read-only,
+empty-search-path security-definer projection for public section snapshots. The
+allowlisted sections are offices, person/organization articles, candidacies,
+meeting votes and legislative choices with public bill associations. It permits
+only anonymous execution, rejects non-null `auth.uid()`, requires public people,
+and applies public election/calendar/meeting gates and legislative visibility
+helpers. Authenticated profile/UUID readers remain unchanged; no table RLS or
+write grants are widened. Ordered pages use owner UUID and per-owner ordinal.
+The build consumes pages sequentially with bounded concurrency, checks errors,
+and shares the export across every public profile.
+
+The runtime-only descriptions above still apply to signed-in and UUID viewers.
+Anonymous public profile sections use static JSON; no private or unlisted payload
+is embedded in those files. Release `20261123120000_public_profile_sections`
+through main before the frontend deploys. Test feature SQL only locally or in a
+preview branch. Build failure preserves the previous deployment.
+
+## Sourced meeting imports and upload sessions
+
+The append-only meeting import/session migrations add immutable source observations,
+unknown choices, moment-observed attendance, and private upload reconciliation
+receipts. They retain existing meeting/people visibility and admin-only writes.
+See [the API contract and verification workflow](meeting-imports.md) for atomic
+imports, source conflicts, provenance, TUS originals, checksums and expiry/cleanup.
+
+## Public calendar meeting export
+
+`export_public_calendar_page(p_offset=0)` composes the existing
+`browse_calendar_events(public_only=true)` and `get_meeting` readers for static
+publication. It is read-only, security invoker with empty search path, rejects
+signed-in callers, and is granted only to `anon`. Each output row has an event
+and optional meeting record; deterministic pages contain up to 500 events,
+including non-meetings so pagination cannot stop early. Public event/calendar/
+election gates and participant filtering remain in the existing readers. The
+build additionally allowlists public people and projects displayed fields.
+No table RLS, write permissions or Storage policies change. Attachment metadata
+follows the existing public meeting reader; signed URLs remain click-time reads.
+The append-only follow-ups retire the initial table-based export: events
+intentionally have no anonymous row policy. Release all migrations through main
+before building.
+
+Run `CALENDAR_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/calendar-snapshot-db.test.ts scripts/tests/calendar-db.test.ts`
+for rollback-only pagination, parent/participant visibility, live/export parity
+and execute-grant tests.
+
+### District offices in legislative history
+
+District-numbered offices may belong to a district organization rather than the
+chamber organization. The append-only `20261124000000_legislative_district_service`
+migration recognizes a direct organization relationship whose label is exactly
+`Legislative district of`, whose source URL is present, and whose related
+organization is a chamber in the same legislature. The reverse display label is
+`Contains legislative district`. This permits sourced bill sponsorships and
+body memberships without moving historical offices between organizations.
+Unrelated labels, unsourced links, and chambers in another legislature remain
+invalid. Existing date, immutable-context, visibility, and admin-write checks
+remain in force. The relationship is an explicit identity reconciliation, not a
+name or district-number match. Merge the migration to main before applying it.
+
+Verify locally with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-district-service-db.test.ts scripts/tests/legislation-db.test.ts`.
+
+`20261124000100_legislative_import_column_cache` caches the permitted column names
+once per resource inside each normalized import request. It retains the 100-row /
+2 MB bounds, admin authorization, provider identity locks, managed-field rejection,
+atomic rollback, per-row validation/auditing, and reviewed attendance preservation.
+There is no cross-request cache. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislative-import-cache-db.test.ts`.
+
+The MCP `import_legislation` with `mode=batched` wrapper accepts at most 1,000 records / 2 MB,
+uses the authenticated caller's existing `import_legislation` RPC in sequential
+100-record transactions, and returns `status`, `imported_count`, `next_offset` and
+`total`. Partial failures stop before later batches; retry from `next_offset`
+using the same provider IDs. No service-role credential, alternate write path or
+transaction-limit bypass is introduced. The single-batch tool remains atomic.
+
+## Vote-choice browse capacity
+
+`vote_choice_browse_performance` resolves permitted vote IDs and office-term IDs
+once per directory request. The existing `browse_legislation` RPC uses that set
+for choices instead of recursively checking the same parents for every row.
+Anonymous/ordinary/admin discovery, explicit unlisted contexts, filters, keyword
+search, exact totals, ordering and projections are unchanged. The helper stays
+in the private schema with no API-role execute grant; public grants and table
+RLS do not change. This fixes the 36,000-row choice scan that timed out during
+public archive builds. No new index, paid service or instance resize is required.
+
+Run `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/vote-choice-browse-db.test.ts`. The rollback test compares
+old/new results across caller/context combinations, then exercises 35,000 choices
+under a three-second statement timeout. Synthetic capacity rows skip audit/import
+triggers only on the test connection; normal trigger behavior is restored before
+reads and the whole transaction rolls back.
+
+The later `20261124010100` migration below supersedes the intermediate
+`20261124000200` wrapper and uses the private `visible_choice_ids` helper.
+Both applied migration files remain in append-only history.
+
+### Public record export and vote-choice browsing
+
+The public archive build reads every discovered vote choice through
+`browse_legislation`. After large legislative imports, recursively checking the
+same vote and office-term parents for every choice exceeded the anonymous
+statement timeout and blocked the entire static deployment (including the sitemap).
+`20261124010100_legislative_choice_browse_performance` resolves visible votes and
+referenced office terms once per query, then joins choices to those permitted IDs.
+The row visibility rule, direct-ID/person/vote contexts, counts, ordering, filters,
+search and detail projections remain unchanged. The helper stays private and the
+public RPC retains its empty search path and existing grants.
+
+Merge this append-only migration to main before applying it through the Supabase
+integration, then rerun the normal Cloudflare production build. Do not increase
+anonymous timeouts or omit choices to make publication pass. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/legislative-choice-browse-db.test.ts`. The test compares
+old/new access results and checks 16,001 choices under a three-second statement
+timeout; its migration and fixtures roll back. After deployment, confirm
+`/records/` returns 200 and the sitemap contains its detail and archive pages.
+
+The follow-up `20261124010200_legislative_sponsorship_browse_performance` applies
+the same shared-parent resolution to bill sponsorships, using visible bills and
+referenced office terms. Larger imports can otherwise block both the record
+archive and public profile snapshots at the sponsorship read. Verify the identical
+visibility/context comparisons and 16,001-row timeout regression with
+`scripts/tests/legislative-sponsorship-browse-db.test.ts` and the same local database
+variable. Both helpers remain uncallable by API roles.
+
+`20261124010300_legislative_action_browse_performance` similarly resolves bill,
+session, body and optional event parents once for bill actions. Its regression,
+`scripts/tests/legislative-action-browse-db.test.ts`, compares row and parent
+visibility (including events and calendars), contextual access and 16,001 actions
+under the same timeout. This keeps action imports from blocking archive builds.
+
+## Election result snapshots
+
+Migration `20261125003200_sos_results_automation` adds disabled-by-default feed
+configuration, durable jobs, service-only leased ingestion/publication RPCs,
+five-minute signed Cron polling, and public-safe collection health. Administrators
+configure or recover feeds through explicit admin RPCs; raw tables have no API
+write grants. Nullable SOS reporting statuses remain unknown. Published snapshots
+are immutable, and revisions can lower counts. Exact evidence receipts and
+meaningful-data fingerprints serve different purposes. Atomic activation records
+the pointer-publication work and marks a meaningful results change for rebuilding;
+R2 publication is retried separately with conditional writes. See
+[operations and release](sos-results-automation.md) before enabling any feed.
+
+Migration `20261125003300` prevents manual publication from advancing a feed
+after automation has been enabled or produced a revision. Migration
+`20261125003400` adds reviewed SOS-to-ballot mappings through admin RPCs and a
+visibility-gated reader. It also permits an equal source timestamp only when the
+current automation-owned snapshot has the same semantic fingerprint. Mapping
+changes to public elections mark the frontend dirty; mappings are not R2 assets.
+
+Migration `20261125003500_sos_results_poll_cadence` keeps the same single
+five-minute Cron heartbeat but gates real source checks with per-feed initial and
+post-transition intervals. Admins configure cadence only while paused through
+`configure_sos_results_poll_cadence`; the original four-argument feed RPC remains
+compatible. Actual activation records an immediate request separately from true
+source-check timestamps and queues the existing signed coordinator when Vault is
+ready. Both public and service health readers expose effective cadence/window and
+use cadence-aware freshness without weakening visibility or service-only grants.
+No feed, production credential, or additional Cron schedule is activated by SQL.
+
+Private evidence and immutable, scoped election reports support agent-assisted OCR
+imports and turnout tracking. Admin-only imports validate identity, vote totals,
+source presence and predecessor IDs; public reads inherit election visibility.
+See [election results](election-results.md) for the RPC contract, deduplication,
+photo examples, validation and release sequence.
+
+`20261124010700_calendar_bill_child_capacity` applies the same bounded parent
+visibility calculation to imported bill actions and sponsorships, which also
+exceeded the three-second API timeout as imports grew. Referenced bills, bodies,
+sessions, events and office terms retain their existing recursive visibility gates.
+The helper is private; grants, RLS and query results are unchanged. Verify with
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/bill-child-browse-db.test.ts`. The rollback test compares
+all caller/parent/context gates and exercises 20,000 rows per resource under the
+API timeout, including a last-page request. No paid resource is required.
+
+Calendar capacity migration uses version `20261124010700` after the concurrent
+main sponsorship release claimed `20261124010200`. The user approved moving the
+feature migration with unchanged SQL after local/preview verification. Production
+history remains intact; the final migration reasserts the tested wrapper in all
+environments. No production migration-history repair is required.
+
+### Public profile legislative vote export performance
+
+`20261124010400_profile_vote_export_performance` pages visibility-approved
+choices before building their bill associations. Each 500-row page resolves
+associations only for its selected votes, preserving the existing anonymous-only
+export, ordering, fields and related-record visibility checks. It does not raise
+query timeouts or omit votes. Merge the append-only migration to `main` before
+production application, then rebuild the static frontend.
+
+Verify with `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-vote-export-db.test.ts`.
+The transactional test compares old/new payloads across hidden parents and
+relationships, and exports all 16,001 fixture choices with a three-second
+statement timeout per page. All fixtures and function changes roll back.
+
+The hosted dataset still exceeded the limit with per-link recursive checks.
+`20261124010500_profile_vote_export_shared_gates` reuses permitted bill/action
+sets and public version/amendment parent joins across the page. The anonymous
+export's existing gate ensures these sets cannot inherit administrator access.
+The same regression now uses 16,001 distinct bills as well as choices and checks
+hidden linked actions. Apply through the main integration before rebuilding.
+
+`20261124010600_choice_browse_page_projection` fixes the remaining public-record
+archive timeout when browsing choices with an empty search query. It counts and
+sorts permitted IDs/timestamps before projecting provenance text and reference
+labels for the selected page. The visibility helper, filters, direct-ID/person/
+vote contexts, nonempty search path, ordering and payload remain unchanged.
+The choice-browse regression now uses 50,001 choices with long source notes and
+the same three-second anonymous timeout. Merge and apply through the main
+integration before rebuilding the frontend; do not omit archive records.
+
+The user approved versions `20261124010700` and `20261124010800` after
+concurrent main releases occupied versions through `20261124010600`. Calendar
+capacity SQL remains unchanged at `10700`; `10800` exactly reasserts main’s
+current browse wrapper, including lightweight choice pagination and main’s
+action/sponsorship helpers. Production history remains intact.
+
+## Public legislative build export
+
+`20261125000000_public_build_legislation_export` adds
+`export_public_legislation_page(p_table,p_offset=0,p_limit=500)`. Its allowlist
+covers only the fourteen public build resources. It requires anonymous execution,
+rejects non-null `auth.uid()`, sets an empty search path, requires public row
+visibility and reuses the existing recursive discovery helpers without contexts.
+It counts/materializes IDs and sort keys before projecting a selected page,
+avoiding repeated full-source JSON scans for every 100-row browser page. Browser
+RPCs and their 100-row caps, RLS, writes, and private/unlisted direct readers are
+unchanged. No privileged build credential or larger timeout is introduced.
+
+Release through main and the Supabase integration before building production.
+Verify with `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-legislation-export-db.test.ts`. The rollback test compares all fourteen resources and multiple large pages with
+existing discovery payloads, checks hidden parents, anonymous-only grants and
+user-context rejection, and retains direct unlisted access in the old reader.
+
+### Structured Georgia SOS turnout
+
+`20261124010900_structured_turnout` adds immutable JSON-evidence reports and a
+fixed Census county-code reference, with RLS and no direct report writes.
+`import_structured_turnout` checks administrator access, exact UTF-8 checksum,
+allowlisted nested schema, source identity, canonical counties, measures and time
+semantics before an atomic election-locked replacement. `get_structured_turnout`
+projects public source rows under election visibility; raw bytes/editors stay
+admin-only. No Storage policies or photo/PDF rules change. See
+[election results](election-results.md#structured-georgia-sos-aggregates-schema-v1)
+for contracts, bounds, correction semantics and main-before-production release.
+
+Migration `20261125003700_structured_turnout_election_day` extends schema v1's
+existing `turnout` table (`QDFdpV`) with exact source style
+`Election Day In-Person`, counting group `election_day`, and the existing
+`turnout` measure. It remains forbidden in the early and absentee tables.
+The maximum becomes 795 source rows (159 counties × five rows across the three
+views). Missing rows and null values stay unavailable; no Election Day value,
+statewide total or cross-view sum is inferred. All checksum, source identity,
+time, authorization, immutable revision and visibility guards remain in force.
+Merge the migration to main before production application.
+
+### Public legislative detail projection
+
+Full static bill/vote/session details reuse `export_public_legislation_page`
+without direct-ID, bill, person or vote contexts. The only additional resource,
+`legislative_event_links`, is paged through existing anonymous
+`browse_legislation` discovery with public-row validation. Recursive parent and
+participant visibility gates remain in SQL; no schema, grant, RLS or privileged
+credential changes are needed. Vote totals count only exported public choices,
+not context-permitted unlisted choices. The explicit live viewer retains its
+existing context-aware totals and relationships. Public-ID indexes list only
+records admitted to the snapshot; unknown IDs still use the live access gate.
+
+### Public request snapshot and downloads
+
+The public build shares anonymous `search_records_requests(p_managed=false)`
+pages and `get_records_request` reads across directory and archive consumers.
+It validates public visibility, stable update timestamps and an unprivileged
+projection before publication. Owner IDs, transfer history, private files and
+storage paths never enter public files. No SQL/RLS/grant changes are needed.
+
+Public file metadata includes only file ID, name and size. Download resolves
+that ID through a fresh request RPC, then uses the existing private bucket's
+60-second signed-URL operation. Current owner/admin/file/request policy stays
+authoritative; URL origin and bucket signing path are checked before navigation.
+Public/unlisted/private access and ownership-transfer behavior remain unchanged.
+
+## Frontend rebuild invalidation
+
+`20261125000100_frontend_rebuild_tracking` adds a singleton
+`public.frontend_rebuild_state` row with `needs_rebuild`, a monotonic `revision`,
+change timestamp and publication timestamp. RLS is enabled; anonymous and
+authenticated API roles have no access. The service role has select access but
+no direct write grant.
+
+`frontend_private.mark_frontend_rebuild_required()` is an empty-search-path,
+security-definer trigger function with no API-role execution grants. Statement
+triggers mark changes transactionally for insert/update/delete/truncate on the
+44 explicitly listed static-content tables. These cover organization/person
+profiles and affiliations, maps/layers/features, calendars/meetings, elections,
+offices, articles, legislation and public request content/children. Parent and
+relationship changes, deletes and visibility transitions invalidate the snapshot.
+Rollbacks also roll back invalidation. Statement-level invalidation avoids
+updating the singleton once per imported row. Private-only and no-op statements
+on tracked tables can conservatively cause an extra rebuild.
+
+Auth/admin/profile settings, audit history, import/upload receipts, request
+ownership/transfer history, runtime short links/counts, public document search,
+and runtime election result/turnout reports are excluded. New static readers or
+schema additions must extend the trigger allowlist in a new migration.
+
+`20261125000200_frontend_rebuild_cron` enables `pg_cron`/`pg_net`, schedules the
+scheduled invocation and adds persistent build ID/revision/request time and a
+five-minute lease. The service-role-only `claim_frontend_rebuild`,
+`record_frontend_rebuild` and `release_frontend_rebuild` RPCs serialize checks,
+retain tracked builds across Edge invocations, and reject expired/replaced leases
+and mismatched build IDs. They use empty search paths and explicit execute grants.
+The obsolete standalone acknowledgement RPC is dropped. Successful reconciliation
+clears the flag only if the current revision equals the build revision. Failed
+builds stay dirty; newer edits can be queued in the same scheduled pass. A crashed
+invocation cannot permanently hold a lease. The publication timestamp records
+the successful reconciliation time, rather than Cloudflare's exact deploy time.
+
+The private invocation function reads the environment-specific URL and signing
+token from Vault at runtime. The reusable token is never placed in `cron.job` or
+`pg_net` headers; the queued request carries a five-minute HMAC signature instead.
+The Edge Function uses a service-only RPC to verify the signature against Vault
+before claiming a rebuild lease.
+The row stores no credentials. Cron history records queuing; HTTP/Edge responses
+and Cloudflare status determine success. See [publishing setup and local tests](development.md#database-driven-publishing).
+Merge both append-only migrations to main before production application.
+
+`20261125000300_frontend_rebuild_twenty_minutes` reschedules the existing job to
+`*/20 * * * *` (minutes 0, 20 and 40 of each hour). Its historical
+`frontend-rebuild-hourly` name, job ID, history, command and lease behavior are
+preserved; no second job is created. Completion checks and failed-build retries
+use the same 20-minute schedule. Release the append-only migration through main.
+
+## County statistics
+
+`20261125000800_county_statistics` stores the full Bibb-style 59-measure profile
+for all 159 counties plus Georgia (9,440 observations). Apply through main and
+the Supabase integration before the frontend/MCP release. No feature-branch SQL
+may be applied to production. Local verification uses `bun run db:migrate`.
+
+Tables: `county_geographies` (FIPS/name/slug/kind), `county_statistic_topics`,
+`county_statistic_indicators` (units, definitions, ordering, six headline slots),
+`county_statistic_sources` (publisher, official URL, retrieval date, exact file
+SHA-256), and `county_statistics` (numeric value, availability, period, source
+variables, numerator/denominator, ACS margin, SAIPE bounds/confidence, component
+inputs, detail, server-controlled update timestamp). All tables have public-read
+RLS and admin-only insert/update/delete; no privileged browser/build key is used.
+The `county_statistic_records` view uses security_invoker. Empty-search-path
+`search_county_statistics(query,county_fips,indicator_code,topic,limit,offset)`
+returns `{results,total_count,limit,offset}` with stable ordering and a 500-row cap.
+It is security-invoker and preserves all source/uncertainty fields. The five
+source tables mark the existing static rebuild state on writes.
+
+Data is sourced directly from Census bulk downloads: Vintage 2025 PEP county
+population/age/race/housing, 2020 Census counts/Gazetteer land area, 2020–2024 ACS
+five-year detailed tables, 2024 SAIPE, 2023 CBP and 2024 Nonemployer Statistics.
+`bun run scripts/import-county-statistics.ts --output /tmp/county-statistics.json`
+fetches and validates a refresh without any database connection. A temporary
+cache retains only Georgia ACS rows and the original source-file checksum.
+`--seed /path/to/NEW-migration.sql` emits initial source-attributed seed SQL;
+never append to or edit an applied migration. Review source changes and use a new
+append-only migration or authenticated administrator writes for subsequent refreshes.
+Do not infer source geography from a service area or address. Georgia age/race
+counts sum the 159 county counts; Census business totals use the published state
+records. Derived ACS shares retain component estimates and margins, without
+fabricated ratio intervals. Suppression/unavailability is explicit and never zero.
+
+Public REST examples (include the site's public `apikey` header):
+
+- `/rest/v1/county_statistic_records?county_fips=eq.13021&order=topic_position,indicator_position`
+- POST `/rest/v1/rpc/search_county_statistics` with `{"p_query":"Bibb household income","p_limit":20,"p_offset":0}`.
+
+`/statistics/` provides live human search; `/statistics/data.csv` and `data.json`
+provide the build snapshot. Each county has equivalent CSV/JSON with its county
+and Georgia records. MCP both catalogs support `search_site` types
+`county_statistic_catalog` and `county_statistic`; compact also exposes dedicated
+catalog/search and admin-save tools. The original catalog stays at 128 tools;
+compact grows from 66 to 70. Update plugin guides/schemas with `bun run plugin:build`.
+
+Verify RLS, completeness, numeric validation, search, pagination, conflicts and
+rebuild invalidation with
+`COUNTY_STATISTICS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/county-statistics-db.test.ts`.
+Verify real local Auth and both MCP catalogs with
+`COUNTY_STATISTICS_MCP_INTEGRATION=1 bun test scripts/tests/county-statistics-mcp.test.ts`.
+
+The append-only `20261125000900_county_statistic_numeric_validation` follow-up
+allows valid population growth above 100% while other percent shares remain
+bounded to 0–100, and rejects non-finite confidence bounds. It preserves the
+already-applied local migration history and is released through main with the
+initial county-statistics migration.
+
+## Bibb school financial records
+
+`school_finance_releases` and `school_finance_rows` retain staged, immutable
+source records with reviewed publication and exact numeric amounts. The admin
+`manage_school_finances` RPC handles batches, reconciliation, corrections,
+withdrawal and employee identity review. Payroll publication creates separate
+source-backed public person profiles and dated organization affiliations, even
+for repeated names. `browse_school_finances` exposes only current published
+releases and public person links, with filtered totals and indexed name/title
+search. RLS is enabled, with no direct API-role table grants. See
+[school finances](school-finances.md) for contracts and release verification.
+
+Payment recipients use `school_finance_recipients` and a foreign key on finance
+rows. Public import wrappers retain existing validation and atomically resolve
+nonaggregate payees at publication, reusing exact matches or creating review-marked
+organization stubs. Private helpers have no API execution grants; the recipient
+registry has RLS and no direct API table access. Public projections omit hidden
+person mappings. See [recipient profiles](school-finances.md#payment-recipient-profiles).
+
+School finance migration `20261125001200` adds staging-only reviewed payroll
+bindings (`resolve_payroll_person`) and row-level stub ownership. Publication
+creates profiles only for unresolved rows. Review, withdrawal and supersession
+preserve canonical biographies, visibility and affiliations; only source-owned
+stubs receive those lifecycle mutations. Original financial facts remain immutable.
+
+Migration `20261125001300` materializes public people who actually have office
+terms before invoking the gated office-history reader in the static profile
+export. Imported payroll/payee profiles without terms cannot contribute rows;
+excluding them avoids timeouts as person counts grow. Anonymous-only execution,
+visibility rules, output fields, ordering and pagination remain unchanged.
+
+Migration `20261125001400` similarly prefilters person/article,
+organization/article and person/candidacy exports with indexed `EXISTS` checks
+for public related records. `NOT MATERIALIZED` lets PostgreSQL retain ordered
+first-page early stopping while avoiding gated-reader calls for unrelated owners.
+The existing readers still define each payload and visibility rule; owner/ordinal
+ordering, bounded pagination, anonymous-only execution and API timeouts are
+unchanged. No new indexes or direct-reader grants are needed. This append-only
+migration must reach GitHub main before production application.
+
+## Cited meeting vote outcomes
+
+`meeting_vote_outcome_observations` is append-only for API clients: direct
+insert/update/delete is not granted even to application admins. Admins may inspect
+it; writes go only through `set_meeting_vote_outcome`, a security-definer RPC
+with empty search path, explicit grants and `is_admin()` check. It locks the vote
+and stores a required HTTPS citation/hash/locator. Exact replay is idempotent;
+conflicts do not overwrite, and corrections require the latest observation UUID
+and a public reason. Original imported rows and source payloads remain unchanged.
+The vote foreign key prevents deletion from discarding cited observations.
+
+Private `meeting_private.outcome_evidence` has no client schema/function access.
+Established gated readers enrich only already-permitted votes: the latest
+source/attachment-aware `get_meeting`, `get_person_meeting_votes`, actual live
+`get_person_votes`, and anonymous-only `export_public_profile_rows`. Their
+original implementations are revoked from client execution; parent visibility,
+public discovery, filters, ordering and bounded pagination remain in force. The
+new table is registered in history via its vote/meeting parents and marks frontend
+rebuild state on inserts. Public history omits private editor account UUIDs.
+
+Migrations `20261125001700`–`20261125002000` are append-only, including citation
+validation and null-safe public-history privacy follow-ups. Apply only after main,
+then deploy the matching MCP source and rebuild static content. Never feature-apply
+to production or repair migration history. See [meeting-imports.md](./meeting-imports.md)
+for citation/correction semantics and the explicitly pending real-data backfill.
+
+## MCP meeting-upload relay state
+
+Migration `20261125002100` adds private `meeting_private.upload_relays` and
+`upload_chunk_receipts`, with RLS and no client table grants. There is no relaxed
+Storage policy. The security-definer `manage_meeting_upload_transfer` RPC has
+empty search path and requires `is_admin()`; first acquisition binds the transfer
+to `auth.uid()`. Each action on an existing transfer requires that owner. `acquire`
+requires a pending, unexpired session. `creating`, `location`, `prepare`, `commit`
+and `creation_auth_rejected` additionally require a matching unexpired lease.
+`release` requires the owner and matching lease, including after expiry; `status`
+requires only the owner. Append-only migration `20261125002200` allows
+`creation_auth_rejected` to clear only an unlocated creation intent with offset
+zero and no chunk receipts. The relay invokes it only after a confirmed Storage
+JWT-expiry rejection before upload creation. If the caller's database auth also
+expired, the reset can fail and operator reconciliation remains necessary.
+Hash receipts reject
+changed chunk replay and retain original offsets; document bytes stay in Storage.
+Only configured-origin, metadata-matched TUS resources are used by the server.
+Locations are backend transport state, not an arbitrary client URL fetch API.
+
+These private receipts are not public civic evidence and do not trigger history or
+frontend rebuilds. Existing canonical attachment creation still triggers normal
+history/rebuild tracking and retains exact source/checksum verification. Release
+through main before applying production SQL or deploying matching MCP code. Shared
+local 54322 is not used; tests run on isolated 54341/54342. See the
+[transfer contract](./meeting-imports.md#authenticated-mcp-byte-transfer), including
+the honest uncertain-creation limitation and pending hosted acceptance.
+
+### Compact meeting observation imports
+
+Append-only migration `20261125002300` adds an admin-only, empty-search-path wrapper
+around the existing immutable `import_meeting_records` function. It locks the
+meeting, processes at most 2,000 expanded observations / 2 MiB through the original
+per-row authority, and commits accepted observations together while returning row
+errors for rejected ones. Dry runs roll back all writes. This does not relax RLS,
+change source payloads, overwrite canonical rows, add tables, or bypass rebuild
+tracking: existing insertion triggers still run. Anonymous execution is revoked;
+ordinary authenticated users fail `is_admin()`. Apply production SQL only after
+main-first release. Tests use isolated 54341/54342; shared 54322 remains untouched.
+See [the compact/attachment contract](./meeting-imports.md#compact-and-attached-simbli-imports-issue-140)
+for checked Storage downloads, exact identity/key mapping and partial semantics.
+
+## Historical officeholder observations (version 1)
+
+Migrations `20261125002400` through `20261125002600` add immutable roster evidence,
+not a new kind of service term. Apply from main before deploying matching web/MCP
+code. No real roster is seeded and no source PDF is certified by this change.
+Organizations/offices are public entities in the current schema; observations have
+explicit public/unlisted/private visibility and require a public linked person for
+non-admin reads. Ordinary sign-in never grants private/unlisted observation access.
+Unresolved raw names can be retained on an organization with no person link, labeled
+unresolved; the API creates no profiles, terms, elections or appointment events.
+Editors may separately create a review-flagged profile through existing supported
+workflows only after deciding an unresolved identity warrants a profile. Never fuzzy
+match, silently merge curated people, or turn a raw roster label into a verified ID.
+
+`accept_officeholder_observations(p_version=1,p_provider,p_rows,p_dry_run=true)`
+is admin-only. A batch has 1–100 rows / 1 MiB, is atomic, and defaults to a real
+constraint-checked rollback. A conflict or field error rolls back the whole batch;
+exact replay returns unchanged IDs. Stable provider/source_key identifies one
+reported observation. A changed row requires the latest `supersedes_id` and a
+nonempty public `correction_reason`. Corrections append a new immutable revision;
+old payloads remain. Concurrent retries serialize by stable source identity.
+Example row (synthetic UUIDs must be replaced with exact reviewed existing IDs):
+
+```json
+{
+  "source_key": "report:2022:roster:row-1",
+  "reported_person": "Example, Alex",
+  "reported_organization": "Historical Authority",
+  "reported_office": "Chair", "role": "Chair pro tempore",
+  "capacity": "acting", "selection_basis": "unknown",
+  "as_of": "2022-06-30", "precision": "day",
+  "organization_id": "00000000-0000-4000-8000-000000000001",
+  "person_id": null, "office_id": null, "office_term_id": null,
+  "source_url": "https://example.test/report.pdf",
+  "document_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "retrieved_on": "2026-11-01", "locator": "Printed viii / PDF page 16 / row 1",
+  "evidence_status": "indexed_copy_unverified", "review_status": "unresolved",
+  "confidence": "uncertain", "visibility": "private"
+}
+```
+
+Reported labels, source URL/hash/retrieval date and locator are required. Optional
+`seat`/`district` preserve source labels, independent of reviewed office metadata.
+`capacity` is substantive/acting/interim/unspecified; `selection_basis` is
+ elected/appointed/unknown, asserted only with evidence. `precision` is day/year/
+unknown. Year uses January 1 only as a sorting bound and displays just the year;
+unknown requires null `as_of`. Retrieval must be a known date, never a verification
+or service date. Evidence is original_verified/indexed_copy_unverified/unverified;
+review is reviewed/unresolved/conflicting; confidence is supported/uncertain/
+unassessed. These are separate assertions: reviewed identity links do not certify
+an original PDF. No automated source download or verification is implied.
+
+A reviewed row requires exact existing person and office UUIDs. The office must
+belong to its recorded historical organization; a corroborating term must match
+that person and office. A dated observation outside its linked term must be marked
+conflicting after review. Displayed interval links are neutral: linkage does not
+confirm or corroborate a service interval, including for unresolved or conflicting
+evidence. Existing verified intervals are never changed, including
+nonconsecutive or overlapping service; observations do not fill gaps. Use the
+existing organization relationship model for sourced predecessor/successor links,
+not automatic consolidation or inherited membership. Different roles/rounds/years
+need distinct stable source identities; corrections must not manufacture new keys.
+
+`read_officeholder_observations(p_person_id,p_organization_id,p_as_of,p_history,
+p_offset,p_limit)` requires a parent, with pages of at most 100. Day filters match
+only that exact observation date; year-precision rows match the same year as context
+and explicitly do not establish service on that day. Unknown dates are excluded
+from date filters and retained in unfiltered history. No snapshot persists until a
+next snapshot. Default reads show latest revisions, optional history includes
+superseded rows through the same visibility gates. Missing coverage is not absence,
+zero, deletion, a full roster, or a current-office determination.
+
+`export_public_officeholder_observations` is a bounded, public-only latest-revision
+projection even for an admin caller. Static profiles share one in-flight paged
+snapshot, validate completeness, and refresh in dev. Runtime profiles use the same
+public rules, with admin-only restricted evidence. JSON downloads identify the
+parent, filter, offset, limit and total and contain only the displayed page, not a
+complete office history. Browser source/label text is escaped, not rendered HTML.
+New rows participate in audit capture and frontend rebuild invalidation. Public
+profiles need publication after edits or visibility corrections. Source history
+remains in the acceptance/read model; original service terms remain authoritative
+for their documented intervals.
+
+The FY2022 ACFR example in #147 remains indexed-copy evidence with original origin
+unverified until an editor actually re-verifies it. This feature does not import
+that roster, certify June 30 membership, or claim a production deployment. Test
+feature migrations only on isolated API 54341 / DB 54342; main-first production
+release and separately reviewed source acceptance remain follow-up work.
+
+Observation audit descriptors also apply nested visibility and current-chain visibility. A restricted latest correction suppresses older revisions from public history; direct RPC history and global/parent audit reads must not reveal private source payloads.
+
+Review follow-up `20261125002700` validates source URL authorities/ports on insert;
+renderers also parse HTTPS links before exposing them. Public export pages include
+a fingerprint of the complete visible exported set. Static consumers require it
+unchanged across pagination and fail on drift; it is not a persisted DB snapshot.
+Superseded-only history remains reachable through the same gated reader, and
+superseded request responses cannot overwrite newer filters or downloaded pages.
+
+## User-fee reports
+
+Migrations `20261125002800`–`20261125002900` add fee-specific stable identities, immutable source
+report versions and observations with separate structured rates and reported
+collections. It reuses organizations and provenance/acceptance patterns rather
+than treating fees as outgoing payments. Bounded admin acceptance is atomic,
+exact-decimal strings stay strings, and corrections explicitly supersede the
+latest report. RLS and public readers/audit descriptors enforce report visibility
+for the whole revision chain. No automatic stubs, collectors, production source
+rows or current-effectiveness claims are added. See [the version-1 contract](./user-fees.md)
+for source fields, scalar/range/tier/text rates, missing periods, exact collections,
+read/search filters, exports and main-first release instructions.
+
+## Obligation reports
+
+Migration `20261125003000` reuses immutable report/provenance and decimal/HTTPS
+validation patterns for source obligations, not payments, original contract values
+or inferred balances. Reviewed existing payer/vendor links are separate from raw
+labels; unresolved identities stay unlinked/private. Hidden-person observations are
+excluded completely before public detail/search/count/sum/export and audit history.
+Exact signed sums are optional, visible/filter-scoped and separated per report
+revision/currency/unit/period/grain, only with a source-asserted disjoint-row basis.
+No collectors, inferred payment links or automatic stubs. See [the version-1 contract](./obligations.md)
+for bounded atomic acceptance, corrections/cancellations, source scope, read APIs,
+exports, RLS/history/rebuild gates and main-first release instructions.
+
+
+### Paused SOS feed window administration
+
+Migration `20261125003600_sos_results_feed_window` adds the authenticated,
+admin-only `configure_sos_results_feed_window(p_election_id,p_starts_at,p_ends_at)`.
+It requires an existing paused feed, public election, exact saved source binding,
+and explicit finite ordered timestamps. It locks the election/feed and updates
+only the polling window. The existing four-argument pause operation remains
+unchanged so emergency pause still works after source/visibility changes.
+No service-role key is exposed to browser code and no raw table write grant is
+added. The static elections admin uses the normal authenticated Supabase client:
+create/pause, set cadence, set the window, verify saved responses, and only then
+permit a separate acceptance-gated activation action. Merge this append-only
+migration to main before production application or shipping its UI controls.
+
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-loopback-db> bun test scripts/tests/sos-feed-window-db.test.ts`
+checks actual role grants and row guards with rolled-back fixtures. It rejects a
+hosted endpoint and any enabled feeds or poll Vault target. Browser transport
+fixtures verify the existing session/admin gate and exact RPC sequence; they do
+not replace database authorization tests or production acceptance.
+
+### SOS source STOP and durable recovery
+
+Migration `20261125003800_sos_download_stop` prevents fresh job claims outside
+`starts_at <= database clock < ends_at`. Immediately before a new upstream GET,
+collectors call service-only `authorize_sos_results_download(job_id,lease_id)`
+with the current fenced lease. Its schema-version-1 response binds job, election,
+source URL, database `server_now`, and `ends_at`. Late preflight, expired lease,
+disabled feed, nonpublic election or changed source fails closed. The Bun reference
+and Rust collector validate this binding and subtract the entire monotonic RPC
+round trip plus a conservative precision margin from the remaining end deadline;
+the active download is cancelled at that deadline. Existing null-end feeds retain
+the normal 180-second download limit; deployment acceptance still requires an
+explicit finite end. The single Supabase Cron HEAD coordinator is unchanged.
+
+STOP prevents new upstream source downloads. Already archived imports with both
+snapshot and receipt, and committed pointer recovery, may drain after the window
+ends. Renew/stage/publish/failure-acknowledgement/pointer RPCs retain existing
+lease and visibility guards without a new window check. Recovery must use
+the exact archived original and never fall back to fresh upstream bytes. This
+avoids wedging durable staging or leaving a committed publication undiscoverable.
+Apply the migration from reviewed main before deploying either updated collector;
+missing authorization RPC support fails closed before a fresh GET.
+
+Rollback-only local coverage:
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-loopback-db> bun test scripts/tests/sos-download-stop-db.test.ts`.
+It verifies exact start/end boundaries, closed queued retries, late preflight,
+role/table access, lease/source/publicity guards, archived staging and pointer drain.
+Collector recovery tests reject any fresh-authorization RPC during archive replay
+and assert zero such calls across interrupted replay and pointer acknowledgement.

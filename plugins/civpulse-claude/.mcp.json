@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "civpulse": {
+      "type": "http",
+      "url": "https://api.civpulse.org/functions/v1/mcp/v2"
+    }
+  }
+}

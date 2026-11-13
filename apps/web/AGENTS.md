@@ -33,8 +33,8 @@ through an RPC.
   keeps non-null narrowing inside nested functions.
 - Admin pages use the gate/denied/panel pattern and the admin tab bar
   (`src/components/AdminTabs.astro`).
-- Styling is plain CSS in `src/styles/global.css` using the cream/forest/sage/
-  rust tokens. Reuse existing classes (`.org-card`, `.org-row`, `.org-form`,
+- Styling is plain CSS in `src/styles/global.css` using the Open Exhibition
+  ultramarine, lime, paper, and ink tokens. Reuse existing classes (`.org-card`, `.org-row`, `.org-form`,
   `.page-intro`, `.prose`, `.button-link`, …) rather than inventing new ones.
 - Prefer `bunx astro add <integration> --yes` over editing `astro.config.mjs`.
 

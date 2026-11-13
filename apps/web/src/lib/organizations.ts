@@ -1,3 +1,5 @@
+import { readBuildOrganizations } from './organization-build-data';
+export { ORGANIZATION_COLUMNS } from './organization-build-data';
 import { getBuildSupabase, organizationLogoUrl } from './supabase-build';
 
 export interface Organization {
@@ -24,32 +26,11 @@ export interface Organization {
   sos_record_url?: string | null;
 }
 
-export const ORGANIZATION_COLUMNS =
-  'id, slug, name, description, email, phone, address_line, website_url, social_url, logo_path, sos_control_number, sos_business_type, sos_status, sos_formation_date, sos_last_annual_registration, sos_principal_office, sos_registered_agent, sos_county, sos_naics_code, sos_officers, sos_record_url';
-
-/**
- * Loads organizations at build time. A build without Supabase env vars, or with
- * an unreachable database, produces an empty directory rather than failing.
- */
+/** Public, paginated build snapshot; configured backend failures stop publication. */
 export async function fetchOrganizations(): Promise<Organization[]> {
-  const supabase = getBuildSupabase();
-  if (!supabase) {
-    console.warn('[organizations] PUBLIC_SUPABASE_* not set; skipping organization pages.');
-    return [];
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('organizations')
-      .select(ORGANIZATION_COLUMNS)
-      .order('name');
-
-    if (error) throw error;
-    return (data ?? []) as Organization[];
-  } catch (error) {
-    console.warn(`[organizations] Could not load organizations: ${String(error)}`);
-    return [];
-  }
+  const client = getBuildSupabase();
+  if (!client) return [];
+  return readBuildOrganizations(client);
 }
 
 export { organizationLogoUrl };

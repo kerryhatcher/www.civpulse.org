@@ -416,3 +416,24 @@ enabled = true
 # formatted with uppercase keywords, indent 2, max width 180, trailing commas,
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
+
+# The function serves OAuth discovery anonymously and verifies user tokens itself.
+[functions.mcp]
+verify_jwt = false
+entrypoint = "./functions/mcp/index.ts"
+import_map = "./functions/mcp/deno.json"
+
+# The handler verifies the user with Supabase Auth and checks public.is_admin().
+[functions.publish]
+verify_jwt = true
+entrypoint = "./functions/publish/index.ts"
+
+# Cron uses a Vault signature, verified through a service-only RPC on every call.
+[functions.rebuild-frontend]
+verify_jwt = false
+entrypoint = "./functions/rebuild-frontend/index.ts"
+
+# The cron request is verified by the dedicated Vault-backed HMAC RPC.
+[functions.poll-election-results]
+verify_jwt = false
+entrypoint = "./functions/poll-election-results/index.ts"

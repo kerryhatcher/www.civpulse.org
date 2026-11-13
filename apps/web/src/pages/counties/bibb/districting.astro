@@ -1,0 +1,37 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BibbGuideMaintenance from '../../../components/counties/BibbGuideMaintenance.astro';
+import { getBibbTopics, BIBB_TOPIC_RESOURCES as official } from '../../../lib/bibb-topic-hubs';
+const data = await getBibbTopics();
+---
+<Layout title="Macon-Bibb districting: apportionment, boundaries & map sources" description="Distinguish apportionment from redistricting, inspect recorded Macon-Bibb electoral maps and source versions, and trace a proposed boundary change to official records."
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Bibb County', href: '/counties/bibb/' }, { name: 'Districting and apportionment', href: '/counties/bibb/districting/' }]}>
+  <main id="main">
+    <div class="page-intro"><h1>How do I research districts, apportionment and boundary changes?</h1><p>Keep the elected body, plan version and effective period attached to every map.</p></div>
+    <nav aria-label="District research steps"><a href="#terms">Understand the terms</a> · <a href="#maps">Inspect a map</a> · <a href="#change">Trace a change</a> · <a href="#assignment">Confirm an assignment</a></nav>
+    <section id="terms" class="guide-section">
+      <h2>Apportionment allocates seats; redistricting draws boundaries</h2>
+      <p>In congressional use, <a href={official.apportionment}>apportionment allocates U.S. House seats among the states using census population</a>. Redistricting changes the lines of electoral districts. A district boundary map is not the seat-allocation calculation.</p>
+      <p>The <a href={official.redistrictingProcess}>Georgia Legislature's process overview</a> distinguishes those terms. When a source uses “reapportionment,” identify which body and process it means instead of assuming every use refers to a change in Macon-Bibb's local districts. That overview is background, not a declaration that a particular plan is currently in force.</p>
+    </section>
+    <section id="maps" class="guide-section">
+      <h2>Compare the office and source version before comparing lines</h2>
+      <ul>{data.maps.map(map => <li><h3><a href={`/maps/${map.slug}/#map-evidence`}>{map.name}</a></h3>{map.description && <p>{map.description}</p>}<p>Open the readable layer/feature records to inspect source credits, source-check dates, boundary versions and plan notes.</p></li>)}</ul>
+      {!data.maps.length && <p>No selected public district maps are published yet. Use the official resources below.</p>}
+      <p>County commission, school-board, state legislative and congressional districts are different geographic questions. A polling precinct is not interchangeable with an electoral district. Do not transfer a district number or an officeholder annotation from one layer to another.</p>
+      <p>Source-check dates describe a saved dataset review, not legal adoption. Boundaries may be generalized for display, and a recorded name may be historical. County statistics in the <a href="/counties/bibb/#demographics">Bibb overview</a> provide county context, not district-level population counts or an assessment of a plan's legal validity.</p>
+    </section>
+    <section id="change" class="guide-section">
+      <h2>Trace a proposed change beyond the colored map</h2>
+      <ol><li>Identify the body and plan name: county commission, school board, state chamber or Congress.</li><li>Find the source document and its status: proposal, adopted record and stated effective period. A draft or an import date alone does not establish adoption.</li><li>Use the <a href={official.reapportionment}>Georgia Legislative and Congressional Reapportionment Office</a> for its official plan resources. For local context, compare the county's <a href={official.commission}>commission/district resources</a> and the original meeting or legislative record.</li><li>Preserve the plan identifier, source and reference period when comparing versions; do not silently replace a historical map with a differently dated one.</li></ol>
+      <p><a href="/legislation/">Civic Pulse legislation</a> and the <a href="/records/">public record archive</a> can provide imported bills or source context. Their coverage is incomplete; a missing record is not evidence that a boundary change did not occur. This guide does not designate any plan as legally current or resolve a boundary dispute.</p>
+    </section>
+    <section id="assignment" class="guide-section">
+      <h2>Confirm the question that applies to you</h2>
+      <p>For an individual ballot or voting assignment, use the official resources in the <a href="/counties/bibb/elections/">Bibb election research guide</a>, rather than treating a saved map feature as a personalized lookup. For a parcel, ownership or property assessment question, use the <a href="/counties/bibb/property-taxes/">property-tax research guide</a>; these electoral maps are not a cadastral or tax-liability service.</p>
+      <p>The <a href="/counties/bibb/government/">government decision guide</a> connects district questions to public bodies, contacts and meeting records. Return to the <a href="/counties/bibb/">Bibb County overview</a> for geography and statistics.</p>
+    </section>
+    <BibbGuideMaintenance />
+  </main>
+</Layout>
+<style>.guide-section { padding-block: 1.5rem; border-bottom: 1px solid var(--line); scroll-margin-top: 1rem; } p, ol { max-width: 75ch; } li { margin-block: .8rem; overflow-wrap: anywhere; }</style>

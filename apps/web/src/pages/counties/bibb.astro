@@ -1,0 +1,6 @@
+---
+import CountyHub from '../../components/counties/CountyHub.astro';
+import {getCountyProfile} from '../../lib/county-statistics';
+const county=await getCountyProfile('13021');
+---
+<CountyHub county={county} />

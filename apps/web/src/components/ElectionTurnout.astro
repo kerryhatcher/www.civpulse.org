@@ -1,0 +1,36 @@
+---
+import SectionLink from './SectionLink.astro';
+interface Props { electionId?: string }
+const { electionId } = Astro.props;
+---
+<section id="voter-turnout" data-shareable-section class="election-turnout" data-election-turnout data-election-id={electionId} aria-labelledby="election-turnout-title" hidden={!electionId}>
+  <h2 id="election-turnout-title">Voter turnout <SectionLink target="voter-turnout" label="voter turnout" /></h2>
+  <p data-turnout-status role="status" aria-live="polite">Loading turnout…</p>
+  <button data-turnout-retry type="button" hidden>Retry turnout</button>
+  <div data-turnout-body hidden>
+    <p class="body-note">Unofficial · turnout only. These are cumulative ballot counts, not candidate results. A turnout percentage is unavailable because registered-voter counts are not reported.</p>
+    <p class="body-note">Turnout follows the county selected in the header. Choose All counties there to view each county separately.</p>
+    <div class="turnout-counties" data-turnout-charts></div>
+    <p class="body-note">Each chart is a separate source view. Measures overlap; do not add them together. Missing values are not zero.</p>
+    <p class="body-note" data-turnout-source></p>
+    <p><a data-turnout-reports href={electionId ? `/elections/results/?id=${electionId}` : '/elections/results/'}>All reports, source details &amp; earlier snapshots →</a></p>
+  </div>
+  <noscript><p>Enable JavaScript to load available turnout, or visit <a href="/elections/results/">Election results &amp; turnout</a>.</p></noscript>
+</section>
+<style>
+  .election-turnout { margin-block: 2.5rem; border-block: 1px solid var(--line); padding-block: 2rem; }
+  h2 { margin-top: 0; }
+  .turnout-counties :global(h3) { font-size: 30px; margin-block: 1.5rem 1rem; }
+  .turnout-counties :global(section + section) { margin-top: 2.5rem; }
+  .turnout-counties :global(.turnout-charts) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 2rem; margin-block: 1.5rem; }
+  .turnout-counties :global(figure) { margin: 0; min-width: 0; }
+  .turnout-counties :global(figcaption) { font-family: var(--serif); font-size: 1.6rem; }
+  .turnout-counties :global(ol) { list-style: none; padding: 0; }
+  .turnout-counties :global(li) { margin-block: 1rem; }
+  .turnout-counties :global(.turnout-bar-label) { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
+  .turnout-counties :global(strong) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .turnout-counties :global(.turnout-track) { height: 12px; background: var(--surface-soft); }
+  .turnout-counties :global(.turnout-bar) { height: 100%; background: var(--ink); }
+  .turnout-counties :global(figure[data-table="absentee"] .turnout-bar) { background: var(--rust); }
+  [data-turnout-source] { overflow-wrap: anywhere; }
+</style>

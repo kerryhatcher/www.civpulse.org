@@ -1,4 +1,11 @@
 ---
+import { profileSectionUrl } from "../../lib/profile-section-assets";
+import { recordDescription } from '../../lib/page-metadata';
+import { organizationStructuredData } from '../../lib/structured-data';
+import { getProfileSectionBuildData } from '../../lib/profile-section-build-data';
+import { emptyProfileSections } from '../../lib/profile-sections';
+import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
@@ -9,7 +16,7 @@ import {
   type Organization,
 } from '../../lib/organizations';
 import { fetchPublicMaps, type MapConfig } from '../../lib/maps';
-import { fetchPublicPeopleForOrganization, personImageUrl, type Person } from '../../lib/people';
+import { fetchPublicPeopleByOrganization, personImageUrl, type Person } from '../../lib/people';
 
 export async function getStaticPaths() {
   const [organizations, maps, relationships] = await Promise.all([
@@ -20,13 +27,8 @@ export async function getStaticPaths() {
       .filter((map) => map.organization_id !== null)
       .map((map) => [map.organization_id as string, map] as const),
   );
-  const peopleByOrganization = new Map<string, { person: Person; role: string }[]>();
-
-  await Promise.all(
-    organizations.map(async (org) => {
-      peopleByOrganization.set(org.id, await fetchPublicPeopleForOrganization(org.id));
-    }),
-  );
+  const peopleByOrganization = await fetchPublicPeopleByOrganization(organizations.map(org => org.id));
+  const sections = await getProfileSectionBuildData();
 
   const organizationById = new Map(organizations.map((org) => [org.id, org]));
   return organizations.map((org) => {
@@ -41,6 +43,7 @@ export async function getStaticPaths() {
       params: { slug: org.slug },
       props: {
         org,
+        evidence: profileEvidence(sections.organizations.get(org.id) ?? emptyProfileSections(), 'orgs'),
         related,
         map: mapByOrganization.get(org.id) ?? null,
         people: peopleByOrganization.get(org.id) ?? [],
@@ -51,12 +54,13 @@ export async function getStaticPaths() {
 
 interface Props {
   org: Organization;
+  evidence: Record<ProfileEvidenceKey, EvidenceSection>;
   map: MapConfig | null;
   people: { person: Person; role: string }[];
   related: { organization: Organization; relationship: string; source_url: string | null }[];
 }
 
-const { org, map, people, related } = Astro.props;
+const { org, map, people, related, evidence } = Astro.props;
 const logo = organizationLogoUrl(org.logo_path);
 
 const registration = [
@@ -85,8 +89,14 @@ const contact = [
 ].filter((item) => item.value);
 ---
 
-<Layout title={org.name} description={org.description ?? `Contact details for ${org.name}.`}>
-  <main id="main">
+<Layout title={`${org.name} — Organization profile`} description={recordDescription(org.name, org.description, 'View contact information, recorded relationships and related public civic records.')}
+  structuredData={organizationStructuredData(org, new URL(Astro.url.pathname, Astro.site ?? Astro.url), logo)}
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Organizations', href: '/orgs/' }, { name: org.name, href: Astro.url.pathname }]}
+>
+  <main id="main" data-profile-snapshot={await profileSectionUrl("organizations",org.id)}>
+    <p><a href={`/finances/obligations/?organization=${org.id}`}>Browse reported obligations for this organization</a></p>
+    <p><a href={`/finances/fees/?organization=${org.id}`}>Browse reported user fees for this organization</a></p>
+    {org.slug === 'bibb-county-board-of-education' && <p><a href="/finances/">Search this organization's school payroll and payments</a></p>}
     <div class="org-header">
       {
         logo ? (
@@ -203,14 +213,16 @@ const contact = [
       </section>
     )}
 
-    <OfficeTerms organizationId={org.id} />
-    <ProfileArticles organizationId={org.id} />
+    <section class="org-contact"><h2>Records requests</h2><p><a href={`/requests/?organization=${org.id}`}>View requests to or from {org.name}</a></p></section>
+    <OfficeTerms organizationId={org.id} published={evidence.offices} historyHref={profileHistoryHref('orgs', org.slug, 'offices')} />
+    <ProfileArticles organizationId={org.id} published={evidence.articles} historyHref={profileHistoryHref('orgs', org.slug, 'articles')} />
 
     <div class="org-contact">
       <p class="org-back">
         <a href="/orgs/">← All organizations</a>
       </p>
     </div>
+  <ObjectHistoryLink feedback table="organizations" id={org.id} />
   </main>
 </Layout>
 

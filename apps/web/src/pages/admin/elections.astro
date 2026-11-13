@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import AdminTabs from '../../components/AdminTabs.astro';
+import SosResultsAdmin from '../../components/SosResultsAdmin.astro';
+import SosMappingsAdmin from '../../components/SosMappingsAdmin.astro';
 ---
 
 <Layout
@@ -83,6 +85,12 @@ import AdminTabs from '../../components/AdminTabs.astro';
         </div>
 
         <label class="field">
+          <span>Georgia SOS results JSON URL</span>
+          <input type="url" name="results_json_url" maxlength="2000" placeholder="https://results.sos.ga.gov/cdn/results/Georgia/export-….json" />
+          <small>Leave blank until SOS publishes the feed. Saving the URL does not import results or start automatic updates.</small>
+        </label>
+
+        <label class="field">
           <span>Description</span>
           <textarea name="description" rows="2" maxlength="4000"></textarea>
         </label>
@@ -98,6 +106,9 @@ import AdminTabs from '../../components/AdminTabs.astro';
         <h2 id="election-list-title">Elections</h2>
         <div class="org-list" data-election-list></div>
       </section>
+
+      <SosResultsAdmin />
+      <SosMappingsAdmin />
 
       <form class="org-form" data-question-form>
         <h2 data-question-form-title>Add a ballot question</h2>

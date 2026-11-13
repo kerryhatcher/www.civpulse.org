@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 import { spawnSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -14,13 +15,27 @@ const git = spawnSync('git', ['rev-parse', '--path-format=absolute', '--git-comm
 });
 if (git.status !== 0) throw new Error('Could not locate the shared checkout.');
 const backendRoot = dirname(git.stdout.trim());
-const status = spawnSync(resolve(root, 'node_modules/.bin/supabase'), ['status', '-o', 'env'], {
+let status = spawnSync(resolve(root, 'node_modules/.bin/supabase'), ['status', '-o', 'env'], {
   cwd: backendRoot, encoding: 'utf8',
 });
+// The Podman Docker shim can try to initialize local runtime state even when
+// a socket is configured. Retry as a remote client with private runtime state.
+if (status.status !== 0 && status.stderr?.toLowerCase().includes('podman') && process.env.DOCKER_HOST?.startsWith('unix://')) {
+  const runtimeDir = mkdtempSync(join(tmpdir(), 'civpulse-podman-'));
+  try {
+    status = spawnSync(resolve(root, 'node_modules/.bin/supabase'), ['status', '-o', 'env'], {
+      cwd: backendRoot, encoding: 'utf8',
+      env: { ...process.env, XDG_RUNTIME_DIR: runtimeDir, CONTAINER_HOST: process.env.DOCKER_HOST },
+    });
+  } finally {
+    rmSync(runtimeDir, { recursive: true, force: true });
+  }
+}
 if (status.status !== 0) {
-  console.error(status.stderr);
-  console.error(`Start the shared backend with \`bun run db:start\` in ${backendRoot}, then rerun \`bun run worktree:setup\`.`);
-  process.exit(1);
+  console.warn(`Shared Supabase is unavailable; no backend settings were refreshed. Start it with \`bun run db:start\` in ${backendRoot}, then rerun \`bun run worktree:setup\`.`);
+  if (status.stderr?.trim()) console.warn(status.stderr.trim());
+  else if (status.error) console.warn(status.error.message);
+  process.exit(0);
 }
 const settings = Object.fromEntries(status.stdout.split('\n').filter(line => line.includes('=')).map(line => {
   const index = line.indexOf('=');

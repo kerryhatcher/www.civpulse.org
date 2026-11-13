@@ -1,0 +1,39 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BibbGuideMaintenance from '../../../components/counties/BibbGuideMaintenance.astro';
+import { BIBB_TOPIC_RESOURCES as official } from '../../../lib/bibb-topic-hubs';
+---
+<Layout title="Macon-Bibb property taxes: records, assessments & payments" description="Find the official Macon-Bibb sources for property assessment records, valuation questions, appeal materials and tax billing, while keeping tax-year context clear."
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Bibb County', href: '/counties/bibb/' }, { name: 'Property tax research', href: '/counties/bibb/property-taxes/' }]}>
+  <main id="main">
+    <div class="page-intro"><h1>Where do I research a Macon-Bibb property tax question?</h1><p>Identify the record and tax year first, then use the office responsible for that question.</p></div>
+    <nav aria-label="Property tax research steps"><a href="#record">Identify the record</a> · <a href="#office">Choose the office</a> · <a href="#review">Review a notice</a> · <a href="#context">Follow public decisions</a></nav>
+    <section id="record" class="guide-section">
+      <h2>Keep the parcel, tax year and document type together</h2>
+      <p>Begin with the document you are researching: an assessment notice, a property record or a tax statement. Keep its parcel/account identifier, tax year and notice date with your notes so a similarly named owner or a different year's record is not mistaken for the same issue.</p>
+      <p>The <a href={official.assessmentNotices}>Assessors' assessment-notices page</a> links current-year notices, previous notices and record search. Use the original record rather than a map label or an undated screenshot. A property value, an assessed value and a bill amount describe different parts of the process; do not use one as a substitute for the others.</p>
+      <p>Civic Pulse does not provide an imported parcel-assessment, individual appeal-case or property-tax payment dataset. This guide points to official records; it does not calculate your liability or determine an exemption.</p>
+    </section>
+    <section id="office" class="guide-section">
+      <h2>Valuation and billing are different responsibilities</h2>
+      <dl>
+        <div><dt>Property value and assessment records</dt><dd>The <a href={official.assessors}>Board of Tax Assessors</a> handles property valuation. Start with its notices and records for a valuation question.</dd></div>
+        <div><dt>Tax statement, billing and collection</dt><dd>The <a href={official.taxProperty}>Tax Commissioner's property-tax information</a> explains billing and collection. Its <a href={official.taxPayments}>official View/Pay portal</a> is linked from that office's site; Civic Pulse does not collect payments.</dd></div>
+        <div><dt>Budgets and millage</dt><dd>The <a href={official.taxFaq}>Tax Commissioner's FAQ</a> distinguishes assessed value from millage and identifies the county commission and Board of Education's rate-setting roles. A valuation question is not the same as a question about a budget or rate decision.</dd></div>
+      </dl>
+      <p><a href={official.stateTaxBibb}>Georgia Department of Revenue's Bibb County facts</a> provides statewide/local context and directs readers to local tax officials for verification. Use the named office for questions about the particular record in front of you.</p>
+    </section>
+    <section id="review" class="guide-section">
+      <h2>If you are reviewing or disputing an assessment</h2>
+      <p>Read the notice's own date and instructions alongside the Assessors' <a href={official.assessmentNotices}>current assessment materials</a> and <a href={official.assessmentAppeals}>appeal form/resources</a>. Ask that office to clarify the applicable process, submission method and deadline for your notice. This guide does not determine whether an appeal is available or timely.</p>
+      <p>Keep the source notice and correspondence with any corrected record. Do not infer that a billing inquiry or a payment changes an assessment appeal's requirements, or use this guide to decide whether to delay a payment. Individual legal/tax questions need advice appropriate to the circumstances.</p>
+    </section>
+    <section id="context" class="guide-section">
+      <h2>Connect the wider public decision to its sources</h2>
+      <p>For a budget or rate discussion, use the <a href="/counties/bibb/government/">local-government decision guide</a> to find official agendas and distinguish proposals from recorded actions. <a href="/finances/">Bibb school payroll and payment records</a> can provide spending context; they are not property-tax bills or evidence of an individual's amount due.</p>
+      <p><a href="/requests/">Published records requests</a> may help locate supporting documents. <a href="/counties/bibb/districting/">Districting and map research</a> explains electoral boundaries, which must not be treated as parcel ownership, assessment or tax-district determinations. Return to the <a href="/counties/bibb/">Bibb County overview</a> for broader context.</p>
+    </section>
+    <BibbGuideMaintenance />
+  </main>
+</Layout>
+<style>.guide-section { padding-block: 1.5rem; border-bottom: 1px solid var(--line); scroll-margin-top: 1rem; } p, dl { max-width: 75ch; } dl > div { margin-block: 1rem; } dt { font-weight: 600; } dd { margin-left: 0; } main { overflow-wrap: anywhere; }</style>

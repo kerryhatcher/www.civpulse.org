@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminTabs from '../../components/AdminTabs.astro';
+---
+<Layout title="Publish changes" description="Publish saved Civic Pulse changes to the public site.">
+  <main id="main">
+    <div class="page-intro">
+      <h1>Publish changes</h1>
+      <p>Rebuild the public site with the changes saved by all admins.</p>
+    </div>
+    <AdminTabs />
+    <p class="status" data-admin-gate>Checking access…</p>
+    <div class="prose" data-admin-denied hidden>
+      <p>Your account does not have admin access. <a href="/signin/?next=/admin/publish/">Sign in with an admin account</a>.</p>
+    </div>
+    <div class="admin-panel" data-admin-panel hidden>
+      <section class="org-form" aria-labelledby="publish-heading">
+        <h2 id="publish-heading">Publish saved changes</h2>
+        <p>Save your edits before publishing. The current public site stays available while the new version builds.</p>
+        <p>If you save more edits while a build is running, publish again after it finishes to include them.</p>
+        <div class="button-row">
+          <button type="button" data-publish disabled>Publish changes</button>
+          <button type="button" data-publish-refresh>Refresh status</button>
+        </div>
+        <p class="status" data-publish-message role="status" aria-live="polite">Loading build status…</p>
+      </section>
+      <section class="org-form" aria-labelledby="build-heading">
+        <h2 id="build-heading">Build status</h2>
+        <p data-build-state role="status" aria-live="polite">Checking the latest build…</p>
+        <dl data-build-details hidden>
+          <dt>Build</dt><dd data-build-id></dd>
+          <dt>Started</dt><dd data-build-created></dd>
+          <dt>Finished</dt><dd data-build-finished></dd>
+        </dl>
+        <p><a data-build-dashboard hidden target="_blank" rel="noopener noreferrer">View build logs in Cloudflare</a></p>
+        <p><a href="/" target="_blank" rel="noopener noreferrer">View public site</a></p>
+      </section>
+    </div>
+  </main>
+</Layout>
+<script>
+  import { initPublishAdmin } from '../../scripts/admin-publish';
+  void initPublishAdmin();
+</script>
+<style>
+  .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  dd { margin-inline-start: 0; overflow-wrap: anywhere; }
+  dt:not(:first-child) { margin-top: 12px; }
+</style>

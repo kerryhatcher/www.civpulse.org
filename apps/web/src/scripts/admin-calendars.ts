@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import {
   CALENDAR_COLUMNS,
   EVENT_COLUMNS,
@@ -246,6 +247,7 @@ export async function initCalendarAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('calendars', calendar.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -413,6 +415,7 @@ export async function initCalendarAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('events', event.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';

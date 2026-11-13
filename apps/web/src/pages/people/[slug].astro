@@ -1,10 +1,24 @@
 ---
+import { renderProfileDescription } from '../../lib/profile-description';
+import { personPageTitle, recordDescription } from '../../lib/page-metadata';
+import { personStructuredData } from '../../lib/structured-data';
+import { getProfileSectionBuildData } from '../../lib/profile-section-build-data';
+import { emptyProfileSections } from '../../lib/profile-sections';
+import { profileEvidence, profileHistoryHref, type EvidenceSection, type ProfileEvidenceKey } from '../../lib/profile-evidence';
+import PersonRelationships from '../../components/PersonRelationships.astro';
+import { fetchPublicPersonRelationships, type RelatedPerson } from '../../lib/person-relationships';
+import ProfileEvidence from '../../components/ProfileEvidence.astro';
+import RecordProvenance from '../../components/RecordProvenance.astro';
+import { biographySources, biographyProvenanceNote, legislativeVoteScope } from '../../lib/record-provenance';
+import { profileSectionUrl } from "../../lib/profile-section-assets";
+import ObjectHistoryLink from '../../components/ObjectHistoryLink.astro';
 import OfficeTerms from '../../components/OfficeTerms.astro';
 import Layout from '../../layouts/Layout.astro';
 import ProfileArticles from '../../components/ProfileArticles.astro';
 import PersonCandidacies from '../../components/PersonCandidacies.astro';
+import PersonVotes from '../../components/PersonVotes.astro';
 import {
-  fetchPublicAffiliations,
+  fetchPublicAffiliationsByPerson,
   fetchPublicPeople,
   personImageUrl,
   PERSON_KIND_LABELS,
@@ -14,22 +28,25 @@ import {
 
 export async function getStaticPaths() {
   const people = await fetchPublicPeople();
-  const affiliations = await Promise.all(
-    people.map((person) => fetchPublicAffiliations(person.id)),
-  );
+  const affiliations = await fetchPublicAffiliationsByPerson(people.map(person => person.id));
+  const relationships = await fetchPublicPersonRelationships(people);
+  const sections = await getProfileSectionBuildData();
 
-  return people.map((person, index) => ({
+  return people.map((person) => ({
     params: { slug: person.slug },
-    props: { person, affiliations: affiliations[index] ?? [] },
+    props: { person, related: relationships.get(person.id) ?? [], affiliations: affiliations.get(person.id) ?? [], evidence: profileEvidence(sections.people.get(person.id) ?? emptyProfileSections(), 'people') },
   }));
 }
 
 interface Props {
   person: Person;
+  related: RelatedPerson[];
   affiliations: OrganizationAffiliation[];
+  evidence: Record<ProfileEvidenceKey, EvidenceSection>;
 }
 
-const { person, affiliations } = Astro.props;
+const { person, affiliations, evidence, related } = Astro.props;
+const history = (key: ProfileEvidenceKey) => profileHistoryHref('people', person.slug, key);
 const image = personImageUrl(person.image_path);
 
 function initials(name: string): string {
@@ -69,10 +86,13 @@ const contact = [
 ---
 
 <Layout
-  title={person.full_name}
-  description={person.description ?? `${PERSON_KIND_LABELS[person.kind]}: ${person.full_name}.`}
+  title={personPageTitle(person.full_name, person.title, PERSON_KIND_LABELS[person.kind])}
+  description={recordDescription(person.full_name, person.description, `${person.title?.trim() || (person.kind === 'other' ? 'Civic profile' : PERSON_KIND_LABELS[person.kind])}. View recorded roles, organizations and available civic records.`)}
+  structuredData={personStructuredData(person, affiliations, new URL(Astro.url.pathname, Astro.site ?? Astro.url), image)}
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'People', href: '/people/' }, { name: person.full_name, href: Astro.url.pathname }]}
 >
-  <main id="main">
+  <main id="main" data-profile-snapshot={await profileSectionUrl("people",person.id)}>
+    {person.slug.startsWith('open-ga-6111-fy') && <p><a href={`/finances/?dataset=payroll&year=${person.slug.match(/^open-ga-6111-fy(\d{4})-/)?.[1] ?? ''}&person=${person.id}`}>View this profile's school payroll source record</a></p>}
     <div class="org-header">
       {
         image ? (
@@ -104,7 +124,8 @@ const contact = [
       </a>
     </div>
 
-    {person.description && <div class="prose person-bio"><p>{person.description}</p></div>}
+    {person.description && <div class="prose person-bio" set:html={renderProfileDescription(person.description)} />}
+    <RecordProvenance title="Biography sources and verification" sources={biographySources(person)} note={biographyProvenanceNote} />
 
     {
       contact.length > 0 && (
@@ -146,13 +167,20 @@ const contact = [
       )
     }
 
-    <OfficeTerms personId={person.id} />
-    <PersonCandidacies personId={person.id} />
-    <ProfileArticles personId={person.id} />
+    <PersonRelationships personId={person.id} related={related} />
+    <OfficeTerms personId={person.id} published={evidence.offices} historyHref={history('offices')} />
+    <section data-person-legislation hidden={!evidence['legislative-votes'].rows.length} aria-label="Legislative record">
+      <h2>Legislative record</h2><p>{legislativeVoteScope}</p><ProfileEvidence section={evidence['legislative-votes']} historyHref={history('legislative-votes')} />
+    </section>
+
+    <PersonVotes personId={person.id} published={evidence.votes} historyHref={history('votes')} />
+    <PersonCandidacies personId={person.id} published={evidence.candidacies} historyHref={history('candidacies')} />
+    <ProfileArticles personId={person.id} published={evidence.articles} historyHref={history('articles')} />
 
     <p class="org-back">
       <a href="/people/">← All people</a>
     </p>
+  <ObjectHistoryLink feedback table="people" id={person.id} />
   </main>
 </Layout>
 
@@ -162,9 +190,13 @@ const contact = [
   import { initAdminEditLink } from '../../scripts/auth';
   import { initProfileArticles } from '../../scripts/profile-articles';
   import { initPersonCandidacies } from '../../scripts/person-candidacies';
+  import { initPersonVotes } from '../../scripts/person-votes';
 
+  import { initPersonRelationships } from '../../scripts/person-relationships';
+  void initPersonRelationships();
   initProfileArticles();
   initPersonCandidacies();
+  initPersonVotes();
 
   void initAdminEditLink();
 </script>

@@ -1,0 +1,52 @@
+name: Frontend rebuild function tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - run: bun run rebuild:check
+      - run: bun run rebuild:test
+      - run: bun run results:check
+      - run: bun run results:test
+
+  sos-admin-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.3'
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - name: Verify anonymous, user and admin SOS controls with isolated transport fixtures
+        env:
+          PUBLIC_RESULTS_FILES_ORIGIN: https://files-test.civpulse.org
+          PUBLIC_SUPABASE_URL: http://127.0.0.1:59991
+          PUBLIC_SUPABASE_ANON_KEY: sos-admin-browser-public-fixture
+          ASTRO_DEV_BACKGROUND: '1'
+        run: |
+          bun run dev:web --host 127.0.0.1 --port 4337 > /tmp/sos-admin-browser-web.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:4337/admin/elections/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4337/admin/elections/ > /dev/null
+          SOS_ADMIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-admin-browser.test.ts
+          SOS_RESULTS_ORIGIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-results-origin-browser.test.ts

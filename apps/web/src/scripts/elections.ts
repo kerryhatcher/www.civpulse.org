@@ -1,3 +1,15 @@
+import { candidatePartyTone } from "../lib/candidate-party";
+import { buildVoteMetrics } from "./vote-metrics";
+import { initElectionPrecinctTurnout } from './precinct-turnout';
+import { initElectionTurnout } from './election-turnout';
+import { initBallotResults } from './ballot-results';
+import { initSosResults } from './sos-results';
+import { readDirectory } from './directory-data';
+import { selectedCounty, readCountyIndex } from './county-filter';
+import { jurisdictionCounties, matchesCounty } from '../lib/county-scope';
+import { orderElections, searchDirectory } from '../lib/directories';
+import { historyLink } from '../lib/history';
+import { isBibbContest, isBibbJurisdiction } from '../lib/election-scope';
 import { formatEventWhen } from '../lib/calendars';
 import {
   electionHref,
@@ -70,8 +82,7 @@ function renderElectionCard(election: Election): HTMLElement {
   return card;
 }
 
-/** Public elections directory. Search uses `search_elections`, which widens to
- * unlisted/private elections for admins. */
+/** Public elections use static search; signed-in access stays with the existing RPC. */
 export function initElectionSearch(): void {
   const input = document.querySelector<HTMLInputElement>('[data-election-search]');
   const initial = document.querySelector<HTMLElement>('[data-election-initial]');
@@ -88,99 +99,60 @@ export function initElectionSearch(): void {
   let timer: number | undefined;
   let requestId = 0;
 
-  async function listAccessible(): Promise<void> {
-    if (!signedIn) {
-      requestId += 1;
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.hidden = true;
-      if (empty) empty.hidden = true;
-      if (initial) initial.hidden = false;
-      return;
-    }
-
-    const id = ++requestId;
-    if (status) {
-      status.textContent = 'Loading elections…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_elections', { p_query: '', p_limit: 100 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.textContent = `Could not load elections: ${error.message}`;
-      return;
-    }
-
-    const elections = (data ?? []) as unknown as Election[];
-    resultsEl.replaceChildren(...elections.map(renderElectionCard));
-    resultsEl.hidden = elections.length === 0;
-    if (empty) empty.hidden = elections.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${elections.length} ${
-        elections.length === 1 ? 'election' : 'elections'
-      } available (includes unlisted and private)`;
-    }
-  }
-
   async function search(query: string): Promise<void> {
     const id = ++requestId;
-    if (status) {
-      status.textContent = 'Searching…';
-      status.hidden = false;
-    }
-
-    const { data, error } = await supabase.rpc('search_elections', { p_query: query, p_limit: 50 });
-
-    if (id !== requestId) return;
-
-    if (error) {
-      resultsEl.replaceChildren();
+    if (status) { status.textContent = query ? 'Searching…' : 'Loading elections…'; status.hidden = false; }
+    if (empty) empty.hidden = true;
+    try {
+      const snapshot = await readDirectory('elections');
+      const {data,error} = snapshot
+        ? {data: query ? searchDirectory(snapshot,query).slice(0,50) : orderElections(snapshot.map(entry=>entry.record)), error:null}
+        : await supabase.rpc('search_elections',{p_query:query,p_limit:query ? 50 : 100});
+      if (id !== requestId) return;
+      if (error) throw error;
+      const elections = (data ?? []) as unknown as Election[];
+      resultsEl.replaceChildren(...elections.map(renderElectionCard));
+      resultsEl.hidden = elections.length === 0;
+      if (empty) empty.hidden = elections.length > 0;
+      if (initial) initial.hidden = true;
+      if (status) status.textContent = query
+        ? `${elections.length} result${elections.length === 1 ? '' : 's'}`
+        : `${elections.length} election${elections.length === 1 ? '' : 's'} available${signedIn ? ' (includes unlisted and private)' : ''}`;
+    } catch (error) {
+      if (id !== requestId) return;
       resultsEl.hidden = true;
-      if (status) status.textContent = `Search failed: ${error.message}`;
-      return;
-    }
-
-    const elections = (data ?? []) as unknown as Election[];
-    resultsEl.replaceChildren(...elections.map(renderElectionCard));
-    resultsEl.hidden = elections.length === 0;
-    if (empty) empty.hidden = elections.length > 0;
-    if (initial) initial.hidden = true;
-    if (status) {
-      status.textContent = `${elections.length} result${elections.length === 1 ? '' : 's'}`;
+      if (status) status.textContent = `Could not load elections: ${error instanceof Error ? error.message : String(error)}`;
     }
   }
 
   inputEl.addEventListener('input', () => {
+    ++requestId;
     const query = inputEl.value.trim();
     window.clearTimeout(timer);
 
     if (!query) {
-      void listAccessible();
+      void search('');
       return;
     }
 
     if (initial) initial.hidden = true;
     timer = window.setTimeout(() => void search(query), 200);
   });
+  window.addEventListener('countychange', () => void search(inputEl.value.trim()));
 
   inputEl.closest('form')?.addEventListener('submit', (event) => {
     event.preventDefault();
     window.clearTimeout(timer);
     const query = inputEl.value.trim();
     if (query) void search(query);
-    else void listAccessible();
+    else void search('');
   });
 
   void supabase.auth.getSession().then(({ data: { session } }) => {
     signedIn = Boolean(session);
     if (signedIn && note) note.hidden = false;
-    if (signedIn) void listAccessible();
+    if (inputEl.value.trim()) void search(inputEl.value.trim());
+    else void search('');
   });
 }
 
@@ -222,9 +194,12 @@ function showViewerStatus(root: HTMLElement, text: string, signIn = false): void
 
 function buildCandidateCard(
   candidate: ElectionContest['candidates'][number],
+  partisan: boolean,
 ): HTMLElement {
   const link = document.createElement('a');
   link.className = 'candidate-card';
+  link.dataset.candidateId = candidate.person.id;
+  link.dataset.partyTone = candidatePartyTone(candidate.party, partisan);
   link.href = personHref(candidate.person);
 
   const image = personImageUrl(candidate.person.image_path);
@@ -266,6 +241,7 @@ function buildCandidateCard(
     .join(' · ');
   text.append(meta);
 
+  const metrics = document.createElement("span"); metrics.dataset.sosMetricsSlot = ""; metrics.append(buildVoteMetrics()); text.append(metrics);
   link.append(text);
   return link;
 }
@@ -274,6 +250,8 @@ function buildContest(contest: ElectionContest): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card';
   card.id = `contest-${contest.id}`;
+  card.dataset.bibbRelevant = String(isBibbContest(contest));
+  card.dataset.countyCoverage = jurisdictionCounties(`${contest.office} ${contest.district ?? ''}`).join(',');
 
   const header = document.createElement('header');
   header.className = 'contest-heading';
@@ -300,7 +278,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
   if (contest.candidates.length > 0) {
     const list = document.createElement('div');
     list.className = 'candidate-list';
-    list.append(...contest.candidates.map(buildCandidateCard));
+    list.append(...contest.candidates.map(candidate => buildCandidateCard(candidate, contest.partisan)));
     card.append(list);
   } else {
     const empty = document.createElement('p');
@@ -309,6 +287,7 @@ function buildContest(contest: ElectionContest): HTMLElement {
     card.append(empty);
   }
 
+  card.append(historyLink('contests', contest.id));
   return card;
 }
 
@@ -316,6 +295,8 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   const card = document.createElement('article');
   card.className = 'contest-card ballot-question';
   card.id = `question-${question.id}`;
+  card.dataset.bibbRelevant = String(isBibbJurisdiction(question.jurisdiction));
+  card.dataset.countyCoverage = jurisdictionCounties(question.jurisdiction).join(',');
   const header = document.createElement('header'); header.className = 'contest-heading';
   const title = document.createElement('h3'); title.textContent = question.title;
   const meta = document.createElement('span'); meta.className = 'contest-meta';
@@ -325,13 +306,14 @@ function buildBallotQuestion(question: BallotQuestion): HTMLElement {
   if (question.description) {
     const description = document.createElement('p'); description.className = 'contest-description'; description.textContent = question.description; card.append(description);
   }
-  const label = document.createElement('p'); label.className = 'body-note'; label.textContent = 'Response choices'; card.append(label);
+  const label = document.createElement('p'); label.className = 'body-note'; label.dataset.ballotChoiceLabel = ''; label.textContent = 'Response choices'; card.append(label);
   const choices = document.createElement('ul'); choices.className = 'ballot-question-choices';
-  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; choices.append(item); }
+  for (const choice of question.choices) { const item = document.createElement('li'); item.textContent = choice; item.dataset.sosChoiceLabel = choice; const metrics = document.createElement("span"); metrics.dataset.sosMetricsSlot = ""; metrics.append(buildVoteMetrics()); item.append(metrics); choices.append(item); }
   card.append(choices);
   if (question.source_url && /^https?:\/\//i.test(question.source_url)) {
     const paragraph = document.createElement('p'); const link = document.createElement('a'); link.href = question.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Official source ↗'; paragraph.append(link); card.append(paragraph);
   }
+  card.append(historyLink('ballot_questions', question.id));
   return card;
 }
 
@@ -413,12 +395,6 @@ function fillElectionView(response: ElectionViewResponse): void {
     }
   }
 
-  const description = document.querySelector<HTMLElement>('[data-election-description]');
-  if (description) {
-    description.textContent = election.description ?? '';
-    description.hidden = !election.description;
-  }
-
   const dates = response.dates ?? [];
   const datesSection = document.querySelector<HTMLElement>('[data-election-dates-section]');
   const datesContainer = document.querySelector<HTMLElement>('[data-election-dates]');
@@ -453,9 +429,41 @@ function fillElectionView(response: ElectionViewResponse): void {
   }
 
   viewer.hidden = false;
+  initElectionScope();
   if (/^#(?:contest|question)-[0-9a-f-]{36}$/i.test(window.location.hash)) {
     document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }
+}
+
+/** Scope only the rendered ballot; RPCs, admin editing and search keep all data. */
+export async function initElectionScope(): Promise<void> {
+  if (!document.querySelector('[data-election-scope]')) return;
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-bibb-relevant]')];
+  let countyIndex: Awaited<ReturnType<typeof readCountyIndex>> | undefined;
+  let indexFailed = false;
+  const empty = document.querySelector<HTMLElement>('[data-election-scope-empty]');
+  function apply() {
+    const county = selectedCounty();
+    for (const card of cards) {
+      const [kind, ...parts] = card.id.split('-');
+      const coverage = card.dataset.countyCoverage?.split(',').filter(Boolean);
+      const relevant = county === 'all' || (county === '13021' ? card.dataset.bibbRelevant === 'true'
+        : !!countyIndex && (coverage?.length ? coverage.includes(county)
+          : matchesCounty(countyIndex, kind === 'question' ? 'ballot_question' : kind, parts.join('-'), county)));
+      card.hidden = !relevant;
+    }
+    if (empty) {
+      empty.hidden = cards.length === 0 || cards.some(card => !card.hidden) || (!countyIndex && !indexFailed && county !== 'all' && county !== '13021');
+      empty.textContent = indexFailed && county !== 'all' && county !== '13021'
+        ? 'County filtering could not load. Reload this page to try again.'
+        : 'No races or ballot questions are recorded for this area yet.';
+    }
+    window.dispatchEvent(new Event('ballotscopechange'));
+  }
+  window.addEventListener('countychange', apply);
+  apply();
+  try { countyIndex = await readCountyIndex(); } catch { indexFailed = true; }
+  apply();
 }
 
 /** Viewer for any election uuid (public, unlisted, or private). */
@@ -488,12 +496,22 @@ export async function initElectionViewFromUrl(): Promise<void> {
 
   status.hidden = true;
   fillElectionView(response);
+  const turnoutReady = response.election ? Promise.allSettled([
+    initElectionTurnout(response.election.id),
+    initBallotResults(response.election.id),
+    initSosResults(response.election.id),
+    initElectionPrecinctTurnout(response.election.id),
+  ]) : Promise.resolve();
 
-  if (response.election && (await isCurrentUserAdmin())) {
-    const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
-    if (edit) {
-      edit.href = `/admin/elections/?edit=${response.election.id}`;
-      edit.hidden = false;
-    }
+  if (response.election) {
+    const electionId = response.election.id;
+    void isCurrentUserAdmin().then(isAdmin => {
+      const edit = document.querySelector<HTMLAnchorElement>('[data-election-edit-link]');
+      if (isAdmin && edit) {
+        edit.href = `/admin/elections/?edit=${electionId}`;
+        edit.hidden = false;
+      }
+    }).catch(() => { /* Optional edit controls remain hidden if the lookup fails. */ });
   }
+  await turnoutReady;
 }

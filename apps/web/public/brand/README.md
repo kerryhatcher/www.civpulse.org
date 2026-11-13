@@ -9,3 +9,11 @@ The county-neutral identity pairs an open forest-green C with a terracotta pulse
 Colors: forest `#173e34`, terracotta `#ae583b`, cream `#f6f1e7`. Use on cream or light backgrounds. Preserve the aspect ratio and clear space of at least one pulse-height around the logo. The header uses a 260px-wide logo on desktop and 234px on smaller screens. Supply a descriptive accessible name when linking it home.
 
 The symbol is original vector artwork. Wordmark glyphs are outlined from Unna Bold; its SIL Open Font License is included as `Unna-LICENSE.txt`. The SVG paths remain editable vector assets. No AI-generated raster assets are used.
+
+## Open Exhibition site identity
+
+The website now renders its Civic Pulse wordmark as self-hosted Anton text in
+`Layout.astro` and the homepage masthead. Its palette is ultramarine `#0838d7`,
+light ink `#f6f7f2`, and lime `#daf868`. The favicon is a matching CP monogram.
+The older `civic-pulse.svg` remains a legacy asset and is not used by the site
+header. Source map symbols and layer colors retain their original meanings.

@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {GEORGIA_COUNTY_HUBS} from '../lib/county-scope';
+---
+<Layout title="County statistics" description="Search official Census civic and demographic statistics for all Georgia counties, with sources, reference periods, comparisons and downloads.">
+ <main id="main">
+  <div class="page-intro"><h1>County statistics</h1><p>Explore 59 official measures for each Georgia county and the state. Search a county, measure, topic, or source.</p></div>
+  <p><a href="/counties/">County summaries & charts</a> · <a href="/statistics/data.csv">Download all data (CSV)</a> · <a href="/statistics/data.json">Download all data (JSON)</a></p>
+  <form class="org-form" data-statistic-search role="search">
+   <label class="field"><span>Search statistics</span><input name="query" type="search" maxlength="500" placeholder="Bibb household income" /></label>
+   <label class="field"><span>County or state</span><select name="county"><option value="">All counties and Georgia</option><option value="13000">Georgia</option>{GEORGIA_COUNTY_HUBS.map(c=><option value={c.fips}>{c.name} County</option>)}</select></label>
+   <button class="button-link" type="submit">Search statistics</button>
+  </form>
+  <p class="status" data-statistic-status role="status">Loading statistics…</p>
+  <div data-statistic-results></div>
+  <div class="org-form-actions"><button type="button" data-statistic-previous>Previous</button><button type="button" data-statistic-next>Next</button></div>
+  <noscript><p>Enable JavaScript to search, or use the county summaries and downloads above.</p></noscript>
+  <div class="prose"><h2>Use the data</h2><p>Each observation includes a numeric value, unit, reference period, definition, and official source. Compare matching measures and periods. Census estimates have uncertainty; race and ethnicity categories overlap. Suppressed or unavailable data is labeled rather than replaced with zero.</p><p>Static downloads reflect the last website build. The public Supabase REST endpoint <code>/rest/v1/county_statistic_records</code> and RPC <code>search_county_statistics</code> return current database records using the site's public API key and Row Level Security. Connected AI agents can use <code>get_county_statistic_catalog</code> and <code>search_county_statistics</code> through <a href="/docs/ai/">Civic Pulse MCP</a>.</p></div>
+ </main>
+</Layout>
+<script>import {initStatisticSearch} from '../scripts/county-statistic-search';initStatisticSearch();</script>

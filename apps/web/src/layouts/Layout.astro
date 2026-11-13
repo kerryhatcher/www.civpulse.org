@@ -1,33 +1,58 @@
 ---
 import '../styles/global.css';
-import '@fontsource/unna/400.css';
-import '@fontsource/unna/700.css';
-import '@fontsource/dm-sans/400.css';
-import '@fontsource/dm-sans/500.css';
-import '@fontsource/dm-sans/600.css';
+import Icon from '../components/Icon.astro';
+import '@fontsource/anton/400.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow/700.css';
+import { GEORGIA_COUNTIES, DEFAULT_COUNTY } from '../lib/county-scope';
+import { shouldNoIndex } from '../lib/indexing-policy.mjs';
+import { breadcrumbStructuredData, serializeStructuredData, siteStructuredData, type Breadcrumb, type SchemaNode } from '../lib/structured-data';
 
 interface Props {
   title: string;
   description?: string;
+  structuredData?: SchemaNode[];
+  breadcrumbs?: Breadcrumb[];
 }
 
 const {
   title,
   description = 'Civic Pulse helps residents follow local decisions, find community events, and explore the places that shape where they live.',
+  structuredData = [], breadcrumbs = [],
 } = Astro.props;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const nav = [
-  { url: '/', label: 'Home' },
-  { url: '/maps/', label: 'Explore maps' },
-  { url: '/calendar/', label: 'Community calendar' },
-  { url: '/elections/', label: 'Elections' },
-  { url: '/people/', label: 'People' },
-  { url: '/search/', label: 'Search' },
-  { url: '/docs/', label: 'Docs' },
+const groups = [
+  { label: 'Community', links: [
+    { url: '/maps/', label: 'Maps' },
+    { url: '/calendar/', label: 'Calendar' },
+    { url: '/people/', label: 'People' },
+    { url: '/orgs/', label: 'Organizations' },
+  ] },
+  { label: 'Government', links: [
+    { url: '/elections/', label: 'Elections' },
+    { url: '/legislation/', label: 'Legislation' },
+    { url: '/finances/', label: 'School finances' },
+    { url: '/requests/', label: 'Records requests' },
+  ] },
+  { label: 'Research & help', links: [
+    { url: '/counties/bibb/', label: 'Bibb County & research guides' },
+    { url: '/records/', label: 'Public record archive' },
+    { url: '/documents/', label: 'Meeting documents' },
+    { url: '/docs/', label: 'Guides & help' },
+    { url: '/about/', label: 'About Civic Pulse' },
+  ] },
 ];
-const isCurrent = (url: string) => (url.replace(/\/+$/, '') || '/') === path;
+const isCurrent = (url: string) => path === url.replace(/\/+$/, '') || path.startsWith(url);
+const isHome = path === '/';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const schema = shouldNoIndex(Astro.url.pathname) ? [] : [
+  ...(isHome ? siteStructuredData(canonical) : structuredData),
+  ...(breadcrumbs.length > 1 ? [breadcrumbStructuredData(breadcrumbs, canonical)] : []),
+];
 ---
 
 <!doctype html>
@@ -36,66 +61,97 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f6f1e7" />
+    {shouldNoIndex(Astro.url.pathname) && <meta name="robots" content="noindex, follow" />}
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0838d7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#090f20" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={`${title} · Civic Pulse`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <title>{title} · Civic Pulse</title>
+    {schema.length > 0 && <script is:inline type="application/ld+json" set:html={serializeStructuredData(schema)} />}
   </head>
-  <body>
+  <body class:list={{ 'home-page': isHome }}>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-shell">
       <header class="site-header">
-        <a href="/" class="brand" aria-label="Civic Pulse home">
-          <img
-            src="/brand/civic-pulse.svg"
-            alt="Civic Pulse"
-            width="257"
-            height="48"
-          />
-        </a>
+        {isHome ? <a class="site-location" href="/counties/bibb/">Bibb County, Georgia <Icon size={16} /></a> : <a href="/" class="brand" aria-label="Civic Pulse home">Civic Pulse<span aria-hidden="true">.</span></a>}
         <nav aria-label="Main navigation">
-          {
-            nav.map((item) => (
-              <a
-                href={item.url}
-                aria-current={isCurrent(item.url) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            ))
-          }
+          <a href="/about/" aria-current={isCurrent('/about/') ? 'page' : undefined}>About</a>
+          <label class="county-picker">
+            <span class="visually-hidden">County</span>
+            <svg class="county-picker-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>
+            <select data-county-filter aria-describedby="county-help">
+              <option value="all">All counties</option>
+              {GEORGIA_COUNTIES.map(county => <option value={county.fips} selected={county.fips === DEFAULT_COUNTY}>{county.name} County</option>)}
+            </select>
+            <svg class="county-picker-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+          </label>
+          <span id="county-help" class="visually-hidden">Choose a county to open its summary page, or All counties for the county directory. Also saves your browsing preference for this tab’s session.</span>
+          <details class="browse-menu" data-browse-menu>
+            <summary>Browse</summary>
+            <div class="browse-panel">
+              {groups.map((group) => (
+                <section aria-label={group.label}>
+                  <h2>{group.label}</h2>
+                  {group.links.map((item) => (
+                    <a href={item.url} aria-current={isCurrent(item.url) ? 'page' : undefined}>{item.label}</a>
+                  ))}
+                </section>
+              ))}
+            </div>
+          </details>
+          <a href="/calendar/" aria-current={isCurrent('/calendar/') ? 'page' : undefined}>Calendar</a>
+          <a href="/search/" aria-current={isCurrent('/search/') ? 'page' : undefined}>Search</a>
           <a data-nav-admin href="/admin/organizations/" hidden>Admin</a>
           <a data-nav-auth href="/signin/">Sign in</a>
         </nav>
       </header>
+      <p class="county-status" data-county-status role="status"></p>
+      {breadcrumbs.length > 1 && <nav class="page-breadcrumbs" aria-label="Breadcrumb"><ol>
+        {breadcrumbs.map((item, index) => <li>{index === breadcrumbs.length - 1
+          ? <span aria-current="page">{item.name}</span> : <a href={item.href}>{item.name}</a>}</li>)}
+      </ol></nav>}
       <slot />
       <footer class="site-footer">
-        <p>
-          Civic Pulse <span aria-hidden="true">·</span> A clearer signal from your
-          community
-        </p>
-        <div>
-          <a href="/orgs/">Organizations</a>
-          <span aria-hidden="true">/</span>
-          <a href="/elections/">Elections</a>
-          <span aria-hidden="true">/</span>
-          <a href="/people/">People</a>
-          <span aria-hidden="true">/</span>
-          <a href="/about/">About this project</a>
-          <span aria-hidden="true">/</span>
-          <a href="/docs/">Documentation</a>
-          <span aria-hidden="true">/</span>
-          <a href="/signin/">Sign in</a>
-        </div>
+        {!isHome && <p>Civic Pulse <span aria-hidden="true">/</span> Public information. Open to everyone.</p>}
+        <nav aria-label="Footer navigation">
+          <a href="/about/">About</a>
+          <a href="/editorial/#corrections">Editorial policy & corrections</a>
+          <a href="/docs/">Guides & help</a>
+          <a href="/search/">Search</a>
+          {isHome && <a href="/elections/">All elections</a>}
+        </nav>
+        {isHome && <a class="footer-local" href="/counties/bibb/">Explore Bibb County <Icon /></a>}
       </footer>
     </div>
   </body>
 </html>
 
+<style>
+  .page-breadcrumbs { margin-block: 1rem; font-size: .9rem; color: var(--on-canvas); }
+  .page-breadcrumbs :focus-visible { outline-color: var(--on-canvas); }
+  .page-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 0; }
+  .page-breadcrumbs li { overflow-wrap: anywhere; }
+  .page-breadcrumbs li + li::before { content: '/'; margin-inline-end: .5rem; }
+</style>
+
 <script>
   import { initAuthNav } from '../scripts/auth';
+  import { initCountyFilter } from '../scripts/county-filter';
+  initCountyFilter();
   void initAuthNav();
+  const menu = document.querySelector<HTMLDetailsElement>('[data-browse-menu]');
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu?.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  document.addEventListener('click', (event) => {
+    if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+  });
 </script>

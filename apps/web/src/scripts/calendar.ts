@@ -1,5 +1,12 @@
-import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, shiftDay, type CalendarEvent } from '../lib/calendar-display';
+import { outcomeLabel } from '../lib/meeting-outcomes';
+import { renderOutcomeEvidence } from './meeting-outcomes';
+import {readPublicCalendar, readCalendarMonth, readPublicEvent} from '../lib/calendar-data';
+import {recordSourceUrl,meetingVoteScope} from '../lib/record-provenance';
+import {renderRecordProvenance} from '../lib/record-provenance-dom';
+import {eventsForMonth, isPublicEvent, type CalendarManifest, type EventViewResponse} from '../lib/calendar-snapshot';
+import { calendarColor, dayBoundary, dayKey, groupEvents, monthWindow, occursOn, type CalendarEvent } from '../lib/calendar-display';
 import {
+  eventSourceUrl,
   eventViewHref,
   formatEventWhen,
   type CalendarRef,
@@ -7,8 +14,10 @@ import {
   type EventRecord,
 } from '../lib/calendars';
 import { getSupabase } from '../lib/supabase';
-import { MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
+import { meetingAttendanceLabel, MEETING_BUCKET, meetingDownloadUrl, type MeetingRecord } from '../lib/meetings';
 import { isCurrentUserAdmin } from './auth';
+import { linkMemberMentions, memberProfileHref } from '../lib/member-mentions';
+import { meetingVideoWatchUrl, meetingVideoEmbed, formatMeetingVideoStart } from '../lib/meeting-video';
 
 const VISIBILITY_LABELS: Record<CalendarVisibility, string> = {
   public: 'Public',
@@ -27,7 +36,7 @@ function renderEventCard(event: EventRecord): HTMLElement {
 
   const heading = document.createElement('h2');
   const link = document.createElement('a');
-  link.href = eventViewHref(event.id);
+  link.href = eventViewHref(event.id, isPublicEvent(event));
   link.textContent = event.title;
   heading.append(link);
   card.append(heading);
@@ -113,10 +122,12 @@ export function initCalendar(): void {
   let view = params.get('view') === 'agenda' ? 'agenda' : 'month';
   let selectedDay: string | null = null;
   let calendars: CalendarRef[] = [];
+  let published: CalendarManifest | null = null;
   let events: CalendarEvent[] = [];
   let selected = new Set<string>();
   let requestId = 0;
   let timer: number | undefined;
+  let initialized = false;
   let loading = true;
   let failed = false;
   query.value = params.get('q') ?? '';
@@ -226,27 +237,36 @@ export function initCalendar(): void {
     syncUrl();
   }
   async function loadEvents(): Promise<void> {
+    if (!initialized) return;
     const id = ++requestId;
     loading = true; failed = false; events = []; render();
     const range = monthWindow(month);
     const rows: EventRecord[] = [];
     try {
-      for (let offset = 0; ; offset += 500) {
-        const { data, error } = await supabase.rpc('browse_calendar_events', { p_start: dayBoundary(range.start), p_end: dayBoundary(range.end), p_offset: offset });
-        if (id !== requestId) return;
-        if (error) throw error;
-        const page = data as EventRecord[]; rows.push(...page);
-        if (page.length < 500) break;
+      if (published) {
+        rows.push(...await readCalendarMonth(published,month));
+      } else {
+        for (let offset = 0; ; offset += 500) {
+          const { data, error } = await supabase.rpc('browse_calendar_events', { p_start: dayBoundary(range.start), p_end: dayBoundary(range.end), p_offset: offset });
+          if (id !== requestId) return;
+          if (error) throw error;
+          const page = data as EventRecord[]; rows.push(...page);
+          if (page.length < 500) break;
+        }
       }
-      events = groupEvents(rows).filter(event => Array.from({length: range.days}, (_, index) => shiftDay(range.start, index)).some(day => occursOn(event, day)));
+      if (id !== requestId) return;
+      const scopedRows = await filterCounty(rows, 'event');
+      if (id !== requestId) return;
+      events = groupEvents(eventsForMonth(scopedRows,month));
       const previous = category.value;
       category.replaceChildren(new Option('All categories', ''));
       for (const name of [...new Set(events.flatMap(event => event.categories))].sort()) category.append(new Option(name, name));
       if (previous && ![...category.options].some(option => option.value === previous)) category.append(new Option(previous, previous));
       category.value = previous;
-    } catch { failed = true; }
+    } catch { if (id === requestId) failed = true; }
     if (id === requestId) { loading = false; render(); }
   }
+  window.addEventListener('countychange', () => location.reload());
   function changeMonth(amount: number): void {
     const date = new Date(`${month}-01T12:00:00Z`); date.setUTCMonth(date.getUTCMonth() + amount);
     month = date.toISOString().slice(0, 7); selectedDay = null; void loadEvents();
@@ -276,9 +296,16 @@ export function initCalendar(): void {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       find('[data-calendar-signed-in]').hidden = !session;
-      const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
-      if (error) throw error;
-      calendars = data as CalendarRef[];
+      const snapshotUrl = document.querySelector<HTMLElement>('[data-calendar-snapshot]')?.dataset.calendarSnapshot;
+      if (!snapshotUrl) throw new Error('Missing calendar snapshot');
+      published = await readPublicCalendar(snapshotUrl,supabase);
+      if (published) calendars = published.calendars;
+      else {
+        const { data, error } = await supabase.rpc('list_calendars', { p_organization_id: null });
+        if (error) throw error;
+        calendars = data as CalendarRef[];
+      }
+      calendars = await filterCounty(calendars, 'calendar');
       selected = new Set(calendars.map(item => item.id));
       const ids = params.has('calendars') ? params.get('calendars')!.split(',') : params.get('calendar') ? [params.get('calendar')!] : null;
       if (ids) selected = new Set(ids.filter(id => calendars.some(item => item.id === id)));
@@ -288,6 +315,7 @@ export function initCalendar(): void {
       calendarOptions();
       if (params.get('calendar')) calendar.value = params.get('calendar')!;
       if (params.get('category')) { const name = params.get('category')!; category.append(new Option(name, name)); category.value = name; }
+      initialized = true;
       await loadEvents();
     } catch { loading = false; failed = true; render(); }
   })();
@@ -295,23 +323,6 @@ export function initCalendar(): void {
 
 // --- Shared event viewer ------------------------------------------------
 
-interface EventViewResponse {
-  status?: string;
-  event?: {
-    id: string;
-    title: string;
-    description: string | null;
-    starts_at: string;
-    ends_at: string | null;
-    all_day: boolean;
-    location: string | null;
-    url: string | null;
-    is_meeting: boolean;
-  };
-  calendar?: { id: string; name: string };
-  organization?: { id: string; name: string; slug: string };
-  election?: { id: string; slug: string; name: string; visibility: string };
-}
 
 function eventIdFromPath(pathname: string): string | null {
   const match = pathname.match(/^\/calendar\/e\/([0-9a-f-]{36})\/?$/i);
@@ -336,6 +347,7 @@ function showViewerStatus(root: HTMLElement, text: string, signIn = false): void
   }
 
   root.hidden = false;
+
 }
 
 function fillEventView(response: EventViewResponse): void {
@@ -349,7 +361,7 @@ function fillEventView(response: EventViewResponse): void {
   };
 
   setText('[data-event-title]', event.title);
-  setText('[data-event-when]', formatEventWhen(event));
+  setText('[data-event-when]', formatEventWhen(event, 'America/New_York'));
   setText(
     '[data-event-meta]',
     [response.organization?.name, response.calendar?.name].filter(Boolean).join(' · '),
@@ -369,9 +381,11 @@ function fillEventView(response: EventViewResponse): void {
 
   const link = document.querySelector<HTMLElement>('[data-event-link]');
   const url = document.querySelector<HTMLAnchorElement>('[data-event-url]');
-  if (link && url && event.url) {
-    url.href = event.url;
-    link.hidden = false;
+  const sourceUrl=eventSourceUrl(event.url);
+  if (link && url) {
+    if (sourceUrl) url.href = sourceUrl;
+    else url.removeAttribute("href");
+    link.hidden = !sourceUrl;
   }
 
   const election = document.querySelector<HTMLElement>('[data-event-election]');
@@ -392,16 +406,55 @@ function fillEventView(response: EventViewResponse): void {
     }
   }
 
+  fillEventProvenance(event);
   viewer.hidden = false;
 }
 
-async function fillMeetingView(id: string): Promise<void> {
-  const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
-  if (error || !data || data.status !== 'ok') return;
-  const meeting = data as MeetingRecord;
+function fillEventProvenance(event:NonNullable<EventViewResponse['event']>,meeting?:MeetingRecord){
+  renderRecordProvenance(document.querySelector('[data-event-provenance]'),{sources:[
+    ...(recordSourceUrl(event.url)?[{label:'Recorded event source',url:event.url!}]:[]),
+    ...(recordSourceUrl(meeting?.event?.meeting_video_url)?[{label:'Recorded meeting video',url:meeting!.event!.meeting_video_url!}]:[]),
+  ],recordDate:{label:'Meeting/event date (not a verification date)',value:formatEventWhen(event,'America/New_York')},
+    note:event.is_meeting?meetingVoteScope:'This event record may be incomplete. Confirm the current event details with the named source.'});
+}
+
+async function fillMeetingView(id: string, snapshot?: MeetingRecord,event?:NonNullable<EventViewResponse['event']>): Promise<void> {
+  let meeting = snapshot;
+  if (!meeting) {
+    const { data, error } = await getSupabase().rpc('get_meeting', { p_id: id });
+    if (error || !data || data.status !== 'ok') return;
+    meeting = data as MeetingRecord;
+  }
+  if(event)fillEventProvenance(event,meeting);
   const root = document.querySelector<HTMLElement>('[data-meeting-details]');
   if (!root) return;
   root.hidden = false;
+  for(const selector of ["[data-meeting-video]","[data-meeting-notes]","[data-meeting-transcript]","[data-meeting-attendance]","[data-meeting-votes]","[data-meeting-attachments]"]) root.querySelector<HTMLElement>(selector)!.hidden=true;
+  for(const selector of ["[data-meeting-video-player]","[data-meeting-attendance-list]","[data-meeting-vote-list]","[data-meeting-attachment-list]"]) root.querySelector(selector)?.replaceChildren();
+  const startLabel=root.querySelector<HTMLElement>("[data-meeting-video-start]"); if(startLabel) startLabel.hidden=true;
+  const videoSection = root.querySelector<HTMLElement>('[data-meeting-video]');
+  const videoPlayer = root.querySelector<HTMLElement>('[data-meeting-video-player]');
+  const videoLink = root.querySelector<HTMLAnchorElement>('[data-meeting-video-link]');
+  if(videoPlayer) videoPlayer.hidden=true;
+  const startAt = meeting.event?.meeting_video_start_seconds;
+  const videoUrl = meetingVideoWatchUrl(meeting.event?.meeting_video_url, startAt);
+  if (videoSection && videoPlayer && videoLink && videoUrl) {
+    videoSection.hidden = false; videoLink.href = videoUrl;
+    const startText = videoSection.querySelector<HTMLElement>('[data-meeting-video-start]');
+    const formattedStart = formatMeetingVideoStart(startAt);
+    if (startText && formattedStart) { startText.textContent = `Starts at ${formattedStart}`; startText.hidden = false; }
+    const embed = meetingVideoEmbed(meeting.event?.meeting_video_url, startAt);
+    if (embed) {
+      const player = document.createElement('iframe');
+      player.src = embed.src;
+      player.title = `${meeting.event?.title ?? 'Meeting'} — ${embed.provider} video`;
+      player.loading = 'lazy';
+      player.allow = 'encrypted-media; fullscreen; picture-in-picture';
+      player.allowFullscreen = true;
+      player.referrerPolicy = 'strict-origin-when-cross-origin';
+      videoPlayer.replaceChildren(player); videoPlayer.hidden = false;
+    }
+  }
   const textSection = (sectionSelector: string, textSelector: string, value: string | null | undefined) => {
     const section = document.querySelector<HTMLElement>(sectionSelector);
     const text = document.querySelector<HTMLElement>(textSelector);
@@ -416,7 +469,10 @@ async function fillMeetingView(id: string): Promise<void> {
     attendance.hidden = false;
     for (const person of meeting.attendance) {
       const item = document.createElement('li');
-      item.textContent = `${person.full_name} — ${person.status}${person.note ? ` (${person.note})` : ''}`;
+      const link = document.createElement('a');
+      link.href = memberProfileHref(person.person_id);
+      link.textContent = person.full_name;
+      item.append(link, ` — ${meetingAttendanceLabel(person.status)}${person.note ? ` (${person.note})` : ''}`);
       attendanceList.append(item);
     }
   }
@@ -426,16 +482,35 @@ async function fillMeetingView(id: string): Promise<void> {
     votes.hidden = false;
     for (const vote of meeting.votes) {
       const article = document.createElement('article');
+      article.id = `vote-${vote.id}`;
+      article.style.scrollMarginTop = '6rem';
       const heading = document.createElement('h4'); heading.textContent = vote.subject; article.append(heading);
       if (vote.description) { const detail = document.createElement('p'); detail.textContent = vote.description; article.append(detail); }
-      const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${vote.outcome ?? 'Not recorded'}`; article.append(outcome);
+      const outcome = document.createElement('p'); outcome.textContent = `Outcome: ${outcomeLabel(vote.outcome)}`; article.append(outcome);
+      const evidence=renderOutcomeEvidence(vote); if(evidence)article.append(evidence);
       const choices = document.createElement('ul');
       for (const choice of vote.choices) {
-        const item = document.createElement('li'); item.textContent = `${choice.full_name}: ${choice.choice}`; choices.append(item);
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = memberProfileHref(choice.person_id);
+        link.textContent = choice.full_name;
+        item.append(link, `: ${choice.choice}`); choices.append(item);
       }
       article.append(choices); voteList.append(article);
     }
   }
+  const members = [...(meeting.attendance ?? []), ...(meeting.votes ?? []).flatMap(vote => vote.choices)];
+  linkMemberMentions(root, members);
+  for (const selector of ['[data-event-description]', '[data-event-title]', '[data-event-location]']) {
+    const text = document.querySelector<HTMLElement>(selector);
+    if (text) linkMemberMentions(text, members);
+  }
+  const scrollToVote = () => {
+    const hash = window.location.hash;
+    if (/^#vote-[0-9a-f-]{36}$/i.test(hash)) root.querySelector<HTMLElement>(hash)?.scrollIntoView();
+  };
+  scrollToVote();
+  window.addEventListener('hashchange', scrollToVote);
   const attachments = document.querySelector<HTMLElement>('[data-meeting-attachments]');
   const attachmentList = document.querySelector<HTMLElement>('[data-meeting-attachment-list]');
   if (attachments && attachmentList && meeting.attachments?.length) {
@@ -466,7 +541,8 @@ export async function initEventViewFromUrl(): Promise<void> {
   const status = document.querySelector<HTMLElement>('[data-event-viewer-status]');
   if (!viewer || !status) return;
 
-  const id =
+  const root = document.querySelector<HTMLElement>('[data-event-id], [data-event-index]');
+  const id = root?.dataset.eventId ??
     eventIdFromPath(window.location.pathname) ?? new URLSearchParams(window.location.search).get('id');
 
   if (!id) {
@@ -474,28 +550,39 @@ export async function initEventViewFromUrl(): Promise<void> {
     return;
   }
 
-  const { data, error } = await getSupabase().rpc('get_event', { p_id: id });
-  const response = data as EventViewResponse | null;
+  try {
+    const snapshot = await readPublicEvent(id,{event:root?.dataset.eventSnapshot,index:root?.dataset.eventIndex},getSupabase());
+    const { data, error } = snapshot ? {data:snapshot.detail,error:null} : await getSupabase().rpc('get_event', { p_id: id });
+    const response = data as EventViewResponse | null;
 
-  if (error || !response || response.status === 'missing') {
-    showViewerStatus(status, 'Event not found.');
-    return;
-  }
-
-  if (response.status === 'private') {
-    showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
-    return;
-  }
-
-  status.hidden = true;
-  fillEventView(response);
-  if (response.event?.is_meeting) await fillMeetingView(response.event.id);
-
-  if (response.event && (await isCurrentUserAdmin())) {
-    const edit = document.querySelector<HTMLAnchorElement>('[data-event-edit-link]');
-    if (edit) {
-      edit.href = `/admin/calendars/?editEvent=${response.event.id}`;
-      edit.hidden = false;
+    if (error || !response || response.status === 'missing') {
+      viewer.hidden=true;
+      showViewerStatus(status, 'Event not found.');
+      return;
     }
+
+    if (response.status === 'private') {
+      viewer.hidden=true;
+    showViewerStatus(status, 'This event is private. An admin account is required to view it.', true);
+      return;
+    }
+
+    status.hidden = true;
+    fillEventView(response);
+    if (response.event?.is_meeting) {
+      if (snapshot && !snapshot.meeting) throw new Error('Missing published meeting record');
+      await fillMeetingView(response.event.id,snapshot?.meeting,response.event);
+    }
+
+    if (response.event && (await isCurrentUserAdmin())) {
+      const edit = document.querySelector<HTMLAnchorElement>('[data-event-edit-link]');
+      if (edit) {
+        edit.href = `/admin/calendars/?editEvent=${response.event.id}`;
+        edit.hidden = false;
+      }
+    }
+  } catch (error) {
+    showViewerStatus(status, error instanceof Error ? error.message : 'Could not load this event. Please reload to try again.');
   }
 }
+import { filterCounty } from './county-filter';

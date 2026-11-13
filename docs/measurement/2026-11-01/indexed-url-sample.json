@@ -1,0 +1,112 @@
+{
+  "selection": "Eight purposeful key URLs; not a random or representative site sample. One indexed, three discovered-not-indexed, four unknown. No population coverage estimate.",
+  "property": "sc-domain:civpulse.org",
+  "rows": [
+    {
+      "url": "https://www.civpulse.org/",
+      "observed_at": "2026-11-01T23:02:53.008616+00:00",
+      "mode": "indexed_version",
+      "coverageState": "Submitted and indexed",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://www.civpulse.org/",
+      "indexingState": "INDEXING_ALLOWED",
+      "lastCrawlTime": "2026-10-26T21:25:25Z",
+      "pageFetchState": "SUCCESSFUL",
+      "referringUrls": [
+        "http://civpulse.org/"
+      ],
+      "robotsTxtState": "ALLOWED",
+      "sitemap": [
+        "https://www.civpulse.org/sitemap-0.xml",
+        "https://www.civpulse.org/sitemap-index.xml"
+      ],
+      "userCanonical": "https://www.civpulse.org/",
+      "verdict": "PASS"
+    },
+    {
+      "url": "https://www.civpulse.org/people/",
+      "observed_at": "2026-11-01T23:03:00.822978+00:00",
+      "mode": "indexed_version",
+      "coverageState": "Discovered - currently not indexed",
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "sitemap": [
+        "https://www.civpulse.org/sitemap-0.xml",
+        "https://www.civpulse.org/sitemap-index.xml"
+      ],
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/orgs/",
+      "observed_at": "2026-11-01T23:03:08.582879+00:00",
+      "mode": "indexed_version",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/maps/commissioners/",
+      "observed_at": "2026-11-01T23:03:16.606714+00:00",
+      "mode": "indexed_version",
+      "coverageState": "Discovered - currently not indexed",
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "sitemap": [
+        "https://www.civpulse.org/sitemap-0.xml",
+        "https://www.civpulse.org/sitemap-index.xml"
+      ],
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/elections/2026-11-03-general-election/",
+      "observed_at": "2026-11-01T23:03:24.079517+00:00",
+      "mode": "indexed_version",
+      "coverageState": "Discovered - currently not indexed",
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "sitemap": [
+        "https://www.civpulse.org/sitemap-0.xml",
+        "https://www.civpulse.org/sitemap-index.xml"
+      ],
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/counties/bibb/",
+      "observed_at": "2026-11-01T23:03:31.611877+00:00",
+      "mode": "indexed_version",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/counties/bibb/government/",
+      "observed_at": "2026-11-01T23:03:39.167943+00:00",
+      "mode": "indexed_version",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "verdict": "NEUTRAL"
+    },
+    {
+      "url": "https://www.civpulse.org/records/",
+      "observed_at": "2026-11-01T23:03:46.758333+00:00",
+      "mode": "indexed_version",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "verdict": "NEUTRAL"
+    }
+  ]
+}

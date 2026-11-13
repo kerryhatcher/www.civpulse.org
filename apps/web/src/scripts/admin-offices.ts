@@ -1,3 +1,4 @@
+import { historyLink } from '../lib/history';
 import { officeLabel, parseServiceDate, serviceDates, type Office, type OfficeTerm } from '../lib/offices';
 import { getSupabase } from '../lib/supabase';
 
@@ -79,6 +80,7 @@ export async function initOfficesAdmin(): Promise<void> {
       info.append(heading, meta);
       const actions = document.createElement('div');
       actions.className = 'org-row-actions';
+      actions.append(historyLink(table, record.id));
       const change = document.createElement('button');
       change.type = 'button'; change.textContent = 'Edit';
       change.addEventListener('click', () => edit(table, record));

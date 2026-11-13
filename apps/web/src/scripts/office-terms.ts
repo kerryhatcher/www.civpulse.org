@@ -1,3 +1,9 @@
+import {loadOfficeholderObservations} from './officeholder-observations';
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownSourceDates, recordSourceUrl } from '../lib/record-provenance';
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
+import { loadPersonLegislation } from './legislation';
+import { historyLink } from '../lib/history';
 import { officeLabel, serviceDates, type ProfileOfficeTerm } from '../lib/offices';
 import { personHref } from '../lib/people';
 import { getSupabase } from '../lib/supabase';
@@ -5,6 +11,8 @@ import { getSupabase } from '../lib/supabase';
 export async function loadOfficeTerms(personId?: string, organizationId?: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-office-terms]');
   if (!root) return;
+  void loadOfficeholderObservations(personId,organizationId);
+  if (personId) void loadPersonLegislation(personId);
   const status = root.querySelector<HTMLElement>('[data-office-status]')!;
   const groups = root.querySelector<HTMLElement>('[data-office-groups]')!;
   root.hidden = false;
@@ -14,7 +22,8 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
   try {
     const supabase = getSupabase();
     await supabase.auth.getSession();
-    const { data, error } = await supabase.rpc('get_office_terms', {
+    const snapshot = await getPublicProfileSnapshot();
+    const { data, error } = snapshot ? {data: snapshot.officeTerms, error: null} : await supabase.rpc('get_office_terms', {
       p_person_id: personId ?? null, p_organization_id: organizationId ?? null,
     });
     if (error) throw error;
@@ -35,20 +44,22 @@ export async function loadOfficeTerms(personId?: string, organizationId?: string
         dates.textContent = serviceDates(term).replace('– present', group === 'upcoming' ? '– end not recorded' : '– present');
         const method = document.createElement('span');
         method.textContent = term.selection_method === 'elected' ? 'Elected' : 'Appointed';
-        card.append(name, link, dates, method);
-        if (term.source_url) {
+        card.append(name, link, dates, method, historyLink('offices', term.office_id), historyLink('office_terms', term.id));
+        const provenance = document.createElement('span'); provenance.textContent = unknownSourceDates; card.append(provenance);
+        if (recordSourceUrl(term.source_url)) {
           const source = document.createElement('a');
-          source.href = term.source_url;
+          source.href = recordSourceUrl(term.source_url)!;
           source.textContent = 'Source';
           source.target = '_blank';
           source.rel = 'noopener noreferrer';
           card.append(source);
-        }
+        } else { const missing = document.createElement('span'); missing.textContent = 'Original source: Not recorded.'; card.append(missing); }
         item.append(card);
         return item;
       }));
     }
-    root.hidden = terms.length === 0;
+    root.hidden = terms.length === 0 && !root.querySelector('[data-public-profile-history]');
+    replacePublishedEvidence(root);
     status.hidden = true;
     groups.hidden = false;
   } catch {

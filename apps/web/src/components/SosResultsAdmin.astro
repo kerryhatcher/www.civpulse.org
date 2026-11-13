@@ -1,0 +1,40 @@
+<section class="org-form" data-sos-admin aria-labelledby="sos-admin-title">
+  <h2 id="sos-admin-title">Automatic SOS results</h2>
+  <p>Configure an existing election while paused. Saving these settings does not start collection. Activate only after the controlled import, public readback, monitoring, and recovery checks pass.</p>
+  <label class="field"><span>Existing election</span><select data-sos-election><option value="">Select an election…</option></select></label>
+  <dl data-sos-identity hidden>
+    <dt>Election UUID</dt><dd data-sos-id></dd>
+    <dt>Election date and visibility</dt><dd data-sos-date></dd>
+    <dt>Saved source URL</dt><dd data-sos-source></dd>
+  </dl>
+  <p class="status" data-sos-health aria-live="polite">Select an election to read its collection health.</p>
+  <button type="button" data-sos-refresh disabled>Refresh collection health</button>
+  <form data-sos-form novalidate>
+    <div class="field-grid">
+      <label class="field"><span>Polling starts at (UTC)</span><input name="sos_starts_at" type="text" placeholder="2026-11-03T18:00:00Z" autocomplete="off" required disabled /><small>Use an explicit UTC timestamp ending in Z, including seconds.</small></label>
+      <label class="field"><span>Polling ends at (UTC)</span><input name="sos_ends_at" type="text" placeholder="2026-11-11T00:00:00Z" autocomplete="off" required disabled /><small>Collection stops at this instant. Convert local time to UTC deliberately.</small></label>
+    </div>
+    <div class="field-grid">
+      <label class="field"><span>Initial polling cadence</span><select name="sos_interval" disabled><option value="3600">Hourly</option><option value="300">Every five minutes</option></select></label>
+      <label class="field"><span>Switch to five-minute polling at (UTC, optional)</span><input name="sos_transition_at" type="text" placeholder="2026-11-03T22:00:00Z" autocomplete="off" disabled /><small>Leave blank to keep the initial cadence throughout the window.</small></label>
+    </div>
+    <label class="calendar-check"><input type="checkbox" name="sos_reviewed" disabled /><span>I reviewed this existing election’s UUID, date, public visibility, and exact saved SOS source URL.</span></label>
+    <div class="org-form-actions"><button type="submit" data-sos-save disabled>Configure paused feed</button><button type="button" data-sos-pause disabled>Pause selected feed</button></div>
+    <label class="calendar-check"><input type="checkbox" name="sos_accepted" disabled /><span>The controlled import, public readback, monitoring, and recovery acceptance checks are complete.</span></label>
+    <button type="button" class="button-link" data-sos-activate disabled>Activate reviewed feed</button>
+  </form>
+  <details>
+    <summary>Recover queued or quarantined work</summary>
+    <p>Retry keeps the original evidence and receipt. Abandon ends only an uncommitted job; it does not delete evidence. A committed pointer must be repaired and retried. The database rejects recovery while a worker holds a live lease.</p>
+    <div class="org-form-actions"><button type="button" data-sos-retry disabled>Retry pending job</button><button type="button" class="button-danger" data-sos-abandon disabled>Abandon uncommitted job…</button></div>
+  </details>
+  <p class="auth-message" data-sos-message hidden role="status" aria-live="polite"></p>
+</section>
+
+<style>
+  [data-sos-identity] { margin: 0; }
+  [data-sos-identity] dt { font-weight: 600; margin-top: .5rem; }
+  [data-sos-identity] dd { margin-inline-start: 0; overflow-wrap: anywhere; }
+  [data-sos-form] { display: grid; gap: 16px; }
+  .org-form-actions { flex-wrap: wrap; }
+</style>

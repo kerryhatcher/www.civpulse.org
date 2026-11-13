@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { GEORGIA_COUNTY_HUBS } from '../../lib/county-scope';
+---
+<Layout title="Georgia county community hubs" description="Explore community summary pages for all 159 Georgia counties.">
+  <main id="main" class="prose">
+    <h1>Georgia county community hubs</h1>
+    <p>Find your community among all 159 Georgia counties. Open a county summary for local government, people, maps, elections, public events, and Census links.</p>
+    <ul class="county-directory">
+      {GEORGIA_COUNTY_HUBS.map(county => <li><a href={`/counties/${county.slug}/`}>{county.name} County</a></li>)}
+    </ul>
+    <p>Coverage varies by county and grows as public records are added.</p>
+  </main>
+</Layout>
+<style>
+  .county-directory { columns: 3 14rem; column-gap: 2rem; }
+  .county-directory li { break-inside: avoid; padding-block: 4px; }
+</style>

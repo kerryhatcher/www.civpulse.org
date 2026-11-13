@@ -1,0 +1,51 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BibbGuideMaintenance from '../../../components/counties/BibbGuideMaintenance.astro';
+import { getBibbTopics, BIBB_TOPIC_RESOURCES as official } from '../../../lib/bibb-topic-hubs';
+import { formatElectionDate } from '../../../lib/elections';
+import { formatEventWhen } from '../../../lib/calendars';
+const data = await getBibbTopics();
+---
+<Layout title="Macon-Bibb elections: research ballots, dates & sources" description="Research recorded Macon-Bibb elections, contests, candidates and dated notices, then connect them to official ballot and voter-information resources."
+  breadcrumbs={[{ name: 'Home', href: '/' }, { name: 'Bibb County', href: '/counties/bibb/' }, { name: 'Election research', href: '/counties/bibb/elections/' }]}>
+  <main id="main">
+    <div class="page-intro"><h1>How do I research a Macon-Bibb election?</h1><p>Separate the election record, the contests it contains, and the official information that applies to you.</p></div>
+    <nav aria-label="Election research steps"><a href="#verify">Check official information</a> · <a href="#records">Explore election records</a> · <a href="#dates">Read dated notices</a> · <a href="#geography">Understand map scope</a></nav>
+    <section id="verify" class="guide-section">
+      <h2>Start with official information for your own record</h2>
+      <p>A countywide election record or composite ballot can include races from different districts. A candidate listed in an imported record does not establish that the race appears on your own ballot.</p>
+      <p><a href={official.sampleBallot}>Georgia.gov's sample-ballot guide</a> directs voters to the Secretary of State's <a href={official.voterPage}>My Voter Page</a> for their sample ballot, registration and polling-place information. Use that official service and the <a href={official.elections}>Macon-Bibb Board of Elections</a> for current local notices. This research guide does not determine eligibility, an assigned polling place or voting hours.</p>
+      <p>The <a href={official.stateCalendar}>official Georgia election calendar</a> provides state election dates and election-specific resources. Compare a dated Civic Pulse entry with the current official notice; a saved deadline can already have passed or changed.</p>
+    </section>
+    <section id="records" class="guide-section">
+      <h2>Connect an election to its recorded contests and people</h2>
+      <p>These previews cover up to three newest dated public election records associated with Civic Pulse's Bibb elections organization, not a personalized ballot or a declaration that an election is upcoming. Imported election records may contain contests spanning multiple jurisdictions. The preview below shows up to six contests per record; open the election to inspect its scope and sources.</p>
+      {data.elections.map(election => <article class="org-card">
+        <h3><a href={`/elections/${election.slug}/`}>{election.name}</a></h3>
+        <p>Election date: <time datetime={election.date}>{formatElectionDate(election.date)}</time> · {election.contestCount} recorded contests</p>
+        <ul>{election.contests.map(contest => <li><a href={`/elections/${election.slug}/#ballot`}>{contest.name}</a>
+          {contest.candidates.length > 0 && <ul>{contest.candidates.map(person => <li><a href={`/people/${person.slug}/`}>{person.name}</a></li>)}</ul>}
+        </li>)}</ul>
+        {!election.contests.length && <p>No contest records have been added for this election.</p>}
+        <a href={`/elections/${election.slug}/`}>Full election record, ballot questions and sources</a>
+      </article>)}
+      {!data.elections.length && <p>No public elections associated with the selected Bibb elections organization have been added yet. Check the official sources above.</p>}
+      <p>A person profile can provide recorded service, article associations and vote context. Those records can be incomplete or historical; an association is not an endorsement or proof of current office. <a href="/elections/">Browse the full public election directory</a> for additional recorded elections.</p>
+    </section>
+    <section id="dates" class="guide-section">
+      <h2>Read the date, type and original notice together</h2>
+      <p>These saved dates belong to the election records above. They are ordered by their recorded start time, may be past or future, and are not live voting instructions. An election date, a registration deadline and a voting period answer different questions; a recorded start does not establish an end time or a person's eligibility.</p>
+      {data.dates.length ? <ul>{data.dates.map(event => <li><a href={`/records/events/${event.id}/`}>{event.title}</a> — {formatEventWhen(event, 'America/New_York')} · {event.election_name}</li>)}</ul> : <p>No public calendar dates have been recorded for these elections. Use the official county notices and state calendar.</p>}
+      <p>Turnout and source reports on an election page describe their stated measure, geography and collection time. Do not treat a turnout count as a candidate result or combine overlapping source reports. Open the full election record for its reported coverage.</p>
+    </section>
+    <section id="geography" class="guide-section">
+      <h2>Use geographic records as evidence, not a personal ballot assignment</h2>
+      <p><a href="/counties/bibb/districting/">Research districting and apportionment</a> to distinguish seat allocation, boundary changes and plan versions.</p>
+      <ul>{data.maps.filter(map => map.slug !== 'school-board').map(map => <li><a href={`/maps/${map.slug}/#map-evidence`}>{map.name}: layers, feature records and source notes</a></li>)}</ul>
+      <p>Read a layer's boundary version and source-check notes before interpreting a district or polling-place feature. Different offices can use different districts, and a saved map may describe an earlier period. Confirm personal ballot and polling-place information through the official services above.</p>
+      <p><a href="/counties/bibb/government/">Follow a local government decision</a> to connect districts with agendas and meeting records, or return to the <a href="/counties/bibb/">Bibb County overview</a> for broader community context.</p>
+    </section>
+    <BibbGuideMaintenance />
+  </main>
+</Layout>
+<style>.guide-section { padding-block: 1.5rem; border-bottom: 1px solid var(--line); scroll-margin-top: 1rem; } p { max-width: 75ch; } li { margin-block: .6rem; overflow-wrap: anywhere; } .org-card { margin-block: 1rem; }</style>

@@ -1,6 +1,7 @@
 import { baseMapLabel } from '../lib/basemaps';
 import type { MapConfig, MapVisibility } from '../lib/maps';
 import { getSupabase } from '../lib/supabase';
+import { filterCounty } from './county-filter';
 
 const VISIBILITY_LABELS: Record<MapVisibility, string> = {
   public: 'Public',
@@ -68,12 +69,18 @@ export function initMapSearch(): void {
   /** Signed in: list everything the user may see. Signed out: static public list. */
   async function listAccessible(): Promise<void> {
     if (!signedIn) {
-      requestId += 1;
-      resultsEl.replaceChildren();
-      resultsEl.hidden = true;
-      if (status) status.hidden = true;
-      if (empty) empty.hidden = true;
-      if (initial) initial.hidden = false;
+      const id = ++requestId;
+      try {
+        const catalog = JSON.parse(document.querySelector('[data-map-catalog]')?.textContent ?? '[]') as MapConfig[];
+        const maps = await filterCounty(catalog, 'map');
+        if (id !== requestId) return;
+        resultsEl.replaceChildren(...maps.map(renderCard));
+        resultsEl.hidden = maps.length === 0;
+        if (empty) empty.hidden = maps.length > 0;
+        if (initial) initial.hidden = true;
+      } catch (error) {
+        if (status) { status.hidden = false; status.textContent = error instanceof Error ? error.message : 'Could not filter maps.'; }
+      }
       return;
     }
 
@@ -97,7 +104,8 @@ export function initMapSearch(): void {
       return;
     }
 
-    const maps = (data ?? []) as unknown as MapConfig[];
+    const maps = await filterCounty((data ?? []) as unknown as MapConfig[], 'map');
+    if (id !== requestId) return;
     resultsEl.replaceChildren(...maps.map(renderCard));
     resultsEl.hidden = maps.length === 0;
     if (empty) empty.hidden = maps.length > 0;
@@ -128,7 +136,8 @@ export function initMapSearch(): void {
       return;
     }
 
-    const maps = (data ?? []) as unknown as MapConfig[];
+    const maps = await filterCounty((data ?? []) as unknown as MapConfig[], 'map');
+    if (id !== requestId) return;
     resultsEl.replaceChildren(...maps.map(renderCard));
     resultsEl.hidden = maps.length === 0;
     if (empty) empty.hidden = maps.length > 0;
@@ -139,6 +148,8 @@ export function initMapSearch(): void {
   }
 
   function update(): void {
+    ++requestId;
+    window.clearTimeout(timer);
     const query = inputEl.value.trim();
 
     if (!query) {
@@ -152,6 +163,7 @@ export function initMapSearch(): void {
   }
 
   inputEl.addEventListener('input', update);
+  window.addEventListener('countychange', update);
 
   inputEl.closest('form')?.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -164,6 +176,6 @@ export function initMapSearch(): void {
   void supabase.auth.getSession().then(({ data: { session } }) => {
     signedIn = Boolean(session);
     if (signedIn && note) note.hidden = false;
-    if (signedIn) void listAccessible();
+    void listAccessible();
   });
 }

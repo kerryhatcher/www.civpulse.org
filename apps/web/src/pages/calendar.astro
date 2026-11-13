@@ -1,4 +1,5 @@
 ---
+import {calendarAssetUrl} from '../lib/calendar-assets';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -6,55 +7,50 @@ import Layout from '../layouts/Layout.astro';
   title="Community calendar"
   description="Find public meetings, community gatherings, and civic deadlines by organization or calendar."
 >
-  <main id="main">
+  <main id="main" data-calendar-snapshot={await calendarAssetUrl('calendar')}>
     <div class="page-intro">
       <h1>Find something to be part of.</h1>
+      <p><a href="/records/events/page/1/">Published event and meeting archive</a></p>
       <p>Public meetings, community gatherings, and deadlines worth knowing.</p>
     </div>
 
-    <form class="calendar-filters" data-calendar-filters role="search">
-      <label class="field">
-        <span>Organization</span>
-        <select data-calendar-org>
-          <option value="">All organizations</option>
-        </select>
-      </label>
-      <label class="field">
-        <span>Calendar</span>
-        <select data-calendar-calendar>
-          <option value="">All calendars</option>
-        </select>
-      </label>
-      <label class="field field-wide">
-        <span>Search events</span>
-        <input
-          type="search"
-          placeholder="Search events…"
-          data-calendar-search
-          autocomplete="off"
-        />
-      </label>
-      <label class="field"><span>Category</span><select data-calendar-category><option value="">All categories</option></select></label>
-    </form>
+    <details class="calendar-options">
+      <summary>Filter events and calendars</summary>
+      <form class="calendar-filters" data-calendar-filters role="search">
+        <label class="field">
+          <span>Organization</span>
+          <select data-calendar-org>
+            <option value="">All organizations</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Calendar</span>
+          <select data-calendar-calendar>
+            <option value="">All calendars</option>
+          </select>
+        </label>
+        <label class="field field-wide">
+          <span>Search events</span>
+          <input
+            type="search"
+            placeholder="Search events…"
+            data-calendar-search
+            autocomplete="off"
+          />
+        </label>
+        <label class="field"><span>Category</span><select data-calendar-category><option value="">All categories</option></select></label>
+      </form>
 
-    <div class="calendar-subscription">
-      <a class="button-link" data-calendar-subscribe href="webcal://www.civpulse.org/events.ics">Subscribe to calendar</a>
-      <a href="/events.ics">Download calendar</a>
-      <details><summary>Use a subscription URL</summary>
-        <p>In your calendar app, choose “Add calendar by URL” or “Subscribe” and paste this address:</p>
-        <label class="field"><span>Public calendar feed URL</span><input readonly data-calendar-feed value="https://www.civpulse.org/events.ics" /></label>
-        <p>Includes all public calendars. Updates appear after publication and your app's next refresh. Private events are excluded. Downloading imports a one-time copy.</p>
-      </details>
-    </div>
-    <details class="calendar-picker" open>
-      <summary>Calendars</summary>
-      <div class="calendar-toolbar">
-        <button type="button" data-calendars-show>Show all</button>
-        <button type="button" data-calendars-hide>Hide all</button>
-        <label class="field"><span>Color by</span><select data-calendar-color><option value="calendar">Calendar</option><option value="organization">Organization</option></select></label>
+      <div class="calendar-picker">
+        <h2>Choose calendars</h2>
+        <div class="calendar-toolbar">
+          <button type="button" data-calendars-show>Show all</button>
+          <button type="button" data-calendars-hide>Hide all</button>
+          <label class="field"><span>Color by</span><select data-calendar-color><option value="calendar">Calendar</option><option value="organization">Organization</option></select></label>
+        </div>
+        <div data-calendar-picker class="calendar-picker-groups"></div>
+        <p class="status">Select several calendars together. Shared events appear once with all matching calendar labels.</p>
       </div>
-      <div data-calendar-picker class="calendar-picker-groups"></div>
-      <p class="status">Select several calendars together. Shared events appear once with all matching calendar labels.</p>
     </details>
     <section aria-label="Community calendar">
       <div class="calendar-toolbar">
@@ -70,12 +66,24 @@ import Layout from '../layouts/Layout.astro';
       <p class="status">Times are shown in America/New_York. Select a day to see its events.</p>
       <div class="calendar-month-grid" data-calendar-grid></div>
     </section>
+    <details class="calendar-feed-options">
+      <summary>Subscribe or download the calendar</summary>
+      <div class="calendar-subscription">
+        <a class="button-link" data-calendar-subscribe href="webcal://www.civpulse.org/events.ics">Subscribe to calendar</a>
+        <a href="/events.ics">Download calendar</a>
+        <details><summary>Use a subscription URL</summary>
+          <p>In your calendar app, choose “Add calendar by URL” or “Subscribe” and paste this address:</p>
+          <label class="field"><span>Public calendar feed URL</span><input readonly data-calendar-feed value="https://www.civpulse.org/events.ics" /></label>
+          <p>Includes all public calendars. Updates appear after publication and your app's next refresh. Private events are excluded. Downloading imports a one-time copy.</p>
+        </details>
+      </div>
+    </details>
     <p class="status" data-calendar-signed-in hidden>You're signed in. Admin accounts can also view unlisted and private events.</p>
     <p class="status" data-calendar-status role="status" aria-live="polite">Loading events…</p>
     <button type="button" data-calendar-clear-day hidden>Show events from today onward</button>
     <div class="event-list" data-calendar-results hidden></div>
     <p class="status" data-calendar-empty hidden>No events match those filters.</p>
-    <noscript><p>Enable JavaScript to browse events, or subscribe using the public calendar feed above.</p></noscript>
+    <noscript><p>Enable JavaScript to browse events, or subscribe using the public calendar feed.</p></noscript>
   </main>
 </Layout>
 
@@ -83,3 +91,9 @@ import Layout from '../layouts/Layout.astro';
   import { initCalendar } from '../scripts/calendar';
   initCalendar();
 </script>
+
+<style>
+  .calendar-options, .calendar-feed-options { margin-block: 1.25rem; }
+  .calendar-options > summary, .calendar-feed-options > summary { min-height: 44px; padding-block: .6rem; }
+  .calendar-options .calendar-picker h2 { font-size: 1.5rem; }
+</style>

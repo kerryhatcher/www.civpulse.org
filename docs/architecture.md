@@ -5,14 +5,38 @@ Supabase backend.
 
 ```
 apps/web/     Astro frontend, built to static files
-apps/mcp/     Cloudflare Worker: remote MCP server (OIDC via Supabase Auth)
-supabase/     Postgres migrations + local Supabase config
+apps/mcp/     Runtime-neutral MCP source (OIDC via Supabase Auth)
+apps/georgia-source/ Public read-only Georgia API reader on Cloudflare Workers
+apps/kb/      Separate public document publication/search Worker (initially disabled)
+supabase/     Postgres migrations, MCP Edge Function + local Supabase config
 scripts/      dev orchestration and local seed helpers
 docs/         architecture, backend, and development notes
 ```
 
 ## Hosting and rendering
 
+### Live election results
+
+Georgia SOS collection uses one five-minute Supabase Cron heartbeat and an
+authenticated polling Edge Function. Postgres gates actual source checks by a
+reviewed per-feed cadence/transition and explicit window; activation requests an
+immediate check through that same coordinator. A separate Bun container claims durable
+database jobs, archives exact source JSON in `civpulse-files`, stages validated
+snapshots, and publishes compact immutable state/county assets. The well-known
+`latest.json` pointer advances with conditional writes after database publication.
+Public election pages poll that pointer; UUID viewers use the visibility-gated
+RPC. The static Astro hosting model is unchanged. Meaningful result changes also
+invalidate the existing 20-minute rebuild coordinator, updating bounded public
+HTML fallbacks independently of browser updates. Collection ships disabled until
+the documented main-first release and deployment checks are complete. See the
+[collection runbook](sos-results-automation.md).
+
+
+- `apps/web/public/llms.txt` is the curated AI-facing site overview, served at
+  `/llms.txt` as a static text asset. It follows the [llms.txt format](https://llmstxt.org/)
+  with public entry points, source/reuse guidance, and the AI connection guide.
+  Keep its links and descriptions aligned with public routes when features change;
+  it contains no database export or restricted record URLs.
 - The frontend deploys as **Cloudflare Workers static assets**
   (`apps/web/wrangler.jsonc`, `assets.directory = ./dist`). It is a **static
   build**: `output` stays the Astro default (`static`) and there is **no
@@ -32,7 +56,402 @@ docs/         architecture, backend, and development notes
     dev server and `astro preview` ignore it. If a link must work in dev, do not
     rely on `_redirects` (see `/maps/view/?id=<uuid>` below).
 
+## Editorial policy and correction routing
+
+`/editorial/` publishes source-priority, identity reconciliation, automated-content
+review, coverage and correction requirements, alongside the confirmed operator/
+maintainer identity (Kerry Hatcher). This identity was explicitly confirmed for
+public use; it is not inferred from credentials or commit authorship. Repository
+contributions/source credits are distinguished from factual-review certification.
+The policy describes requirements for new correction work, not retrospective
+human review or a complete historical notice register.
+
+The existing public repository issue tracker is the reporting channel. Live
+repository metadata checked November 1, 2026 showed `has_issues=true`, public,
+not archived and not disabled. GitHub sign-in is required to submit; no issue is
+created by the site. No private inbox, mail address, automatic triage or service
+deadline is invented. Public-report privacy instructions reflect that real channel.
+
+`corrections.ts` creates fixed-origin GitHub issue-form links. Prefilled context
+accepts generated public profile/record/history route shapes, removes query and
+fragment data and rejects noindex UUID viewers, account/admin paths and foreign
+origins. Private viewer IDs/access parameters are never propagated. This is a
+presentation safeguard, not a new access grant or a record-discovery API.
+`RecordFeedback` is shared by record/history-link components and public detail
+templates; About and the shared footer link to policy/corrections. Static rendering
+and RLS/public-snapshot gates remain unchanged.
+
+Editors must triage and recheck sources, use the appropriate correction workflow,
+preserve original facts/history, add scoped dated notices where supported and
+verify successful publication before claiming a public fix. GitHub closure, edit,
+import and build timestamps do not independently verify facts or publication.
+
+## Bibb resident-question pilot guides
+
+The site already has 159 county overview hubs, including substantial Bibb
+geography/statistics and selected local links. The pilot adds four guides:
+`/counties/bibb/government/` (following a local decision),
+`/counties/bibb/elections/` (researching an election record),
+`/counties/bibb/property-taxes/` (assessment versus billing research) and
+`/counties/bibb/districting/` (apportionment/boundary research). They answer distinct
+questions rather than duplicating the county overview or generating thin locality
+variants. The Bibb overview and shared Browse menu provide discovery; guides have
+visible breadcrumbs, cross-links, self-canonicals and sitemap entries.
+
+`bibb-topic-hubs.ts` reuses existing anonymous snapshots and explicit organization/
+map curation. It projects public affiliations/candidate profiles and requires
+public event/calendar/election parents. Election previews follow the Bibb elections
+organization relationship, not a person's inferred residence or ballot eligibility.
+Up to three dated elections/six contests per election, six selected-organization
+meetings and nine saved dates are displayed with links to fuller public records.
+Missing expected election detail fails publication. No schema, RLS or privileged
+read is added; signing in does not enrich these static guides.
+
+Official resource purposes are supported by the [county commission page](https://www.maconbibb.us/commissioners/),
+[county elections page](https://www.maconbibb.us/board-of-elections/),
+[Georgia.gov sample-ballot guide](https://georgia.gov/view-sample-ballot) and
+[SOS election calendar](https://sos.ga.gov/page/election-calendar-and-events).
+The fixed November 1, 2026 linking-page review date is editorial evidence, not a
+build/verification timestamp. Direct agenda-portal/MVP fetches were blocked, so
+their destinations are confirmed through official parent links; no service
+availability or personalized voter result is asserted. The editor publishing a
+guide change owns review under the admin guide's maintenance process. Known
+roster/import gaps and record dates remain visible; no named maintainer, officeholder
+assignment, voting hours or eligibility advice is invented.
+
+Property-tax roles and destinations come from the official Bibb Assessors,
+[Tax Commissioner](https://www.maconbibbtax.us/property.html) and
+[DOR county facts](https://dor.georgia.gov/county-property-tax-facts-bibb), with no
+parcel/payment import or personalized tax/appeal advice. The payment service's
+verification challenge is not bypassed. District terminology uses
+[Census apportionment](https://www.census.gov/topics/public-sector/congressional-apportionment/about.html)
+and [Georgia Legislature resources](https://www.legis.ga.gov/joint-office/reapportionment).
+Saved maps remain source-backed snapshots, not assertions about legal validity,
+personal voting assignments or cadastral/tax boundaries. No rates, statutory
+deadlines, pending litigation outcomes or named officeholders are hardcoded.
+
+## Record provenance and date semantics
+
+The provenance audit found these existing public facts; no schema was added:
+
+| Record | Available source facts | Date meaning and gaps |
+| --- | --- | --- |
+| Person biography | HTTP(S) citations in safe rendered Markdown | No dedicated publication/retrieval/verification fields; contact URLs are not citations |
+| Office term | `source_url`, service start/end and precision | Service period, not source publication or verification; missing source/date metadata is explicit |
+| Election | Public date/deadline URLs and ballot-question source URLs | Election/key dates describe events, not verification; source links remain claim-scoped |
+| Meeting/vote | Event source URL, recorded video and contextual public meeting record | Meeting/vote date is not source publication/retrieval or verification |
+| Article association | URL, `published_on`, `fetched_on`, role | Publication and retrieval are separate; neither establishes verification |
+| Legislative vote | Existing public source URL, occurrence date and coverage | `retrieved_at` remains excluded by the established public detail projection; no broader import metadata exposure |
+
+`RecordProvenance.astro` renders source/date context next to public biographies,
+elections and meeting/vote details. Compact profile history/live-card notes retain
+the same meanings after enhancement. Biography citations are discovered from
+anchors produced by the existing safe micromark renderer (including reference
+links); raw Markdown is not parsed by a new citation grammar. Source URLs reject
+executable schemes and embedded credentials. Hidden people/elections/dates cannot
+contribute public provenance. All dates remain explicit source facts or Unknown;
+`updated_at`, import completion and build time are never verification fallbacks.
+
+Vote scope notes persist after enhancement and on history pages: imported/added
+records can be incomplete, legislative attendance roll calls are excluded, and
+missing choices do not establish absence/opposition or a participation denominator.
+No official affiliation, source completeness or whole-record verification is
+inferred from a link. Refresh/publication conventions are in the admin guide.
+
+## Readable profile evidence
+
+
+Public person/organization slug templates project the existing anonymous
+`getProfileSectionBuildData()` export into readable office, candidacy, article,
+meeting-vote and legislative-choice evidence. Only discovered public owners get
+HTML; public person/election/article gates are retained. Meeting and legislative
+parent/relationship visibility remains enforced by the unchanged export RPCs.
+Organization profiles expose their public officeholders/articles. No privileged
+credential, schema change or server rendering is introduced.
+
+Each existing component receives an optional public fallback: ten initial office,
+candidacy/article records or twenty vote records. Larger sets link to bounded,
+crawlable `/<people|orgs>/<slug>/history/<section>/<page>/` pages of twenty records.
+These paths are self-canonical/indexable; they are distinct from the noindex
+`/history/` audit utility. Source precision and association roles are preserved;
+missing service ends are not current-office claims. Source/context links lead to
+public elections, meetings, bills, votes and original publishers.
+
+Successful component enhancement hides its own fallback after replacing live DOM.
+Pending/failing loads retain readable evidence; later pagination cannot restore
+and duplicate it. The anonymous browser still uses the published snapshot, while
+signed-in profiles and UUID viewers retain their existing live RPC gates.
+Legislative filters/grouped pagination are unchanged: static evidence lists
+individual nonattendance choices, while the interactive view groups by bill.
+Public history links remain available after enhancement. Rebuilds replace all
+profile/history HTML with the same public snapshot used by JSON assets.
+
+## Readable map evidence
+
+Public `/maps/<slug>/` pages prerender layer descriptions, source attribution and
+links, notes, feature counts and recorded source-check date coverage. Each layer
+previews five feature records; larger sets link to crawlable
+`/maps/<slug>/layers/<layer-id>/page/<n>/` pages of at most 25 records. These pages
+use the same `getMapBuildData()` snapshot and normalized presentation as the
+interactive map. Feature titles/text are shared with popup rendering. Only
+configured popup fields and source links enter HTML; geometry and arbitrary
+properties are not dumped. Dates are labeled as source checks/versions, never
+inferred from build time. Source names do not establish current representatives
+or justify a guessed person-profile link.
+
+The anonymous build still filters public maps/layers before requesting their
+features through the existing map-context RPC gate. Stored features inherit those
+gates; no schema/RLS changes are introduced. Restricted layers, maps and UUID
+viewer contents never enter readable pages. Public layers initially turned off
+are included because default display is not visibility. The existing signed-in
+RPC gate remains authoritative for live restricted content.
+
+External public GeoJSON is now read once per layer during the build and captured
+into the same content-hashed geometry assets as stored features. HTML and public
+Leaflet layers cannot fetch different external revisions. The original external
+URL is retained as a source credit. Local URLs resolve within Astro's public
+directory; HTTP(S) fetches have a 30-second deadline. Invalid/unavailable sources
+fail publication rather than silently omit text or geometry. Successful rebuilds
+replace the readable pages along with manifests/geometry; formerly public copies
+cannot be recalled from prior downloads. No server rendering or privileged build
+credential is added.
+
+## Page titles and descriptions
+
+### Public structured data
+
+`structured-data.ts` emits a small JSON-LD graph through the shared Layout.
+The homepage identifies Civic Pulse as an `Organization` and its `WebSite`, with
+an explicit publisher relationship. It does not identify Civic Pulse as a public
+agency or as the parent of any organization listed on the site.
+
+Public person and organization slug pages emit `Person` and `Organization`
+respectively. UUID-based absolute entity IDs remain stable when a slug changes;
+`url` and `mainEntityOfPage` use the same canonical public URL as the HTML.
+Person names, public portraits and displayed public organization affiliations
+are included. Affiliation does not imply employment, current office or endorsement;
+recorded titles can describe past service and are not emitted as `jobTitle`.
+Organization names, displayed summaries and logos come from the existing public
+snapshot. Website/social fields are not automatically promoted to verified
+`sameAs` identities. No ratings, inferred government relationships or hidden
+records enter these graphs.
+
+Profiles, election pages and public event detail pages include visible breadcrumbs
+and matching `BreadcrumbList` data. Elections are not labeled as events. Individual
+public event details may emit `Event` when they have valid dates and a recorded
+physical venue. Public event, calendar and election-parent gates still apply;
+election deadlines/voting periods, missing venues and explicit virtual locations
+are excluded. All-day dates use the displayed New York calendar dates, including
+the inclusive last day instead of the database's exclusive end. Venue text is
+preserved as `Place.name`; it is not parsed into an invented postal address.
+Calendar ownership alone does not establish an organizer. No admission policy,
+ticket offer, cancellation status or performer is inferred.
+
+This is Schema.org vocabulary, not a guarantee of Google rich-result eligibility.
+In particular, free-text venues do not establish Google's required detailed
+event address or public admission. Utility/auth/admin/restricted viewer shells
+emit no graphs, even when opened by an administrator; the browser never augments
+JSON-LD from privileged live data. Serialization escapes HTML script terminators
+and line separators before inserting JSON into an inline script.
+
+Maintenance follows [Google's general structured-data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies),
+[Organization guidance](https://developers.google.com/search/docs/appearance/structured-data/organization),
+[site-name guidance](https://developers.google.com/search/docs/appearance/site-names),
+[breadcrumbs](https://developers.google.com/search/docs/appearance/structured-data/breadcrumb)
+and [event guidance](https://developers.google.com/search/docs/appearance/structured-data/event).
+The vocabulary references are [Person](https://schema.org/Person),
+[Organization](https://schema.org/Organization), [WebSite](https://schema.org/WebSite),
+[BreadcrumbList](https://schema.org/BreadcrumbList) and [Event](https://schema.org/Event).
+
+### Editorial titles and descriptions
+
+The shared Layout uses each page's title/description for both HTML metadata and
+Open Graph, adds the Civic Pulse title suffix once, and publishes the same
+queryless public URL in canonical and `og:url`. Titles describe the page subject;
+the H1 and visible record fields remain the source of identity and context.
+
+Editorial patterns:
+
+- Home describes officials, elections and public records; its description names
+  Macon-Bibb as a starting point while acknowledging records from other communities.
+- Broad directories describe their content, without claiming every record serves
+  Macon-Bibb. A session county preference does not change static metadata.
+- People use `Name — recorded title`; without a title, use the recorded kind,
+  or `Civic profile` for Other. Preserve historical wording such as Former or a
+  service period. Do not infer current office or jurisdiction from affiliations,
+  mailing addresses or the site's default county.
+- Organizations and maps keep their recorded names and identify the page as an
+  organization profile or interactive map. Elections with a year in their names
+  keep that title; names without a year gain the recorded election date. This is
+  factual time context, not a claim about current/upcoming status.
+- Public record descriptions keep the record's name alongside the stored summary.
+  `page-metadata.ts` trims empty/whitespace summaries and uses a named description
+  of the available record view instead of a bare kind/name. A summary already
+  beginning with the subject is preserved. No completeness or outcome is inferred.
+- Published `/records/` descriptions already supply record/source/date context;
+  retain those facts rather than replacing them with a universal local label.
+
+Before/after examples from the local QA snapshot (the Layout adds `· Civic Pulse`):
+
+| Page | Before title | After title |
+| --- | --- | --- |
+| Home | Your community, in the open | Local officials, elections & public records |
+| `/people/` | People | Officials, candidates & civic profiles |
+| `/orgs/` | Organizations | Organizations & public bodies |
+| `/elections/` | Elections | Election dates, candidates & ballots |
+| `/maps/` | Explore maps | Civic maps: precincts, districts & places |
+| Thomas Jackson Gillon Jr | Thomas Jackson Gillon Jr | Thomas Jackson Gillon Jr — Election Supervisor |
+| Gena Tripp | Gena Tripp | Gena Tripp — Civic profile |
+
+Gena Tripp's description changes from `Credited author in candidate news coverage.`
+to `Gena Tripp. Credited author in candidate news coverage.` This preserves the
+source claim while distinguishing her page from other credited authors. The
+407-page indexable local snapshot had no empty or duplicate titles, but eight
+duplicate description groups covering 139 pages. After the change, that snapshot
+has no empty or duplicate titles/descriptions. This is an audit of local fixture
+and public records, not a measurement of production rankings or click-through rate.
+New records may still need editorial review, especially distinct people sharing
+a name/title. Do not add invented facts just to make metadata unique.
+
+These patterns follow Google's guidance on [descriptive titles](https://developers.google.com/search/docs/appearance/title-link)
+and [page-specific descriptions](https://developers.google.com/search/docs/appearance/snippet).
+Search engines may choose different title links or snippets; no ranking or
+display result is guaranteed.
+
 ## Backend
+
+### Session county preference
+
+The shared static layout renders a Georgia county selector (default Bibb/FIPS
+13021, plus All counties). `county-filter.ts` validates and stores the preference
+in `sessionStorage` under `civicpulse.county`; it is independent of auth and never
+changes authorization. Choosing a county saves the preference and navigates to
+its `/counties/<slug>/` summary; All counties opens `/counties/`. Both navigation
+and static routes use `GEORGIA_COUNTY_HUBS` from the canonical county reference in
+`county-scope.ts`. The header does not dispatch `countychange` before navigation,
+avoiding competing calendar/request-directory reloads. Storage failures do not
+block navigation, but the preference may reset on the next page. Detail links
+and admin forms keep their full subject; choosing a county leaves that page.
+Opening a named county summary directly also synchronizes the header and session preference to that county. The summary pathname is matched only against the canonical county slugs, never arbitrary input.
+
+`/county-data.json` is built solely from public snapshots. Its keys pair a record
+kind and UUID with known county FIPS codes. The explicit slug registry in
+`src/data/county-coverage.ts` classifies local organizations/maps; public affiliations, calendars/events, and request
+organization links propagate that coverage. Unclassified affiliations keep a
+person unclassified. Election race/question jurisdictions classify explicit
+county references; result reports and turnout use their own county fields.
+Do not treat SOS registered-office counties or mailing addresses as service areas.
+Extend `county-coverage.ts` when another county has verified coverage; a hub's
+curated selections establish relevance, not exclusive service coverage. Regional
+library maps and statewide district maps remain available across counties.
+Unknown and statewide records remain discoverable.
+
+The geography index is presentation metadata, never a visibility allowlist.
+Signed-in discovery still uses existing permission-checked RPCs; restricted IDs
+and metadata never enter the public index. Filtering happens before people,
+site-search and request-directory pagination. Historical archive URLs retain
+their all-county page boundaries and hide only known out-of-area entries.
+Account synchronization and a general county-assignment schema are not added.
+
+### County community hubs and statistics
+
+All 159 county pages share `components/counties/CountyHub.astro` and
+`DemographicCharts.astro`. Bibb’s existing local curation and map feature remain;
+all counties use the same 59-measure profile, six headlines, three comparisons,
+18 age bands, race/ethnicity chart, three poverty intervals, and eight topic tables.
+
+Postgres is the source of truth. `county_geographies`,
+`county_statistic_topics`, `county_statistic_indicators`,
+`county_statistic_sources`, and `county_statistics` normalize identities,
+definitions, units, official-source provenance, and numeric observations.
+`county_statistic_records` is a security-invoker public projection. Source files
+are official Census bulk downloads; imported Bibb values match all 59 prior
+checked-in figures. Source checksums, variables/calculations, retrieval dates,
+periods, counts, components, ACS margins and SAIPE confidence intervals survive
+in REST, MCP and downloads. No displayed values fall back to TypeScript literals.
+
+The build reads ordered anonymous pages of 500 from the public projection once,
+then joins each county to Georgia (13000). It rejects missing measures, headline
+slots, comparison periods or sources; absent data must use an explicit
+unavailable/suppressed observation, never a zero. Dev caches expire after 30
+seconds. All five tables invalidate the existing rebuild state on changes.
+Database and MCP edits are live immediately; static pages/exports update after
+rebuild. `/admin/statistics/` uses admin RLS and optimistic timestamp checks.
+
+The cached statistics snapshot includes per-FIPS groups, one Georgia indicator
+lookup, shared age/poverty chart maxima, and the county-plus-Georgia download
+arrays. All county pages and CSV/JSON endpoints, including Bibb's separate routes,
+reuse these indexes instead of filtering the full 9,440-row array repeatedly.
+Rows are shared by reference; downloads retain the public reader's state-first
+FIPS order. Completeness, six-headline and matching comparison-code/period/source
+checks run before the snapshot is published. Only available observations affect
+shared chart scales; suppressed/unavailable values keep their existing semantics.
+The snapshot and every derived index expire together after 30 seconds in dev;
+production builds retain them for their anonymous build client. Public database
+credentials, fetch pagination and static rendering remain unchanged.
+
+Each county exports `statistics.csv` and `statistics.json` with its 59 rows
+and the matching 59 Georgia rows. `/statistics/data.csv` and `data.json`
+contain all 9,440 observations. `/statistics/` searches live database records
+using `search_county_statistics`; the same RPC and public projection are REST
+accessible. Both MCP catalogs expose statistics through `search_site` with
+`type=county_statistic` or `county_statistic_catalog`. The compact catalog
+also has dedicated discovery/search/admin-edit tools. See
+[county statistics](backend.md#county-statistics) and [MCP](mcp.md).
+
+The 2025 Population Estimates Program supplies population, age, sex, race and
+housing-unit figures; ACS covers 2020–2024; poverty uses 2024 SAIPE; land and Census
+counts use 2020; business sources use 2023 CBP and 2024 Nonemployer Statistics.
+Age percentages are derived from counts. Race and ethnicity overlap. Direct ACS
+estimates retain 90% margins; derived shares retain components rather than a
+fabricated margin. Figures from different periods are labeled separately.
+
+### Profile build requests
+
+`organization-build-data.ts` shares production organization and affiliation
+promises by anonymous build client across profiles, organization readers and
+directory generation. The organization stream selects the existing full public
+organization fields in database `name,id` order; profile affiliation projections
+remain explicitly limited to `id,slug,name,role`. Affiliation pages retain
+`person_id,organization_id` order. Profiles and directory assembly still apply
+their public-person/readable-organization allowlists before using relationships.
+Failed streams reject every dependent consumer, rather than publishing partial
+data. Development deliberately bypasses these production caches so each read
+retains its existing freshness. `build-rows.ts` holds the unchanged sequential
+500-row reader; its previous profile-module export remains available.
+
+People and organization profiles share one in-flight public profile snapshot per
+production build. People, organizations and affiliations load in three parallel
+streams, each fetching stable, ordered pages of 500 rows sequentially. Profiles
+join the snapshot in memory instead of sending requests for each person or
+organization. The anon client and explicit public-person filter remain in use;
+unlisted/private people never enter the snapshot. A configured backend failure
+fails the build instead of publishing profiles with missing affiliations. Dev
+requests reload the snapshot so edits remain visible.
+
+### Production transport and capacity
+
+Cloudflare's zone-level `always_use_https` setting is enabled for `civpulse.org`
+(October 26, 2026). HTTP URLs redirect to the same HTTPS hostname, path and query
+before reaching static assets or Workers. This is managed Cloudflare state, not
+an Astro redirect; local development continues to use HTTP. Verify with
+`curl -I 'http://www.civpulse.org/people/?q=test'` and follow the redirect to check
+the HTTPS response.
+
+The minimum edge TLS version is 1.2; TLS 1.3 remains enabled. R2 custom domains
+also require TLS 1.2 (including the previously older overrides on
+`data.civpulse.org` and `cdn-dev.civpulse.org`). Cloudflare sends
+`Strict-Transport-Security: max-age=2592000` on HTTPS responses, including static
+assets and R2. The policy applies to each responding hostname: `includeSubDomains`
+and preload remain off because the zone includes external mail-tracking hosts
+and wildcard routes. Do not enable either without checking every affected host.
+The unproxied Supabase `api.civpulse.org` endpoint manages its own TLS/HSTS.
+These settings do not require a paid Cloudflare plan. Check TLS 1.2/1.3 access,
+rejection of TLS 1.0/1.1, HTTP redirects and the HSTS header after changes.
+
+The hosted CivicPulse database was resized from Nano to Micro on October 26,
+2026: memory increases from 0.5 GB to 1 GB at the same $0.01344/hour rate. Resizing
+restarts the project; verify project health and a public Data API query afterward.
 
 ### Runtime short-link exception
 
@@ -73,6 +492,39 @@ See [backend.md](./backend.md) for schema, RLS, visibility, and search details.
 
 ## Visibility model
 
+### Search engine indexing policy
+
+`src/lib/indexing-policy.mjs` supplies one static HTML/sitemap policy. The shared
+Layout emits `robots: noindex, follow` for the following utility shells, including
+requests with query strings. The same paths are omitted from the sitemap.
+Other public HTML uses the default indexable behavior without a robots meta tag.
+
+| Route family | Indexing policy | Public discovery destination |
+| --- | --- | --- |
+| `/signin/`, `/signup/`, `/account/` | Noindex | Public civic directories |
+| `/admin/` and descendants | Noindex | Published public records |
+| `/oauth/` and descendants | Noindex | AI connection guide `/docs/ai/` |
+| `/search/`, `/history/` | Noindex, including query results and revisions | Public directories and record pages |
+| `/maps/view/`, `/people/view/`, `/elections/view/` | Noindex, regardless of session or requested record visibility | Public `/maps/<slug>/`, `/people/<slug>/`, `/elections/<slug>/` pages |
+| `/calendar/view/`, `/requests/view/`, `/legislation/view/`, `/legislation/vote/`, `/legislation/session/` | Noindex, including live public viewers | Published `/records/{events,requests,bills,votes,sessions}/<uuid>/` pages |
+| Exact `/404`, `/404/`, `/404.html` | Noindex | Valid public URLs, including IDs starting with `404`, remain indexable |
+| Home, about, guides, county hubs, public profiles/maps/elections, directories and `/records/` archives/details | Indexable and included in the sitemap | Self-canonical public pages |
+| Public browsing tools `/calendar/`, `/documents/`, `/elections/results/`, `/finances/`, `/statistics/` | Indexable, queryless canonical, included in the sitemap | Their public directory/report content |
+
+Generated JSON assets remain omitted from the sitemap under its existing rules.
+Cloudflare short links `/l/*` retain their separate response-level noindex policy.
+Pretty restricted map rewrites serve the same noindex viewer HTML. No request-time
+visibility decision is made while rendering HTML: a shared UUID shell remains
+noindex even when its current record is public. Published record URLs keep their
+own public indexing policy.
+
+`robots.txt` continues allowing crawling so engines can observe noindex. Meta tags
+work in Astro dev, preview and static hosting; duplicate `_headers` rules are not
+needed for these HTML pages. Noindex is a discovery hint, not access control:
+existing RLS/RPC gates and the public/unlisted/private rules below still enforce
+access. Sitemap omission alone does not prevent indexing, and removal can wait
+until a crawler revisits the page. See [Google's noindex guidance](https://developers.google.com/search/docs/crawling-indexing/block-indexing).
+
 Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 | Value | Meaning |
@@ -90,10 +542,10 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   silently omitted for anonymous visitors.
 - Calendars and events: each calendar belongs to one organization (an
   organization can have many) and each event belongs to one calendar. An event
-  is only visible when both it and its calendar are visible. `/calendar/` browses
-  and filters events by organization/calendar through `search_events`; unlisted
-  and private events use the `/calendar/view/?id=<uuid>` shell gated by
-  `get_event`.
+  is only visible when both it and its calendar are visible. Anonymous `/calendar/`
+  browsing uses static month files; signed-in browsing uses `browse_calendar_events`.
+  Public event pages are `/records/events/<uuid>/`; unlisted/private links use
+  `/calendar/view/?id=<uuid>` gated by `get_event`.
 - Meetings are calendar events marked `is_meeting`. Admins add notes, transcripts,
   attendance, votes, and attachments at `/admin/meetings/`. The event viewer
   loads these records through `get_meeting`; private meeting files are served
@@ -112,6 +564,21 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   so hidden elections never leak into prerendered HTML. Early-voting days and
   deadlines are calendar events tagged with the election, so they appear on the
   community calendar and link back to the election.
+  Store contests for the same election together, including races outside Bibb
+  County. The static detail page and UUID viewer use the header's session county
+  (Bibb by default). Select All counties, then return from the county directory
+  to the election to see the full ballot.
+  The ballot and turnout charts have no independent county selectors. Charts
+  render the pinned turnout snapshot for the selected county, or separate county
+  groups for All counties, without combining counts or falling back to another
+  county when data is missing. Header changes navigate to the county summary;
+  reopening the election uses the saved preference.
+  Search, person candidacies, admin
+  editing, and `get_election` retain every visibility-permitted contest. A direct
+  contest/question anchor reveals only that out-of-area race, with a notice,
+  without changing the saved county preference. The frontend geographic
+  policy in `election-scope.ts` uses the 2026 Macon-Bibb composite ballot's district
+  list; review it when district boundaries change. This is presentation, not RLS.
 - Articles: external URLs with titles and many-to-many links to people and
   organizations. Runtime “News & articles” lists on profiles distinguish subjects,
   authors, publishers, and mentions. Hidden associations never enter static HTML;
@@ -120,6 +587,23 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
   handled by `@astrojs/sitemap` with a filter for admin/auth/viewer routes.
 
 ## Auth and admin
+
+- `/admin/publish/` requests a manual production rebuild through the `publish`
+  Supabase Edge Function. Every request verifies the user's token with Auth and
+  checks `public.is_admin()` using that token. The function calls a secret
+  Cloudflare Workers Builds Deploy Hook for `civpulse-web-new` on `main`;
+  Cloudflare runs the existing migration checks, build, and deploy commands.
+  Build status is read from Cloudflare using a server-only Workers CI Read token.
+  Only selected status fields are returned, never build environment variables,
+  raw logs, credentials, or the hook URL. No service-role key or new tables are
+  needed. See [development.md](./development.md#manual-publishing-setup).
+
+- Database writes to static-content tables set a protected rebuild flag and
+  increment its revision. Supabase Cron invokes a dedicated Edge Function every 20 minutes to
+  reconcile the saved build ID and request the existing production Cloudflare
+  build hook when needed. A database lease prevents overlapping checks. Only a
+  confirmed successful deployment clears its captured revision; concurrent edits
+  and failed builds stay pending. Completion is checked on the next scheduled run. See [automatic publishing setup](development.md#database-driven-publishing).
 
 - Auth pages: `/signin/`, `/signup/`, `/account/` (client-side forms).
 - Admin: `/admin/organizations/`, `/admin/people/`, `/admin/layers/`,
@@ -130,15 +614,28 @@ Maps, layers, calendars, and events all have `public | unlisted | private`:
 
 ## MCP server
 
-`apps/mcp` is a separate Cloudflare Worker that exposes a remote Model Context
-Protocol server at `https://mcp.civpulse.org/mcp`. AI agents authenticate to it
+`apps/mcp` provides the tool/auth source for the Supabase `mcp` Edge Function,
+bundled into `supabase/functions/mcp/handler.js`. It exposes a remote Model Context
+Protocol server at `https://api.civpulse.org/functions/v1/mcp`. AI agents authenticate to it
 with **OpenID Connect / OAuth 2.1** through the Supabase Auth OAuth 2.1 server
 (a consent page lives on the static site at `/oauth/consent/`). Each tool call
 forwards the user's access token to Supabase, so RLS applies exactly as it does
-in the web app — reads follow visibility and writes require an admin. The Worker
+in the web app — reads follow visibility and writes require an admin. The function
 never uses the service-role key. See [mcp.md](./mcp.md).
 
+Georgia source reads use the separate `apps/georgia-source` Cloudflare Worker.
+It runs the shared Georgia adapter against a fixed official API origin and exposes
+only validated session, member, vote-list and vote-detail reads. It has no database
+binding, Civic Pulse credentials, or import capability. The authenticated MCP
+function requests normalized public source data from it without forwarding the
+user's token. The frontend remains a static Astro build.
+
 ## Profile media
+
+Public meeting documents use a separate R2 publication archive and runtime search
+Worker, described in [public-documents.md](./public-documents.md). The archive is
+disabled until explicitly configured. It does not change the static Astro
+hosting model or automatically copy private meeting attachments.
 
 `apps/media` is a separate Cloudflare Worker at `media.civpulse.org`, bound to
 R2 bucket `civpulse-media` in the Kerry Personal account. The Astro site remains
@@ -159,8 +656,378 @@ checking references in both the database and deployed builds.
 
 ## Account roles and registration
 
-Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. When email confirmation is enabled in Supabase, the confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Saved preferences are planned, not implemented.
+Anyone can register at `/signup/` with an email, password (at least 8 characters), and optional name. When email confirmation is enabled in Supabase, the confirmation returns to `/account/`; allow that URL in Auth redirect settings. New accounts have the `user` role, with the same civic content access as anonymous visitors. Unlisted UUID links remain accessible to both; discovery of unlisted content and all private content require an admin. Account-saved preferences remain planned; the header county preference is stored only for the browser tab's session.
 
 `public.admins` remains the only source of admin authority; user-editable metadata never grants roles. Admins use `/admin/users/` to search registered accounts and promote another user. The `admin_list_users` and `promote_user_to_admin` RPCs check `is_admin()` on every call, use an empty search path, and expose no service key. Promotion is immediate without a token refresh. Account profiles are readable only by their owner or admins.
 
 Verify with `ACCOUNTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/accounts-db.test.ts`. Fixtures roll back.
+
+## Records request tracking
+
+`/requests/`, `/requests/view/?id=<uuid>` and `/admin/requests/` are static Astro
+shells with browser RPC data. This follows the runtime calendar pattern: saved
+request content is live without a rebuild, while new frontend code requires a
+deploy. Organization profiles link to a filtered request directory; the Account
+page links to managed requests. Viewer routes are excluded from the sitemap.
+No request identity, private file metadata or ownership history enters HTML at
+build time. Creation is admin-only; owners and admins manage existing requests.
+
+## Legislative records
+
+`/legislation/`, its session directory, bill/session/vote UUID viewers, and
+`/admin/legislation/` are static Astro shells. Browser RPCs fetch legislative data,
+so saved records appear immediately without embedding hidden content in HTML.
+UUID viewer routes are excluded from the sitemap. Person profiles load historical
+votes and sponsorships alongside office terms. Existing local meeting/attendance
+records remain independent. See [backend.md](./backend.md#legislative-records).
+
+### Public map snapshots
+
+Public map pages, the explorer and homepage previews share build-generated
+`/map-data/maps/<id>-<sha256>.json` layer manifests and
+`/map-data/layers/<id>-<sha256>.json` GeoJSON files. The anon build client exports
+only explicitly public maps and layers through the existing RPC access gates.
+Geometry is paginated sequentially and exported once per layer, preserving full
+coordinate precision, feature IDs/properties, per-map styling and presentation.
+External public GeoJSON is captured at build time into content-hashed assets;
+upstream source changes appear only after rebuild. External downloads have a
+10 MiB byte cap and 30-second timeout; malformed geometry fails publication.
+Only selected layers
+are downloaded; homepage previews use only public default-visible layers.
+
+A public anonymous map load needs no map/layer RPC unless its manifest indicates
+unlisted layers, which are never exported. Signed-in map views consult the live
+layer RPC to preserve private/unlisted access; only layers still returned as
+public reuse the complete published layer, including name, description, style,
+presentation, attribution and geometry, so readable evidence and the interactive
+view stay on one snapshot until rebuild. The RPC's returned IDs and visibility
+remain authoritative: omitted layers stay omitted, newly restricted layers use
+their live gated configuration, and new layers without a snapshot remain live.
+UUID map viewers retain the live map,
+layer and geometry gates. No auth, RLS, or backend schema changes are involved.
+
+Configured backend errors, invalid/truncated pages or changing feature totals
+fail publication. All public routes/endpoints share one snapshot per build.
+Development reuses the snapshot for 30 seconds to avoid re-exporting geometry
+for every asset request. No generated data is checked into Git. Static map JSON
+is omitted from the sitemap. Cloudflare serves JSON with nosniff and a five-minute
+revalidation cache rather than a year-long immutable cache: after a visibility
+change, publish again to remove the previous files. Previously downloaded public
+data cannot be recalled; private/unlisted data must never be made public as a
+workaround. Old open pages may need a reload following publication.
+
+### Public profile section snapshots
+
+Parallel legislative reads fill indexed slots, then assemble resource keys in
+the explicit terms/sessions/bodies/sponsorships order. RPC completion order must
+not affect serialized profile JSON or its content-hashed asset path.
+
+After public exports complete, profile sponsorship assembly builds one office-term
+index of positions in the shared sponsorship array. Each profile looks up its
+distinct term IDs and sorts only the matched positions, retaining the global
+export order without scanning every sponsorship for every person. Repeated terms
+do not duplicate rows. A profile with votes but no matching terms still gets the
+shared legislative resources and an empty sponsorship list; empty profiles retain
+their existing empty sections. Export visibility gates and source rows are unchanged.
+
+Public person and organization pages reference content-hashed JSON under
+`/profile-data/`. Office terms, candidacies, article associations, meeting choices,
+and legislative voting/sponsorship data are exported once per build with three
+bounded request workers. The new anonymous-only `export_public_profile_rows` RPC
+returns ordered pages of at most 500 public projections. It sets an empty search
+path, rejects user JWTs and does not grant authenticated execution. Existing UUID
+and signed-in profile readers retain their original access checks and behavior.
+Only explicitly public people and public related records/parents enter exports;
+legislative metadata/sponsorships use the existing anonymous browse gates.
+
+The asset builder keeps owner-to-asset lookups separate from unique files. Equal
+JSON bodies share `/profile-data/assets/<sha256>.json` across people and
+organizations, including one common empty snapshot. Serialization is memoized for
+shared source objects and equal bodies are hashed once. The route emits each
+unique file once; public owner lists remain the publication boundary.
+
+Repeated legislative terms/sessions/bodies can use a shared reference asset when
+the deduplicated JSON saving exceeds 1 KiB after counting its file and pointers.
+Price distinct primary bodies after vote transformations, rather than counting
+owners: identical nonempty owners stay inline when extraction adds bytes/fetches.
+The calculation reuses serialized shared fields instead of repeating large arrays.
+Empty/small or single-body reference groups stay inline.
+Only the existing public reference arrays are extracted, in their fixed order;
+sponsorships remain profile-specific. Anonymous loading hydrates the reference
+file before rendering sections. Required-file failures reject the load, without
+falling back to a broader live query. Signed-in and UUID views keep their live
+gates and do not fetch these profile files. HTML, the file pool and the updated
+reader must publish together; older open pages may need a reload after release.
+
+The public renderer reuses its current cards, pagination and filters with static
+data. One owner snapshot supplies all sections, including empty sections, with
+an additional shared reference request only when extraction is worthwhile.
+Legislative initial results contain 20 grouped entries; later unfiltered pages
+are separate static files. Full raw choices download only when a visitor uses a
+legislative filter, so a long history does not inflate the initial page download.
+Bill UUIDs, vote counts, latest-vote ordering, source choice wording and coverage
+labels are preserved. Date grouping is recalculated in America/New_York in the
+browser, including year-precision service ends and current candidacy statuses.
+
+Configured export errors fail the build. Development snapshots expire after 30
+seconds. JSON files are excluded from the sitemap, served with nosniff and a
+five-minute revalidation cache, and never checked into Git. Public imports,
+article associations, office/election changes, vote edits and visibility changes
+require Publish. Publish promptly after making previously public data restricted;
+old downloads cannot be recalled, and open pages may need reloading after a
+publication removes their previous asset URLs. No new service/compute size or
+privileged build credentials are required.
+
+### Public directory snapshots
+
+Organization affiliation text and election contest/candidate/question text append
+to per-record buckets in their existing input order. Buckets are joined once when
+projecting the search text; accumulated arrays are not recopied on every insertion
+or spread into a potentially very large function argument list. Public parent and
+person allowlists still apply before any relationship text enters a bucket.
+
+Anonymous people, organization and election directory controls read one
+content-hashed JSON file per directory from `/directory-data/`. People retain
+24-card pagination, type filters and four name sorts; organization/election
+keyword results retain their 24/50-card caps. Public organization affiliations,
+election contests, public candidate names/parties/statuses and ballot questions
+remain searchable. Signed-in searches retain the existing live RPCs and their
+permission checks, including hidden relationship discovery where allowed.
+UUID viewers are unchanged. No restricted record or search-only relationship
+text is exported: the build uses the anon client, explicit public parent filters
+and public-person allowlists. Organizations have no visibility field.
+
+Search runs in the browser with English word stemming, quoted phrases, `OR`
+and `-excluded` terms, plus literal substring matching. Local relevance favors
+exact/substring titles then alphabetical ties; it is not PostgreSQL `ts_rank`,
+so ranking and some language tokenization differ from live signed-in searches.
+People still sort by the selected first/last name ordering. Election browsing
+recomputes upcoming/past ordering using today's America/New_York date.
+
+Build reads use stable 500-row pages and fail publication on backend errors,
+preventing a partial directory from replacing a good deployment. The three JSON
+assets have five-minute revalidation and are excluded from the sitemap. Failed
+asset loads show an error; they never silently fall back to backend searches.
+Publishing after imports/edits refreshes directories and profiles together.
+There is no new runtime service or paid resource. Builds add paged public
+affiliation reads and three static assets; election search reuses cached, gated
+election-detail reads instead of broadening ballot-question table permissions; measure bytes/build time as
+data grows. Static copies already downloaded cannot be recalled after hiding a
+record, so publish promptly when restricting visibility.
+
+### Static public calendar and event pages
+
+The anonymous calendar reads `/calendar-data/` files: a small calendar/month
+manifest and one content-hashed file per occupied month. Spanning events appear
+in every occupied month; New York dates, DST and exclusive midnight ends use the
+same helpers as the live calendar. Empty months need no request. Date navigation,
+organization/calendar/category filters, multi-calendar selection, colors, keyword
+filtering and Month/Agenda views remain in the browser. Signed-in browsing uses
+the existing gated RPCs, with unchanged discovery permissions.
+
+Public event pages are prerendered at `/records/events/<uuid>/`, including title,
+time, description, location, public election link, and public meeting notes,
+transcripts, attendance and votes. Browser hydration and legacy viewers reuse
+a lazily loaded month detail file with the same public meeting content, video
+settings and attachment metadata. Anonymous legacy UUID viewers use
+a separate public event index; IDs absent from that index still use `get_event`
+and `get_meeting`, preserving unlisted direct links and private gates. A missing
+published file is an error, never a silent backend fallback. Signed-in viewers
+retain live RPCs and admin edit links. Attachment bytes and signed download URLs
+are never embedded; Storage checks access when the download button is clicked.
+
+The homepage reads published future events and selects today's next four at
+runtime, so dates advance without a daily rebuild. The ICS feed reuses the same
+public build snapshot, retaining UIDs and subscription URLs. Events need public
+event, calendar and optional election parents; hidden calendar names, event text,
+participant IDs and relationship facts never enter public snapshots. Build reads
+are paged, bounded and shared; any configured backend failure stops publication.
+Assets revalidate after five minutes and are excluded from the sitemap; public
+event HTML is included. Publish after imports/edits and promptly after restricting
+visibility. Previously downloaded public copies cannot be recalled.
+
+There is no new hosting service, bucket or instance resize. Public visits replace
+calendar/event/meeting RPCs with static asset reads. Builds add public meeting
+export pages and event HTML/JSON assets; monitor build minutes and static file
+counts as imports grow. Signed downloads retain their existing Storage costs.
+
+### Indexable public record archive
+
+`/records/` links to paginated (50 records per page) archives under
+`/records/{bills,votes,sessions,events,requests}/page/<number>/`. Record pages
+use `/records/<kind>/<uuid>/`: the category is readable and the UUID keeps the
+URL stable when a title changes. Each record and archive page has its own title,
+description and self-canonical and is included by the existing sitemap integration.
+The corresponding live directories and the footer link to these archives.
+
+One shared build snapshot uses the anonymous public client. Legislative records
+and relationships come from paginated `browse_legislation` discovery calls with
+no direct-ID, bill, person or vote context (those contexts can admit unlisted
+records). Calendar export uses `p_public_only`; only discovered public requests
+are hydrated. Public event/calendar/election and request visibility is checked
+again before projection. Backend errors, malformed/duplicate/truncated pages and
+changing counted totals fail the build. Detail hydration uses three workers.
+
+Astro escapes source text; source links permit HTTP(S) only. Pages project public
+facts, notes, transcripts, recorded choices and source links. They never serialize
+request owners/transfers, file storage paths or expiring signed URLs. Files and
+editing remain in the existing live viewers, which retain their current RPC/auth
+rules. No RLS changes, migration, service key or server adapter is introduced.
+Unknown/deleted IDs have no generated page and return the existing static 404.
+
+Publication remains a snapshot: visibility changes and deletions require a rebuild
+to remove previously published pages, like public profiles and map exports. A
+previously downloaded public page cannot be recalled. The export validates paging
+and response gates but is not a transaction spanning concurrent editorial changes;
+rebuild after edits settle. Development caches the snapshot for thirty seconds.
+
+The calendar UI and public record archive share the same public calendar snapshot,
+including batched meeting records, instead of hydrating every meeting twice.
+Public archive event pages host the interactive event viewer and prerendered
+meeting text at one canonical URL. Detail JSON is packed by month to reduce
+static file counts; ordinary calendar month browsing never downloads transcripts.
+
+### Election results and turnout
+
+`/elections/results/` is a static shell using live `get_election_results` RPC data.
+This explicit runtime reporting surface makes saved snapshots available immediately;
+existing election/profile content still follows its normal rebuild behavior.
+Original result photographs/PDFs live in private Supabase Storage and never enter
+prerendered HTML. The AI agent transcribes originals, and admin-only MCP tools
+validate and save immutable cumulative reports. See [election results](election-results.md).
+
+### County demographic charts
+
+`DemographicCharts.astro` renders age/race bars and poverty interval plots from
+that same Census snapshot. `county-charts.ts` progressively adds keyboard-accessible
+topic tabs; without JavaScript all chart sections remain visible. No charting
+dependency or runtime data request is needed. Tables and CSV retain all measures.
+
+### Build-time legislative page scheduling
+
+Profiles and the archive share public legislative tables in memory for one
+anonymous build client. The build-only `export_public_legislation_page` RPC
+returns up to 500 rows with exact totals, counting lightweight IDs and sort keys
+before projecting the selected page. It reuses existing recursive discovery
+helpers, requires public rows, rejects user JWTs, grants only anonymous execute,
+and has an empty search path. No direct-ID or unlisted context is accepted.
+Browser RPCs, their caps, table RLS and write grants remain unchanged.
+
+At most two legislative page requests run across all tables; the existing
+six-request HTTP ceiling remains. Pages are assembled in original offset order.
+Changing totals, invalid/repeated IDs, hidden rows, malformed/truncated pages or
+persistent backend errors fail publication. Cache entries live only in the build
+process; development expires them after thirty seconds. Row/page/timing logs
+identify future regressions. No disk cache or privileged credentials are used.
+
+Confirmed statement timeouts from public build reads retry at most twice with
+short backoff and identical credentials/parameters. Permission/validation errors
+never retry. Profile exports keep 500-row pages normally; a confirmed timeout
+splits only that range into sequential 100-row reads through the same anonymous
+export RPC. Short pages preserve EOF, and any denied/malformed/failed subpage
+stops the whole export. Timeouts are never increased and records are never omitted.
+
+### Static public legislation directory
+
+Anonymous bill and session browsing uses hashed JSON under
+`/directory-data/legislation/`. The manifest carries public terms, sessions and
+the first 25 bills; further searches, sorting, filters and Load more read public
+bill shards of at most 500 rows, grouped by term. Term filters download only their matching shards.
+The build reuses the existing anonymous legislation export and per-build table
+cache shared by archives and profiles; it adds no database migration or privileged
+credential. Projected rows omit raw import/provenance payloads. Existing recursive
+discovery gates exclude unlisted/private records and hidden parents before export.
+Signed-in browsing and all UUID viewers retain their existing live RPC gates.
+Missing assets fail visibly without a live anonymous fallback. Each deployment
+publishes a fresh snapshot; admin edits need a rebuild.
+
+### Static public bill, vote and session details
+
+Published legislation details use the existing `/records/bills/<uuid>/`,
+`/records/votes/<uuid>/` and `/records/sessions/<uuid>/` URLs with full
+prerendered headings, metadata, sources, section navigation and first 25 rows per
+section. Additional rows are hashed static JSON, loaded 25 at a time. The build
+reuses the anonymous discovery exports shared with profiles, directories and the
+archive. Calendar-to-session links use the existing anonymous
+`browse_legislation` discovery gate with no direct context. No per-record query,
+service credential, new migration or runtime rendering is introduced.
+
+Only discovery-approved public rows and parents enter these files. Raw import
+payloads, membership review notes and unlisted/private children are excluded.
+Vote counts are computed from published choices; official counts and coverage
+remain separate, with a mismatch warning when applicable. Relations link to
+published details only when their target was admitted to the same snapshot.
+
+Legacy UUID viewers check a hashed per-kind public-ID index and redirect anonymous
+callers to published details, preserving section anchors. Unknown/unpublished IDs
+retain the live RPC gate, including direct unlisted access and admin-only private
+access. Signed-in readers use the live viewer. The explicit `live=1` link offers
+the existing context-gated reader without a redirect loop. A missing index or
+section file fails visibly without silently querying the backend.
+
+### Static public records requests
+
+Anonymous `/requests/` discovery reads a hashed public directory file under
+`/directory-data/`; search, stage/organization filters and 25-row pagination run
+in the browser. The build shares one anonymous request discovery/detail snapshot
+with the archive. Published `/records/requests/<uuid>/` pages prerender request
+facts, timeline, independent fee totals, related links and safe shared-file names
+and sizes. Only discovered public requests enter these files; explicit projection
+omits ownership, transfers, private files, storage paths and signing URLs.
+
+Legacy public UUID links redirect through a hashed public-ID index. Unlisted and
+private UUID readers, signed-in discovery, managed requests and editing remain
+live behind existing RPC checks. Signed-in visits to published details use the
+live viewer; an explicit live link preserves that path for anonymous readers.
+
+Download is deliberately live: a click re-reads `get_records_request`, resolves
+the requested file only from its current permitted file list, then requests the
+existing 60-second Storage signature. Both the RPC and Storage RLS enforce current
+request/file access. Already-issued signatures retain their existing short expiry.
+A visibility/file-policy change requires a rebuild to refresh published metadata,
+but new downloads immediately recheck access. No backend policy, bucket exposure,
+service credential, migration or hosting-plan change is introduced.
+
+## School finances
+
+`/finances/` is a static Astro shell with live public-key RPC search for Bibb
+school payroll and recipient payment summaries. Separate staged releases preserve
+source checksums, filters and exact amounts; publication is atomic. Payroll
+creates separate public person records per source row, flagged for identity
+review, and dated school affiliations. Existing people/affiliation rebuild
+tracking publishes those profiles. Finance search needs no static bulk export or
+server adapter. Originals remain in collector evidence. See
+[school finances](school-finances.md).
+
+## Person relationship publication
+
+Related-person lists follow the existing static profile model. A paginated anon
+read of `person_relationships` is grouped once for both directions, and both
+endpoints must occur in the public people snapshot. No hidden relationship IDs,
+names, labels or source URLs are serialized. Signed-in profiles use the
+visibility-aware RPC and replace the public list only on success. Private
+endpoints require admin access; ordinary signed-in relationships can include
+public and unlisted endpoints only. UUID viewers
+load relationships only after the parent person gate succeeds. Anonymous static
+profiles make no extra relationship RPC; no-JavaScript visitors see public links.
+The new table participates in object history and frontend rebuild tracking.
+
+## Cited vote outcome publication
+
+Effective meeting outcomes are a gated read projection over immutable imported
+votes and append-only cited observations. Calendar meeting snapshots explicitly
+allowlist evidence fields (excluding editor accounts), and public profile exports
+include the same outcome/source history. Static HTML, profile JSON and live
+meeting/person readers use the same projection. Existing visibility and bounded
+history pagination remain in force; observation inserts trigger a frontend rebuild.
+
+## Authenticated MCP upload relay
+
+The MCP HTTP handler passes its verified caller token, configured project URL and
+public key to an internal upload context. Existing upload-management operations
+relay bounded 256 KiB chunks; no web SSR endpoint or browser token handoff is added.
+Private SQL state owns transport Location/lease/hash receipts across handler
+instances, while original bytes remain in Storage. Every server HEAD/PATCH checks
+the configured destination and exact session metadata; no arbitrary URL/headers
+are accepted from a tool caller. Existing finalization remains the public metadata
+boundary. No canonical attachment or public-archive copy is created by staging.

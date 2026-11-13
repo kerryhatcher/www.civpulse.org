@@ -31,6 +31,8 @@ Select **Civpulse shared local backend** in the chat's Environment picker.
 The versioned configuration is `.codex/environments/environment.toml`.
 Its setup runs `bun run worktree:setup`: installs the locked dependencies and
 reads the original checkout's running Supabase with `supabase status -o env`.
+When a Podman Docker shim cannot initialize its local runtime, setup retries
+against the configured `DOCKER_HOST` Unix socket using temporary runtime state.
 Only the local API URL and anon key are written to the worktree's gitignored
 `apps/web/.env.local`. Existing `.env` files are preserved; `.env.local` takes
 precedence for these two settings. Rerunning setup refreshes those settings.
@@ -38,7 +40,11 @@ precedence for these two settings. Rerunning setup refreshes those settings.
 Start the backend once with `bun run db:start` in the original checkout, then
 use the environment's **Start web** action (`bun run dev:worktree`) in each
 worktree. This starts only Astro and leaves the shared backend running.
-If the backend is stopped, setup explains where to start it and can be rerun.
+If the backend is stopped or its container socket is inaccessible, setup still
+installs dependencies and explains where to start the backend. It does not
+refresh `.env.local` in that case; start the backend and ensure the container
+socket is accessible, then rerun setup before using the site. Any existing
+`.env.local` is left unchanged.
 Astro selects an available port; use the URL printed by that worktree.
 
 All worktrees share database rows, Auth users, and schema. Run backend lifecycle,
@@ -52,6 +58,217 @@ worktrees so Codex can discover them there.
 
 ## Verifying a change
 
+### Automatic SOS results
+
+Run `bun run results:check` and `bun run results:test`, then
+`ELECTION_RESULTS_TEST_DATABASE_URL=<isolated-local-db> bun test scripts/tests/sos-automation-db.test.ts scripts/tests/sos-results-db.test.ts scripts/tests/sos-cadence-db.test.ts`.
+The cadence test checks hourly silence/delay, the exact transition boundary,
+late activation, unchanged attempt provenance, freshly renewed old publication
+backlog versus recent queued work, separate stale-update detection, end-exclusive
+pausing, and a signed
+activation pg_net queue entry that is rolled back before any outbound request.
+The HTTP collector integration uses actual local Auth/PostgREST with synthetic
+source/R2 boundaries: save local `supabase status -o json` privately and set
+`SOS_RESULTS_LOCAL_STATUS=<status-file> bun test scripts/tests/sos-collector-integration.test.ts`.
+It rejects nonlocal endpoints and removes only its own fixtures. Never commit
+the status file or print its keys. CI runs this against its disposable stack.
+
+For browser QA, set `SOS_RESULTS_TEST_URL` to an Astro dev server and optionally
+`SOS_RESULTS_PUBLIC_PATH` to a synthetic public election slug, then run
+`bun test scripts/tests/sos-results-browser.test.ts`. The tests cover desktop/light,
+mobile/dark, automatic updates, corrections, retained focus/filter/disclosures,
+offline/error last-good data, selected-scope downloads and stale responses.
+With the same dev-server environment, run
+`bun test scripts/tests/precinct-county-browser.test.ts scripts/tests/election-scope-browser.test.ts`
+for county switching, delayed map loads, viewer reinitialization, out-of-county
+ballot links and unavailable county coverage.
+Also exercise anonymous and signed-in access against real local Auth and run
+`bun run check` and `bun run build`. Follow the [runbook](sos-results-automation.md)
+for feed measurements, container setup, cache/CORS checks, and main-first release.
+
+### Editorial policy and corrections
+
+Run `bun test scripts/tests/corrections.test.ts`, check/build and
+`CORRECTIONS_TEST_DIST=apps/web/dist bun test scripts/tests/corrections.test.ts`.
+Tests cover fixed report origin, safe public URL context, query/fragment stripping,
+private viewer/foreign-origin rejection, confirmed policy wording, sitemap and
+built record-report links. Verify repository issues remain enabled before changing
+the channel; do not invent a contact route to make tests pass.
+
+Browser-test About/footer discovery, policy anchors and a record's prepared form
+at desktop/mobile widths without JavaScript, anonymously and with an actual admin
+session. Opening the GitHub link must remain a read-only form/sign-in check: do
+not submit a test issue or message anyone. Inspect UUID viewers with sensitive
+dummy query/fragment markers and ensure those values are absent from report URLs.
+No database fixtures or production data changes are needed.
+
+### Bibb topic guides
+
+Run `bun test scripts/tests/bibb-topic-hubs.test.ts`, check/build and
+`BIBB_TOPICS_TEST_DIST=apps/web/dist bun test scripts/tests/bibb-topic-hubs.test.ts`.
+Projection coverage checks public parents/candidate/affiliation gates, explicit
+geography, source order, bounded previews and missing-data cases. Built coverage
+checks distinct titles, canonicals/indexability, sitemap discovery, contextual
+links and official-resource URLs.
+
+At desktop/mobile widths, enter through Bibb's county overview with JavaScript
+disabled, follow each question guide and a contextual record/map, and return
+through breadcrumbs. With JavaScript, verify Browse discovery and an actual local
+admin session produce the same public guide content with no console errors or
+overflow. No production content edits are needed. The official linking-page
+review is manual and dated: do not claim it refreshes automatically during builds.
+
+### Record provenance
+
+Run `bun test scripts/tests/record-provenance.test.ts scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts`,
+then check/build and
+`PROVENANCE_TEST_DIST=apps/web/dist bun test scripts/tests/record-provenance.test.ts`.
+Coverage includes separate source publication/retrieval facts, unknown verification,
+invalid dates, reference-style Markdown citations, escaped raw HTML, unsafe URLs
+and public-only source selection. The built check confirms missing date metadata
+does not become a build/edit date on person/election pages.
+The CI step checks helpers; built-output and browser checks remain local release
+verification. Run `PROVENANCE_BROWSER_URL=http://127.0.0.1:4332 bun test scripts/tests/record-provenance-browser.test.ts`
+against a local static preview with local Auth configured. Synthetic RPC responses
+verify anonymous/actual signed-in UUID biography/event sources, live event date
+and source synchronization on public permalinks, meeting scope notes and denied
+viewer gates at desktop/mobile widths. Attendance-vote detail pages omit the
+profile-history exclusion note while retaining their source/date provenance.
+Runtime biography extraction runs only after a successful person access gate and
+includes citations on permitted unlisted/private biographies. Public prerendering
+still uses the separate publicity-filtered helper; denied viewers show no record.
+
+In a browser with JavaScript disabled, verify a cited biography, sourced office,
+election date source and meeting/vote context, plus explicit unknowns. Repeat at
+desktop/mobile widths and after actual admin sign-in; live card enhancement must
+retain date semantics and vote exclusions/denominator notes. Temporary local
+citations/private source fixtures must be restored/removed before the final build.
+
+### Readable profile evidence
+
+Run `bun test scripts/tests/profile-evidence.test.ts scripts/tests/profile-section-data.test.ts scripts/tests/profile-sections.test.ts`,
+then check/build and
+`PROFILE_EVIDENCE_TEST_DIST=apps/web/dist bun test scripts/tests/profile-evidence.test.ts`.
+The built check compares every public owner's initial evidence and all history
+pages with the matching JSON asset, including externalized legislative choices.
+Projection tests cover hidden related records, source dates/roles/choices and
+unsafe source URLs; existing tests retain live access selection and vote filters.
+Run `PROFILE_EVIDENCE_BROWSER=1 bun test scripts/tests/profile-legislation-browser.test.ts`
+with local Chrome for the real-DOM legislative initialization regression. It
+retains 20 published choices and the link to all 21 entries while loading and
+after a synthetic RPC failure, then retries successfully and reinitializes without
+duplicating or removing the ordinary history link. This test bundles the actual
+enhancement module with an in-memory RPC boundary and needs no database/server.
+It also checks office, candidacy and article sections after empty live reads:
+published history navigation remains available even if current records were
+removed, while sections without a published history link still hide when empty.
+
+At desktop/mobile widths, disable JavaScript and read office sources, candidacy
+election links, article roles/dates and vote context; follow history pagination.
+With JavaScript, verify successful loading hides each fallback without duplicate
+cards and Load more/filters still work. Deliberately return malformed snapshot
+JSON to verify the public evidence remains on an enhancement failure. Repeat with
+an actual admin login and temporary private/unlisted related records: they may
+appear only in the gated live view, never in static HTML/history. Clean up local
+fixtures and rebuild before completing verification.
+
+### Readable map evidence
+
+Run `bun test scripts/tests/map-build-data.test.ts scripts/tests/map-data.test.ts scripts/tests/map-evidence.test.ts`,
+then `bun run check`, `bun run build` and
+`MAP_EVIDENCE_TEST_DIST=apps/web/dist bun test scripts/tests/map-evidence.test.ts`.
+The built-output check follows every layer continuation and compares all titles
+and ordering with the exact geometry/presentation manifest. Unit coverage checks
+public filtering, shared geometry/external reads, fail-closed source errors,
+source dates, configured-only fields and unsafe URL rejection.
+Run `bun test scripts/tests/map-build-source.test.ts` for protocol-relative HTTPS,
+bounded streaming, missing bodies and invalid JSON. External geometry tests cover
+coordinate shapes and nested collections; explicit null geometry remains valid
+GeoJSON. Blank/unsafe feature URLs fall through to valid source credits, and
+local-path links must resolve to the local origin.
+Access-check regressions also vary live names/title fields/attribution against
+published metadata for anonymous and signed-in callers. Authorized public layers
+retain their complete published configuration; omitted layers are never restored,
+restricted layers stay live/gated, and RPC failures never fall back to snapshots.
+
+Browser-test a public map without JavaScript at desktop/mobile widths: read its
+credits and source dates, follow a large layer's feature pages and return to the
+map. With JavaScript, compare feature names/source notes to the map directory and
+exercise layer selection. Repeat with an actual local admin login, and confirm
+restricted map/layer content remains absent from static text even when visible
+to the administrator through a gated UUID viewer. Do not publish private fixtures
+or infer a date to make a missing-source case look complete.
+
+### Open Exhibition visual system
+
+The shared layout uses self-hosted Anton for the Civic Pulse masthead, Barlow
+Condensed for headings, and Barlow for body text. Global tokens define ultramarine,
+lime, and light reading surfaces. A CSS `prefers-color-scheme: dark` media
+query swaps semantic surface/text tokens to navy, pale text, and lime accents.
+The browser applies preference changes immediately without JavaScript or stored
+state. Matching media-qualified theme-color metadata styles browser chrome.
+Map layer colors remain source-defined; do not invert map tiles or imagery.
+The homepage topic links progressively enhance into a detail panel through
+`home-exhibition.ts`; native anchors and all directory links remain usable when
+JavaScript is disabled. Topic hashes support direct links and browser history.
+No new server rendering, data queries, or visibility rules are introduced.
+
+Verify the homepage at desktop and phone widths, each topic and browser Back,
+search submission, election fallback when no callout is active, and map-directory
+links. The homepage groups events by Eastern calendar date without dropping
+events or visibility badges. The full calendar is linked from Upcoming dates.
+Test both color-scheme preferences, including a change while the page is open,
+plus selected calendar buttons, fields, focus states, and map popups. Check a directory, reading page, and signed-in admin page because the
+fonts, colors, header, and footer are shared. Keep election timing tests and
+anonymous/signed-in event checks intact.
+
+Accessibility regression checks for this visual system:
+
+- Keep `--control-line` separate from decorative `--line`; empty input and textarea boundaries must contrast at least 3:1 against their surfaces in both themes.
+- Inspect map attribution after Leaflet CSS loads on `/maps/`, a standalone map, and an election page. The shared dark override must win the cascade.
+- At 320px check element overflow as well as document width, particularly the masthead and topic labels.
+- Activate a map directory entry using Enter, Tab through its detail actions, and close using Escape and the close button. Focus should return to the originating entry without a trap.
+- Check People ranking before pagination anonymously and signed in; officials and candidates must precede Other while alphabetical sorts remain available.
+- Verify search reset clears query/type/page but preserves county, and that calendar disclosures and election jump links remain keyboard operable.
+
+MCP consolidation has two catalogs: the original `/mcp` and opt-in
+`/mcp/v2`. Run `bun test scripts/tests/mcp-common-reads.test.ts
+scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts
+scripts/tests/mcp-handler.test.ts` for
+schema parity, RPC/write dispatch, operation-specific validation and endpoint
+discovery/challenges. `SUPABASE_TELEMETRY_DISABLED=1 bun run mcp:test`
+runs real local OAuth/CRUD fixtures and compares both versions' search/retrieval
+responses with regular-user and admin tokens, including hidden/private records.
+It also runs the complete CRUD suite against v2 with independent disposable
+fixtures, checking real transactions, relationship deletes, partial updates,
+rollback and regular-user write denial. Unit tests compare every consolidated
+branch, including office/office-term writes and feature ID precision. It also
+checks v2's signed-out and account-directory denial. No hosted credentials
+are used. Run `bun run mcp:check`, `bun run mcp:build`, and `bun run plugin:build`
+to validate and regenerate both catalogs and the deployable Edge Function bundle.
+Then run `bun run plugin:claude:sync` to refresh the Claude Code plugin's copies
+of the shared skills and references (`bun run plugin:claude:check` verifies them).
+See [the migration guide](mcp.md#compact-catalog-v2).
+
+Related-read tests compare all 15 original handlers with their compact selectors,
+including status envelopes, exact parent IDs, nullable calendar filters, combined
+office-term filters, singular candidates and admin-only table reads. The local
+suite also verifies private-map/election/person gates and unlisted-article
+exclusion through related readers on both endpoints. No schema migration is
+needed; all selectors reuse the caller's existing client and guarded handlers.
+
+Profile generation fetches affiliations in sequential groups of 100 people,
+with stable pagination and joined organization details. This avoids hundreds
+of simultaneous Data API requests as the people directory grows. The build
+uses the public client and existing RLS; an affiliation read error stops the
+build instead of silently publishing a profile with missing affiliations.
+Run `bun test scripts/tests/people-build.test.ts` for batching, pagination,
+and error propagation checks.
+
+For the public document archive Worker, local tests and activation sequence, see
+[public-documents.md](./public-documents.md). Publication and content search ship
+disabled; builds do not upload or backfill any meeting files.
+
 1. `bun run check` — `astro check` must report 0 errors.
 2. `bun run build` — the static build must succeed and write `apps/web/dist`.
 3. Exercise the flow in the browser and watch the console for errors.
@@ -62,8 +279,22 @@ worktrees so Codex can discover them there.
 
 ### Ad-hoc browser checks
 
-Playwright is not a dependency of this repo. For quick verification, run a
-throwaway Node script from the Astro app (or a checkout that has Playwright)
+For the public election-report turnout cards, start Astro and run
+`ELECTION_RESULTS_TEST_URL=http://127.0.0.1:4323 bun test scripts/tests/election-results-browser.test.ts`
+(substitute the actual port). The test uses Playwright with system Chrome,
+anonymous desktop/phone contexts, and synthetic RPC responses; it writes no
+database rows. It checks area selection, independent voters/ballots, missing and
+zero registration, percentages, source notes, console health and horizontal
+overflow. Without the URL it skips. Screenshots are saved under `/tmp/issue-111-*.png`.
+After deployment, also check the saved WA2 and EM1 reports against live data.
+The same suite covers independent photo/PDF and structured-turnout availability:
+structured-only, photo-only, both, neither, each request failing/loading, no
+matching county rows, source provenance and all 101 fixture rows over two pages.
+Availability screenshots are saved under `/tmp/issue-106-*.png`. After deployment,
+check the November 3 results page anonymously at desktop and phone widths too.
+
+Playwright is a root devDependency for the election-report browser regression.
+For quick verification, run a throwaway Bun script from the repo
 against the dev server, using the system Chrome channel — the bundled Chromium
 download may be absent:
 
@@ -73,7 +304,7 @@ bunx playwright screenshot --channel=chrome --viewport-size=1280,900 \
 ```
 
 For scripted flows, `chromium.launch({ channel: 'chrome' })` works the same way.
-Add `playwright` as a devDependency only if you are committing tests.
+Use `bun run` for scripted flows.
 
 ### Homepage election callout
 
@@ -93,7 +324,7 @@ changing the election or early-voting data does. Multiple qualifying elections
 appear in Election Day/name order.
 
 Verify the day before the window (hidden), its first day (visible), early-voting
-start, Election Day (visible with today's status), and the following day
+start, Election Day (visible), and the following day
 (hidden), including a visitor outside the Eastern time zone. Check missing and
 non-public dates, multiple elections, narrow screens, keyboard focus, and the
 election-details link. Confirm anonymous and signed-in visitors receive the same
@@ -124,6 +355,15 @@ resolve to the new destination after an edit without rebuilding.
 false --strict-vars false` from `apps/web` after changing bindings. Run
 `bun test scripts/tests/short-links.test.ts`; use `SHORT_LINKS_TEST_DATABASE_URL`
 for the opt-in database permissions/concurrency tests documented in backend.md.
+The Short links GitHub workflow runs the redirect tests and Worker type checks on
+pull requests and pushes to main. Database concurrency and permission checks run
+against the local test database before release.
+
+The October 25 short-link release also pins patched transitive dependencies:
+`body-parser` 2.4.0 and Undici 7.30.1 for consumers on major version 7. Undici 8
+consumers keep their existing major version. These root `overrides` resolve the
+Trivy release blockers without suppressing advisories. The version-scoped rule
+uses Bun lockfile version 3; Bun 1.4.3 is verified for installation and CI.
 
 ## Secret scanning
 
@@ -195,50 +435,259 @@ The site is static, so admin changes are only visible publicly after
 ### Automatic Cloudflare deployments
 
 Cloudflare Workers Builds connects `kerryhatcher/www.civpulse.org` on `main` to
-both existing Workers in the Kerry Personal account. Preview deployments are
-disabled. The build root is `/` so Bun installs the workspace lockfile; both
-builds use Node 24 and the existing Cloudflare-managed `Astro-starter` build token.
+the static website Worker in the Kerry Personal account. Preview deployments are
+disabled. The build root is `/` so Bun installs the workspace lockfile;
+the build uses Node 24 and the existing Cloudflare-managed `Astro-starter` build token.
 No deployment credentials are stored in the repository or GitHub variables.
 
 | Worker | Domain | Build command | Deploy command | Watch paths |
 | --- | --- | --- | --- | --- |
 | `civpulse-web-new` | `www.civpulse.org`, `new.civpulse.org` | `bun run check:migrations && bun run check && bun run build` | `bun run check:migrations && bun run --cwd apps/web wrangler deploy` | `apps/web/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
-| `civpulse-mcp` | `mcp.civpulse.org` | `bun run check:migrations && bun run mcp:check` | `bun run mcp:deploy` | `apps/mcp/**`, `package.json`, `bun.lock`, `supabase/migrations/**`, `scripts/check-migrations.mjs` |
+
 
 The web build has `PUBLIC_SUPABASE_URL` set to the hosted project URL and
 `PUBLIC_SUPABASE_ANON_KEY` set to its current `sb_publishable_…` key. Despite the
 historical variable name, this accepts Supabase publishable keys as well as
-legacy anon keys. MCP uses that same publishable key in its Wrangler `vars`.
+legacy anon keys. The MCP Edge Function uses the public anon key injected by Supabase.
 These are public values; authorization still uses the caller's user token and
 RLS. Using the publishable format avoids JWT secret-scanner false positives
 without suppressing scanner rules.
 
-Manage these settings in each Worker's **Settings → Build** in Cloudflare.
+Manage these settings in the web Worker's **Settings → Build** in Cloudflare.
 Build status appears on the GitHub commit checks and in Cloudflare build logs.
-Supabase's GitHub integration deploys migrations separately. Both Workers Builds
-pipelines run `bun run check:migrations` before building and deploying. The guard
+Supabase's GitHub integration deploys migrations and declared Edge Functions. The web
+pipeline runs `bun run check:migrations` before building and deploying. The guard
 waits up to ten minutes for the official Supabase GitHub app's `Supabase Preview`
 check to succeed for the checkout's full commit SHA. A migration-history mismatch,
-failed/skipped/cancelled check, API error, or timeout blocks deployment. A missing
+failed/skipped/cancelled check, unrecoverable API error, or timeout blocks deployment. A missing
 check never counts as success. Keep the Supabase production integration enabled
 for every push to `main`; after resolving a failure, rerun the Cloudflare build.
 Keep schema changes backward compatible with the currently deployed frontend.
 
+The guard and its CI tests also reject duplicate migration filename versions
+before deployment. Concurrent migration PRs must reserve distinct timestamps;
+never rename or remove an applied production migration to resolve a collision.
+
 The guard uses GitHub's public checks API, without database credentials. An optional
-`GITHUB_TOKEN` with Checks read permission raises API rate limits (set it as a
-build secret, never a `PUBLIC_*` value). API rate limiting blocks deployment and
-requires a retry or token configuration. Local `bun run deploy` and
+read-only `GITHUB_TOKEN` raises API rate limits (set it as a
+build secret, never a `PUBLIC_*` value). Cloudflare build runners can share an
+egress IP and exhaust GitHub's anonymous quota. The guard retries confirmed
+HTTP 403/429 rate limits up to four times within its ten-minute budget, respecting
+`Retry-After` and `x-ratelimit-reset`; secondary limits without a reset use
+exponential backoff starting at one minute. It never treats a rate-limit response
+as migration success. Permission-denied 403s still fail immediately. Rate limits
+beyond the budget report the next retry time and block deployment; configure a
+repository-scoped fine-grained token with the minimum required read access as the
+Cloudflare build secret `GITHUB_TOKEN` when persistent rate limiting occurs.
+Do not copy a broad personal CLI token into build settings or disable the gate.
+Local `bun run deploy` and
 `bun run mcp:deploy` use the same guard; unpushed commits cannot pass it.
 `bun test scripts/tests/check-migrations.test.ts` covers mismatch rejection,
-trusted-app/commit matching, reruns, waiting, API failures, and timeout behavior;
-the Migration deployment gate workflow runs these tests on pushes and PRs.
+trusted-app/commit matching, reruns, waiting, API failures, timeout behavior, and
+rate-limit recovery/budgets; the Migration deployment gate workflow runs these
+tests on pushes and PRs.
+
+Production's Cloudflare build secret `GITHUB_TOKEN` uses the fine-grained token
+**civpulse-cloudflare-migration-checks**, restricted to `kerryhatcher/www.civpulse.org`,
+with read-only Metadata permission and no user or write permissions. Because this
+repository is public, its check-run endpoint accepts this narrower token; access
+was verified against the guard's exact API request. It expires **October 23, 2027**.
+Rotate it in GitHub's fine-grained token settings and replace the encrypted
+Cloudflare **Settings → Builds → Variables and secrets** value before expiration.
+If the repository becomes private, re-evaluate the required Checks read access.
+
 Keep production's applied migration files on `main`. Applying a feature-branch
 migration to production before its file reaches `main` blocks subsequent Supabase
 checks with “Remote migration versions not found in local migrations directory.”
 If this happens, restore the exact applied file from its source branch after
 comparing it with `supabase_migrations.schema_migrations`; do not delete history
 entries or rerun applied SQL to make the check pass.
+
+### Guarding production migration pushes
+
+Develop and test new migrations locally with `bun run db:migrate` or in a
+Supabase preview branch. Merge the migration PR to `main` before production
+application; the existing Supabase GitHub integration remains the normal release
+path. Never apply feature-branch schema SQL to production through MCP, the SQL
+editor, a direct CLI command, or migration-history repair.
+
+For a manual production push, use `bun run db:push --dry-run`, then
+`bun run db:push` from a clean, current `main` checkout. The wrapper
+`scripts/push-production-migrations.mjs` rejects feature branches, unpublished or
+stale commits, and changed/staged/untracked/ignored migration files or config.
+It queries the canonical GitHub repository for the current `main` SHA on every
+invocation; a cached `origin/main`, a CI branch variable, or failed network request
+cannot authorize a push. Detached checkouts must also match current `main`.
+
+The CLI target is pinned to production project `drzcrodqflzkzzbqsags`. Only
+`--dry-run` and `--include-all` are accepted; target/workdir overrides, seed data,
+and custom roles are not supported by this production command. Authentication
+uses the existing local Supabase credentials, never a committed key. Dry runs
+perform the same checks. This wrapper guards the repository command; it cannot
+intercept someone using separate database credentials, MCP, or the dashboard.
+The agent instructions prohibit those bypasses. Keep production credentials out
+of feature-branch automation and retain Supabase's `main` integration.
+
+`bun test scripts/tests/push-production-migrations.test.ts` uses disposable Git
+repositories and a fake CLI callback to prove rejected pushes never reach
+Supabase. The Migration deployment gate workflow runs these tests alongside the
+existing checks that block frontend deployment after failed migration validation.
+
+The October 26 llms.txt deployment hit this condition for
+`20261026182152_legislative_history_performance_compat.sql`, applied from the
+legislative vote-history branch before PR #25 merged. The recovery restores that
+exact file from commit `1da2477`; its MD5 is
+`19f7659880d9319ea6322d3079aa74ba`, matching production's stored SQL. This is a
+history reconciliation only: do not reapply it or mark it reverted. Its guard
+skips fresh databases until the later legislative schema exists; the originating
+feature branch includes the dependency-ordered follow-up for fresh installations.
+After merging the restored file, require a successful Supabase check for the new
+`main` commit and a successful Cloudflare build before verifying `/llms.txt`.
+
 Redeploy the web Worker after editing prerendered public content in the admin.
+
+### Manual publishing setup
+
+The [Publish admin page](/admin/publish/) calls the `publish` Supabase Edge
+Function. It verifies the user with Auth, checks `public.is_admin()` on each
+request, and either requests a production build or returns its status. It reuses
+active production builds, including builds started by Git pushes or other admins.
+Database change tracking and automatic publishing are described below.
+
+Configure the following **Supabase Edge Function secrets**, never `PUBLIC_*`
+variables, source files, or browser configuration:
+
+| Secret | Value |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | Kerry Personal account ID (`6d837580a4d0641139ecada9e74076b8`) |
+| `CLOUDFLARE_WORKER_TAG` | Immutable tag for `civpulse-web-new` (`2bf0468f854440eebeb10454be815eaa`), not the Worker name |
+| `CLOUDFLARE_BUILDS_READ_TOKEN` | **User-owned** Cloudflare API token with **Workers Builds Configuration → Read** (API permission: Workers CI Read), restricted to this account; used only for status |
+| `CLOUDFLARE_DEPLOY_HOOK_URL` | A Workers Builds Deploy Hook URL for **`civpulse-web-new`, branch `main`** |
+| `PUBLISH_ALLOWED_ORIGINS` | Optional comma-separated exact origins; defaults to `https://www.civpulse.org,https://new.civpulse.org` |
+
+Create the hook under **Workers & Pages → civpulse-web-new → Settings → Builds →
+Deploy Hooks**. The hook URL is a credential. Store it and the read token in a
+gitignored env file, then upload with
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase secrets set --project-ref drzcrodqflzkzzbqsags --env-file /absolute/path/to/publish.env`.
+Do not print or log that file. Supabase injects its own `SUPABASE_URL` and public
+`SUPABASE_ANON_KEY`; the function does not need a service-role key.
+
+Create the status token under **My Profile → API Tokens → Create Token → Custom
+token**. Choose **Account → Workers Builds Configuration → Read**, include only
+**Kerry Personal**, and give it a descriptive name such as **Civic Pulse publish
+build status**. Account-owned tokens are not supported by the Builds API and
+return `Invalid token` even when Cloudflare's token-verification endpoint accepts
+them. Verify status access before saving the token; no edit permission is needed.
+
+The `functions.publish` entry in `supabase/config.toml` declares the function for
+the existing Supabase GitHub deployment integration. For a deliberate standalone
+deployment, run `bun run check:migrations` first, then
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions deploy publish --project-ref drzcrodqflzkzzbqsags`.
+The handler also validates the session itself; keep `verify_jwt = true` in hosted
+configuration. Deploy the frontend through the existing guarded pipeline.
+
+Keep both existing Cloudflare commands unchanged:
+`bun run check:migrations && bun run check && bun run build` and
+`bun run check:migrations && bun run --cwd apps/web wrangler deploy`.
+Hook-triggered builds still check the exact Git checkout's Supabase migration
+status. Rebuilding the same commit needs no new commit or new migration check
+when its existing check is successful. The publish function never overrides
+build commands or accepts branch/Worker choices from callers.
+
+The admin page polls every 10 seconds during a build and pins the returned build
+ID in session storage until it finishes. On a fresh visit it loads the latest
+`main` build. Status reads reject build IDs belonging to another Worker/branch.
+Only a stopped build with outcome `success` is shown as published; failures,
+cancellations, skipped builds, and unknown outcomes never imply publication.
+A failed status read disables publishing until a successful refresh. Ambiguous
+publish requests are not retried automatically. Cloudflare deduplicates hook
+requests while queued/initializing; there is no database lock across concurrent
+admins. Save edits before publishing and publish again after an active build if
+you edited content during it. The separate scheduled process tracks unpublished revisions;
+manual builds can leave the flag pending and cause one extra scheduled rebuild.
+
+For local development, use a separate hook/Worker if testing real deployments;
+never point routine local tests at the production hook. Use a gitignored env
+file with `PUBLISH_ALLOWED_ORIGINS=http://localhost:4321` (substitute the actual
+Astro origin) and run
+`SUPABASE_TELEMETRY_DISABLED=1 bunx supabase functions serve publish --env-file /absolute/path/to/publish.env`.
+`bun run publish:check` type-checks the handler. `bun run publish:test` exercises auth, scope isolation, sanitized statuses,
+request failures, and deduplication with mock upstream calls and never deploys.
+
+### Database-driven publishing
+
+Supabase Cron runs `frontend_private.invoke_rebuild()` every 20 minutes, at minutes 0, 20 and 40 of
+each hour (UTC), using `pg_cron` and `pg_net`. It invokes the `rebuild-frontend` Edge Function
+with a short-lived HMAC signature. GitHub Actions only tests the function; it no
+longer schedules rebuilds or needs database/deploy credentials.
+
+Each invocation claims a five-minute database lease, then checks a previously
+tracked Cloudflare build, if any. A successful production build clears only its
+captured revision. Newer edits remain pending and can start another build in that
+same scheduled pass. A running build stays tracked. A confirmed failed, canceled or
+skipped build is retired with the flag still set and retried on the next 20-minute run. Unknown
+statuses, mismatched Worker/branch/ID, upstream errors and ambiguous hook requests
+never clear the flag. An existing manual/Git-push build or deduplicated hook is
+never adopted, because it may have read data before the captured revision.
+
+The function makes bounded API requests and returns without waiting for the build.
+Cloudflare still performs the existing guarded migration check, Astro build and
+deployment. Completion is reconciled at the next scheduled invocation, so the flag
+can remain pending after the new site is already live. A timeout or crash releases
+coordination through lease expiry; stored build IDs survive between invocations.
+Lost hook responses may cause an extra build after the untracked build finishes.
+Manual/Git-push builds can also cause one redundant scheduled publication.
+
+Setup, after merging all rebuild migrations to **main**:
+
+1. Let the Supabase integration apply `20261125000100_frontend_rebuild_tracking`, `20261125000200_frontend_rebuild_cron`, and
+   `20261125000300_frontend_rebuild_twenty_minutes` and deploy `rebuild-frontend`, declared
+   in `supabase/config.toml`. The later version follows the repository's existing
+   future-dated migration history. Initial state is dirty to publish existing data.
+   Production application must use the main integration or guarded `bun run db:push`.
+2. Reuse the existing Supabase Edge secrets `CLOUDFLARE_ACCOUNT_ID`,
+   `CLOUDFLARE_WORKER_TAG`, `CLOUDFLARE_BUILDS_READ_TOKEN` and
+   `CLOUDFLARE_DEPLOY_HOOK_URL` from manual publishing above. The function receives
+   `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` automatically from Supabase; do
+   not add them to GitHub or frontend settings. The Astro build still uses anon.
+3. In **Supabase Dashboard → Vault**, create `frontend_rebuild_token` with a
+   cryptographically random token (at least 32 characters), and
+   `frontend_rebuild_url` with
+   `https://drzcrodqflzkzzbqsags.supabase.co/functions/v1/rebuild-frontend`.
+   Vault is the only store for the signing token; no duplicate Edge secret is
+   needed. Never print or commit the token. Vault values are environment-specific;
+   local/preview databases must use their own function URL/token and a separate
+   test Worker/hook. No production endpoint or secret is seeded by migrations.
+   Missing Vault setup makes the Cron run fail with a configuration message while
+   leaving pending data untouched.
+
+The Edge Function uses `verify_jwt = false` because it validates its dedicated
+Cron signature through the service-role-only `verify_frontend_rebuild_signature`
+RPC. An anon key or admin JWT cannot invoke it. The signature covers
+`frontend-rebuild:<Unix seconds>` with HMAC-SHA256 and expires after five minutes.
+`pg_net` queues contain only the signature/timestamp, never the reusable Vault
+token. Keep clocks synchronized. Rotate the token in Vault; Edge verification
+uses the current Vault value automatically. No CORS access or caller-selected
+Worker/build/branch is offered.
+
+Inspect the **Cron** Dashboard job `frontend-rebuild-hourly` (the historical name
+is retained; its schedule is now `*/20 * * * *`) and
+`cron.job_run_details`. Cron success means an HTTP request was queued; inspect
+`net._http_response` for that request ID and the Edge Function logs to verify the
+invocation succeeded. Cloudflare build logs remain authoritative for deployment.
+An operator can run `select frontend_private.invoke_rebuild();` in a trusted
+Supabase SQL session to reconcile early; it uses the same lease and authentication.
+Do not invoke it against production until the main migration and function deploy
+have completed. Follow the same main migration guard for standalone function deploys.
+
+Run `bun run rebuild:check`, `bun run rebuild:test`, and
+`REBUILD_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/frontend-rebuild-db.test.ts scripts/tests/frontend-rebuild-cron-db.test.ts`.
+The timer-only rollback test also works after the earlier rebuild migrations are
+applied: `REBUILD_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/frontend-rebuild-timer-db.test.ts`.
+The database tests apply feature migrations and fixtures in rollback-only
+transactions against local Supabase at the preceding migration; queued HTTP
+requests never commit or leave the database. Never point them at production.
+Finish with `bun run check`, `bun run build`, and a browser check of the admin guide.
 
 ### Profile media development and deployment
 
@@ -265,3 +714,939 @@ retained as a rollback origin; the Worker route takes precedence. To roll back,
 remove the www Worker route and revert its Wrangler declaration before the next
 build. The apex and HTTP redirects continue sending visitors to HTTPS www.
 The public ICS feed remains `/events.ics` on both hostnames.
+
+## Supabase MCP deployment
+
+MCP executes at `https://api.civpulse.org/functions/v1/mcp`. Source is in
+`apps/mcp/src`; run `bun run mcp:build` to regenerate the committed
+`supabase/functions/mcp/handler.js`. The Supabase GitHub integration deploys
+functions declared in `supabase/config.toml` on production pushes, after migrations.
+No new deployment credential is required. `bun run mcp:deploy` is the manual
+CLI path and requires Supabase CLI authentication. The former Cloudflare MCP
+build trigger was removed; its Worker serves only compatibility redirects.
+
+### Georgia source reader
+
+Run `bun run georgia:check` and `bun run georgia:test` for the shared source
+adapter and its public reader. Deploy the reader first with
+`bun run georgia:deploy` (requires Cloudflare Wrangler authentication), then
+rebuild/deploy MCP. The reader is a separate Worker configured in
+`apps/georgia-source/wrangler.jsonc`; deployment is independent of the Astro site
+and Supabase integration. The function's `GEORGIA_SOURCE_READER_URL` override
+must be an owned HTTPS reader endpoint without credentials or a query string.
+Its default is `https://civpulse-georgia-source.kerryhatcher.workers.dev/`.
+
+On October 26, 2026, the same adapter completed locally in Bun and Deno in under
+half a second, but hosted Supabase requests stalled at the Georgia handshake.
+Root-page and unauthenticated API probes also timed out from Supabase in
+`us-east-2` and `us-east-1`; DNS resolved the same address as locally. Forcing
+HTTP/1.1 did not help. Cloudflare reached the origin and completed the shared
+adapter successfully. This isolates the failure to the hosted network path;
+it does not establish whether the upstream cause was routing or a firewall.
+The scoped reader avoids that path without retries or longer Georgia timeouts.
+
+After deployment, exercise all four resources through the authenticated hosted
+MCP tool. For vote `21003`, member `4942`, verify `attendance: true`, original
+`source_choice: Yea`, and the official source URL. Local success alone does not
+validate the hosted network path. Both transports reject redirects without
+following them; use `redirect: manual` because Workers does not support `error`.
+
+Run `bun run mcp:check`, `bun run scripts/build-mcp.mjs --check`,
+`bun test scripts/tests/mcp-handler.test.ts`, and `bun run mcp:test` (local DB)
+before release. The routing checks cover gateway path stripping, OAuth discovery
+and allowed origins. The full suite covers user/admin RLS, refresh and revocation.
+Browser CORS responses use literal values from the approved origin allowlist;
+they never echo an unchecked request header. Unknown origins receive 403.
+
+## Maintaining the public AI setup guide
+
+`apps/web/src/pages/docs/ai.md` is the visitor-facing guide for AI plugins, MCP,
+OAuth, skills and troubleshooting. `DocsLayout.astro` links it from every docs
+page; the visitor and admin guides link to it instead of duplicating setup steps.
+The guide points to `CivicPulse/civpulse-openai`, `CivicPulse/civpulse-pi` and
+`CivicPulse/skills`. Verify repository READMEs before changing release/install
+instructions. Pi now documents Git-package installation, OAuth through `/mcp`,
+workflow commands and its default write guard. The shared repository documents
+seven standalone public-source skills, installed with `bunx skills add`.
+Distinguish those seven skills from the four live-service workflows bundled
+with the OpenAI and Pi plugins; MCP authorization is a separate setup step.
+Do not present private registered app bindings as public directory availability.
+
+### Records request verification
+
+Apply the records-request migration locally without resetting the shared DB.
+Run the rollback database test documented in backend.md, then verify creation as
+an admin, owner editing/transfer, public and unlisted anonymous viewing, private
+rejection, fee totals and private/shared file downloads. Check narrow and desktop
+layouts and browser console output. Synthetic fixtures must be labeled as such
+and removed after testing. Bucket enumeration must not reveal unlisted files.
+
+### History verification
+
+Apply the pending audit migrations to the local database with `bun run supabase
+migration up --include-all` (use the existing shared-backend checkout deliberately;
+do not reset it). Run the rollback-only suite with
+`HISTORY_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun
+test scripts/tests/history-db.test.ts`.
+
+In the browser, open a person or organization and choose **View history**. Check
+an expanded Before/After revision, **Load older changes**, and a relationship
+change. Anonymous and ordinary signed-in users must have the same public results.
+An admin opening **Audit log** can browse all types, including hidden/deleted
+records and editor account IDs. Verify a visibility change hides old revisions
+from public access, and that private history never enters the static build.
+History is fetched live through an RPC; profile text still follows the normal
+static-build lifecycle. No historical revisions exist before tracking is enabled.
+
+### Legislative records verification
+
+Apply pending append-only migrations to the local backend without resetting shared
+data. Run `LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-db.test.ts`, `bun run mcp:check`,
+`bun run check` and `bun run build`. Database fixtures roll back.
+
+In `/admin/legislation/`, create a term, session and body for existing organizations,
+then a bill, sponsorship, vote and member choice linked to an existing office term.
+Check `/legislation/`, the bill/vote viewers and the person's profile anonymously,
+as an ordinary user and as an admin. Verify media links, filters, session carryover,
+voice-vote restrictions, private/unlisted references, mobile layout and browser
+console health. Fictional manual browser fixtures must remain local and be cleaned
+up in reverse dependency order. Do not label a partial import as complete coverage.
+
+## Testing member voting records
+
+For video URL parsing and safe embed construction, run
+`bun test scripts/tests/meeting-video.test.ts`. With local Supabase running, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-video-db.test.ts`
+for the migration/backfill, URL and meeting constraints, visibility, admin edits
+and clearing a video. Database fixtures and schema changes always roll back.
+Run `scripts/tests/meeting-video-start-db.test.ts` with the same database variable
+for optional start-time defaults, zero/null behavior, constraints and visibility.
+
+For site search of meeting notes, transcripts and motions, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/meeting-search-db.test.ts`.
+This transactional test applies the search migration and rolls back all changes;
+it verifies punctuation, full-text matching, deduplication, live edits and
+anonymous/non-admin/admin visibility.
+
+Run `bun test scripts/tests/member-mentions.test.ts` for participant-name matching.
+The Meeting profiles CI workflow uses `bun run --bun check` to run Astro with
+Bun rather than the runner's preinstalled Node version.
+With local Supabase running, run
+`MEETINGS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-votes-db.test.ts`
+to check profile voting permissions, paging, live edits and meeting visibility.
+The database test creates fixtures and applies the voting-history migration if
+needed inside a transaction that always rolls back, preserving shared local data.
+
+For legislative presentation changes, run
+`bun test scripts/tests/legislation-display.test.ts` plus the legislative database
+suite. Check an imported partial roll call on desktop and mobile: official totals,
+member choice, exact procedural question, readable action labels, person/chamber
+links, sources, timeline, session, sponsorships, and media. Exercise collapsed
+profile filters and reset, admin record search, edit/cancel/save, and source fields.
+Use local fixture copies only; never modify live imported records for UI tests.
+
+For Georgia legislative source reads and MCP office lookup, run
+`bun run georgia:test` and `bun test scripts/tests/mcp-legislation.test.ts`
+and `bun run mcp:check`. The adapter uses only Georgia's public website handshake,
+fixed official API origin, bounded tool pages and request timeouts. Its token is
+never returned. A live source check should compare member ID, district, choice,
+source totals and attendance flag against the official page. Rebuild both the MCP
+bundle (`bun run mcp:build`) and plugin tool references (`bun run plugin:build`)
+after changing tool schemas. Refresh connected-host discovery after deployment.
+
+Profile pagination QA: on a person with more than 20 legislative choices and
+10 linked articles, move forward/back independently in both sections. The card
+count must remain bounded, first-page Previous and last-page Next must disable,
+and applying/clearing vote filters must reset only the vote page. Verify both
+public slug and UUID person viewers, anonymous and signed-in, without console
+errors. Small office/candidacy groups remain visible together.
+
+Profile RPC reads retry transport failures and HTTP 502/503/504 up to twice
+with short delays, preserving the caller's authorization and request body.
+The explicit read allowlist excludes Auth and mutations; permission errors are
+never retried or downgraded to anonymous access. Votes and articles also expose
+Retry buttons after persistent failure. Verify recovery from a failed first
+page and a failed Next request, keeping the current page intact until success.
+Also submit a filter while Next is pending, fail the newest request, and confirm
+the retained page's navigation is restored rather than left disabled.
+Run `bun test scripts/tests/profile-fetch.test.ts` for transport regressions.
+
+The build-time Supabase client limits concurrent requests to six. Static profile
+and organization pages can request many affiliations in parallel; bounding the
+shared client's requests avoids exhausting the hosted PostgREST connection pool.
+This limit applies only to prerendering, not browser data requests.
+## Legislative admin timing checks
+
+When testing a record-type switch, immediately submit a search before reference
+pickers finish loading, then edit a result. The winning request must populate
+the editor before exposing editable results; search must not cancel form setup.
+
+### Verifying public map exports
+
+Run `bun test scripts/tests/map-build-data.test.ts scripts/tests/map-data.test.ts`,
+`bun run check` and `bun run build`. Inspect `apps/web/dist/map-data/`: each public
+stored layer should have one geometry file even when linked to many maps, and
+no private/unlisted IDs or payloads should appear. Public anonymous map views and
+homepage previews fetch those files rather than geometry RPCs. Verify explorer
+selection, layer toggles, place search and popups. Also verify a private UUID map
+is denied anonymously and loads its gated geometry with an authorized account;
+unlisted UUID maps retain their existing access behavior. Use disposable local
+fixtures for access checks, and remove them after verification. Build against
+production only with public credentials and the configured public Turnstile key.
+
+### Verifying public profile snapshots
+
+For asset layout changes, run `bun test scripts/tests/profile-section-assets.test.ts scripts/tests/profile-section-data.test.ts`.
+It checks shared empty/nonempty bodies, owner lookups, unselected-owner exclusion,
+source immutability, deduplication-aware reference profitability (including identical
+vote-bearing owners), fixed reference ordering, deterministic content hashes,
+resolved URLs, vote paging/filtering, signed-in bypass and required-reference
+failure/retry. Save a fresh stabilized build's `profile-data/`, `people/` and
+`orgs/` directories outside the repo before editing. After rebuilding against the
+same data, run
+`PROFILE_ASSET_BASELINE_DIR=/tmp/saved-profile-build bun test scripts/tests/profile-section-assets.test.ts`.
+It compares every owner's expanded payload and table order while resolving old
+and new reference/page/filter URLs, rather than requiring unchanged transport URLs.
+
+Local deduplication verification preserved all 200 owner payloads and resolved
+every generated profile reference. The physical profile files changed from 200
+to 188 and raw JSON bytes from 533,493 to 515,073; 28 profiles shared one
+legislative reference file. Full local build times were 3.95 s before and 3.86 s
+after initially. The local data had no bills, legislative votes or sponsorships,
+so these are not production savings estimates.
+
+Pure asset-generation benchmarks used synthetic public-only in-memory records,
+alternated old/new execution order, and compared every expanded owner payload
+after each pair. Five measured pairs followed one warmup; median generation time
+excludes fetching data, Astro file writes and upload:
+
+| Workload | Files before / after | JSON bytes before / after | Generation before / after |
+| --- | --- | --- | --- |
+| 10,000 empty owners | 10,000 / 1 | 990,000 / 99 | 140.97 / 3.53 ms |
+| 1,000 profiles sharing 50 terms, 200 sessions and 100 bodies | 1,000 / 1,001 | 109,322,780 / 490,841 | 122.62 / 22.09 ms |
+
+These timings were rerun after the profitability fix. Repeating an identical
+nonempty owner does not multiply inline bytes: 100 identical owners now keep one
+inline file without a shared-reference request. Distinct profiles must save over
+1 KiB after deduplicating the post-vote-transformation bodies and counting the
+shared file plus each pointer's actual UTF-8 bytes.
+The reference-heavy case trades one additional file/request for removing repeated
+reference payloads. No deployment was run, so upload time is unavailable; do not
+infer it from these CPU measurements. In the browser, verify anonymous primary
+and shared-reference requests resolve, sections/votes still render, and an actual
+signed-in session performs no profile-asset reads. Check desktop and phone widths.
+
+Run `bun test scripts/tests/organization-build-data.test.ts scripts/tests/profile-build-data.test.ts scripts/tests/directories.test.ts`
+when changing shared organization/affiliation reads. Concurrent profile,
+organization and directory consumers must reuse one production stream per table
+and client, with no extra organization fields entering profile affiliations.
+Tests cover paging beyond 1,000 rows, database ordering, public-person filters,
+client isolation, later-page failure propagation, fresh development reads and
+recovery after a development failure. The synthetic three-page-per-table fixture
+uses nine requests across consumers instead of the previous five-stream layout's
+15 (people once, organizations twice, affiliations twice).
+
+Before the refactor, save the built `directory-data/`, `profile-data/`, `people/`,
+`orgs/`, `elections/` and `counties/` directories outside the repo. Rebuild against
+the same dataset and use the existing `BUILD_GROUPING_BASELINE_DIR` output check
+for directory/profile paths, hashes and HTML; compare county output too because
+its government curation uses these readers. An independent repeat exposed an
+existing race: legislative resource keys followed RPC completion order, changing
+28 profile hashes and their HTML references despite equivalent data. Resource
+assembly now uses an explicit order after reads finish; the grouping suite varies
+completion order and checks identical profile JSON/hashes. Pre-fix baselines can
+therefore differ in profile key order and asset references. Compare their parsed
+data semantically, then save a new stabilized baseline and require byte-identical
+paths, hashes and HTML across repeated builds. County output is unaffected.
+The corrected local comparison found all 894 saved files semantically equivalent:
+838 retained exact bytes/paths, while 28 profile JSON assets and 28 HTML references
+changed only resource-key order/content hashes. Two builds with stabilized
+assembly then matched all 894 paths and files byte for byte.
+
+An actual local concurrent profile/organization/directory read used 141 public
+people and 59 organizations: people requests stayed at one, organization requests
+fell from two to one, and affiliation requests fell from two to one (five total
+requests to three). One 437-page build changed from 4.53 s to 4.34 s. The local
+dataset had no bills, legislative votes or sponsorships; these timings do not
+establish production savings. Measure with the release dataset separately.
+Exercise organization affiliation and election candidate searches and public
+profiles anonymously and with a real local session, watching console errors.
+
+Run `bun test scripts/tests/profile-sections.test.ts
+scripts/tests/profile-section-data.test.ts` and
+`PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/profile-sections-db.test.ts`. The database test rolls back
+its fixtures and compares public exports and client vote grouping with existing
+read RPCs, including hidden profiles and hidden election/calendar/legislative
+parents, more than 50 meeting votes, and paged exports. Then run `bun run check`
+and `bun run build`, inspect `dist/profile-data`, and exercise anonymous and
+signed-in person/organization/UUID profiles, meeting pagination, legislative
+pagination/filters and date groups. No restricted IDs or payloads should appear
+in exports. Initial public profiles should not download the full legislative
+filter dataset. No backend fallback should conceal failed publication assets.
+
+### Verifying static public directories
+
+Run `bun test scripts/tests/build-grouping.test.ts scripts/tests/directories.test.ts scripts/tests/profile-section-data.test.ts`
+when changing directory/profile grouping. It covers exact ordered search text,
+empty groups, public relationship filtering, reversed/repeated/multiple office
+terms, source-order sponsorship matching, empty and vote-only profiles, export
+assembly and anonymous/signed-in snapshot selection.
+
+For byte equivalence, save `directory-data/`, `profile-data/`, `people/`, `orgs/`
+and `elections/` from the old build beneath a temporary directory outside the
+repo. Rebuild with the same dataset, then run
+`BUILD_GROUPING_BASELINE_DIR=/tmp/saved-build bun test scripts/tests/build-grouping.test.ts`.
+It compares relative paths and bytes, including content hashes. The grouping
+refactor matched all 416 local snapshot/public-HTML files exactly.
+
+Synthetic CPU benchmarks compared the saved old directory assembly and old
+sponsorship filter against the new functions in one process. Five measured pairs
+alternated execution order after one warmup; exact JSON output equality was
+checked for every pair. Median times:
+
+| Synthetic workload | Before | After |
+| --- | --- | --- |
+| One organization, 10,000 public people/affiliations | 148.97 ms | 3.39 ms |
+| One organization, 20,000 public people/affiliations | 453.62 ms | 7.36 ms |
+| One election, 5,000 contests and 5,000 candidates | 115.72 ms | 2.94 ms |
+| 500 profiles, three terms each, 50,000 sponsorships | 424.60 ms | 3.89 ms |
+| 1,000 profiles, three terms each, 50,000 sponsorships | 869.32 ms | 3.92 ms |
+
+These are synthetic scaling checks, including an election stress case, not
+production timing estimates. The local full build had no bills, legislative votes
+or sponsorships; its 437-page build changed from 4.74 s to 4.37 s in one comparison.
+That does not establish production savings. Measure the release dataset separately.
+In the browser, exercise organization affiliation and election candidate searches,
+plus a profile with multiple office terms, anonymously and with a local session.
+Nonempty sponsorship assembly is covered by synthetic exports when local data
+has none. Check desktop/phone layout and console errors.
+
+Run `bun test scripts/tests/directories.test.ts scripts/tests/directory-data.test.ts`
+and `PEOPLE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres
+bun test scripts/tests/people-directory-db.test.ts`, then `bun run check` and
+`bun run build`. Inspect `dist/directory-data` for hidden IDs and search-only
+private relationship text. Anonymous directory search/paging/filter changes
+must use the static file without directory RPC calls. Exercise first/last name
+sorting, kind filtering, Next/Previous/Clear, organization member/role search,
+election candidate/contest/ballot search, empty results and rapid query changes.
+Signed-in discovery and UUID viewers must retain existing permissions. Test
+private/unlisted fixtures locally and clean them up; check browser console errors.
+A missing snapshot should report failure without falling back to a live search.
+
+### Verifying the public record archive
+
+Run `bun test scripts/tests/public-records.test.ts` and, with the shared local
+backend running, `PUBLIC_RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-records-db.test.ts`.
+The database test creates synthetic records inside a rollback-only transaction;
+it checks anonymous and ordinary authenticated publication, hidden parent gates
+and retained direct-unlisted viewer access without modifying production schema.
+Then run `bun run check` and `bun run build` and inspect `dist/records` and the
+sitemap. Exercise `/records/` → a category → a record → live viewer, archive
+pagination, two distinct canonicals and missing/deleted IDs in preview. Check
+anonymous and signed-in browser states and console errors. No signed download
+URLs, file storage paths, owners or transfer history may enter record HTML.
+
+### Meeting import and resumable original QA
+
+See [meeting imports](meeting-imports.md#release-and-verification). Apply the new
+migrations locally using `bun run supabase migration up --local --include-all`;
+never apply feature SQL to production. Run the opt-in Auth/MCP/Storage integration
+suite with the local seeded admin and `.env.local` public key. The test uses the
+public Turnstile testing token from the existing local Auth configuration and
+removes its synthetic records/objects. Optional captured-original verification
+reads saved local PDFs; it does not resume source collection.
+
+Meeting-import CI requests `supabase status -o json` explicitly. Supabase's
+auto-detected default output differs between interactive agent sessions and CI;
+do not parse the default `db:status` output as JSON.
+
+The meeting-import integration job reserves TCP/UDP ports 54320–54329 with
+`net.ipv4.ip_local_reserved_ports` before checkout or dependency/image downloads.
+These fixed Supabase ports overlap Linux's ephemeral outbound-port range; without
+the reservation, an outgoing connection can make Docker's bind to 54322 fail.
+The step preserves the runner's existing reservations and changes only the
+disposable CI runner. Local developer ports and services remain unchanged. Failed
+startup prints socket owners/states and container port mappings before failing;
+it does not kill processes or ignore startup errors.
+
+### Verifying public calendar snapshots
+
+Run `bun test scripts/tests/calendar.test.ts scripts/tests/calendar-snapshot.test.ts`
+and the rollback calendar database suites in backend.md, then `bun run check`
+and `bun run build`. Check month rollover, DST, spanning/all-day events, day
+selection, Today, Month/Agenda, organization/calendar/category/text filters,
+Show all/Hide all, colors and shared calendar labels. Anonymous interactions
+read month files; signed-in views retain live gates. Public event pages and old
+UUID links must show the same public event and meeting details, including vote
+anchors, video offsets and permission-checked downloads. Test private/unlisted
+event/calendar/election parents and hidden meeting participants with disposable
+local fixtures, inspect exports for restricted IDs/text, remove fixtures, and
+check browser console errors. Missing published files must report failure rather
+than invoke live public readers. The calendar export migrations must be deployed
+before a hosted build; do not bypass the production migration gate.
+
+### Election result photo imports
+
+See [election results](election-results.md) for local database tests and the import
+contract. Run `ELECTION_RESULTS_INTEGRATION=1 bun test scripts/tests/election-results-integration.test.ts`
+against local Supabase with the seeded admin to exercise actual MCP serialization,
+Auth, private Storage, SHA-256 retries and concurrent report deduplication. Optional
+`ELECTION_PHOTO_ROOT` points to the supplied attachment folder containing
+`8-Photo-8.jpg` and `9-Photo-9.jpg`; those different byte streams must resolve to one
+April report. Originals remain private locally; disposable election/person/report
+fixtures are removed. No production connection is used.
+
+On October 26 the local backend contained unrelated migrations from other chats.
+Local verification used a temporary migration workdir containing the exact applied
+local history plus the new migration, then `migration up --db-url` pinned to
+127.0.0.1:54322. No history repairs, resets or production applications occurred.
+The 46-assertion database test, real two-photo MCP integration, anonymous/admin
+browser flow, MCP type check, plugin archive check, Astro check and static build
+passed. The build retains its existing profile-sections dynamic-import warning.
+
+The public-record archive exports up to three independent legislative table
+streams concurrently, with sequential pages inside each stream. Results are
+assembled in the original table order, keeping archive section ordering stable.
+The shared build client still caps all outbound requests at six. Build logs show
+completed tables and row counts; backend failures identify the failing table.
+This reduces publication time without raising SQL timeouts or omitting records.
+Run `bun test scripts/tests/public-records.test.ts`, `bun run check` and
+`bun run build` when changing export scheduling.
+
+### Sitemap route filtering
+
+For public title/description changes, run `PAGE_METADATA_TEST_DIST=apps/web/dist bun test scripts/tests/page-metadata.test.ts`
+after the build. It checks recorded-role/date fallbacks and all indexable HTML for
+populated descriptions, matching Open Graph values and canonical/OG URLs, plus
+subject consistency on profile/map/election details. Inspect desktop/phone directory
+headings in a browser and compare sampled record titles to their visible fields.
+Audit duplicate descriptions against the actual dataset; distinct records can
+share names, so resolve ambiguity with verified source context, never invented facts.
+
+The shared `apps/web/src/lib/indexing-policy.mjs` determines both the Layout's
+static `noindex, follow` meta tag and sitemap exclusions. Keep its route families
+aligned with the [indexing matrix](architecture.md#search-engine-indexing-policy).
+Do not block utility/viewer paths in `robots.txt`; crawlers must read their meta tags.
+
+The sitemap filter in `apps/web/astro.config.mjs` matches only the exact error-page
+paths `/404`, `/404/` and `/404.html`. Do not exclude every URL containing `/404`:
+valid public UUIDs and slugs can start with those digits. Public record details
+and paginated archives belong in the sitemap; admin/auth shells, UUID viewers
+and generated JSON assets remain excluded. Run `bun test scripts/tests/sitemap.test.ts`
+when changing the filter, then check the deployed XML against public record IDs.
+
+After `bun run build`, run
+`INDEXING_TEST_DIST=apps/web/dist bun test scripts/tests/sitemap.test.ts scripts/tests/indexing-build.test.ts`.
+This inspects every generated HTML page's robots meta, its sitemap membership,
+and crawl permission in the generated robots file. The output sweep skips unless
+the dist path is supplied. Also check the rendered sign-in/account/admin and
+UUID viewer pages anonymously and with a local session; public profile/record
+pages must remain indexable. Noindex must not change viewer RPC access outcomes.
+
+### Verifying full-site build performance
+
+Run `bun test scripts/tests/legislation-build-data.test.ts scripts/tests/public-records.test.ts scripts/tests/profile-section-data.test.ts` for shared reads, out-of-order page completion, the global two-request ceiling, and fail-closed export behavior.
+Run `PUBLIC_RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-records-db.test.ts` for actual anonymous/ordinary caller gates, hidden parents, and direct unlisted access. Finish with `bun run check`, `bun run build`, and anonymous/signed-in archive/profile browser checks.
+
+Measure the full Cloudflare build/deploy against the previous successful build,
+recording dataset/page counts and the `Public legislation build:` timings.
+Use only public production credentials for a local hosted-data benchmark.
+Keep the six-request HTTP ceiling and two-request legislative ceiling; do not
+raise timeouts, omit records or reuse a snapshot across builds to improve timing.
+
+Run `bun test scripts/tests/build-read.test.ts` for timeout-only retries and
+profile subpage equivalence, final short pages, authorization failure, and
+malformed/failed subpages. Per-section logs include export row counts and timing;
+confirmed timeout retries/splits are visible in build logs and do not bypass
+validation or change credentials.
+
+The build export migration must reach main before production application. Run
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/public-legislation-export-db.test.ts` to compare all resource payloads, ordering, totals, hidden parents and execute/context gates. The capacity fixtures roll back. A shared local turnout migration may require a temporary migration workdir containing its exact file; never reset or repair shared history.
+
+### Structured Georgia SOS turnout verification
+
+Run `ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/structured-turnout-db.test.ts scripts/tests/election-results-db.test.ts`.
+The tests use rollback-only fixtures and can apply the new migration transactionally.
+After applying locally with the normal migration CLI, run
+`ELECTION_RESULTS_INTEGRATION=1 bun test scripts/tests/structured-turnout-integration.test.ts scripts/tests/election-results-integration.test.ts`.
+The integration exercises real Auth/MCP serialization, all 636 rows, concurrent
+imports, competing replacements and anonymous readback, then cleans up fixtures.
+Optional `TURNOUT_PREPARED_JSON=/tmp/turnout.json` validates a locally converted
+saved export under a disposable election identity; do not commit that private file.
+
+Browser QA: select a disposable election on `/elections/results/`, inspect all
+measure types/nulls and source timestamps, Load more, select an older turnout
+snapshot and switch elections. Verify anonymous and signed-in reads, narrow
+screens and console errors. The turnout pager pins its report UUID so concurrent
+imports cannot mix snapshots. Remove disposable election/reports afterward.
+The local migration was applied with `migration up --db-url` pinned to
+127.0.0.1 using a temporary workdir reflecting the shared local migration history;
+no reset or production migration was run.
+
+### Verifying static legislation discovery
+
+Run `bun test scripts/tests/legislation-directory-static.test.ts` and
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-directory-db.test.ts`, then the normal
+check/build. Verify anonymous bills and sessions search, jurisdiction/state/term
+filters, all four bill sorts, empty results and Load more without directory RPCs.
+The initial bills load requires only the manifest; selected-term searches fetch
+only matching term shards, cached by hash. Test static asset failures, private and
+unlisted records/parents, signed-in live discovery and UUID access locally. Scan
+`dist/directory-data/legislation` for restricted fixture IDs/text and raw import
+fields. Check console errors, build timing and total/maximum JSON sizes after a
+production-data build. No paid service is added; compare Cloudflare build duration
+and Supabase read load if import volume grows.
+
+### Verifying the session county filter
+
+County-jurisdiction matching uses case-insensitive literal county names with
+word-boundary checks and fixed regexes for the statewide and Macon-Bibb aliases.
+Keep punctuation, multiword names, repeated matches, and misleading prefixes or
+suffixes covered in the county tests; do not build regexes from county names.
+
+Run `bun test scripts/tests/county-filter.test.ts scripts/tests/directories.test.ts
+scripts/tests/calendar-snapshot.test.ts`, then `bun run check` and `bun run build`.
+In a fresh browser session, verify Bibb is selected. Change to Jones and All
+counties on organizations, people, maps, calendar and site search; verify the
+selected county summary opens (All counties opens the statewide directory), then
+return to the directory to verify matching records, pagination, no-result states,
+navigation/reload persistence, and a new
+session's Bibb default. Repeat signed in and signed out, including admin navigation.
+Check mobile header wrapping, keyboard selection and console health. Verify
+header county changes navigate to summaries, then return to ballots and direct race anchors; turnout should scan past source
+pages containing other counties and retain its pinned report. County coverage
+comes from the explicit registry, not address/name heuristics. Regional library
+and statewide maps remain available in every county. The public geography JSON
+must contain only public IDs; restricted records keep their existing live gates.
+
+Election ballots and turnout charts use only the header county selector. Verify
+there is no ballot-area or chart county dropdown on static and signed-in UUID
+pages. After changing the header and returning from the summary to the election,
+turnout must use the saved county, keep All counties in separate labeled groups,
+and show a no-data message
+without a fallback when the chosen county is missing. A direct race anchor
+reveals only its target and does not change the saved county or reveal other
+out-of-area races. Run `bun test scripts/tests/election-turnout.test.ts` for county
+grouping, preservation of overlapping source views, and missing/zero values.
+
+### Verifying public legislation details
+
+Run `bun test scripts/tests/legislation-details.test.ts` and
+`LEGISLATION_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/legislation-details-db.test.ts`, followed by check/build.
+Test anonymous bill, vote and session details, section anchors, sources, official
+and recorded vote totals and Load more beyond 25/50 records without legislation
+RPCs. Verify public legacy UUID redirects (including hashes), explicit live links,
+unlisted UUID readers, anonymous private rejection and signed-in private access
+for all three kinds. Signed-in static pages should reach the live viewer.
+
+Use disposable local fixtures and scan generated detail HTML/JSON and public-ID
+indexes for restricted IDs, private participants, unlisted child text and import
+payloads. Missing indexes/pages must report failure and allow retry without
+fallback reads. Measure total assets, largest file and full production-data build
+duration; no static file may approach Cloudflare's file-size limit. New detail
+JSON uses the existing directory-data revalidation/nosniff headers and is excluded
+from the sitemap. Existing canonical public detail URLs stay indexable.
+
+### Verifying static records requests
+
+Run `bun test scripts/tests/request-snapshot.test.ts scripts/tests/directories.test.ts`
+and `RECORDS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/request-snapshot-db.test.ts scripts/tests/records-requests-db.test.ts`,
+then check/build. Use disposable local public/unlisted/private requests, an
+ordinary owner and public/private files. Verify search words/stemming, quotes, OR,
+exclusions, English stop words, stage/organization filters, Next/Previous and URL
+criteria. Request matching reuses directory search with PostgreSQL English stop
+words and literal fallback disabled; existing directory defaults are unchanged.
+
+Check published request facts, timeline, fee categories, links, legacy redirects,
+private denial, owner/admin live management, managed scope and owner transfers.
+Normal anonymous discovery/details must make no request RPCs. Download must
+re-read permissions and sign only the current allowed file, including after a
+file/request becomes private. Scan generated HTML/JSON for fixture owner IDs,
+transfer text, private file names, storage paths and signed URLs. Missing assets
+fail visibly without runtime discovery fallback. Clean up owned files/users/rows
+and the preview server. Compare full build duration and asset sizes before release.
+
+### Georgia county summary navigation
+
+The header county menu saves the preference and opens that summary; All counties
+opens `/counties/`. Confirm 159 unique county links and generated summaries,
+including `/counties/ben-hill/`, `/counties/jeff-davis/`, and the existing Bibb page.
+Opening a summary directly must synchronize the menu and saved preference. Test
+from calendar and requests too, where legacy county-change listeners must not
+reload before the summary opens. Check storage-denied navigation, mobile layout,
+and anonymous/signed-in navigation. Run `bun test scripts/tests/county-filter.test.ts`,
+`bun run check`, and `bun run build`.
+
+### Full county demographic profiles
+
+Run `bun test scripts/tests/county-statistics-build.test.ts` for indexed FIPS/state
+joins, all 159 download projections, chart-scale availability rules, failed reads,
+completeness/headline/comparison validation, shared requests and development expiry.
+The default suite exercises the public download accessor for every county and
+rejects unknown county codes using an in-memory build client; no database is needed.
+To check a refactor against its previous rendered output, preserve the old built
+`counties/` directory outside the repo, build the change against the same local
+dataset, then run
+`COUNTY_STATISTICS_BASELINE_DIR=/tmp/saved-counties bun test scripts/tests/county-statistics-build.test.ts`.
+The optional comparison checks all 477 county HTML/CSV/JSON files byte for byte,
+including Bibb's static page/CSV and dynamic JSON route. Full HTML comparison also
+covers every chart bar, interval, shared scale, source, period and table value.
+`COUNTY_STATISTICS_DIST` can override the default `apps/web/dist/counties` path.
+
+The indexing change was measured locally with all 9,440 public county/Georgia
+records. Both implementations loaded their snapshots before the CPU comparison;
+execution order alternated, with one warmup and nine measured pairs. Each pass
+generated all 159 profile models, selected all county download arrays, and then
+serialized the CSV/JSON separately. Median times:
+
+| Operation | Before | After |
+| --- | --- | --- |
+| Generate 159 county profile/chart models | 99.71 ms | 64.23 ms |
+| Select the 159 county-plus-state download arrays | 4.42 ms | 0.04 ms |
+| Serialize those arrays to CSV and JSON | 89.52 ms | 88.62 ms |
+
+The generated profile/chart models and all 477 county output files matched the
+baseline exactly. One full local build changed from 4.38 s to 4.24 s (route
+generation 3.52 s to 3.25 s); summed county HTML/CSV/JSON log durations changed
+from 1,350 ms to 1,191 ms. Those coarse route timings include the initial database
+load. Serialization work is unchanged. This dataset had no bills or legislative
+votes, so the full-build measurements do not establish production savings.
+The final verification build took 4.73 s, illustrating normal whole-build variance.
+Repeat with the release dataset when assessing production build time.
+
+Run county-statistic DB/MCP tests from [backend notes](backend.md#county-statistics),
+then `bun run check`, `bun run build`, `bun run mcp:check`, `bun run mcp:build`,
+and `bun run plugin:build`. Validate all 159 built pages: six headlines, 59 topic
+rows, 18 age bands, race/ethnicity and poverty charts, three comparisons, sources,
+and per-county CSV/JSON. Verify every county's values join its own FIPS and Georgia
+13000, and that Bibb's imported values match the prior profile. Charts and native
+HTML topic tables must work on desktop/mobile and without chart enhancement.
+
+Test `/statistics/` searching “Bibb household income”, changing the county filter,
+pagination, no results, downloads, and console errors. Signed-out visitors cannot
+edit. On `/admin/statistics/`, load/save an existing row as the local test admin;
+verify timestamp conflict rejection, source/period/uncertainty preservation and
+live RPC updates. The static page changes only after a rebuild. Restore any
+synthetic local edit before the final build. Source suppression must never become
+zero. A missing observation must fail the build rather than hide an entire profile.
+
+### School finance verification
+
+Run the parser/MCP and rollback database tests in
+[school-finances.md](school-finances.md#release-and-verification), then check/build.
+Optional real-source tests use `FINANCE_SOURCE_DIR` and verify the FY2025 payroll
+and FY2024/FY2025 payment counts without production writes. Browser-test anonymous
+and signed-in filters, pagination, source details, person review labels/links,
+page CSV, unavailable years and mobile layout. Test feature DDL only locally or
+in a disposable preview; do not alter the shared local migration history.
+
+Recipient regression coverage is in `scripts/tests/school-finance-recipients-db.test.ts`.
+It runs in the existing Supabase integration workflow. The real-source finance
+test also applies the recipient extension inside its rollback transaction.
+Verify anonymous/signed-in payment profile links, provisional/review labels and
+private-person redaction in the browser before release.
+
+Organization profile path generation uses `fetchPublicPeopleByOrganization` to
+load one people/affiliation snapshot per route request, including development.
+Do not call the single-organization reader once for every stub: in development
+it intentionally reloads data and thousands of concurrent snapshots exhaust memory.
+
+### Structured data verification
+
+After `bun run check` and `bun run build`, run
+`STRUCTURED_DATA_TEST_DIST=apps/web/dist bun test scripts/tests/structured-data.test.ts`.
+This checks identity/relationship projections, hidden parent exclusions, all-day
+inclusive dates, script-termination escaping and actual built graphs/canonicals.
+Check representative home, person, organization, election and public event pages
+in a browser; breadcrumb names must match visible headings and no graph may be
+added by signing in. Confirm restricted UUID viewers still emit no JSON-LD.
+The local seed contains election deadlines/voting periods, so zero `Event` nodes
+is expected there; the event regression uses an explicit synthetic physical
+meeting and must not invent details to make a live record pass validation.
+
+Submit rendered code to [Google's Rich Results Test](https://search.google.com/test/rich-results)
+for supported Organization/BreadcrumbList markup, and to the
+[Schema.org validator](https://validator.schema.org/) for Person/WebSite/Event
+vocabulary. A valid Schema.org event with a venue name can still lack Google's
+required detailed address. Report actual tool results and any access/challenge
+blocker; a parser test alone is not an external-validator result. Do not deploy
+feature code simply to obtain a public URL for these code-input tools.
+
+Local validation on November 1, 2026: Schema.org accepted the built public Person
+and BreadcrumbList with zero errors/warnings. A bounded follow-up also accepted
+the rendered synthetic physical Event plus BreadcrumbList with zero errors/warnings.
+Homepage/WebSite validation still did not complete within the bounded tool attempt.
+Google's code-input test returned
+“Something went wrong — Log in and try again”; a Google pass is therefore not
+claimed. The local browser checked temporary physical-event fixtures and
+anonymous/admin viewer exclusions; those fixtures were removed afterward.
+
+### Sparse related-profile export verification
+
+Run `PROFILE_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/profile-related-export-db.test.ts`.
+The loopback-only test applies old/new function definitions inside a rolled-back
+transaction, compares every exported article/candidacy row and ordinal, checks
+visibility, unchanged direct readers, anonymous-only execution and 500-row page
+boundaries with a dense 650-record owner. It also verifies that reader calls do
+not exceed eligible owners under a three-second statement limit. It does not
+apply migrations or change migration history. Set `PROFILE_EXPORT_PLAN_DIR` to a
+local directory to retain `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` plans and RPC
+timings; the integration workflow runs this regression too.
+
+A local PostgreSQL 17.11 run added 7,000 unrelated public people, 5,000 unrelated
+organizations, 100 related owners of each type and dense article/candidacy owners
+to the development seed. First/second 500-row page measurements were:
+
+| Section | RPC ms before → after | Gated-reader calls before → after |
+| --- | --- | --- |
+| Person articles | 37.59/47.51 → 6.43/10.31 | 2916/3457 → 82/104 |
+| Organization articles | 40.67/50.78 → 14.90/16.65 | 2166/2779 → 118/118 |
+| Candidacies | 92.03/111.40 → 13.74/15.15 | 3467/4393 → 104/104 |
+
+These are single local synthetic runs, not production latency estimates. UUID
+ordering and cache state affect timing and early stopping. Explicit CTE
+materialization was rejected because it slowed a dense first organization page;
+the inline eligibility checks retain planner freedom. Release the migration
+through main before production application; never raise API timeouts to mask an
+export regression.
+
+### Person relationship regression checks
+
+After applying pending migrations to the local database with
+`SUPABASE_TELEMETRY_DISABLED=1 supabase migration up --local`, run:
+
+`PERSON_RELATIONSHIPS_TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres bun test scripts/tests/person-relationships-db.test.ts scripts/tests/person-relationships.test.ts scripts/tests/mcp-compact-writes.test.ts scripts/tests/mcp-related-reads.test.ts`.
+
+DB fixtures and the append-only validation/visibility follow-up are applied inside
+the test transaction and roll back, without changing migration history. Coverage
+includes whitespace-only labels, malformed source authorities, uppercase HTTP(S)
+schemes, reciprocal labels and both-endpoint gates: anonymous public-only,
+ordinary signed-in public/unlisted, admin private access, and admin-only writes.
+For browser QA use synthetic local public/unlisted/
+private people, rebuild for the public snapshot, verify both directions with JS
+disabled and anonymous/actual Admin sessions at desktop/mobile widths, then remove
+the fixtures and rebuild cleanly. Check labels are text-escaped, hidden names/IDs
+never enter anonymous HTML, and a failed signed-in refresh retains published links.
+Run `bun run plugin:build`, `bun run plugin:claude:sync` and
+`bun run plugin:claude:check` to keep generated tool guides/schemas synchronized.
+
+### Cited outcome local validation and migration ordering
+
+Check the **actual largest migration version** before naming a newly generated
+file; this repository contains future-dated versions. During issue #126 validation,
+a new uncommitted file accidentally reused 016 and the shared local database at
+54322 applied it before rejecting main's same-version relationship follow-up.
+That shared history was not repaired, reset or rewritten. It therefore must not
+be treated as a clean validation database for main/this feature. The feature SQL
+was preserved under unique 017, then subsequent checks rolled forward through
+018–020; no already-applied migration was edited.
+
+Validation instead used an isolated project `civpulse-issue126` (API 54341, DB
+54342). Current CLI/Podman secret-copy startup failed; official CLI 2.75.0 with a
+temporary compatible config started the isolated stack. Its older platform
+bootstrap lacked `storage.allow_only_operation`; the existing platform function
+definition was read from shared local and copied only to isolated local before
+applying all repository migrations. No project dependency changes or shared writes
+were needed for that workaround. These are local environment observations, not
+production migration or performance claims.
+
+Use `MEETING_OUTCOMES_TEST_DATABASE_URL` pointing to an isolated local/preview
+DB with current migrations, then run `bun test scripts/tests/meeting-outcomes-db.test.ts
+scripts/tests/meeting-outcomes.test.ts scripts/tests/meeting-outcomes-mcp.test.ts
+scripts/tests/mcp-common-reads.test.ts`.
+The shared catalog regression expects 72 compact tools and the exact v2-only
+tool names, including `set_meeting_vote_outcome`, while preserving the 128-tool
+compatibility catalog and unchanged schemas for retained tools. This catches
+accidental additions/removals that a count alone would miss. Generated Codex and
+Claude compact references must agree after `bun run plugin:build`,
+`bun run plugin:claude:sync` and `bun run plugin:claude:check`.
+Also run `scripts/tests/profile-sections-db.test.ts` and
+`scripts/tests/person-votes-db.test.ts` against the isolated DB using
+`PROFILE_TEST_DATABASE_URL` and `MEETINGS_TEST_DATABASE_URL`. Their SQL assertions
+unwrap the JSON objects returned by the cited-outcome `get_person_votes` reader,
+matching the browser RPC payload while retaining paging/privacy/export checks.
+Transactional fixtures roll back. Browser QA uses synthetic local cited outcomes,
+explicitly injects that isolated API/anon key into the build process (without
+changing checked-in environment files), checks no-JS/anonymous/actual Admin desktop
+and mobile meeting/person flows, then removes fixtures and builds cleanly.
+Never point feature SQL/backfill at production or repair shared history to unblock
+validation. Apply through main before matching MCP/static release.
+
+### Search visibility measurement baseline
+
+[The dated baseline](./measurement/2026-11-01/README.md) versions production
+sitemap inventory, privacy-minimized provider evidence, exact prompt trials and
+manual comparison cadence. It distinguishes indexing from discovered URLs,
+retrieval links from AI citations, and missing data from zero observations.
+
+Run a new read-only sitemap capture with
+`bun run scripts/search-visibility-baseline.mjs --out docs/measurement/YYYY-MM-DD`.
+Use a new dated directory; the script refuses overwrite. Optional `--local
+apps/web/dist` labels a separate local content comparison, never a production
+missing-page count. It recursively reads only same-origin, queryless production
+sitemaps, validates their actual XML root and entries with the strict SAX parser,
+retains source hashes and writes a gzip CSV inventory. XML prolog comments,
+processing instructions and DTD declarations are accepted without fetching external
+entities; commented sitemap markers or URLs are not capture evidence. Both
+`--out` and an optional `--local` require directory values before capture starts.
+It does not crawl
+all pages, submit sitemaps or request indexing. Verify with
+`bun test scripts/tests/search-visibility-baseline.test.ts`.
+
+Provider reads use the HTP SEO review workflow: resolve the exact owned hostname,
+inventory all source metadata, choose explicit property/range scopes, then retain
+one latest selected snapshot with freshness and row limits. Do not register
+collection, change bindings, publish raw analytics query strings/private viewer
+IDs or treat `has_more` snapshot history as additional traffic to sum. Store
+aggregate evidence only in this public repository; never tokens or account emails.
+Repeat prompt trials manually with exact text, observed platform/model/mode and
+dates; unavailable answers have no accuracy/citation denominator. An accuracy score
+also requires retained evaluated answer claims/excerpts and official comparison
+values/excerpts with source URLs and observation dates. Categories and links alone
+are not auditable: leave counts unknown rather than reconstructing missing answer
+values from current sources. The baseline regression checks this evidence rule.
+No automation
+or paid vendor is required. This issue changes reports/tooling only, not site
+rendering or access rules. The required check/build uses explicit isolated local
+54341 credentials; shared 54322 remains unsuitable after the documented collision.
+
+### Authenticated MCP chunk-relay verification
+
+Apply unique pending migrations 021–022 only to the isolated local/preview database;
+never use shared local 54322 or production feature SQL. Run
+`bun test scripts/tests/meeting-upload-relay.test.ts` for strict base64/URL guards,
+partial-prefix replay, metadata substitution denial and error redaction. For real
+Auth/MCP/TUS verification, supply the isolated stack status JSON in
+`MEETING_RELAY_LOCAL_STATUS` and run
+`MEETING_RELAY_INTEGRATION=1 bun test scripts/tests/meeting-upload-relay-integration.test.ts`.
+The harness explicitly requires API 54341 / DB 54342. Its service credential is
+used only to create/clean local test users; MCP transfer uses the user's Auth
+session and public project key internally. Test logs never print real tokens.
+
+The follow-up verifies completed sessions without relay records and a real expired
+JWT rejection on isolated Storage's creation POST: HTTP 400, JSON `statusCode=403`,
+`code=AccessDenied`, `error=Unauthorized`, and `"exp" claim timestamp check failed`,
+with no Location. The pinned Storage v1.82.1
+[JWT pre-handler](https://github.com/supabase/storage/blob/v1.82.1/src/http/plugins/jwt.ts)
+rejects expiry before the TUS create handler. Only that exact confirmed shape (HTTP
+400/403) allows a lease-guarded reset; generic auth/RLS/server failures and missing
+receipts remain uncertain. If the reset RPC also loses auth, fail closed and
+reconcile manually. This local observation does not establish hosted behavior.
+Cancellation does not terminate partial TUS bytes; capability expiry and repeated
+explicit object cleanup remain required. Tool descriptions/generated catalogs must
+state that limit.
+
+The fixture records exact downloaded hashes for 5,179,685/20,968,285-byte synthetic
+PDF-signature byte arrays, largest MCP envelope size, canonical count and replay
+results. These are transport fixtures, not official-source or hosted-connector
+acceptance. Canonical fixture objects/rows/users are removed; an intentionally
+unconfirmed POST can leave a private partial TUS resource until Storage expiration.
+No historical/backfill objects are cleaned up. Run MCP check/build, plugin build/
+Claude sync/check, root check and explicit isolated build before review. There is
+no new web upload UI or changed web visibility rule; affected authorization is
+exercised by the real Auth/MCP integration. The added admin instructions are static.
+
+### Officeholder observation follow-up checks
+
+Run `OFFICEHOLDER_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54342/postgres
+bun test scripts/tests/officeholder-observations-db.test.ts scripts/tests/officeholder-export.test.ts
+scripts/tests/mcp-common-reads.test.ts` against the isolated stack. Migration
+`20261125002700` is append-only: source authorities reject malformed ports and
+credentials. Rendering additionally uses a URL parser to omit unusable legacy
+sources. UUID profile matching is case-independent without rewriting raw labels.
+
+Each public export page includes a content-derived fingerprint of its complete
+visible latest-revision set (including display slugs). The build compares this
+across pages and fails rather than publish mixed pages after a correction or
+visibility change, even if the total is unchanged. This is an unchanged-dataset
+check, not a cross-request PostgreSQL transaction or a claim that edits are locked.
+The fingerprint includes only already-public exported data.
+
+Browser regression fixture `scripts/tests/fixtures/officeholder-observation-ui.ts`
+bundles the actual enhancement module with a synthetic RPC boundary. Serve it
+locally with that module's `getSupabase` import replaced by
+`{rpc:(...args)=>window.fixtureRPC(...args)}`. It verifies superseded-only history
+controls, later requests winning over earlier successes/errors, and hiding truly
+empty profiles. The rendered fixture must report all seven assertions passing.
+The history probe uses the same permission-checked reader; it adds no unrestricted
+existence endpoint. Check real person/organization rendering and console health
+as well; fixture API behavior is not a substitute for real-Auth visibility tests.
+
+### SOS result update sound
+
+The browser synthesizes a quiet two-partial Web Audio bell after a complete selected
+SOS scope is successfully applied and its canonical source data changed. The
+comparison ignores publication IDs, ordering indexes and timestamps; it retains
+source counts (including unknown versus zero), labels and reporting statuses.
+Initial loads, area changes, search, mapping-only edits, unchanged revisions and
+failed or superseded requests do not ring. Audio unlocks on a trusted pointer/key
+gesture, with a browser-local mute toggle and silent handling of blocked audio.
+Run `bun test scripts/tests/sos-results-change.test.ts` for comparison coverage,
+and the sound regression in `scripts/tests/sos-results-browser.test.ts` with
+`SOS_RESULTS_TEST_URL` pointed at the local development server.
+
+
+### Automatic-results admin controls
+
+Run `bun run check`, `bun run build`, and the isolated window RPC regression:
+
+```sh
+ELECTION_RESULTS_TEST_DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54402/postgres bun test scripts/tests/sos-feed-window-db.test.ts
+```
+
+The test rejects nonloopback databases, enabled fixtures and configured poll Vault
+targets. It rolls back fixture users/elections/feeds and, when the disposable DB
+lags this branch, installs the feature helper only inside that rolled-back test
+transaction. Never point it at production or use it to apply hosted migrations.
+
+For rendered access/admin flow QA, start Astro with explicit local public client
+settings, then run:
+
+```sh
+PUBLIC_SUPABASE_URL=http://127.0.0.1:59991 PUBLIC_SUPABASE_ANON_KEY=sos-admin-browser-public-fixture ASTRO_DEV_BACKGROUND=1 bun run dev:web --host 127.0.0.1 --port 4337
+SOS_ADMIN_TEST_URL=http://127.0.0.1:4337 bun test scripts/tests/sos-admin-browser.test.ts
+```
+
+The suite uses real Chromium and the real page/client code with synthetic SDK
+sessions and intercepted loopback HTTP boundaries. It reads no real browser
+session or service credential and makes no hosted database or collection writes.
+Anonymous sign-in redirection, ordinary-user denial, paused configuration,
+verified responses, explicit activation/pause, source-change invalidation,
+recovery/abandon confirmation, console health and desktop/mobile layout are
+covered. Browser plugin was unavailable during implementation, so regular
+Playwright was used. CI installs bundled Chromium; local Chrome can be selected
+with `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome`. Screenshots stay outside the repository.
+
+### Isolated results asset origins
+
+Set `PUBLIC_RESULTS_FILES_ORIGIN=https://files-test.civpulse.org` (or the exact
+`https://files-dev.civpulse.org`) before starting/building an isolated frontend.
+The default remains `https://files.civpulse.org`. The public reader uses this
+same origin for pointer fetches, selected scope fetches, and immutable asset URL
+validation. Only those three exact HTTPS origins are accepted; paths, trailing
+slashes, credentials, query strings, fragments, and explicit ports are rejected.
+Use the matching isolated Supabase public URL/anon key. This setting does not
+start collection, configure a feed, or grant access to private election data.
+
+### Complete local election demonstration
+
+The synthetic `issue187-synthetic-results` local fixture uses the clearly labeled
+[illustrative source page](/demo-election-source.html) for its invented dates,
+question wording and vote counts. It is demo content, not official election
+information. The local-only Bun seed script is `/tmp/issue187-complete-ballot.ts`
+and targets Postgres at `127.0.0.1:54342`; it must never run against production.
+
+### PR 208 migration version reconciliation
+
+The three profile-summary migrations were moved without SQL changes from versions
+`20261119000000`, `20261120000000`, and `20261121000000` to
+`20261125003900`, `20261125004000`, and `20261125004100`. Main already uses the
+old versions for object history, records requests, and the document archive.
+The PR preview (`sqxfmjyunajfgomkaacx`) had applied only the profile summaries at
+those old versions. Its three history rows were moved to the new versions with
+name guards, preserving their recorded statements and all database data.
+Production history was verified to contain main's migrations and was unchanged.
+Never mark the main migrations applied on that preview: they still need to run.
+For another old checkout, inspect both version and name before reconciling its
+history; do not reset a shared database or blindly mark versions applied.

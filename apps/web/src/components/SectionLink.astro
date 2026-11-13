@@ -1,0 +1,8 @@
+---
+interface Props { target: string; label: string }
+const { target, label } = Astro.props;
+---
+<a class="section-link" href={`#${target}`} aria-label={`Link to ${label}`}>Link</a>
+<style>
+  .section-link { display: inline-flex; align-items: center; min-height: 44px; margin-inline-start: .75rem; font-family: var(--sans); font-size: .875rem; font-weight: 400; vertical-align: middle; white-space: nowrap; }
+</style>

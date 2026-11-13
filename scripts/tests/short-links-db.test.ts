@@ -1,6 +1,10 @@
 import { expect, test } from 'bun:test';
 import { SQL } from 'bun';
 
+const credentialTarget = new URL('https://example.test/');
+credentialTarget.username = 'qa-user';
+credentialTarget.password = 'fixture';
+
 const databaseUrl = process.env.SHORT_LINKS_TEST_DATABASE_URL;
 test.skipIf(!databaseUrl)('short links protect metadata, editing and counts while allowing public resolution', async () => {
   const sql = new SQL(databaseUrl!);
@@ -22,7 +26,7 @@ test.skipIf(!databaseUrl)('short links protect metadata, editing and counts whil
       };
       await denied(() => tx`update public.short_links set code='deadbeef' where id=${link.id}`, '42501');
       await denied(() => tx`insert into public.short_link_stats(link_id,redirect_count) values (${link.id},100)`, '42501');
-      for (const target of ['javascript:alert(1)', 'https://user:secret@example.com/', 'https://www.civpulse.org/l/deadbeef', 'https://new.civpulse.org/%6c/deadbeef', 'https://example.com/ space']) {
+      for (const target of ['javascript:alert(1)', credentialTarget.href, 'https://www.civpulse.org/l/deadbeef', 'https://new.civpulse.org/%6c/deadbeef', 'https://example.com/ space']) {
         await denied(() => tx`select public.save_short_link(${link.id}, 'QA', ${target}, true)`, '23514');
       }
       await tx.unsafe('set local role anon');

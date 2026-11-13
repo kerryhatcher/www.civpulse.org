@@ -1,0 +1,10 @@
+---
+import CountyHub from '../../components/counties/CountyHub.astro';
+import { GEORGIA_COUNTY_HUBS } from '../../lib/county-scope';
+import { getCountyProfile } from '../../lib/county-statistics';
+export function getStaticPaths() {
+  return GEORGIA_COUNTY_HUBS.filter(county=>county.fips!=='13021').map(county=>({params:{county:county.slug},props:{fips:county.fips}}));
+}
+const county=await getCountyProfile(Astro.props.fips);
+---
+<CountyHub county={county} />

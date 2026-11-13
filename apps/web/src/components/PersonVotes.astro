@@ -1,0 +1,21 @@
+---
+import ProfileEvidence from './ProfileEvidence.astro';
+import type { EvidenceSection } from '../lib/profile-evidence';
+import { meetingVoteScope } from '../lib/record-provenance';
+interface Props { personId?: string; published?: EvidenceSection; historyHref?: string }
+const { personId, published, historyHref } = Astro.props;
+---
+<section data-person-votes data-person-id={personId} hidden={!personId} aria-labelledby="person-votes-title">
+  <h2 id="person-votes-title">Meeting votes</h2>
+  <p>{meetingVoteScope}</p>
+  {published && <ProfileEvidence section={published} historyHref={historyHref} />}
+  <p data-person-votes-status role="status" aria-live="polite" hidden={!!published}>Loading meeting votes…</p>
+  <div data-person-votes-list></div>
+  <button type="button" data-person-votes-more hidden>Load more votes</button>
+</section>
+<style>
+  section { margin-block: 2rem; }
+  [data-person-votes-list] :global(article) { border-top: 1px solid var(--color-border, #ddd); padding-block: 1rem; }
+  [data-person-votes-list] :global(h3) { margin-block: 0 .5rem; }
+  [data-person-votes-list] :global(p) { margin-block: .5rem; }
+</style>

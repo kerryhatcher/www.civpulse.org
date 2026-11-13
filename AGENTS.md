@@ -34,6 +34,12 @@ the [README](./README.md) too.
 
 ## Backend rules
 
+- Production migrations must reach GitHub `main` before they are applied. Use
+  the Supabase integration on `main`, or the guarded `bun run db:push` from a
+  clean, current `main` checkout. Never apply feature-branch SQL to production
+  through MCP `apply_migration`/`execute_sql`, the SQL editor, raw CLI commands,
+  or migration-history repair. Test feature migrations locally or in a Supabase
+  preview branch. Do not bypass the guard to unblock a deployment.
 - Migrations are **append-only**; never edit an applied migration. Use
   `supabase migration up` to apply to a running local DB (keeps data) or
   `bun run db:reset` for a clean slate.

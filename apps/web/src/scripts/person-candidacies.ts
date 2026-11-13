@@ -1,8 +1,12 @@
+import { replacePublishedEvidence } from "../lib/profile-evidence-enhancement";
+import { unknownSourceDates } from '../lib/record-provenance';
+import { getPublicProfileSnapshot } from "../lib/profile-section-data";
+import { historyLink } from '../lib/history';
 import { CANDIDATE_STATUS_LABELS, electionHref, formatElectionDate } from '../lib/elections';
 import type { PersonCandidacy } from '../lib/people';
 import { getSupabase } from '../lib/supabase';
 
-function renderCandidacy(race: PersonCandidacy): HTMLLIElement {
+function renderCandidacy(race: PersonCandidacy, personId: string): HTMLLIElement {
   const item = document.createElement('li');
   const link = document.createElement('a');
   link.className = 'org-card person-candidacy-card';
@@ -20,17 +24,18 @@ function renderCandidacy(race: PersonCandidacy): HTMLLIElement {
   meta.className = 'candidate-meta';
   meta.textContent = [race.party, CANDIDATE_STATUS_LABELS[race.status]].filter(Boolean).join(' · ');
   link.append(office, election, date, meta);
+  const provenance = document.createElement('span'); provenance.textContent = unknownSourceDates; link.append(provenance);
   if (race.is_write_in) {
     const badge = document.createElement('span');
     badge.className = 'candidate-write-in';
     badge.textContent = 'Certified write-in';
     link.append(badge);
   }
-  item.append(link);
+  item.append(link, historyLink('contest_candidates', JSON.stringify({contest_id: race.contest_id, person_id: personId})));
   return item;
 }
 
-/** Fetch at runtime so hidden elections never enter public HTML and date groups stay current. */
+/** Published public races use current browser dates; restricted views retain live access checks. */
 export async function loadPersonCandidacies(personId: string): Promise<void> {
   const root = document.querySelector<HTMLElement>('[data-person-candidacies]');
   if (!root) return;
@@ -43,17 +48,19 @@ export async function loadPersonCandidacies(personId: string): Promise<void> {
   try {
     const supabase = getSupabase();
     await supabase.auth.getSession();
-    const { data, error } = await supabase.rpc('get_person_candidacies', { p_person_id: personId });
+    const snapshot = await getPublicProfileSnapshot();
+    const { data, error } = snapshot ? {data: snapshot.candidacies, error: null} : await supabase.rpc('get_person_candidacies', { p_person_id: personId });
     if (error) throw error;
     const races = (data ?? []) as PersonCandidacy[];
     for (const [key, current] of [['current', true], ['past', false]] as const) {
       const selected = races.filter((race) => race.is_current === current);
-      root.querySelector(`[data-${key}-candidacies]`)!.replaceChildren(...selected.map(renderCandidacy));
+      root.querySelector(`[data-${key}-candidacies]`)!.replaceChildren(...selected.map(race => renderCandidacy(race, personId)));
       root.querySelector<HTMLElement>(`[data-${key}-candidacies-empty]`)!.hidden = selected.length > 0;
     }
     status.hidden = true;
+    replacePublishedEvidence(root);
     groups.hidden = false;
-    root.hidden = races.length === 0;
+    root.hidden = races.length === 0 && !root.querySelector('[data-public-profile-history]');
   } catch {
     status.textContent = 'Could not load candidacies. Please reload to try again.';
   }

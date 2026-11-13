@@ -1,4 +1,7 @@
+import { historyLink } from '../lib/history';
 import { initBallotQuestionAdmin } from './admin-ballot-questions';
+import { initSosResultsAdmin } from './admin-sos-results';
+import { initSosMappingsAdmin } from './admin-sos-mappings';
 import {
   CANDIDATE_STATUS_LABELS,
   ELECTION_COLUMNS,
@@ -151,6 +154,8 @@ export async function initElectionAdmin(): Promise<void> {
   }
 
   panel.hidden = false;
+  initSosResultsAdmin();
+  initSosMappingsAdmin();
 
   // --- Element references ------------------------------------------------
 
@@ -235,7 +240,7 @@ export async function initElectionAdmin(): Promise<void> {
   async function loadElections(): Promise<void> {
     const { data, error } = await supabase
       .from('elections')
-      .select(ELECTION_COLUMNS)
+      .select(`${ELECTION_COLUMNS}, results_json_url`)
       .order('election_date', { ascending: false });
 
     if (error) {
@@ -369,6 +374,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('elections', election.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -411,6 +417,7 @@ export async function initElectionAdmin(): Promise<void> {
     set('slug', election.slug);
     set('election_date', election.election_date);
     set('description', election.description);
+    set('results_json_url', election.results_json_url ?? null);
     const kind = electionFormEl.querySelector<HTMLSelectElement>('select[name="kind"]');
     const visibility = electionFormEl.querySelector<HTMLSelectElement>('select[name="visibility"]');
     if (kind) kind.value = election.kind;
@@ -473,6 +480,7 @@ export async function initElectionAdmin(): Promise<void> {
         visibility: visibilityValue(String(values.get('visibility') ?? 'public')),
         organization_id: textOrNull(values.get('organization_id')),
         description: textOrNull(values.get('description')),
+        results_json_url: textOrNull(values.get('results_json_url')),
       };
 
       const { error } = id
@@ -541,6 +549,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('contests', contest.id));
 
         const edit = document.createElement('button');
         edit.type = 'button';
@@ -735,6 +744,7 @@ export async function initElectionAdmin(): Promise<void> {
 
         const actions = document.createElement('div');
         actions.className = 'org-row-actions';
+        actions.append(historyLink('contest_candidates', JSON.stringify({contest_id: candidate.contest_id, person_id: candidate.person_id})));
 
         const edit = document.createElement('button');
         edit.type = 'button';
