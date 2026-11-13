@@ -1664,3 +1664,7 @@ pinned by digest and scanner errors still fail the job.
 
 The lockfile also updates transitive `hono` and `@hono/node-server` packages to
 patched releases without changing their parent MCP SDK or dependency ranges.
+
+The bundled HubSpot conversion snippet checks message source and origin directly
+inside its handler, preserving its same-window restriction while allowing the
+static security scanner to recognize the validation.

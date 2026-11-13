@@ -115,15 +115,10 @@
   // from a cross-origin source WindowProxy to that ID. Accept only the inline
   // same-window callback; cross-origin iframe messages fail closed until a
   // vendor-supported source/form binding can be verified.
-  function isTrustedOrigin(event) {
-    return !!(event && event.source === window &&
-      event.origin === window.location.origin);
-  }
-
   function handleMessage(event) {
     try {
       // Reject an unbound source before even reading its structured-clone data.
-      if (!isTrustedOrigin(event)) return;
+      if (!event || event.source !== window || event.origin !== window.location.origin) return;
       var data = event && event.data;
       if (!data || typeof data !== 'object') return;
       if (data.type !== 'hsFormCallback') return;
