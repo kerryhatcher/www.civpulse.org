@@ -42,13 +42,32 @@ for (const layer of manifest.layers) {
 let createdLayers = 0, createdMaps = 0;
 const existingLayers = await request('layers?select=id,presentation');
 const existingMaps = await request('maps?select=id,slug,view_options');
+const refreshSources = process.argv.includes('--refresh-source-links');
+// Check every published object before changing any stored source links.
+if (refreshSources) {
+  for (const layer of manifest.layers) {
+    const response = await fetch(layer.presentation.sourceUrl, { method: 'HEAD' });
+    if (!response.ok) throw new Error(`Source unavailable for ${layer.key}: HTTP ${response.status}`);
+  }
+}
 for (const map of manifest.maps) {
   const collision = existingMaps.find(row => row.slug === map.slug && row.view_options?.snapshotId !== map.id);
   if (collision) throw new Error('Map slug already belongs to unrelated content: ' + map.slug);
 }
 for (const layer of manifest.layers) {
   const existing = existingLayers.find(row => row.presentation?.snapshotId === layer.id);
-  if (existing) { layer.importedId = existing.id; continue; }
+  if (existing) {
+    layer.importedId = existing.id;
+    if (refreshSources && existing.presentation?.sourceUrl !== layer.presentation.sourceUrl) {
+      const response = await fetch(`${url}/rest/v1/layers?id=eq.${existing.id}`, {
+        method: 'PATCH',
+        headers: { apikey: key, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ presentation: { ...existing.presentation, sourceUrl: layer.presentation.sourceUrl } }),
+      });
+      if (!response.ok) throw new Error(`Could not refresh source for ${layer.key}: HTTP ${response.status}`);
+    }
+    continue;
+  }
   layer.importedId = await request('rpc/save_postgis_layer', {
     p_layer: { name: layer.name, description: layer.description, visibility: 'public', style: layer.style, presentation: { ...layer.presentation, snapshotId: layer.id } },
     p_geojson: datasets.get(layer.id),

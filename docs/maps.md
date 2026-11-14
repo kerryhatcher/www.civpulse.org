@@ -1,5 +1,40 @@
 # Hosted geometry loading
 
+## Bibb County ALPR camera snapshot
+
+The public **Bibb County Flock & ALPR Cameras** map contains 154 reported
+locations: Flock Safety (148), Genetec (5), and Motorola Solutions (1), each
+in a separate reusable PostGIS layer, enabled by default. Map UUID:
+`a2eb1103-725a-410e-ba00-791aba8e5987`, slug `bibb-alpr-cameras`.
+The live viewer works at `/maps/view/?id=a2eb1103-725a-410e-ba00-791aba8e5987`;
+the map catalog and slug page include it after the next frontend build/deploy.
+
+The October 23, 2026 retrieval uses the daily US GeoJSON at
+<https://data.dontgetflocked.com/cameras.geojson.gz>, documented by
+[flockhopper3/deflock-data](https://github.com/flockhopper3/deflock-data).
+Despite its suffix, that endpoint returned plain JSON. The entire US document
+had 144,273 features. Only points inside the Census TIGERweb January 1, 2026
+Bibb County boundary (GEOID `13021`) were retained, using polygon containment
+with holes, rather than a bounding box. Boundary query:
+<https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1/query?where=GEOID%3D%2713021%27&outFields=GEOID%2CNAME&f=geojson&outSR=4326>.
+
+Reviewed camera and boundary GeoJSON snapshots are in `scripts/data/deflock/`.
+`bun scripts/prepare-bibb-alpr.mjs > /tmp/bibb-alpr-layers.json` validates
+county containment, WGS84 points, unique OSM IDs and import limits, then produces
+three MCP `save_postgis_layer` payloads. Original source properties are retained;
+the preparation adds stable OSM feature IDs, readable titles, and OSM source
+links. Import new layers only once; use the IDs in `import-record.json` for
+an explicitly requested replacement. Never blindly rerun a create operation.
+
+This is a manually imported snapshot, with no automatic refresh. Locations,
+manufacturer tags and operating status are community reported and unverified.
+An OSM edit timestamp is not an installation or verification date. Popups show
+manufacturer, operator, directions, mount and surveillance zone when provided,
+plus the OSM edit timestamp and source link. Attribution is to OpenStreetMap
+contributors and FlockHopper; OpenStreetMap data is under the
+[ODbL](https://www.openstreetmap.org/copyright). No schema, access-rule or
+frontend-renderer changes were needed.
+
 Viewers and homepage previews fetch stored features through `get_layer_geojson_page`
 in ordered batches starting with 10 features. Compact layers (the initial batch
 is at most 100 KB) use batches of 100 thereafter; dense boundaries retain batches
@@ -39,7 +74,9 @@ make repeat runs preserve later administrator edits, visibility and geometry.
 Unrelated maps with colliding slugs are rejected before writes. Individual layer
 imports and map/link saves are atomic. If a later import fails, fix its cause and
 rerun; previously completed imports are retained. No automatic source refresh is
-configured.
+configured. Existing layers retain their stored source links; changing the manifest
+does not update them. Review and update those links separately after verifying
+the corresponding R2 objects are available.
 
 `scripts/data/maps/manifest.json` records source URLs, counts, hashes, original
 styles, preset selections, and repairs. Compressed GeoJSON snapshots stay under
@@ -139,3 +176,10 @@ Source periods are preserved: attendance zones are labeled 2025–26, legislativ
 boundaries use their 2026/120th Congress vintage, and the bus schedule covers
 June 7–October 31, 2026. These labels do not imply live schedules or current
 address-level voting/enrollment assignments.
+
+To refresh existing snapshot layers after moving their source files, run
+`bun --env-file=apps/web/.env scripts/import-maps.mjs --refresh-source-links`.
+This checks every published URL with HEAD before writing, then updates only
+`presentation.sourceUrl` on matching snapshots. Visibility, geometry and other
+administrator edits are retained. The elementary source link deliberately serves
+the original evidence; its repaired import geometry is documented above.

@@ -2,7 +2,7 @@
 export function normalizeTargetUrl(value: string): string {
   const input = value.trim();
   if (!input || input.length > 4000 || /[\s\\\x00-\x1f\x7f]/.test(input)) throw new Error('Enter a valid HTTP or HTTPS destination URL without spaces.');
-  const candidate = /^[a-z][a-z0-9+.-]*:/i.test(input) ? input : `https://${input}`;
+  const candidate = /^[^/:]+:\d+(?:[/?#]|$)/.test(input) || !/^[a-z][a-z0-9+.-]*:/i.test(input) ? `https://${input}` : input;
   let url: URL;
   try { url = new URL(candidate); } catch { throw new Error('Enter a valid destination URL, such as https://www.kerryhatcher.com.'); }
   if (!['http:', 'https:'].includes(url.protocol) || !url.hostname || url.username || url.password) throw new Error('Use an HTTP or HTTPS URL without a username or password.');

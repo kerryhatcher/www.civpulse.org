@@ -908,3 +908,7 @@ Automatic SOS source checks identify the CivicPulse collector explicitly in the
 request User-Agent, including its version and repository link. This client
 identification does not enable a feed or change the reviewed source URL, cadence
 or stop window.
+
+Short-link searches treat `%`, `_`, quotes and backslashes as literal text.
+Saving during a list refresh queues another refresh so the saved link appears.
+Bare destination domains may include a port, such as `example.com:8080/page`.

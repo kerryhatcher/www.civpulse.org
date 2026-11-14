@@ -51,6 +51,7 @@ export async function initLinksAdmin(): Promise<void> {
   let query = '';
   let busy = false;
   let listing = false;
+  let reloadRequested = false;
   let revision = 0;
   let svgObjectUrl: string | null = null;
   const field = (name: string) => ui.form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
@@ -99,13 +100,13 @@ export async function initLinksAdmin(): Promise<void> {
     } catch { if (currentRevision === revision) ui.qrMessage.textContent = 'Could not generate QR downloads. Open this link again to retry.'; }
   }
   async function load() {
-    if (listing) return;
+    if (listing) { reloadRequested = true; return; }
     listing = true; ui.previous.disabled = ui.next.disabled = true;
     ui.list.replaceChildren(); ui.listMessage.textContent = 'Loading short links…';
     try {
       let request = supabase.from('short_links').select('*').order('created_at', { ascending: false }).order('id').range(offset, offset + 49);
       if (query) {
-        const pattern = `"%${query.replace(/[\\"%_]/g, char => `\\${char}`)}%"`;
+        const pattern = `"%${query.replace(/[\\%_]/g, char => `\\${char}`).replace(/[\\"]/g, char => `\\${char}`)}%"`;
         request = request.or(`title.ilike.${pattern},code.ilike.${pattern},target_url.ilike.${pattern}`);
       }
       const { data, error } = await request;
@@ -126,7 +127,10 @@ export async function initLinksAdmin(): Promise<void> {
       }
       ui.next.disabled = links.length < 50;
     } catch (error) { ui.listMessage.textContent = `Could not load short links: ${fail(error)} Search again to retry.`; }
-    finally { ui.previous.disabled = offset === 0; listing = false; }
+    finally {
+      ui.previous.disabled = offset === 0; listing = false;
+      if (reloadRequested) { reloadRequested = false; void load(); }
+    }
   }
   ui.form.addEventListener('submit', async event => {
     event.preventDefault(); if (busy) return;

@@ -1636,3 +1636,35 @@ The synthetic `issue187-synthetic-results` local fixture uses the clearly labele
 question wording and vote counts. It is demo content, not official election
 information. The local-only Bun seed script is `/tmp/issue187-complete-ballot.ts`
 and targets Postgres at `127.0.0.1:54342`; it must never run against production.
+
+### PR 208 migration version reconciliation
+
+The three profile-summary migrations were moved without SQL changes from versions
+`20261119000000`, `20261120000000`, and `20261121000000` to
+`20261125003900`, `20261125004000`, and `20261125004100`. Main already uses the
+old versions for object history, records requests, and the document archive.
+The PR preview (`sqxfmjyunajfgomkaacx`) had applied only the profile summaries at
+those old versions. Its three history rows were moved to the new versions with
+name guards, preserving their recorded statements and all database data.
+Production history was verified to contain main's migrations and was unchanged.
+Never mark the main migrations applied on that preview: they still need to run.
+For another old checkout, inspect both version and name before reconciling its
+history; do not reset a shared database or blindly mark versions applied.
+
+`cf:dev` now requires a running local Supabase backend and passes its URL and anon
+key explicitly to Wrangler. It fails before starting Wrangler if local status is
+unavailable, so deployed production vars cannot silently receive local test visits.
+
+Secret-scan CI checks historical commits as well as the current tree. Three exact
+historical false positives from PR 208 (two example.com test credentials and an
+organization UUID interpreted as a Privacy token) are matched by detector, path,
+and SHA-256 in `scripts/filter-secret-findings.mjs`. Verified or changed findings
+still block; no test directory or detector is excluded. The scanner image is
+pinned by digest and scanner errors still fail the job.
+
+The lockfile also updates transitive `hono` and `@hono/node-server` packages to
+patched releases without changing their parent MCP SDK or dependency ranges.
+
+The bundled HubSpot conversion snippet checks message source and origin directly
+inside its handler, preserving its same-window restriction while allowing the
+static security scanner to recognize the validation.

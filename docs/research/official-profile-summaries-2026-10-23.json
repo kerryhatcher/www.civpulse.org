@@ -1,0 +1,1318 @@
+{
+  "researched_on": "2026-10-23",
+  "scope": "Existing elected_official and appointed_official profiles; exclude every person in the 2026-11-03 candidate summary manifest. No kind, role, relationship, visibility, or contact changes.",
+  "source_policy": "Very short neutral summaries from official government or agency biographies and rosters. Roster-only sources support role summaries, not inferred personal biographies. Preserve source provenance here rather than lengthy import notes in public profile copy.",
+  "excluded_candidate_ids": [
+    "0e4795df-8d55-4d5e-9bc1-509b9c37baca",
+    "d1559c93-719a-4fc0-a0d4-71b2e7234d08",
+    "ff6115ec-4714-4017-bac5-a15f7051c98d",
+    "469fcab4-2558-43d3-876d-867281eb9c5a",
+    "327ec919-5ad7-4fc1-9c45-ce96bbb1795d",
+    "c07f2cdc-72b2-486a-a97b-f300f3a28305",
+    "ca744bb6-7240-462b-842d-c73304680d66",
+    "4637503f-991b-4623-8bb6-d3f9adddad7e",
+    "e8faef88-d2c1-4cf2-ae96-bb68833973f8",
+    "2a4633f0-a6cc-4fee-9bcd-3e22c922fc5d",
+    "3f791bd3-743c-451f-bc95-75e5ad733264",
+    "98fe0c78-3773-454a-9d62-1f91cedff5cb",
+    "49a6c276-614d-4afe-903d-a2babb900ddd",
+    "1492f72e-957a-4269-bc41-1836912cb08d",
+    "aa267684-2172-4aee-99a5-11a6fd82281e",
+    "39a82cdb-d28e-45fe-8b25-0a5af20d1747",
+    "8514c662-f904-439a-b740-99ce53e4c68b",
+    "3179c219-419a-474d-8cae-15919c4b902d",
+    "d67edd86-d3e6-4167-925f-902ac784bed1",
+    "d83bc0bc-a840-4410-9e17-ae5194cd58b7",
+    "5cde93a4-7d2c-42fd-bf88-e21f6fe36dcf",
+    "184c126f-d744-4afa-90f3-d502a50cb59a",
+    "328dc2f6-6d30-45c3-8976-37317463a08e",
+    "670d5793-8315-43ff-869e-07de02fadcf9",
+    "65b9c67b-6ed9-487b-a0b8-4d3ee553fe69",
+    "22d1fe3c-347c-4191-a434-035b9a7339da",
+    "7f194229-ef18-4fa6-a89e-6ffc2e8af6d0",
+    "736f7cc9-e1a7-485e-8df0-4b38eabc180f",
+    "5bb16306-07ce-40e0-9420-43e0a276aab9",
+    "85166d7b-f811-4469-83a7-4b5c26e516a5",
+    "23d6e9f5-0b5a-4b53-8c9c-7d16ffbb22af",
+    "a701e558-a609-4ad9-bdc2-2aa73a78c076",
+    "4eca497e-3726-43c1-a433-1c559bcc4538",
+    "d0508d76-a7f8-4fa4-9035-eba77bc3110c",
+    "33c58218-8db1-4366-b3b1-f27e7efc4ad3",
+    "2b03c3fa-5e5f-44b2-aa35-16b8145406b9",
+    "6ba46c94-8e1d-49c9-84db-8dccb4390f02",
+    "1b29ad10-b8b5-40c7-a6a7-17cf3578dfa7",
+    "186056da-a7b7-4ca3-b7c1-b355a6a023ac",
+    "cb24e2da-dae2-41b9-8ede-46a21c7f253a",
+    "bf49a783-3c8e-48b8-b357-12b4b2a92c35",
+    "4f3dcffe-e601-4942-beb1-4de54d9b6cb4",
+    "7346c09e-f504-4ff4-bf6e-f68c6c7be480",
+    "c2bc18be-0728-48da-97e6-76a958faa2ed",
+    "b6dfab42-707e-4937-be07-67891b4e60f8",
+    "6de2b701-1f24-496d-9204-f828d406d575",
+    "ee21ed73-18b9-42ed-a3c2-0501a6a0561a",
+    "3ef1dc0f-b072-44fd-8ce5-76ad16dab593",
+    "7c3cbdbc-ab37-444c-8b7e-b8f71356a6ca",
+    "bc8d34ca-8ba7-4a55-9384-c77b2f52eca8"
+  ],
+  "officials": [
+    {
+      "person_id": "0c8d1ee6-b309-4c1b-bba1-aa4251f29835",
+      "slug": "andrea-cooke",
+      "name": "Andrea Cooke",
+      "kind": "elected_official",
+      "summary": "Andrea Cooke is a marriage and family therapist and community advocate representing Macon-Bibb County’s District 5.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissionerandreacooke/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Commissioner, District 5 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "5da49567-f8c8-4ad7-b722-ec1d03a47c7c",
+      "slug": "anita-r-howard",
+      "name": "Anita R. Howard",
+      "kind": "elected_official",
+      "summary": "Anita R. Howard is the Macon Judicial Circuit’s district attorney, elected in 2020 to serve Bibb, Crawford, and Peach counties.",
+      "source_urls": [
+        "https://www.maconjudicialcircuitda.com/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "District Attorney — Macon Judicial Circuit District Attorney’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconjudicialcircuitda.com/\n\nProfile photo source: https://www.maconjudicialcircuitda.com/about-the-macon-judicial-circuit-district-attorney/leadership/"
+    },
+    {
+      "person_id": "967441f2-1af1-4848-9bfe-7632203f20c8",
+      "slug": "aprill-adside-smith",
+      "name": "Aprill-Adside Smith",
+      "kind": "elected_official",
+      "summary": "Aprill-Adside Smith is Gordon’s mayor and an associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Gordon Mayor — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "40318614-e0c4-4a1c-b1de-6688a5c4e0a9",
+      "slug": "barney-t-hester",
+      "name": "Barney T. Hester",
+      "kind": "elected_official",
+      "summary": "Barney T. Hester represents District 4 on the Bibb County Board of Education.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "8a552636-e98e-4e41-b0e9-d95c738f144a",
+      "slug": "bernice-banks",
+      "name": "Bernice Banks",
+      "kind": "elected_official",
+      "summary": "Bernice Banks is a Hawkinsville commissioner and municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Hawkinsville Commissioner — Pulaski County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "dcb2010b-b71f-4e3e-beac-19b98baebdad",
+      "slug": "bert-bivins",
+      "name": "Bert Bivins",
+      "kind": "appointed_official",
+      "summary": "Bert Bivins serves on Macon-Bibb County’s Land Bank Authority board, which supports neighborhood revitalization and efforts to address blighted property.",
+      "source_urls": [
+        "https://maconlandbank.org/board-of-directors/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Land Bank Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconlandbank.org/board-of-directors/"
+    },
+    {
+      "person_id": "c491f2a4-9e4f-48c4-b2f3-6a6640ec2684",
+      "slug": "bill-howell",
+      "name": "Bill Howell",
+      "kind": "elected_official",
+      "summary": "Bill Howell represents Macon-Bibb County’s District 7 and also serves on the Macon Water Authority board.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/",
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Commissioner, District 7 — Macon-Bibb County Board of Commissioners. Macon-Bibb County Representative — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/ ; https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "07da3c8e-f7c9-472c-8c6e-e106847f08ef",
+      "slug": "bill-sharp",
+      "name": "Bill Sharp",
+      "kind": "elected_official",
+      "summary": "Bill Sharp is a Putnam County commissioner and county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commissioner — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "a39a870a-0dc2-4bce-b21c-756ee2b1f166",
+      "slug": "brendalyn-bailey",
+      "name": "Brendalyn Bailey",
+      "kind": "elected_official",
+      "summary": "Brendalyn Bailey represents Macon-Bibb County’s District 9 and has a background in education and human resources.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/",
+        "https://www.maconbibb.us/brendalyn-bailey-to-serve-as-district-9-commissioner/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Listed on the Macon-Bibb County Board of Health in its county governing-authority CEO/designee seat.\n\nSource: https://northcentralhealthdistrict.org/board-of-health/\n\nCommissioner, District 9 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "7ca5e746-3b21-453b-a4c1-23ccc89e348a",
+      "slug": "charles-murphy",
+      "name": "Charles Murphy",
+      "kind": "appointed_official",
+      "summary": "Charles Murphy serves on the Macon-Bibb County Transit Authority board, which governs the local public transit authority.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Board Member — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/\n\nProfile photo source: https://mbcta.net/board/"
+    },
+    {
+      "person_id": "1c7df6c2-da1b-46ee-8228-46cd3e32cd8a",
+      "slug": "charles-richardson",
+      "name": "Charles Richardson",
+      "kind": "appointed_official",
+      "summary": "Charles Richardson serves on Macon-Bibb’s Urban Development Authority and is a former Telegraph editorial page editor with extensive civic board experience.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "87381ac5-fb1b-4e59-8c03-4e8e0241d17c",
+      "slug": "charles-williams",
+      "name": "Charles Williams",
+      "kind": "elected_official",
+      "summary": "Charles Williams is Jeffersonville’s mayor and a municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Jeffersonville Mayor — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "819f04a3-2367-4874-9f7d-001e227e4ddb",
+      "slug": "chris-weidner",
+      "name": "Chris Weidner",
+      "kind": "elected_official",
+      "summary": "Chris Weidner is Jones County’s commission chairman and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commission Chairman — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "495519c4-f410-49f7-bfb6-7838cbba62c1",
+      "slug": "clifford-holmes",
+      "name": "Clifford Holmes",
+      "kind": "elected_official",
+      "summary": "Clifford Holmes is a Warner Robins councilmember and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Warner Robins Councilman — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "fd2f67e6-95a8-42f1-9fe7-4bdf6510cc7b",
+      "slug": "connie-l-williford",
+      "name": "Connie L. Williford",
+      "kind": "elected_official",
+      "summary": "Connie L. Williford serves as a judge of the Bibb County Superior Court.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/superior-court-judges/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Superior Court Judge of the Macon Judicial Circuit, listed on the Bibb County Superior Court’s official judges directory.\n\nSource: https://www.maconbibb.us/superior-court/superior-court-judges/"
+    },
+    {
+      "person_id": "7a758d34-d937-4a09-a6e7-a4d33dc71bec",
+      "slug": "dale-jump",
+      "name": "Dale Jump",
+      "kind": "elected_official",
+      "summary": "Dale Jump is a Crawford County commissioner and county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commissioner — Crawford County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "4bce6b85-af50-41dd-98dd-e0385cf48140",
+      "slug": "dan-a-sims",
+      "name": "Dan A. Sims",
+      "kind": "appointed_official",
+      "summary": "Dan A. Sims is Bibb County’s school superintendent, with a background as a teacher, principal, and Atlanta Public Schools associate superintendent.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/superintendents-office"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "b8632cf4-8987-436d-a30f-ae7b2527b4ff",
+      "slug": "dan-perdue",
+      "name": "Dan Perdue",
+      "kind": "elected_official",
+      "summary": "Dan Perdue is Houston County’s commission chairman and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commission Chairman — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "c05058a6-f087-4ff7-b08b-ea7b6ae0e3b5",
+      "slug": "daryl-j-morton",
+      "name": "Daryl J. Morton",
+      "kind": "elected_official",
+      "summary": "Daryl J. Morton is president of the Bibb County Board of Education and represents the countywide Post 7 seat.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "91a8a7ab-76a0-4f15-b3fb-28ca82fc0f07",
+      "slug": "dave-dickey",
+      "name": "Dave Dickey",
+      "kind": "appointed_official",
+      "summary": "Dave Dickey serves on the Macon-Bibb County Transit Authority board, which governs the local public transit authority.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Board Member — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/\n\nProfile photo source: https://mbcta.net/board/"
+    },
+    {
+      "person_id": "1912a900-5d7d-4984-981f-8db73642e6db",
+      "slug": "david-davis",
+      "name": "David Davis",
+      "kind": "elected_official",
+      "summary": "David Davis is Bibb County’s sheriff and an FBI National Academy graduate who began his career with the sheriff’s office in 1979.",
+      "source_urls": [
+        "https://bibbsheriff.us/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Sheriff — Bibb County Sheriff's Office.\n\nSources (official rosters reviewed October 22, 2026): https://bibbsheriff.us/\n\nProfile photo source: https://bibbsheriff.us/"
+    },
+    {
+      "person_id": "c337dff2-f460-428d-b9a5-c00fd00830ec",
+      "slug": "david-l-mincey-iii",
+      "name": "David L. Mincey III",
+      "kind": "elected_official",
+      "summary": "David L. Mincey III serves as a judge of the Bibb County Superior Court.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/superior-court-judges/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Superior Court Judge of the Macon Judicial Circuit, listed on the Bibb County Superior Court’s official judges directory.\n\nSource: https://www.maconbibb.us/superior-court/superior-court-judges/"
+    },
+    {
+      "person_id": "5335a106-c1be-4d61-9380-483aed4bdf5c",
+      "slug": "deborah-garcia",
+      "name": "Deborah Garcia",
+      "kind": "appointed_official",
+      "summary": "Deborah Garcia serves on the Macon-Bibb County Transit Authority board, which governs the local public transit authority.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Board Member — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/\n\nProfile photo source: https://mbcta.net/board/"
+    },
+    {
+      "person_id": "98e39565-5e69-438c-aa3e-f96dbebe0736",
+      "slug": "denese-shinholster",
+      "name": "Denese Shinholster",
+      "kind": "elected_official",
+      "summary": "Denese Shinholster is a Milledgeville councilmember and municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Milledgeville Councilwoman — Baldwin County; Council Vice Chair (2026–27); Executive Committee; Budget, Audit and Personnel Committee Chair at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+    },
+    {
+      "person_id": "88b25b66-dea4-4123-a40b-02ccfc877426",
+      "slug": "donice-bryant",
+      "name": "Donice Bryant",
+      "kind": "elected_official",
+      "summary": "Donice Bryant represents District 8 on the Macon-Bibb County Board of Commissioners.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Commissioner, District 8 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "da45de3e-14e8-400f-a285-05977e333783",
+      "slug": "duke-groover",
+      "name": "Duke Groover",
+      "kind": "appointed_official",
+      "summary": "Duke Groover is Macon-Bibb County’s attorney, advising county leaders and pension boards and overseeing the government’s legal work.",
+      "source_urls": [
+        "https://www.maconbibb.us/county-attorney/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "County Attorney — Macon-Bibb County Attorney’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/county-attorney/"
+    },
+    {
+      "person_id": "41b22eb3-383f-4009-be84-e1f285ce988d",
+      "slug": "dwight-jones",
+      "name": "Dwight Jones",
+      "kind": "elected_official",
+      "summary": "Dwight Jones represents District 3 on the Macon Water Authority board and chairs its finance committee.",
+      "source_urls": [
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Elected Board Member, District 3 — Macon Water Authority. Board Vice Chair — Macon-Bibb County Industrial Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconwater.org/your-mwa/board-members/ ; https://mbcia.com/about/our-team/\n\nProfile photo source: https://mbcia.com/about/our-team/"
+    },
+    {
+      "person_id": "7da3f33c-b3ad-4d93-bb2b-10109d414394",
+      "slug": "ed-barbee",
+      "name": "Ed Barbee",
+      "kind": "elected_official",
+      "summary": "Ed Barbee is Gray’s mayor and a municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Gray Mayor — Jones County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "a3267413-29bf-43a0-b5b5-0123a2ee3b2a",
+      "slug": "elaine-lucas",
+      "name": "Elaine Lucas",
+      "kind": "elected_official",
+      "summary": "Elaine Lucas represents District 1 on the Macon Water Authority board and chairs its personnel committee.",
+      "source_urls": [
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Elected Board Member, District 1 — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://maconwater.org/your-mwa/board-members/"
+    },
+    {
+      "person_id": "b90954c5-3439-45b5-b952-33e7d37d8379",
+      "slug": "emily-davis",
+      "name": "Emily Davis",
+      "kind": "elected_official",
+      "summary": "Emily Davis is a Baldwin County commissioner and county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commissioner — Baldwin County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "1d6d2142-beba-45fe-94a3-4d6f1d62945b",
+      "slug": "eric-bush",
+      "name": "Eric Bush",
+      "kind": "appointed_official",
+      "summary": "Eric Bush serves as chief financial officer for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "dea1bf0d-380f-48da-8d9c-21dc5e50f4c3",
+      "slug": "erica-woodford",
+      "name": "Erica Woodford",
+      "kind": "elected_official",
+      "summary": "Erica Woodford is Bibb County’s clerk of Superior Court, whose office handles court filings, real estate records, and jury services.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/clerk-of-superior-court/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Clerk of Superior Court — Bibb County Clerk of Superior Court.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/superior-court/clerk-of-superior-court/\n\nProfile photo source: https://www.maconbibb.us/superior-court/clerk-of-superior-court/"
+    },
+    {
+      "person_id": "c1f7dc20-28e4-4ce7-a950-9d786f457eca",
+      "slug": "ethel-lett",
+      "name": "Ethel Lett",
+      "kind": "appointed_official",
+      "summary": "Ethel Lett serves as assistant superintendent for teaching & learning for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "084a5e1f-05b6-472e-aad7-a1cbecd9ba15",
+      "slug": "flint-shepherd",
+      "name": "Flint Shepherd",
+      "kind": "elected_official",
+      "summary": "Flint Shepherd is Wilkinson County’s commission vice chairman and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commission Vice-Chairman — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "1a0bb114-ab2e-423a-b073-83227965f173",
+      "slug": "frank-patterson",
+      "name": "Frank Patterson",
+      "kind": "elected_official",
+      "summary": "Frank Patterson is the Macon Water Authority’s District 4 board member and vice chairman, and chairs its engineering committee.",
+      "source_urls": [
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Elected Board Vice Chairman, District 4 — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://maconwater.org/your-mwa/board-members/"
+    },
+    {
+      "person_id": "7d3c6161-fae9-42fc-8d3b-b5df103f4334",
+      "slug": "gary-bechtel",
+      "name": "Gary Bechtel",
+      "kind": "elected_official",
+      "summary": "Gary Bechtel is the elected chairman of the Macon Water Authority board.",
+      "source_urls": [
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Elected Board Chairman — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://maconwater.org/your-mwa/board-members/"
+    },
+    {
+      "person_id": "0e1a977f-bad9-4c87-818f-639a6893a93f",
+      "slug": "george-thomas",
+      "name": "George Thomas",
+      "kind": "appointed_official",
+      "summary": "George Thomas chairs Macon-Bibb County’s Board of Tax Assessors and has a background in property management and community programs.",
+      "source_urls": [
+        "https://www.bibbassessors.com/board-of-assessors/",
+        "https://www.bibbassessors.com/board-of-assessors/george-thomas/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Chair — Macon-Bibb County Board of Tax Assessors.\n\nSources (official rosters reviewed October 22, 2026): https://www.bibbassessors.com/board-of-assessors"
+    },
+    {
+      "person_id": "3f212d49-2a4b-48e4-be4e-9defd2e5b62a",
+      "slug": "henry-c-ficklin",
+      "name": "Henry C. Ficklin",
+      "kind": "elected_official",
+      "summary": "Henry C. Ficklin represents District 2 on the Bibb County Board of Education.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "4720cd11-f382-44f8-87a0-8d6d38c0038b",
+      "slug": "james-a-epps-jr",
+      "name": "James A. Epps Jr.",
+      "kind": "appointed_official",
+      "summary": "James A. Epps Jr. serves on the Middle Georgia Regional Commission as a lieutenant governor’s appointee.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Lieutenant Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "64b1d7a6-12d1-473e-90a6-f69cfe494dc4",
+      "slug": "james-m-freeman",
+      "name": "James M. Freeman",
+      "kind": "elected_official",
+      "summary": "James M. Freeman represents District 6 on the Bibb County Board of Education.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "165e5f30-b751-48f5-8a11-9a1e09552159",
+      "slug": "james-richardson",
+      "name": "James Richardson",
+      "kind": "elected_official",
+      "summary": "James Richardson is a Byron councilmember and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Byron Councilman — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "d5a326bb-7b45-47f0-8241-ea6ea9da46ca",
+      "slug": "james-vaughn",
+      "name": "James Vaughn",
+      "kind": "appointed_official",
+      "summary": "James Vaughn serves on the Middle Georgia Regional Commission as a governor’s appointee.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "77bb82a3-ab28-4a38-8b43-e047ed48e379",
+      "slug": "jamie-cassady",
+      "name": "Jamie Cassady",
+      "kind": "appointed_official",
+      "summary": "Jamie Cassady serves as assistant superintendent for student affairs for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "40ceff39-4431-4eaa-837d-05772be45f0d",
+      "slug": "jan-beeland",
+      "name": "Jan Beeland",
+      "kind": "appointed_official",
+      "summary": "Jan Beeland serves on Macon-Bibb’s Urban Development Authority and is a former Macon Arts Alliance executive director with a background in historic preservation.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "a2cf87c6-9211-43ae-9492-149d9d08285b",
+      "slug": "jeff-hanson",
+      "name": "Jeff Hanson",
+      "kind": "elected_official",
+      "summary": "Jeff Hanson serves as chief judge of the State Court of Bibb County.",
+      "source_urls": [
+        "https://www.maconbibb.us/state-court/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Chief Judge — State Court of Bibb County.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/state-court/"
+    },
+    {
+      "person_id": "419cfc73-8a99-413c-895e-f436c6ebbb7c",
+      "slug": "jeffery-o-monroe",
+      "name": "Jeffery O. Monroe",
+      "kind": "elected_official",
+      "summary": "Jeffery O. Monroe serves as a judge of the Bibb County Superior Court.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/superior-court-judges/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Superior Court Judge of the Macon Judicial Circuit, listed on the Bibb County Superior Court’s official judges directory.\n\nSource: https://www.maconbibb.us/superior-court/superior-court-judges/"
+    },
+    {
+      "person_id": "c396e211-dfa7-4b38-87f6-ce66364ab0f0",
+      "slug": "jenna-s-mashburn",
+      "name": "Jenna S. Mashburn",
+      "kind": "elected_official",
+      "summary": "Jenna S. Mashburn is Pulaski County’s sole commissioner and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; Sole Commissioner — Pulaski County; Council Chair (2026–27); Executive Committee; GARC Policy Member at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/\n\nProfile photo source: https://www.middlegeorgiarc.org/about-us/mission-values/"
+    },
+    {
+      "person_id": "7937b8ed-56a3-4573-b8c1-465b854a4e6c",
+      "slug": "jim-crisp",
+      "name": "Jim Crisp",
+      "kind": "appointed_official",
+      "summary": "Jim Crisp serves on Macon-Bibb’s Urban Development Authority and is the retired founding artistic director of Theatre Macon.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "a2d32c73-6082-4947-95c7-eee317cd8f7d",
+      "slug": "jim-davis",
+      "name": "Jim Davis",
+      "kind": "appointed_official",
+      "summary": "Jim Davis is vice chair of Macon-Bibb County’s Board of Tax Assessors and a former tax commissioner and chief appraiser.",
+      "source_urls": [
+        "https://www.bibbassessors.com/board-of-assessors/",
+        "https://www.bibbassessors.com/board-of-assessors/jim-davis/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Vice Chair — Macon-Bibb County Board of Tax Assessors.\n\nSources (official rosters reviewed October 22, 2026): https://www.bibbassessors.com/board-of-assessors"
+    },
+    {
+      "person_id": "d76d0073-22bc-4e35-b01f-99ef440288e3",
+      "slug": "joey-hulett",
+      "name": "Joey Hulett",
+      "kind": "elected_official",
+      "summary": "Joey Hulett represents District 4 on the Macon-Bibb County Board of Commissioners.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Commissioner, District 4 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "6b9ac97d-d2b4-4bc5-91cb-9cf18bc6a12a",
+      "slug": "john-reid",
+      "name": "John Reid",
+      "kind": "elected_official",
+      "summary": "John Reid is Eatonton’s mayor and a municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Eatonton Mayor — Putnam County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "dc863f11-7ccd-4958-9409-5bc21b8d7add",
+      "slug": "jonathan-alderman",
+      "name": "Jonathan Alderman",
+      "kind": "appointed_official",
+      "summary": "Jonathan Alderman serves on Macon-Bibb County’s Board of Tax Assessors and is an attorney experienced in estate planning and real estate.",
+      "source_urls": [
+        "https://www.bibbassessors.com/board-of-assessors/",
+        "https://www.bibbassessors.com/board-of-assessors/jonathan-alderman/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Board of Tax Assessors.\n\nSources (official rosters reviewed October 22, 2026): https://www.bibbassessors.com/board-of-assessors"
+    },
+    {
+      "person_id": "b360c23d-862b-41b4-b06e-2bd392b89993",
+      "slug": "jonathan-barton",
+      "name": "Jonathan Barton",
+      "kind": "appointed_official",
+      "summary": "Jonathan Barton serves on Macon-Bibb’s Urban Development Authority and has a background in professional baseball, banking, and community development.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "b287ed93-aeef-4cb4-8f79-1e891e60280c",
+      "slug": "kaitlynn-kressin",
+      "name": "Kaitlynn Kressin",
+      "kind": "appointed_official",
+      "summary": "Kaitlynn Kressin serves on Macon-Bibb’s Urban Development Authority and is a downtown business owner and Mercer University graduate.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/\n\nBoard Member (published roster) — Downtown Macon Business Improvement District Board of Directors.\n\nSources (reviewed October 23, 2026): https://newtownmacon.com/experience/bid/\n\nBoard roster is published without term dates; membership is recorded as listed, without certifying a 2026 appointment term."
+    },
+    {
+      "person_id": "0801d37b-2027-4ea1-bd21-b1832dad3098",
+      "slug": "katika-lovett",
+      "name": "Katika Lovett",
+      "kind": "appointed_official",
+      "summary": "Katika Lovett serves as deputy superintendent for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "42b2b8f2-329b-4245-a35a-fecd9a3cd9e9",
+      "slug": "keith-moffett",
+      "name": "Keith Moffett",
+      "kind": "appointed_official",
+      "summary": "Keith Moffett is Macon-Bibb County’s manager, a Navy veteran, and a former county administrator and local E-911 director.",
+      "source_urls": [
+        "https://www.maconbibb.us/county-manager/dr-keith-moffett/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "County Manager — Macon-Bibb County Manager’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/county-manager/dr-keith-moffett/\n\nProfile photo source: https://www.maconbibb.us/county-manager/dr-keith-moffett/"
+    },
+    {
+      "person_id": "ea91c848-f782-45cd-95bc-33f15be53245",
+      "slug": "ken-fowler",
+      "name": "Ken Fowler",
+      "kind": "elected_official",
+      "summary": "Ken Fowler is Twiggs County’s commission chairman and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commission Chairman — Twiggs County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "97e23ec2-7eea-45b4-8485-d54e8ef60850",
+      "slug": "ken-smith",
+      "name": "Ken Smith",
+      "kind": "elected_official",
+      "summary": "Ken Smith serves as a judge of the Bibb County Superior Court.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/superior-court-judges/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Superior Court Judge of the Macon Judicial Circuit, listed on the Bibb County Superior Court’s official judges directory.\n\nSource: https://www.maconbibb.us/superior-court/superior-court-judges/"
+    },
+    {
+      "person_id": "bfd5c75b-de67-4467-9109-f563e4ff09a8",
+      "slug": "kevin-adams",
+      "name": "Kevin Adams",
+      "kind": "appointed_official",
+      "summary": "Kevin Adams serves as chief information officer for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "ce8e27c6-ddac-4c9f-bdaf-ece7ad76bf78",
+      "slug": "kristin-c-hanlon",
+      "name": "Kristin C. Hanlon",
+      "kind": "elected_official",
+      "summary": "Kristin C. Hanlon represents District 3 on the Bibb County Board of Education and serves as its treasurer.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "0a309f97-b51c-4493-b2c1-5a06e3dd0930",
+      "slug": "lamarcus-davis",
+      "name": "Lamarcus Davis",
+      "kind": "elected_official",
+      "summary": "Lamarcus Davis is a Monroe County commissioner and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; County Commissioner — Monroe County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "d36c3c01-9372-4d1e-9ffa-44a15316d084",
+      "slug": "larhonda-patrick",
+      "name": "LaRhonda Patrick",
+      "kind": "elected_official",
+      "summary": "LaRhonda Patrick is Warner Robins’ mayor and an associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Warner Robins Mayor — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "274fcd92-1d7e-416a-b8e7-73c97b7491bc",
+      "slug": "latoya-smith",
+      "name": "LaToya Smith",
+      "kind": "appointed_official",
+      "summary": "LaToya Smith serves as assistant superintendent for human resources for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "0f1554d0-fbb9-4edd-a27d-5f282df884c7",
+      "slug": "leigh-ann-junod",
+      "name": "Leigh Ann Junod",
+      "kind": "appointed_official",
+      "summary": "Leigh Ann Junod serves on Macon-Bibb County’s Board of Tax Assessors and is a certified residential appraiser specializing in homes and land.",
+      "source_urls": [
+        "https://www.bibbassessors.com/board-of-assessors/",
+        "https://www.bibbassessors.com/board-of-assessors/leigh-ann-junod/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Board of Tax Assessors.\n\nSources (official rosters reviewed October 22, 2026): https://www.bibbassessors.com/board-of-assessors"
+    },
+    {
+      "person_id": "a2f70f76-d0fb-4158-b6a8-dba2f58c4266",
+      "slug": "leon-jones",
+      "name": "Leon Jones",
+      "kind": "elected_official",
+      "summary": "Leon Jones is Bibb County’s coroner, leading the county coroner’s office.",
+      "source_urls": [
+        "https://www.maconbibb.us/coroners-office/contact-us/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Coroner — Bibb County Coroner’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/coroners-office/contact-us/"
+    },
+    {
+      "person_id": "2f8e724b-6bd6-4e79-b45f-878efaa02c8a",
+      "slug": "lester-miller",
+      "name": "Lester Miller",
+      "kind": "elected_official",
+      "summary": "Lester Miller is Macon-Bibb County’s mayor, an attorney and small business owner, and a former Bibb County school board president.",
+      "source_urls": [
+        "https://www.maconbibb.us/mayor/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Mayor — Macon-Bibb County Board of Commissioners. Board Member; Macon-Bibb County Mayor — Macon-Bibb County Industrial Authority.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/ ; https://mbcia.com/about/our-team/\n\nProfile photo source: https://www.maconbibb.us/commissioners/\n\nMGRC: County Member; Macon-Bibb County Mayor — Macon-Bibb County; Pension and Retirement Plan Committee, Post 1 at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/\n\nBoard Member (published roster) — Downtown Macon Business Improvement District Board of Directors.\n\nSources (reviewed October 23, 2026): https://newtownmacon.com/experience/bid/\n\nBoard roster is published without term dates; membership is recorded as listed, without certifying a 2026 appointment term."
+    },
+    {
+      "person_id": "16b137c3-4bb8-4b48-af45-3d416193920a",
+      "slug": "lisa-berrian",
+      "name": "Lisa Berrian",
+      "kind": "appointed_official",
+      "summary": "Lisa Berrian serves on Macon-Bibb’s Urban Development Authority and has a background in newspaper management and nonprofit fundraising.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "c14ef110-8791-4394-8c3d-08826f3e1f7e",
+      "slug": "lisa-w-boyd",
+      "name": "Lisa W. Boyd",
+      "kind": "elected_official",
+      "summary": "Lisa W. Boyd represents the countywide Post 8 seat on the Bibb County Board of Education.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "cc05200e-4b63-4b07-a900-9f8d4054e3f4",
+      "slug": "lloyd-hatfield",
+      "name": "Lloyd Hatfield",
+      "kind": "elected_official",
+      "summary": "Lloyd Hatfield is an Ivey councilmember and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Ivey Councilman — Wilkinson County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "02f11044-9ed4-476b-842e-e1ca28598616",
+      "slug": "lori-rodgers",
+      "name": "Lori Rodgers",
+      "kind": "appointed_official",
+      "summary": "Lori Rodgers serves as assistant superintendent of district effectiveness & federal programs for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "2a0b36ba-c961-4b18-a6b0-b739eabf17e2",
+      "slug": "louis-frank-tompkins",
+      "name": "Louis Frank Tompkins",
+      "kind": "appointed_official",
+      "summary": "Louis Frank Tompkins chairs the Macon-Bibb County Transit Authority board, which governs the local public transit authority.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Chairman — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/"
+    },
+    {
+      "person_id": "5c969fef-09a0-4ec6-8b29-d2d1790f62da",
+      "slug": "lynn-farmer",
+      "name": "Lynn Farmer",
+      "kind": "appointed_official",
+      "summary": "Lynn Farmer is vice chair of the Macon-Bibb County Transit Authority board.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Vice Chair — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/\n\nProfile photo source: https://mbcta.net/board/"
+    },
+    {
+      "person_id": "cbc0eeb9-c3c2-466f-8dfa-0712a3175fc4",
+      "slug": "marshall-talley",
+      "name": "Marshall Talley",
+      "kind": "elected_official",
+      "summary": "Marshall Talley represents District 2 on the Macon Water Authority board and serves on its finance and personnel committees.",
+      "source_urls": [
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Elected Board Member, District 2 — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://maconwater.org/your-mwa/board-members/"
+    },
+    {
+      "person_id": "3369e3aa-30ac-4428-995d-3b6700fc0f99",
+      "slug": "martin-moseley",
+      "name": "Martin Moseley",
+      "kind": "elected_official",
+      "summary": "Martin Moseley is Peach County’s commission chairman and a county member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "County Member; County Commission Chairman — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "f4c01e01-b855-46c5-897f-dae67bddd843",
+      "slug": "michael-chidester",
+      "name": "Michael Chidester",
+      "kind": "elected_official",
+      "summary": "Michael Chidester is Byron’s mayor and a municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Byron Mayor — Peach County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "273c1291-435e-41dd-8d05-e86b8a240966",
+      "slug": "mike-dodd",
+      "name": "Mike Dodd",
+      "kind": "elected_official",
+      "summary": "Mike Dodd is a Forsyth councilmember and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Forsyth Councilman — Monroe County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "f7c14733-8cce-428e-8583-a5998a1f8ee5",
+      "slug": "myrtice-c-johnson",
+      "name": "Myrtice C. Johnson",
+      "kind": "elected_official",
+      "summary": "Myrtice C. Johnson represents District 1 on the Bibb County Board of Education.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1"
+    },
+    {
+      "person_id": "98c51283-89b6-48d3-8a06-a414cb8e9067",
+      "slug": "nancy-nash",
+      "name": "Nancy Nash",
+      "kind": "appointed_official",
+      "summary": "Nancy Nash serves on the Middle Georgia Regional Commission as a governor’s appointee.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/\n\nVice Chair — Middle Georgia Community Food Bank.\nSource (reviewed October 23, 2026): https://mgcfb.org/about-us/"
+    },
+    {
+      "person_id": "1d525469-97fa-4023-9665-89dba6341074",
+      "slug": "pamela-white-colbert",
+      "name": "Pamela White-Colbert",
+      "kind": "elected_official",
+      "summary": "Pamela White-Colbert is Bibb County’s chief civil and magistrate judge and a former assistant district attorney with three decades of prosecutorial experience.",
+      "source_urls": [
+        "https://www.maconbibb.us/civil-magistrate-court/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Chief Judge — Bibb County Civil and Magistrate Court.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/civil-magistrate-court/\n\nProfile photo source: https://www.maconbibb.us/civil-magistrate-court/\n\nBoard Member — Macon-Bibb Citizen Advocacy.\nSource (reviewed October 23, 2026): https://www.maconbibbcitizenadvocacy.org/contact-us/board-and-staff/\n\nBoard Member — Macon-Bibb County Economic Opportunity Council.\nSource (reviewed October 23, 2026): https://www.maconbibbeoc.com/about-us/board-of-directors/"
+    },
+    {
+      "person_id": "9d3705d1-2c60-40bb-ab49-f29e38f30a6f",
+      "slug": "paul-bronson",
+      "name": "Paul Bronson",
+      "kind": "elected_official",
+      "summary": "Paul Bronson represents Macon-Bibb County’s District 2 and is an Army Reserve officer who has supported local student leadership programs.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/",
+        "https://www.maconbibb.us/jrotcpentagontrip2025/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Commissioner, District 2 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "21e06b0c-9e8c-4dab-a76b-47589d4638af",
+      "slug": "philip-t-raymond-iii",
+      "name": "Philip T. Raymond III",
+      "kind": "elected_official",
+      "summary": "Philip T. Raymond III serves as chief judge of the Bibb County Superior Court.",
+      "source_urls": [
+        "https://www.maconbibb.us/superior-court/superior-court-judges/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Chief Judge of the Macon Judicial Circuit, listed on the Bibb County Superior Court’s official judges directory.\n\nSource: https://www.maconbibb.us/superior-court/superior-court-judges/"
+    },
+    {
+      "person_id": "ed6f6546-5775-4152-bca8-d265528620cc",
+      "slug": "randall-walker",
+      "name": "Randall Walker",
+      "kind": "elected_official",
+      "summary": "Randall Walker is Perry’s mayor and a municipal member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Municipal Member; Perry Mayor — Houston County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "dae22da3-ae64-4cbe-9ccd-e2a12f113061",
+      "slug": "raymond-wilder",
+      "name": "Raymond Wilder",
+      "kind": "elected_official",
+      "summary": "Raymond Wilder represents District 6 on the Macon-Bibb County Board of Commissioners.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Commissioner, District 6 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "ae9d4fbe-e9ee-4fa7-aa02-adca6c739fcd",
+      "slug": "rebecca-l-grist",
+      "name": "Rebecca L. Grist",
+      "kind": "elected_official",
+      "summary": "Rebecca L. Grist is Bibb County’s solicitor-general, leading the prosecution of misdemeanor cases in state and municipal courts.",
+      "source_urls": [
+        "https://www.maconbibb.us/solicitor/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Solicitor-General — Bibb County Solicitor-General’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/solicitor/"
+    },
+    {
+      "person_id": "01584584-e31c-4253-a011-4a72839f6511",
+      "slug": "ryan-griffin",
+      "name": "Ryan Griffin",
+      "kind": "appointed_official",
+      "summary": "Ryan Griffin serves on Macon-Bibb’s Urban Development Authority and works in construction, real estate, and downtown investment.",
+      "source_urls": [
+        "https://maconbibbuda.com/your-uda/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Urban Development Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconbibbuda.com/your-uda/\n\nProfile photo source: https://maconbibbuda.com/your-uda/"
+    },
+    {
+      "person_id": "0dd382c7-9147-4754-ad6f-7574af309fc0",
+      "slug": "sam-kitchens",
+      "name": "Sam Kitchens",
+      "kind": "appointed_official",
+      "summary": "Sam Kitchens serves as assistant superintendent of operations for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "370aa744-e494-4507-8a98-34631af3e294",
+      "slug": "sarah-s-harris",
+      "name": "Sarah S. Harris",
+      "kind": "elected_official",
+      "summary": "Sarah S. Harris is Bibb County’s probate judge, serving a court responsible for wills, estates, and guardianships.",
+      "source_urls": [
+        "https://www.maconbibb.us/probate-court/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Probate Court Judge — Bibb County Probate Court.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/probate-court/\n\nProfile photo source: https://www.maconbibb.us/probate-court/"
+    },
+    {
+      "person_id": "31701511-b0ce-4991-84b5-bf1fd9a523b0",
+      "slug": "shane-edwards",
+      "name": "Shane Edwards",
+      "kind": "appointed_official",
+      "summary": "Shane Edwards is Macon-Bibb County’s fire chief, rising through the department’s ranks before his appointment in 2022.",
+      "source_urls": [
+        "https://www.maconbibb.us/fire-department/fire-chief/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Fire Chief — Macon-Bibb County Fire Department.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/fire-department/fire-chief/\n\nProfile photo source: https://www.maconbibb.us/fire-department/fire-chief/"
+    },
+    {
+      "person_id": "f80e217c-668f-4d25-87db-35bc0e47eb39",
+      "slug": "sharell-f-lewis",
+      "name": "Sharell F. Lewis",
+      "kind": "elected_official",
+      "summary": "Sharell F. Lewis serves as a judge of the State Court of Bibb County.",
+      "source_urls": [
+        "https://www.maconbibb.us/state-court/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Judge — State Court of Bibb County.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/state-court/"
+    },
+    {
+      "person_id": "cf5419b6-8ee1-4a99-8037-7cddab7837e9",
+      "slug": "shonya-mapp",
+      "name": "Shonya Mapp",
+      "kind": "elected_official",
+      "summary": "Shonya Mapp is a Milledgeville councilmember and associate member of the Middle Georgia Regional Commission.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Associate Member; Milledgeville Councilwoman — Baldwin County at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "68c9d4e5-78ab-43ab-82f5-05c0c0f9dbc7",
+      "slug": "stanley-stewart",
+      "name": "Stanley Stewart",
+      "kind": "elected_official",
+      "summary": "Stanley Stewart represents District 3 on the Macon-Bibb County Board of Commissioners.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Listed on the Macon-Bibb County Board of Health in its largest-city CEO/designee seat.\n\nSource: https://northcentralhealthdistrict.org/board-of-health/\n\nCommissioner, District 3 — Macon-Bibb County Board of Commissioners.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/\n\nProfile photo source: https://www.maconbibb.us/commissioners/"
+    },
+    {
+      "person_id": "d82be1f5-5470-4263-a14d-d228f08f8521",
+      "slug": "stephanie-hartley",
+      "name": "Stephanie Hartley",
+      "kind": "appointed_official",
+      "summary": "Stephanie Hartley serves as chief communications officer for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "0fd73b43-9f5d-4e04-9dca-59c0bec0ccab",
+      "slug": "sundra-m-woodford",
+      "name": "Sundra M. Woodford",
+      "kind": "elected_official",
+      "summary": "Sundra M. Woodford represents District 5 as Bibb County school board vice president and is vice chair of the county Land Bank Authority.",
+      "source_urls": [
+        "https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1",
+        "https://maconlandbank.org/board-of-directors/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Bibb County Board of Education member; seat and officer role follow the official roster.\n\nSource: https://simbli.eboardsolutions.com/AboutUs/AboutUs.aspx?S=4013&TID=1\n\nBoard Vice Chair — Macon-Bibb County Land Bank Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconlandbank.org/board-of-directors/"
+    },
+    {
+      "person_id": "e2f13ec4-ef10-481d-99a6-2ed1a1b450cd",
+      "slug": "tamara-candis",
+      "name": "Tamara Candis",
+      "kind": "appointed_official",
+      "summary": "Tamara Candis serves as associate superintendent of schools for the Bibb County School District.",
+      "source_urls": [
+        "https://www.bcsdk12.net/about-us/senior-cabinet"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Bibb County School District administrator listed in its official leadership directory.\n\nSource: https://www.bcsdk12.net/about-us/senior-cabinet"
+    },
+    {
+      "person_id": "4e7c0923-4d1a-4640-a9ac-59c9ccaad3fc",
+      "slug": "tekquell-watson",
+      "name": "Tekquell Watson",
+      "kind": "appointed_official",
+      "summary": "Tekquell Watson is Macon-Bibb County’s chief information officer and an Air Force veteran with experience in federal technology leadership and cybersecurity.",
+      "source_urls": [
+        "https://www.maconbibb.us/macon-bibb-hires-new-cio/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Chief Information Officer — Macon-Bibb County Information Technology Department.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/macon-bibb-hires-new-cio/"
+    },
+    {
+      "person_id": "052c2afe-5bb2-4aa0-99ee-ab865fe3c637",
+      "slug": "thomas-jackson-gillon-jr",
+      "name": "Thomas Jackson Gillon Jr",
+      "kind": "appointed_official",
+      "summary": "Thomas Jackson Gillon Jr. is Bibb County’s elections supervisor, overseeing election administration for the county Board of Elections.",
+      "source_urls": [
+        "https://www.maconbibb.us/wp-content/uploads/2026/10/AGENDA-OCTOBER-15-2026.pdf"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Election Supervisor — Bibb County Board of Elections.\n\nSource: https://www.maconbibb.us/wp-content/uploads/2026/10/AGENDA-OCTOBER-15-2026.pdf"
+    },
+    {
+      "person_id": "8da68d4d-e024-4d99-99ee-dd62a75cb017",
+      "slug": "tom-ellington",
+      "name": "Tom Ellington",
+      "kind": "appointed_official",
+      "summary": "Tom Ellington chairs Macon-Bibb County’s Land Bank Authority, which works on neighborhood revitalization, affordable housing, and blight removal.",
+      "source_urls": [
+        "https://maconlandbank.org/board-of-directors/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Chair — Macon-Bibb County Land Bank Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconlandbank.org/board-of-directors/\n\nMember of the Bibb County Board of Elections, listed on its October 15, 2026 agenda.\nSource: https://www.maconbibb.us/wp-content/uploads/2026/10/AGENDA-OCTOBER-15-2026.pdf"
+    },
+    {
+      "person_id": "7e102341-6136-4914-b6a2-ad7c0bab27d1",
+      "slug": "tommy-stalnaker",
+      "name": "Tommy Stalnaker",
+      "kind": "appointed_official",
+      "summary": "Tommy Stalnaker serves on the Middle Georgia Regional Commission as a governor’s appointee.",
+      "source_urls": [
+        "https://www.middlegeorgiarc.org/mgrc-council-2/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Governor’s Appointee — State at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/"
+    },
+    {
+      "person_id": "744fd23b-2f67-4c38-8539-1b614c30624b",
+      "slug": "valerie-wynn",
+      "name": "Valerie Wynn",
+      "kind": "elected_official",
+      "summary": "Valerie Wynn is Macon-Bibb County’s mayor pro tem and District 1 commissioner, and also serves on the Macon Water Authority board.",
+      "source_urls": [
+        "https://www.maconbibb.us/commissioners/",
+        "https://maconwater.org/your-mwa/board-members/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Mayor Pro Tem; Commissioner, District 1 — Macon-Bibb County Board of Commissioners. Macon-Bibb County Representative — Macon Water Authority.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibb.us/commissioners/ ; https://maconwater.org/your-mwa/board-members/\n\nProfile photo source: https://www.maconbibb.us/commissioners/\n\nMGRC: Municipal Member — Macon-Bibb County; Budget, Audit and Personnel Committee at the Middle Georgia Regional Commission. \n\nSources (official rosters reviewed October 23, 2026): https://www.middlegeorgiarc.org/mgrc-council-2/ ; https://www.middlegeorgiarc.org/mgrc-council-2/officers-and-committees/"
+    },
+    {
+      "person_id": "3f0b92ed-d08d-4526-9845-68b32c9a75b9",
+      "slug": "veronica-mcclendon",
+      "name": "Veronica McClendon",
+      "kind": "appointed_official",
+      "summary": "Veronica McClendon serves on Macon-Bibb County’s Land Bank Authority board, which supports neighborhood revitalization and affordable housing.",
+      "source_urls": [
+        "https://maconlandbank.org/board-of-directors/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Land Bank Authority.\n\nSources (official rosters reviewed October 22, 2026): https://maconlandbank.org/board-of-directors/"
+    },
+    {
+      "person_id": "ddd583ec-8c3c-4a1c-8154-9fa2effa3ec2",
+      "slug": "wade-mccord",
+      "name": "Wade McCord",
+      "kind": "elected_official",
+      "summary": "Wade McCord is Macon-Bibb County’s tax commissioner and an Army veteran who joined the tax office in 1995.",
+      "source_urls": [
+        "https://www.maconbibbtax.us/biography.html"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Tax Commissioner — Macon-Bibb County Tax Commissioner’s Office.\n\nSources (official rosters reviewed October 22, 2026): https://www.maconbibbtax.us/\n\nProfile photo source: https://www.maconbibbtax.us/"
+    },
+    {
+      "person_id": "99ed534b-bdbd-401c-b4fc-bc2547af3ad1",
+      "slug": "weston-stroud",
+      "name": "Weston Stroud",
+      "kind": "appointed_official",
+      "summary": "Weston Stroud serves on the Macon-Bibb County Transit Authority board, which governs the local public transit authority.",
+      "source_urls": [
+        "https://mbcta.net/board/"
+      ],
+      "basis": "official_roster",
+      "previous_description": "Board Member — Macon-Bibb County Transit Authority.\n\nSources (official rosters reviewed October 22, 2026): https://mbcta.net/board/\n\nMacon-Bibb County Traffic Safety Manager.\nSource: https://www.maconbibb.us/pedestrian-safety-summit-highlights-progress-partnerships-and-continued-work/\n\nBoard Secretary — Macon Milledgeville Regional Habitat for Humanity.\nSource (reviewed October 23, 2026): https://www.mmrhabitat.org/meet-mahfh"
+    },
+    {
+      "person_id": "a87feb93-3de4-4169-a059-3e88baf3fccb",
+      "slug": "yashica-kendrick",
+      "name": "Yashica Kendrick",
+      "kind": "appointed_official",
+      "summary": "Yashica Kendrick is identified as Bibb County’s chief registrar in official 2025 election-board records.",
+      "source_urls": [
+        "https://www.maconbibb.us/wp-content/uploads/2025/01/AGENDA-JANUARY-9-2025.pdf"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": null,
+      "limitation": "Official source establishes the role in January 2025; current tenure was not independently confirmed. Summary is explicitly dated."
+    },
+    {
+      "person_id": "cb041d98-5088-4793-861a-bcdc0d3e1485",
+      "slug": "yvonne-holmes",
+      "name": "Yvonne Holmes",
+      "kind": "appointed_official",
+      "summary": "Yvonne Holmes serves on Macon-Bibb County’s Board of Tax Assessors and has a background in banking, photography-business management, and equalization-board service.",
+      "source_urls": [
+        "https://www.bibbassessors.com/board-of-assessors/",
+        "https://www.bibbassessors.com/board-of-assessors/yvonne-holmes/"
+      ],
+      "basis": "biography_or_role_with_context",
+      "previous_description": "Board Member — Macon-Bibb County Board of Tax Assessors.\n\nSources (official rosters reviewed October 22, 2026): https://www.bibbassessors.com/board-of-assessors"
+    }
+  ]
+}

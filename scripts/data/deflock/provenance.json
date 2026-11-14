@@ -1,0 +1,18 @@
+{
+  "retrievedOn": "2026-10-23",
+  "sourceRepository": "https://github.com/flockhopper3/deflock-data",
+  "cameraSource": "https://data.dontgetflocked.com/cameras.geojson.gz",
+  "sourceUSFeatures": 144273,
+  "sourceUSSha256": "3b58207c8e9a40ecc3ef79523ca36f59e42276b5c4f17292f24976b2ee79f58e",
+  "boundarySource": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1/query?where=GEOID%3D%2713021%27&outFields=GEOID%2CNAME&f=geojson&outSR=4326",
+  "countyGeoid": "13021",
+  "counts": {
+    "Flock Safety": 148,
+    "Genetec": 5,
+    "Motorola Solutions": 1
+  },
+  "snapshotSha256": {
+    "bibb-boundary-2026-10-23.geojson": "2100dc5c9f554ad39074de144a21ef13dfeee7f850f4e105b53b5258ed330ef2",
+    "bibb-cameras-2026-10-23.geojson": "ff6cfe0f37952091faea8842f216def07b78a31471e09cefe3aede972f62a526"
+  }
+}

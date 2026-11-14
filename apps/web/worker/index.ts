@@ -18,7 +18,7 @@ export default {
       const response = await fetch(`${env.PUBLIC_SUPABASE_URL}/rest/v1/rpc/resolve_short_link`, {
         method: 'POST',
         headers: { apikey: env.PUBLIC_SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_code: match[1], p_count: request.method === 'GET' }),
+        body: JSON.stringify({ p_code: match[1], p_count: false }),
         signal: AbortSignal.timeout(5000),
       });
       if (!response.ok) throw new Error(`Short link lookup status ${response.status}`);
@@ -26,6 +26,15 @@ export default {
       if (target === null) return reply('Short link not found or paused.', 404);
       if (typeof target !== 'string') throw new Error('Invalid short link destination');
       const destination = normalizeTargetUrl(target);
+      if (request.method === 'GET') {
+        const counted = await fetch(`${env.PUBLIC_SUPABASE_URL}/rest/v1/rpc/count_short_link_redirect`, {
+          method: 'POST',
+          headers: { apikey: env.PUBLIC_SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_code: match[1], p_target_url: target }),
+          signal: AbortSignal.timeout(5000),
+        });
+        if (!counted.ok || await counted.json() !== true) throw new Error('Short link changed during resolution');
+      }
       // Never cache an editable destination or skip counting a later request.
       return new Response(null, { status: 302, headers: { ...headers, Location: destination, 'Referrer-Policy': 'no-referrer' } });
     } catch (error) {
