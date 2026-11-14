@@ -1675,3 +1675,8 @@ The release lockfile resolves Astro to 7.4.12 after CI reported
 CVE-2026-126361 (dynamic-tag attribute injection, fixed in 7.4.5) and
 CVE-2026-126364 (Node adapter image-path containment, fixed in 7.4.7).
 The application remains prerendered static output with no server adapter.
+
+Astro's checker also requires a compatible emnapi runtime when executed by Bun.
+The root development dependency pins `@emnapi/runtime` to stable 1.11.3 so the
+checker cannot pick Rolldown's unrelated 2.0 beta peer. Verify both
+`bun run check` and `bun run --bun check` when updating Astro or this pin.

@@ -54,6 +54,7 @@
     "results:test": "bun test apps/results-collector/tests supabase/functions/poll-election-results/handler.test.ts scripts/tests/sos-results.test.ts scripts/tests/sos-results-reader.test.ts scripts/tests/sos-ballot.test.ts scripts/tests/sos-mapping-admin.test.ts scripts/tests/sos-results-change.test.ts"
   },
   "devDependencies": {
+    "@emnapi/runtime": "1.11.3",
     "playwright": "^1.64.1",
     "sax": "1.6.1",
     "supabase": "^2.121.0",
