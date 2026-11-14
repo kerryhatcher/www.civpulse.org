@@ -23,7 +23,7 @@
     "@fontsource/dm-sans": "^5.3.0",
     "@fontsource/unna": "^5.3.0",
     "@supabase/supabase-js": "^2.118.0",
-    "astro": "^7.4.2",
+    "astro": "^7.4.12",
     "leaflet": "^1.9.4",
     "micromark": "^4.0.3",
     "qrcode": "1.5.4",

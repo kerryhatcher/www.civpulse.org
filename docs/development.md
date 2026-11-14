@@ -1668,3 +1668,10 @@ patched releases without changing their parent MCP SDK or dependency ranges.
 The bundled HubSpot conversion snippet checks message source and origin directly
 inside its handler, preserving its same-window restriction while allowing the
 static security scanner to recognize the validation.
+
+### Astro security patch for the PR 208 release
+
+The release lockfile resolves Astro to 7.4.12 after CI reported
+CVE-2026-126361 (dynamic-tag attribute injection, fixed in 7.4.5) and
+CVE-2026-126364 (Node adapter image-path containment, fixed in 7.4.7).
+The application remains prerendered static output with no server adapter.
